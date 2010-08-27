@@ -1,0 +1,31 @@
+-classpath
+'C:/home/afs/Projects/Jena2/target/classes;C:/home/afs/.m2/repo/com/hp/hpl/jena/iri/0.8/iri-0.8.jar;C:/home/afs/.m2/repo/xerces/xercesImpl/2.7.1/xercesImpl-2.7.1.jar;C:/home/afs/.m2/repo/com/ibm/icu/icu4j/3.4.4/icu4j-3.4.4.jar;C:/home/afs/.m2/repo/org/slf4j/slf4j-api/1.5.8/slf4j-api-1.5.8.jar'
+-encoding
+'UTF-8'
+-public
+-quiet
+-sourcepath
+'C:/home/afs/Projects/Jena2/src/main/java'
+-author
+-bottom
+'Copyright © 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP'
+-charset
+'UTF-8'
+-d
+'C:/home/afs/Projects/Jena2/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Jena Framework'
+-group
+'API - Application Programming Interface' 'com.hp.hpl.jena.db:com.hp.hpl.jena.rdf.model:com.hp.hpl.jena.rdf.listeners:com.hp.hpl.jena.rdf.arp:com.hp.hpl.jena.rdf.arp.lang:com.hp.hpl.jena.datatypes:com.hp.hpl.jena.datatypes.xsd:com.hp.hpl.jena.rdql:com.hp.hpl.jena.shared:com.hp.hpl.jena.vocabulary:com.hp.hpl.jena.xmloutput:com.hp.hpl.jena.ontology:com.hp.hpl.jena.ontology.daml:com.hp.hpl.jena.reasoner:com.hp.hpl.jena.reasoner.rulesys:com.hp.hpl.jena.reasoner.rulesys.builtins:com.hp.hpl.jena.reasoner.transitiveReasoner:com.hp.hpl.jena.reasoner.dig'
+-group
+'SPI - System Programming Interface' 'com.hp.hpl.jena.enhanced:com.hp.hpl.jena.graph:com.hp.hpl.jena.graph.compose:com.hp.hpl.jena.graph.query:com.hp.hpl.jena.util:com.hp.hpl.jena.util.iterator'
+-group
+'Command line tools' 'jena'
+-group
+'Other Packages' 'com.hp.hpl.jena.assembler'
+-use
+-version
+-windowtitle
+'Jena Framework'
