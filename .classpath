@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/arq-2.8.4.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/iri-0.8-sources.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3.jar" sourcepath="Jenna-2.6.3/jena-2.6.3-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SPDXParser/Jenna-2.6.3/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3-tests.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
