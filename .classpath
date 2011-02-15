@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="Test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/arq-2.8.4.jar"/>
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/icu4j-3.4.4.jar"/>
@@ -20,5 +21,7 @@
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ApachePOI/poi-3.5-FINAL-20090928.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ApachePOI/poi-ooxml-3.5-FINAL-20090928.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

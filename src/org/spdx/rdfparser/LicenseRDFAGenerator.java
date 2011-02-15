@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Source Auditor Inc.
+ * Copyright (c) 2011 Source Auditor Inc.
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -20,20 +20,42 @@
  */
 package org.spdx.rdfparser;
 
+import java.io.File;
+import java.util.Iterator;
+
 /**
- * Exception for invalid SPDX Documents
+ * Converts a spreadsheet containing SPDX License information into RDFA 
+ * HTML pages describing the licenses.
  * @author Gary O'Neall
  *
  */
-public class InvalidSPDXDocException extends Exception {
+public class LicenseRDFAGenerator {
+
 	/**
-	 * 
+	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
 	 */
-	private static final long serialVersionUID = -8042590523688807173L;
-	public InvalidSPDXDocException(String msg) {
-		super(msg);
+	public static void main(String[] args) {
+		File ssFile = new File(args[0]);
+		SPDXLicenseSpreadsheet ss = null;
+		try {
+			ss = new SPDXLicenseSpreadsheet(ssFile, false);
+			Iterator<SPDXLicense> iter = ss.getIterator();
+			while (iter.hasNext()) {
+				System.out.println(iter.next().toString());
+			}
+		} catch (SpreadsheetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (ss != null) {
+				try {
+					ss.close();
+				} catch (SpreadsheetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
-	public InvalidSPDXDocException(String msg, Throwable inner) {
-		super(msg, inner);
-	}
+
 }
