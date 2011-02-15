@@ -13,6 +13,6 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.spdx.rdfparser.PrettyPrinter"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="&quot;C:\Users\Source Auditor\Documents\SDPX\zlib-1.2.5.spdxv3.rdf&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="&quot;C:\Users\Source Auditor\Documents\SDPX\zlib-1.2.3-all-src.spdx_.txt&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="SPDXParser"/>
 </launchConfiguration>

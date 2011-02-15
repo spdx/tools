@@ -1,26 +1,22 @@
 /**
- * Copyright (c) 2010 Source Auditor Inc.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright (c) 2010, 2011 Source Auditor Inc.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package org.spdx.rdfparser;
 
@@ -42,7 +38,7 @@ public class SPDXDocument {
 	static final String RDF_PROP_TYPE = "type";
 	static final String RDF_PROP_RESOURCE = "resource";
 	
-	static final String SPDX_NAMESPACE = "http://spdx.org/ont/#";
+	static final String SPDX_NAMESPACE = "http://spdx.org/ont#";
 	static final String PROP_SPDX_DOC = "SPDXDoc";
 	static final String PROP_SPDX_VERSION = "SPDXVersion";
 	static final String PROP_SPDX_CREATED_BY = "CreatedBy";
@@ -367,65 +363,7 @@ public class SPDXDocument {
 		}
 	}
 	
-	class SPDXLicense {
 
-		@SuppressWarnings("unused")
-		private Node node;
-		private String id;
-		private String text;
-		
-		/**
-		 * Constructs an SPDX License from the licenseNode
-		 * @param licenseNode RDF graph node representing the SPDX License
-		 */
-		public SPDXLicense(Node licenseNode) {
-			this.node = licenseNode;
-			// id
-			Node p = model.getProperty(SPDX_NAMESPACE, PROP_LICENSE_ID).asNode();
-			Triple m = Triple.createMatch(licenseNode, p, null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.id = t.getObject().toString(false);
-			}
-			// text
-			p = model.getProperty(SPDX_NAMESPACE, PROP_LICENSE_TEXT).asNode();
-			m = Triple.createMatch(licenseNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.text = t.getObject().toString(false);
-			}
-		}
-
-		/**
-		 * @return the id
-		 */
-		public String getId() {
-			return this.id;
-		}
-
-		/**
-		 * @param id the id to set
-		 */
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		/**
-		 * @return the text
-		 */
-		public String getText() {
-			return this.text;
-		}
-
-		/**
-		 * @param text the text to set
-		 */
-		public void setText(String text) {
-			this.text = text;
-		}
-	}
 	
 	class SPDXFile {
 		@SuppressWarnings("unused")
@@ -571,7 +509,7 @@ public class SPDXDocument {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(new SPDXLicense(t.getObject()));
+			alLic.add(new SPDXLicense(model, t.getObject()));
 		}
 		this.nonStandardLicenses = new SPDXLicense[als.size()];
 		this.nonStandardLicenses = alLic.toArray(this.nonStandardLicenses);
