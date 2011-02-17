@@ -33,7 +33,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class LicenseSheet extends AbstractSheet {
 	
 	static final int NUM_COLS = 7;
-	static final int COL_NAME = 1;
+	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
 	static final int COL_NOTES = COL_SOURCE_URL + 1;

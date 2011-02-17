@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -53,9 +52,9 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
 	
 	private LicenseSheet licenseSheet;
 
-	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create)
+	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create, boolean readonly)
 			throws SpreadsheetException {
-		super(spreadsheetFile, create);
+		super(spreadsheetFile, create, readonly);
 		this.licenseSheet = new LicenseSheet(this.workbook, LICENSE_SHEET_NAME);
 		String verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
