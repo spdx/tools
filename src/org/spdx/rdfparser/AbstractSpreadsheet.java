@@ -44,12 +44,18 @@ public abstract class AbstractSpreadsheet {
 	protected File saveFile;
 	protected Workbook workbook;
 
+	private boolean readonly;
+
 	/**
 	 * @param spreadsheetFile
 	 * @param create
 	 * @throws AnalyzeException 
 	 */
-	public AbstractSpreadsheet(File spreadsheetFile, boolean create) throws SpreadsheetException {
+	public AbstractSpreadsheet(File spreadsheetFile, boolean create, boolean readonly) throws SpreadsheetException {
+		this.readonly = readonly;
+		if (readonly && create) {
+			throw(new SpreadsheetException("Can not create a readonly spreadsheet"));
+		}
 		if (!spreadsheetFile.exists()) {
 			if (!create) {
 				throw(new SpreadsheetException("File "+spreadsheetFile.getName()+" does not exist"));
@@ -97,6 +103,9 @@ public abstract class AbstractSpreadsheet {
 	 * @throws IOException 
 	 */
 	public void writeToFile(File file) throws IOException {
+		if (readonly) {
+			return;
+		}
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(file);

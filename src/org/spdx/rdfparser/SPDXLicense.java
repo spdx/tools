@@ -182,7 +182,7 @@ class SPDXLicense {
 			sb.append(this.name);
 		}
 		if (this.id != null) {
-			sb.append("ID: ");
+			sb.append("; ID: ");
 			sb.append(this.id);
 		}
 		return sb.toString();
