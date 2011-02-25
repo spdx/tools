@@ -1,22 +1,26 @@
 /**
  * Copyright (c) 2010, 2011 Source Auditor Inc.
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
-
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
-
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+* Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.spdx.rdfparser;
 
@@ -25,11 +29,25 @@ import java.util.ArrayList;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * 
- * Simple model for the SPDX Document
+ * Simple model for the SPDX Document.  The document is stored in a Jena RDF
+ * model which can be accessed through the model property.
+ * 
+ * The class can be constructed using an already populated Jenna model.  It can
+ * also be constructed with a blank model and the SPDX document constructed using
+ * the "set" methods.
+ * 
+ * The createSpdxDocument(uri) must be called first for a blank model
+ * 
+ * The license, file, and package objects can be constructed then added to the model
+ * by using the set functions.
+ * 
  * @author Gary O'Neall
  *
  */
@@ -68,82 +86,24 @@ public class SPDXDocument {
 	static final String PROP_FILE_TYPE = "FileType"; 	//TODO: Resolve inconsistency w/Doc - File/Type vs. FileType
 	static final String PROP_FILE_LICENSE = "FileLicense";	//TODO: Resolve inconsistency w/Doc - File/License vs. FileLicense
 	static final String PROP_FILE_COPYRIGHT = "FileCopyright"; 	//TODO: Resolve inconsistency w/Doc - File/Copyright vs FileCopyright
-	static final String PROP_FILE_SHA1 = "SHA1"; 
+	static final String PROP_FILE_SHA1 = "SHA1";
+	public static final String PROP_FILE_SEEN_LICENSE = "SeenLicense";	//TODO: Update with official field 
+	public static final String PROP_FILE_LIC_COMMENTS = "LicenseComments";	//TODO: Update with offical field
 	
-	private String spdxVersion;
-	private String[] createdBy;
-	private String[] reviewers;
-	private String created; 							// creation timestamp
-	//TODO: Change created to Date and write a dateformatter for YYYY-MM-DDThh:mm:ssZ
-	SPDXPackage spdxPackage;
-	SPDXLicense[] nonStandardLicenses;
+	/**
+	 * Simple class representing an SPDX Package.  This is stored in an RDF
+	 * model.
+	 * 
+	 * This package is initialized using an existing SPDXPackage in an 
+	 * RDF document by constructing the package with the node representing the
+	 * SPDX package.
 
-	class LicenseDeclaration {
-
-		private String name;
-		private String[] disjunctiveLicenses;
-		
-		/**
-		 * Construct a new license declaration and populate the properties based on the licenseNode
-		 * @param licenseNode Node in the RDF graph representing the license declaration
-		 */
-		public LicenseDeclaration(Node licenseNode) {
-			// name
-			this.name = licenseNode.toString(false);
-			// disjunctiveLicenses
-			Node p = model.getProperty(SPDX_NAMESPACE, PROP_DISJUNCTIVE_LICENSE).asNode();
-			Triple m = Triple.createMatch(licenseNode, p, null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
-			ArrayList<String> als = new ArrayList<String>();
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				als.add(t.getObject().toString(false));
-			}
-			this.disjunctiveLicenses = als.toArray(new String[als.size()]);
-		}
-
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return this.name;
-		}
-
-		/**
-		 * @param name the name to set
-		 */
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		/**
-		 * @return the disjunctiveLicenses
-		 */
-		public String[] getDisjunctiveLicenses() {
-			return this.disjunctiveLicenses;
-		}
-
-		/**
-		 * @param disjunctiveLicenses the disjunctiveLicenses to set
-		 */
-		public void setDisjunctiveLicenses(String[] disjunctiveLicenses) {
-			this.disjunctiveLicenses = disjunctiveLicenses;
-		}
-	}
-	
-	class SPDXPackage {
-		private String declaredName;
-		private String fileName;
-		private String sha1;
-		private String sourceInfo;
-		private LicenseDeclaration[] declaredLicenses;
-		private LicenseDeclaration[] detectedLicenses;
-		private String declaredCopyright;
-		private String shortDescription;
-		private String description;
-		private SPDXFile[] files;
-		@SuppressWarnings("unused")
-		private Node node;
+	 * 
+	 * @author Gary O'Neall
+	 *
+	 */
+	public class SPDXPackage {
+		private Node node = null;
 		/**
 		 * Construct a new SPDX package and populate the properties from the node
 		 * @param pkgNode Node in the RDF graph representing the SPDX package
@@ -151,325 +111,626 @@ public class SPDXDocument {
 		public SPDXPackage(Node pkgNode) {
 			this.node = pkgNode;
 			//TODO: Validate parsed properties
-			// declaredCopyright
-			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_COPYRIGHT).asNode();
-			Triple m = Triple.createMatch(pkgNode, p, null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.declaredCopyright = t.getObject().toString(false);
-			}
-			// declaredLicenses
-			ArrayList<LicenseDeclaration> alLic = new ArrayList<LicenseDeclaration>();
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				alLic.add(new LicenseDeclaration(t.getObject()));
-			}
-			LicenseDeclaration[] decLics = new LicenseDeclaration[alLic.size()];
-			decLics = alLic.toArray(decLics);
-			this.declaredLicenses = decLics;
-			// declaredName
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_NAME).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.declaredName = t.getObject().toString(false);
-			}
-			// description
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DESCRIPTION).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.description = t.getObject().toString(false);
-			}
-			// detectedLicenses
-			alLic = new ArrayList<LicenseDeclaration>();
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				alLic.add(new LicenseDeclaration(t.getObject()));
-			}
-			this.detectedLicenses = new LicenseDeclaration[alLic.size()];
-			this.detectedLicenses = alLic.toArray(this.detectedLicenses);
-			// fileName
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE_NAME).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.fileName = t.getObject().toString(false);
-			}
-			// files
-			ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				alFiles.add(new SPDXFile(t.getObject()));
-			}
-			this.files = alFiles.toArray(new SPDXFile[alFiles.size()]);
-			// sha1
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_SHA1).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.sha1 = t.getObject().toString(false);
-			}
-			// shortDescription
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_SHORT_DESC).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.shortDescription = t.getObject().toString(false);
-			}
-			// sourceInfo
-			p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_SOURCE_INFO).asNode();
-			m = Triple.createMatch(pkgNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.sourceInfo = t.getObject().toString(false);
-			}
 		}
 		/**
 		 * @return the declaredName
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getDeclaredName() {
-			return this.declaredName;
+		public String getDeclaredName() throws InvalidSPDXDocException {
+			String[] declaredNames = findDocPropertieStringValues(this.node, PROP_PACKAGE_DECLARED_NAME);
+			if (declaredNames == null || declaredNames.length == 0) {
+				return null;
+			}
+			if (declaredNames.length > 1) {
+				throw(new InvalidSPDXDocException("More than one declared name for a package"));
+			}
+			return(declaredNames[0]);
 		}
+
 		/**
 		 * @param declaredName the declaredName to set
 		 */
 		public void setDeclaredName(String declaredName) {
-			this.declaredName = declaredName;
+			removeProperties(node, PROP_PACKAGE_DECLARED_NAME);
+			addProperty(node, PROP_PACKAGE_DECLARED_NAME, new String[] {declaredName});
 		}
 		/**
 		 * @return the fileName
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getFileName() {
-			return this.fileName;
+		public String getFileName() throws InvalidSPDXDocException {
+			String[] fileNames = findDocPropertieStringValues(this.node, PROP_PACKAGE_FILE_NAME);
+			if (fileNames == null || fileNames.length == 0) {
+				return null;
+			}
+			if (fileNames.length > 1) {
+				throw(new InvalidSPDXDocException("More than one machine name for a package"));
+			}
+			return fileNames[0];
 		}
 		/**
 		 * @param fileName the fileName to set
 		 */
 		public void setFileName(String fileName) {
-			this.fileName = fileName;
+			removeProperties(node, PROP_PACKAGE_FILE_NAME);
+			addProperty(node, PROP_PACKAGE_FILE_NAME, new String[] {fileName});
 		}
 		/**
 		 * @return the sha1
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getSha1() {
-			return this.sha1;
+		public String getSha1() throws InvalidSPDXDocException {
+			String[] sha1s = findDocPropertieStringValues(this.node, PROP_PACKAGE_SHA1);
+			if (sha1s == null || sha1s.length == 0) {
+				return null;
+			}
+			if (sha1s.length > 1) {
+				throw(new InvalidSPDXDocException("More than one sha1 for a package"));
+			}
+			return(sha1s[0]);
 		}
 		/**
 		 * @param sha1 the sha1 to set
 		 */
 		public void setSha1(String sha1) {
-			this.sha1 = sha1;
+			removeProperties(node, PROP_PACKAGE_SHA1);
+			addProperty(node, PROP_PACKAGE_SHA1, new String[] {sha1});
 		}
 		/**
 		 * @return the sourceInfo
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getSourceInfo() {
-			return this.sourceInfo;
+		public String getSourceInfo() throws InvalidSPDXDocException {
+			String[] sourceInfos = findDocPropertieStringValues(this.node, PROP_PACKAGE_SOURCE_INFO);
+			if (sourceInfos == null || sourceInfos.length == 0) {
+				return null;
+			}
+			if (sourceInfos.length > 1) {
+				throw(new InvalidSPDXDocException("More than one source info for an SPDX package"));
+			}
+			return sourceInfos[0];
 		}
 		/**
 		 * @param sourceInfo the sourceInfo to set
 		 */
 		public void setSourceInfo(String sourceInfo) {
-			this.sourceInfo = sourceInfo;
+			removeProperties(node, PROP_PACKAGE_SOURCE_INFO);
+			addProperty(node, PROP_PACKAGE_SOURCE_INFO, new String[] {sourceInfo});
 		}
 		/**
 		 * @return the declaredLicenses
 		 */
 		public LicenseDeclaration[] getDeclaredLicenses() {
-			return this.declaredLicenses;
+			ArrayList<LicenseDeclaration> alLic = new ArrayList<LicenseDeclaration>();
+			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE).asNode();
+			Triple m = Triple.createMatch(this.node, p, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				alLic.add(new LicenseDeclaration(t.getObject(), model));
+			}
+			LicenseDeclaration[] retval = new LicenseDeclaration[alLic.size()];
+			retval = alLic.toArray(retval);
+			return retval;
 		}
 		/**
 		 * @param declaredLicenses the declaredLicenses to set
 		 */
 		public void setDeclaredLicenses(LicenseDeclaration[] declaredLicenses) {
-			this.declaredLicenses = declaredLicenses;
+			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
+			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
+			Resource s = model.getResource(this.node.getURI());
+			for (int i = 0; i < declaredLicenses.length; i++) {
+				Resource lic = model.createResource(p);
+				s.addProperty(p, lic);
+				declaredLicenses[i].populateModel(lic, model);
+			}
 		}
 		/**
 		 * @return the detectedLicenses
 		 */
 		public LicenseDeclaration[] getDetectedLicenses() {
-			return this.detectedLicenses;
+			ArrayList<LicenseDeclaration> alLic = new ArrayList<LicenseDeclaration>();
+			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE).asNode();
+			Triple m = Triple.createMatch(this.node, p, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				alLic.add(new LicenseDeclaration(t.getObject(), model));
+			}
+			LicenseDeclaration[] retval = new LicenseDeclaration[alLic.size()];
+			retval = alLic.toArray(retval);
+			return retval;
 		}
 		/**
 		 * @param detectedLicenses the detectedLicenses to set
 		 */
 		public void setDetectedLicenses(LicenseDeclaration[] detectedLicenses) {
-			this.detectedLicenses = detectedLicenses;
+			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
+			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE);
+			Resource s = model.getResource(this.node.getURI());
+			for (int i = 0; i < detectedLicenses.length; i++) {
+				Resource lic = model.createResource(p);
+				s.addProperty(p, lic);
+				detectedLicenses[i].populateModel(lic, model);
+			}
 		}
 		/**
 		 * @return the declaredCopyright
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getDeclaredCopyright() {
-			return this.declaredCopyright;
+		public String getDeclaredCopyright() throws InvalidSPDXDocException {
+			String[] copyrights = findDocPropertieStringValues(this.node, PROP_PACKAGE_DECLARED_COPYRIGHT);
+			if (copyrights == null || copyrights.length == 0) {
+				return null;
+			}
+			if (copyrights.length > 1) {
+				throw(new InvalidSPDXDocException("More than one declared copyright for a package"));
+			}
+			return(copyrights[0]);
 		}
 		/**
 		 * @param declaredCopyright the declaredCopyright to set
 		 */
 		public void setDeclaredCopyright(String declaredCopyright) {
-			this.declaredCopyright = declaredCopyright;
+			removeProperties(node, PROP_PACKAGE_DECLARED_COPYRIGHT);
+			addProperty(node, PROP_PACKAGE_DECLARED_COPYRIGHT, new String[] {declaredCopyright});
 		}
 		/**
 		 * @return the shortDescription
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getShortDescription() {
-			return this.shortDescription;
+		public String getShortDescription() throws InvalidSPDXDocException {
+			String[] shortDescs = findDocPropertieStringValues(this.node, PROP_PACKAGE_SHORT_DESC);
+			if (shortDescs == null || shortDescs.length == 0) {
+				return null;
+			}
+			if (shortDescs.length > 1) {
+				throw(new InvalidSPDXDocException("More than one short description for a package"));
+			}
+			return(shortDescs[0]);
 		}
 		/**
 		 * @param shortDescription the shortDescription to set
 		 */
 		public void setShortDescription(String shortDescription) {
-			this.shortDescription = shortDescription;
+			removeProperties(node, PROP_PACKAGE_SHORT_DESC);
+			addProperty(node, PROP_PACKAGE_SHORT_DESC, new String[] {shortDescription});
 		}
 		/**
 		 * @return the description
+		 * @throws InvalidSPDXDocException 
 		 */
-		public String getDescription() {
-			return this.description;
+		public String getDescription() throws InvalidSPDXDocException {
+			String[] desc = findDocPropertieStringValues(this.node, PROP_PACKAGE_DESCRIPTION);
+			if (desc == null || desc.length == 0) {
+				return null;
+			}
+			if (desc.length > 1) {
+				throw(new InvalidSPDXDocException("More than one description for a package"));
+			}
+			return(desc[0]);
 		}
 		/**
 		 * @param description the description to set
 		 */
 		public void setDescription(String description) {
-			this.description = description;
+			removeProperties(node, PROP_PACKAGE_DESCRIPTION);
+			addProperty(node, PROP_PACKAGE_DESCRIPTION, new String[] {description});
 		}
 		/**
 		 * @return the files
 		 */
 		public SPDXFile[] getFiles() {
-			return this.files;
+			// files
+			ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
+			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE).asNode();
+			Triple m = Triple.createMatch(this.node, p, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				alFiles.add(new SPDXFile(t.getObject(), model));
+			}
+			SPDXFile[] retval = new SPDXFile[alFiles.size()];
+			return alFiles.toArray(retval);
 		}
 		/**
 		 * @param files the files to set
 		 */
 		public void setFiles(SPDXFile[] files) {
-			this.files = files;
+			removeProperties(node, PROP_PACKAGE_FILE);
+			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
+			Resource s = model.getResource(this.node.getURI());
+			for (int i = 0; i < files.length; i++) {
+				Resource file = model.createResource(p);
+				s.addProperty(p, file);
+				files[i].populateModel(file, model);
+			}
+		}
+		
+		public String getUrl() {
+			//TODO: Implement URL
+			return null;
+		}
+		
+		public void setUrl(String url) {
+			
+		}
+		
+		public String getFileChecksums() {
+			//TODO: Impelemtn file checksums
+			return null;
+		}
+		
+		public void setFileChecksums() {
+			
+		}
+		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXDocException {
+			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
+					this.getSha1(), this.getSourceInfo(), this.getDeclaredLicenses(), 
+					this.getDetectedLicenses(), this.getDeclaredCopyright(), 
+					this.getShortDescription(), this.getDescription(), this.getUrl(), 
+					this.getFileChecksums());
 		}
 	}
 	
 
 	
-	class SPDXFile {
-		@SuppressWarnings("unused")
-		private Node node;
-		private String name;
-		private LicenseDeclaration[] fileLicenses;
-		private String sha1;
-		private String type;
-		/**
-		 * Construct an SPDX File form the fileNode
-		 * @param fileNode RDF Graph node representing the SPDX File
-		 */
-		public SPDXFile(Node fileNode) {
-			this.node = fileNode;
-			// name
-			Node p = model.getProperty(SPDX_NAMESPACE, PROP_FILE_NAME).asNode();
-			Triple m = Triple.createMatch(fileNode, p, null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.name = t.getObject().toString(false);
-			}
-			// sha1
-			p = model.getProperty(SPDX_NAMESPACE, PROP_FILE_SHA1).asNode();
-			m = Triple.createMatch(fileNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.sha1 = t.getObject().toString(false);
-			}
-			// type
-			p = model.getProperty(SPDX_NAMESPACE, PROP_FILE_TYPE).asNode();
-			m = Triple.createMatch(fileNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				this.type = t.getObject().toString(false);
-			}
-			// detectedLicense
-			ArrayList<LicenseDeclaration> alLic = new ArrayList<LicenseDeclaration>();
-			p = model.getProperty(SPDX_NAMESPACE, PROP_FILE_LICENSE).asNode();
-			m = Triple.createMatch(fileNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				alLic.add(new LicenseDeclaration(t.getObject()));
-			}
-			this.fileLicenses = alLic.toArray(new LicenseDeclaration[alLic.size()]);
-		}
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return this.name;
-		}
-		/**
-		 * @param name the name to set
-		 */
-		public void setName(String name) {
-			this.name = name;
-		}
-		/**
-		 * @return the fileLicenses
-		 */
-		public LicenseDeclaration[] getFileLicenses() {
-			return this.fileLicenses;
-		}
-		/**
-		 * @param fileLicenses the fileLicenses to set
-		 */
-		public void setFileLicenses(LicenseDeclaration[] fileLicenses) {
-			this.fileLicenses = fileLicenses;
-		}
-		/**
-		 * @return the sha1
-		 */
-		public String getSha1() {
-			return this.sha1;
-		}
-		/**
-		 * @param sha1 the sha1 to set
-		 */
-		public void setSha1(String sha1) {
-			this.sha1 = sha1;
-		}
-		/**
-		 * @return the type
-		 */
-		public String getType() {
-			return this.type;
-		}
-		/**
-		 * @param type the type to set
-		 */
-		public void setType(String type) {
-			this.type = type;
-		}
-	}
-	
 	Model model;
-	private String name;
+	SPDXPackage spdxPackage = null;
+	SPDXLicense[] nonStandardLicenses = null;
 	
 	public SPDXDocument(Model model) throws InvalidSPDXDocException {
 		//TODO: Verify cardinality
 		this.model = model;
+	}
+	
+	public String verify() {
+		return null;
+		//TODO: Implement verify
+	}
+	
+	/**
+	 * @param propertyName
+	 * @return
+	 */
+	/**
+	 * Find all property string values belonging to the subject
+	 * @param subject
+	 * @param propertyName
+	 * @return string values of the properties or null if the subject or propertyName is null
+	 */
+	private String[] findDocPropertieStringValues(Node subject, String propertyName) {
+		if (subject == null || propertyName == null) {
+			return null;
+		}
+		ArrayList<String> alResult = new ArrayList<String>();
+		Node p = model.getProperty(SPDX_NAMESPACE, propertyName).asNode();
+		Triple m = Triple.createMatch(subject, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			alResult.add(t.getObject().toString(false));
+		}
+		String[] retval = new String[alResult.size()];
+		return alResult.toArray(retval);
+	}
+
+	/**
+	 * @return the spdxVersion or null if there is no SPDX document
+	 * @throws InvalidSPDXDocException 
+	 */
+	public String getSpdxVersion() throws InvalidSPDXDocException {
+		String[] versions = findDocPropertieStringValues(getSpdxDocNode(), PROP_SPDX_VERSION);
+		if (versions == null || versions.length == 0) {
+			return null;
+		}
+		if (versions.length > 1) {
+			throw(new InvalidSPDXDocException("More than one version exists for the SPDX Document"));
+		}
+		return versions[0];
+	}
+	
+	/**
+	 * Remove all properties by the property name from the subject node
+	 * @param node
+	 * @param propertyName
+	 */
+	private void removeProperties(Node subject, String propertyName) {
+		Property p = model.getProperty(SPDX_NAMESPACE, propertyName);
+		Resource s = model.getResource(subject.getURI());
+		model.removeAll(s, p, null);
+		
+	}
+	
+	private void addProperty(Node subject, String propertyName, String[] propertyValue) {
+		Resource s = model.getResource(subject.getURI());
+		Property p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_VERSION);
+		for (int i = 0; i < propertyValue.length; i++) {
+			s.addProperty(p, propertyValue[i]);
+		}
+	}
+
+	/**
+	 * @param spdxVersion the spdxVersion to set
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void setSpdxVersion(String spdxVersion) throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must create the SPDX document before setting spdxVersion"));
+		}
+		removeProperties(spdxDocNode, PROP_SPDX_VERSION);
+		addProperty(spdxDocNode, PROP_SPDX_VERSION, new String[] {spdxVersion});
+	}
+
+	/**
+	 * @return the createdBy
+	 * @throws InvalidSPDXDocException 
+	 */
+	public String[] getCreatedBy() throws InvalidSPDXDocException {
+		// createdBy
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("The SPDX Document need to be created before accessing createdBy"));
+		}
+		ArrayList<String> als = new ArrayList<String>();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY).asNode();
+		Triple m = Triple.createMatch(spdxDocNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			als.add(t.getObject().toString(false));
+		}
+		String[] createdBy = new String[als.size()];
+		createdBy = als.toArray(createdBy);
+		return createdBy;
+	}
+
+	/**
+	 * @param createdBy the createdBy to set
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void setCreatedBy(String[] createdBy) throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must create the SPDX document before setting createdBy"));
+		}
+		// delete the previous createdby's
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY);
+		Resource s = model.getResource(getSpdxDocNode().getURI());
+		model.removeAll(s, p, null);
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY);
+		for (int i = 0; i < createdBy.length; i++) {
+			s.addProperty(p, createdBy[i]);
+		}
+	}
+
+	/**
+	 * @return the reviewers
+	 * @throws InvalidSPDXDocException 
+	 */
+	public String[] getReviewers() throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must have an SPDX document to get reviewers"));
+		}
+		ArrayList<String> als = new ArrayList<String>();
+		als.clear();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY).asNode();
+		Triple m = Triple.createMatch(spdxDocNode, p, null);
+		ExtendedIterator<Triple >tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			als.add(t.getObject().toString(false));
+		}
+		String[] reviewers = new String[als.size()];
+		reviewers = als.toArray(reviewers);
+		return reviewers;
+	}
+
+	/**
+	 * @param reviewers the reviewers to set
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void setReviewers(String[] reviewers) throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must have an SPDX document to set reviewers"));
+		}
+		// delete any previous created
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY);
+		Resource s = model.getResource(spdxDocNode.getURI());
+		model.removeAll(s, p, null);
+		// add the property
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY);
+		for (int i = 0; i < reviewers.length; i++) {
+			s.addProperty(p, reviewers[i]);
+		}
+	}
+
+	/**
+	 * @return the created
+	 * @throws InvalidSPDXDocException 
+	 */
+	public String getCreated() throws InvalidSPDXDocException {
+		String created = null;
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("No SPDX Document."));
+		}
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED).asNode();
+		Triple m = Triple.createMatch(spdxDocNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			created = t.getObject().toString(false);
+		}
+		return created;
+	}
+
+	/**
+	 * @param created the created to set
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void setCreated(String created) throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must create the SPDX document before setting created"));
+		}
+		// delete any previous created
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED);
+		Resource s = model.getResource(spdxDocNode.getURI());
+		model.removeAll(s, p, null);
+		// add the property
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED);
+		s.addProperty(p, created);
+	}
+
+	/**
+	 * @return the spdxPackage
+	 * @throws InvalidSPDXDocException 
+	 */
+	public SPDXPackage getSpdxPackage() throws InvalidSPDXDocException {
+		if (this.spdxPackage != null) {
+			return this.spdxPackage;
+		}
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must set an SPDX doc before getting an SPDX package"));
+		}
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_PACKAGE).asNode();
+		Triple m = Triple.createMatch(spdxDocNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		SPDXPackage newSpdxPackage = null;
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			newSpdxPackage = new SPDXPackage(t.getObject());
+		}
+		this.spdxPackage = newSpdxPackage;
+		return newSpdxPackage;
+	}
+
+	/**
+	 * Creates an empty SPDX package
+	 * @param uri Unique URI representing the SPDX package
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void createSpdxPackage(String uri) throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must create the SPDX document before creating an SPDX Package"));
+		}
+		// delete the previous SPDX package
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_PACKAGE);
+		Resource s = model.getResource(getSpdxDocNode().getURI());
+		model.removeAll(s, p, null);
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_PACKAGE);
+		Resource spdxPkg = model.createResource(uri, p);
+		s.addProperty(p, spdxPkg);
+		this.spdxPackage = new SPDXPackage(spdxPkg.asNode());
+	}
+	
+	public void createSpdxPackage() throws InvalidSPDXDocException {
+		// generate a unique URI by appending a "?package" to the end of the doc URI
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must create the SPDX document before creating an SPDX Package"));
+		}
+		createSpdxPackage(spdxDocNode.getURI()+"?package");
+	}
+
+	/**
+	 * @return the nonStandardLicenses
+	 * @throws InvalidSPDXDocException 
+	 */
+	public SPDXLicense[] getNonStandardLicenses() throws InvalidSPDXDocException {
+		// nonStandardLicenses
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("No SPDX Document - can not get the Non Standard Licenses"));
+		}
+		ArrayList<SPDXLicense> alLic = new ArrayList<SPDXLicense>();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES).asNode();
+		Triple m = Triple.createMatch(spdxDocNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			alLic.add(new SPDXLicense(model, t.getObject()));
+		}
+		SPDXLicense[] nonStandardLicenses = new SPDXLicense[alLic.size()];
+		nonStandardLicenses = alLic.toArray(nonStandardLicenses);
+		return nonStandardLicenses;
+	}
+
+	/**
+	 * @param nonStandardLicenses the nonStandardLicenses to set
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void setNonStandardLicenses(SPDXLicense[] nonStandardLicenses) throws InvalidSPDXDocException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXDocException("Must create the SPDX document before setting Non-Standard Licenses"));
+		}
+		// delete the previous createdby's
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+		Resource s = model.getResource(getSpdxDocNode().getURI());
+		model.removeAll(s, p, null);
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+		for (int i = 0; i < nonStandardLicenses.length; i++) {
+			s.addProperty(p, nonStandardLicenses[i].createResource(model));
+		}
+	}
+
+	/**
+	 * @return the URI of the SPDX Document
+	 */
+	public String getSpdxDocUri() {
 		// populate the model
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			return null;
+		}
+		return spdxDocNode.toString(false);
+	}
+	
+	/**
+	 * @return the model
+	 */
+	public Model getModel() {
+		return model;
+	}
+
+	/**
+	 * @param model the model to set
+	 */
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
+	/**
+	 * Creates a new empty SPDX Document.
+	 * Note: Any previous SPDX documents will be deleted from the model to
+	 * preserve the one and only one constraint.
+	 * Note: Follow-up calls MUST be made to add the required properties for this
+	 * to be a valid SPDX document
+	 * @param uri URI for the SPDX Document
+	 */
+	public void createSpdxDocument(String uri) {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode != null) {
+			// delete
+			model.removeAll();
+		}
+		model.setNsPrefix("", SPDX_NAMESPACE);
+		Property spdxDocProperty = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_DOC);
+		model.createResource(uri, spdxDocProperty);
+	}
+	
+	/**
+	 * @return the spdx doc node from the model
+	 */
+	private Node getSpdxDocNode() {
 		Node spdxDocNode = null;
 		Node rdfTypePredicate = this.model.getProperty(RDF_NAMESPACE, RDF_PROP_TYPE).asNode();
 		Node spdxDocObject = this.model.getProperty(SPDX_NAMESPACE, PROP_SPDX_DOC).asNode();
@@ -479,164 +740,6 @@ public class SPDXDocument {
 			Triple docTriple = tripleIter.next();
 			spdxDocNode = docTriple.getSubject();
 		}
-		if (spdxDocNode == null) {
-			throw(new InvalidSPDXDocException("No SPDX Document Found"));
-		}
-		this.name = spdxDocNode.toString(false);
-		// created
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED).asNode();
-		m = Triple.createMatch(spdxDocNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			this.created = t.getObject().toString(false);
-		}
-		// createdBy
-		ArrayList<String> als = new ArrayList<String>();
-		p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY).asNode();
-		m = Triple.createMatch(spdxDocNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			als.add(t.getObject().toString(false));
-		}
-		this.createdBy = new String[als.size()];
-		this.createdBy = als.toArray(this.createdBy);
-		// nonStandardLicenses
-		ArrayList<SPDXLicense> alLic = new ArrayList<SPDXLicense>();
-		p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES).asNode();
-		m = Triple.createMatch(spdxDocNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			alLic.add(new SPDXLicense(model, t.getObject()));
-		}
-		this.nonStandardLicenses = new SPDXLicense[als.size()];
-		this.nonStandardLicenses = alLic.toArray(this.nonStandardLicenses);
-		// reviewers
-		als.clear();
-		p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY).asNode();
-		m = Triple.createMatch(spdxDocNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			als.add(t.getObject().toString(false));
-		}
-		this.reviewers = new String[als.size()];
-		this.reviewers = als.toArray(this.reviewers);
-		// spdxPackage
-		p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_PACKAGE).asNode();
-		m = Triple.createMatch(spdxDocNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			this.spdxPackage = new SPDXPackage(t.getObject());
-		}
-		// spdxVersion
-		p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_VERSION).asNode();
-		m = Triple.createMatch(spdxDocNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			this.spdxVersion = t.getObject().toString(false);
-		}
-	}
-
-	/**
-	 * @return the spdxVersion
-	 */
-	public String getSpdxVersion() {
-		return this.spdxVersion;
-	}
-
-	/**
-	 * @param spdxVersion the spdxVersion to set
-	 */
-	public void setSpdxVersion(String spdxVersion) {
-		this.spdxVersion = spdxVersion;
-	}
-
-	/**
-	 * @return the createdBy
-	 */
-	public String[] getCreatedBy() {
-		return this.createdBy;
-	}
-
-	/**
-	 * @param createdBy the createdBy to set
-	 */
-	public void setCreatedBy(String[] createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	/**
-	 * @return the reviewers
-	 */
-	public String[] getReviewers() {
-		return this.reviewers;
-	}
-
-	/**
-	 * @param reviewers the reviewers to set
-	 */
-	public void setReviewers(String[] reviewers) {
-		this.reviewers = reviewers;
-	}
-
-	/**
-	 * @return the created
-	 */
-	public String getCreated() {
-		return this.created;
-	}
-
-	/**
-	 * @param created the created to set
-	 */
-	public void setCreated(String created) {
-		this.created = created;
-	}
-
-	/**
-	 * @return the spdxPackage
-	 */
-	public SPDXPackage getSpdxPackage() {
-		return this.spdxPackage;
-	}
-
-	/**
-	 * @param spdxPackage the spdxPackage to set
-	 */
-	public void setSpdxPackage(SPDXPackage spdxPackage) {
-		this.spdxPackage = spdxPackage;
-	}
-
-	/**
-	 * @return the nonStandardLicenses
-	 */
-	public SPDXLicense[] getNonStandardLicenses() {
-		return this.nonStandardLicenses;
-	}
-
-	/**
-	 * @param nonStandardLicenses the nonStandardLicenses to set
-	 */
-	public void setNonStandardLicenses(SPDXLicense[] nonStandardLicenses) {
-		this.nonStandardLicenses = nonStandardLicenses;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return this.name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
+		return spdxDocNode;
 	}
 }
