@@ -1,30 +1,33 @@
 /**
  * Copyright (c) 2010 Source Auditor Inc.
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
-
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
-
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+* Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.spdx.rdfparser;
 
 import java.io.File;
 import java.io.InputStream;
 
-import org.spdx.rdfparser.SPDXDocument.LicenseDeclaration;
-import org.spdx.rdfparser.SPDXDocument.SPDXFile;
+import org.spdx.rdfparser.LicenseDeclaration;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -77,19 +80,25 @@ public class PrettyPrinter {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
 		}
-		prettyPrintDoc(doc);
+		try {
+			prettyPrintDoc(doc);
+		} catch (InvalidSPDXDocException e) {
+			System.out.print("Error pretty printing SPDX Document: "+e.getMessage());
+			return;
+		}
 	}
 
 	/**
 	 * @param doc
+	 * @throws InvalidSPDXDocException 
 	 */
-	private static void prettyPrintDoc(SPDXDocument doc) {
+	private static void prettyPrintDoc(SPDXDocument doc) throws InvalidSPDXDocException {
 		if (doc == null) {
 			System.out.println("Warning: No document to print");
 			return;
 		}
-		if (doc.getName() != null) {
-			System.out.printf("SPDX Document for %1s\n",doc.getName());
+		if (doc.getSpdxDocUri() != null) {
+			System.out.printf("SPDX Document for %1s\n",doc.getSpdxDocUri());
 		}
 		if (doc.getSpdxVersion() != null && doc.getCreated() != null) {
 			System.out.printf("Version: %1s\tCreated: %2s\n", doc.getSpdxVersion(), doc.getCreated());
@@ -134,8 +143,9 @@ public class PrettyPrinter {
 
 	/**
 	 * @param spdxPackage
+	 * @throws InvalidSPDXDocException 
 	 */
-	private static void prettyPrintPackage(SPDXPackage pkg) {
+	private static void prettyPrintPackage(SPDXPackage pkg) throws InvalidSPDXDocException {
 		// Declared name
 		if (pkg.getDeclaredName() != null && !pkg.getDeclaredName().isEmpty()) {
 			System.out.printf("Package Name: %1s\n", pkg.getDeclaredName());

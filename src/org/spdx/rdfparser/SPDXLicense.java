@@ -1,35 +1,41 @@
 /**
  * Copyright (c) 2011 Source Auditor Inc.
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
-
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
-
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.spdx.rdfparser;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Source Auditor
  *
  */
-class SPDXLicense {
+public class SPDXLicense {
 
 	private String name;
 	private String id;
@@ -38,6 +44,8 @@ class SPDXLicense {
 	private String notes;
 	private String standardLicenseHeader;
 	private String template;
+	private Node licenseNode = null;
+	private Model model = null;
 	
 	public SPDXLicense(String name, String id, String text, String sourceUrl, String notes,
 			String standardLicenseHeader, String template) {
@@ -55,6 +63,8 @@ class SPDXLicense {
 	 */
 	public SPDXLicense(Model spdxModel, Node licenseNode) {
 		// id
+		this.licenseNode  = licenseNode;
+		this.model = spdxModel;
 		Node p = spdxModel.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID).asNode();
 		Triple m = Triple.createMatch(licenseNode, p, null);
 		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
@@ -159,6 +169,15 @@ class SPDXLicense {
 	 */
 	public void setId(String id) {
 		this.id = id;
+		if (this.licenseNode != null) {
+			// delete any previous created
+			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID);
+			Resource s = model.getResource(licenseNode.getURI());
+			model.removeAll(s, p, null);
+			// add the property
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID);
+			s.addProperty(p, id);
+		}
 	}
 
 	/**
@@ -173,6 +192,15 @@ class SPDXLicense {
 	 */
 	public void setText(String text) {
 		this.text = text;
+		if (this.licenseNode != null) {
+			// delete any previous created
+			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT);
+			Resource s = model.getResource(licenseNode.getURI());
+			model.removeAll(s, p, null);
+			// add the property
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT);
+			s.addProperty(p, text);
+		}
 	}
 	
 	@Override
@@ -186,5 +214,23 @@ class SPDXLicense {
 			sb.append(this.id);
 		}
 		return sb.toString();
+	}
+	public Resource createResource(Model model) {
+		this.model = model;
+		Property licenseProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+				SPDXDocument.PROP_SPDX_NONSTANDARD_LICENSES);
+		Resource r = model.createResource(licenseProperty);
+		if (id != null) {
+			Property idProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+					SPDXDocument.PROP_LICENSE_ID);
+			r.addProperty(idProperty, this.id);
+		}
+		if (this.text != null) {
+			Property textProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+					SPDXDocument.PROP_LICENSE_TEXT);
+			r.addProperty(textProperty, this.text);
+		}
+		this.licenseNode = r.asNode();
+		return r;
 	}
 }

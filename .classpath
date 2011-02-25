@@ -21,7 +21,9 @@
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="lib" path="Jenna-2.6.3/lib/xercesImpl-2.7.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="/ApachePOI/poi-3.5-FINAL-20090928.jar"/>
-	<classpathentry exported="true" kind="lib" path="/ApachePOI/poi-ooxml-3.5-FINAL-20090928.jar"/>
+	<classpathentry kind="lib" path="ApachePOI/poi-3.5-FINAL-20090928.jar"/>
+	<classpathentry kind="lib" path="ApachePOI/poi-ooxml-3.5-FINAL-20090928.jar"/>
+	<classpathentry kind="lib" path="commons-lang-2.3/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="ApachePOI/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
