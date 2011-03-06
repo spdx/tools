@@ -88,8 +88,13 @@ public class ReviewersSheet extends AbstractSheet {
 		for (int i = 0; i < NUM_COLS; i++) {
 			Cell cell = row.getCell(i);
 			if (cell == null) {
-				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum());
+				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in reviewer sheet";
 			} else {
+				if (i == TIMESTAMP_COL) {
+					if (!(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
+						return "Timestamp cell is not a numeric type for row "+String.valueOf(row.getRowNum())+" in Reviewer sheet";
+					}
+				}
 //				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
 //					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
 //				}

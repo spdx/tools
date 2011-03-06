@@ -118,9 +118,14 @@ public class OriginsSheet extends AbstractSheet {
 			Cell cell = row.getCell(i);
 			if (cell == null) {
 				if (REQUIRED[i]) {
-					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum());
+					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum()+" in Origins Spreadsheet");
 				}
 			} else {
+				if (i == CREATED_COL) {
+					if (!(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
+						return "Created column in origin spreadsheet is not of type Date";
+					}
+				}
 //				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
 //					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
 //				}
@@ -255,7 +260,7 @@ public class OriginsSheet extends AbstractSheet {
 		}
 	}
 	
-	public String getCreatedBy() {
+	public String[] getCreatedBy() {
 		// first count rows
 		int numRows = 0;
 		while (sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows) != null &&
@@ -267,6 +272,10 @@ public class OriginsSheet extends AbstractSheet {
 		for (int i = 0; i < numRows; i++) {
 			retval[i] = sheet.getRow(firstRowNum + DATA_ROW_NUM + i).getCell(CREATED_BY_COL).getStringCellValue();
 		}
-		return getDataCellStringValue(CREATED_BY_COL);
+		return retval;
+	}
+
+	public void setCreated(Date created) {
+		setDataCellDateValue(CREATED_COL, created);
 	}
 }

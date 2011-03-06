@@ -26,6 +26,9 @@ package org.spdx.spdxspreadsheet;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.spdx.rdfparser.InvalidSPDXDocException;
@@ -45,7 +48,7 @@ import com.hp.hpl.jena.util.FileManager;
  * Usage: RdfToSpreadsheet rdfxmlfile.rdf spreadsheetfile.xls
  * where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is 
  * the output SPDX spreadsheeet file.
- * @author Source Auditor
+ * @author Gary O'Neall
  *
  */
 public class RdfToSpreadsheet {
@@ -67,7 +70,7 @@ public class RdfToSpreadsheet {
 		}
 		File spdxRdfFile = new File(args[0]);
 		if (!spdxRdfFile.exists()) {
-			System.out.printf("Error: File %1$s does not exist.", args[0]);
+			System.out.printf("Error: File %1$s does not exist.\n", args[0]);
 			return;
 		}
 		File spdxSpreadsheetFile = new File(args[1]);
@@ -159,6 +162,17 @@ public class RdfToSpreadsheet {
 		originsSheet.setDataLicense("This field is not yet supported by SPDX");
 		// Author Comments
 		originsSheet.setAuthorComments("This field is not yet supported by SPDX");
+		String created = doc.getCreated();
+		if (created.endsWith("GMT")) {
+			created = created.substring(0, created.length()-4);
+		}
+		DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");	//TODO: implment the correct
+		try {
+			originsSheet.setCreated(dateFormat.parse(created));
+		} catch (ParseException e) {
+			throw(new InvalidSPDXDocException("Invalid created date - unable to parse"));
+		}
+		
 	}
 
 	private static void usage() {

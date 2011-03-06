@@ -113,9 +113,9 @@ public class LicenseDeclaration {
 		licenseResource.addProperty(nameProperty, this.name);
 		// disjunctive licenses
 		if (this.disjunctiveLicenses != null) {
-			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
-					SPDXDocument.PROP_DISJUNCTIVE_LICENSE);
 			for (int i = 0; i < this.disjunctiveLicenses.length; i++) {
+				Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+						SPDXDocument.PROP_DISJUNCTIVE_LICENSE);
 				licenseResource.addProperty(p, this.disjunctiveLicenses[i]);
 			}
 		}
