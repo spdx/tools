@@ -26,11 +26,12 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 
+import org.apache.poi.ss.usermodel.Sheet;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
@@ -77,6 +78,8 @@ public class SPDXDocument {
 	static final String PROP_PACKAGE_SHORT_DESC = "ShortDesc";
 	static final String PROP_PACKAGE_DESCRIPTION = "Description";
 	static final String PROP_PACKAGE_FILE = "hasFile";
+	static final String PROP_PACKAGE_URL = "DownloadURL";
+	static final String PROP_PACKAGE_FILE_CHECKSUMS = "FileChecksums";	//TODO: Update with correct property name
 	
 	static final String PROP_LICENSE_ID = "LicenseID";
 	static final String PROP_LICENSE_TEXT = "LicenseText";
@@ -218,9 +221,9 @@ public class SPDXDocument {
 		 */
 		public void setDeclaredLicenses(LicenseDeclaration[] declaredLicenses) {
 			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
 			Resource s = model.getResource(this.node.getURI());
 			for (int i = 0; i < declaredLicenses.length; i++) {
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
 				Resource lic = model.createResource(p);
 				s.addProperty(p, lic);
 				declaredLicenses[i].populateModel(lic, model);
@@ -246,10 +249,10 @@ public class SPDXDocument {
 		 * @param detectedLicenses the detectedLicenses to set
 		 */
 		public void setDetectedLicenses(LicenseDeclaration[] detectedLicenses) {
-			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE);
+			removeProperties(node, PROP_PACKAGE_DETECTED_LICENSE);
 			Resource s = model.getResource(this.node.getURI());
 			for (int i = 0; i < detectedLicenses.length; i++) {
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE);
 				Resource lic = model.createResource(p);
 				s.addProperty(p, lic);
 				detectedLicenses[i].populateModel(lic, model);
@@ -339,31 +342,46 @@ public class SPDXDocument {
 		 */
 		public void setFiles(SPDXFile[] files) {
 			removeProperties(node, PROP_PACKAGE_FILE);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 			Resource s = model.getResource(this.node.getURI());
 			for (int i = 0; i < files.length; i++) {
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 				Resource file = model.createResource(p);
 				s.addProperty(p, file);
 				files[i].populateModel(file, model);
 			}
 		}
 		
-		public String getUrl() {
-			//TODO: Implement URL
-			return null;
+		public String getUrl() throws InvalidSPDXDocException {
+			String[] urls = findDocPropertieStringValues(this.node, PROP_PACKAGE_URL);
+			if (urls == null || urls.length == 0) {
+				return null;
+			}
+			if (urls.length > 1) {
+				throw(new InvalidSPDXDocException("More than one URL for a package"));
+			}
+			return(urls[0]);
 		}
 		
 		public void setUrl(String url) {
-			
+			removeProperties(node, PROP_PACKAGE_URL);
+			addProperty(node, PROP_PACKAGE_URL, new String[] {url});
 		}
 		
-		public String getFileChecksums() {
-			//TODO: Impelemtn file checksums
-			return null;
+		public String getFileChecksums() throws InvalidSPDXDocException {
+			String[] cksums = findDocPropertieStringValues(this.node, PROP_PACKAGE_FILE_CHECKSUMS);
+			if (cksums == null || cksums.length == 0) {
+				return null;
+			}
+			if (cksums.length > 1) {
+				throw(new InvalidSPDXDocException("More than one file checksums for a package"));
+			}
+			return(cksums[0]);
 		}
 		
-		public void setFileChecksums() {
-			
+		public void setFileChecksums(String fileChecksums) {
+			removeProperties(node, PROP_PACKAGE_FILE_CHECKSUMS);
+			addProperty(node, PROP_PACKAGE_FILE_CHECKSUMS, new String[] {fileChecksums});
+
 		}
 		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXDocException {
 			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
@@ -445,8 +463,8 @@ public class SPDXDocument {
 	
 	private void addProperty(Node subject, String propertyName, String[] propertyValue) {
 		Resource s = model.getResource(subject.getURI());
-		Property p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_VERSION);
 		for (int i = 0; i < propertyValue.length; i++) {
+			Property p = model.createProperty(SPDX_NAMESPACE, propertyName);
 			s.addProperty(p, propertyValue[i]);
 		}
 	}
@@ -500,8 +518,8 @@ public class SPDXDocument {
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY);
 		Resource s = model.getResource(getSpdxDocNode().getURI());
 		model.removeAll(s, p, null);
-		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY);
 		for (int i = 0; i < createdBy.length; i++) {
+			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED_BY);
 			s.addProperty(p, createdBy[i]);
 		}
 	}
@@ -543,8 +561,8 @@ public class SPDXDocument {
 		Resource s = model.getResource(spdxDocNode.getURI());
 		model.removeAll(s, p, null);
 		// add the property
-		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY);
 		for (int i = 0; i < reviewers.length; i++) {
+			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY);
 			s.addProperty(p, reviewers[i]);
 		}
 	}
@@ -676,8 +694,8 @@ public class SPDXDocument {
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 		Resource s = model.getResource(getSpdxDocNode().getURI());
 		model.removeAll(s, p, null);
-		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 		for (int i = 0; i < nonStandardLicenses.length; i++) {
+			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 			s.addProperty(p, nonStandardLicenses[i].createResource(model));
 		}
 	}
@@ -741,5 +759,10 @@ public class SPDXDocument {
 			spdxDocNode = docTriple.getSubject();
 		}
 		return spdxDocNode;
+	}
+
+	public void setAuthorsComments(Sheet sheet) {
+		// TODO Implment authors comments
+		
 	}
 }
