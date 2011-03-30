@@ -1,37 +1,31 @@
 /**
  * Copyright (c) 2011 Source Auditor Inc.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  */
 package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.AbstractSheet;
+import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.LicenseDeclaration;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SpreadsheetException;
+import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 
 /**
  * Sheet describing the per file information in an SPDX Document
@@ -55,6 +49,9 @@ public class PerFileSheet extends AbstractSheet {
 	static final String[] HEADER_TITLES = new String[] {"File Name", "File Type",
 		"File Identifier", "Asserted License", "Seen License", "License Comments",
 		"Seen Copyright", "Artifact Of"};
+	static final int[] COLUMN_WIDTHS = new int[] {20, 10, 10, 40, 40, 40,
+		40, 30};
+
 	
 	/**
 	 * @param workbook
@@ -66,8 +63,12 @@ public class PerFileSheet extends AbstractSheet {
 	
 	public void add(SPDXFile fileInfo) {
 		Row row = addRow();
-		if (fileInfo.getArtifactOf() != null && ! fileInfo.getArtifactOf().isEmpty()) {
-			row.createCell(ARTIFACT_OF_COL).setCellValue(fileInfo.getArtifactOf());
+		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < fileInfo.getArtifactOf().length; i++) {
+				sb.append(fileInfo.getArtifactOf()[i].getName());
+			}
+			row.createCell(ARTIFACT_OF_COL).setCellValue(sb.toString());
 		}
 		if (fileInfo.getFileLicenses() != null && fileInfo.getFileLicenses().length > 0) {
 			row.createCell(ASSERTED_LIC_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getFileLicenses()));
@@ -106,19 +107,19 @@ public class PerFileSheet extends AbstractSheet {
 		} else {
 			sha1 = "";
 		}
-		LicenseDeclaration[] fileLicenses;
+		SPDXLicenseInfo fileLicenses;
 		Cell assertedLicenseCell = row.getCell(ASSERTED_LIC_COL);
 		if (assertedLicenseCell != null && !assertedLicenseCell.getStringCellValue().isEmpty()) {
-			fileLicenses = PackageInfoSheet.parseLicenseString(assertedLicenseCell.getStringCellValue());
+			fileLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue());
 		} else {
-			fileLicenses = new LicenseDeclaration[0];
+			fileLicenses = null;
 		}
-		LicenseDeclaration[] seenLicenses;
+		SPDXLicenseInfo seenLicenses;
 		Cell seenLicenseCell = row.getCell(SEEN_LIC_COL);
 		if (seenLicenseCell != null && !seenLicenseCell.getStringCellValue().isEmpty()) {
-			seenLicenses = PackageInfoSheet.parseLicenseString(seenLicenseCell.getStringCellValue());
+			seenLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicenseCell.getStringCellValue());
 		} else {
-			seenLicenses = new LicenseDeclaration[0];
+			seenLicenses = null;
 		}
 		String licenseComments;
 		Cell licCommentCell = row.getCell(LIC_COMMENTS_COL);
@@ -134,14 +135,15 @@ public class PerFileSheet extends AbstractSheet {
 		} else {
 			copyright = "";
 		}
-		String artifactOf;
+		DOAPProject[] artifactOf;
 		Cell artifactOfCell = row.getCell(ARTIFACT_OF_COL);
 		if (artifactOfCell != null) {
-			artifactOf = artifactOfCell.getStringCellValue();
+			artifactOf = new DOAPProject[] {new DOAPProject(artifactOfCell.getStringCellValue(), null)};
 		} else {
-			artifactOf = "";
+			artifactOf = new DOAPProject[0];
 		}
-		return new SPDXFile(name, type, sha1, fileLicenses, seenLicenses, 
+		return new SPDXFile(name, type, sha1, new SPDXLicenseInfo[] {fileLicenses}, 
+				new SPDXLicenseInfo[] {seenLicenses}, 
 				licenseComments, copyright, artifactOf);		
 	}
 
@@ -197,7 +199,7 @@ public class PerFileSheet extends AbstractSheet {
 //				}
 				if (i == ASSERTED_LIC_COL || i == SEEN_LIC_COL) {
 					try {
-						PackageInfoSheet.parseLicenseString(cell.getStringCellValue());
+						SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
 					} catch (SpreadsheetException ex) {
 						if (i == ASSERTED_LIC_COL) {
 							return "Invalid asserted license string in row "+String.valueOf(row.getRowNum()) +
@@ -218,9 +220,12 @@ public class PerFileSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
+			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
 			Cell cell = row.createCell(i);
+			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}

@@ -1,36 +1,27 @@
 /**
  * Copyright (c) 2011 Source Auditor Inc.
-* Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  */
 package org.spdx.spdxspreadsheet;
 
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.AbstractSheet;
 
 /**
  * Sheet describing any reviewers for an SPDX Document
@@ -43,6 +34,7 @@ public class ReviewersSheet extends AbstractSheet {
 	static final int REVIEWER_COL = 0;
 	static final int TIMESTAMP_COL = REVIEWER_COL + 1;
 	static final String[] HEADER_TITLES = new String[] {"Reviewer", "Timestamp"};
+	static final int[] COLUMN_WIDTHS = new int[] {50, 20};
 	
 	public ReviewersSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
@@ -109,9 +101,12 @@ public class ReviewersSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
+			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
 			Cell cell = row.createCell(i);
+			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
@@ -119,7 +114,11 @@ public class ReviewersSheet extends AbstractSheet {
 	public void addReviewer(String reviewer, Date timeStamp) {
 		Row row = addRow();
 		row.createCell(REVIEWER_COL).setCellValue(reviewer);
-		row.createCell(TIMESTAMP_COL).setCellValue(timeStamp);
+		Cell dateCell = row.createCell(TIMESTAMP_COL);
+		if (timeStamp != null) {
+			dateCell.setCellValue(timeStamp);
+			dateCell.setCellStyle(dateStyle);
+		}
 	}
 	
 	public String getReviewer(int rowNum) {
