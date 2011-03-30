@@ -32,6 +32,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.spdxspreadsheet.PerFileSheet;
+import org.spdx.spdxspreadsheet.SpreadsheetException;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * @author Source Auditor
@@ -39,13 +44,84 @@ import org.spdx.spdxspreadsheet.PerFileSheet;
  */
 public class TestPerFileSheet {
 
+	static final String[] NONSTD_IDS = new String[] {"id1", "id2", "id3", "id4"};
+	static final String[] NONSTD_TEXTS = new String[] {"text1", "text2", "text3", "text4"};
+	static final String[] STD_IDS = new String[] {"AFL-3", "CECILL-B", "EUPL-1"};
+	static final String[] STD_TEXTS = new String[] {"std text1", "std text2", "std text3"};
+
+	SPDXNonStandardLicense[] NON_STD_LICENSES;
+	SPDXStandardLicense[] STANDARD_LICENSES;
+	SPDXDisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
+	SPDXConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
+	
+	SPDXConjunctiveLicenseSet COMPLEX_LICENSE;
+	
+	Resource[] NON_STD_LICENSES_RESOURCES;
+	Resource[] STANDARD_LICENSES_RESOURCES;
+	Resource[] DISJUNCTIVE_LICENSES_RESOURCES;
+	Resource[] CONJUNCTIVE_LICENSES_RESOURCES;
+	Resource COMPLEX_LICENSE_RESOURCE;
+	
+	Model model;
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		NON_STD_LICENSES = new SPDXNonStandardLicense[NONSTD_IDS.length];
+		for (int i = 0; i < NONSTD_IDS.length; i++) {
+			NON_STD_LICENSES[i] = new SPDXNonStandardLicense(NONSTD_IDS[i], NONSTD_TEXTS[i]);
+		}
+		
+		STANDARD_LICENSES = new SPDXStandardLicense[STD_IDS.length];
+		for (int i = 0; i < STD_IDS.length; i++) {
+			STANDARD_LICENSES[i] = new SPDXStandardLicense("Name "+String.valueOf(i), 
+					STD_IDS[i], STD_TEXTS[i], "URL "+String.valueOf(i), "Notes "+String.valueOf(i), 
+					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i));
+		}
+		
+		DISJUNCTIVE_LICENSES = new SPDXDisjunctiveLicenseSet[3];
+		CONJUNCTIVE_LICENSES = new SPDXConjunctiveLicenseSet[2];
+		
+		DISJUNCTIVE_LICENSES[0] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
+		});
+		CONJUNCTIVE_LICENSES[0] = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+				STANDARD_LICENSES[0], NON_STD_LICENSES[0], STANDARD_LICENSES[1]
+		});
+		CONJUNCTIVE_LICENSES[1] = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+				DISJUNCTIVE_LICENSES[0], NON_STD_LICENSES[2]
+		});
+		DISJUNCTIVE_LICENSES[1] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+				CONJUNCTIVE_LICENSES[1], NON_STD_LICENSES[0], STANDARD_LICENSES[0]
+		});
+		DISJUNCTIVE_LICENSES[2] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+				DISJUNCTIVE_LICENSES[1], CONJUNCTIVE_LICENSES[0], STANDARD_LICENSES[2]
+		});
+		COMPLEX_LICENSE = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
+		});
+		model = ModelFactory.createDefaultModel();
+		
+		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
+		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
+			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(model);
+		}
+		STANDARD_LICENSES_RESOURCES = new Resource[STANDARD_LICENSES.length];
+		for (int i = 0; i < STANDARD_LICENSES.length; i++) {
+			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(model);
+		}
+		CONJUNCTIVE_LICENSES_RESOURCES = new Resource[CONJUNCTIVE_LICENSES.length];
+		for (int i = 0; i < CONJUNCTIVE_LICENSES.length; i++) {
+			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(model);
+		}
+		DISJUNCTIVE_LICENSES_RESOURCES = new Resource[DISJUNCTIVE_LICENSES.length];
+		for (int i = 0; i < DISJUNCTIVE_LICENSES.length; i++) {
+			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(model);
+		}
+		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(model);
 	}
-
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -70,24 +146,14 @@ public class TestPerFileSheet {
 		Workbook wb = new HSSFWorkbook();
 		PerFileSheet.create(wb, "File Info");
 		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info");
-		LicenseDeclaration[] testLicenses1 = new LicenseDeclaration[3];
-		testLicenses1[0] = new LicenseDeclaration("License1", new String[0]);
-		testLicenses1[1] = new LicenseDeclaration("License2", new String[] {
-				"disj1", "disj2", "disj3"
-		});
-		testLicenses1[2] = new LicenseDeclaration("License3", new String[] {"disjj"});
-//		String lic1String = PackageInfoSheet.licensesToString(testLicenses1);
-		LicenseDeclaration[] testLicenses2 = new LicenseDeclaration[2];
-		testLicenses2[0] = new LicenseDeclaration("License3", new String[]{"testdik1", "testdis2"});
-		testLicenses2[1] = new LicenseDeclaration("License4", new String[] {
-				"disj1", "disj2", "disj3", "disj4"
-		});
-//		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
-
+		SPDXLicenseInfo[] testLicenses1 = new SPDXLicenseInfo[] {COMPLEX_LICENSE};
+		SPDXLicenseInfo[] testLicenses2 = new SPDXLicenseInfo[] {NON_STD_LICENSES[0]};
+		DOAPProject[] testProject2 = new DOAPProject[] {new DOAPProject("artifactof 2", "home page2")};
+		DOAPProject[] testProject3 = new DOAPProject[] {new DOAPProject("artifactof 3", "home page3")};
 		SPDXFile testFile1 = new SPDXFile("FileName1", "fileType1", "sha1", testLicenses1, testLicenses2, 
-				"license comments 1", "copyright (c) 1", "artifactof 2");
+				"license comments 1", "copyright (c) 1", testProject2);
 		SPDXFile testFile2 = new SPDXFile("FileName2", "fileType2", "sha12", testLicenses2, testLicenses1, 
-				"license comments2", "copyright (c) 12", "artifactof 3");
+				"license comments2", "copyright (c) 12", testProject3);
 		fileInfoSheet.add(testFile1);
 		fileInfoSheet.add(testFile2);
 		SPDXFile result1 = fileInfoSheet.getFileInfo(1);
@@ -103,7 +169,7 @@ public class TestPerFileSheet {
 	private void compareSPDXFile(SPDXFile testFile, SPDXFile result) {
 		compareLicenseDeclarations(testFile.getFileLicenses(), result.getFileLicenses());
 		compareLicenseDeclarations(testFile.getSeenLicenses(), result.getSeenLicenses());
-		assertEquals(testFile.getArtifactOf(), result.getArtifactOf());
+		compareProjects(testFile.getArtifactOf(), result.getArtifactOf());
 		assertEquals(testFile.getCopyright(), result.getCopyright());
 		assertEquals(testFile.getLicenseComments(), result.getLicenseComments());
 		assertEquals(testFile.getName(), result.getName());
@@ -111,17 +177,60 @@ public class TestPerFileSheet {
 		assertEquals(testFile.getType(), result.getType());
 	}
 	
+	/**
+	 * Compares 2 projects and fails if they don't match
+	 * @param artifactOf
+	 * @param artifactOf2
+	 */
+	private void compareProjects(DOAPProject[] projects,
+			DOAPProject[] result) {
+		assertEquals(projects.length, result.length);
+		for (int i = 0; i < projects.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < result.length; j++) {
+				if (projects[i].getName() == null) {
+					if (result[j].getName() == null) {
+						if (projects[i].getHomePage() == null) {
+							if (result[j].getHomePage() == null) {
+								found = true;
+								break;
+							}
+						} else if (projects[i].getHomePage().equals(result[j].getHomePage())) {
+							found = true;
+							break;
+						}
+					} else if (projects[i].getName().equals(result[j].getName())) {
+						if (projects[i].getHomePage() == null) {
+							if (result[j].getHomePage() == null) {
+								found = true;
+								break;
+							}
+						} else if (projects[i].getHomePage().equals(result[j].getHomePage())) {
+							found = true;
+							break;
+						}
+					}
+				}
+				if (!found) {
+					fail("Project not found: "+projects[i].getName());
+				}
+			}
+		}
+	}
 	private void compareLicenseDeclarations(
-			LicenseDeclaration[] testLicenses,
-			LicenseDeclaration[] result) {
+			SPDXLicenseInfo[] testLicenses,
+			SPDXLicenseInfo[] result) {
 		assertEquals(testLicenses.length, result.length);
 		for (int i = 0;i < testLicenses.length; i++) {
-			assertEquals(testLicenses[i].getName(), result[i].getName());
-			assertEquals(testLicenses[i].getDisjunctiveLicenses().length, 
-					result[i].getDisjunctiveLicenses().length);
-			for (int j = 0; j < result[i].getDisjunctiveLicenses().length; j++) {
-				assertEquals(testLicenses[i].getDisjunctiveLicenses()[j],
-						result[i].getDisjunctiveLicenses()[j]);
+			boolean found = false;
+			for (int j = 0; j < result.length; j++) {
+				if (testLicenses[i].equals(result[j])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				fail("license not found: "+testLicenses[i].toString());
 			}
 		}
 	}

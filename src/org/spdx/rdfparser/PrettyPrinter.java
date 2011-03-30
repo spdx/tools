@@ -1,26 +1,18 @@
 /**
  * Copyright (c) 2010 Source Auditor Inc.
-* Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  */
 package org.spdx.rdfparser;
 
@@ -28,7 +20,7 @@ import java.io.File;
 import java.io.InputStream;
 
 import org.spdx.rdfparser.LicenseDeclaration;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -73,16 +65,16 @@ public class PrettyPrinter {
 			return;
 		}
 		model.read(spdxRdfInput, null);
-		SPDXDocument doc = null;
+		SPDXAnalysis doc = null;
 		try {
-			doc = new SPDXDocument(model);
-		} catch (InvalidSPDXDocException ex) {
+			doc = new SPDXAnalysis(model);
+		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
 		}
 		try {
 			prettyPrintDoc(doc);
-		} catch (InvalidSPDXDocException e) {
+		} catch (InvalidSPDXAnalysisException e) {
 			System.out.print("Error pretty printing SPDX Document: "+e.getMessage());
 			return;
 		}
@@ -90,9 +82,9 @@ public class PrettyPrinter {
 
 	/**
 	 * @param doc
-	 * @throws InvalidSPDXDocException 
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static void prettyPrintDoc(SPDXDocument doc) throws InvalidSPDXDocException {
+	private static void prettyPrintDoc(SPDXAnalysis doc) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
 			System.out.println("Warning: No document to print");
 			return;
@@ -103,23 +95,29 @@ public class PrettyPrinter {
 		if (doc.getSpdxVersion() != null && doc.getCreated() != null) {
 			System.out.printf("Version: %1s\tCreated: %2s\n", doc.getSpdxVersion(), doc.getCreated());
 		}
-		if (doc.getCreatedBy() != null && doc.getCreatedBy().length > 0) {
+		if (doc.getCreators() != null && doc.getCreators().length > 0) {
 			System.out.println("Created by:");
-			String[] createdBy = doc.getCreatedBy();
+			SPDXCreator[] createdBy = doc.getCreators();
 			for (int i = 0; i < createdBy.length; i++) {
 				System.out.printf("\t%1s\n", createdBy[i]);
 			}
 		}
 		if (doc.getReviewers() != null && doc.getReviewers().length > 0) {
 			System.out.println("Reviewed by:");
-			String[] reviewedBy = doc.getReviewers();
+			SPDXReview[] reviewedBy = doc.getReviewers();
 			for (int i = 0; i < reviewedBy.length; i++) {
-				System.out.printf("\t%1s\n",reviewedBy[i]);
+				if (reviewedBy[i].getComment() != null && !reviewedBy[i].getComment().isEmpty()) {
+					System.out.printf("\t%1s\t%2s\tComment:%3s\n",reviewedBy[i].getReviewer(), 
+							reviewedBy[i].getReviewDate(), reviewedBy[i].getComment());
+				} else {
+					System.out.printf("\t%1s\t%2s\n",reviewedBy[i].getReviewer(), 
+							reviewedBy[i].getReviewDate());
+				}
 			}
 		}
 		prettyPrintPackage(doc.getSpdxPackage());
 		if (doc.getNonStandardLicenses() != null && doc.getNonStandardLicenses().length > 0) {
-			SPDXLicense[] nonStandardLic = doc.getNonStandardLicenses();
+			SPDXStandardLicense[] nonStandardLic = doc.getNonStandardLicenses();
 			System.out.println("Non-Standard Licenses:");
 			for (int i = 0; i < nonStandardLic.length; i++) {
 				prettyPrintLicense(nonStandardLic[i]);
@@ -130,7 +128,7 @@ public class PrettyPrinter {
 	/**
 	 * @param license
 	 */
-	private static void prettyPrintLicense(SPDXLicense license) {
+	private static void prettyPrintLicense(SPDXStandardLicense license) {
 		// id
 		if (license.getId() != null && !license.getId().isEmpty()) {
 			System.out.printf("\tLicense ID: %1s", license.getId());
@@ -143,9 +141,9 @@ public class PrettyPrinter {
 
 	/**
 	 * @param spdxPackage
-	 * @throws InvalidSPDXDocException 
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static void prettyPrintPackage(SPDXPackage pkg) throws InvalidSPDXDocException {
+	private static void prettyPrintPackage(SPDXPackage pkg) throws InvalidSPDXAnalysisException {
 		// Declared name
 		if (pkg.getDeclaredName() != null && !pkg.getDeclaredName().isEmpty()) {
 			System.out.printf("Package Name: %1s\n", pkg.getDeclaredName());
@@ -164,7 +162,11 @@ public class PrettyPrinter {
 		}
 		// sha1
 		if (pkg.getSha1() != null && !pkg.getSha1().isEmpty()) {
-				System.out.printf("SHA1: %1s\n",pkg.getSha1());				
+			System.out.printf("SHA1: %1s\n",pkg.getSha1());				
+		}
+		// file verification code
+		if (pkg.getVerificationCode() != null && !pkg.getVerificationCode().isEmpty()) {
+			System.out.printf("Verification: %1s\n", pkg.getVerificationCode());
 		}
 		// Description
 		if (pkg.getDescription() != null && !pkg.getDescription().isEmpty()) {
@@ -178,6 +180,14 @@ public class PrettyPrinter {
 		if (pkg.getDeclaredLicenses() != null && pkg.getDeclaredLicenses().length > 0) {
 			for (int i = 0; i < pkg.getDeclaredLicenses().length; i++) {
 				prettyPrintDeclaredLicense(pkg.getDeclaredLicenses()[i]);
+			}
+		}
+		// file licenses
+		if (pkg.getLicenseInfoFromFiles() != null && pkg.getLicenseInfoFromFiles().length > 0) {
+			SPDXLicenseInfo[] licenses = pkg.getLicenseInfoFromFiles();
+			System.out.println("Licenses from files:");
+			for (int i = 0; i < licenses.length; i++) {
+				System.out.printf("\t%1s\n", licenses[i].toString());
 			}
 		}
 		// Files
@@ -216,20 +226,7 @@ public class PrettyPrinter {
 	 * @param licenseDeclaration
 	 */
 	private static void prettyPrintDeclaredLicense(
-			LicenseDeclaration licenseDeclaration) {
-		String[] disjunctive = licenseDeclaration.getDisjunctiveLicenses();
-		if (licenseDeclaration.getName() == null || licenseDeclaration.getName().isEmpty()) {
-			System.out.println("\tLicense - UNKNOWN");
-			return;
-		} else {
-			System.out.println("\tLicense - "+licenseDeclaration.getName());
-		}
-		if (disjunctive != null && disjunctive.length > 0) {
-			System.out.println("\tLicensed under a choice of:");
-			System.out.printf("\t\t%1s\n", licenseDeclaration.getName());
-			for (int i = 0; i < disjunctive.length; i++) {
-				System.out.printf("\t\t%1s\n", disjunctive[i]);
-			}
-		}
+			SPDXLicenseInfo licenseDeclaration) {
+		System.out.println("\tLicense - "+licenseDeclaration.toString());
 	}
 }

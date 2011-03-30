@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.LicenseDeclaration;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
+import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -47,24 +48,33 @@ public class TestPackageInfoSheet {
 
 	@Test
 	public void testAddAndGet() throws SpreadsheetException {
-		LicenseDeclaration[] testLicenses1 = new LicenseDeclaration[3];
-		testLicenses1[0] = new LicenseDeclaration("License1", new String[0]);
-		testLicenses1[1] = new LicenseDeclaration("License2", new String[] {
-				"disj1", "disj2", "disj3"
-		});
-		testLicenses1[2] = new LicenseDeclaration("License3", new String[] {"disjj"});
+		SPDXLicenseInfo[] testLicenses1 = new SPDXLicenseInfo[3];
+		testLicenses1[0] = new SPDXNonStandardLicense("License1", "License1Text");
+		SPDXLicenseInfo[] disjunctiveLicenses = new SPDXLicenseInfo[3];
+		disjunctiveLicenses[0] = new SPDXNonStandardLicense("disj1", "disj1 Text");
+		disjunctiveLicenses[1] = new SPDXNonStandardLicense("disj2", "disj2 Text");
+		disjunctiveLicenses[2] = new SPDXNonStandardLicense("disj3", "disj3 Text");
+		testLicenses1[1] = new SPDXDisjunctiveLicenseSet(disjunctiveLicenses);
+		SPDXLicenseInfo[] conjunctiveLicenses = new SPDXLicenseInfo[] {
+				new SPDXNonStandardLicense("conj1", "conj1 Text"),
+				new SPDXNonStandardLicense("conj2", "conj2 Text")
+		};
+		testLicenses1[2] = new SPDXConjunctiveLicenseSet(conjunctiveLicenses);
+		SPDXLicenseInfo testLicense1 = new SPDXDisjunctiveLicenseSet(testLicenses1);
+		
 //		String lic1String = PackageInfoSheet.licensesToString(testLicenses1);
-		LicenseDeclaration[] testLicenses2 = new LicenseDeclaration[2];
-		testLicenses2[0] = new LicenseDeclaration("License3", new String[]{"testdik1", "testdis2"});
-		testLicenses2[1] = new LicenseDeclaration("License4", new String[] {
-				"disj1", "disj2", "disj3", "disj4"
-		});
+		SPDXLicenseInfo[] testLicenses2 = new SPDXLicenseInfo[2];
+		testLicenses2[0] = new SPDXNonStandardLicense("License3", "License 3 text");
+		testLicenses2[1] = new SPDXNonStandardLicense("License4", "License 4 text");
+		SPDXLicenseInfo testLicense2 = new SPDXConjunctiveLicenseSet(testLicenses2);
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
 		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "machinename1", 
-				"sha1-1", "sourceinfo1", testLicenses1, testLicenses2, "dec-copyright1",
+				"sha1-1", "sourceinfo1", new SPDXLicenseInfo[] {testLicense1},
+				new SPDXLicenseInfo[] {testLicense2}, "dec-copyright1",
 				"short desc1", "desc1", "http://url1", "filechecksum1");
 		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "machinename1", 
-				"sha1-1", "sourceinfo1", testLicenses1, testLicenses2, "dec-copyright1",
+				"sha1-1", "sourceinfo1", new SPDXLicenseInfo[] {testLicense1},
+				new SPDXLicenseInfo[] {testLicense2}, "dec-copyright1",
 				"short desc1", "desc1", "http://url1", "filechecksum1");
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
@@ -97,55 +107,19 @@ public class TestPackageInfoSheet {
 	}
 
 	static public void compareLicenseDeclarations(
-			LicenseDeclaration[] testLicenses,
-			LicenseDeclaration[] result) {
+			SPDXLicenseInfo[] testLicenses,
+			SPDXLicenseInfo[] result) {
 		assertEquals(testLicenses.length, result.length);
 		for (int i = 0;i < testLicenses.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < result.length; j++) {
-				if (testLicenses[i].getName().equals(result[j].getName())) {
-					if ((testLicenses[i].getDisjunctiveLicenses() == null ||
-							testLicenses[i].getDisjunctiveLicenses().length == 0) &&
-							(result[j].getDisjunctiveLicenses() == null ||
-							result[j].getDisjunctiveLicenses().length == 0)) {
-						found = true;
-						break;
-					} else if (testLicenses[i].getDisjunctiveLicenses().length == result[j].getDisjunctiveLicenses().length) {
-						for (int k = 0; k < testLicenses[i].getDisjunctiveLicenses().length; k++) {
-							boolean found2 = false;
-							for (int l = 0; l < result[j].getDisjunctiveLicenses().length; l++) {
-								if (testLicenses[i].getDisjunctiveLicenses()[k].equals(result[j].getDisjunctiveLicenses()[l])) {
-									found2 = true;
-									break;
-								}
-							}
-							if (found2) {
-								found = true;
-							} else {
-								found = false;
-								break;
-							}
-						}
-					}
+				if (testLicenses[i].equals(result[j])) {
+					found = true;
 				}
-			}
+			}				
 			if (!found) {
-				fail("License match "+testLicenses[i].getName()+ " was not found.");
+				fail("License match "+testLicenses[i].toString()+ " was not found.");
 			}
 		}
 	}
-
-	@Test
-	public void testParseLicenseString() throws SpreadsheetException {
-		LicenseDeclaration[] testLicenses = new LicenseDeclaration[3];
-		testLicenses[0] = new LicenseDeclaration("License1", new String[0]);
-		testLicenses[1] = new LicenseDeclaration("License2", new String[] {
-				"disj1", "disj2", "disj3"
-		});
-		testLicenses[2] = new LicenseDeclaration("License3", new String[] {"disjj"});
-		String licString = PackageInfoSheet.licensesToString(testLicenses);
-		LicenseDeclaration[] result = PackageInfoSheet.parseLicenseString(licString);
-		compareLicenseDeclarations(testLicenses, result);
-	}
-
 }

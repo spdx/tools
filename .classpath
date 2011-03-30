@@ -25,5 +25,10 @@
 	<classpathentry kind="lib" path="ApachePOI/poi-ooxml-3.5-FINAL-20090928.jar"/>
 	<classpathentry kind="lib" path="commons-lang-2.3/commons-lang-2.3.jar"/>
 	<classpathentry kind="lib" path="ApachePOI/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="grddl-0.3/lib/BrowserLauncher2-10.jar"/>
+	<classpathentry kind="lib" path="grddl-0.3/lib/grddl.jar"/>
+	<classpathentry kind="lib" path="grddl-0.3/lib/nekohtml.jar"/>
+	<classpathentry kind="lib" path="grddl-0.3/lib/saxon8.jar"/>
+	<classpathentry kind="lib" path="commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
