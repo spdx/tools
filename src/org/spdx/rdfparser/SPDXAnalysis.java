@@ -597,7 +597,7 @@ public class SPDXAnalysis {
 	}
 
 	/**
-	 * @param createdBy the createdBy to set
+	 * @param creators array of creators to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void setCreator(SPDXCreator[] creators) throws InvalidSPDXAnalysisException {

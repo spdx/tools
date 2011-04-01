@@ -78,7 +78,7 @@ public abstract class SPDXLicenseInfo {
 	 * create a new resource and populate it.  If the resource does exist,
 	 * return the existing resource.
 	 * @param model
-	 * @return
+	 * @return resource created from the model
 	 */
 	public Resource createResource(Model model) {
 		if (this.model != null &&

@@ -132,7 +132,7 @@ public class SPDXLicenseInfoFactory {
 	 *				keywords AND and OR
 	 *			A licenseID must NOT be "AND" or "OR"
 	 * @param licenseString String conforming to the syntax
-	 * @return
+	 * @return an SPDXLicenseInfo created from the string
 	 * @throws InvalidLicenseStringException 
 	 */
 	public static SPDXLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
@@ -200,18 +200,18 @@ public class SPDXLicenseInfoFactory {
 			// consume the AND or the OR
 			// skip more whitespace
 			pos = skipWhiteSpace(parseString, pos);
-			if (parseString.charAt(pos) == 'A') {
+			if (parseString.charAt(pos) == 'A' || parseString.charAt(pos) == 'a') {
 				// And
 				if (pos + 4 >= parseString.length() || 
-						!parseString.substring(pos, pos+4).equals("AND ")) {
+						!parseString.substring(pos, pos+4).toUpperCase().equals("AND ")) {
 					throw(new InvalidLicenseStringException("Expecting an AND"));
 				}
 				isConjunctive = true;
 				pos = pos + 4;
-			} else if (parseString.charAt(pos) == 'O') {
+			} else if (parseString.charAt(pos) == 'O' || parseString.charAt(pos) == 'o') {
 				// or
 				if (pos + 3 >= parseString.length() || 
-						!parseString.substring(pos, pos+3).equals("OR ")) {
+						!parseString.substring(pos, pos+3).toUpperCase().equals("OR ")) {
 					throw(new InvalidLicenseStringException("Expecting an OR"));
 				}
 				isDisjunctive = true;
@@ -293,7 +293,7 @@ public class SPDXLicenseInfoFactory {
 
 	/**
 	 * @param licenseID
-	 * @return
+	 * @return true if the licenseID belongs to a standard license
 	 */
 	public static boolean isStandardLicenseID(String licenseID) {
 		// TODO Replace with a lookup of the website
