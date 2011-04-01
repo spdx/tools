@@ -1,27 +1,19 @@
 /**
  * Copyright (c) 2011 Source Auditor Inc.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+*/
 package org.spdx.rdfparser;
 
 import com.hp.hpl.jena.graph.Node;
@@ -32,130 +24,47 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
- * @author Source Auditor
+ * Describes a license
+ * 
+ * All licenses have an ID and text.  Subclasses should extend this class to add
+ * additional properties.
+ * 
+ * @author Gary O'Neall
  *
  */
-public class SPDXLicense {
+public abstract class SPDXLicense extends SPDXLicenseInfo {
+	protected String id;
+	protected String text;
 
-	private String name;
-	private String id;
-	private String text;
-	private String sourceUrl;
-	private String notes;
-	private String standardLicenseHeader;
-	private String template;
-	private Node licenseNode = null;
-	private Model model = null;
-	
-	public SPDXLicense(String name, String id, String text, String sourceUrl, String notes,
-			String standardLicenseHeader, String template) {
-		this.name = name;
-		this.id = id;
-		this.text = text;
-		this.sourceUrl = sourceUrl;
-		this.notes = notes;
-		this.standardLicenseHeader = standardLicenseHeader;
-		this.template = template;
-	}
 	/**
-	 * Constructs an SPDX License from the licenseNode
-	 * @param licenseNode RDF graph node representing the SPDX License
+	 * @param model
+	 * @param licenseInfoNode
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXLicense(Model spdxModel, Node licenseNode) {
+	SPDXLicense(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+		super(model, licenseInfoNode);
 		// id
-		this.licenseNode  = licenseNode;
-		this.model = spdxModel;
-		Node p = spdxModel.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID).asNode();
-		Triple m = Triple.createMatch(licenseNode, p, null);
-		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
+		Node p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_ID).asNode();
+		Triple m = Triple.createMatch(licenseInfoNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.id = t.getObject().toString(false);
 		}
-		// name
-		//TODO: Implement name rdf parsing
-		this.name = id;
 		// text
-		p = spdxModel.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT).asNode();
-		m = Triple.createMatch(licenseNode, p, null);
-		tripleIter = spdxModel.getGraph().find(m);	
+		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_TEXT).asNode();
+		m = Triple.createMatch(licenseInfoNode, p, null);
+		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.text = t.getObject().toString(false);
 		}
-		// SourceUrl
-		//TODO: Implement SourceUrl rdf parsing
-		this.sourceUrl = "";
-		// notes
-		//TODO: Implement notes rdf parsing
-		this.notes = "";
-		// standardLicenseHeader
-		//TODO: Implement standardLicenseHeader rdf parsing
-		this.standardLicenseHeader = "";
-		// template
-		//TODO: Implement template rdf parsing
-		this.template = "";
 	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	/**
-	 * @return the sourceUrl
-	 */
-	public String getSourceUrl() {
-		return sourceUrl;
-	}
-	/**
-	 * @param sourceUrl the sourceUrl to set
-	 */
-	public void setSourceUrl(String sourceUrl) {
-		this.sourceUrl = sourceUrl;
-	}
-	/**
-	 * @return the notes
-	 */
-	public String getNotes() {
-		return notes;
-	}
-	/**
-	 * @param notes the notes to set
-	 */
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-	/**
-	 * @return the standardLicenseHeader
-	 */
-	public String getStandardLicenseHeader() {
-		return standardLicenseHeader;
-	}
-	/**
-	 * @param standardLicenseHeader the standardLicenseHeader to set
-	 */
-	public void setStandardLicenseHeader(String standardLicenseHeader) {
-		this.standardLicenseHeader = standardLicenseHeader;
-	}
-	/**
-	 * @return the template
-	 */
-	public String getTemplate() {
-		return template;
-	}
-	/**
-	 * @param template the template to set
-	 */
-	public void setTemplate(String template) {
-		this.template = template;
+	
+	SPDXLicense(String id, String text) {
+		super();
+		this.id = id;
+		this.text = text;
 	}
 	/**
 	 * @return the id
@@ -169,14 +78,13 @@ public class SPDXLicense {
 	 */
 	public void setId(String id) {
 		this.id = id;
-		if (this.licenseNode != null) {
+		if (licenseInfoNode != null) {
 			// delete any previous created
-			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID);
-			Resource s = model.getResource(licenseNode.getURI());
-			model.removeAll(s, p, null);
+			Property p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_ID);
+			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID);
-			s.addProperty(p, id);
+			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_ID);
+			resource.addProperty(p, id);
 		}
 	}
 
@@ -192,45 +100,68 @@ public class SPDXLicense {
 	 */
 	public void setText(String text) {
 		this.text = text;
-		if (this.licenseNode != null) {
+		if (this.licenseInfoNode != null) {
 			// delete any previous created
-			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT);
-			Resource s = model.getResource(licenseNode.getURI());
-			model.removeAll(s, p, null);
+			Property p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_TEXT);
+			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT);
-			s.addProperty(p, text);
+			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_TEXT);
+			resource.addProperty(p, text);
 		}
 	}
 	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		if (this.name != null) {
-			sb.append(this.name);
-		}
-		if (this.id != null) {
-			sb.append("; ID: ");
-			sb.append(this.id);
-		}
-		return sb.toString();
-	}
-	public Resource createResource(Model model) {
-		this.model = model;
-		Property licenseProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
-				SPDXDocument.PROP_SPDX_NONSTANDARD_LICENSES);
-		Resource r = model.createResource(licenseProperty);
+	/**
+	 * Create a basic SPDXLicense resource of a given type
+	 * If a license with this ID already exists in the model, then that resource
+	 * is returned.  No checking is done to make sure the text matches.  ID's are
+	 * assumed to be unique.
+	 * NOTE: the type must be a subclass of SPDXLicense
+	 * @param model
+	 * @param typeURI
+	 * @return
+	 */
+	protected Resource _createResource(Model model, Resource type) {
+		Resource r = null;
 		if (id != null) {
-			Property idProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
-					SPDXDocument.PROP_LICENSE_ID);
-			r.addProperty(idProperty, this.id);
+			// check to see if it exists
+			Property idProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, 
+					SPDXAnalysis.PROP_LICENSE_ID);
+			Property typeProperty = this.model.getProperty(SPDXAnalysis.RDF_NAMESPACE, 
+					SPDXAnalysis.RDF_PROP_TYPE);
+			Triple m = Triple.createMatch(null, idProperty.asNode(), null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				if (t.getObject().toString(false).equals(this.id)) {
+					Triple typeMatch = Triple.createMatch(t.getSubject(), typeProperty.asNode(), type.asNode());
+					ExtendedIterator<Triple> typeTripleIter = model.getGraph().find(typeMatch);
+					if (typeTripleIter.hasNext()) {
+						// found it
+						if (t.getSubject().isURI()) {
+							r = model.createResource(t.getSubject().getURI());
+						} else if (t.getSubject().isBlank()) {
+							r = model.createResource(t.getSubject().getBlankNodeId());
+						}
+					}
+				}
+			}
+
 		}
-		if (this.text != null) {
-			Property textProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
-					SPDXDocument.PROP_LICENSE_TEXT);
-			r.addProperty(textProperty, this.text);
+		if (r == null) {
+			// need to create it
+			r = model.createResource(type);
+			if (id != null) {
+				Property idProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, 
+						SPDXAnalysis.PROP_LICENSE_ID);
+				r.addProperty(idProperty, this.id);
+			}
+			if (this.text != null) {
+				Property textProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, 
+						SPDXAnalysis.PROP_LICENSE_TEXT);
+				r.addProperty(textProperty, this.text);
+			}
 		}
-		this.licenseNode = r.asNode();
+
 		return r;
 	}
 }

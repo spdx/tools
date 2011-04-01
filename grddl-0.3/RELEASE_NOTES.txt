@@ -1,0 +1,18 @@
+grddl 0.3: Sept 2007
+  - implements Rec (modulo security limitations)
+  - HTTP header support
+  - Transparent Content Negotiation support
+  - RDFa support
+  - predefined transform support (for microformats)
+  
+
+grddl 0.2: March 2007
+  - added Java sandbox to improve security
+  - added license dialog
+  - added http headers support (LINK and PROFILE)
+
+grddl 0.1: January 2007
+   first release.
+   Implements my best guess of the next version of
+     http://www.w3.org/TR/2006/WD-grddl-20061024/
+   Does not respect HTTP expiry headers.

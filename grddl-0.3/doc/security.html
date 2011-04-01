@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<!-- $Id: security.html 2242 2007-09-24 15:35:19Z jeremy_carroll $ -->
+<!-- (c) Copyright 2007 Hewlett-Packard Development Company LP -->
+<head>
+  <title>The Jena GRDDL Reader - Security</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="DC.Creator"    content="Jeremy J. Carroll"/>
+  <meta name="DC.Title"      content="The Jena GRDDL Reader - Security"/>
+  <meta name="DC.Rights"
+        content="Copyright 2007 Hewlett-Packard Development Company LP"/>
+  <meta name="DC.Identifier" content="http://jena.sourceforge.net/grddl/security.html"/>
+  <meta name="DC.Format"     content="text/html;charset=utf-8"/>
+  <meta name="DC.Date"       content="$Date: 2007/01/17 10:44:16 $"/>
+  <meta name="DC.Type"       content="web page"/>
+
+
+  <link rel="stylesheet" type="text/css" href="styles/site.css" />
+</head>
+
+<body>
+
+<div id="header">
+The Jena GRDDL Reader - Security
+</div>
+
+
+<div id="main">
+
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr>
+
+<!-- Left -->
+<td width="25ex" style="border-right: 1px solid #DDD;">
+ <div id="leftnav">
+  <div align="center" >
+  <a href="http://jena.sourceforge.net">
+  <img src="images/jena-logo-small.png" alt="jena" style="border:0;" />
+  </a>
+  </div>
+  <div class="grouptitle" style="width: 20ex;">on this site</div>
+  <div class="item"><a href="index.html">GRDDL home</a></div>
+  <div class="item"><a href="http://jena.sourceforge.net">Jena home</a></div>
+  <div class="item"><a href="http://sourceforge.net/project/showfiles.php?group_id=40417">downloads</a></div>
+  <div class="item"><a href="license.html">license</a></div>
+  <div class="item"><a href="security.html">security</a></div>
+  <div class="item"><a href="alerts.html">security alerts</a></div>
+  <div class="item"><a href="documentation.html">documentation</a></div>
+  <div class="item"><a href="http://jena.sourceforge.net/test/grddl/">test area</a></div>
+  
+  <div class="item">&nbsp;</div>
+
+  <div id="localnav">
+    <div class="item">&nbsp;</div>
+    <div class="item">&nbsp;</div>
+    <div class="item">&nbsp;</div>
+    <div class="item">&nbsp;</div>
+    <div class="item">&nbsp;</div>
+    <div class="item">&nbsp;</div>
+  </div>
+ </div>
+</td>
+
+<!-- Right -->
+<td width="100%"> <!-- Set width.  Fixed width above takes precedence : fixes Mozilla oddity -->
+
+<div id="trail">
+<a href="index.html">home</a>
+&raquo; <a href="security.html">security</a>
+</div>
+
+<div id="content">
+
+<p>Jena GRDDL Reader: Version 0.3</p>
+<p>Note: also refer to the security page that ships
+in the doc directory of your version of the Jena GRDDL Reader.
+</p>
+
+<h2>Background</h2>
+<p>
+GRDDL specifies that some
+files retrieved from the Web
+should be interpreted as XSLT
+and executed in the client machine.
+As with any technology involving
+the local execution of untrusted programs,
+particularly in a programming language
+which supports both local and remote input/output operations,
+there is a potential risk of malicious code.
+</p>
+<h2>Legal</h2>
+<p>
+The reader is reminded that the
+Jena GRDDL Reader is distributed
+under the 
+<a href="license.html">Jena License</a> terms.
+Nothing in the documentation, including this file,
+should be read, as granting rights or expectations
+not granted
+under that license. In particular, the reader is
+reminded that:
+</p>
+<p>
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (etc.)
+</p>
+
+<h2>Security Goals of Jena GRDDL Reader</h2>
+<p>
+Releases of the Jena GRDDL Reader 
+should
+include
+documention covering
+known security issues.
+</p>
+<p>
+The aim is to implement the 
+<a href="http://www.w3.org/TR/grddl/#sec">
+security section
+</a> of the specification.
+This aim has not been fully achieved in any version of the software.
+</p>
+<h2>Details of Implementation, (Lack of) Conformance</h2>
+<p>
+The <a href="security-conformance.html">conformance</a>
+page, indicates which features of the specification have
+been implemented, which are viewed as the responsibility
+of the user of the software, and which are unimplemented.
+</p>
+<h2>Potential Weaknesses</h2>
+<p>
+Any defects in the code implementing the security
+features of GRDDL may
+ leave security holes. This may, in the worse case, enable
+ a malicious party to take control of your machine.
+ A more likely case, is that a malicious party will
+ gain illegal access to some data either on your machine
+ or accessible from your machine, but not directly accessible
+ to the malicious party.
+</p>
+<p>
+Known weaknesses are listed both
+in the 
+<a href="security-conformance.html#weaknesses">conformance section</a>,
+and on the <a href="alerts.html">security alerts</a> page.
+</p>
+
+
+
+
+</div><!-- end #content -->
+
+</td>
+</tr>
+</table>
+</div> <!-- end #main -->
+
+<div id="footer">
+&nbsp;
+</div>
+
+<div id="logos">
+<div class="left">
+<a href="http://www.w3.org/RDF/" title="RDF Resource Description Framework">
+  <img border="0" src="images/rdf_w3c_icon.gif" alt="Resource Description Framework"/>
+</a>
+<br/>
+<br/>
+
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+</div>
+
+<div class="right">
+Hosted by:
+<a href="http://sourceforge.net" title="SourceForge">
+<!--
+  <img src="http://sourceforge.net/sflogo.php?group_id=40417&amp;type=1"
+       border="0"
+       alt="sourceforge.net" />
+-->
+  <img src="images/sflogo-type1.png" border="0" alt="sourceforge.net"/>
+</a>
+</div>
+
+</div>
+
+</body>
+</html>
