@@ -74,7 +74,7 @@ public class PrettyPrinter {
 			return;
 		}
 		model.read(spdxRdfInput, "http://example.com//", fileType(args[0]));
-		SPDXDocument doc = null;
+		SPDXAnalysis doc = null;
 		try {
 			doc = new SPDXAnalysis(model);
 		} catch (InvalidSPDXAnalysisException ex) {
