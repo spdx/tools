@@ -34,6 +34,10 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
 
+import java.util.regex.Pattern;
+
+import net.rootdev.javardfa.jena.RDFaReader;
+
 /**
  * Simple pretty printer for SPDX RDF XML files.  Writes output to System.out.
  * Usage: PrettyPrinter SPDXRdfXMLFile > textFile
@@ -66,13 +70,18 @@ public class PrettyPrinter {
 			System.out.printf("Error: File %1$s does not exist.", args[0]);
 			return;
 		}
+                
+                try {
+                    Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+                } catch(java.lang.ClassNotFoundException e) {}  // do nothing
+
 		Model model = ModelFactory.createDefaultModel();
 		InputStream spdxRdfInput = FileManager.get().open(args[0]);
 		if (spdxRdfInput == null) {
 			System.out.printf("Error: Can not open %1$s", args[0]);
 			return;
 		}
-		model.read(spdxRdfInput, null);
+		model.read(spdxRdfInput, "http://example.com//", fileType(args[0]));
 		SPDXDocument doc = null;
 		try {
 			doc = new SPDXDocument(model);
@@ -87,6 +96,13 @@ public class PrettyPrinter {
 			return;
 		}
 	}
+
+    private static String fileType(String path) {
+        if (Pattern.matches("(?i:.*\\.x?html?$)", path))
+            return "HTML";
+        else
+            return "RDF/XML";
+    }
 
 	/**
 	 * @param doc
