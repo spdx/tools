@@ -81,8 +81,8 @@ public class DOAPProject {
 	}
 
 	/**
-	 * @param projectname
-	 * @param homepage
+	 * @param projectName
+	 * @param homePage
 	 */
 	public DOAPProject(String projectName, String homePage) {
 		this.name = projectName;
