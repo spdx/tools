@@ -1,0 +1,16 @@
+-classpath 'G:/apache/commons/logging/target/checkout/target/classes;C:/Documents and Settings/dlg01/.m2/repository/javax/servlet/servlet-api/2.3/servlet-api-2.3.jar;C:/Documents and Settings/dlg01/.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar;C:/Documents and Settings/dlg01/.m2/repository/logkit/logkit/1.0.1/logkit-1.0.1.jar;C:/Documents and Settings/dlg01/.m2/repository/avalon-framework/avalon-framework/4.1.3/avalon-framework-4.1.3.jar' -protected
+-sourcepath
+'G:/apache/commons/logging/target/checkout/src/java'
+-author
+-bottom
+'Copyright &copy; 2001-2007 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All Rights Reserved.'
+-charset
+'ISO-8859-1'
+-d
+'G:/apache/commons/logging/target/checkout/target/site/apidocs'
+-doctitle
+'Commons Logging 1.1.1 API'
+-use
+-version
+-windowtitle
+'Commons Logging 1.1.1 API'

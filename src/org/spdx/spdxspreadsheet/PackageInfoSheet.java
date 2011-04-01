@@ -1,37 +1,33 @@
 /**
  * Copyright (c) 2011 Source Auditor Inc.
-* Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  */
 package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.AbstractSheet;
 import org.spdx.rdfparser.LicenseDeclaration;
+import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.SPDXLicenseInfoFactory;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
-import org.spdx.rdfparser.SpreadsheetException;
 
 /**
  * Sheet describing the package information for an SPDX Document
@@ -59,6 +55,9 @@ public class PackageInfoSheet extends AbstractSheet {
 		"MachineName", "Package URL", "Package SHA", "Files Checksum",
 		"Source Info", "Declared License(s)", "Seen License(s)", 
 		"Declared Copyright", "Short Desc.", "Full Desc."};
+	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 15, 15, 30,
+		40, 40, 40, 40, 40};
+
 	/**
 	 * @param workbook
 	 * @param sheetName
@@ -116,7 +115,7 @@ public class PackageInfoSheet extends AbstractSheet {
 			} else {
 				if (i == DECLARED_LICENSE_COL || i == SEEN_LICENSE_COL) {
 					try {
-						parseLicenseString(cell.getStringCellValue());
+						SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
 					} catch(SpreadsheetException ex) {
 						if (i == DECLARED_LICENSE_COL) {
 							return "Invalid declared license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
@@ -139,9 +138,12 @@ public class PackageInfoSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
+			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
 			Cell cell = row.createCell(i);
+			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
@@ -197,13 +199,15 @@ public class PackageInfoSheet extends AbstractSheet {
 		} else {
 			sourceInfo = "";
 		}
-		LicenseDeclaration[] declaredLicenses = parseLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
-		LicenseDeclaration[] seenLicenses;
+		SPDXLicenseInfo[] declaredLicenses = new SPDXLicenseInfo[] {
+				SPDXLicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue())
+		};
+		SPDXLicenseInfo[] seenLicenses;
 		Cell seenLicensesCell = row.getCell(SEEN_LICENSE_COL);
 		if (seenLicensesCell != null && !seenLicensesCell.getStringCellValue().isEmpty()) {
-			seenLicenses = parseLicenseString(seenLicensesCell.getStringCellValue());
+			seenLicenses = new SPDXLicenseInfo[] {SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicensesCell.getStringCellValue())};
 		} else {
-			seenLicenses = new LicenseDeclaration[0];
+			seenLicenses = new SPDXLicenseInfo[0];
 		}
 		String declaredCopyright = row.getCell(DECLARED_COPYRIGHT_COL).getStringCellValue();
 		Cell shortDescCell = row.getCell(SHORT_DESC_COL);
@@ -226,56 +230,21 @@ public class PackageInfoSheet extends AbstractSheet {
 				declaredLicenses, seenLicenses, declaredCopyright, shortDesc, 
 				description, url, fileChecksums);
 	}
-	
-	public static LicenseDeclaration[] parseLicenseString(String licenseString) throws SpreadsheetException {
-		String[] conjunctiveLicenses = licenseString.split("\\Wand(\\W|\\()");
-		LicenseDeclaration[] retval = new LicenseDeclaration[conjunctiveLicenses.length];
-		for (int i = 0; i < conjunctiveLicenses.length; i++) {
-			String[] disjunctiveLicenses = conjunctiveLicenses[i].split("\\Wor\\W");
-			if (disjunctiveLicenses.length == 0) {
-				// should not get here
-				throw new SpreadsheetException("Invalid license declaration at the "+String.valueOf(i)+
-						" license: "+licenseString);
-			}
-			String[] diLicenses = new String[disjunctiveLicenses.length-1];
-			for (int j = 1; j < disjunctiveLicenses.length; j++) {
-				diLicenses[j-1] = trimLicense(disjunctiveLicenses[j]);
-			}
-			retval[i] = new LicenseDeclaration(trimLicense(disjunctiveLicenses[0]), diLicenses);
-		}
-		return retval;
-	}
 
-	private static String trimLicense(String licenseString) {
-		String retval = licenseString.trim();
-		if (retval.charAt(0) == '(') {
-			retval = retval.substring(1);
-		}
-		if (retval.endsWith(")")) {
-			retval = retval.substring(0, retval.length()-1);
-		}
-		return retval;
-	}
-
-	public static String licensesToString(LicenseDeclaration[] declaredLicenses) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < declaredLicenses.length; i++) {
-			if (sb.length() > 0) {
-				sb.append(" and ");
+	public static String licensesToString(SPDXLicenseInfo[] licenses) {
+		if (licenses == null || licenses.length == 0) {
+			return "";
+		} else if (licenses.length == 1) {
+			return licenses[0].toString();
+		} else {
+			StringBuilder sb = new StringBuilder("(");
+			sb.append(licenses[0].toString());
+			for (int i = 1; i < licenses.length; i++) {
+				sb.append(" AND ");
+				sb.append(licenses[i].toString());
 			}
-			String[] disjunctiveLicenses = declaredLicenses[i].getDisjunctiveLicenses();
-			if (disjunctiveLicenses != null && disjunctiveLicenses.length > 0) {
-				sb.append("(");
-			}
-			sb.append(declaredLicenses[i].getName());
-			if (disjunctiveLicenses != null && disjunctiveLicenses.length > 0) {
-				for (int j = 0; j < disjunctiveLicenses.length; j++) {
-					sb.append(" or ");
-					sb.append(disjunctiveLicenses[j]);
-				}
-				sb.append(")");
-			}
+			sb.append(")");
+			return sb.toString();
 		}
-		return sb.toString();
 	}
 }

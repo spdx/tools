@@ -1,26 +1,18 @@
 /**
  * Copyright (c) 2011 Source Auditor Inc.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
  */
 package org.spdx.spdxspreadsheet;
 
@@ -30,17 +22,22 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.spdx.rdfparser.InvalidSPDXDocException;
-import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXAnalysis;
+import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
+import org.spdx.rdfparser.SPDXCreator;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicense;
+import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
-import org.spdx.rdfparser.SpreadsheetException;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFReader;
 import com.hp.hpl.jena.util.FileManager;
 
 /**
@@ -55,6 +52,7 @@ public class RdfToSpreadsheet {
 
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
+	static Pattern datePattern = Pattern.compile(".. ... \\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d GMT$");
 	
 	/**
 	 * @param args
@@ -84,11 +82,16 @@ public class RdfToSpreadsheet {
 			System.out.printf("Error: Can not open %1$s", args[0]);
 			return;
 		}
-		model.read(spdxRdfInput, null);
-		SPDXDocument doc = null;
+		if (spdxRdfFile.getName().toUpperCase().endsWith("HTML")) {
+			RDFReader reader = model.getReader("GRDDL");
+			reader.read(model, spdxRdfInput, "https://olex.openlogic.com/");	//TODO: Figure out base
+		} else {
+			model.read(spdxRdfInput, null);
+		}
+		SPDXAnalysis doc = null;
 		try {
-			doc = new SPDXDocument(model);
-		} catch (InvalidSPDXDocException ex) {
+			doc = new SPDXAnalysis(model);
+		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
 		}
@@ -98,7 +101,7 @@ public class RdfToSpreadsheet {
 			copyRdfXmlToSpreadsheet(doc, ss);
 		} catch (SpreadsheetException e) {
 			System.out.println("Error opening or writing to spreadsheet: "+e.getMessage());
-		} catch (InvalidSPDXDocException e) {
+		} catch (InvalidSPDXAnalysisException e) {
 			System.out.println("Error translating the RDF file: "+e.getMessage());
 
 		} finally {
@@ -112,8 +115,8 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyRdfXmlToSpreadsheet(SPDXDocument doc,
-			SPDXSpreadsheet ss) throws InvalidSPDXDocException {
+	private static void copyRdfXmlToSpreadsheet(SPDXAnalysis doc,
+			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
 			System.out.println("Warning: No document to copy");
 			return;
@@ -125,12 +128,26 @@ public class RdfToSpreadsheet {
 		copyReviewerInfo(doc.getReviewers(), ss.getReviewersSheet());
 	}
 
-	private static void copyReviewerInfo(String[] reviewers,
-			ReviewersSheet reviewersSheet) {
+	private static void copyReviewerInfo(SPDXReview[] reviewers,
+			ReviewersSheet reviewersSheet) throws InvalidSPDXAnalysisException {
+		DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");	//TODO: implement the correct
 		for (int i = 0; i < reviewers.length; i++) {
-			reviewersSheet.addReviewer(reviewers[i], Calendar.getInstance().getTime());
+			String reviewerName = reviewers[i].getReviewer();
+			Date reviewDate = null;
+			String dateString = reviewers[i].getReviewDate();
+			if (dateString != null && !dateString.isEmpty()) {
+				try {
+					if (dateString.endsWith("GMT")) {
+						dateString = dateString.substring(0, dateString.length()-3);
+					}
+					dateString = dateString.trim();
+					reviewDate = dateFormat.parse(dateString);
+				} catch (Exception ex) {
+					throw(new InvalidSPDXAnalysisException("Invalid reviewer date format for reviewer "+reviewers[i]));
+				}
+			}
+			reviewersSheet.addReviewer(reviewerName, reviewDate);
 		}
-		//TODO: Replace the reviewers time with the actual time
 	}
 
 	private static void copyPerFileInfo(SPDXFile[] files,
@@ -140,7 +157,7 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyNonStdLicenses(SPDXLicense[] nonStandardLicenses,
+	private static void copyNonStdLicenses(SPDXStandardLicense[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
 			nonStandardLicensesSheet.add(nonStandardLicenses[i].getId(), nonStandardLicenses[i].getText());
@@ -148,16 +165,21 @@ public class RdfToSpreadsheet {
 	}
 
 	private static void copyPackageInfo(SPDXPackage spdxPackage,
-			PackageInfoSheet packageInfoSheet) throws InvalidSPDXDocException {
+			PackageInfoSheet packageInfoSheet) throws InvalidSPDXAnalysisException {
 		SPDXPackageInfo pkgInfo = spdxPackage.getPackageInfo();
 		packageInfoSheet.add(pkgInfo);
 	}
 
-	private static void copyOrigins(SPDXDocument doc, OriginsSheet originsSheet) throws InvalidSPDXDocException {
+	private static void copyOrigins(SPDXAnalysis doc, OriginsSheet originsSheet) throws InvalidSPDXAnalysisException {
 		// SPDX Version
 		originsSheet.setSPDXVersion(doc.getSpdxVersion());
 		// Created by
-		originsSheet.setCreatedBy(doc.getCreatedBy());
+		SPDXCreator[] creators = doc.getCreators();
+		String[] createdBys = new String[creators.length];
+		for (int i = 0; i < creators.length; i++) {
+			createdBys[i] = creators[i].getName();
+		}
+		originsSheet.setCreatedBy(createdBys);
 		// Data license
 		originsSheet.setDataLicense("This field is not yet supported by SPDX");
 		// Author Comments
@@ -170,7 +192,7 @@ public class RdfToSpreadsheet {
 		try {
 			originsSheet.setCreated(dateFormat.parse(created));
 		} catch (ParseException e) {
-			throw(new InvalidSPDXDocException("Invalid created date - unable to parse"));
+			throw(new InvalidSPDXAnalysisException("Invalid created date - unable to parse"));
 		}
 		
 	}

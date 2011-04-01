@@ -1,0 +1,21 @@
+
+
+Requires:  java 5 or later
+           jena 2.5.1 or later
+           
+Understand the security issues about running untrusted code.
+See doc/security.html.           
+           
+           
+Use Jena, reader named "GRDDL"
+
+   e.g.
+   Model m = ....
+   m.read("http://example.org/grddl.html","GRDDL"); 
+   
+Or java *classpath* jena.rdfcopy \
+    http://www.example.org/grddl.html GRDDL RDF-XML/ABBREV
+    
+
+Classpath must include: 
+    all the jena jars, and all the grddl jars.
