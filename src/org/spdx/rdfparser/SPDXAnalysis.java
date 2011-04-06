@@ -66,7 +66,6 @@ public class SPDXAnalysis {
 	
 	// SPDX Class Names
 	static final String CLASS_SPDX_ANALYSIS = "Analysis";
-	static final String CLASS_SPDX_CREATOR = "Creator";
 	static final String CLASS_SPDX_PACKAGE = "Package";
 	static final String CLASS_SPDX_CHECKSUM = "Checksum";
 	static final String CLASS_SPDX_CONJUNCTIVE_LICENSE_SET = "ConjunctiveLicenseSet";
@@ -81,12 +80,10 @@ public class SPDXAnalysis {
 	static final String PROP_SPDX_REVIEWED_BY = "hasReview";
 	static final String PROP_SPDX_NONSTANDARD_LICENSES = "hasNonStandardLicense";
 	static final String PROP_SPDX_VERSION = "specVersion";
-	static final String PROP_SPDX_CREATOR = "hasCreator";
+	static final String PROP_SPDX_CREATOR = "creator";
+	static final String PROP_SPDX_CREATOR_COMMENT = "creatorComment";
 	static final String PROP_SPDX_PACKAGE = "describesPackage";
-	
-	// SPDX Creator Properties
-	static final String PROP_CREATOR_NAME = "creatorName";
-	
+		
 	// SPDX Checksum Properties
 	static final String PROP_CHECKSUM_ALGORITHM = "algorithm";
 	static final String PROP_CHECKSUM_VALUE = "cksumValue";
@@ -94,7 +91,7 @@ public class SPDXAnalysis {
 	// SPDX Package Properties
 	static final String PROP_PACKAGE_DECLARED_NAME = "name";
 	static final String PROP_PACKAGE_FILE_NAME = "packageFileName";	
-	static final String PROP_PACKAGE_CHECKSUM = "packageChecksum";
+	static final String PROP_PACKAGE_CHECKSUM = "checksum";
 	static final String PROP_PACKAGE_DOWNLOAD_URL = "packageDownloadLocation";
 	static final String PROP_PACKAGE_SOURCE_INFO = "sourceInfo";
 	static final String PROP_PACKAGE_DECLARED_LICENSE = "licenseDeclared";
@@ -574,49 +571,85 @@ public class SPDXAnalysis {
 	}
 
 	/**
-	 * @return the createdBy
+	 * @return the The creators of the Analysis
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXCreator[] getCreators() throws InvalidSPDXAnalysisException {
-		// creators
+	public String[] getCreators() throws InvalidSPDXAnalysisException {
+		// createdBy
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("The SPDX Document need to be created before accessing Creator"));
+			throw(new InvalidSPDXAnalysisException("No SPDX Document was found.  Can not access the creator information"));
 		}
-		ArrayList<SPDXCreator> als = new ArrayList<SPDXCreator>();
-
+		ArrayList<String> als = new ArrayList<String>();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			als.add(new SPDXCreator(model, t.getObject()));
+			als.add(t.getObject().toString(false));
 		}
-		SPDXCreator[] creators = new SPDXCreator[als.size()];
-		creators = als.toArray(creators);
-		return creators;
+		String[] createdBy = new String[als.size()];
+		createdBy = als.toArray(createdBy);
+		return createdBy;
 	}
 
+
 	/**
-	 * @param creators array of creators to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param creators the creators of the analysis
+	 * @throws InvalidSPDXDocException 
 	 */
-	public void setCreator(SPDXCreator[] creators) throws InvalidSPDXAnalysisException {
+	public void setCreators(String[] createdBy) throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("Must create the SPDX analysis before setting creator"));
+			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting createdBy"));
 		}
 		// delete the previous createdby's
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR);
-		Resource s = getResource(getSpdxDocNode());
+		Resource s = model.getResource(getSpdxDocNode().getURI());
 		model.removeAll(s, p, null);
-		
-		// add the new ones
-		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR);
-		for (int i = 0; i < creators.length; i++) {
-			Resource creator = creators[i].createResource(model);
-			s.addProperty(p, creator);
+		for (int i = 0; i < createdBy.length; i++) {
+			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR);
+			s.addProperty(p, createdBy[i]);
 		}
+	}
+
+	/**
+	 * @return the creator comments for the analysis
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public String getCreatorComment() throws InvalidSPDXAnalysisException {
+		// creatorComment
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXAnalysisException("No SPDX Document was found.  Can not access the creator information"));
+		}
+		String creatorComment = null;
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR_COMMENT).asNode();
+		Triple m = Triple.createMatch(spdxDocNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			creatorComment = t.getObject().toString(false);
+		}
+		return creatorComment;
+	}
+
+
+	/**
+	 * @param creatorComment comments to be set by the creators of the analysis
+	 * @throws InvalidSPDXDocException 
+	 */
+	public void setCreatorComment(String creatorComment) throws InvalidSPDXAnalysisException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting createdBy"));
+		}
+		// delete the previous creatorComments
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR_COMMENT);
+		Resource s = model.getResource(getSpdxDocNode().getURI());
+		model.removeAll(s, p, null);
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR_COMMENT);
+		s.addProperty(p, creatorComment);
 	}
 
 	/**

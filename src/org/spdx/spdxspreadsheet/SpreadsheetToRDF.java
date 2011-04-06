@@ -24,7 +24,6 @@ import java.io.IOException;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXAnalysis;
 import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
-import org.spdx.rdfparser.SPDXCreator;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
@@ -193,11 +192,8 @@ public class SpreadsheetToRDF {
 	private static void copyOrigins(OriginsSheet originsSheet, SPDXAnalysis analysis) throws InvalidSPDXAnalysisException {
 		analysis.setCreated(originsSheet.getCreated().toGMTString());
 		String[] createdBys = originsSheet.getCreatedBy();
-		SPDXCreator[] creators = new SPDXCreator[createdBys.length];
-		for (int i = 0; i < createdBys.length; i++) {
-			creators[i] = new SPDXCreator(createdBys[i], originsSheet.getAuthorComments());	//TODO: Split the comments by author
-		}
-		analysis.setCreator(creators);
+		analysis.setCreators(createdBys);
+		analysis.setCreatorComment(originsSheet.getAuthorComments());
 		analysis.setSpdxVersion(originsSheet.getSPDXVersion());
 	}
 

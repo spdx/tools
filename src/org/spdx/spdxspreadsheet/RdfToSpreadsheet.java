@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXAnalysis;
 import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
-import org.spdx.rdfparser.SPDXCreator;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
@@ -172,16 +171,15 @@ public class RdfToSpreadsheet {
 		// SPDX Version
 		originsSheet.setSPDXVersion(doc.getSpdxVersion());
 		// Created by
-		SPDXCreator[] creators = doc.getCreators();
-		String[] createdBys = new String[creators.length];
-		for (int i = 0; i < creators.length; i++) {
-			createdBys[i] = creators[i].getName();
-		}
+		String[] createdBys = doc.getCreators();
 		originsSheet.setCreatedBy(createdBys);
 		// Data license
 		originsSheet.setDataLicense("This field is not yet supported by SPDX");
 		// Author Comments
-		originsSheet.setAuthorComments("This field is not yet supported by SPDX");
+		String comments = doc.getCreatorComment();
+		if (comments != null && !comments.isEmpty()) {
+			originsSheet.setAuthorComments(comments);
+		}
 		String created = doc.getCreated();
 		if (created.endsWith("GMT")) {
 			created = created.substring(0, created.length()-4);
