@@ -21,9 +21,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -37,7 +35,7 @@ import org.spdx.rdfparser.SPDXPackageInfo;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.RDFReader;
+import net.rootdev.javardfa.jena.RDFaReader;
 import com.hp.hpl.jena.util.FileManager;
 
 /**
@@ -82,12 +80,12 @@ public class RdfToSpreadsheet {
 			System.out.printf("Error: Can not open %1$s", args[0]);
 			return;
 		}
-		if (spdxRdfFile.getName().toUpperCase().endsWith("HTML")) {
-			RDFReader reader = model.getReader("GRDDL");
-			reader.read(model, spdxRdfInput, "https://olex.openlogic.com/");	//TODO: Figure out base
-		} else {
-			model.read(spdxRdfInput, null);
-		}
+		
+        try {
+            Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+        } catch(java.lang.ClassNotFoundException e) {}  // do nothing
+
+		model.read(spdxRdfInput, "http://example.com//", fileType(args[0]));
 		SPDXAnalysis doc = null;
 		try {
 			doc = new SPDXAnalysis(model);
@@ -202,5 +200,11 @@ public class RdfToSpreadsheet {
 				"where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is\n"+
 				"the output SPDX spreadsheeet file.");
 	}
-
+	
+    private static String fileType(String path) {
+        if (Pattern.matches("(?i:.*\\.x?html?$)", path))
+            return "HTML";
+        else
+            return "RDF/XML";
+    }
 }

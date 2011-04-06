@@ -19,7 +19,6 @@ package org.spdx.rdfparser;
 import java.io.File;
 import java.io.InputStream;
 
-import org.spdx.rdfparser.LicenseDeclaration;
 import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
 
 import com.hp.hpl.jena.rdf.model.Model;

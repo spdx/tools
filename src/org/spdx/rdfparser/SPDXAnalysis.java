@@ -125,6 +125,7 @@ public class SPDXAnalysis {
 	// SPDX Review Properties
 	static final String PROP_REVIEW_REVIEWER = "reviewer";
 	static final String PROP_REVIEW_DATE = "reviewDate";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-1.0";
 	
 	/**
 	 * Simple class representing an SPDX Package.  This is stored in an RDF
