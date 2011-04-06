@@ -19,7 +19,6 @@ package org.spdx.rdfparser;
 import java.io.File;
 import java.io.InputStream;
 
-import org.spdx.rdfparser.LicenseDeclaration;
 import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -74,7 +73,7 @@ public class PrettyPrinter {
 			return;
 		}
 		model.read(spdxRdfInput, "http://example.com//", fileType(args[0]));
-		SPDXDocument doc = null;
+		SPDXAnalysis doc = null;
 		try {
 			doc = new SPDXAnalysis(model);
 		} catch (InvalidSPDXAnalysisException ex) {
@@ -113,10 +112,13 @@ public class PrettyPrinter {
 		}
 		if (doc.getCreators() != null && doc.getCreators().length > 0) {
 			System.out.println("Created by:");
-			SPDXCreator[] createdBy = doc.getCreators();
-			for (int i = 0; i < createdBy.length; i++) {
-				System.out.printf("\t%1s\n", createdBy[i]);
+			String[] creators = doc.getCreators();
+			for (int i = 0; i < creators.length; i++) {
+				System.out.printf("\t%1s\n", creators[i]);
 			}
+		}
+		if (doc.getCreatorComment() != null && !doc.getCreatorComment().isEmpty()) {
+			System.out.println("Creator comment: "+doc.getCreatorComment());
 		}
 		if (doc.getReviewers() != null && doc.getReviewers().length > 0) {
 			System.out.println("Reviewed by:");

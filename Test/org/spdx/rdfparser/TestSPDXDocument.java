@@ -126,22 +126,44 @@ public class TestSPDXDocument {
 		String beforeCreate = writer.toString();
 		writer.close();
 		doc.createSpdxAnalysis(testUri);
-		SPDXCreator[] noCreatedBy = doc.getCreators();
+		String[] noCreatedBy = doc.getCreators();
 		assertEquals(0, noCreatedBy.length);
-		SPDXCreator[] testCreatedBy = new SPDXCreator[] {new SPDXCreator("Created By Me", "My comment")};
-		doc.setCreator(testCreatedBy);
-		SPDXCreator[] resultCreatedBy = doc.getCreators();
+		String[] testCreatedBy = new String[] {"Created By Me"};
+		doc.setCreators(testCreatedBy);
+		String[] resultCreatedBy = doc.getCreators();
 		compareArrays(testCreatedBy, resultCreatedBy);
 		writer = new StringWriter();
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
-		SPDXCreator[] testCreatedBy2 = new SPDXCreator[] {
-				new SPDXCreator("second created", ""), 
-				new SPDXCreator("another", "Comment2"),
-				new SPDXCreator("and another", "and another comment")};
-		doc.setCreator(testCreatedBy2);
-		SPDXCreator[] resultCreatedBy2 = doc.getCreators();
+		String[] testCreatedBy2 = new String[] {
+				"second created", 
+				"another",
+				"and another"};
+		doc.setCreators(testCreatedBy2);
+		String[] resultCreatedBy2 = doc.getCreators();
 		compareArrays(testCreatedBy2, resultCreatedBy2);
+	}
+	
+	@Test
+	public void testCreatorComment() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXAnalysis doc = new SPDXAnalysis(model);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		StringWriter writer = new StringWriter();
+		doc.getModel().write(writer);
+		String beforeCreate = writer.toString();
+		writer.close();
+		doc.createSpdxAnalysis(testUri);
+		String creatorComment = doc.getCreatorComment();
+		if (creatorComment != null) {
+			if (!creatorComment.isEmpty()) {
+				fail("Comment should be empty");
+			}
+		}
+		String comment = "This is a comment";
+		doc.setCreatorComment(comment);
+		String result = doc.getCreatorComment();
+		assertEquals(comment, result);
 	}
 
 	private void compareArrays(Object[] a1,

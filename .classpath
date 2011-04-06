@@ -30,5 +30,7 @@
 	<classpathentry kind="lib" path="grddl-0.3/lib/nekohtml.jar"/>
 	<classpathentry kind="lib" path="grddl-0.3/lib/saxon8.jar"/>
 	<classpathentry kind="lib" path="commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/htmlparser-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/java-rdfa-0.5-20100701.145737-3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
