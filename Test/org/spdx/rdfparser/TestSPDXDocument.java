@@ -65,6 +65,31 @@ public class TestSPDXDocument {
 		fail("Not yet implemented");
 	}
 
+    /**
+     * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
+     */
+    @Test
+    public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithExplicitBase() {
+        try {
+            new SPDXAnalysis("valid-with-explicit-base.html");
+        } catch(Exception e) {
+            fail("Loading 'valid-with-explicit-base.html' failed because: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
+     */
+    @Test
+    public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithoutExplicitBase() {
+        try {
+            new SPDXAnalysis("valid-without-explicit-base.html");
+        } catch(Exception e) {
+            fail("Loading 'valid-without-explicit-base.html' failed because: " + e.getMessage());
+        }
+    }
+
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getSpdxVersion()}.
 	 */

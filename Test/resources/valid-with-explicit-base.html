@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns:dc='http://purl.org/dc/terms/' 
+      xmlns:foaf='http://xmlns.com/foaf/0.1/' 
+      xmlns:spdx="http://spdx.org/ont#"
+      xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Valid rdfa test case</title>
+    <style type="text/css" media="screen">
+<!--
+  body { font-family: Verdana, Verdana, Geneva, sans-serif; }
+  table { border-collapse: collapse; }
+  td { border: solid 1px black; }
+-->
+    </style>
+    <base href="http://example.com/some-analysis"/>
+  </head>
+  <body typeof="spdx:Analysis">
+    <h1>Intellectual property analysis of <a href="http://zlib.net/zlib-1.2.5.tar.gz"
+                                            rel="spdx:describesPackage"><span about="http://zlib.net/zlib-1.2.5.tar.gz" typeof="spdx:Package" property="spdx:name">zlib 1.2.5 Source</span></a></h1>
+      
+    <p>Analysis performed on <span property="spdx:created" content="2010-09-29T03:08:06Z" datatype="xsd:dateTime">29 Sept 2010 3:08 UTC</span> by <span property="spdx:creator">OpenLogic, Inc</span> using <span property="spdx:creator">OLEX SPDX 1.0</span>.</p>
+    
+    <div about="http://zlib.net/zlib-1.2.5.tar.gz">
+      <h2>Analyzed package</h2>
+      <dl>
+        <dt>Download location</dt>
+        <dd><a href="http://zlib.net/zlib-1.2.5.tar.gz" rel="spdx:packageDownloadLocation">http://zlib.net/zlib-1.2.5.tar.gz</a></dd>
+
+        <dt>Package file name</dt>
+        <dd property="spdx:packageFileName">zlib-1.2.5.tar.gz</dd>
+        
+        <dt>Summary</dt>
+        <dd property="spdx:summary">zlib 1.2.5 Source</dd>
+        
+        <dt>Description</dt>
+        <dd property="spdx:description" content="">None provided</dd>
+
+        <dt>Copyright text</dt>
+        <dd rel="spdx:copyrightText" resource="spdx:unknown">Copyright text not looked for.</dd>
+
+        <dt>Package verification code</dt>
+        <dd property="spdx:packageVerificationCode" resource="spdx:unknown">Not calculated</dd>
+
+        <dt>Source information</dt>
+        <dd property="spdx:sourceInfo">Downloaded from zlib.net on some date.</dd>
+      </dl>
+      
+      <h5>Licensing in files</h5>
+      <ul>
+        <li><a href="http://spdx.org/licenses/bsl-1.0" rel="spdx:licensingInfoFromFiles">BSL-1.0</a></li>
+        <li><a href="#LicensingInfo-1" rel="spdx:licensingInfoFromFiles">LicensingInfo-1</a></li>
+        <li><a href="http://spdx.org/licenses/zlib" rel="spdx:licensingInfoFromFiles">Zlib</a></li>
+        <li><a href="#LicensingInfo-2" rel="spdx:licensingInfoFromFiles">LicensingInfo-2</a></li>
+      </ul>
+
+      <h5>Declared licensing</h5>
+      <p><a href="http://spdx.org/licenses/zlib" rel="spdx:licensingDeclared">Zlib</a></p>
+
+      <h5>Concluded licensing</h5>
+      <p>All of the following licenses apply:</p>
+      <div rel="spdx:licensingConcluded">
+        <ul typeof="spdx:ConjunctiveLicensingSet">
+          <li><a href="http://spdx.org/licenses/bsl-1.0" rel="spdx:member">BSL-1.0</a></li>
+          <li><a href="#LicensingInfo-1" rel="spdx:member">LicensingInfo-1</a></li>
+          <li><a href="http://spdx.org/licenses/zlib" rel="spdx:member">Zlib</a></li>
+          <li><a href="#LicensingInfo-2" rel="spdx:member">LicensingInfo-2</a></li>
+        </ul>
+      </div>
+    </div>
+       
+    <h2>Non-standard licensing information</h2>
+    <ul style="list-style:none;padding-left:0;">
+      <li typeof="spdx:ExtractedLicensingInfo" id="LicensingInfo-1" about="#LicensingInfo-1">
+        <h3>LicensingInfo-1</h3>
+        <div property="spdx:extractedText">The author releases this work into the public domain. [or some such statement of intent]</div>
+      </li>
+      <li typeof="spdx:ExtractedLicensingInfo" id="LicensingInfo-2" about="#LicensingInfo-2">
+        <h3>LicensingInfo-2</h3>
+        <pre property="spdx:extractedText">
+* Permission to use, copy, modify, distribute and sell this software
+* and its documentation for any purpose is hereby granted without fee,
+* provided that the above copyright notice appear in all copies...
+        </pre>
+      </li>
+    </ul>
+    
+    <h2>Files in zlib 1.2.5</h2>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Type</th><th>Licensing in file</th><th>Licensing concluded</th><th>Checksum</th><th>Copyright</th></tr>
+      </thead>
+
+      <tbody>
+        <tr typeof="spdx:File" about="http://zlib.net/zlib-1.2.5.tar.gz#adler32.c">
+          <td><span property="spdx:fileName">adler32.c</span><link href="http://zlib.net/zlib-1.2.5.tar.gz" rev="spdx:hasFile"/></td>
+          <td property="spdx:fileType">source</td>
+          <td><a href="http://spdx.com/licenses/zlib" rel="spdx:licensingInFile">Zlib</a></td>
+          <td rel="spdx:checksum">
+            <div typeof="spdx:Checksum"><span rel="spdx:algorithm" resource="spdx:sha1">SHA1</span>:<span property="spdx:checksumValue">2d28c862903817066d69489bac1c098468924973</span></div>
+          </td>
+          <td rel="spdx:copyrightText" resource="spdx:unknown">unknown</td>
+        </tr>
+
+        <tr typeof="spdx:File" about="http://zlib.net/zlib-1.2.5.tar.gz#amiga/Makefile.pup">
+          <td><span property="spdx:fileName">amiga/Makefile.pup</span><link href="http://zlib.net/zlib-1.2.5.tar.gz" rev="spdx:hasFile"/></td>
+          <td property="spdx:fileType">other</td>
+          <td><a href="http://spdx.org/licenses/Zlib" rel="spdx:licensingInFile">Zlib</a></td>
+          <td><a href="http://spdx.org/licenses/Zlib" rel="spdx:licensingConcluded">Zlib</a></td>
+          <td rel="spdx:checksum"><div typeof="spdx:Checksum"><span rel="spdx:algorithm" resource="spdx:sha1">SHA1</span>:<span property="spdx:checksumValue">2287492b17695ba12233b5a967ba606f54a1477b</span></div></td>
+          <td rel="spdx:copyrightText" resource="spdx:unknown">unknown</td>
+        </tr>
+                
+      </tbody>
+    </table>
+
+    <p>This document conforms to <span property="spdx:specVersion">SPDX1.0-DRAFT</span>.</p>
+  </body>
+</html>

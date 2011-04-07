@@ -25,6 +25,21 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+import java.util.regex.Pattern;
+
+import net.rootdev.javardfa.jena.RDFaReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.net.URI;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.util.FileManager;
+
+
+
 /**
  * 
  * Simple model for the SPDX Analysis document.  The document is stored in a Jena RDF
@@ -468,7 +483,7 @@ public class SPDXAnalysis {
 			return retval;
 		}
 	}
-	
+		
 	Model model;
 	SPDXPackage spdxPackage = null;
 	SPDXStandardLicense[] nonStandardLicenses = null;
@@ -478,6 +493,46 @@ public class SPDXAnalysis {
 		this.model = model;
 	}
 	
+	/**
+	 * Load SPDXAnalysis from a file
+	 */
+	public SPDXAnalysis(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
+		try {
+			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+		} catch(java.lang.ClassNotFoundException e) {}  // do nothing
+
+		Model model = ModelFactory.createDefaultModel();
+
+		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
+		if (spdxRdfInput == null)
+			throw new FileNotFoundException("Unable to open \"" + fileNameOrUrl + "\" for reading");
+
+		model.read(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
+
+		this.model = model;
+	}
+
+	private String figureBaseUri(String src) {
+		try{
+			URI s = new URI(src);
+			
+			if (null == s.getScheme())
+				return "file://" + new File(src).getAbsoluteFile().toString();
+			else
+				return s.toString();
+			
+		} catch(URISyntaxException e){
+			return null;
+		}
+	}
+
+    private String fileType(String path) {
+		if (Pattern.matches("(?i:.*\\.x?html?$)", path))
+			return "HTML";
+		else
+			return "RDF/XML";
+	}
+
 	public String verify() {
 		return null;
 		//TODO: Implement verify
