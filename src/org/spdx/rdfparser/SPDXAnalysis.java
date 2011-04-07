@@ -47,7 +47,7 @@ public class SPDXAnalysis {
 	// Namespaces
 	static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	static final String RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
-	static final String SPDX_NAMESPACE = "http://spdx.org/ont#";
+	static final String SPDX_NAMESPACE = "http://spdx.org/rdf/terms";
 	static final String DOAP_NAMESPACE = "http://usefulinc.com/ns/doap#";
 
 	// RDF Properties
