@@ -4,8 +4,11 @@
 # $ buildr compile (compiles classes)
 # $ buildr package (builds jar)
 
+repositories.remote << 'http://www.ibiblio.org/maven2/'
+
 dc = Layout.new
 dc[:source, :main, :java] = 'src/'
+dc[:source, :test, :java] = 'Test/'
 
 define 'PrettyPrinter', :layout => dc do
   manifest['Main-Class'] = 'org.spdx.rdfparser.PrettyPrinter'
