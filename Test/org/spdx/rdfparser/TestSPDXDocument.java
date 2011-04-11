@@ -26,6 +26,7 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -71,7 +72,10 @@ public class TestSPDXDocument {
     @Test
     public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithExplicitBase() {
         try {
-            new SPDXAnalysis("valid-with-explicit-base.html");
+        	String fileName = "Test" + File.separator + "resources" + File.separator + "valid-with-explicit-base.html";
+        	File file = new File(fileName);
+        	String fullFilePath = file.getAbsolutePath();
+            new SPDXAnalysis(fileName);
         } catch(Exception e) {
             fail("Loading 'valid-with-explicit-base.html' failed because: " + e.getMessage());
         }
@@ -83,7 +87,8 @@ public class TestSPDXDocument {
     @Test
     public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithoutExplicitBase() {
         try {
-            new SPDXAnalysis("valid-without-explicit-base.html");
+        	String fileName = "Test" + File.separator + "resources" + File.separator + "valid-without-explicit-base.html";
+            new SPDXAnalysis(fileName);
         } catch(Exception e) {
             fail("Loading 'valid-without-explicit-base.html' failed because: " + e.getMessage());
         }
