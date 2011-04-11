@@ -62,7 +62,7 @@ public class SPDXAnalysis {
 	// Namespaces
 	static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	static final String RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
-	static final String SPDX_NAMESPACE = "http://spdx.org/rdf/terms";
+	static final String SPDX_NAMESPACE = "http://spdx.org/rdf/terms#";
 	static final String DOAP_NAMESPACE = "http://usefulinc.com/ns/doap#";
 
 	// RDF Properties
@@ -137,7 +137,7 @@ public class SPDXAnalysis {
 	// SPDX Review Properties
 	static final String PROP_REVIEW_REVIEWER = "reviewer";
 	static final String PROP_REVIEW_DATE = "reviewDate";
-	public static final String CURRENT_SPDX_VERSION = "SPDX-1.0";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-0.8";
 	
 	/**
 	 * Simple class representing an SPDX Package.  This is stored in an RDF
