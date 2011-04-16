@@ -50,7 +50,7 @@ public class SPDXConjunctiveLicenseSet extends SPDXLicenseSet {
 	 */
 	@Override
 	protected Resource _createResource(Model model) {
-		Resource type = model.createResource(SPDXAnalysis.SPDX_NAMESPACE + SPDXAnalysis.CLASS_SPDX_CONJUNCTIVE_LICENSE_SET);
+		Resource type = model.createResource(SPDXDocument.SPDX_NAMESPACE + SPDXDocument.CLASS_SPDX_CONJUNCTIVE_LICENSE_SET);
 		return super._createResource(model, type);
 	}
 

@@ -50,7 +50,7 @@ public class SPDXFile {
 		this.node = fileNode;
 		this.model = model;
 		// name
-		Node p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_NAME).asNode();
+		Node p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_NAME).asNode();
 		Triple m = Triple.createMatch(fileNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -58,7 +58,7 @@ public class SPDXFile {
 			this.name = t.getObject().toString(false);
 		}
 		// checksum - sha1
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_CHECKSUM).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_CHECKSUM).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -69,7 +69,7 @@ public class SPDXFile {
 			}
 		}
 		// type
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_TYPE).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_TYPE).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -78,7 +78,7 @@ public class SPDXFile {
 		}
 		// detectedLicense
 		ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LICENSE).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LICENSE).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -88,7 +88,7 @@ public class SPDXFile {
 		this.fileLicenses = alLic.toArray(new SPDXLicenseInfo[alLic.size()]);
 		// seenLicenses
 		alLic.clear();		
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_SEEN_LICENSE).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_SEEN_LICENSE).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -97,7 +97,7 @@ public class SPDXFile {
 		}
 		this.seenLicenses = alLic.toArray(new SPDXLicenseInfo[alLic.size()]);
 		//licenseComments
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LIC_COMMENTS).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LIC_COMMENTS).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -105,7 +105,7 @@ public class SPDXFile {
 			this.licenseComments = t.getObject().toString(false);
 		}
 		//copyright
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_COPYRIGHT).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_COPYRIGHT).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -114,7 +114,7 @@ public class SPDXFile {
 		}
 		//artifactOf
 		ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_ARTIFACTOF).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_ARTIFACTOF).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -125,7 +125,7 @@ public class SPDXFile {
 	}
 	
 	public Resource createResource(Model model) {
-		Resource type = model.createResource(SPDXAnalysis.SPDX_NAMESPACE + SPDXAnalysis.CLASS_SPDX_FILE);
+		Resource type = model.createResource(SPDXDocument.SPDX_NAMESPACE + SPDXDocument.CLASS_SPDX_FILE);
 		Resource retval = model.createResource(type);
 		populateModel(model, retval);
 		return retval;
@@ -138,7 +138,7 @@ public class SPDXFile {
 	 */
 	private void populateModel(Model model, Resource fileResource) {
 		// name
-		Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_NAME);
+		Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_NAME);
 		fileResource.addProperty(p, this.getName());
 
 		if (this.sha1 != null) {
@@ -146,16 +146,16 @@ public class SPDXFile {
 			SPDXChecksum cksum = new SPDXChecksum(SPDXChecksum.ALGORITHM_SHA1, sha1);
 			Resource cksumResource = cksum.createResource(model);
 
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_CHECKSUM);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_CHECKSUM);
 			fileResource.addProperty(p, cksumResource);
 		}
 		// type
-		p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_TYPE);
+		p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_TYPE);
 		fileResource.addProperty(p, this.getType());
 
 		// detectedLicense
 		if (this.fileLicenses != null && this.fileLicenses.length > 0) {
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LICENSE);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LICENSE);
 			for (int i = 0; i < this.fileLicenses.length; i++) {
 				Resource lic = this.fileLicenses[i].createResource(model);
 				fileResource.addProperty(p, lic);
@@ -164,7 +164,7 @@ public class SPDXFile {
 
 		// seenLicenses
 		if (this.seenLicenses != null && this.seenLicenses.length > 0) {
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_SEEN_LICENSE);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_SEEN_LICENSE);
 			for (int i = 0; i < this.seenLicenses.length; i++) {
 				Resource lic = this.seenLicenses[i].createResource(model);
 				fileResource.addProperty(p, lic);
@@ -172,18 +172,18 @@ public class SPDXFile {
 		}
 		//licenseComments
 		if (this.licenseComments != null) {
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LIC_COMMENTS);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LIC_COMMENTS);
 			fileResource.addProperty(p, this.getLicenseComments());
 		}
 		//copyright
 		if (this.copyright != null) {
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_COPYRIGHT);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_COPYRIGHT);
 			fileResource.addProperty(p, this.getCopyright());	
 		}
 
 		//artifactof
 		if (this.artifactOf != null) {
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_ARTIFACTOF);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_ARTIFACTOF);
 			for (int i = 0; i < artifactOf.length; i++) {
 				// we need to check on these if it already exists
 				Resource projectResource = null;
@@ -225,10 +225,10 @@ public class SPDXFile {
 	public void setSeenLicenses(SPDXLicenseInfo[] seenLicenses) {
 		this.seenLicenses = seenLicenses;
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_SEEN_LICENSE);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_SEEN_LICENSE);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_SEEN_LICENSE);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_SEEN_LICENSE);
 
 			for (int i = 0; i < seenLicenses.length; i++) {
 				Resource lic = seenLicenses[i].createResource(model);
@@ -248,10 +248,10 @@ public class SPDXFile {
 	public void setLicenseComments(String licenseComments) {
 		this.licenseComments = licenseComments;
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LIC_COMMENTS);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LIC_COMMENTS);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LIC_COMMENTS);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LIC_COMMENTS);
 			fileResource.addProperty(p, this.getLicenseComments());
 		}	
 	}
@@ -267,12 +267,18 @@ public class SPDXFile {
 	public void setCopyright(String copyright) {
 		this.copyright = copyright;
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_COPYRIGHT);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_COPYRIGHT);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_COPYRIGHT);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_COPYRIGHT);
 			fileResource.addProperty(p, this.getCopyright());
 		}	
+	}
+	/**
+	 * @return the copyright
+	 */
+	public String getLicenseComment() {
+		return this.licenseComments;
 	}
 	
 	/**
@@ -287,10 +293,10 @@ public class SPDXFile {
 	public void setName(String name) {
 		this.name = name;
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_NAME);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_NAME);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_NAME);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_NAME);
 			fileResource.addProperty(p, this.getName());
 		}
 	}
@@ -306,10 +312,10 @@ public class SPDXFile {
 	public void setFileLicenses(SPDXLicenseInfo[] fileLicenses) {
 		this.fileLicenses = fileLicenses;
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LICENSE);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LICENSE);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_LICENSE);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_LICENSE);
 
 			for (int i = 0; i < fileLicenses.length; i++) {
 				Resource lic = fileLicenses[i].createResource(model);
@@ -328,13 +334,13 @@ public class SPDXFile {
 	 */
 	public void setSha1(String sha1) {
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_CHECKSUM);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_CHECKSUM);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
 			SPDXChecksum cksum = new SPDXChecksum(SPDXChecksum.ALGORITHM_SHA1, sha1);
 			Resource cksumResource = cksum.createResource(model);
 
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_CHECKSUM);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_CHECKSUM);
 			fileResource.addProperty(p, cksumResource);
 		}
 	}
@@ -350,10 +356,10 @@ public class SPDXFile {
 	public void setType(String type) {
 		this.type = type;
 		if (this.model != null && this.node != null) {
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_TYPE);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_TYPE);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_TYPE);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_TYPE);
 			fileResource.addProperty(p, this.getType());
 		}
 	}
@@ -372,9 +378,9 @@ public class SPDXFile {
 		this.artifactOf = artifactOf;
 		if (this.model != null && this.name != null) {
 			Resource fileResource = model.createResource(node.getURI());
-			Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_ARTIFACTOF);
+			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_ARTIFACTOF);
 			model.removeAll(fileResource, p, null);
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_FILE_ARTIFACTOF);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_FILE_ARTIFACTOF);
 			for (int i = 0; i < artifactOf.length; i++) {
 				// we need to check on these if it already exists
 				Resource projectResource = null;

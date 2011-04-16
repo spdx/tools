@@ -138,7 +138,7 @@ public class TestSPDXFile {
 	@Test
 	public void testPopulateModel() throws IOException, InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		doc.createSpdxAnalysis(testDocUri);
 		String pkgUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082?pkg";
@@ -148,7 +148,7 @@ public class TestSPDXFile {
 		String beforeCreate = writer.toString();
 		writer.close();
 		Resource pkgResource = model.getResource(pkgUri);
-		Property p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_PACKAGE_FILE);
+		Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_PACKAGE_FILE);
 		
 		SPDXLicenseInfo[] declaredLic = new SPDXLicenseInfo[] {COMPLEX_LICENSE};
 		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};

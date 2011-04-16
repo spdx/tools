@@ -59,18 +59,23 @@ public class LicenseTOCHTMLFile {
 			"\n"+ 
 			"  <tbody>\n";
 	static final String REFERENCE = "[REFERENCE]";
+	static final String REFNUMBER = "[REFERENCE_NUMBER]";
 	static final String LICENSEID = "[LICENSEID]";
 	static final String LICENSE_NAME = "[LICENSE_NAME]";
-      static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+"\" rel=\"rdf:_1\">"+LICENSE_NAME+"</a></td>\n"+
+      static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
       		"      <td><code>"+LICENSEID+"</code></td>\n"+
       		"      <td><a href=\""+REFERENCE+"#licenseText\">License Text</a></td>\n"+
       		"    </tr>\n";
       static final String HTML_FILE_TEMPLATE_LAST = "    </tbody>\n</table>\n</body>\n</html>";
 
       ArrayList<String> tableRows = new ArrayList<String>();
+
+      private int currentRefNumber = 1;
       
 	public void addLicense(SPDXStandardLicense license, String licHTMLReference) {
 		String newRow = ROW_TEMPLATE.replace(REFERENCE, licHTMLReference);
+		currentRefNumber++;
+		newRow = newRow.replace(REFNUMBER, String.valueOf(this.currentRefNumber));
 		newRow = newRow.replace(LICENSE_NAME, escapeHTML(license.getName()));
 		newRow = newRow.replace(LICENSEID, escapeHTML(license.getId()));
 		tableRows.add(newRow);

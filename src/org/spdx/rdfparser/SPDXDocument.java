@@ -25,19 +25,8 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.rootdev.javardfa.jena.RDFaReader;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.File;
-import java.net.URI;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.util.FileManager;
-
 
 
 /**
@@ -45,19 +34,21 @@ import com.hp.hpl.jena.util.FileManager;
  * Simple model for the SPDX Analysis document.  The document is stored in a Jena RDF
  * model which can be accessed through the model property.
  * 
- * The class can be constructed using an already populated Jenna model.  It can
- * also be constructed with a blank model and the SPDX document constructed using
- * the "set" methods.
+ * The class should be constructed using the SPDXDocumentFactory class
  * 
  * The createSpdxDocument(uri) must be called first for a blank model
  * 
  * The license, file, and package objects can be constructed then added to the model
  * by using the set functions.
  * 
+ * The non-standard licenses must contain a unique ID of the form LicenseRef-NN where NN is a
+ * unique number.  The method <code>addNonStandardLicense(licenseText)</code> can be called to 
+ * create a new unique Non-Standard License.
+ * 
  * @author Gary O'Neall
  *
  */
-public class SPDXAnalysis {
+public class SPDXDocument {
 	
 	// Namespaces
 	static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -80,28 +71,33 @@ public class SPDXAnalysis {
 	static final String PROP_PROJECT_HOMEPAGE = "homepage";
 	
 	// SPDX Class Names
-	static final String CLASS_SPDX_ANALYSIS = "Analysis";
+	static final String CLASS_SPDX_ANALYSIS = "SpdxDocument";
 	static final String CLASS_SPDX_PACKAGE = "Package";
+	static final String CLASS_SPDX_CREATION_INFO = "CreationInfo";
 	static final String CLASS_SPDX_CHECKSUM = "Checksum";
+	static final String CLASS_SPDX_LICENSE = "License";
 	static final String CLASS_SPDX_CONJUNCTIVE_LICENSE_SET = "ConjunctiveLicenseSet";
 	static final String CLASS_SPDX_DISJUNCTIVE_LICENSE_SET = "DisjunctiveLicenseSet";
-	static final String CLASS_SPDX_NON_STANDARD_LICENSE = "NonStandardLicense";
-	static final String CLASS_SPDX_STANDARD_LICENSE = "StandardLicense";
+	static final String CLASS_SPDX_EXTRACTED_LICENSING_INFO = "ExtractedLicensingInfo";
+	static final String CLASS_SPDX_STANDARD_LICENSE = "License";
 	static final String CLASS_SPDX_FILE = "File";
 	static final String CLASS_SPDX_REVIEW = "Review";
 	
-	// SPDX Analysis Properties
-	static final String PROP_SPDX_CREATED = "created";	// creation timestamp
-	static final String PROP_SPDX_REVIEWED_BY = "hasReview";
+	// SPDX Document Properties
+	static final String PROP_SPDX_REVIEWED_BY = "reviewed";
 	static final String PROP_SPDX_NONSTANDARD_LICENSES = "hasNonStandardLicense";
 	static final String PROP_SPDX_VERSION = "specVersion";
-	static final String PROP_SPDX_CREATOR = "creator";
-	static final String PROP_SPDX_CREATOR_COMMENT = "creatorComment";
+	static final String PROP_SPDX_CREATION_INFO = "creationInfo";
 	static final String PROP_SPDX_PACKAGE = "describesPackage";
 		
+	// SPDX CreationInfo Properties
+// - use rdfs:comment	static final String PROP_CREATION_CREATOR_COMMENT = "comment";
+	static final String PROP_CREATION_CREATOR = "creator";
+	static final String PROP_CREATION_CREATED = "created";	// creation timestamp
+	
 	// SPDX Checksum Properties
 	static final String PROP_CHECKSUM_ALGORITHM = "algorithm";
-	static final String PROP_CHECKSUM_VALUE = "cksumValue";
+	static final String PROP_CHECKSUM_VALUE = "checksumValue";
 	
 	// SPDX Package Properties
 	static final String PROP_PACKAGE_DECLARED_NAME = "name";
@@ -115,21 +111,24 @@ public class SPDXAnalysis {
 	static final String PROP_PACKAGE_SHORT_DESC = "summary";
 	static final String PROP_PACKAGE_DESCRIPTION = "description";
 	static final String PROP_PACKAGE_FILE = "hasFile";
-	static final String PROP_PACKAGE_URL = "DownloadURL";
+//	static final String PROP_PACKAGE_URL = "DownloadURL";
 	static final String PROP_PACKAGE_VERIFICATION_CODE = "packageVerificationCode";	
 	static final String PROP_PACKAGE_LICENSE_INFO_FROM_FILES = "licenseInfoFromFiles";
+	static final String PROP_PACKAGE_LICENSE_COMMENT = "licenseComments";
 	
 	// SPDX License Properties
-	static final String PROP_LICENSE_ID = "LicenseID";
-	static final String PROP_LICENSE_TEXT = "LicenseText";
-	static final String PROP_DISJUNCTIVE_LICENSE = "DisjunctiveLicense";
+	static final String PROP_LICENSE_ID = "licenseID";
+	static final String PROP_LICENSE_TEXT = "licenseText";
+	static final String PROP_EXTRACTED_TEXT = "extractedText";
+	static final String PROP_LICENSE_SET_MEMEBER = "member";
+//	static final String PROP_DISJUNCTIVE_LICENSE = "DisjunctiveLicense";
 	
 	// SPDX File Properties
 	static final String PROP_FILE_NAME = "fileName"; 	
 	static final String PROP_FILE_TYPE = "fileType"; 	
 	static final String PROP_FILE_LICENSE = "licenseConcluded";	
 	static final String PROP_FILE_COPYRIGHT = "copyrightText"; 	
-	static final String PROP_FILE_CHECKSUM = "fileChecksum";
+	static final String PROP_FILE_CHECKSUM = "checksum";
 	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";	
 	public static final String PROP_FILE_LIC_COMMENTS = "licenseComments";	
 	public static final String PROP_FILE_ARTIFACTOF = "artifactOf";
@@ -137,7 +136,22 @@ public class SPDXAnalysis {
 	// SPDX Review Properties
 	static final String PROP_REVIEW_REVIEWER = "reviewer";
 	static final String PROP_REVIEW_DATE = "reviewDate";
+	
+	
 	public static final String CURRENT_SPDX_VERSION = "SPDX-0.8";
+	
+	// Date format
+	public static final String SPDX_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	
+	// license ID format
+	public static String NON_STD_LICENSE_ID_PRENUM = "LicenseRef-";
+	public static Pattern LICENSE_ID_PATTERN = Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"(\\d+)$");
+
+	/**
+	 * Keeps tract of the next license reference number when generating the license ID's for
+	 * non-standard licenses
+	 */
+	protected int nextLicenseRef = 1;
 	
 	/**
 	 * Simple class representing an SPDX Package.  This is stored in an RDF
@@ -290,6 +304,8 @@ public class SPDXAnalysis {
 				s.addProperty(p, lic);
 			}
 		}
+		
+		
 		/**
 		 * @return the detectedLicenses
 		 * @throws InvalidSPDXAnalysisException 
@@ -319,6 +335,28 @@ public class SPDXAnalysis {
 				Resource lic = detectedLicenses[i].createResource(model);
 				s.addProperty(p, lic);
 			}
+		}
+		/**
+		 * @return the licenseComment
+		 * @throws InvalidSPDXAnalysisException 
+		 */
+		public String getLicenseComment() throws InvalidSPDXAnalysisException {
+			String[] comments = findDocPropertieStringValues(this.node, PROP_PACKAGE_LICENSE_COMMENT);
+			if (comments == null || comments.length == 0) {
+				return null;
+			}
+			if (comments.length > 1) {
+				throw(new InvalidSPDXAnalysisException("More than one license comment for a package"));
+			}
+			return(comments[0]);
+		}
+		/**
+		 * @param comments the license comments to set
+		 * @throws InvalidSPDXAnalysisException 
+		 */
+		public void setLicenseComment(String comments) throws InvalidSPDXAnalysisException {
+			removeProperties(node, PROP_PACKAGE_LICENSE_COMMENT);
+			addProperty(node, PROP_PACKAGE_LICENSE_COMMENT, new String[] {comments});
 		}
 		/**
 		 * @return the declaredCopyright
@@ -417,8 +455,8 @@ public class SPDXAnalysis {
 			}
 		}
 		
-		public String getUrl() throws InvalidSPDXAnalysisException {
-			String[] urls = findDocPropertieStringValues(this.node, PROP_PACKAGE_URL);
+		public String getDownloadUrl() throws InvalidSPDXAnalysisException {
+			String[] urls = findDocPropertieStringValues(this.node, PROP_PACKAGE_DOWNLOAD_URL);
 			if (urls == null || urls.length == 0) {
 				return null;
 			}
@@ -428,9 +466,9 @@ public class SPDXAnalysis {
 			return(urls[0]);
 		}
 		
-		public void setUrl(String url) throws InvalidSPDXAnalysisException {
-			removeProperties(node, PROP_PACKAGE_URL);
-			addProperty(node, PROP_PACKAGE_URL, new String[] {url});
+		public void setDownloadUrl(String url) throws InvalidSPDXAnalysisException {
+			removeProperties(node, PROP_PACKAGE_DOWNLOAD_URL);
+			addProperty(node, PROP_PACKAGE_DOWNLOAD_URL, new String[] {url});
 		}
 		
 		public String getVerificationCode() throws InvalidSPDXAnalysisException {
@@ -453,12 +491,12 @@ public class SPDXAnalysis {
 			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
 					this.getSha1(), this.getSourceInfo(), this.getDeclaredLicenses(), 
 					this.getDetectedLicenses(), this.getDeclaredCopyright(), 
-					this.getShortDescription(), this.getDescription(), this.getUrl(), 
+					this.getShortDescription(), this.getDescription(), this.getDownloadUrl(), 
 					this.getVerificationCode());
 		}
 		
 		public void setLicenseInfoFromFiles(SPDXLicenseInfo[] licenseInfo) throws InvalidSPDXAnalysisException {
-			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
+			removeProperties(node, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
 			Resource s = getResource(this.node);
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
 
@@ -486,51 +524,61 @@ public class SPDXAnalysis {
 		
 	Model model;
 	SPDXPackage spdxPackage = null;
-	SPDXStandardLicense[] nonStandardLicenses = null;
 	
-	public SPDXAnalysis(Model model) throws InvalidSPDXAnalysisException {
-		//TODO: Verify cardinality
+	public SPDXDocument(Model model) throws InvalidSPDXAnalysisException {
 		this.model = model;
-	}
-	
-	/**
-	 * Load SPDXAnalysis from a file
-	 */
-	public SPDXAnalysis(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
-		try {
-			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-		} catch(java.lang.ClassNotFoundException e) {}  // do nothing
-
-		Model model = ModelFactory.createDefaultModel();
-
-		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
-		if (spdxRdfInput == null)
-			throw new FileNotFoundException("Unable to open \"" + fileNameOrUrl + "\" for reading");
-
-		model.read(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
-
-		this.model = model;
-	}
-
-	private String figureBaseUri(String src) {
-		try{
-			URI s = new URI(src);
-			
-			if (null == s.getScheme())
-				return "file://" + new File(src).getAbsoluteFile().toString();
-			else
-				return s.toString();
-			
-		} catch(URISyntaxException e){
-			return null;
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode != null) {	// not empty - we should verify
+			verify();
+			initializeNextLicenseRef();
 		}
 	}
 
-    private String fileType(String path) {
-		if (Pattern.matches("(?i:.*\\.x?html?$)", path))
-			return "HTML";
-		else
-			return "RDF/XML";
+	/**
+	 * Initialize the next license reference by scanning all of the existing non-standard licenses
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void initializeNextLicenseRef() throws InvalidSPDXAnalysisException {
+		initializeNextLicenseRef(this.getNonStandardLicenses());
+	}
+	
+	private void initializeNextLicenseRef(SPDXNonStandardLicense[] existingLicenses) throws InvalidSPDXAnalysisException {
+		int highestNonStdLicense = 0;
+		for (int i = 0; i < existingLicenses.length; i++) {
+			int idNum = getLicenseRefNum(existingLicenses[i].getId());
+			if (idNum > highestNonStdLicense) {
+				highestNonStdLicense = idNum;
+			}
+		}	
+		this.nextLicenseRef = highestNonStdLicense + 1;
+	}
+	/**
+	 * Parses a license ID and return the integer representing the ID number (e.g. N in LicenseRef-N)
+	 * @param licenseID
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public int getLicenseRefNum(String licenseID) throws InvalidSPDXAnalysisException {
+		Matcher matcher = LICENSE_ID_PATTERN.matcher(licenseID);
+		if (!matcher.matches()) {
+			throw(new InvalidSPDXAnalysisException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
+		}
+		int numGroups = matcher.groupCount();
+		if (numGroups != 1) {
+			throw(new InvalidSPDXAnalysisException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
+		}
+		int idNum = Integer.decode(matcher.group(1));
+		return idNum;
+	}
+	
+	public static String formNonStandardLicenseID(int idNum) {
+		return NON_STD_LICENSE_ID_PRENUM + String.valueOf(idNum);
+	}
+	
+	synchronized int getAndIncrementNextLicenseRef() {
+		int retval = this.nextLicenseRef;
+		this.nextLicenseRef++;
+		return retval;
 	}
 
 	public String verify() {
@@ -625,86 +673,75 @@ public class SPDXAnalysis {
 		addProperty(spdxDocNode, PROP_SPDX_VERSION, new String[] {spdxVersion});
 	}
 
+	@Deprecated
 	/**
+	 * This method id deprecated - please use the getCreator() method for this information
 	 * @return the The creators of the Analysis
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public String[] getCreators() throws InvalidSPDXAnalysisException {
-		// createdBy
+		SPDXCreatorInformation creator = getCreatorInfo();
+		if (creator != null && creator.getCreators() != null) {
+			return creator.getCreators();
+		} else {
+			return null;
+		}
+	}
+	
+	public SPDXCreatorInformation getCreatorInfo() throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("No SPDX Document was found.  Can not access the creator information"));
 		}
-		ArrayList<String> als = new ArrayList<String>();
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR).asNode();
+		ArrayList<SPDXCreatorInformation> als = new ArrayList<SPDXCreatorInformation>();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATION_INFO).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			als.add(t.getObject().toString(false));
+			als.add(new SPDXCreatorInformation(model, t.getObject()));
 		}
-		String[] createdBy = new String[als.size()];
-		createdBy = als.toArray(createdBy);
-		return createdBy;
+		if (als.size() > 1) {
+			throw(new InvalidSPDXAnalysisException("Too many creation infos for document.  Only one is allowed."));
+		}
+		if (als.size() > 0) {
+			return als.get(0);
+		} else {
+			return null;
+		}
 	}
-
 
 	/**
 	 * @param creators the creators of the analysis
 	 * @throws InvalidSPDXDocException 
 	 */
-	public void setCreators(String[] createdBy) throws InvalidSPDXAnalysisException {
+	public void setCreationInfo(SPDXCreatorInformation creator) throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting createdBy"));
+			throw(new InvalidSPDXAnalysisException("Must have an SPDX document to set creationInfo"));
 		}
-		// delete the previous createdby's
-		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR);
-		Resource s = model.getResource(getSpdxDocNode().getURI());
+		// delete any previous created
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATION_INFO);
+		Resource s = getResource(spdxDocNode);
 		model.removeAll(s, p, null);
-		for (int i = 0; i < createdBy.length; i++) {
-			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR);
-			s.addProperty(p, createdBy[i]);
-		}
+		// add the property
+		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATION_INFO);
+		s.addProperty(p, creator.createResource(model));
 	}
 
+	@Deprecated
 	/**
+	 * This method id deprecated - please use the getCreator() method for this information
 	 * @return the creator comments for the analysis
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public String getCreatorComment() throws InvalidSPDXAnalysisException {
-		// creatorComment
-		Node spdxDocNode = getSpdxDocNode();
-		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("No SPDX Document was found.  Can not access the creator information"));
+		SPDXCreatorInformation creator = this.getCreatorInfo();
+		if (creator != null) {
+			return creator.getComment();
+		} else {
+			return null;
 		}
-		String creatorComment = null;
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR_COMMENT).asNode();
-		Triple m = Triple.createMatch(spdxDocNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			creatorComment = t.getObject().toString(false);
-		}
-		return creatorComment;
-	}
-
-
-	/**
-	 * @param creatorComment comments to be set by the creators of the analysis
-	 * @throws InvalidSPDXDocException 
-	 */
-	public void setCreatorComment(String creatorComment) throws InvalidSPDXAnalysisException {
-		Node spdxDocNode = getSpdxDocNode();
-		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting createdBy"));
-		}
-		// delete the previous creatorComments
-		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR_COMMENT);
-		Resource s = model.getResource(getSpdxDocNode().getURI());
-		model.removeAll(s, p, null);
-		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATOR_COMMENT);
-		s.addProperty(p, creatorComment);
 	}
 
 	/**
@@ -750,42 +787,19 @@ public class SPDXAnalysis {
 		}
 	}
 
+	@Deprecated
 	/**
+	 * This method id deprecated - please use the getCreator() method for this information
 	 * @return the created
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public String getCreated() throws InvalidSPDXAnalysisException {
-		String created = null;
-		Node spdxDocNode = getSpdxDocNode();
-		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("No SPDX Document."));
+		SPDXCreatorInformation creator = this.getCreatorInfo();
+		if (creator != null) {
+			return creator.getCreated();
+		} else {
+			return null;
 		}
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED).asNode();
-		Triple m = Triple.createMatch(spdxDocNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			created = t.getObject().toString(false);
-		}
-		return created;
-	}
-
-	/**
-	 * @param created the created to set
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	public void setCreated(String created) throws InvalidSPDXAnalysisException {
-		Node spdxDocNode = getSpdxDocNode();
-		if (spdxDocNode == null) {
-			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting created"));
-		}
-		// delete any previous created
-		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED);
-		Resource s = getResource(spdxDocNode);
-		model.removeAll(s, p, null);
-		// add the property
-		p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_CREATED);
-		s.addProperty(p, created);
 	}
 
 	/**
@@ -846,21 +860,21 @@ public class SPDXAnalysis {
 	 * @return the nonStandardLicenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXStandardLicense[] getNonStandardLicenses() throws InvalidSPDXAnalysisException {
+	public SPDXNonStandardLicense[] getNonStandardLicenses() throws InvalidSPDXAnalysisException {
 		// nonStandardLicenses
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("No SPDX Document - can not get the Non Standard Licenses"));
 		}
-		ArrayList<SPDXStandardLicense> alLic = new ArrayList<SPDXStandardLicense>();
+		ArrayList<SPDXNonStandardLicense> alLic = new ArrayList<SPDXNonStandardLicense>();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(new SPDXStandardLicense(model, t.getObject()));
+			alLic.add(new SPDXNonStandardLicense(model, t.getObject()));
 		}
-		SPDXStandardLicense[] nonStandardLicenses = new SPDXStandardLicense[alLic.size()];
+		SPDXNonStandardLicense[] nonStandardLicenses = new SPDXNonStandardLicense[alLic.size()];
 		nonStandardLicenses = alLic.toArray(nonStandardLicenses);
 		return nonStandardLicenses;
 	}
@@ -869,11 +883,13 @@ public class SPDXAnalysis {
 	 * @param nonStandardLicenses the nonStandardLicenses to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setNonStandardLicenses(SPDXStandardLicense[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
+	public void setNonStandardLicenses(SPDXNonStandardLicense[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting Non-Standard Licenses"));
 		}
+		// validate the license ID's and update the next license ID property
+		initializeNextLicenseRef(nonStandardLicenses);
 		// delete the previous createdby's
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
@@ -882,6 +898,24 @@ public class SPDXAnalysis {
 			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 			s.addProperty(p, nonStandardLicenses[i].createResource(model));
 		}
+		// need to re-update the max license ID
+	}
+	
+	/**
+	 * Adds a new non-standard license containing the text provided.  Forms the license ID
+	 * from the next License ID available
+	 * @param licenseText
+	 * @return the newly created NonStandardLicense
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public synchronized SPDXNonStandardLicense addNewNonStandardLicense(String licenseText) throws InvalidSPDXAnalysisException {
+		int nextLicNum = this.getAndIncrementNextLicenseRef();
+		String licenseID = formNonStandardLicenseID(nextLicNum);
+		SPDXNonStandardLicense retval = new SPDXNonStandardLicense(licenseID, licenseText);
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+		Resource s = getResource(getSpdxDocNode());
+		s.addProperty(p, retval.createResource(model));
+		return retval;
 	}
 
 	/**

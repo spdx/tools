@@ -8,7 +8,6 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.LicenseDeclaration;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

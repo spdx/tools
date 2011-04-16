@@ -20,11 +20,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXAnalysis;
-import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
+import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
@@ -44,7 +49,8 @@ public class SpreadsheetToRDF {
 
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
-
+	static DateFormat format = new SimpleDateFormat(SPDXDocument.SPDX_DATE_FORMAT);
+	
 	/**
 	 * @param args
 	 */
@@ -90,9 +96,9 @@ public class SpreadsheetToRDF {
 			return;
 		}
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis analysis = null;
+		SPDXDocument analysis = null;
 		try {
-			analysis = new SPDXAnalysis(model);
+			analysis = new SPDXDocument(model);
 		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Analysis: "+ex.getMessage());
 			return;
@@ -125,7 +131,7 @@ public class SpreadsheetToRDF {
 	}
 	
 	private static void copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss,
-			SPDXAnalysis analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
+			SPDXDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		analysis.createSpdxAnalysis(ss.getPackageInfoSheet().getPackageInfo(1).getUrl()+"#SPDXANALYSIS");		
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		analysis.createSpdxPackage();
@@ -137,12 +143,12 @@ public class SpreadsheetToRDF {
 	}
 
 	private static void copyReviewerInfo(ReviewersSheet reviewersSheet,
-			SPDXAnalysis analysis) throws InvalidSPDXAnalysisException {
+			SPDXDocument analysis) throws InvalidSPDXAnalysisException {
 		int numReviewers = reviewersSheet.getNumDataRows();
 		int firstRow = reviewersSheet.getFirstDataRow();
 		SPDXReview[] reviewers = new SPDXReview[numReviewers];
 		for (int i = 0; i < reviewers.length; i++) {
-			reviewers[i] = new SPDXReview(reviewersSheet.getReviewer(firstRow+i), reviewersSheet.getReviewerTimestampe(firstRow+i).toGMTString(), null);
+			reviewers[i] = new SPDXReview(reviewersSheet.getReviewer(firstRow+i), format.format(reviewersSheet.getReviewerTimestampe(firstRow+i)), null);
 		}
 		analysis.setReviewers(reviewers);
 	}
@@ -158,14 +164,13 @@ public class SpreadsheetToRDF {
 	}
 
 	private static void copyNonStdLicenses(
-			NonStandardLicensesSheet nonStandardLicensesSheet, SPDXAnalysis analysis) throws InvalidSPDXAnalysisException {
+			NonStandardLicensesSheet nonStandardLicensesSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
 		int numNonStdLicenses = nonStandardLicensesSheet.getNumDataRows();
 		int firstRow = nonStandardLicensesSheet.getFirstDataRow();
-		SPDXStandardLicense[] nonStdLicenses = new SPDXStandardLicense[numNonStdLicenses];
+		SPDXNonStandardLicense[] nonStdLicenses = new SPDXNonStandardLicense[numNonStdLicenses];
 		for (int i = 0; i < nonStdLicenses.length; i++) {
-			nonStdLicenses[i] = new SPDXStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
-					nonStandardLicensesSheet.getIdentifier(firstRow+i), 
-					nonStandardLicensesSheet.getExtractedText(firstRow+i), null, null, null, null);
+			nonStdLicenses[i] = new SPDXNonStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
+					nonStandardLicensesSheet.getExtractedText(firstRow+i));
 		}
 		analysis.setNonStandardLicenses(nonStdLicenses);
 	}
@@ -186,14 +191,15 @@ public class SpreadsheetToRDF {
 		spdxPackage.setSha1(info.getSha1());
 		spdxPackage.setShortDescription(info.getShortDescription());
 		spdxPackage.setSourceInfo(info.getSourceInfo());
-		spdxPackage.setUrl(info.getUrl());
+		spdxPackage.setDownloadUrl(info.getUrl());
 	}
 
-	private static void copyOrigins(OriginsSheet originsSheet, SPDXAnalysis analysis) throws InvalidSPDXAnalysisException {
-		analysis.setCreated(originsSheet.getCreated().toGMTString());
+	private static void copyOrigins(OriginsSheet originsSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
+		Date createdDate = originsSheet.getCreated();
+		String created  = format.format(createdDate);
 		String[] createdBys = originsSheet.getCreatedBy();
-		analysis.setCreators(createdBys);
-		analysis.setCreatorComment(originsSheet.getAuthorComments());
+		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, "");
+		analysis.setCreationInfo(creator);
 		analysis.setSpdxVersion(originsSheet.getSPDXVersion());
 	}
 

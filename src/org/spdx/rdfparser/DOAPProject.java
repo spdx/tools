@@ -63,7 +63,7 @@ public class DOAPProject {
 		}
 		
 		// name
-		Node p = model.getProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_NAME).asNode();
+		Node p = model.getProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_NAME).asNode();
 		Triple m = Triple.createMatch(projectNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -71,7 +71,7 @@ public class DOAPProject {
 			this.name = t.getObject().toString(false);
 		}
 		// home page
-		p = model.getProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_HOMEPAGE).asNode();
+		p = model.getProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_HOMEPAGE).asNode();
 		m = Triple.createMatch(projectNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -102,9 +102,9 @@ public class DOAPProject {
 	public void setName(String name) {
 		this.name = name;
 		if (this.projectNode != null && this.model != null) {
-			Property p = model.createProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_NAME);
+			Property p = model.createProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_NAME);
 			model.removeAll(projectResource, p, null);
-			p = model.createProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_NAME);
+			p = model.createProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_NAME);
 			projectResource.addProperty(p, name);
 		}
 	}
@@ -122,10 +122,10 @@ public class DOAPProject {
 	public void setHomePage(String homePage) {
 		this.homePage = homePage;
 		if (this.projectNode != null && this.model != null) {
-			Property p = model.createProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_HOMEPAGE);
+			Property p = model.createProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_HOMEPAGE);
 			model.removeAll(projectResource, p, null);
 			if (homePage != null) {
-				p = model.createProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_HOMEPAGE);
+				p = model.createProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_HOMEPAGE);
 				Resource homePageResource = model.createResource(homePage);
 				projectResource.addProperty(p, homePageResource);
 			}
@@ -141,7 +141,7 @@ public class DOAPProject {
 	}
 	
 	public Resource createResource(Model model) {
-		Resource type = model.createResource(SPDXAnalysis.DOAP_NAMESPACE + SPDXAnalysis.CLASS_DOAP_PROJECT);
+		Resource type = model.createResource(SPDXDocument.DOAP_NAMESPACE + SPDXDocument.CLASS_DOAP_PROJECT);
 		Resource retval = model.createResource(type);
 		populateModel(model, retval);
 		return retval;
@@ -158,13 +158,13 @@ public class DOAPProject {
 		
 		// Name		
 		if (name != null) {
-			Property p = model.createProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_NAME);
+			Property p = model.createProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_NAME);
 			projectResource.addProperty(p, name);
 		}
 
 		// HomePage
 		if (homePage != null) {
-			Property p = model.createProperty(SPDXAnalysis.DOAP_NAMESPACE, SPDXAnalysis.PROP_PROJECT_HOMEPAGE);
+			Property p = model.createProperty(SPDXDocument.DOAP_NAMESPACE, SPDXDocument.PROP_PROJECT_HOMEPAGE);
 			projectResource.addProperty(p, homePage);
 		}		
 	}

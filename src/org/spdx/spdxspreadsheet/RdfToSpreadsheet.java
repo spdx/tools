@@ -25,9 +25,11 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXAnalysis;
-import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
+import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
@@ -85,9 +87,9 @@ public class RdfToSpreadsheet {
         } catch(java.lang.ClassNotFoundException e) {}  // do nothing
 
 		model.read(spdxRdfInput, "http://example.com//", fileType(args[0]));
-		SPDXAnalysis doc = null;
+		SPDXDocument doc = null;
 		try {
-			doc = new SPDXAnalysis(model);
+			doc = new SPDXDocument(model);
 		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
@@ -112,7 +114,7 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyRdfXmlToSpreadsheet(SPDXAnalysis doc,
+	private static void copyRdfXmlToSpreadsheet(SPDXDocument doc,
 			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
 			System.out.println("Warning: No document to copy");
@@ -154,7 +156,7 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyNonStdLicenses(SPDXStandardLicense[] nonStandardLicenses,
+	private static void copyNonStdLicenses(SPDXNonStandardLicense[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
 			nonStandardLicensesSheet.add(nonStandardLicenses[i].getId(), nonStandardLicenses[i].getText());
@@ -167,24 +169,22 @@ public class RdfToSpreadsheet {
 		packageInfoSheet.add(pkgInfo);
 	}
 
-	private static void copyOrigins(SPDXAnalysis doc, OriginsSheet originsSheet) throws InvalidSPDXAnalysisException {
+	private static void copyOrigins(SPDXDocument doc, OriginsSheet originsSheet) throws InvalidSPDXAnalysisException {
 		// SPDX Version
 		originsSheet.setSPDXVersion(doc.getSpdxVersion());
 		// Created by
-		String[] createdBys = doc.getCreators();
+		SPDXCreatorInformation creator = doc.getCreatorInfo();
+		String[] createdBys = creator.getCreators();
 		originsSheet.setCreatedBy(createdBys);
 		// Data license
 		originsSheet.setDataLicense("This field is not yet supported by SPDX");
 		// Author Comments
-		String comments = doc.getCreatorComment();
+		String comments = creator.getComment();
 		if (comments != null && !comments.isEmpty()) {
 			originsSheet.setAuthorComments(comments);
 		}
-		String created = doc.getCreated();
-		if (created.endsWith("GMT")) {
-			created = created.substring(0, created.length()-4);
-		}
-		DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");	//TODO: implment the correct
+		String created = creator.getCreated();
+		DateFormat dateFormat = new SimpleDateFormat(SPDXDocument.SPDX_DATE_FORMAT);	
 		try {
 			originsSheet.setCreated(dateFormat.parse(created));
 		} catch (ParseException e) {

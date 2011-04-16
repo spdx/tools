@@ -29,11 +29,14 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -59,7 +62,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
 	 */
 	@Test
 	public void testSPDXAnalysis() {
@@ -67,7 +70,7 @@ public class TestSPDXDocument {
 	}
 
     /**
-     * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
+     * Test method for {@link org.spdx.rdfparser.SPDXDocument#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
      */
     @Test
     public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithExplicitBase() {
@@ -75,20 +78,20 @@ public class TestSPDXDocument {
         	String fileName = "Test" + File.separator + "resources" + File.separator + "valid-with-explicit-base.html";
         	File file = new File(fileName);
         	String fullFilePath = file.getAbsolutePath();
-            new SPDXAnalysis(fileName);
+            SPDXDocumentFactory.creatSpdxDocument(fileName);
         } catch(Exception e) {
             fail("Loading 'valid-with-explicit-base.html' failed because: " + e.getMessage());
         }
     }
 
     /**
-     * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
+     * Test method for {@link org.spdx.rdfparser.SPDXDocument#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
      */
     @Test
     public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithoutExplicitBase() {
         try {
         	String fileName = "Test" + File.separator + "resources" + File.separator + "valid-without-explicit-base.html";
-            new SPDXAnalysis(fileName);
+        	SPDXDocumentFactory.creatSpdxDocument(fileName);
         } catch(Exception e) {
             fail("Loading 'valid-without-explicit-base.html' failed because: " + e.getMessage());
         }
@@ -96,7 +99,7 @@ public class TestSPDXDocument {
 
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getSpdxVersion()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getSpdxVersion()}.
 	 */
 	@Test
 	public void testGetSpdxVersion() {
@@ -104,14 +107,14 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#setSpdxVersion(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setSpdxVersion(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSetSpdxVersion() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		StringWriter writer = new StringWriter();
 		doc.getModel().write(writer);
@@ -134,7 +137,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getCreators()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getCreators()}.
 	 */
 	@Test
 	public void testGetCreatedBy() {
@@ -142,26 +145,35 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#setCreator(java.lang.String[])}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setCreator(java.lang.String[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
-	public void testSetCreatedBy() throws InvalidSPDXAnalysisException, IOException {
+	public void testSetCreationInfo() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		StringWriter writer = new StringWriter();
 		doc.getModel().write(writer);
 		String beforeCreate = writer.toString();
 		writer.close();
 		doc.createSpdxAnalysis(testUri);
-		String[] noCreatedBy = doc.getCreators();
-		assertEquals(0, noCreatedBy.length);
+		SPDXCreatorInformation noCreator = doc.getCreatorInfo();
+		if (noCreator != null) {
+			fail("creator exists");
+		}
 		String[] testCreatedBy = new String[] {"Created By Me"};
-		doc.setCreators(testCreatedBy);
-		String[] resultCreatedBy = doc.getCreators();
+		String testComment = "My comment";
+		DateFormat format = new SimpleDateFormat(SPDXDocument.SPDX_DATE_FORMAT);
+		String createdDate = format.format(new Date());
+		SPDXCreatorInformation creator = new SPDXCreatorInformation(testCreatedBy, createdDate, testComment);
+		doc.setCreationInfo(creator);
+		SPDXCreatorInformation result = doc.getCreatorInfo();
+		String[] resultCreatedBy = result.getCreators();
 		compareArrays(testCreatedBy, resultCreatedBy);
+		assertEquals(creator.getCreated(), result.getCreated());
+		assertEquals(creator.getComment(), result.getComment());
 		writer = new StringWriter();
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
@@ -169,31 +181,11 @@ public class TestSPDXDocument {
 				"second created", 
 				"another",
 				"and another"};
-		doc.setCreators(testCreatedBy2);
-		String[] resultCreatedBy2 = doc.getCreators();
+		SPDXCreatorInformation creator2 = new SPDXCreatorInformation(testCreatedBy2, createdDate, testComment);
+		doc.setCreationInfo(creator2);
+		SPDXCreatorInformation result2 = doc.getCreatorInfo();
+		String[] resultCreatedBy2 = result2.getCreators();
 		compareArrays(testCreatedBy2, resultCreatedBy2);
-	}
-	
-	@Test
-	public void testCreatorComment() throws InvalidSPDXAnalysisException, IOException {
-		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
-		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
-		StringWriter writer = new StringWriter();
-		doc.getModel().write(writer);
-		String beforeCreate = writer.toString();
-		writer.close();
-		doc.createSpdxAnalysis(testUri);
-		String creatorComment = doc.getCreatorComment();
-		if (creatorComment != null) {
-			if (!creatorComment.isEmpty()) {
-				fail("Comment should be empty");
-			}
-		}
-		String comment = "This is a comment";
-		doc.setCreatorComment(comment);
-		String result = doc.getCreatorComment();
-		assertEquals(comment, result);
 	}
 
 	private void compareArrays(Object[] a1,
@@ -212,7 +204,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getReviewers()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getReviewers()}.
 	 */
 	@Test
 	public void testGetReviewers() {
@@ -220,14 +212,14 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#setReviewers(java.lang.String[])}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setReviewers(java.lang.String[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSetReviewers() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		StringWriter writer = new StringWriter();
 		doc.getModel().write(writer);
@@ -252,7 +244,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getCreated()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getCreated()}.
 	 */
 	@Test
 	public void testGetCreated() {
@@ -260,44 +252,14 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#setCreated(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
-	 */
-	@Test
-	public void testSetCreated() throws InvalidSPDXAnalysisException, IOException {
-		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
-		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
-		StringWriter writer = new StringWriter();
-		doc.getModel().write(writer);
-		String beforeCreate = writer.toString();
-		writer.close();
-		doc.createSpdxAnalysis(testUri);
-		String noCreated = doc.getCreated();
-		assertNull(noCreated);
-		String testCreated = "Created By Me";
-		doc.setCreated(testCreated);
-		String resultCreated = doc.getCreated();
-		assertEquals(testCreated, resultCreated);
-		writer = new StringWriter();
-		doc.getModel().write(writer);
-		String afterCreate = writer.toString();
-		String testCreated2 = "second created";
-		doc.setCreated(testCreated2);
-		String resultCreated2 = doc.getCreated();
-		assertEquals(testCreated2, resultCreated2);
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getSpdxPackage()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getSpdxPackage()}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testGetSpdxPackage() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		StringWriter writer = new StringWriter();
 		doc.getModel().write(writer);
@@ -316,7 +278,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#createSpdxPackage(String)}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#createSpdxPackage(String)}.
 	 */
 	@Test
 	public void testCreateSpdxPackage() {
@@ -324,46 +286,38 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getNonStandardLicenses()}.
-	 */
-	@Test
-	public void testGetNonStandardLicenses() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#setNonStandardLicenses(org.spdx.rdfparser.SPDXStandardLicense[])}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setNonStandardLicenses(org.spdx.rdfparser.SPDXStandardLicense[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSetNonStandardLicenses() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		StringWriter writer = new StringWriter();
 		doc.getModel().write(writer);
 		String beforeCreate = writer.toString();
 		writer.close();
 		doc.createSpdxAnalysis(testUri);
-		SPDXStandardLicense[] noNonStdLic = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] noNonStdLic = doc.getNonStandardLicenses();
 		assertEquals(0, noNonStdLic.length);
-		SPDXStandardLicense[] testNonStdLic = new SPDXStandardLicense[] {new SPDXStandardLicense(
-				"name", "LicID1", "Licnese Text 1", "URL", "LicNotes1", "StdHeader", "Template")};
+		SPDXNonStandardLicense[] testNonStdLic = new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(
+				SPDXDocument.formNonStandardLicenseID(1), "Licnese Text 1")};
 		doc.setNonStandardLicenses(testNonStdLic);
-		SPDXStandardLicense[] resultNonStdLic = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] resultNonStdLic = doc.getNonStandardLicenses();
 		assertEquals(1, resultNonStdLic.length);
 		assertEquals(testNonStdLic[0].getId(), resultNonStdLic[0].getId());
 		assertEquals(testNonStdLic[0].getText(), resultNonStdLic[0].getText());
 
-		SPDXStandardLicense[] testNonStdLic2 = new SPDXStandardLicense[] {new SPDXStandardLicense(
-				"name", "LicID2", "Licnese Text 2", "URL", "LicNotes1", "StdHeader", "Template"),
-				new SPDXStandardLicense(
-						"name", "LicID3", "Licnese Text 3", "URL", "LicNotes1", "StdHeader", "Template"),
-				new SPDXStandardLicense(
-						"name", "LicID4", "Licnese Text 4", "URL", "LicNotes1", "StdHeader", "Template")};
+		SPDXNonStandardLicense[] testNonStdLic2 = new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(
+				SPDXDocument.formNonStandardLicenseID(2), "Licnese Text 2"),
+				new SPDXNonStandardLicense(
+						SPDXDocument.formNonStandardLicenseID(3), "Licnese Text 3"),
+				new SPDXNonStandardLicense(
+						SPDXDocument.formNonStandardLicenseID(4), "Licnese Text 4")};
 		doc.setNonStandardLicenses(testNonStdLic2);
-		SPDXStandardLicense[] resultNonStdLic2 = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] resultNonStdLic2 = doc.getNonStandardLicenses();
 		assertEquals(testNonStdLic2.length, resultNonStdLic2.length);
 		String[] testLicIds = new String[testNonStdLic2.length];
 		String[] testLicTexts = new String[testNonStdLic2.length];
@@ -383,7 +337,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#getName()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getName()}.
 	 */
 	@Test
 	public void testGetName() {
@@ -391,14 +345,14 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXAnalysis#createSpdxAnalysis(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#createSpdxAnalysis(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testcreateSpdxDocument() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
-		SPDXAnalysis doc = new SPDXAnalysis(model);
+		SPDXDocument doc = new SPDXDocument(model);
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		StringWriter writer = new StringWriter();
 		doc.getModel().write(writer);
@@ -415,5 +369,54 @@ public class TestSPDXDocument {
 		String uriResult = doc.getSpdxDocUri();
 		assertEquals(testUri, uriResult);
 	}
+	
+	@Test
+	public void testSpdxPackageDeclaredLicense() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testUri);
+		doc.createSpdxPackage();
+		String TEST_LICENSE_ID = SPDXDocument.formNonStandardLicenseID(15);
+		SPDXNonStandardLicense[] declaredLicenses = 
+			new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(TEST_LICENSE_ID, "text")};
+		doc.getSpdxPackage().setDeclaredLicenses(declaredLicenses);
+		SPDXLicenseInfo[] result = doc.getSpdxPackage().getDeclaredLicenses();
+		assertEquals(1, result.length);
+		if (!(result[0] instanceof SPDXNonStandardLicense)) {
+			fail("wrong type for declared license");
+		}
+		assertEquals(TEST_LICENSE_ID, ((SPDXNonStandardLicense)result[0]).getId());
+	}
 
+	@Test
+	public void testAddNonStandardLicense() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testUri);
+		doc.createSpdxPackage();
+		String NON_STD_LIC_TEXT1 = "licenseText1";
+		String NON_STD_LIC_TEXT2 = "LicenseText2";
+		SPDXNonStandardLicense[] emptyLic = doc.getNonStandardLicenses();
+		assertEquals(0,emptyLic.length);
+		SPDXNonStandardLicense lic1 = doc.addNewNonStandardLicense(NON_STD_LIC_TEXT1);
+		String licID1 = SPDXDocument.formNonStandardLicenseID(1);
+		assertEquals(licID1, lic1.getId());
+		assertEquals(NON_STD_LIC_TEXT1, lic1.getText());
+		SPDXNonStandardLicense[] licresult1 = doc.getNonStandardLicenses();
+		assertEquals(1, licresult1.length);
+		assertEquals(licID1, licresult1[0].getId());
+		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getText());
+		SPDXNonStandardLicense lic2 = doc.addNewNonStandardLicense(NON_STD_LIC_TEXT2);
+		String licID2 = SPDXDocument.formNonStandardLicenseID(2);
+		assertEquals(licID2, lic2.getId());
+		assertEquals(NON_STD_LIC_TEXT2, lic2.getText());
+		SPDXNonStandardLicense[] licresult2 = doc.getNonStandardLicenses();
+		assertEquals(2, licresult2.length);
+		if (!licresult2[0].getId().equals(licID2) && !licresult2[1].getId().equals(licID2)) {
+			fail("second license not found");
+		}
+
+	}
 }

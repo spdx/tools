@@ -18,7 +18,7 @@ package org.spdx.rdfparser;
 
 import java.io.File;
 
-import org.spdx.rdfparser.SPDXAnalysis.SPDXPackage;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -51,9 +51,9 @@ public class PrettyPrinter {
 			System.out.printf("Warning: Extra arguments will be ignored");
                 }
 
-        SPDXAnalysis doc = null;
+        SPDXDocument doc = null;
         try {
-            doc = new SPDXAnalysis(args[0]);
+            doc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
         } catch(Exception ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
@@ -71,7 +71,7 @@ public class PrettyPrinter {
 	 * @param doc
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static void prettyPrintDoc(SPDXAnalysis doc) throws InvalidSPDXAnalysisException {
+	private static void prettyPrintDoc(SPDXDocument doc) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
 			System.out.println("Warning: No document to print");
 			return;
@@ -107,7 +107,7 @@ public class PrettyPrinter {
 		}
 		prettyPrintPackage(doc.getSpdxPackage());
 		if (doc.getNonStandardLicenses() != null && doc.getNonStandardLicenses().length > 0) {
-			SPDXStandardLicense[] nonStandardLic = doc.getNonStandardLicenses();
+			SPDXNonStandardLicense[] nonStandardLic = doc.getNonStandardLicenses();
 			System.out.println("Non-Standard Licenses:");
 			for (int i = 0; i < nonStandardLic.length; i++) {
 				prettyPrintLicense(nonStandardLic[i]);
@@ -118,7 +118,7 @@ public class PrettyPrinter {
 	/**
 	 * @param license
 	 */
-	private static void prettyPrintLicense(SPDXStandardLicense license) {
+	private static void prettyPrintLicense(SPDXNonStandardLicense license) {
 		// id
 		if (license.getId() != null && !license.getId().isEmpty()) {
 			System.out.printf("\tLicense ID: %1s", license.getId());
