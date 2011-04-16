@@ -44,7 +44,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 	SPDXLicense(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 		// id
-		Node p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_ID).asNode();
+		Node p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -52,7 +52,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 			this.id = t.getObject().toString(false);
 		}
 		// text
-		p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_TEXT).asNode();
+		p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT).asNode();
 		m = Triple.createMatch(licenseInfoNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -80,10 +80,10 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		this.id = id;
 		if (licenseInfoNode != null) {
 			// delete any previous created
-			Property p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_ID);
+			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_ID);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_ID);
 			resource.addProperty(p, id);
 		}
 	}
@@ -102,10 +102,10 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		this.text = text;
 		if (this.licenseInfoNode != null) {
 			// delete any previous created
-			Property p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_TEXT);
+			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_LICENSE_TEXT);
+			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_LICENSE_TEXT);
 			resource.addProperty(p, text);
 		}
 	}
@@ -124,10 +124,10 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		Resource r = null;
 		if (id != null) {
 			// check to see if it exists
-			Property idProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, 
-					SPDXAnalysis.PROP_LICENSE_ID);
-			Property typeProperty = this.model.getProperty(SPDXAnalysis.RDF_NAMESPACE, 
-					SPDXAnalysis.RDF_PROP_TYPE);
+			Property idProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+					SPDXDocument.PROP_LICENSE_ID);
+			Property typeProperty = this.model.getProperty(SPDXDocument.RDF_NAMESPACE, 
+					SPDXDocument.RDF_PROP_TYPE);
 			Triple m = Triple.createMatch(null, idProperty.asNode(), null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
@@ -151,13 +151,13 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 			// need to create it
 			r = model.createResource(type);
 			if (id != null) {
-				Property idProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, 
-						SPDXAnalysis.PROP_LICENSE_ID);
+				Property idProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+						SPDXDocument.PROP_LICENSE_ID);
 				r.addProperty(idProperty, this.id);
 			}
 			if (this.text != null) {
-				Property textProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, 
-						SPDXAnalysis.PROP_LICENSE_TEXT);
+				Property textProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
+						SPDXDocument.PROP_LICENSE_TEXT);
 				r.addProperty(textProperty, this.text);
 			}
 		}

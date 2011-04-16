@@ -33,7 +33,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  *
  */
 public class LicenseHTMLFile {
-	static final String HTML_BEFORE_TITLE = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"+
+	static final boolean USE_SITE = false;	// set to true to use the site name for the link of external web pages
+	static final String HTML_BEFORE_TITLE1 = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"+
 			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">\n"+
 			"<html xmlns=\"http://www.w3.org/1999/xhtml\"\n"+
 			"	xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
@@ -42,8 +43,8 @@ public class LicenseHTMLFile {
 			"	xmlns:dc=\"http://purl.org/dc/terms/\"\n"+
 			"	xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n"+
 			"	xmlns:spdx=\"http://spdx.org/spec#\">\n"+
-			"<head>\n"+
-			"	<title></title>\n"+
+			"<head>\n	<title>";
+	static final String HTML_BETWEEN_TITLE = "</title>\n"+
 			"	<link rel=\"stylesheet\" href=\"screen.css\" media=\"screen\" type=\"text/css\" />\n"+
 			"</head>\n"+
 			"<body typeof=\"spdx:License\">\n"+
@@ -105,7 +106,9 @@ public class LicenseHTMLFile {
 		try {
 			stream = new FileOutputStream(htmlFile);
 			writer = new OutputStreamWriter(stream);
-			writer.write(HTML_BEFORE_TITLE);
+			writer.write(HTML_BEFORE_TITLE1);
+			writer.write(escapeHTML(license.getName()));
+			writer.write(HTML_BETWEEN_TITLE);
 			writer.write(escapeHTML(license.getName()));
 			writer.write(AFTER_TITLE);
 			writer.write(tableOfContentsReference);
@@ -145,8 +148,9 @@ public class LicenseHTMLFile {
 	}
 	private String getSiteFromUrl(String url) {
 		Matcher matcher = SITE_PATTERN.matcher(url);
-		if (matcher.find()) {
-			return matcher.group(1);
+		if (matcher.find() && USE_SITE) {
+			int numGroups = matcher.groupCount();
+			return matcher.group(numGroups-1);
 		} else {
 			return url;
 		}

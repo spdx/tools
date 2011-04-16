@@ -16,10 +16,9 @@
  */
 package org.spdx.rdfparser;
 
-import org.spdx.rdfparser.LicenseDeclaration;
 
 /**
- * @author Source Auditor
+ * @author Gary O'Neall
  *
  */
 public class SPDXPackageInfo {

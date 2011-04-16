@@ -43,7 +43,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 	 */
 	public SPDXLicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
-		Node p = model.getProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_PACKAGE_DECLARED_LICENSE).asNode();
+		Node p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_PACKAGE_DECLARED_LICENSE).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -65,7 +65,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 
 	protected Resource _createResource(Model model, Resource type) {
 		Resource r = model.createResource(type);
-		Property licProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_PACKAGE_DECLARED_LICENSE);
+		Property licProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_PACKAGE_DECLARED_LICENSE);
 		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
 			Resource licResource = iter.next().createResource(model);
@@ -83,10 +83,10 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		}
 		if (model != null && licenseInfoNode != null) {
 			// delete any previous created
-			Property licProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_PACKAGE_DECLARED_LICENSE);
+			Property licProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_PACKAGE_DECLARED_LICENSE);
 			model.removeAll(resource, licProperty, null);
 
-			licProperty = model.createProperty(SPDXAnalysis.SPDX_NAMESPACE, SPDXAnalysis.PROP_PACKAGE_DECLARED_LICENSE);
+			licProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_PACKAGE_DECLARED_LICENSE);
 			for (int i = 0; i < licenseInfos.length; i++) {
 				Resource licResource = licenseInfos[i].createResource(model);
 				resource.addProperty(licProperty, licResource);
