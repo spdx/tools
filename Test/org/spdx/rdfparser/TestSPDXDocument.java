@@ -165,7 +165,7 @@ public class TestSPDXDocument {
 		}
 		String[] testCreatedBy = new String[] {"Created By Me"};
 		String testComment = "My comment";
-		DateFormat format = new SimpleDateFormat(SPDXDocument.SPDX_DATE_FORMAT);
+		DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		String createdDate = format.format(new Date());
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(testCreatedBy, createdDate, testComment);
 		doc.setCreationInfo(creator);
