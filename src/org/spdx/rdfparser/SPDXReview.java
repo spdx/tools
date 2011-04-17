@@ -50,7 +50,7 @@ public class SPDXReview {
 		}
 		
 		//reviewer
-		Node p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_REVIEWER).asNode();
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_REVIEWER).asNode();
 		Triple m = Triple.createMatch(reviewerNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -58,7 +58,7 @@ public class SPDXReview {
 			this.reviewer = t.getObject().toString(false);
 		}
 		//Date
-		p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_DATE).asNode();
+		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_DATE).asNode();
 		m = Triple.createMatch(reviewerNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -66,7 +66,7 @@ public class SPDXReview {
 			this.reviewDate = t.getObject().toString(false);
 		}
 		//Comment
-		p = model.createProperty(SPDXDocument.RDFS_NAMESPACE, SPDXDocument.RDFS_PROP_COMMENT).asNode();
+		p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
 		m = Triple.createMatch(reviewerNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -87,7 +87,7 @@ public class SPDXReview {
 	}
 
 	public Resource createResource(Model model) {
-		Resource type = model.createResource(SPDXDocument.SPDX_NAMESPACE + SPDXDocument.CLASS_SPDX_REVIEW);
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_REVIEW);
 		Resource retval = model.createResource(type);
 		populateModel(model, retval);
 		return retval;
@@ -104,19 +104,19 @@ public class SPDXReview {
 		
 		// Reviewer		
 		if (reviewer != null) {
-			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_REVIEWER);
+			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_REVIEWER);
 			reviewResource.addProperty(p, reviewer);
 		}
 
 		// Date
 		if (reviewDate != null) {
-			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_DATE);
+			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_DATE);
 			reviewResource.addProperty(p, reviewDate);
 		}	
 		
 		// Comment
 		if (comment != null) {
-			Property p = model.createProperty(SPDXDocument.RDFS_NAMESPACE, SPDXDocument.RDFS_PROP_COMMENT);
+			Property p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 			reviewResource.addProperty(p, comment);
 		}
 	}
@@ -134,9 +134,9 @@ public class SPDXReview {
 	public void setReviewer(String reviewer) {
 		this.reviewer = reviewer;
 		if (this.reviewerNode != null && this.model != null) {
-			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_REVIEWER);
+			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_REVIEWER);
 			model.removeAll(this.reviewerResource, p, null);
-			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_REVIEWER);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_REVIEWER);
 			this.reviewerResource.addProperty(p, reviewer);
 		}
 	}
@@ -154,9 +154,9 @@ public class SPDXReview {
 	public void setReviewDate(String reviewDate) {
 		this.reviewDate = reviewDate;
 		if (this.reviewerNode != null && this.model != null) {
-			Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_DATE);
+			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_DATE);
 			model.removeAll(this.reviewerResource, p, null);
-			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_REVIEW_DATE);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_DATE);
 			this.reviewerResource.addProperty(p, reviewDate);
 		}
 	}
@@ -174,10 +174,10 @@ public class SPDXReview {
 	public void setComment(String comment) {
 		this.comment = comment;
 		if (this.reviewerNode != null && this.model != null) {
-			Property p = model.createProperty(SPDXDocument.RDFS_NAMESPACE, SPDXDocument.RDFS_PROP_COMMENT);
+			Property p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 			model.removeAll(this.reviewerResource, p, null);
 			if (comment != null) {
-				p = model.createProperty(SPDXDocument.RDFS_NAMESPACE, SPDXDocument.RDFS_PROP_COMMENT);
+				p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 				this.reviewerResource.addProperty(p, comment);
 			}
 		}

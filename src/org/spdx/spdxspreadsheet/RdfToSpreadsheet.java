@@ -33,6 +33,7 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -184,7 +185,7 @@ public class RdfToSpreadsheet {
 			originsSheet.setAuthorComments(comments);
 		}
 		String created = creator.getCreated();
-		DateFormat dateFormat = new SimpleDateFormat(SPDXDocument.SPDX_DATE_FORMAT);	
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
 		try {
 			originsSheet.setCreated(dateFormat.parse(created));
 		} catch (ParseException e) {

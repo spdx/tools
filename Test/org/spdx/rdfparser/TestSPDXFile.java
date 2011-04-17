@@ -148,7 +148,7 @@ public class TestSPDXFile {
 		String beforeCreate = writer.toString();
 		writer.close();
 		Resource pkgResource = model.getResource(pkgUri);
-		Property p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_PACKAGE_FILE);
+		Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_FILE);
 		
 		SPDXLicenseInfo[] declaredLic = new SPDXLicenseInfo[] {COMPLEX_LICENSE};
 		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};

@@ -33,6 +33,7 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -49,7 +50,7 @@ public class SpreadsheetToRDF {
 
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
-	static DateFormat format = new SimpleDateFormat(SPDXDocument.SPDX_DATE_FORMAT);
+	static DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 	
 	/**
 	 * @param args

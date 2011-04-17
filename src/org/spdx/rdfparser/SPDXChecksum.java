@@ -55,7 +55,7 @@ public class SPDXChecksum {
 			throw(new InvalidSPDXAnalysisException("Checksum node can not be a literal"));
 		}
 		// Algorithm
-		Node p = spdxModel.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_ALGORITHM).asNode();
+		Node p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM).asNode();
 		Triple m = Triple.createMatch(checksumNode, p, null);
 		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -64,7 +64,7 @@ public class SPDXChecksum {
 		}
 		
 		// value
-		p = spdxModel.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_VALUE).asNode();
+		p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
 		m = Triple.createMatch(checksumNode, p, null);
 		tripleIter = spdxModel.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -87,10 +87,10 @@ public class SPDXChecksum {
 		this.algorithm = algorithm;
 		if (this.model != null && this.checksumNode != null) {
 			// delete any previous algorithm
-			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_ALGORITHM);
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			model.removeAll(checksumResource, p, null);
 			// add the property
-			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_ALGORITHM);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			checksumResource.addProperty(p, algorithm);
 		}
 	}
@@ -109,26 +109,26 @@ public class SPDXChecksum {
 		this.value = value;
 		if (this.model != null && this.checksumNode != null) {
 			// delete any previous value
-			Property p = model.getProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_VALUE);
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE);
 			model.removeAll(checksumResource, p, null);
 			// add the property
-			p = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_VALUE);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE);
 			checksumResource.addProperty(p, value);
 		}
 	}
 	
 	public Resource createResource(Model model) {
 		this.model = model;
-		Resource type = model.createResource(SPDXDocument.SPDX_NAMESPACE +
-				SPDXDocument.CLASS_SPDX_CHECKSUM);
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE +
+				SpdxRdfConstants.CLASS_SPDX_CHECKSUM);
 		Resource r = model.createResource(type);
 		if (algorithm != null) {
-			Property algProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, 
-					SPDXDocument.PROP_CHECKSUM_ALGORITHM);
+			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			r.addProperty(algProperty, this.algorithm);
 		}
 		if (this.value != null) {
-			Property valueProperty = model.createProperty(SPDXDocument.SPDX_NAMESPACE, SPDXDocument.PROP_CHECKSUM_VALUE);
+			Property valueProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE);
 			r.addProperty(valueProperty, this.value);
 		}
 		this.checksumNode = r.asNode();

@@ -45,7 +45,7 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	 */
 	@Override
 	protected Resource _createResource(Model model) {
-		Resource type = model.createResource(SPDXDocument.SPDX_NAMESPACE + SPDXDocument.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
 		return super._createResource(model, type);
 	}
 	
