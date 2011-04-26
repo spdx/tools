@@ -68,12 +68,12 @@ public class TestPackageInfoSheet {
 		SPDXLicenseInfo testLicense2 = new SPDXConjunctiveLicenseSet(testLicenses2);
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
 		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "machinename1", 
-				"sha1-1", "sourceinfo1", new SPDXLicenseInfo[] {testLicense1},
-				new SPDXLicenseInfo[] {testLicense2}, "dec-copyright1",
+				"sha1-1", "sourceinfo1", testLicense1,
+				testLicense2, "dec-copyright1",
 				"short desc1", "desc1", "http://url1", "filechecksum1");
 		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "machinename1", 
-				"sha1-1", "sourceinfo1", new SPDXLicenseInfo[] {testLicense1},
-				new SPDXLicenseInfo[] {testLicense2}, "dec-copyright1",
+				"sha1-1", "sourceinfo1", testLicense1,
+				testLicense2, "dec-copyright1",
 				"short desc1", "desc1", "http://url1", "filechecksum1");
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
@@ -93,8 +93,8 @@ public class TestPackageInfoSheet {
 	private void comparePkgInfo(SPDXPackageInfo pkgInfo1,
 			SPDXPackageInfo pkgInfo2) {
 		assertEquals(pkgInfo1.getDeclaredCopyright(), pkgInfo2.getDeclaredCopyright());
-		compareLicenseDeclarations(pkgInfo1.getDeclaredLicenses(), pkgInfo2.getDeclaredLicenses());
-		compareLicenseDeclarations(pkgInfo1.getDetectedLicenses(), pkgInfo2.getDetectedLicenses());
+		assertEquals(pkgInfo1.getDeclaredLicenses(), pkgInfo2.getDeclaredLicenses());
+		assertEquals(pkgInfo1.getDetectedLicenses(), pkgInfo2.getDetectedLicenses());
 		assertEquals(pkgInfo1.getDeclaredName(), pkgInfo2.getDeclaredName());
 		assertEquals(pkgInfo1.getDescription(), pkgInfo2.getDescription());
 		assertEquals(pkgInfo1.getFileChecksum(), pkgInfo2.getFileChecksum());

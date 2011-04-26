@@ -17,6 +17,7 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -26,7 +27,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -51,6 +51,12 @@ import java.util.regex.Pattern;
 public class SPDXDocument implements SpdxRdfConstants {
 	
 	public static final String CURRENT_SPDX_VERSION = "SPDX-0.8";
+	
+	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
+	
+	static {
+		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
+	}
 
 	/**
 	 * Keeps tract of the next license reference number when generating the license ID's for
@@ -78,7 +84,6 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public SPDXPackage(Node pkgNode) {
 			this.node = pkgNode;
-			//TODO: Validate parsed properties
 		}
 		/**
 		 * @return the declaredName
@@ -182,7 +187,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @return the declaredLicenses
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public SPDXLicenseInfo[] getDeclaredLicenses() throws InvalidSPDXAnalysisException {
+		public SPDXLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
 			ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
@@ -191,23 +196,25 @@ public class SPDXDocument implements SpdxRdfConstants {
 				Triple t = tripleIter.next();
 				alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 			}
-			SPDXLicenseInfo[] retval = new SPDXLicenseInfo[alLic.size()];
-			retval = alLic.toArray(retval);
-			return retval;
+			if (alLic.size() > 1) {
+				throw(new InvalidSPDXAnalysisException("Too many declared licenses"));
+			}
+			if (alLic.size() == 0) {
+				return null;
+			}
+			return alLic.get(0);
 		}
 		/**
 		 * @param declaredLicenses the declaredLicenses to set
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public void setDeclaredLicenses(SPDXLicenseInfo[] declaredLicenses) throws InvalidSPDXAnalysisException {
+		public void setDeclaredLicense(SPDXLicenseInfo declaredLicense) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
 			Resource s = getResource(this.node);
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
 
-			for (int i = 0; i < declaredLicenses.length; i++) {
-				Resource lic = declaredLicenses[i].createResource(model);
-				s.addProperty(p, lic);
-			}
+			Resource lic = declaredLicense.createResource(model);
+			s.addProperty(p, lic);
 		}
 		
 		
@@ -215,31 +222,33 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @return the detectedLicenses
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public SPDXLicenseInfo[] getDetectedLicenses() throws InvalidSPDXAnalysisException {
+		public SPDXLicenseInfo getConcludedLicenses() throws InvalidSPDXAnalysisException {
 			ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
-			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE).asNode();
+			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
 				alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 			}
-			SPDXLicenseInfo[] retval = new SPDXLicenseInfo[alLic.size()];
-			retval = alLic.toArray(retval);
-			return retval;
+			if (alLic.size() > 1) {
+				throw(new InvalidSPDXAnalysisException("Too many concluded licenses"));
+			}
+			if (alLic.size() == 0) {
+				return null;
+			}
+			return alLic.get(0);
 		}
 		/**
 		 * @param detectedLicenses the detectedLicenses to set
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public void setDetectedLicenses(SPDXLicenseInfo[] detectedLicenses) throws InvalidSPDXAnalysisException {
-			removeProperties(node, PROP_PACKAGE_DETECTED_LICENSE);
+		public void setConcludedLicenses(SPDXLicenseInfo detectedLicenses) throws InvalidSPDXAnalysisException {
+			removeProperties(node, PROP_PACKAGE_CONCLUDED_LICENSE);
 			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DETECTED_LICENSE);
-			for (int i = 0; i < detectedLicenses.length; i++) {
-				Resource lic = detectedLicenses[i].createResource(model);
-				s.addProperty(p, lic);
-			}
+			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE);
+			Resource lic = detectedLicenses.createResource(model);
+			s.addProperty(p, lic);
 		}
 		/**
 		 * @return the licenseComment
@@ -394,8 +403,8 @@ public class SPDXDocument implements SpdxRdfConstants {
 		}
 		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXAnalysisException {
 			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
-					this.getSha1(), this.getSourceInfo(), this.getDeclaredLicenses(), 
-					this.getDetectedLicenses(), this.getDeclaredCopyright(), 
+					this.getSha1(), this.getSourceInfo(), this.getDeclaredLicense(), 
+					this.getConcludedLicenses(), this.getDeclaredCopyright(), 
 					this.getShortDescription(), this.getDescription(), this.getDownloadUrl(), 
 					this.getVerificationCode());
 		}
@@ -425,6 +434,147 @@ public class SPDXDocument implements SpdxRdfConstants {
 			retval = alLic.toArray(retval);
 			return retval;
 		}
+		/**
+		 * @return
+		 */
+		public ArrayList<String> verify() {
+			ArrayList<String> retval = new ArrayList<String>();
+			// name
+			try {
+				String name = this.getDeclaredName();
+				if (name == null || name.isEmpty()) {
+					retval.add("Missing required name for package");
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid name: "+e.getMessage());
+			}
+			// summary
+			try {
+				@SuppressWarnings("unused")
+				String summary = this.getShortDescription();
+				//TODO: rdf has this as mandatory, optional in pdf - if mandatory add check
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid summary: "+e.getMessage());
+			}
+			// description
+			try {
+				@SuppressWarnings("unused")
+				String description = this.getDescription();
+				//TODO: rdf has this as mandatory, optional in pdf - if mandatory add check
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid description: "+e.getMessage());
+			}
+			// download location
+			try {
+				String downloadLocation = this.getDownloadUrl();
+				if (downloadLocation == null || downloadLocation.isEmpty()) {
+					retval.add("Missing required download location for package");
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid download location: "+e.getMessage());
+			}
+			// checksum
+			try {
+				String checksum = this.getSha1();
+				if (checksum == null || checksum.isEmpty()) {
+					retval.add("Missing required package checksum");
+				} else {
+					String verify = SpdxVerificationHelper.verifyChecksumString(checksum);
+					if (verify != null) {
+						retval.add("Package checksum error: "+verify);
+					}
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid checksum: "+e.getMessage());
+			}
+			// package verification code - mandatory
+			try {
+				String packageVerificationCode = this.getVerificationCode();
+				if (packageVerificationCode == null || packageVerificationCode.isEmpty()) {
+					retval.add("Missing required package verification code");
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package verification code: "+e.getMessage());
+			}
+			// source Info - optional
+			try {
+				@SuppressWarnings("unused")
+				String sourceInfo = this.getSourceInfo();
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package source info: "+e.getMessage());
+			}
+			
+			// copyright text - mandatory
+			try {
+				String copyrightText = this.getDeclaredCopyright();
+				if (copyrightText == null || copyrightText.isEmpty()) {
+					retval.add("Missing required package copyright text");
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package copyright: "+e.getMessage());
+			}
+			
+			// license comments - optional
+			try {
+				@SuppressWarnings("unused")
+				String licenseComments = this.getLicenseComment();
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid license comments: "+e.getMessage());
+			}
+			
+			// license declared - mandatory - 1 (need to change return values)
+			try {
+				SPDXLicenseInfo declaredLicense = this.getDeclaredLicense();
+				if (declaredLicense == null) {
+					retval.add("Missing required declared license");
+				} else {
+					retval.addAll(declaredLicense.verify());
+				}				
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package declared license: "+e.getMessage());
+			}
+			
+			// license concluded - mandatory - 1 (need to change return values)
+			try {
+				SPDXLicenseInfo concludedLicense = this.getConcludedLicenses();
+				if (concludedLicense == null) {
+					retval.add("Missing required concluded license");
+				} else {
+					retval.addAll(concludedLicense.verify());
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package concluded license: "+e.getMessage());
+			}
+			
+			// license infos from files - mandatory - 1 or more
+			try {
+				SPDXLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
+				if (licenseInfosFromFiles == null || licenseInfosFromFiles.length == 0) {
+					retval.add("Missing required license infos from files");
+				} else {
+					for (int i = 0; i < licenseInfosFromFiles.length; i++) {
+						retval.addAll(licenseInfosFromFiles[i].verify());
+					}
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package license infos from files: "+e.getMessage());
+			}
+			
+			// hasFiles mandatory one or more
+			try {
+				SPDXFile[] files = this.getFiles();
+				if (files == null || files.length == 0) {
+					retval.add("Missing required package files");
+				} else {
+					for (int i = 0; i < files.length; i++) {
+						retval.addAll(files[i].verify());
+					}
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package files: "+e.getMessage());
+			}		
+			return retval;
+		}
 	}
 		
 	Model model;
@@ -444,7 +594,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void initializeNextLicenseRef() throws InvalidSPDXAnalysisException {
-		initializeNextLicenseRef(this.getNonStandardLicenses());
+		initializeNextLicenseRef(this.getExtractedLicenseInfos());
 	}
 	
 	private void initializeNextLicenseRef(SPDXNonStandardLicense[] existingLicenses) throws InvalidSPDXAnalysisException {
@@ -486,9 +636,89 @@ public class SPDXDocument implements SpdxRdfConstants {
 		return retval;
 	}
 
-	public String verify() {
-		return null;
-		//TODO: Implement verify
+	public String verifySpdxVersion(String spdxVersion) {
+		if (!spdxVersion.startsWith("SPDX-")) {
+			return "Invalid spdx version - must start with 'SPDX-'";
+		}
+		Matcher docSpecVersionMatcher = SpdxRdfConstants.SPDX_VERSION_PATTERN.matcher(spdxVersion);
+		if (!docSpecVersionMatcher.matches()) {
+			return "Invalid spdx version format - must match 'SPDX-M.N'";
+		}
+		return null;	// if we got here, there is no problem
+	}
+	/**
+	 * Verifies the spdx document
+	 * @return error messages for any fields which do not match the spec.  Return an empty array list if no issues.
+	 */
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		// specVersion
+		try {
+			String docSpecVersion = this.getSpdxVersion();
+			if (docSpecVersion == null || docSpecVersion.isEmpty()) {
+				retval.add("Missing required SPDX version");
+			} else {
+				String verify = verifySpdxVersion(docSpecVersion);
+				if (verify != null) {
+					retval.add(verify);
+				} else {
+					if (!SUPPORTED_SPDX_VERSIONS.contains(docSpecVersion)) {
+						retval.add("Version "+docSpecVersion+" is not supported by this version of the rdf parser");
+					}
+				}				
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			retval.add("Invalid spec version: "+e.getMessage());
+		}
+		// creationInfo
+		try {
+			SPDXCreatorInformation creator = this.getCreatorInfo();
+			if (creator == null) {
+				retval.add("Missing required Creator");
+			} else {
+				ArrayList<String> creatorVerification = creator.verify();
+				retval.addAll(creatorVerification);
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			retval.add("Invalid creator information: "+e.getMessage());
+		}
+		// Package
+		try {
+			SPDXPackage sPkg = this.getSpdxPackage();
+			if (sPkg == null) {
+				retval.add("Missing required SPDX Package");
+			} else {
+				ArrayList<String> packageVerification = sPkg.verify();
+				retval.addAll(packageVerification);
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			retval.add("Invalid SPDX Package: "+e.getMessage());
+		}
+		// Reviewers
+		try {
+			SPDXReview[] reviews = this.getReviewers();
+			if (reviews != null) {
+				for (int i = 0; i < reviews.length; i++) {
+					ArrayList<String> reviewerVerification = reviews[i].verify();
+					retval.addAll(reviewerVerification);
+				}
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			retval.add("Invalid reviewers: "+e.getMessage());
+		}
+		// Non standard licenses
+		try {
+			SPDXNonStandardLicense[] extractedLicInfos = this.getExtractedLicenseInfos();
+			if (extractedLicInfos != null) {
+				for (int i = 0; i < extractedLicInfos.length; i++) {
+					ArrayList<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
+					retval.addAll(extractedLicInfoVerification);
+				}
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			retval.add("Invalid extracted licensing info: "+e.getMessage());
+		}
+		return retval;
 	}
 	
 	/**
@@ -570,6 +800,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void setSpdxVersion(String spdxVersion) throws InvalidSPDXAnalysisException {
+		String versionVerify = verifySpdxVersion(spdxVersion);
+		if (versionVerify != null && !versionVerify.isEmpty()) {
+			throw(new InvalidSPDXAnalysisException(versionVerify));
+		}
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting spdxVersion"));
@@ -677,6 +911,20 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void setReviewers(SPDXReview[] reviewers) throws InvalidSPDXAnalysisException {
+		if (reviewers.length > 0) {
+			ArrayList<String> errors = new ArrayList<String>();
+			for (int i = 0;i < reviewers.length; i++) {
+				errors.addAll(reviewers[i].verify());
+			}
+			if (errors.size() > 0) {
+				StringBuilder sb = new StringBuilder("Invalid reviewers due to the following errors in validation:\n");
+				for (int i = 0; i < errors.size(); i++) {
+					sb.append(errors.get(i));
+					sb.append('\n');
+				}
+				throw(new InvalidSPDXAnalysisException(sb.toString()));
+			}
+		}
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must have an SPDX document to set reviewers"));
@@ -765,7 +1013,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @return the nonStandardLicenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXNonStandardLicense[] getNonStandardLicenses() throws InvalidSPDXAnalysisException {
+	public SPDXNonStandardLicense[] getExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
 		// nonStandardLicenses
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
@@ -788,7 +1036,20 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @param nonStandardLicenses the nonStandardLicenses to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setNonStandardLicenses(SPDXNonStandardLicense[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
+	public void setExtractedLicenseInfos(SPDXNonStandardLicense[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
+		ArrayList<String> errors = new ArrayList<String>();
+		// verify the licenses
+		for (int i = 0;i < nonStandardLicenses.length; i++) {
+			errors.addAll(nonStandardLicenses[i].verify());
+		}
+		if (errors.size() > 0) {
+			StringBuilder sb = new StringBuilder("Invalid extracted license infos due to the following verification failures:\n");
+			for (int i = 0; i < errors.size(); i++) {
+				sb.append(errors.get(i));
+				sb.append('\n');
+			}
+			throw new InvalidSPDXAnalysisException(sb.toString());
+		}
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting Non-Standard Licenses"));
@@ -813,7 +1074,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @return the newly created NonStandardLicense
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public synchronized SPDXNonStandardLicense addNewNonStandardLicense(String licenseText) throws InvalidSPDXAnalysisException {
+	public synchronized SPDXNonStandardLicense addNewExtractedLicenseInfo(String licenseText) throws InvalidSPDXAnalysisException {
 		int nextLicNum = this.getAndIncrementNextLicenseRef();
 		String licenseID = formNonStandardLicenseID(nextLicNum);
 		SPDXNonStandardLicense retval = new SPDXNonStandardLicense(licenseID, licenseText);

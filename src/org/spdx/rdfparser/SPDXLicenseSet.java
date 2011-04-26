@@ -16,6 +16,7 @@
 */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -99,4 +100,17 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		retval = this.licenseInfos.toArray(retval);
 		return retval;
 	}	
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()
+	 */
+	@Override
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		Iterator<SPDXLicenseInfo> iter = licenseInfos.iterator();
+		while (iter.hasNext()) {
+			retval.addAll(iter.next().verify());
+		}
+		return retval;
+	}
 }

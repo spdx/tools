@@ -31,13 +31,11 @@ import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import net.rootdev.javardfa.jena.RDFaReader;
 import com.hp.hpl.jena.util.FileManager;
 
 /**
@@ -123,7 +121,7 @@ public class RdfToSpreadsheet {
 		}
 		copyOrigins(doc, ss.getOriginsSheet());
 		copyPackageInfo(doc.getSpdxPackage(), ss.getPackageInfoSheet());
-		copyNonStdLicenses(doc.getNonStandardLicenses(), ss.getNonStandardLicensesSheet());
+		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
 		copyPerFileInfo(doc.getSpdxPackage().getFiles(), ss.getPerFileSheet());
 		copyReviewerInfo(doc.getReviewers(), ss.getReviewersSheet());
 	}

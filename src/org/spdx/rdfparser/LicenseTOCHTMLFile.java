@@ -62,8 +62,10 @@ public class LicenseTOCHTMLFile {
 	static final String REFNUMBER = "[REFERENCE_NUMBER]";
 	static final String LICENSEID = "[LICENSEID]";
 	static final String LICENSE_NAME = "[LICENSE_NAME]";
-      static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
-      		"      <td><code>"+LICENSEID+"</code></td>\n"+
+      static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+
+      		"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
+      		"      <td about=\""+REFERENCE+"\" typeof=\"spdx:License\">\n"+
+      		"      <code property=\"spdx:licenseId\">"+LICENSEID+"</code></td>\n"+
       		"      <td><a href=\""+REFERENCE+"#licenseText\">License Text</a></td>\n"+
       		"    </tr>\n";
       static final String HTML_FILE_TEMPLATE_LAST = "    </tbody>\n</table>\n</body>\n</html>";

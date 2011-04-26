@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -217,5 +217,34 @@ public class SPDXReview {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * @return
+	 */
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		String reviewer = this.getReviewer();
+		if (reviewer == null || reviewer.isEmpty()) {
+			retval.add("Missing required reviewer");
+		} else {
+			String verify = SpdxVerificationHelper.verifyReviewer(reviewer);
+			if (verify != null) {
+				retval.add(verify);
+			}
+		}
+		String reviewDate = this.getReviewDate();
+		if (reviewDate == null || reviewDate.isEmpty()) {
+			retval.add("Missing required review date");
+		} else {
+			String verify = SpdxVerificationHelper.verifyDate(reviewDate);
+			if (verify != null) {
+				retval.add(verify);
+			}
+		}
+		@SuppressWarnings("unused")
+		String reviewerComment = this.getComment();
+		// anything to verify for comment?
+		return retval;
 	}
 }

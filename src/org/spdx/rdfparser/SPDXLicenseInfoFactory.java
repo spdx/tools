@@ -72,6 +72,10 @@ public class SPDXLicenseInfoFactory {
 		}			
 	}
 	
+	public static final String NONE_SEEN_LICENSE_NAME = "NONESEEN";
+	public static final String NONE_LICENSE_NAME = "NONE";
+	public static final String NOT_ANALYZED_LICENSE_NAME = "NOTANALYZED";
+	
 	/**
 	 * Create the appropriate SPDXLicenseInfo from the model and node provided.
 	 * The appropriate SPDXLicenseInfo subclass object will be chosen based on
@@ -83,6 +87,16 @@ public class SPDXLicenseInfoFactory {
 	static SPDXLicenseInfo getLicenseInfoFromModel(Model model, Node node) throws InvalidSPDXAnalysisException {
 		if (!node.isURI() && !node.isBlank()) {
 			throw(new InvalidSPDXAnalysisException("Can not create a LicenseInfo from a literal node"));
+		}
+		// check to see if it is a "standard" type of license (NONESEEN, NONE, NOTANALYZED)
+		if (node.isURI()) {
+			if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE)) {
+				return new SPDXNoneLicense(model, node);
+			} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONESEEN)) {
+				return new SPDXNoneSeenLicense(model, node);
+			} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOT_ANALYZED)) {
+				return new SPDXNotAnalyzedLicense(model, node);
+			}
 		}
 		// find the subclass
 		Node rdfTypePredicate = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
@@ -188,6 +202,13 @@ public class SPDXLicenseInfoFactory {
 				int startOfID = pos;
 				pos = skipNonWhiteSpace(parseString, pos);
 				String licenseID = parseString.substring(startOfID, pos);
+				if (licenseID.equals(NONE_LICENSE_NAME)) {
+					licenseInfoList.add(new SPDXNoneLicense());
+				} else if (licenseID.equals(NONE_SEEN_LICENSE_NAME)) {
+					licenseInfoList.add(new SPDXNoneSeenLicense());
+				} else if (licenseID.equals(NOT_ANALYZED_LICENSE_NAME)) {
+					licenseInfoList.add(new SPDXNotAnalyzedLicense());
+				}
 				if (isStandardLicenseID(licenseID)) {
 					licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null));
 				} else {

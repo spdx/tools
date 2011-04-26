@@ -155,7 +155,7 @@ public class TestSPDXFile {
 		
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
 		SPDXFile file = new SPDXFile("fileName", "FileType", "sha1", 
-				declaredLic, seenLic, "License comments", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
 				"Copyrights", artifactOfs);
 		Resource fileResource = file.createResource(model);
 		pkgResource.addProperty(p, fileResource);
@@ -168,7 +168,7 @@ public class TestSPDXFile {
 		assertEquals(file.getName(), file2.getName());
 		assertEquals(file.getSha1(), file2.getSha1());
 		assertEquals(file.getType(), file2.getType());
-		TestPackageInfoSheet.compareLicenseDeclarations(file.getFileLicenses(), file2.getFileLicenses());
+		assertEquals(file.getConcludedLicenses(), file2.getConcludedLicenses());
 		TestPackageInfoSheet.compareLicenseDeclarations(file.getSeenLicenses(), file2.getSeenLicenses());
 	}
 

@@ -16,6 +16,8 @@
 */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -134,6 +136,28 @@ public class SPDXChecksum {
 		this.checksumNode = r.asNode();
 		this.checksumResource = r;
 		return r;
+	}
+	
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		String algorithm = this.getAlgorithm();
+		if (algorithm == null || algorithm.isEmpty()) {
+			retval.add("Missing required algorithm");
+		} else {
+			if (!algorithm.equals(ALGORITHM_SHA1)) {
+				retval.add("Unsupported checksum algorithm: "+algorithm);
+			}
+		}
+		String value = this.getValue();
+		if (value == null || !value.isEmpty()) {
+			retval.add("Missing required checksum value");
+		} else {
+			String verify = SpdxVerificationHelper.verifyChecksumString(value);
+			if (verify != null) {
+				retval.add(verify);
+			}
+		}
+		return retval;
 	}
 
 }

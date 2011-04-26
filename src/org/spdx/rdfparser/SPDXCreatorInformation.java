@@ -248,4 +248,35 @@ public class SPDXCreatorInformation {
 		}
 		return sb.toString();
 	}
+
+	/**
+	 * @return
+	 */
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		String[] creators = this.getCreators();
+		if (creators == null || creators.length == 0) {
+			retval.add("Missing required creators");
+		} else {
+			for (int i = 0;i < creators.length; i++) {
+				String verify = SpdxVerificationHelper.verifyCreator(creators[i]);
+				if (verify != null) {
+					retval.add(verify);
+				}
+			}
+		}
+		String creationDate = this.getCreated();
+		if (creationDate == null || creationDate.isEmpty()) {
+			retval.add("Missing required created date");
+		} else {
+			String verify = SpdxVerificationHelper.verifyDate(creationDate);
+			if (verify != null) {
+				retval.add(verify);
+			}
+		}
+		@SuppressWarnings("unused")
+		String createdComments = this.getComment();
+		// anything to verify for comments?
+		return retval;
+	}
 }
