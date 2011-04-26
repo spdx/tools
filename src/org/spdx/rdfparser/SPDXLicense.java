@@ -164,4 +164,13 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 
 		return r;
 	}
+	
+	@Override
+	public boolean equals(Object comp) {
+		if (!(comp instanceof SPDXLicense)) {
+			return false;
+		}
+		SPDXLicense compl = (SPDXLicense)comp;
+		return compl.getId().equals(this.getId());
+	}
 }

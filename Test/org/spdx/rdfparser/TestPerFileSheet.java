@@ -150,9 +150,9 @@ public class TestPerFileSheet {
 		SPDXLicenseInfo[] testLicenses2 = new SPDXLicenseInfo[] {NON_STD_LICENSES[0]};
 		DOAPProject[] testProject2 = new DOAPProject[] {new DOAPProject("artifactof 2", "home page2")};
 		DOAPProject[] testProject3 = new DOAPProject[] {new DOAPProject("artifactof 3", "home page3")};
-		SPDXFile testFile1 = new SPDXFile("FileName1", "fileType1", "sha1", testLicenses1, testLicenses2, 
+		SPDXFile testFile1 = new SPDXFile("FileName1", "fileType1", "sha1", COMPLEX_LICENSE, testLicenses2, 
 				"license comments 1", "copyright (c) 1", testProject2);
-		SPDXFile testFile2 = new SPDXFile("FileName2", "fileType2", "sha12", testLicenses2, testLicenses1, 
+		SPDXFile testFile2 = new SPDXFile("FileName2", "fileType2", "sha12", NON_STD_LICENSES[0], testLicenses1, 
 				"license comments2", "copyright (c) 12", testProject3);
 		fileInfoSheet.add(testFile1);
 		fileInfoSheet.add(testFile2);
@@ -167,7 +167,7 @@ public class TestPerFileSheet {
 	}
 
 	private void compareSPDXFile(SPDXFile testFile, SPDXFile result) {
-		compareLicenseDeclarations(testFile.getFileLicenses(), result.getFileLicenses());
+		assertEquals(testFile.getConcludedLicenses(), result.getConcludedLicenses());
 		compareLicenseDeclarations(testFile.getSeenLicenses(), result.getSeenLicenses());
 		compareProjects(testFile.getArtifactOf(), result.getArtifactOf());
 		assertEquals(testFile.getCopyright(), result.getCopyright());

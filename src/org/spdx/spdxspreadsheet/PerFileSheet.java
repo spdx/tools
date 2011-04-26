@@ -69,8 +69,8 @@ public class PerFileSheet extends AbstractSheet {
 			}
 			row.createCell(ARTIFACT_OF_COL).setCellValue(sb.toString());
 		}
-		if (fileInfo.getFileLicenses() != null && fileInfo.getFileLicenses().length > 0) {
-			row.createCell(ASSERTED_LIC_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getFileLicenses()));
+		if (fileInfo.getConcludedLicenses() != null) {
+			row.createCell(ASSERTED_LIC_COL).setCellValue(fileInfo.getConcludedLicenses().toString());
 		}
 		row.createCell(FILE_NAME_COL).setCellValue(fileInfo.getName());
 		if (fileInfo.getSha1() != null && !fileInfo.getSha1().isEmpty()) {
@@ -141,7 +141,7 @@ public class PerFileSheet extends AbstractSheet {
 		} else {
 			artifactOf = new DOAPProject[0];
 		}
-		return new SPDXFile(name, type, sha1, new SPDXLicenseInfo[] {fileLicenses}, 
+		return new SPDXFile(name, type, sha1, fileLicenses, 
 				new SPDXLicenseInfo[] {seenLicenses}, 
 				licenseComments, copyright, artifactOf);		
 	}

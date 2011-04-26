@@ -16,12 +16,11 @@
  */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
+
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Source Auditor
@@ -157,5 +156,30 @@ public class SPDXStandardLicense extends SPDXLicense {
 		}
 		SPDXStandardLicense comp = (SPDXStandardLicense)o;
 		return (this.id.equals(comp.getId()));
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()
+	 */
+	@Override
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		String id = this.getId();
+		if (id == null || id.isEmpty()) {
+			retval.add("Missing required license ID");
+		}
+		//Todo check to see if the id is a standard license id
+		String name = this.getName();
+		if (name == null || !name.isEmpty()) {
+			retval.add("Missing required license name");
+		}
+		this.getNotes();
+		this.getSourceUrl();
+		this.getStandardLicenseHeader();
+		this.getTemplate();
+		String licenseText = this.getText();
+		if (licenseText == null || licenseText.isEmpty()) {
+			retval.add("Missing required license text");
+		}
+		return retval;
 	}
 }

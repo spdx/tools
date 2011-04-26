@@ -53,7 +53,7 @@ public class LicenseHTMLFile {
 	static final String AFTER_TOC_REFERENCE = "\">License List</a></p>\n\n<h2 id=\"information\">Information</h2>\n<dl>\n"+
 			"			<dt>Full name</dt>\n"+
 			"			<dd property=\"rdfs:label\">";
-	static final String AFTER_LICENSE_NAME = "</dd>\n\n<dt>Short identifier</dt>\n<dd><code>";
+	static final String AFTER_LICENSE_NAME = "</dd>\n\n<dt>Short identifier</dt>\n<dd><code property=\"spdx:licenseId\">";
 	static final String AFTER_SHORT_ID = "</dd>\n";
 	static final String WEBURL = "[WEBURL]";
 	static final String SITE = "[SITE]";
@@ -128,8 +128,9 @@ public class LicenseHTMLFile {
 					writer.write(urlRow);
 				}
 				writer.write(OTHER_WEB_PAGE_END);
+			} else {
+				writer.write(BEFORE_NOTES);
 			}
-			writer.write(BEFORE_NOTES);
 			if (license.getNotes()!= null && !license.getNotes().isEmpty()) {
 				writer.write(NOTES_HTML.replace(NOTES, escapeHTML(license.getNotes())));
 			}

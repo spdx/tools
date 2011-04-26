@@ -23,6 +23,10 @@ package org.spdx.spdxspreadsheet;
  *
  */
 public class InvalidLicenseStringException extends SpreadsheetException {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1688466911486933160L;
 	public InvalidLicenseStringException(String message) {
 		super(message);
 	}

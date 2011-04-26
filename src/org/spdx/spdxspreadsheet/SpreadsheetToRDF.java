@@ -31,7 +31,6 @@ import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
@@ -173,7 +172,7 @@ public class SpreadsheetToRDF {
 			nonStdLicenses[i] = new SPDXNonStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
 					nonStandardLicensesSheet.getExtractedText(firstRow+i));
 		}
-		analysis.setNonStandardLicenses(nonStdLicenses);
+		analysis.setExtractedLicenseInfos(nonStdLicenses);
 	}
 
 	private static void copyPackageInfo(PackageInfoSheet packageInfoSheet,
@@ -183,10 +182,10 @@ public class SpreadsheetToRDF {
 			throw(new InvalidSPDXAnalysisException("No package info in the spreadsheet"));
 		}
 		spdxPackage.setDeclaredCopyright(info.getDeclaredCopyright());
-		spdxPackage.setDeclaredLicenses(info.getDeclaredLicenses());
+		spdxPackage.setDeclaredLicense(info.getDeclaredLicenses());
 		spdxPackage.setDeclaredName(info.getDeclaredName());
 		spdxPackage.setDescription(info.getDescription());
-		spdxPackage.setDetectedLicenses(info.getDetectedLicenses());
+		spdxPackage.setConcludedLicenses(info.getDetectedLicenses());
 		spdxPackage.setVerificationCode(info.getFileChecksum());
 		spdxPackage.setFileName(info.getFileName());
 		spdxPackage.setSha1(info.getSha1());

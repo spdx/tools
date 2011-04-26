@@ -49,7 +49,8 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_PACKAGE = "Package";
 	public static final String CLASS_SPDX_CREATION_INFO = "CreationInfo";
 	public static final String CLASS_SPDX_CHECKSUM = "Checksum";
-	public static final String CLASS_SPDX_LICENSE = "License";
+	public static final String CLASS_SPDX_ANY_LICENSE_INFO = "AnyLicenseInfo";
+	public static final String CLASS_SPDX_SIMPLE_LICENSE_INFO = "SimpleLicenseInfo";
 	public static final String CLASS_SPDX_CONJUNCTIVE_LICENSE_SET = "ConjunctiveLicenseSet";
 	public static final String CLASS_SPDX_DISJUNCTIVE_LICENSE_SET = "DisjunctiveLicenseSet";
 	public static final String CLASS_SPDX_EXTRACTED_LICENSING_INFO = "ExtractedLicensingInfo";
@@ -80,7 +81,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_DOWNLOAD_URL = "packageDownloadLocation";
 	public static final String PROP_PACKAGE_SOURCE_INFO = "sourceInfo";
 	public static final String PROP_PACKAGE_DECLARED_LICENSE = "licenseDeclared";
-	public static final String PROP_PACKAGE_DETECTED_LICENSE = "licenseConcluded";
+	public static final String PROP_PACKAGE_CONCLUDED_LICENSE = "licenseConcluded";
 	public static final String PROP_PACKAGE_DECLARED_COPYRIGHT = "copyrightText";
 	public static final String PROP_PACKAGE_SHORT_DESC = "summary";
 	public static final String PROP_PACKAGE_DESCRIPTION = "description";
@@ -91,11 +92,14 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_LICENSE_COMMENT = "licenseComments";
 	
 	// SPDX License Properties
-	public static final String PROP_LICENSE_ID = "licenseID";
+	public static final String PROP_LICENSE_ID = "licenseId";
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
 	//	static final String PROP_DISJUNCTIVE_LICENSE = "DisjunctiveLicense";
+	public static final String TERM_LICENSE_NONESEEN = "noneSeen";
+	public static final String TERM_LICENSE_NONE = "none";
+	public static final String TERM_LICENSE_NOT_ANALYZED = "notAnalyzed";
 	
 	// SPDX File Properties
 	public static final String PROP_FILE_NAME = "fileName";
@@ -114,9 +118,10 @@ public interface SpdxRdfConstants {
 	// Date format
 	public static final String SPDX_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	
-	
 	// license ID format
 	public static String NON_STD_LICENSE_ID_PRENUM = "LicenseRef-";
 	public static Pattern LICENSE_ID_PATTERN = Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"(\\d+)$");
+	
+	public static Pattern SPDX_VERSION_PATTERN = Pattern.compile("^SPDX-(\\d+)\\.(\\d+)$");
 
 }

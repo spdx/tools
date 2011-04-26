@@ -123,7 +123,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testUri);
 		String noVersion = doc.getSpdxVersion();
 		assertNull(noVersion);
-		String testVersion = "0.7.2";
+		String testVersion = SPDXDocument.CURRENT_SPDX_VERSION;
 		doc.setSpdxVersion(testVersion);
 		String resultVersion = doc.getSpdxVersion();
 		assertEquals(testVersion, resultVersion);
@@ -131,9 +131,13 @@ public class TestSPDXDocument {
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
 		String testVersion2 = "1.3.3";
-		doc.setSpdxVersion(testVersion2);
-		String resultVersion2 = doc.getSpdxVersion();
-		assertEquals(testVersion2, resultVersion2);
+		try {
+			doc.setSpdxVersion(testVersion2);
+			fail("version should fail");
+		} catch(InvalidSPDXAnalysisException e) {
+			// ignore
+		}
+
 	}
 
 	/**
@@ -228,13 +232,16 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testUri);
 		SPDXReview[] noReviewedBy = doc.getReviewers();
 		assertEquals(0, noReviewedBy.length);
-		SPDXReview[] testreviewedBy = new SPDXReview[] {new SPDXReview("reviewed By Me", "date1", "comment1")};
+		SimpleDateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+		String date1 = format.format(new Date());
+		SPDXReview[] testreviewedBy = new SPDXReview[] {new SPDXReview("Person: reviewed By Me", date1, "comment1")};
 		doc.setReviewers(testreviewedBy);
 		SPDXReview[] resultreviewedBy = doc.getReviewers();
 		compareArrays(testreviewedBy, resultreviewedBy);
-		SPDXReview[] testreviewedBy2 = new SPDXReview[] {new SPDXReview("review1", "date=1", "comment-1"), 
-				new SPDXReview("review2", "date2", "comment2"), 
-				new SPDXReview("review3", "date3", "comment3")};
+		String date2 = format.format(new Date());
+		SPDXReview[] testreviewedBy2 = new SPDXReview[] {new SPDXReview("Person: review1", date2, "comment-1"), 
+				new SPDXReview("Person: review2", date1, "comment2"), 
+				new SPDXReview("Person: review3", date2, "comment3")};
 		doc.setReviewers(testreviewedBy2);
 		SPDXReview[] resultreviewedBy2 = doc.getReviewers();
 		compareArrays(testreviewedBy2, resultreviewedBy2);
@@ -286,7 +293,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setNonStandardLicenses(org.spdx.rdfparser.SPDXStandardLicense[])}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setExtractedLicenseInfos(org.spdx.rdfparser.SPDXStandardLicense[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
@@ -300,12 +307,12 @@ public class TestSPDXDocument {
 		String beforeCreate = writer.toString();
 		writer.close();
 		doc.createSpdxAnalysis(testUri);
-		SPDXNonStandardLicense[] noNonStdLic = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] noNonStdLic = doc.getExtractedLicenseInfos();
 		assertEquals(0, noNonStdLic.length);
 		SPDXNonStandardLicense[] testNonStdLic = new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(
 				SPDXDocument.formNonStandardLicenseID(1), "Licnese Text 1")};
-		doc.setNonStandardLicenses(testNonStdLic);
-		SPDXNonStandardLicense[] resultNonStdLic = doc.getNonStandardLicenses();
+		doc.setExtractedLicenseInfos(testNonStdLic);
+		SPDXNonStandardLicense[] resultNonStdLic = doc.getExtractedLicenseInfos();
 		assertEquals(1, resultNonStdLic.length);
 		assertEquals(testNonStdLic[0].getId(), resultNonStdLic[0].getId());
 		assertEquals(testNonStdLic[0].getText(), resultNonStdLic[0].getText());
@@ -316,8 +323,8 @@ public class TestSPDXDocument {
 						SPDXDocument.formNonStandardLicenseID(3), "Licnese Text 3"),
 				new SPDXNonStandardLicense(
 						SPDXDocument.formNonStandardLicenseID(4), "Licnese Text 4")};
-		doc.setNonStandardLicenses(testNonStdLic2);
-		SPDXNonStandardLicense[] resultNonStdLic2 = doc.getNonStandardLicenses();
+		doc.setExtractedLicenseInfos(testNonStdLic2);
+		SPDXNonStandardLicense[] resultNonStdLic2 = doc.getExtractedLicenseInfos();
 		assertEquals(testNonStdLic2.length, resultNonStdLic2.length);
 		String[] testLicIds = new String[testNonStdLic2.length];
 		String[] testLicTexts = new String[testNonStdLic2.length];
@@ -378,15 +385,11 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testUri);
 		doc.createSpdxPackage();
 		String TEST_LICENSE_ID = SPDXDocument.formNonStandardLicenseID(15);
-		SPDXNonStandardLicense[] declaredLicenses = 
-			new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(TEST_LICENSE_ID, "text")};
-		doc.getSpdxPackage().setDeclaredLicenses(declaredLicenses);
-		SPDXLicenseInfo[] result = doc.getSpdxPackage().getDeclaredLicenses();
-		assertEquals(1, result.length);
-		if (!(result[0] instanceof SPDXNonStandardLicense)) {
-			fail("wrong type for declared license");
-		}
-		assertEquals(TEST_LICENSE_ID, ((SPDXNonStandardLicense)result[0]).getId());
+		SPDXNonStandardLicense declaredLicenses = new SPDXNonStandardLicense(TEST_LICENSE_ID, "text");
+		doc.getSpdxPackage().setDeclaredLicense(declaredLicenses);
+		SPDXLicenseInfo result = doc.getSpdxPackage().getDeclaredLicense();
+		assertEquals(declaredLicenses, result);
+		assertEquals(TEST_LICENSE_ID, ((SPDXNonStandardLicense)result).getId());
 	}
 
 	@Test
@@ -398,21 +401,21 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage();
 		String NON_STD_LIC_TEXT1 = "licenseText1";
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
-		SPDXNonStandardLicense[] emptyLic = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] emptyLic = doc.getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
-		SPDXNonStandardLicense lic1 = doc.addNewNonStandardLicense(NON_STD_LIC_TEXT1);
+		SPDXNonStandardLicense lic1 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT1);
 		String licID1 = SPDXDocument.formNonStandardLicenseID(1);
 		assertEquals(licID1, lic1.getId());
 		assertEquals(NON_STD_LIC_TEXT1, lic1.getText());
-		SPDXNonStandardLicense[] licresult1 = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] licresult1 = doc.getExtractedLicenseInfos();
 		assertEquals(1, licresult1.length);
 		assertEquals(licID1, licresult1[0].getId());
 		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getText());
-		SPDXNonStandardLicense lic2 = doc.addNewNonStandardLicense(NON_STD_LIC_TEXT2);
+		SPDXNonStandardLicense lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
 		String licID2 = SPDXDocument.formNonStandardLicenseID(2);
 		assertEquals(licID2, lic2.getId());
 		assertEquals(NON_STD_LIC_TEXT2, lic2.getText());
-		SPDXNonStandardLicense[] licresult2 = doc.getNonStandardLicenses();
+		SPDXNonStandardLicense[] licresult2 = doc.getExtractedLicenseInfos();
 		assertEquals(2, licresult2.length);
 		if (!licresult2[0].getId().equals(licID2) && !licresult2[1].getId().equals(licID2)) {
 			fail("second license not found");

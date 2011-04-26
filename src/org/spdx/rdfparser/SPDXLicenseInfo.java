@@ -16,6 +16,8 @@
 */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -107,4 +109,9 @@ public abstract class SPDXLicenseInfo {
 	
 	// force subclasses to implement equals
 	public abstract boolean equals(Object o);
+
+	/**
+	 * @return
+	 */
+	public abstract ArrayList<String> verify();
 }

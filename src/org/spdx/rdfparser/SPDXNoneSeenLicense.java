@@ -23,23 +23,27 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * A non-standard license which is valid only within an SPDXAnalysis
+ * Special class of license to represent a no license seen in the file or packages
  * @author Gary O'Neall
  *
  */
-public class SPDXNonStandardLicense extends SPDXLicense {
+public class SPDXNoneSeenLicense extends SPDXLicenseInfo {
 
 	/**
 	 * @param model
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXNonStandardLicense(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+	public SPDXNoneSeenLicense(Model model, Node licenseInfoNode)
+			throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 	}
-	
-	public SPDXNonStandardLicense(String id, String text) {
-		super(id, text);
+
+	/**
+	 * 
+	 */
+	public SPDXNoneSeenLicense() {
+		super();
 	}
 
 	/* (non-Javadoc)
@@ -47,18 +51,15 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	 */
 	@Override
 	protected Resource _createResource(Model model) {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
-		return super._createResource(model, type);
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONESEEN);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#toString()
 	 */
 	@Override
 	public String toString() {
-		// must be only the ID if we are to use this to create 
-		// parseable license strings
-		return this.id;
+		return SPDXLicenseInfoFactory.NONE_SEEN_LICENSE_NAME;
 	}
 
 	/* (non-Javadoc)
@@ -66,26 +67,19 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof SPDXNonStandardLicense)) {
+		if (o instanceof SPDXNoneSeenLicense) {
+			return true;
+		} else {
 			return false;
 		}
-		SPDXNonStandardLicense comp = (SPDXNonStandardLicense)o;
-		return (this.id.equals(comp.getId()));
 	}
 
-	/**
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()
 	 */
+	@Override
 	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
-		String id = this.getId();
-		if (id == null || id.isEmpty()) {
-			retval.add("Missing required license ID");
-		}
-		String licenseText = this.getText();
-		if (licenseText == null || licenseText.isEmpty()) {
-			retval.add("Missing required license text");
-		}
-		return retval;
+		return new ArrayList<String>();
 	}
+
 }

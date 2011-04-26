@@ -39,7 +39,7 @@ public class LicenseRDFAGenerator {
 
 		INVALID_FILE_CHARS.add('\\'); INVALID_FILE_CHARS.add('/'); INVALID_FILE_CHARS.add('*');
 		INVALID_FILE_CHARS.add('<'); INVALID_FILE_CHARS.add('>'); INVALID_FILE_CHARS.add('[');
-		INVALID_FILE_CHARS.add(']'); INVALID_FILE_CHARS.add('='); INVALID_FILE_CHARS.add('+');
+		INVALID_FILE_CHARS.add(']'); INVALID_FILE_CHARS.add('='); // INVALID_FILE_CHARS.add('+');
 		INVALID_FILE_CHARS.add(';'); INVALID_FILE_CHARS.add(':');
 		INVALID_FILE_CHARS.add('\''); INVALID_FILE_CHARS.add('"'); INVALID_FILE_CHARS.add('|');
 		INVALID_FILE_CHARS.add('\t'); INVALID_FILE_CHARS.add('?'); INVALID_FILE_CHARS.add('&');
@@ -147,7 +147,6 @@ public class LicenseRDFAGenerator {
 				sb.append(licId.charAt(i));
 			}
 		}
-		sb.append(".html");
 		return sb.toString();
 	}
 	private static void usage() {

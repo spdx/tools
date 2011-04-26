@@ -26,8 +26,8 @@ public class SPDXPackageInfo {
 	private String fileName;
 	private String sha1;
 	private String sourceInfo;
-	private SPDXLicenseInfo[] declaredLicenses;
-	private SPDXLicenseInfo[] detectedLicenses;
+	private SPDXLicenseInfo declaredLicenses;
+	private SPDXLicenseInfo detectedLicenses;
 	private String declaredCopyright;
 	private String shortDescription;
 	private String description;
@@ -35,15 +35,15 @@ public class SPDXPackageInfo {
 	private String fileChecksum;
 
 	public SPDXPackageInfo(String declaredName, String machineName, String sha1,
-			String sourceInfo, SPDXLicenseInfo[] declaredLicenses, 
-			SPDXLicenseInfo[] seenLicenses, String declaredCopyright, String shortDescription,
+			String sourceInfo, SPDXLicenseInfo declaredLicense, 
+			SPDXLicenseInfo detectedLicense, String declaredCopyright, String shortDescription,
 			String description, String url, String fileChecksum) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;
 		this.sha1 = sha1;
 		this.sourceInfo = sourceInfo;
-		this.declaredLicenses = declaredLicenses;
-		this.detectedLicenses = seenLicenses;
+		this.declaredLicenses = declaredLicense;
+		this.detectedLicenses = detectedLicense;
 		this.declaredCopyright = declaredCopyright;
 		this.shortDescription = shortDescription;
 		this.description = description;
@@ -138,28 +138,28 @@ public class SPDXPackageInfo {
 	/**
 	 * @return the declaredLicenses
 	 */
-	public SPDXLicenseInfo[] getDeclaredLicenses() {
+	public SPDXLicenseInfo getDeclaredLicenses() {
 		return declaredLicenses;
 	}
 
 	/**
 	 * @param declaredLicenses the declaredLicenses to set
 	 */
-	public void setDeclaredLicenses(SPDXLicenseInfo[] declaredLicenses) {
+	public void setDeclaredLicenses(SPDXLicenseInfo declaredLicenses) {
 		this.declaredLicenses = declaredLicenses;
 	}
 
 	/**
 	 * @return the detectedLicenses
 	 */
-	public SPDXLicenseInfo[] getDetectedLicenses() {
+	public SPDXLicenseInfo getDetectedLicenses() {
 		return detectedLicenses;
 	}
 
 	/**
 	 * @param detectedLicenses the detectedLicenses to set
 	 */
-	public void setDetectedLicenses(SPDXLicenseInfo[] detectedLicenses) {
+	public void setDetectedLicenses(SPDXLicenseInfo detectedLicenses) {
 		this.detectedLicenses = detectedLicenses;
 	}
 

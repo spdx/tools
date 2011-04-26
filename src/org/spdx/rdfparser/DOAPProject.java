@@ -16,6 +16,8 @@
 */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -167,5 +169,12 @@ public class DOAPProject {
 			Property p = model.createProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 			projectResource.addProperty(p, homePage);
 		}		
+	}
+
+	/**
+	 * @return
+	 */
+	public ArrayList<String> verify() {
+		return new ArrayList<String>();	// anything to verify?
 	}
 }

@@ -30,11 +30,10 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public class SPDXFile {
-	@SuppressWarnings("unused")
 	private Node node = null;
 	private Model model = null;
 	private String name;
-	private SPDXLicenseInfo[] fileLicenses;
+	private SPDXLicenseInfo concludedLicenses;
 	private String sha1;
 	private String type;
 	private SPDXLicenseInfo[] seenLicenses;
@@ -76,7 +75,7 @@ public class SPDXFile {
 			Triple t = tripleIter.next();
 			this.type = t.getObject().toString(false);
 		}
-		// detectedLicense
+		// concluded License
 		ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE).asNode();
 		m = Triple.createMatch(fileNode, p, null);
@@ -85,7 +84,13 @@ public class SPDXFile {
 			Triple t = tripleIter.next();
 			alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 		}
-		this.fileLicenses = alLic.toArray(new SPDXLicenseInfo[alLic.size()]);
+		if (alLic.size() > 1) {
+			throw(new InvalidSPDXAnalysisException("Too many concluded licenses for file"));
+		}
+		if (alLic.size() == 0) {
+			throw(new InvalidSPDXAnalysisException("Missing required concluded license"));
+		}
+		this.concludedLicenses = alLic.get(0);
 		// seenLicenses
 		alLic.clear();		
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE).asNode();
@@ -121,7 +126,7 @@ public class SPDXFile {
 			Triple t = tripleIter.next();
 			alProjects.add(new DOAPProject(model, t.getObject()));
 		}
-		this.artifactOf = alProjects.toArray(new DOAPProject[alLic.size()]);
+		this.artifactOf = alProjects.toArray(new DOAPProject[alProjects.size()]);
 	}
 	
 	public Resource createResource(Model model) {
@@ -154,12 +159,10 @@ public class SPDXFile {
 		fileResource.addProperty(p, this.getType());
 
 		// detectedLicense
-		if (this.fileLicenses != null && this.fileLicenses.length > 0) {
+		if (this.concludedLicenses != null) {
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
-			for (int i = 0; i < this.fileLicenses.length; i++) {
-				Resource lic = this.fileLicenses[i].createResource(model);
-				fileResource.addProperty(p, lic);
-			}
+			Resource lic = this.concludedLicenses.createResource(model);
+			fileResource.addProperty(p, lic);
 		}
 
 		// seenLicenses
@@ -201,13 +204,13 @@ public class SPDXFile {
 		this.node = fileResource.asNode();
 	}
 	public SPDXFile(String name, String type, String sha1,
-			SPDXLicenseInfo[] fileLicenses,
+			SPDXLicenseInfo concludedLicenses,
 			SPDXLicenseInfo[] seenLicenses, String licenseComments,
 			String copyright, DOAPProject[] artifactOf) {
 		this.name = name;
 		this.type = type;
 		this.sha1 = sha1;
-		this.fileLicenses = fileLicenses;
+		this.concludedLicenses = concludedLicenses;
 		this.seenLicenses = seenLicenses;
 		this.licenseComments = licenseComments;
 		this.copyright = copyright;
@@ -274,12 +277,7 @@ public class SPDXFile {
 			fileResource.addProperty(p, this.getCopyright());
 		}	
 	}
-	/**
-	 * @return the copyright
-	 */
-	public String getLicenseComment() {
-		return this.licenseComments;
-	}
+
 	
 	/**
 	 * @return the name
@@ -303,24 +301,21 @@ public class SPDXFile {
 	/**
 	 * @return the fileLicenses
 	 */
-	public SPDXLicenseInfo[] getFileLicenses() {
-		return this.fileLicenses;
+	public SPDXLicenseInfo getConcludedLicenses() {
+		return this.concludedLicenses;
 	}
 	/**
 	 * @param fileLicenses the fileLicenses to set
 	 */
-	public void setFileLicenses(SPDXLicenseInfo[] fileLicenses) {
-		this.fileLicenses = fileLicenses;
+	public void setConcludedLicenses(SPDXLicenseInfo fileLicenses) {
+		this.concludedLicenses = fileLicenses;
 		if (this.model != null && this.node != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
-
-			for (int i = 0; i < fileLicenses.length; i++) {
-				Resource lic = fileLicenses[i].createResource(model);
-				fileResource.addProperty(p, lic);
-			}
+			Resource lic = fileLicenses.createResource(model);
+			fileResource.addProperty(p, lic);
 		}
 	}
 	/**
@@ -394,5 +389,75 @@ public class SPDXFile {
 			}
 		}
 
+	}
+
+	/**
+	 * @return
+	 */
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = new ArrayList<String>();
+		// fileName
+		String fileName = this.getName();
+		if (fileName == null || fileName.isEmpty()) {
+			retval.add("Missing required name for file");
+			fileName = "UNKNOWN";
+		}
+		// fileType
+		//TODO: Resolve whether mandatory or not
+		String fileType = this.getType();
+		if (fileType == null || fileType.isEmpty()) {
+			retval.add("Missing required file type");
+		} else {
+			String verifyFileType = SpdxVerificationHelper.verifyFileType(fileType);
+			if (verifyFileType != null) {
+				retval.add(verifyFileType + "; File - "+fileName);
+			}
+		}
+		// copyrightText
+		//TODO: Resolve whether mandatory or not
+		String copyrightText = this.getCopyright();
+		if (copyrightText == null || copyrightText.isEmpty()) {
+			retval.add("Missing required copyright text for file "+fileName);
+		}
+		// license comments
+		@SuppressWarnings("unused")
+		String comments = this.getLicenseComments();
+		// license concluded
+		SPDXLicenseInfo concludedLicense = this.getConcludedLicenses();
+		if (concludedLicense == null) {
+			retval.add("Missing required concluded license for file "+fileName);
+		} else {
+			retval.addAll(concludedLicense.verify());
+		}
+		// license info in files
+		SPDXLicenseInfo[] licenseInfosInFile = this.getSeenLicenses();
+		if (licenseInfosInFile == null || licenseInfosInFile.length == 0) {
+			retval.add("Missing required license infos in file for file "+fileName);
+		} else {
+			for (int i = 0; i < licenseInfosInFile.length; i++) {
+				retval.addAll(licenseInfosInFile[i].verify());
+			}
+		}
+		// checksum
+		String checksum = this.getSha1();
+		if (checksum == null || checksum.isEmpty()) {
+			retval.add("Missing required checksum for file "+fileName);
+		} else {
+			String verify = SpdxVerificationHelper.verifyChecksumString(checksum);
+			if (verify != null) {
+				retval.add(verify + "; file "+fileName);
+			}
+		}
+		// artifactOf - limit to one
+		DOAPProject[] projects = this.getArtifactOf();
+		if (projects != null) {
+			if (projects.length > 1) {
+				retval.add("To many artifact of's - limit to one per file.  File: "+fileName);
+			}
+			for (int i = 0;i < projects.length; i++) {
+				retval.addAll(projects[i].verify());
+			}
+		}	
+		return retval;
 	}
 }

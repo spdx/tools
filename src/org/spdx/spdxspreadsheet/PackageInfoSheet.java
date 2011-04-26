@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXLicenseInfoFactory;
+import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 
 /**
@@ -151,7 +152,7 @@ public class PackageInfoSheet extends AbstractSheet {
 		Cell copyrightCell = row.createCell(DECLARED_COPYRIGHT_COL);
 		copyrightCell.setCellValue(pkgInfo.getDeclaredCopyright());
 		Cell DeclaredLicenseCol = row.createCell(DECLARED_LICENSE_COL);
-		DeclaredLicenseCol.setCellValue(licensesToString(pkgInfo.getDeclaredLicenses()));
+		DeclaredLicenseCol.setCellValue(pkgInfo.getDeclaredLicenses().toString());
 		Cell fileChecksumCell = row.createCell(FILE_CHECKSUM_COL);
 		fileChecksumCell.setCellValue(pkgInfo.getFileChecksum());
 		if (pkgInfo.getDescription() != null) {
@@ -163,7 +164,7 @@ public class PackageInfoSheet extends AbstractSheet {
 		Cell pkgSha1 = row.createCell(PACKAGE_SHA_COL);
 		pkgSha1.setCellValue(pkgInfo.getSha1());
 		Cell detectedLicenseCell = row.createCell(SEEN_LICENSE_COL);
-		detectedLicenseCell.setCellValue(licensesToString(pkgInfo.getDetectedLicenses()));
+		detectedLicenseCell.setCellValue(pkgInfo.getDetectedLicenses().toString());
 		if (pkgInfo.getShortDescription() != null) {
 			Cell shortDescCell = row.createCell(SHORT_DESC_COL);
 			shortDescCell.setCellValue(pkgInfo.getShortDescription());
@@ -195,15 +196,14 @@ public class PackageInfoSheet extends AbstractSheet {
 		} else {
 			sourceInfo = "";
 		}
-		SPDXLicenseInfo[] declaredLicenses = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue())
-		};
-		SPDXLicenseInfo[] seenLicenses;
+		SPDXLicenseInfo declaredLicenses = 
+				SPDXLicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
+		SPDXLicenseInfo seenLicenses;
 		Cell seenLicensesCell = row.getCell(SEEN_LICENSE_COL);
 		if (seenLicensesCell != null && !seenLicensesCell.getStringCellValue().isEmpty()) {
-			seenLicenses = new SPDXLicenseInfo[] {SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicensesCell.getStringCellValue())};
+			seenLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicensesCell.getStringCellValue());
 		} else {
-			seenLicenses = new SPDXLicenseInfo[0];
+			seenLicenses = new SPDXNoneLicense();
 		}
 		String declaredCopyright = row.getCell(DECLARED_COPYRIGHT_COL).getStringCellValue();
 		Cell shortDescCell = row.getCell(SHORT_DESC_COL);
