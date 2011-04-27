@@ -18,6 +18,8 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -161,6 +163,24 @@ public class TestDOAPProject {
 			DOAPProject comp = new DOAPProject(model, projectResources[i].asNode());
 			assertEquals(TEST_PROJECTS[i].getName(), comp.getName());
 			assertEquals(TEST_PROJECTS[i].getHomePage(), comp.getHomePage());
+		}
+	}
+	
+	@Test
+	public void testVerify() throws InvalidSPDXAnalysisException {
+		ArrayList<String> verify;
+		for (int i = 0; i < TEST_PROJECTS.length; i++) {
+			verify = TEST_PROJECTS[i].verify();
+			assertEquals(0, verify.size());
+		}
+		Resource[] projectResources = new Resource[TEST_PROJECTS.length];
+		for (int i = 0; i < projectResources.length; i++) {
+			projectResources[i] = TEST_PROJECTS[i].createResource(model);
+		}
+		for (int i = 0;i < projectResources.length; i++) {
+			DOAPProject comp = new DOAPProject(model, projectResources[i].asNode());
+			verify = comp.verify();
+			assertEquals(0, verify.size());
 		}
 	}
 

@@ -28,6 +28,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,7 +45,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class TestSPDXFile {
 
-	static final String[] NONSTD_IDS = new String[] {"id1", "id2", "id3", "id4"};
+	static final String[] NONSTD_IDS = new String[] {SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"1",
+		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"2", SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"3",
+		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"4"};
 	static final String[] NONSTD_TEXTS = new String[] {"text1", "text2", "text3", "text4"};
 	static final String[] STD_IDS = new String[] {"AFL-3", "CECILL-B", "EUPL-1"};
 	static final String[] STD_TEXTS = new String[] {"std text1", "std text2", "std text3"};
@@ -154,9 +157,11 @@ public class TestSPDXFile {
 		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};
 		
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
-		SPDXFile file = new SPDXFile("fileName", "FileType", "sha1", 
+		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
 				COMPLEX_LICENSE, seenLic, "License comments", 
 				"Copyrights", artifactOfs);
+		ArrayList<String> verify = file.verify();
+		assertEquals(0, verify.size());
 		Resource fileResource = file.createResource(model);
 		pkgResource.addProperty(p, fileResource);
 
@@ -170,6 +175,8 @@ public class TestSPDXFile {
 		assertEquals(file.getType(), file2.getType());
 		assertEquals(file.getConcludedLicenses(), file2.getConcludedLicenses());
 		TestPackageInfoSheet.compareLicenseDeclarations(file.getSeenLicenses(), file2.getSeenLicenses());
+		verify = file2.verify();
+		assertEquals(0, verify.size());
 	}
 
 }

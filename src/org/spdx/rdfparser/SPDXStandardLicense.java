@@ -169,7 +169,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		}
 		//Todo check to see if the id is a standard license id
 		String name = this.getName();
-		if (name == null || !name.isEmpty()) {
+		if (name == null || name.isEmpty()) {
 			retval.add("Missing required license name");
 		}
 		this.getNotes();

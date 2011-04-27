@@ -18,6 +18,11 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +37,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class TestSPDXReview {
 
-	String[] REVIEWER = new String[] {"Alg1", "Alg2", "Alg3"};
-	String[] REVIEWDATE = new String[] {"Date1", "Date1", "Date1"};
+	String[] REVIEWER = new String[] {"Person: Alg1", "Person: Alg2", "Person: Alg3"};
+	DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+	String[] REVIEWDATE = new String[] {format.format(new Date()), format.format(new Date()),
+			format.format(new Date())};
 	String[] COMMENTS = new String[] {"", "comment1", null};
 	SPDXReview[] TEST_REVIEWS;
 	Model model;
@@ -72,6 +79,8 @@ public class TestSPDXReview {
 			assertEquals(TEST_REVIEWS[i].getReviewer(), comp.getReviewer());
 			assertEquals(TEST_REVIEWS[i].getReviewDate(), comp.getReviewDate());
 			assertEquals(TEST_REVIEWS[i].getComment(), comp.getComment());
+			ArrayList<String> verify = comp.verify();
+			assertEquals(0, verify.size());
 		}
 	}
 
@@ -95,6 +104,8 @@ public class TestSPDXReview {
 			assertEquals(newReviewers[i], comp.getReviewer());
 			assertEquals(TEST_REVIEWS[i].getReviewDate(), comp.getReviewDate());
 			assertEquals(TEST_REVIEWS[i].getComment(), comp.getComment());
+			ArrayList<String> verify = comp.verify();
+			assertEquals(0, verify.size());
 		}
 	}
 
@@ -118,6 +129,8 @@ public class TestSPDXReview {
 			assertEquals(TEST_REVIEWS[i].getReviewer(), comp.getReviewer());
 			assertEquals(newReviewDates[i], comp.getReviewDate());
 			assertEquals(TEST_REVIEWS[i].getComment(), comp.getComment());
+			ArrayList<String> verify = comp.verify();
+			assertEquals(0, verify.size());
 		}
 	}
 
@@ -142,6 +155,8 @@ public class TestSPDXReview {
 			assertEquals(TEST_REVIEWS[i].getReviewer(), comp.getReviewer());
 			assertEquals(TEST_REVIEWS[i].getReviewDate(), comp.getReviewDate());
 			assertEquals(newComments[i], comp.getComment());
+			ArrayList<String> verify = comp.verify();
+			assertEquals(0, verify.size());
 		}
 	}
 

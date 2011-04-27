@@ -18,6 +18,8 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class TestSPDXChecksum {
 
-	String[] ALGORITHMS = new String[] {"Alg1", "Alg2", "Alg3"};
+	String[] ALGORITHMS = new String[] {"SHA-1", "Alg2", "Alg3"};
 	String[] VALUES = new String[] {"Value1", "Value2", "Value3"};
 	SPDXChecksum[] TEST_CHECKSUMS;
 	Model model;
@@ -115,6 +117,17 @@ public class TestSPDXChecksum {
 			assertEquals(TEST_CHECKSUMS[i].getAlgorithm(), comp.getAlgorithm());
 			assertEquals(TEST_CHECKSUMS[i].getValue(), comp.getValue());
 		}
+	}
+	
+	@Test
+	public void testVerify() throws InvalidSPDXAnalysisException {
+		SPDXChecksum checksum = new SPDXChecksum("SHA1", "0123456789abcdef0123456789abcdef01234567");
+		ArrayList<String> verify = checksum.verify();
+		assertEquals(0, verify.size());
+		Resource chcksumResource = checksum.createResource(model);
+		SPDXChecksum comp = new SPDXChecksum(model, chcksumResource.asNode());
+		verify = comp.verify();
+		assertEquals(0, verify.size());
 	}
 
 }

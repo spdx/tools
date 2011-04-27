@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.After;
@@ -60,15 +61,7 @@ public class TestSPDXDocument {
 	@After
 	public void tearDown() throws Exception {
 	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
-	 */
-	@Test
-	public void testSPDXAnalysis() {
-		fail("Not yet implemented");
-	}
-
+	
     /**
      * Test method for {@link org.spdx.rdfparser.SPDXDocument#SPDXAnalysis(com.hp.hpl.jena.rdf.model.Model)}.
      */
@@ -96,15 +89,6 @@ public class TestSPDXDocument {
             fail("Loading 'valid-without-explicit-base.html' failed because: " + e.getMessage());
         }
     }
-
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getSpdxVersion()}.
-	 */
-	@Test
-	public void testGetSpdxVersion() {
-		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setSpdxVersion(java.lang.String)}.
@@ -139,15 +123,6 @@ public class TestSPDXDocument {
 		}
 
 	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getCreators()}.
-	 */
-	@Test
-	public void testGetCreatedBy() {
-		fail("Not yet implemented");
-	}
-
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setCreator(java.lang.String[])}.
 	 * @throws InvalidSPDXAnalysisException 
@@ -167,11 +142,13 @@ public class TestSPDXDocument {
 		if (noCreator != null) {
 			fail("creator exists");
 		}
-		String[] testCreatedBy = new String[] {"Created By Me"};
+		String[] testCreatedBy = new String[] {"Person: Created By Me"};
 		String testComment = "My comment";
 		DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		String createdDate = format.format(new Date());
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(testCreatedBy, createdDate, testComment);
+		ArrayList<String> verify = creator.verify();
+		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator);
 		SPDXCreatorInformation result = doc.getCreatorInfo();
 		String[] resultCreatedBy = result.getCreators();
@@ -182,10 +159,12 @@ public class TestSPDXDocument {
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
 		String[] testCreatedBy2 = new String[] {
-				"second created", 
-				"another",
-				"and another"};
+				"Person: second created", 
+				"Company: another",
+				"Tool: and another"};
 		SPDXCreatorInformation creator2 = new SPDXCreatorInformation(testCreatedBy2, createdDate, testComment);
+		verify = creator2.verify();
+		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator2);
 		SPDXCreatorInformation result2 = doc.getCreatorInfo();
 		String[] resultCreatedBy2 = result2.getCreators();
@@ -207,13 +186,6 @@ public class TestSPDXDocument {
 		}
 	}
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getReviewers()}.
-	 */
-	@Test
-	public void testGetReviewers() {
-		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setReviewers(java.lang.String[])}.
@@ -235,27 +207,31 @@ public class TestSPDXDocument {
 		SimpleDateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		String date1 = format.format(new Date());
 		SPDXReview[] testreviewedBy = new SPDXReview[] {new SPDXReview("Person: reviewed By Me", date1, "comment1")};
+		ArrayList<String> verify = testreviewedBy[0].verify();
+		assertEquals(0, verify.size());
 		doc.setReviewers(testreviewedBy);
 		SPDXReview[] resultreviewedBy = doc.getReviewers();
 		compareArrays(testreviewedBy, resultreviewedBy);
+		verify = resultreviewedBy[0].verify();
+		assertEquals(0, verify.size());
 		String date2 = format.format(new Date());
 		SPDXReview[] testreviewedBy2 = new SPDXReview[] {new SPDXReview("Person: review1", date2, "comment-1"), 
 				new SPDXReview("Person: review2", date1, "comment2"), 
 				new SPDXReview("Person: review3", date2, "comment3")};
+		for (int i = 0; i < testreviewedBy2.length; i++) {
+			verify = testreviewedBy2[i].verify();
+			assertEquals(0, verify.size());
+		}
 		doc.setReviewers(testreviewedBy2);
 		SPDXReview[] resultreviewedBy2 = doc.getReviewers();
 		compareArrays(testreviewedBy2, resultreviewedBy2);
+		for (int i = 0; i < resultreviewedBy2.length; i++) {
+			verify = resultreviewedBy2[i].verify();
+			assertEquals(0, verify.size());
+		}
 		writer = new StringWriter();
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getCreated()}.
-	 */
-	@Test
-	public void testGetCreated() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -281,15 +257,28 @@ public class TestSPDXDocument {
 		if (!afterCreate.contains("uniquepackagename")) {
 			fail("missing uri in RDF document");
 		}
+		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#createSpdxPackage(String)}.
-	 */
-	@Test
-	public void testCreateSpdxPackage() {
-		
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SPDXNoneSeenLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(new SPDXFile[]{testFile});
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		pkg.setVerificationCode("0123456789abcdef0123456789abcdef01234567");
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
 	}
 
 	/**
@@ -341,14 +330,6 @@ public class TestSPDXDocument {
 		writer = new StringWriter();
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getName()}.
-	 */
-	@Test
-	public void testGetName() {
-		fail("Not yet implemented");
 	}
 
 	/**
@@ -420,6 +401,59 @@ public class TestSPDXDocument {
 		if (!licresult2[0].getId().equals(licID2) && !licresult2[1].getId().equals(licID2)) {
 			fail("second license not found");
 		}
-
+	}
+	
+	@Test
+	public void testVerify() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		StringWriter writer = new StringWriter();
+		doc.getModel().write(writer);
+		String beforeCreate = writer.toString();
+		writer.close();
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		writer = new StringWriter();
+		doc.getModel().write(writer);
+		String afterCreate = writer.toString();
+		if (!afterCreate.contains("uniquepackagename")) {
+			fail("missing uri in RDF document");
+		}
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SPDXNoneSeenLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(new SPDXFile[]{testFile});
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		pkg.setVerificationCode("0123456789abcdef0123456789abcdef01234567");
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+		String date = format.format(new Date());
+		SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] {"Person: creator"},
+				date, "");
+		verify = creator.verify();
+		assertEquals(0, verify.size());
+		doc.setCreationInfo(creator);
+		doc.setExtractedLicenseInfos(new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"11", "Text")});
+		doc.setSpdxVersion(SPDXDocument.CURRENT_SPDX_VERSION);
+		verify = doc.verify();
+		assertEquals(0, verify.size());
+		
 	}
 }

@@ -44,7 +44,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 	 */
 	public SPDXLicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
-		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_LICENSE).asNode();
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -66,7 +66,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 
 	protected Resource _createResource(Model model, Resource type) {
 		Resource r = model.createResource(type);
-		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_LICENSE);
+		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
 			Resource licResource = iter.next().createResource(model);
@@ -84,10 +84,10 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		}
 		if (model != null && licenseInfoNode != null) {
 			// delete any previous created
-			Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_LICENSE);
+			Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 			model.removeAll(resource, licProperty, null);
 
-			licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_LICENSE);
+			licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 			for (int i = 0; i < licenseInfos.length; i++) {
 				Resource licResource = licenseInfos[i].createResource(model);
 				resource.addProperty(licProperty, licResource);
