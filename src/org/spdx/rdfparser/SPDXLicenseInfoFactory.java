@@ -163,6 +163,13 @@ public class SPDXLicenseInfoFactory {
 			int startOfIDPos = skipWhiteSpace(parseString, 0);
 			int endOfIDPos = skipNonWhiteSpace(parseString, startOfIDPos);
 			String licenseID = parseString.substring(startOfIDPos, endOfIDPos);
+			if (licenseID.equals(NONE_LICENSE_NAME)) {
+				return new SPDXNoneLicense();
+			} else if (licenseID.equals(NONE_SEEN_LICENSE_NAME)) {
+				return new SPDXNoneSeenLicense();
+			} else if (licenseID.equals(NOT_ANALYZED_LICENSE_NAME)) {
+				return new SPDXNotAnalyzedLicense();
+			}
 			if (isStandardLicenseID(licenseID)) {
 				return new SPDXStandardLicense(licenseID, null, null, null, null, null, null);
 			} else {

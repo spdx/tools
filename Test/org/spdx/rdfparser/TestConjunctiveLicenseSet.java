@@ -20,6 +20,8 @@ package org.spdx.rdfparser;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +65,10 @@ public class TestConjunctiveLicenseSet {
 		Resource clsResource = cls.createResource(model);
 		SPDXConjunctiveLicenseSet cls2 = new SPDXConjunctiveLicenseSet(model, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
+		ArrayList<String> verify = cls2.verify();
+		assertEquals(0, verify.size());
+		verify = cls.verify();
+		assertEquals(0, verify.size());
 	}
 	
 	@Test
@@ -71,5 +77,9 @@ public class TestConjunctiveLicenseSet {
 		Resource clsResource = cls.createResource(model);
 		SPDXDisjunctiveLicenseSet cls2 = new SPDXDisjunctiveLicenseSet(model, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
+		ArrayList<String> verify = cls2.verify();
+		assertEquals(0, verify.size());
+		verify = cls.verify();
+		assertEquals(0, verify.size());
 	}
 }

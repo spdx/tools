@@ -149,7 +149,7 @@ public class SPDXChecksum {
 			}
 		}
 		String value = this.getValue();
-		if (value == null || !value.isEmpty()) {
+		if (value == null || value.isEmpty()) {
 			retval.add("Missing required checksum value");
 		} else {
 			String verify = SpdxVerificationHelper.verifyChecksumString(value);

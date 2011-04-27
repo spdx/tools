@@ -19,6 +19,8 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +65,10 @@ public class TestSPDXStandardLicense {
 		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
 		assertEquals(id, compLic.getId());
 		assertEquals(text, compLic.getText());
+		ArrayList<String> verify = stdl.verify();
+		assertEquals(0, verify.size());
+		verify = compLic.verify();
+		assertEquals(0, verify.size());
 /*		assertEquals(name, compLic.getName());
 		assertEquals(sourceUrl, compLic.getSourceUrl());
 		assertEquals(notes, compLic.getNotes());
@@ -97,6 +103,10 @@ public class TestSPDXStandardLicense {
 		SPDXStandardLicense compLic2 = new SPDXStandardLicense(model, licResource.asNode());
 		assertEquals(newID, compLic2.getId());
 		assertEquals(newText, compLic2.getText());
+		ArrayList<String> verify = stdl.verify();
+		assertEquals(0, verify.size());
+		verify = compLic.verify();
+		assertEquals(0, verify.size());
 	}
 	
 	@Test
