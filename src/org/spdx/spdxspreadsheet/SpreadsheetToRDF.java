@@ -148,7 +148,8 @@ public class SpreadsheetToRDF {
 		int firstRow = reviewersSheet.getFirstDataRow();
 		SPDXReview[] reviewers = new SPDXReview[numReviewers];
 		for (int i = 0; i < reviewers.length; i++) {
-			reviewers[i] = new SPDXReview(reviewersSheet.getReviewer(firstRow+i), format.format(reviewersSheet.getReviewerTimestampe(firstRow+i)), null);
+			reviewers[i] = new SPDXReview(reviewersSheet.getReviewer(firstRow+i), format.format(reviewersSheet.getReviewerTimestamp(firstRow+i)),
+					reviewersSheet.getReviewerComment(firstRow + i));
 		}
 		analysis.setReviewers(reviewers);
 	}
@@ -185,7 +186,9 @@ public class SpreadsheetToRDF {
 		spdxPackage.setDeclaredLicense(info.getDeclaredLicenses());
 		spdxPackage.setDeclaredName(info.getDeclaredName());
 		spdxPackage.setDescription(info.getDescription());
-		spdxPackage.setConcludedLicenses(info.getDetectedLicenses());
+		spdxPackage.setConcludedLicenses(info.getConcludedLicense());
+		spdxPackage.setLicenseInfoFromFiles(info.getLicensesFromFiles());
+		spdxPackage.setLicenseComment(info.getLicenseComments());
 		spdxPackage.setVerificationCode(info.getFileChecksum());
 		spdxPackage.setFileName(info.getFileName());
 		spdxPackage.setSha1(info.getSha1());
@@ -198,7 +201,8 @@ public class SpreadsheetToRDF {
 		Date createdDate = originsSheet.getCreated();
 		String created  = format.format(createdDate);
 		String[] createdBys = originsSheet.getCreatedBy();
-		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, "");
+		String creatorComment = originsSheet.getAuthorComments();
+		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, creatorComment);
 		analysis.setCreationInfo(creator);
 		analysis.setSpdxVersion(originsSheet.getSPDXVersion());
 	}

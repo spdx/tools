@@ -128,23 +128,20 @@ public class RdfToSpreadsheet {
 
 	private static void copyReviewerInfo(SPDXReview[] reviewers,
 			ReviewersSheet reviewersSheet) throws InvalidSPDXAnalysisException {
-		DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");	//TODO: implement the correct
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
 		for (int i = 0; i < reviewers.length; i++) {
 			String reviewerName = reviewers[i].getReviewer();
 			Date reviewDate = null;
 			String dateString = reviewers[i].getReviewDate();
 			if (dateString != null && !dateString.isEmpty()) {
 				try {
-					if (dateString.endsWith("GMT")) {
-						dateString = dateString.substring(0, dateString.length()-3);
-					}
 					dateString = dateString.trim();
 					reviewDate = dateFormat.parse(dateString);
 				} catch (Exception ex) {
 					throw(new InvalidSPDXAnalysisException("Invalid reviewer date format for reviewer "+reviewers[i]));
 				}
 			}
-			reviewersSheet.addReviewer(reviewerName, reviewDate);
+			reviewersSheet.addReviewer(reviewerName, reviewDate, reviewers[i].getComment());
 		}
 	}
 

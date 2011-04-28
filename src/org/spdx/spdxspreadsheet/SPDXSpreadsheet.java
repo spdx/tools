@@ -47,6 +47,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	static final String PER_FILE_SHEET_NAME = "Per File Info";
 	private ReviewersSheet reviewersSheet;
 	static final String REVIEWERS_SHEET_NAME = "Reviewers";
+	private String version;
 	
 	/**
 	 * @param spreadsheetFile
@@ -58,11 +59,17 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			boolean readonly) throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
 		this.originsSheet = new OriginsSheet(this.workbook, ORIGIN_SHEET_NAME);
-		this.packageInfoSheet = new PackageInfoSheet(this.workbook, PACKAGE_INFO_SHEET_NAME);
-		this.nonStandardLicensesSheet = new NonStandardLicensesSheet(this.workbook, NON_STANDARD_LICENSE_SHEET_NAME);
-		this.perFileSheet = new PerFileSheet(this.workbook, PER_FILE_SHEET_NAME);
-		this.reviewersSheet = new ReviewersSheet(this.workbook, REVIEWERS_SHEET_NAME);
-		String verifyMsg = verifyWorkbook();
+		String verifyMsg = originsSheet.verify();
+		if (verifyMsg != null) {
+			logger.error(verifyMsg);
+			throw(new SpreadsheetException(verifyMsg));
+		}
+		this.version = this.originsSheet.getSpreadsheetVersion();
+		this.packageInfoSheet = new PackageInfoSheet(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
+		this.nonStandardLicensesSheet = new NonStandardLicensesSheet(this.workbook, NON_STANDARD_LICENSE_SHEET_NAME, version);
+		this.perFileSheet = new PerFileSheet(this.workbook, PER_FILE_SHEET_NAME, version);
+		this.reviewersSheet = new ReviewersSheet(this.workbook, REVIEWERS_SHEET_NAME, version);
+		verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
 			logger.error(verifyMsg);
 			throw(new SpreadsheetException(verifyMsg));

@@ -27,28 +27,61 @@ public class SPDXPackageInfo {
 	private String sha1;
 	private String sourceInfo;
 	private SPDXLicenseInfo declaredLicenses;
-	private SPDXLicenseInfo detectedLicenses;
+	private SPDXLicenseInfo concludedLicense;
+	private SPDXLicenseInfo[] licensesFromFiles;
 	private String declaredCopyright;
 	private String shortDescription;
 	private String description;
 	private String url;
 	private String fileChecksum;
+	private String licenseComments;
 
 	public SPDXPackageInfo(String declaredName, String machineName, String sha1,
 			String sourceInfo, SPDXLicenseInfo declaredLicense, 
-			SPDXLicenseInfo detectedLicense, String declaredCopyright, String shortDescription,
+			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
+			String licenseComments, String declaredCopyright, String shortDescription,
 			String description, String url, String fileChecksum) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;
 		this.sha1 = sha1;
 		this.sourceInfo = sourceInfo;
 		this.declaredLicenses = declaredLicense;
-		this.detectedLicenses = detectedLicense;
+		this.concludedLicense = concludedLicense;
+		this.licensesFromFiles = licensesFromFiles;
+		this.licenseComments = licenseComments;
 		this.declaredCopyright = declaredCopyright;
 		this.shortDescription = shortDescription;
 		this.description = description;
 		this.url = url;
 		this.fileChecksum = fileChecksum;
+	}
+
+	/**
+	 * @return the licensesFromFiles
+	 */
+	public SPDXLicenseInfo[] getLicensesFromFiles() {
+		return licensesFromFiles;
+	}
+
+	/**
+	 * @param licensesFromFiles the licensesFromFiles to set
+	 */
+	public void setLicensesFromFiles(SPDXLicenseInfo[] licensesFromFiles) {
+		this.licensesFromFiles = licensesFromFiles;
+	}
+
+	/**
+	 * @return the licenseComments
+	 */
+	public String getLicenseComments() {
+		return licenseComments;
+	}
+
+	/**
+	 * @param licenseComments the licenseComments to set
+	 */
+	public void setLicenseComments(String licenseComments) {
+		this.licenseComments = licenseComments;
 	}
 
 	/**
@@ -152,15 +185,15 @@ public class SPDXPackageInfo {
 	/**
 	 * @return the detectedLicenses
 	 */
-	public SPDXLicenseInfo getDetectedLicenses() {
-		return detectedLicenses;
+	public SPDXLicenseInfo getConcludedLicense() {
+		return concludedLicense;
 	}
 
 	/**
-	 * @param detectedLicenses the detectedLicenses to set
+	 * @param concludedLicense the detectedLicenses to set
 	 */
-	public void setDetectedLicenses(SPDXLicenseInfo detectedLicenses) {
-		this.detectedLicenses = detectedLicenses;
+	public void setDConcludedLicense(SPDXLicenseInfo concludedLicense) {
+		this.concludedLicense = concludedLicense;
 	}
 
 	/**

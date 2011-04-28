@@ -16,6 +16,8 @@
  */
 package org.spdx.spdxspreadsheet;
 
+import java.util.ArrayList;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,6 +26,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXNoneLicense;
+import org.spdx.rdfparser.SPDXNoneSeenLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 
 /**
@@ -33,7 +36,7 @@ import org.spdx.rdfparser.SPDXPackageInfo;
  */
 public class PackageInfoSheet extends AbstractSheet {
 
-	int NUM_COLS = 11;
+	int NUM_COLS = 13;
 	int NAME_COL = 0;
 	int MACHINE_NAME_COL = NAME_COL+1;
 	int URL_COL = MACHINE_NAME_COL + 1;
@@ -41,26 +44,32 @@ public class PackageInfoSheet extends AbstractSheet {
 	int FILE_CHECKSUM_COL = PACKAGE_SHA_COL + 1;
 	int SOURCE_INFO_COL = FILE_CHECKSUM_COL + 1;
 	int DECLARED_LICENSE_COL = SOURCE_INFO_COL + 1;
-	int SEEN_LICENSE_COL = DECLARED_LICENSE_COL + 1;
-	int DECLARED_COPYRIGHT_COL = SEEN_LICENSE_COL + 1;
+	int CONCLUDED_LICENSE_COL = DECLARED_LICENSE_COL + 1;
+	int LICENSE_INFO_IN_FILES_COL = CONCLUDED_LICENSE_COL + 1;
+	int LICENSE_COMMENT_COL = LICENSE_INFO_IN_FILES_COL + 1;
+	int DECLARED_COPYRIGHT_COL = LICENSE_COMMENT_COL + 1;
 	int SHORT_DESC_COL = DECLARED_COPYRIGHT_COL + 1;
 	int FULL_DESC_COL = SHORT_DESC_COL + 1;
+	private String version;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, true, 
-		true, true, false, true, true, true, false, false};
-	static final String[] HEADER_TITLES = new String[] {"DeclaredName",
-		"MachineName", "Package URL", "Package SHA", "Files Checksum",
-		"Source Info", "Declared License(s)", "Seen License(s)", 
-		"Declared Copyright", "Short Desc.", "Full Desc."};
+		true, true, false, true, true, true, false, true, false, false};
+	static final String[] HEADER_TITLES = new String[] {"Package Name",
+		"Package FileName", "Package Download Location", "Package Checksum", "Package Verification Code",
+		"Source Info", "License Declared", "License Concluded", "License Info From Files", 
+		"License Comments", "Package Copyright Text", "Summary", "Description"};
+	
 	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 15, 15, 30,
-		40, 40, 40, 40, 40};
+		40, 40, 40, 40, 40, 40, 40};
 
 	/**
 	 * @param workbook
 	 * @param sheetName
+	 * @param version 
 	 */
-	public PackageInfoSheet(Workbook workbook, String sheetName) {
+	public PackageInfoSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
+		this.version = version;
 	}
 
 	/* (non-Javadoc)
@@ -71,6 +80,9 @@ public class PackageInfoSheet extends AbstractSheet {
 		try {
 			if (sheet == null) {
 				return "Worksheet for SPDX Package Info does not exist";
+			}
+			if (!OriginsSheet.verifyVersion(version)) {
+				return "Unsupported version "+version;
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
@@ -110,7 +122,7 @@ public class PackageInfoSheet extends AbstractSheet {
 					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum());
 				}
 			} else {
-				if (i == DECLARED_LICENSE_COL || i == SEEN_LICENSE_COL) {
+				if (i == DECLARED_LICENSE_COL || i == CONCLUDED_LICENSE_COL) {
 					try {
 						SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
 					} catch(SpreadsheetException ex) {
@@ -118,6 +130,18 @@ public class PackageInfoSheet extends AbstractSheet {
 							return "Invalid declared license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						} else {
 							return "Invalid seen license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
+						}
+					}
+				} else if (i == LICENSE_INFO_IN_FILES_COL) {
+					String[] licenses = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
+					if (licenses.length < 1) {
+						return "Missing licenss infos in files";
+					}
+					for (int j = 0; j < licenses.length; j++) {
+						try {
+							SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim());
+						} catch(SpreadsheetException ex) {
+							return "Invalid license infos in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						}
 					}
 				}
@@ -153,6 +177,8 @@ public class PackageInfoSheet extends AbstractSheet {
 		copyrightCell.setCellValue(pkgInfo.getDeclaredCopyright());
 		Cell DeclaredLicenseCol = row.createCell(DECLARED_LICENSE_COL);
 		DeclaredLicenseCol.setCellValue(pkgInfo.getDeclaredLicenses().toString());
+		Cell concludedLicenseCol = row.createCell(CONCLUDED_LICENSE_COL);
+		concludedLicenseCol.setCellValue(pkgInfo.getConcludedLicense().toString());
 		Cell fileChecksumCell = row.createCell(FILE_CHECKSUM_COL);
 		fileChecksumCell.setCellValue(pkgInfo.getFileChecksum());
 		if (pkgInfo.getDescription() != null) {
@@ -163,8 +189,19 @@ public class PackageInfoSheet extends AbstractSheet {
 		fileNameCell.setCellValue(pkgInfo.getFileName());
 		Cell pkgSha1 = row.createCell(PACKAGE_SHA_COL);
 		pkgSha1.setCellValue(pkgInfo.getSha1());
-		Cell detectedLicenseCell = row.createCell(SEEN_LICENSE_COL);
-		detectedLicenseCell.setCellValue(pkgInfo.getDetectedLicenses().toString());
+		// add the license infos in files in multiple rows
+		SPDXLicenseInfo[] licenseInfosInFiles = pkgInfo.getLicensesFromFiles();
+		if (licenseInfosInFiles != null && licenseInfosInFiles.length > 0) {
+			StringBuilder sb = new StringBuilder(licenseInfosInFiles[0].toString());
+			for (int i = 1; i < licenseInfosInFiles.length; i++) {
+				sb.append(",");
+				sb.append(licenseInfosInFiles[i].toString());
+			}
+			row.createCell(LICENSE_INFO_IN_FILES_COL).setCellValue(sb.toString());
+		}
+		if (pkgInfo.getLicenseComments() != null) {
+			row.createCell(LICENSE_COMMENT_COL).setCellValue(pkgInfo.getLicenseComments());
+		}
 		if (pkgInfo.getShortDescription() != null) {
 			Cell shortDescCell = row.createCell(SHORT_DESC_COL);
 			shortDescCell.setCellValue(pkgInfo.getShortDescription());
@@ -182,11 +219,15 @@ public class PackageInfoSheet extends AbstractSheet {
 		if (row == null) {
 			return null;
 		}
+		Cell nameCell = row.getCell(NAME_COL);
+		if (nameCell == null || nameCell.getStringCellValue().isEmpty()) {
+			return null;
+		}
 		String error = validateRow(row);
 		if (error != null && !error.isEmpty()) {
 			throw(new SpreadsheetException(error));
 		}
-		String declaredName = row.getCell(NAME_COL).getStringCellValue();
+		String declaredName = nameCell.getStringCellValue();
 		String machineName = row.getCell(MACHINE_NAME_COL).getStringCellValue();
 		String sha1 = row.getCell(PACKAGE_SHA_COL).getStringCellValue();
 		String sourceInfo;
@@ -198,12 +239,24 @@ public class PackageInfoSheet extends AbstractSheet {
 		}
 		SPDXLicenseInfo declaredLicenses = 
 				SPDXLicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
-		SPDXLicenseInfo seenLicenses;
-		Cell seenLicensesCell = row.getCell(SEEN_LICENSE_COL);
-		if (seenLicensesCell != null && !seenLicensesCell.getStringCellValue().isEmpty()) {
-			seenLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicensesCell.getStringCellValue());
+		SPDXLicenseInfo concludedLicense;
+		Cell concludedLicensesCell = row.getCell(CONCLUDED_LICENSE_COL);
+		if (concludedLicensesCell != null && !concludedLicensesCell.getStringCellValue().isEmpty()) {
+			concludedLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString(concludedLicensesCell.getStringCellValue());
 		} else {
-			seenLicenses = new SPDXNoneLicense();
+			concludedLicense = new SPDXNoneLicense();
+		}
+		String[] licenseStrings = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
+		SPDXLicenseInfo[] licenseInfosFromFiles = new SPDXLicenseInfo[licenseStrings.length];
+		for (int i = 0; i < licenseStrings.length; i++) {
+			licenseInfosFromFiles[i] = SPDXLicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
+		}
+		Cell licenseCommentCell = row.getCell(LICENSE_COMMENT_COL);
+		String licenseComment;
+		if (licenseCommentCell != null && !licenseCommentCell.getStringCellValue().isEmpty()) {
+			licenseComment = licenseCommentCell.getStringCellValue();
+		} else {
+			licenseComment = "";
 		}
 		String declaredCopyright = row.getCell(DECLARED_COPYRIGHT_COL).getStringCellValue();
 		Cell shortDescCell = row.getCell(SHORT_DESC_COL);
@@ -223,7 +276,8 @@ public class PackageInfoSheet extends AbstractSheet {
 		String url = row.getCell(URL_COL).getStringCellValue();
 		String fileChecksums = row.getCell(FILE_CHECKSUM_COL).getStringCellValue();
 		return new SPDXPackageInfo(declaredName, machineName, sha1, sourceInfo, 
-				declaredLicenses, seenLicenses, declaredCopyright, shortDesc, 
+				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
+				licenseComment, declaredCopyright, shortDesc, 
 				description, url, fileChecksums);
 	}
 

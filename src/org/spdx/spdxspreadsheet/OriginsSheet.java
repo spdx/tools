@@ -30,8 +30,8 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class OriginsSheet extends AbstractSheet {
 
-	static final String CURRENT_VERSION = "0.8";
-	static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION};
+	public static final String CURRENT_VERSION = "0.9";
+	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION};
 	static final int NUM_COLS = 6;
 	static final int SPREADSHEET_VERSION_COL = 0;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
@@ -46,8 +46,10 @@ public class OriginsSheet extends AbstractSheet {
 		true, true, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
-		"SPDXVersion", "CreatedBy", "Created", "DataLicense", "AuthorComments"};
+		"SPDX Version", "Creator", "Created", "Data License", "Creator Comment"};
 	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 20, 16, 40, 60};
+	
+	String version = CURRENT_VERSION;	// updated in the verify method
 	
 	public OriginsSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
@@ -59,6 +61,15 @@ public class OriginsSheet extends AbstractSheet {
 			if (sheet == null) {
 				return "Worksheet for SPDX Origins does not exist";
 			}
+			// validate version
+			version = getDataCellStringValue(SPREADSHEET_VERSION_COL);
+			if (version == null) {
+				return "Invalid origins spreadsheet - no spreadsheet version found";
+			}
+
+			if (!verifyVersion(version)) {
+				return "Spreadsheet version "+version+" not supported.";
+			}
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
@@ -67,22 +78,6 @@ public class OriginsSheet extends AbstractSheet {
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Origins worksheet";
 				}
-			}
-			// validate version
-			String version = getDataCellStringValue(SPREADSHEET_VERSION_COL);
-			if (version == null) {
-				return "Invalid origins spreadsheet - no spreadsheet version found";
-			}
-			boolean supported = false;
-			version = version.trim();
-			for (int i = 0; i < SUPPORTED_VERSIONS.length; i++) {
-				if (SUPPORTED_VERSIONS[i].equals(version)) {
-					supported = true;
-					break;
-				}
-			}
-			if (!supported) {
-				return "Spreadsheet version "+version+" not supported.";
 			}
 			// validate rows
 			boolean done = false;
@@ -228,7 +223,7 @@ public class OriginsSheet extends AbstractSheet {
 		return getDataCellStringValue(SPDX_VERSION_COL);
 	}
 	
-	public String getSpreadsheetVersion(String version) {
+	public String getSpreadsheetVersion() {
 		return getDataCellStringValue(SPREADSHEET_VERSION_COL);
 	}
 
@@ -278,5 +273,21 @@ public class OriginsSheet extends AbstractSheet {
 
 	public void setCreated(Date created) {
 		setDataCellDateValue(CREATED_COL, created);
+	}
+
+	/**
+	 * @param versionToCheck
+	 * @return
+	 */
+	public static boolean verifyVersion(String versionToCheck) {
+		boolean supported = false;
+		String trVersion = versionToCheck.trim();
+		for (int i = 0; i < SUPPORTED_VERSIONS.length; i++) {
+			if (SUPPORTED_VERSIONS[i].equals(trVersion)) {
+				supported = true;
+				break;
+			}
+		}
+		return supported;
 	}
 }

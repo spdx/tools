@@ -188,14 +188,7 @@ public class SPDXFile {
 		if (this.artifactOf != null) {
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
 			for (int i = 0; i < artifactOf.length; i++) {
-				// we need to check on these if it already exists
-				Resource projectResource = null;
-				String uri = artifactOf[i].getProjectUri();
-				if (uri != null) {
-					projectResource = model.createResource(uri);
-				} else {
-					projectResource = artifactOf[i].createResource(model);
-				}
+				Resource projectResource = artifactOf[i].createResource(model);
 				fileResource.addProperty(p, projectResource);
 			}
 		}
