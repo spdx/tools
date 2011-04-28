@@ -36,12 +36,15 @@ public class NonStandardLicensesSheet extends AbstractSheet {
 	static final String[] HEADER_TITLES = new String[] {"Identifier", "Extracted Text"};
 	static final int[] COLUMN_WIDTHS = new int[] {10, 80};
 	
+	private String version;
 	/**
 	 * @param workbook
 	 * @param sheetName
+	 * @param version 
 	 */
-	public NonStandardLicensesSheet(Workbook workbook, String sheetName) {
+	public NonStandardLicensesSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
+		this.version = version;
 	}
 
 	/* (non-Javadoc)

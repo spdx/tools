@@ -31,6 +31,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -129,13 +130,6 @@ public class TestPerFileSheet {
 	public void tearDown() throws Exception {
 	}
 
-	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheet#verify()}.
-	 */
-	@Test
-	public void testVerify() {
-		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheet#add(org.spdx.rdfparser.SPDXFile)}.
@@ -145,7 +139,7 @@ public class TestPerFileSheet {
 	public void testAddAndGet() throws SpreadsheetException {
 		Workbook wb = new HSSFWorkbook();
 		PerFileSheet.create(wb, "File Info");
-		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info");
+		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info", OriginsSheet.CURRENT_VERSION);
 		SPDXLicenseInfo[] testLicenses1 = new SPDXLicenseInfo[] {COMPLEX_LICENSE};
 		SPDXLicenseInfo[] testLicenses2 = new SPDXLicenseInfo[] {NON_STD_LICENSES[0]};
 		DOAPProject[] testProject2 = new DOAPProject[] {new DOAPProject("artifactof 2", "home page2")};
@@ -199,16 +193,16 @@ public class TestPerFileSheet {
 							found = true;
 							break;
 						}
-					} else if (projects[i].getName().equals(result[j].getName())) {
-						if (projects[i].getHomePage() == null) {
-							if (result[j].getHomePage() == null) {
-								found = true;
-								break;
-							}
-						} else if (projects[i].getHomePage().equals(result[j].getHomePage())) {
+					}
+				} else if (projects[i].getName().equals(result[j].getName())) {
+					if (projects[i].getHomePage() == null) {
+						if (result[j].getHomePage() == null) {
 							found = true;
 							break;
 						}
+					} else if (projects[i].getHomePage().equals(result[j].getHomePage())) {
+						found = true;
+						break;
 					}
 				}
 				if (!found) {
@@ -241,7 +235,7 @@ public class TestPerFileSheet {
 	public void testCreate() {
 		Workbook wb = new HSSFWorkbook();
 		PerFileSheet.create(wb, "File Info");
-		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info");
+		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info", OriginsSheet.CURRENT_VERSION);
 		String ver = fileInfoSheet.verify();
 		if (ver != null && !ver.isEmpty()){
 			fail(ver);

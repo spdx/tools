@@ -37,6 +37,7 @@ public class DOAPProject {
 	private Node projectNode = null;
 	private Resource projectResource = null;
 	private Model model = null;
+	private String uri = null;
 	
 	/**
 	 * This method will create a DOAP Project object from a DOAP document
@@ -136,7 +137,7 @@ public class DOAPProject {
 	
 	public String getProjectUri() {
 		if (projectNode == null || !projectNode.isURI()) {
-			return null;
+			return uri;
 		} else {
 			return projectNode.getURI();
 		}
@@ -144,7 +145,12 @@ public class DOAPProject {
 	
 	public Resource createResource(Model model) {
 		Resource type = model.createResource(SpdxRdfConstants.DOAP_NAMESPACE + SpdxRdfConstants.CLASS_DOAP_PROJECT);
-		Resource retval = model.createResource(type);
+		Resource retval;
+		if (uri != null) {
+			retval = model.createResource(uri, type);
+		} else {
+			retval = model.createResource(type);
+		}
 		populateModel(model, retval);
 		return retval;
 	}
@@ -176,5 +182,18 @@ public class DOAPProject {
 	 */
 	public ArrayList<String> verify() {
 		return new ArrayList<String>();	// anything to verify?
+	}
+
+	/**
+	 * @param uri
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setUri(String uri) throws InvalidSPDXAnalysisException {
+		if (this.projectResource != null) {
+			if (!this.projectResource.hasURI(uri)) {
+				throw(new InvalidSPDXAnalysisException("Can not set a URI value for a resource which has already been created."));
+			}
+		}
+		this.uri = uri;
 	}
 }

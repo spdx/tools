@@ -404,7 +404,8 @@ public class SPDXDocument implements SpdxRdfConstants {
 		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXAnalysisException {
 			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
 					this.getSha1(), this.getSourceInfo(), this.getDeclaredLicense(), 
-					this.getConcludedLicenses(), this.getDeclaredCopyright(), 
+					this.getConcludedLicenses(), this.getLicenseInfoFromFiles(), 
+					this.getLicenseComment(), this.getDeclaredCopyright(), 
 					this.getShortDescription(), this.getDescription(), this.getDownloadUrl(), 
 					this.getVerificationCode());
 		}

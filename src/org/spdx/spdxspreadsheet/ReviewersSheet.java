@@ -30,14 +30,20 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class ReviewersSheet extends AbstractSheet {
 
-	static final int NUM_COLS = 2;
+	static final int NUM_COLS = 3;
 	static final int REVIEWER_COL = 0;
 	static final int TIMESTAMP_COL = REVIEWER_COL + 1;
-	static final String[] HEADER_TITLES = new String[] {"Reviewer", "Timestamp"};
-	static final int[] COLUMN_WIDTHS = new int[] {50, 20};
+	static final int COMMENT_COL = TIMESTAMP_COL + 1;
+	static final String[] HEADER_TITLES = new String[] {"Reviewer", "Review Date", "Reviewer Comment"};
+	static final int[] COLUMN_WIDTHS = new int[] {50, 20, 60};
+	static final boolean[] REQUIRED = new boolean[] {true, true, false};
 	
-	public ReviewersSheet(Workbook workbook, String sheetName) {
+	@SuppressWarnings("unused")
+	private String version;
+	
+	public ReviewersSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
+		this.version = version;
 	}
 
 	@Override
@@ -79,7 +85,7 @@ public class ReviewersSheet extends AbstractSheet {
 	private String validateRow(Row row) {
 		for (int i = 0; i < NUM_COLS; i++) {
 			Cell cell = row.getCell(i);
-			if (cell == null) {
+			if (REQUIRED[i] && cell == null) {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in reviewer sheet";
 			} else {
 				if (i == TIMESTAMP_COL) {
@@ -111,13 +117,16 @@ public class ReviewersSheet extends AbstractSheet {
 		}
 	}
 	
-	public void addReviewer(String reviewer, Date timeStamp) {
+	public void addReviewer(String reviewer, Date timeStamp, String reviewerComment) {
 		Row row = addRow();
 		row.createCell(REVIEWER_COL).setCellValue(reviewer);
 		Cell dateCell = row.createCell(TIMESTAMP_COL);
 		if (timeStamp != null) {
 			dateCell.setCellValue(timeStamp);
 			dateCell.setCellStyle(dateStyle);
+		}
+		if (reviewerComment != null && !reviewerComment.isEmpty()) {
+			row.createCell(COMMENT_COL).setCellValue(reviewerComment);
 		}
 	}
 	
@@ -133,7 +142,7 @@ public class ReviewersSheet extends AbstractSheet {
 		return reviewer.getStringCellValue();
 	}
 	
-	public Date getReviewerTimestampe(int rowNum) {
+	public Date getReviewerTimestamp(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -143,5 +152,17 @@ public class ReviewersSheet extends AbstractSheet {
 			return null;
 		}
 		return tsCell.getDateCellValue();
+	}
+	
+	public String getReviewerComment(int rowNum) {
+		Row row = sheet.getRow(rowNum);
+		if (row == null) {
+			return null;
+		}
+		Cell commentCell = row.getCell(COMMENT_COL);
+		if (commentCell == null) {
+			return null;
+		}
+		return commentCell.getStringCellValue();
 	}
 }

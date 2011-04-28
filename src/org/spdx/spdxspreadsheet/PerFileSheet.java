@@ -22,6 +22,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXLicenseInfoFactory;
@@ -33,44 +34,50 @@ import org.spdx.rdfparser.SPDXLicenseInfoFactory;
  */
 public class PerFileSheet extends AbstractSheet {
 
-	static final int NUM_COLS = 8;
+	static final int NUM_COLS = 10;
 	static final int FILE_NAME_COL = 0;
 	static final int FILE_TYPE_COL = FILE_NAME_COL + 1;
 	static final int SHA1_COL = FILE_TYPE_COL + 1;
-	static final int ASSERTED_LIC_COL = SHA1_COL + 1;
-	static final int SEEN_LIC_COL = ASSERTED_LIC_COL + 1;
-	static final int LIC_COMMENTS_COL = SEEN_LIC_COL + 1;
+	static final int CONCLUDED_LIC_COL = SHA1_COL + 1;
+	static final int LIC_INFO_IN_FILE_COL = CONCLUDED_LIC_COL + 1;
+	static final int LIC_COMMENTS_COL = LIC_INFO_IN_FILE_COL + 1;
 	static final int SEEN_COPYRIGHT_COL = LIC_COMMENTS_COL + 1;
-	static final int ARTIFACT_OF_COL = SEEN_COPYRIGHT_COL + 1;
+	static final int ARTIFACT_OF_PROJECT_COL = SEEN_COPYRIGHT_COL + 1;
+	static final int ARTIFACT_OF_HOMEPAGE_COL = ARTIFACT_OF_PROJECT_COL + 1;
+	static final int ARTIFACT_OF_PROJECT_URL_COL = ARTIFACT_OF_HOMEPAGE_COL + 1;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, 
-		false, false, false, false};
+		false, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"File Name", "File Type",
-		"File Identifier", "Asserted License", "Seen License", "License Comments",
-		"Seen Copyright", "Artifact Of"};
+		"File Checksum", "License Concluded", "License Info in File", "License Comments",
+		"File Copyright Text", "Artifact of Project", "Artifact of Homepage", 
+		"Artifact of URL"};
 	static final int[] COLUMN_WIDTHS = new int[] {20, 10, 10, 40, 40, 40,
-		40, 30};
+		40, 30, 40, 40};
 
+	private String version;
 	
 	/**
 	 * @param workbook
 	 * @param sheetName
+	 * @param version 
 	 */
-	public PerFileSheet(Workbook workbook, String sheetName) {
+	public PerFileSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
+		this.version = version;
 	}
 	
 	public void add(SPDXFile fileInfo) {
 		Row row = addRow();
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < fileInfo.getArtifactOf().length; i++) {
-				sb.append(fileInfo.getArtifactOf()[i].getName());
-			}
-			row.createCell(ARTIFACT_OF_COL).setCellValue(sb.toString());
+			// currently, this is restricted to only 0 or zero
+			DOAPProject project = fileInfo.getArtifactOf()[0];
+			row.createCell(ARTIFACT_OF_PROJECT_COL).setCellValue(project.getName());
+			row.createCell(ARTIFACT_OF_HOMEPAGE_COL).setCellValue(project.getHomePage());
+			row.createCell(ARTIFACT_OF_PROJECT_URL_COL).setCellValue(project.getProjectUri());
 		}
 		if (fileInfo.getConcludedLicenses() != null) {
-			row.createCell(ASSERTED_LIC_COL).setCellValue(fileInfo.getConcludedLicenses().toString());
+			row.createCell(CONCLUDED_LIC_COL).setCellValue(fileInfo.getConcludedLicenses().toString());
 		}
 		row.createCell(FILE_NAME_COL).setCellValue(fileInfo.getName());
 		if (fileInfo.getSha1() != null && !fileInfo.getSha1().isEmpty()) {
@@ -84,7 +91,7 @@ public class PerFileSheet extends AbstractSheet {
 			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyright());
 		}
 		if (fileInfo.getSeenLicenses() != null && fileInfo.getSeenLicenses().length > 0) {
-			row.createCell(SEEN_LIC_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getSeenLicenses()));
+			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getSeenLicenses()));
 		}
 	}
 	
@@ -107,14 +114,14 @@ public class PerFileSheet extends AbstractSheet {
 			sha1 = "";
 		}
 		SPDXLicenseInfo fileLicenses;
-		Cell assertedLicenseCell = row.getCell(ASSERTED_LIC_COL);
+		Cell assertedLicenseCell = row.getCell(CONCLUDED_LIC_COL);
 		if (assertedLicenseCell != null && !assertedLicenseCell.getStringCellValue().isEmpty()) {
 			fileLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue());
 		} else {
 			fileLicenses = null;
 		}
 		SPDXLicenseInfo seenLicenses;
-		Cell seenLicenseCell = row.getCell(SEEN_LIC_COL);
+		Cell seenLicenseCell = row.getCell(LIC_INFO_IN_FILE_COL);
 		if (seenLicenseCell != null && !seenLicenseCell.getStringCellValue().isEmpty()) {
 			seenLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicenseCell.getStringCellValue());
 		} else {
@@ -135,9 +142,28 @@ public class PerFileSheet extends AbstractSheet {
 			copyright = "";
 		}
 		DOAPProject[] artifactOf;
-		Cell artifactOfCell = row.getCell(ARTIFACT_OF_COL);
-		if (artifactOfCell != null) {
-			artifactOf = new DOAPProject[] {new DOAPProject(artifactOfCell.getStringCellValue(), null)};
+		Cell artifactOfCell = row.getCell(ARTIFACT_OF_PROJECT_COL);
+		if (artifactOfCell != null && !artifactOfCell.getStringCellValue().isEmpty()) {
+			String projectName = artifactOfCell.getStringCellValue();
+			String homePage = "";
+			Cell homePageCell = row.getCell(ARTIFACT_OF_HOMEPAGE_COL);
+			if (homePageCell != null) {
+				homePage = homePageCell.getStringCellValue();
+			}
+			Cell uriCell = row.getCell(ARTIFACT_OF_PROJECT_URL_COL);
+			String uri = "";
+			if (uriCell != null) {
+				uri = uriCell.getStringCellValue();
+			}
+			DOAPProject project = new DOAPProject(projectName, homePage);
+			if (uri != null) {
+				try {
+					project.setUri(uri);
+				} catch (InvalidSPDXAnalysisException e) {
+					throw new SpreadsheetException("Error setting the URI for the artifact of");
+				}
+			}
+			artifactOf = new DOAPProject[] {project};
 		} else {
 			artifactOf = new DOAPProject[0];
 		}
@@ -196,11 +222,11 @@ public class PerFileSheet extends AbstractSheet {
 //				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
 //					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
 //				}
-				if (i == ASSERTED_LIC_COL || i == SEEN_LIC_COL) {
+				if (i == CONCLUDED_LIC_COL || i == LIC_INFO_IN_FILE_COL) {
 					try {
 						SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
 					} catch (SpreadsheetException ex) {
-						if (i == ASSERTED_LIC_COL) {
+						if (i == CONCLUDED_LIC_COL) {
 							return "Invalid asserted license string in row "+String.valueOf(row.getRowNum()) +
 									" details: "+ex.getMessage();
 						} else {
