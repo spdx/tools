@@ -17,10 +17,11 @@
 package org.spdx.spdxspreadsheet;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -28,15 +29,12 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SpdxRdfConstants;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.util.FileManager;
 
 /**
  * Translates an RDF XML file to a SPDX Spreadsheet format
@@ -74,34 +72,32 @@ public class RdfToSpreadsheet {
 			System.out.println("Spreadsheet file already exists - please specify a new file.");
 			return;
 		}
-		Model model = ModelFactory.createDefaultModel();
-		InputStream spdxRdfInput = FileManager.get().open(args[0]);
-		if (spdxRdfInput == null) {
-			System.out.printf("Error: Can not open %1$s", args[0]);
-			return;
-		}
-		
-        try {
-            Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-        } catch(java.lang.ClassNotFoundException e) {}  // do nothing
-
-		model.read(spdxRdfInput, "http://example.com//", fileType(args[0]));
 		SPDXDocument doc = null;
 		try {
-			doc = new SPDXDocument(model);
+			doc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
 		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
+		} catch (IOException e) {
+			System.out.print("Unable to open file :"+args[0]+", "+e.getMessage());
 		}
 		SPDXSpreadsheet ss = null;
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
 			copyRdfXmlToSpreadsheet(doc, ss);
+			ArrayList<String> verify = doc.verify();
+			if (verify.size() > 0) {
+				System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
+				for (int i = 0; i < verify.size(); i++) {
+					System.out.println("\t"+verify.get(i));
+				}
+			}
 		} catch (SpreadsheetException e) {
 			System.out.println("Error opening or writing to spreadsheet: "+e.getMessage());
 		} catch (InvalidSPDXAnalysisException e) {
 			System.out.println("Error translating the RDF file: "+e.getMessage());
-
+		} catch (Exception ex) {
+			System.out.println("Unexpected error translating the RDF to spreadsheet: "+ex.getMessage());
 		} finally {
 			if (ss != null) {
 				try {
@@ -194,11 +190,4 @@ public class RdfToSpreadsheet {
 				"where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is\n"+
 				"the output SPDX spreadsheeet file.");
 	}
-	
-    private static String fileType(String path) {
-        if (Pattern.matches("(?i:.*\\.x?html?$)", path))
-            return "HTML";
-        else
-            return "RDF/XML";
-    }
 }

@@ -61,6 +61,7 @@ public class DOAPProject {
 			this.projectResource = model.createResource(node.getBlankNodeId());
 		} else if (projectNode.isURI()) {
 			this.projectResource = model.createResource(node.getURI());
+			this.uri = node.getURI();
 		} else {
 			throw(new InvalidSPDXAnalysisException("Can not create a DOAP project from a literal node"));
 		}
@@ -193,6 +194,9 @@ public class DOAPProject {
 			if (!this.projectResource.hasURI(uri)) {
 				throw(new InvalidSPDXAnalysisException("Can not set a URI value for a resource which has already been created."));
 			}
+		}
+		if (!SpdxVerificationHelper.isValidUri(uri)) {
+			throw(new InvalidSPDXAnalysisException("Invalid URI for DOAP Project "+this.name+": "+uri));
 		}
 		this.uri = uri;
 	}

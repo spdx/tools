@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -107,6 +108,13 @@ public class SpreadsheetToRDF {
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
 			copySpreadsheetToSPDXAnalysis(ss, analysis);
+			ArrayList<String> verify = analysis.verify();
+			if (verify.size() > 0) {
+				System.out.println("Warning: The following verification errors were found in the resultant SPDX Document:");
+				for (int i = 0; i < verify.size(); i++) {
+					System.out.println("\t"+verify.get(i));
+				}
+			}
 			model.write(out);
 		} catch (SpreadsheetException e) {
 			System.out.println("Error creating or writing to spreadsheet: "+e.getMessage());
@@ -135,8 +143,9 @@ public class SpreadsheetToRDF {
 		analysis.createSpdxAnalysis(ss.getPackageInfoSheet().getPackageInfo(1).getUrl()+"#SPDXANALYSIS");		
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		analysis.createSpdxPackage();
-		copyPackageInfo(ss.getPackageInfoSheet(), analysis.getSpdxPackage());
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
+		// note - non std licenses must be added first so that the text is available
+		copyPackageInfo(ss.getPackageInfoSheet(), analysis.getSpdxPackage());
 		copyPerFileInfo(ss.getPerFileSheet(), analysis.getSpdxPackage());
 		copyReviewerInfo(ss.getReviewersSheet(), analysis);
 

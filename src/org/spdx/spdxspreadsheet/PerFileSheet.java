@@ -55,6 +55,7 @@ public class PerFileSheet extends AbstractSheet {
 	static final int[] COLUMN_WIDTHS = new int[] {20, 10, 10, 40, 40, 40,
 		40, 30, 40, 40};
 
+	@SuppressWarnings("unused")
 	private String version;
 	
 	/**
@@ -156,7 +157,7 @@ public class PerFileSheet extends AbstractSheet {
 				uri = uriCell.getStringCellValue();
 			}
 			DOAPProject project = new DOAPProject(projectName, homePage);
-			if (uri != null) {
+			if (uri != null && !uri.isEmpty()) {
 				try {
 					project.setUri(uri);
 				} catch (InvalidSPDXAnalysisException e) {

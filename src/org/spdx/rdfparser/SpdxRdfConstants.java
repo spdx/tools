@@ -86,7 +86,6 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_SHORT_DESC = "summary";
 	public static final String PROP_PACKAGE_DESCRIPTION = "description";
 	public static final String PROP_PACKAGE_FILE = "hasFile";
-	//	static final String PROP_PACKAGE_URL = "DownloadURL";
 	public static final String PROP_PACKAGE_VERIFICATION_CODE = "packageVerificationCode";
 	public static final String PROP_PACKAGE_LICENSE_INFO_FROM_FILES = "licenseInfoFromFiles";
 	public static final String PROP_PACKAGE_LICENSE_COMMENT = "licenseComments";
@@ -96,8 +95,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
-	//	static final String PROP_DISJUNCTIVE_LICENSE = "DisjunctiveLicense";
-	public static final String TERM_LICENSE_NONESEEN = "noneSeen";
+	public static final String TERM_LICENSE_AMBIGUOUS = "ambiguous";
 	public static final String TERM_LICENSE_NONE = "none";
 	public static final String TERM_LICENSE_NOT_ANALYZED = "notAnalyzed";
 	
@@ -117,6 +115,7 @@ public interface SpdxRdfConstants {
 	
 	// Date format
 	public static final String SPDX_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	public static final String STANDARD_LICENSE_URL = "http://spdx.org/licenses";
 	
 	// license ID format
 	public static String NON_STD_LICENSE_ID_PRENUM = "LicenseRef-";

@@ -261,7 +261,7 @@ public class TestSPDXDocument {
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SPDXNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
-		pkg.setDeclaredLicense(new SPDXNoneSeenLicense());
+		pkg.setDeclaredLicense(new SPDXAmbiguousLicense());
 		pkg.setDeclaredName("Name");
 		pkg.setDescription("Description");
 		pkg.setDownloadUrl("None");
@@ -425,7 +425,7 @@ public class TestSPDXDocument {
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SPDXNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
-		pkg.setDeclaredLicense(new SPDXNoneSeenLicense());
+		pkg.setDeclaredLicense(new SPDXAmbiguousLicense());
 		pkg.setDeclaredName("Name");
 		pkg.setDescription("Description");
 		pkg.setDownloadUrl("None");

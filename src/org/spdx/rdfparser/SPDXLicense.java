@@ -117,10 +117,11 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 	 * assumed to be unique.
 	 * NOTE: the type must be a subclass of SPDXLicense
 	 * @param model
+	 * @param uri 
 	 * @param typeURI
 	 * @return
 	 */
-	protected Resource _createResource(Model model, Resource type) {
+	protected Resource _createResource(Model model, Resource type, String uri) {
 		Resource r = null;
 		if (id != null) {
 			// check to see if it exists
@@ -145,11 +146,14 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 					}
 				}
 			}
-
 		}
 		if (r == null) {
 			// need to create it
-			r = model.createResource(type);
+			if (uri == null || uri.isEmpty()) {
+				r = model.createResource(type);
+			} else {
+				r = model.createResource(uri, type);
+			}
 			if (id != null) {
 				Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_LICENSE_ID);
@@ -161,7 +165,6 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 				r.addProperty(textProperty, this.text);
 			}
 		}
-
 		return r;
 	}
 	
@@ -172,5 +175,14 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		}
 		SPDXLicense compl = (SPDXLicense)comp;
 		return compl.getId().equals(this.getId());
+	}
+
+	/**
+	 * @param model
+	 * @param type
+	 * @return
+	 */
+	public Resource _createResource(Model model, Resource type) {
+		return _createResource(model, type, null);
 	}
 }

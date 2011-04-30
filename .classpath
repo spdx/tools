@@ -2,18 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="Test"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/arq-2.8.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/icu4j-3.4.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/iri-0.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/iri-0.8-sources.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/iri-0.8-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3.jar" sourcepath="Jenna-2.6.3/jena-2.6.3-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SPDXParser/Jenna-2.6.3/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3-tests.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3-tests.jar"/>
+	<classpathentry kind="lib" path="Jenna-2.6.3/lib/junit-4.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/log4j-1.2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/lucene-core-2.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/slf4j-api-1.5.8.jar"/>
