@@ -141,11 +141,20 @@ public class SPDXStandardLicense extends SPDXLicense {
 	@Override
 	protected Resource _createResource(Model model) {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_STANDARD_LICENSE);
-		Resource r = super._createResource(model, type);
+		String uri = this.createStdLicenseUri(this.id);
+		Resource r = super._createResource(model, type, uri);
 		//TODO: Implement additional properties
 		return r;
 	}
 	
+	/**
+	 * Creates a standard license URI by appending the standard license ID to the URL hosting the SPDX licenses
+	 * @param id Standard License ID
+	 * @return
+	 */
+	private String createStdLicenseUri(String id) {
+		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
+	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
 	 */
@@ -178,7 +187,9 @@ public class SPDXStandardLicense extends SPDXLicense {
 		this.getTemplate();
 		String licenseText = this.getText();
 		if (licenseText == null || licenseText.isEmpty()) {
-			retval.add("Missing required license text");
+//			retval.add("Missing required license text");
+			//TODO: Fill in the properties from the standard license website if
+			// available
 		}
 		return retval;
 	}

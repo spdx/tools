@@ -16,8 +16,6 @@
  */
 package org.spdx.spdxspreadsheet;
 
-import java.util.ArrayList;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,7 +24,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXNoneLicense;
-import org.spdx.rdfparser.SPDXNoneSeenLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 
 /**

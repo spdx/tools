@@ -53,7 +53,7 @@ public class SPDXDocumentFactory {
 	 * @throws IOException
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	static SPDXDocument creatSpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
+	public static SPDXDocument creatSpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {}  // do nothing

@@ -36,6 +36,7 @@ public class NonStandardLicensesSheet extends AbstractSheet {
 	static final String[] HEADER_TITLES = new String[] {"Identifier", "Extracted Text"};
 	static final int[] COLUMN_WIDTHS = new int[] {10, 80};
 	
+	@SuppressWarnings("unused")
 	private String version;
 	/**
 	 * @param workbook

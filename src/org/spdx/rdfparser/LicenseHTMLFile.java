@@ -147,6 +147,7 @@ public class LicenseHTMLFile {
 			}
 		}
 	}
+	@SuppressWarnings("unused")
 	private String getSiteFromUrl(String url) {
 		Matcher matcher = SITE_PATTERN.matcher(url);
 		if (matcher.find() && USE_SITE) {

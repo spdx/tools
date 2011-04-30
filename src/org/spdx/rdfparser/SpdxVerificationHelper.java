@@ -20,6 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
 
+import com.hp.hpl.jena.iri.IRIFactory;
+
 /**
  * Holds static methods used for verify various property valuse
  * @author Gary O'Neall
@@ -27,6 +29,8 @@ import java.util.HashSet;
  */
 public class SpdxVerificationHelper {
 	
+	static IRIFactory iriFactory = IRIFactory.semanticWebImplementation();
+
 	static HashSet<String> VALID_FILE_TYPES = new HashSet<String>();
 	
 	static {
@@ -111,5 +115,14 @@ public class SpdxVerificationHelper {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Validates a URI is indeed valid
+	 * @param uri
+	 * @return
+	 */
+	public static boolean isValidUri(String uri) {
+		return !iriFactory.create(uri).hasViolation(false);
 	}
 }
