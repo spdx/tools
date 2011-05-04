@@ -35,7 +35,10 @@ public class ReviewersSheet extends AbstractSheet {
 	static final int TIMESTAMP_COL = REVIEWER_COL + 1;
 	static final int COMMENT_COL = TIMESTAMP_COL + 1;
 	static final String[] HEADER_TITLES = new String[] {"Reviewer", "Review Date", "Reviewer Comment"};
-	static final int[] COLUMN_WIDTHS = new int[] {50, 20, 60};
+	static final int[] COLUMN_WIDTHS = new int[] {60, 20, 120};
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true};
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false};
+
 	static final boolean[] REQUIRED = new boolean[] {true, true, false};
 	
 	@SuppressWarnings("unused")
@@ -107,10 +110,17 @@ public class ReviewersSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
+		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
+		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
 			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
+			if (LEFT_WRAP[i]) {
+				sheet.setDefaultColumnStyle(i, wrapStyle);
+			} else if (CENTER_NOWRAP[i]) {
+				sheet.setDefaultColumnStyle(i, centerStyle);
+			}
 			Cell cell = row.createCell(i);
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);

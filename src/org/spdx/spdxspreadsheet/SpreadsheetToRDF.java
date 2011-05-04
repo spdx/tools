@@ -115,7 +115,7 @@ public class SpreadsheetToRDF {
 					System.out.println("\t"+verify.get(i));
 				}
 			}
-			model.write(out);
+			model.write(out, "RDF/XML-ABBREV");
 		} catch (SpreadsheetException e) {
 			System.out.println("Error creating or writing to spreadsheet: "+e.getMessage());
 		} catch (InvalidSPDXAnalysisException e) {
@@ -198,7 +198,7 @@ public class SpreadsheetToRDF {
 		spdxPackage.setConcludedLicenses(info.getConcludedLicense());
 		spdxPackage.setLicenseInfoFromFiles(info.getLicensesFromFiles());
 		spdxPackage.setLicenseComment(info.getLicenseComments());
-		spdxPackage.setVerificationCode(info.getFileChecksum());
+		spdxPackage.setVerificationCode(info.getPackageVerification());
 		spdxPackage.setFileName(info.getFileName());
 		spdxPackage.setSha1(info.getSha1());
 		spdxPackage.setShortDescription(info.getShortDescription());

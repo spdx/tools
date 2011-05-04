@@ -385,21 +385,24 @@ public class SPDXDocument implements SpdxRdfConstants {
 			addProperty(node, PROP_PACKAGE_DOWNLOAD_URL, new String[] {url});
 		}
 		
-		public String getVerificationCode() throws InvalidSPDXAnalysisException {
-			String[] cksums = findDocPropertieStringValues(this.node, PROP_PACKAGE_VERIFICATION_CODE);
-			if (cksums == null || cksums.length == 0) {
-				return null;
+		public SpdxPackageVerificationCode getVerificationCode() throws InvalidSPDXAnalysisException {			
+			SpdxPackageVerificationCode retval = null;
+			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE).asNode();
+			Triple m = Triple.createMatch(this.node, p, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				retval = new SpdxPackageVerificationCode(model, t.getObject());
 			}
-			if (cksums.length > 1) {
-				throw(new InvalidSPDXAnalysisException("More than one file checksums for a package"));
-			}
-			return(cksums[0]);
+			return retval;
 		}
 		
-		public void setVerificationCode(String fileChecksums) throws InvalidSPDXAnalysisException {
+		public void setVerificationCode(SpdxPackageVerificationCode verificationCode) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_VERIFICATION_CODE);
-			addProperty(node, PROP_PACKAGE_VERIFICATION_CODE, new String[] {fileChecksums});
-
+			Resource verificationCodeResource = verificationCode.createResource(model);
+			Resource s = getResource(this.node);
+			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE);
+			s.addProperty(p, verificationCodeResource);
 		}
 		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXAnalysisException {
 			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
@@ -488,15 +491,6 @@ public class SPDXDocument implements SpdxRdfConstants {
 			} catch (InvalidSPDXAnalysisException e) {
 				retval.add("Invalid checksum: "+e.getMessage());
 			}
-			// package verification code - mandatory
-			try {
-				String packageVerificationCode = this.getVerificationCode();
-				if (packageVerificationCode == null || packageVerificationCode.isEmpty()) {
-					retval.add("Missing required package verification code");
-				}
-			} catch (InvalidSPDXAnalysisException e) {
-				retval.add("Invalid package verification code: "+e.getMessage());
-			}
 			// source Info - optional
 			try {
 				@SuppressWarnings("unused")
@@ -574,6 +568,20 @@ public class SPDXDocument implements SpdxRdfConstants {
 			} catch (InvalidSPDXAnalysisException e) {
 				retval.add("Invalid package files: "+e.getMessage());
 			}		
+			
+			// verification code
+			SpdxPackageVerificationCode verificationCode = null;
+			try {
+				verificationCode = this.getVerificationCode();
+				if (verificationCode == null) {
+					retval.add("Missing required package verification code.");
+				} else {
+					retval.addAll(verificationCode.verify());
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid package verification code: "+e.getMessage());
+			}
+
 			return retval;
 		}
 	}

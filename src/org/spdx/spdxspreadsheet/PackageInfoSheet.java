@@ -25,6 +25,7 @@ import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 
 /**
  * Sheet describing the package information for an SPDX Document
@@ -33,13 +34,14 @@ import org.spdx.rdfparser.SPDXPackageInfo;
  */
 public class PackageInfoSheet extends AbstractSheet {
 
-	int NUM_COLS = 13;
+	int NUM_COLS = 14;
 	int NAME_COL = 0;
 	int MACHINE_NAME_COL = NAME_COL+1;
 	int URL_COL = MACHINE_NAME_COL + 1;
 	int PACKAGE_SHA_COL = URL_COL + 1;
-	int FILE_CHECKSUM_COL = PACKAGE_SHA_COL + 1;
-	int SOURCE_INFO_COL = FILE_CHECKSUM_COL + 1;
+	int FILE_VERIFICATION_VALUE_COL = PACKAGE_SHA_COL + 1;
+	int VERIFICATION_EXCLUDED_FILES_COL = FILE_VERIFICATION_VALUE_COL + 1;
+	int SOURCE_INFO_COL = VERIFICATION_EXCLUDED_FILES_COL + 1;
 	int DECLARED_LICENSE_COL = SOURCE_INFO_COL + 1;
 	int CONCLUDED_LICENSE_COL = DECLARED_LICENSE_COL + 1;
 	int LICENSE_INFO_IN_FILES_COL = CONCLUDED_LICENSE_COL + 1;
@@ -50,14 +52,14 @@ public class PackageInfoSheet extends AbstractSheet {
 	private String version;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, true, 
-		true, true, false, true, true, true, false, true, false, false};
+		true, true, true, false, true, true, true, false, true, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package Name",
 		"Package FileName", "Package Download Location", "Package Checksum", "Package Verification Code",
-		"Source Info", "License Declared", "License Concluded", "License Info From Files", 
+		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files", 
 		"License Comments", "Package Copyright Text", "Summary", "Description"};
 	
-	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 15, 15, 30,
-		40, 40, 40, 40, 40, 40, 40};
+	static final int[] COLUMN_WIDTHS = new int[] {30, 30, 50, 25, 25, 40, 30,
+		40, 40, 90, 50, 50, 50, 80};
 
 	/**
 	 * @param workbook
@@ -156,10 +158,12 @@ public class PackageInfoSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
+		CellStyle defaultStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
 			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
+			sheet.setDefaultColumnStyle(i, defaultStyle);
 			Cell cell = row.createCell(i);
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);
@@ -176,8 +180,19 @@ public class PackageInfoSheet extends AbstractSheet {
 		DeclaredLicenseCol.setCellValue(pkgInfo.getDeclaredLicenses().toString());
 		Cell concludedLicenseCol = row.createCell(CONCLUDED_LICENSE_COL);
 		concludedLicenseCol.setCellValue(pkgInfo.getConcludedLicense().toString());
-		Cell fileChecksumCell = row.createCell(FILE_CHECKSUM_COL);
-		fileChecksumCell.setCellValue(pkgInfo.getFileChecksum());
+		Cell fileChecksumCell = row.createCell(FILE_VERIFICATION_VALUE_COL);
+		fileChecksumCell.setCellValue(pkgInfo.getPackageVerification().getValue());
+		Cell verificationExcludedFilesCell = row.createCell(VERIFICATION_EXCLUDED_FILES_COL);
+		StringBuilder excFilesStr = new StringBuilder();
+		String[] excludedFiles = pkgInfo.getPackageVerification().getExcludedFileNames();
+		if (excludedFiles.length > 0) {
+			excFilesStr.append(excludedFiles[0]);
+			for (int i = 1;i < excludedFiles.length; i++) {
+				excFilesStr.append(", ");
+				excFilesStr.append(excludedFiles[i]);
+			}
+		}
+		verificationExcludedFilesCell.setCellValue(excFilesStr.toString());
 		if (pkgInfo.getDescription() != null) {
 			Cell descCell = row.createCell(FULL_DESC_COL);
 			descCell.setCellValue(pkgInfo.getDescription());
@@ -271,11 +286,22 @@ public class PackageInfoSheet extends AbstractSheet {
 			description = "";
 		}
 		String url = row.getCell(URL_COL).getStringCellValue();
-		String fileChecksums = row.getCell(FILE_CHECKSUM_COL).getStringCellValue();
+		String packageVerificationValue = row.getCell(FILE_VERIFICATION_VALUE_COL).getStringCellValue();
+		String[] excludedFiles;
+		String excludedFilesStr = row.getCell(VERIFICATION_EXCLUDED_FILES_COL).getStringCellValue();
+		if (excludedFilesStr != null && !excludedFilesStr.isEmpty()) {
+			excludedFiles = excludedFilesStr.split(",");
+			for (int i = 0;i < excludedFiles.length; i++) {
+				excludedFiles[i] = excludedFiles[i].trim();
+			}
+		} else {
+			excludedFiles = new String[0];
+		}
+		SpdxPackageVerificationCode verificationCode = new SpdxPackageVerificationCode(packageVerificationValue, excludedFiles);
 		return new SPDXPackageInfo(declaredName, machineName, sha1, sourceInfo, 
 				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
 				licenseComment, declaredCopyright, shortDesc, 
-				description, url, fileChecksums);
+				description, url, verificationCode);
 	}
 
 	public static String licensesToString(SPDXLicenseInfo[] licenses) {

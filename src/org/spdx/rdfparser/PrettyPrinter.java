@@ -139,9 +139,9 @@ public class PrettyPrinter {
 		if (pkg.getSha1() != null && !pkg.getSha1().isEmpty()) {
 			System.out.printf("SHA1: %1s\n",pkg.getSha1());				
 		}
-		// file verification code
-		if (pkg.getVerificationCode() != null && !pkg.getVerificationCode().isEmpty()) {
-			System.out.printf("Verification: %1s\n", pkg.getVerificationCode());
+		// package verification code
+		if (pkg.getVerificationCode() != null && pkg.getVerificationCode().getValue() != null && !pkg.getVerificationCode().getValue().isEmpty()) {
+			System.out.printf("Verification: %1s\n", pkg.getVerificationCode().getValue());
 		}
 		// Description
 		if (pkg.getDescription() != null && !pkg.getDescription().isEmpty()) {

@@ -157,4 +157,18 @@ public abstract class AbstractSheet {
 		headerStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		return headerStyle;
 	}
+	
+	public static CellStyle createLeftWrapStyle(Workbook wb) {
+		CellStyle wrapStyle = wb.createCellStyle();
+		wrapStyle.setWrapText(true);
+		wrapStyle.setAlignment(CellStyle.ALIGN_LEFT);
+		return wrapStyle;
+	}
+	
+	public static CellStyle createCenterStyle(Workbook wb) {
+		CellStyle centerStyle = wb.createCellStyle();
+		centerStyle.setWrapText(false);
+		centerStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		return centerStyle;
+	}
 }

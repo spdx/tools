@@ -34,7 +34,10 @@ public class NonStandardLicensesSheet extends AbstractSheet {
 	
 	static boolean[] REQUIRED = new boolean[] {true, true};
 	static final String[] HEADER_TITLES = new String[] {"Identifier", "Extracted Text"};
-	static final int[] COLUMN_WIDTHS = new int[] {10, 80};
+	static final int[] COLUMN_WIDTHS = new int[] {15, 120};
+	static final boolean[] LEFT_WRAP = new boolean[] {false, false};
+	static final boolean[] CENTER_NOWRAP = new boolean[] {true, false};
+
 	
 	@SuppressWarnings("unused")
 	private String version;
@@ -113,10 +116,17 @@ public class NonStandardLicensesSheet extends AbstractSheet {
 		}
 		Sheet sheet = wb.createSheet(sheetName);
 		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
+		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
+		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
 			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
+			if (LEFT_WRAP[i]) {
+				sheet.setDefaultColumnStyle(i, wrapStyle);
+			} else if (CENTER_NOWRAP[i]) {
+				sheet.setDefaultColumnStyle(i, centerStyle);
+			}
 			Cell cell = row.createCell(i);
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);

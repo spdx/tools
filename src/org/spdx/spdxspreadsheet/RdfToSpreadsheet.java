@@ -109,7 +109,7 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyRdfXmlToSpreadsheet(SPDXDocument doc,
+	public static void copyRdfXmlToSpreadsheet(SPDXDocument doc,
 			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
 			System.out.println("Warning: No document to copy");
