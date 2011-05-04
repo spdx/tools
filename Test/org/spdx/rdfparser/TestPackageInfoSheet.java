@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) 2011 Source Auditor Inc.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+*/
 package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
@@ -64,15 +80,17 @@ public class TestPackageInfoSheet {
 		testLicenses2[1] = new SPDXNonStandardLicense("License4", "License 4 text");
 		SPDXLicenseInfo testLicense2 = new SPDXConjunctiveLicenseSet(testLicenses2);
 		SPDXLicenseInfo[] testLicenseInfos = new SPDXLicenseInfo[] {new SPDXNoneLicense()};
+		SpdxPackageVerificationCode testVerification = new SpdxPackageVerificationCode("value",
+				new String[] {"skippedfil1", "skippedfile2"});
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
 		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "machinename1", 
 				"sha1-1", "sourceinfo1", testLicense1,
 				testLicense2, testLicenseInfos, "license comments", "dec-copyright1",
-				"short desc1", "desc1", "http://url1", "filechecksum1");
+				"short desc1", "desc1", "http://url1", testVerification);
 		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "machinename1", 
 				"sha1-1", "sourceinfo1", testLicense1,
 				testLicense2, testLicenseInfos, "licensecomments2", "dec-copyright1",
-				"short desc1", "desc1", "http://url1", "filechecksum1");
+				"short desc1", "desc1", "http://url1", testVerification);
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
 		PackageInfoSheet pkgInfoSheet = new PackageInfoSheet(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
@@ -95,7 +113,7 @@ public class TestPackageInfoSheet {
 		assertEquals(pkgInfo1.getConcludedLicense(), pkgInfo2.getConcludedLicense());
 		assertEquals(pkgInfo1.getDeclaredName(), pkgInfo2.getDeclaredName());
 		assertEquals(pkgInfo1.getDescription(), pkgInfo2.getDescription());
-		assertEquals(pkgInfo1.getFileChecksum(), pkgInfo2.getFileChecksum());
+		assertEquals(pkgInfo1.getPackageVerification().getValue(), pkgInfo2.getPackageVerification().getValue());
 		assertEquals(pkgInfo1.getFileName(), pkgInfo2.getFileName());
 		assertEquals(pkgInfo1.getSha1(), pkgInfo2.getSha1());
 		assertEquals(pkgInfo1.getShortDescription(), pkgInfo2.getShortDescription());
@@ -103,6 +121,14 @@ public class TestPackageInfoSheet {
 		assertEquals(pkgInfo1.getUrl(), pkgInfo2.getUrl());
 		if (!compareLicenses(pkgInfo1.getLicensesFromFiles(), pkgInfo2.getLicensesFromFiles())) {
 			fail("license infos not equal");
+		}
+		assertEquals(pkgInfo1.getPackageVerification().getValue(),
+				pkgInfo2.getPackageVerification().getValue());
+		assertEquals(pkgInfo1.getPackageVerification().getExcludedFileNames().length,
+				pkgInfo2.getPackageVerification().getExcludedFileNames().length);
+		for (int i = 0; i < pkgInfo1.getPackageVerification().getExcludedFileNames().length; i++) {
+			assertEquals(pkgInfo1.getPackageVerification().getExcludedFileNames()[i], 
+					pkgInfo2.getPackageVerification().getExcludedFileNames()[i]);
 		}
 	}
 

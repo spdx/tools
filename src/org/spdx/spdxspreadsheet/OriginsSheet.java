@@ -30,7 +30,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class OriginsSheet extends AbstractSheet {
 
-	public static final String CURRENT_VERSION = "0.9";
+	public static final String CURRENT_VERSION = "0.9.1";
 	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION};
 	static final int NUM_COLS = 6;
 	static final int SPREADSHEET_VERSION_COL = 0;
@@ -47,8 +47,9 @@ public class OriginsSheet extends AbstractSheet {
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
 		"SPDX Version", "Creator", "Created", "Data License", "Creator Comment"};
-	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 20, 16, 40, 60};
-	
+	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 16, 40, 70};
+	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, true};
+	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, false};
 	String version = CURRENT_VERSION;	// updated in the verify method
 	
 	public OriginsSheet(Workbook workbook, String sheetName) {
@@ -126,11 +127,18 @@ public class OriginsSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
+		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
+		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Sheet sheet = wb.createSheet(sheetName);
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
 			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
+			if (LEFT_WRAP[i]) {
+				sheet.setDefaultColumnStyle(i, wrapStyle);
+			} else if (CENTER_NOWRAP[i]) {
+				sheet.setDefaultColumnStyle(i, centerStyle);
+			}
 			Cell cell = row.createCell(i);
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);

@@ -42,7 +42,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	private PackageInfoSheet packageInfoSheet;
 	static final String PACKAGE_INFO_SHEET_NAME = "Package Info";
 	private NonStandardLicensesSheet nonStandardLicensesSheet;
-	static final String NON_STANDARD_LICENSE_SHEET_NAME = "Non Standard Licenses";
+	static final String NON_STANDARD_LICENSE_SHEET_NAME = "Extracted Lic Info";
 	private PerFileSheet perFileSheet;
 	static final String PER_FILE_SHEET_NAME = "Per File Info";
 	private ReviewersSheet reviewersSheet;

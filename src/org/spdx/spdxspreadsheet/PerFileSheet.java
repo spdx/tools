@@ -52,8 +52,13 @@ public class PerFileSheet extends AbstractSheet {
 		"File Checksum", "License Concluded", "License Info in File", "License Comments",
 		"File Copyright Text", "Artifact of Project", "Artifact of Homepage", 
 		"Artifact of URL"};
-	static final int[] COLUMN_WIDTHS = new int[] {20, 10, 10, 40, 40, 40,
-		40, 30, 40, 40};
+	static final int[] COLUMN_WIDTHS = new int[] {60, 10, 25, 30, 30, 40,
+		40, 25, 60, 60};
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true, 
+		true, true, true, true, true, true, true};
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false, 
+		false, false, false, false, false, false, false};
+
 
 	@SuppressWarnings("unused")
 	private String version;
@@ -246,10 +251,17 @@ public class PerFileSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
+		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);
 		for (int i = 0; i < HEADER_TITLES.length; i++) {
 			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
+			if (LEFT_WRAP[i]) {
+				sheet.setDefaultColumnStyle(i, wrapStyle);
+			} else if (CENTER_NOWRAP[i]) {
+				sheet.setDefaultColumnStyle(i, centerStyle);
+			}
 			Cell cell = row.createCell(i);
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);

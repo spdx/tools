@@ -119,6 +119,11 @@ public class SPDXChecksum {
 		}
 	}
 	
+	/**
+	 * Creates a resource from this SPDX Checksum
+	 * @param model
+	 * @return
+	 */
 	public Resource createResource(Model model) {
 		this.model = model;
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE +

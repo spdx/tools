@@ -57,6 +57,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_STANDARD_LICENSE = "License";
 	public static final String CLASS_SPDX_FILE = "File";
 	public static final String CLASS_SPDX_REVIEW = "Review";
+	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";
 	
 	// SPDX Document Properties
 	public static final String PROP_SPDX_REVIEWED_BY = "reviewed";
@@ -73,6 +74,11 @@ public interface SpdxRdfConstants {
 	// SPDX Checksum Properties
 	public static final String PROP_CHECKSUM_ALGORITHM = "algorithm";
 	public static final String PROP_CHECKSUM_VALUE = "checksumValue";
+	
+	// SPDX PackageVerificationCode Properties
+	public static final String PROP_VERIFICATIONCODE_IGNORED_FILES = "packageVerificationCodeExcludedFile";
+	public static final String PROP_VERIFICATIONCODE_VALUE = "packageVerificationCodeValue";
+
 	
 	// SPDX Package Properties
 	public static final String PROP_PACKAGE_DECLARED_NAME = "name";

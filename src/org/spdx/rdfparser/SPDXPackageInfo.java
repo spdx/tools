@@ -33,14 +33,14 @@ public class SPDXPackageInfo {
 	private String shortDescription;
 	private String description;
 	private String url;
-	private String fileChecksum;
 	private String licenseComments;
+	private SpdxPackageVerificationCode verificationCode;
 
 	public SPDXPackageInfo(String declaredName, String machineName, String sha1,
 			String sourceInfo, SPDXLicenseInfo declaredLicense, 
 			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
-			String description, String url, String fileChecksum) {
+			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;
 		this.sha1 = sha1;
@@ -53,7 +53,7 @@ public class SPDXPackageInfo {
 		this.shortDescription = shortDescription;
 		this.description = description;
 		this.url = url;
-		this.fileChecksum = fileChecksum;
+		this.verificationCode = spdxPackageVerificationCode;
 	}
 
 	/**
@@ -99,17 +99,17 @@ public class SPDXPackageInfo {
 	}
 
 	/**
-	 * @return the fileChecksum
+	 * @return the verificationCode
 	 */
-	public String getFileChecksum() {
-		return fileChecksum;
+	public SpdxPackageVerificationCode getPackageVerification() {
+		return verificationCode;
 	}
 
 	/**
-	 * @param fileChecksum the fileChecksum to set
+	 * @param verificationCode the verificationCode to set
 	 */
-	public void setFileChecksum(String fileChecksum) {
-		this.fileChecksum = fileChecksum;
+	public void setPackageVerification(SpdxPackageVerificationCode verificationCode) {
+		this.verificationCode = verificationCode;
 	}
 
 	/**
