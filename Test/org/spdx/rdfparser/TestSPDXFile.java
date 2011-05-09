@@ -26,10 +26,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Source Auditor
@@ -171,4 +174,37 @@ public class TestSPDXFile {
 		assertEquals(0, verify.size());
 	}
 
+	@Test
+	public void testNoneCopyright() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
+		Resource fileResource = file.createResource(model);
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
+		Triple m = Triple.createMatch(null, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NONE, t.getObject().getURI());
+		}
+		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		assertEquals(SpdxRdfConstants.NONE_VALUE, file2.getCopyright());
+	}
+	
+	@Test
+	public void testNoassertionCopyright() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0]);
+		Resource fileResource = file.createResource(model);
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
+		Triple m = Triple.createMatch(null, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, t.getObject().getURI());
+		}
+		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, file2.getCopyright());
+	}
 }

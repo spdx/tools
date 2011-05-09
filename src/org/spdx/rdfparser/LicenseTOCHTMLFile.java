@@ -42,7 +42,7 @@ public class LicenseTOCHTMLFile {
 			"      xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n"+
 			"      xmlns:spdx=\"http://spdx.org/spec#\">\n"+
 			"<head>\n"+
-			"  <title></title>\n"+
+			"  <title>SPDX Standard Licenses</title>\n"+
 			"  <link rel=\"stylesheet\" href=\"screen.css\" media=\"screen\" type=\"text/css\" />\n"+
 			"</head>\n"+
 			"\n"+ 

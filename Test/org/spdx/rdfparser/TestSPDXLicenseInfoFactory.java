@@ -193,18 +193,11 @@ public class TestSPDXLicenseInfoFactory {
 		assertEquals(none, comp);
 		ArrayList<String> verify = comp.verify();
 		assertEquals(0, verify.size());
-		// AMBIGUOUS_LICENSE_NAME
-		SPDXLicenseInfo ambiguous = SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDXLicenseInfoFactory.AMBIGUOUS_LICENSE_NAME);
-		r = ambiguous.createResource(model);
+		// NOASSERTION_NAME
+		SPDXLicenseInfo noAssertion = SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDXLicenseInfoFactory.NOASSERTION_LICENSE_NAME);
+		r = noAssertion.createResource(model);
 		comp = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
-		assertEquals(ambiguous, comp);
-		verify = comp.verify();
-		assertEquals(0, verify.size());
-		// NOT_ANALYZED_LICENSE_NAME
-		SPDXLicenseInfo notAnalyzed = SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDXLicenseInfoFactory.NOT_ANALYZED_LICENSE_NAME);
-		r = notAnalyzed.createResource(model);
-		comp = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
-		assertEquals(notAnalyzed, comp);
+		assertEquals(noAssertion, comp);
 		verify = comp.verify();
 		assertEquals(0, verify.size());
 	}

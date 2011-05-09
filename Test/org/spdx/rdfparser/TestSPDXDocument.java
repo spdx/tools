@@ -31,8 +31,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Source Auditor
@@ -253,7 +256,7 @@ public class TestSPDXDocument {
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SPDXNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
-		pkg.setDeclaredLicense(new SPDXAmbiguousLicense());
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
 		pkg.setDescription("Description");
 		pkg.setDownloadUrl("None");
@@ -420,7 +423,7 @@ public class TestSPDXDocument {
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SPDXNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
-		pkg.setDeclaredLicense(new SPDXAmbiguousLicense());
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
 		pkg.setDescription("Description");
 		pkg.setDownloadUrl("None");
@@ -451,7 +454,68 @@ public class TestSPDXDocument {
 		doc.setExtractedLicenseInfos(new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"11", "Text")});
 		doc.setSpdxVersion(SPDXDocument.CURRENT_SPDX_VERSION);
 		verify = doc.verify();
-		assertEquals(0, verify.size());
-		
+		assertEquals(0, verify.size());		
+	}
+	
+	@Test
+	public void testNoneValues() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setDownloadUrl(SpdxRdfConstants.NONE_VALUE);
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DOWNLOAD_URL).asNode();
+		Triple m = Triple.createMatch(null, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NONE, t.getObject().getURI());
+		}
+		assertEquals(SpdxRdfConstants.NONE_VALUE, doc.getSpdxPackage().getDownloadUrl());
+		pkg.setDeclaredCopyright(SpdxRdfConstants.NONE_VALUE);
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_COPYRIGHT).asNode();
+		m = Triple.createMatch(null, p, null);
+		tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NONE, t.getObject().getURI());
+		}
+		assertEquals(SpdxRdfConstants.NONE_VALUE, doc.getSpdxPackage().getDeclaredCopyright());
+	}
+	
+	@Test
+	public void testNoAssertionValues() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setDownloadUrl(SpdxRdfConstants.NOASSERTION_VALUE);
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DOWNLOAD_URL).asNode();
+		Triple m = Triple.createMatch(null, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, t.getObject().getURI());
+		}
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, doc.getSpdxPackage().getDownloadUrl());
+		pkg.setDeclaredCopyright(SpdxRdfConstants.NOASSERTION_VALUE);
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_COPYRIGHT).asNode();
+		m = Triple.createMatch(null, p, null);
+		tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, t.getObject().getURI());
+		}
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, doc.getSpdxPackage().getDeclaredCopyright());
 	}
 }

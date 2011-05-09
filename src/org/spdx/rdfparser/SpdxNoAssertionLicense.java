@@ -23,18 +23,18 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * Special class of license to represent an ambiguous license in the file or packages
+ * Special class of license to represent no asserted license license in the file or packages
  * @author Gary O'Neall
  *
  */
-public class SPDXAmbiguousLicense extends SPDXLicenseInfo {
+public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
 
 	/**
 	 * @param model
 	 * @param licenseInfoNode
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXAmbiguousLicense(Model model, Node licenseInfoNode)
+	public SpdxNoAssertionLicense(Model model, Node licenseInfoNode)
 			throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 	}
@@ -42,7 +42,7 @@ public class SPDXAmbiguousLicense extends SPDXLicenseInfo {
 	/**
 	 * 
 	 */
-	public SPDXAmbiguousLicense() {
+	public SpdxNoAssertionLicense() {
 		super();
 	}
 
@@ -51,7 +51,7 @@ public class SPDXAmbiguousLicense extends SPDXLicenseInfo {
 	 */
 	@Override
 	protected Resource _createResource(Model model) {
-		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_AMBIGUOUS);
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION);
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +59,7 @@ public class SPDXAmbiguousLicense extends SPDXLicenseInfo {
 	 */
 	@Override
 	public String toString() {
-		return SPDXLicenseInfoFactory.AMBIGUOUS_LICENSE_NAME;
+		return SPDXLicenseInfoFactory.NOASSERTION_LICENSE_NAME;
 	}
 
 	/* (non-Javadoc)
@@ -67,7 +67,7 @@ public class SPDXAmbiguousLicense extends SPDXLicenseInfo {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof SPDXAmbiguousLicense) {
+		if (o instanceof SpdxNoAssertionLicense) {
 			return true;
 		} else {
 			return false;

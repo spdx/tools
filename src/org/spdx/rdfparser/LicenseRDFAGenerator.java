@@ -16,8 +16,10 @@
  */
 package org.spdx.rdfparser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashSet;
@@ -54,6 +56,7 @@ public class LicenseRDFAGenerator {
 		"padding-left: 1em;\n}\n\ntable {\nborder-collapse: collapse;\n}\n"+
 		"td,th {\nmargin: 0;\nborder: 1px solid black;\n}\n";
 	static final String CSS_FILE_NAME = "screen.css";
+	static final String LICENSE_HTML_TEMPLATE_FILENAME = "resources/LicenseHTMLTemplate.txt";
 	/**
 	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
 	 */
@@ -80,10 +83,52 @@ public class LicenseRDFAGenerator {
 			usage();
 			return;
 		}
+		String htmlTemplate;
+		File htmlTemplateFile = new File(LICENSE_HTML_TEMPLATE_FILENAME);
+		if (!htmlTemplateFile.exists()) {
+			System.out.println("Missing HTML template file "+htmlTemplateFile.getPath()+".  Check installation");
+			return;
+		}
+		if (!htmlTemplateFile.canRead()) {
+			System.out.println("Can not read HTML template file "+htmlTemplateFile.getPath()+".  Make sure program is installed in a directory with read permissions.");
+			return;
+		}
+		FileReader reader = null;
+		BufferedReader in = null;
+		
+		try {
+			reader = new FileReader(htmlTemplateFile);
+			in = new BufferedReader(reader);
+			StringBuilder sb = new StringBuilder();
+			String line = in.readLine();
+			while (line != null) {
+				sb.append(line);
+				line = in.readLine();
+			}
+			htmlTemplate = sb.toString();
+		} catch (IOException e) {
+			System.out.println("IO Error copying HTML template files: "+e.getMessage());
+			return;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
+				}
+			} 
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
+				}
+			}
+		}
 		SPDXLicenseSpreadsheet ss = null;
 		try {
 			ss = new SPDXLicenseSpreadsheet(ssFile, false, true);
-			LicenseHTMLFile licHtml = new LicenseHTMLFile();
+			LicenseHTMLFile licHtml = new LicenseHTMLFile(htmlTemplate);
 			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile();
 			Iterator<SPDXStandardLicense> iter = ss.getIterator();
 			String tocFileName = "index.html";
@@ -147,6 +192,7 @@ public class LicenseRDFAGenerator {
 				sb.append(licId.charAt(i));
 			}
 		}
+		sb.append(".html");
 		return sb.toString();
 	}
 	private static void usage() {

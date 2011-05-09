@@ -72,9 +72,8 @@ public class SPDXLicenseInfoFactory {
 		}			
 	}
 	
-	public static final String AMBIGUOUS_LICENSE_NAME = "AMBIGUOUS";
+	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
 	public static final String NONE_LICENSE_NAME = "NONE";
-	public static final String NOT_ANALYZED_LICENSE_NAME = "NOTANALYZED";
 	
 	/**
 	 * Create the appropriate SPDXLicenseInfo from the model and node provided.
@@ -92,10 +91,8 @@ public class SPDXLicenseInfoFactory {
 		if (node.isURI()) {
 			if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE)) {
 				return new SPDXNoneLicense(model, node);
-			} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_AMBIGUOUS)) {
-				return new SPDXAmbiguousLicense(model, node);
-			} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOT_ANALYZED)) {
-				return new SPDXNotAnalyzedLicense(model, node);
+			} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION)) {
+				return new SpdxNoAssertionLicense(model, node);
 			}
 		}
 		// find the subclass
@@ -165,11 +162,9 @@ public class SPDXLicenseInfoFactory {
 			String licenseID = parseString.substring(startOfIDPos, endOfIDPos);
 			if (licenseID.equals(NONE_LICENSE_NAME)) {
 				return new SPDXNoneLicense();
-			} else if (licenseID.equals(AMBIGUOUS_LICENSE_NAME)) {
-				return new SPDXAmbiguousLicense();
-			} else if (licenseID.equals(NOT_ANALYZED_LICENSE_NAME)) {
-				return new SPDXNotAnalyzedLicense();
-			}
+			} else if (licenseID.equals(NOASSERTION_LICENSE_NAME)) {
+				return new SpdxNoAssertionLicense();
+			} 
 			if (isStandardLicenseID(licenseID)) {
 				return new SPDXStandardLicense(licenseID, licenseID, null, null, null, null, null);
 			} else {
@@ -211,11 +206,9 @@ public class SPDXLicenseInfoFactory {
 				String licenseID = parseString.substring(startOfID, pos);
 				if (licenseID.equals(NONE_LICENSE_NAME)) {
 					licenseInfoList.add(new SPDXNoneLicense());
-				} else if (licenseID.equals(AMBIGUOUS_LICENSE_NAME)) {
-					licenseInfoList.add(new SPDXAmbiguousLicense());
-				} else if (licenseID.equals(NOT_ANALYZED_LICENSE_NAME)) {
-					licenseInfoList.add(new SPDXNotAnalyzedLicense());
-				}
+				} else if (licenseID.equals(NOASSERTION_LICENSE_NAME)) {
+					licenseInfoList.add(new SpdxNoAssertionLicense());
+				} 
 				if (isStandardLicenseID(licenseID)) {
 					licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null));
 				} else {

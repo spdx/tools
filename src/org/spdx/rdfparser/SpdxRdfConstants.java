@@ -59,6 +59,12 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_REVIEW = "Review";
 	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";
 	
+	// General SPDX Properties
+	public static final String PROP_VALUE_NONE = "none";
+	public static final String URI_VALUE_NONE = SPDX_NAMESPACE  + PROP_VALUE_NONE;
+	public static final String PROP_VALUE_NOASSERTION = "noassertion";
+	public static final String URI_VALUE_NOASSERTION = SPDX_NAMESPACE + PROP_VALUE_NOASSERTION;
+	
 	// SPDX Document Properties
 	public static final String PROP_SPDX_REVIEWED_BY = "reviewed";
 	public static final String PROP_SPDX_NONSTANDARD_LICENSES = "hasExtractedLicensingInfo";
@@ -101,9 +107,8 @@ public interface SpdxRdfConstants {
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
-	public static final String TERM_LICENSE_AMBIGUOUS = "ambiguous";
-	public static final String TERM_LICENSE_NONE = "none";
-	public static final String TERM_LICENSE_NOT_ANALYZED = "notAnalyzed";
+	public static final String TERM_LICENSE_NOASSERTION = PROP_VALUE_NOASSERTION;
+	public static final String TERM_LICENSE_NONE = PROP_VALUE_NONE;
 	
 	// SPDX File Properties
 	public static final String PROP_FILE_NAME = "fileName";
@@ -129,4 +134,7 @@ public interface SpdxRdfConstants {
 	
 	public static Pattern SPDX_VERSION_PATTERN = Pattern.compile("^SPDX-(\\d+)\\.(\\d+)$");
 
+	// Standard value strings
+	public static String NONE_VALUE = "NONE";
+	public static String NOASSERTION_VALUE = "NOASSERTION";
 }
