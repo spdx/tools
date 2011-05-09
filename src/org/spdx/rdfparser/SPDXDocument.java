@@ -750,7 +750,17 @@ public class SPDXDocument implements SpdxRdfConstants {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alResult.add(t.getObject().toString(false));
+			if (t.getObject().isURI()) {
+				if (t.getObject().getURI().equals(SpdxRdfConstants.URI_VALUE_NONE)) {
+					alResult.add(SpdxRdfConstants.NONE_VALUE);
+				} else if (t.getObject().getURI().equals(SpdxRdfConstants.URI_VALUE_NOASSERTION)) {
+					alResult.add(SpdxRdfConstants.NOASSERTION_VALUE);
+				} else {
+					alResult.add(t.getObject().toString(false));
+				}
+			} else {
+				alResult.add(t.getObject().toString(false));
+			}
 		}
 		String[] retval = new String[alResult.size()];
 		return alResult.toArray(retval);
@@ -796,11 +806,18 @@ public class SPDXDocument implements SpdxRdfConstants {
 		return s;
 	}
 	
-	private void addProperty(Node subject, String propertyName, String[] propertyValue) throws InvalidSPDXAnalysisException {
-		Resource s = getResource(subject);
+	private void addProperty(Node subject, String propertyName, String[] propertyValue) throws InvalidSPDXAnalysisException { Resource s = getResource(subject);
 		for (int i = 0; i < propertyValue.length; i++) {
 			Property p = model.createProperty(SPDX_NAMESPACE, propertyName);
-			s.addProperty(p, propertyValue[i]);
+			if (propertyValue[i].equals(SpdxRdfConstants.NONE_VALUE)) {
+				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NONE);
+				s.addProperty(p, r);
+			} else if (propertyValue[i].equals(SpdxRdfConstants.NOASSERTION_VALUE)) {
+				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NOASSERTION);
+				s.addProperty(p, r);
+			} else {
+				s.addProperty(p, propertyValue[i]);
+			}
 		}
 	}
 

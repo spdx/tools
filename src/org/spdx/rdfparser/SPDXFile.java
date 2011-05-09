@@ -115,7 +115,18 @@ public class SPDXFile {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.copyright = t.getObject().toString(false);
+			if (t.getObject().isURI()) {
+				// check for standard value types
+				if (t.getObject().getURI().equals(SpdxRdfConstants.URI_VALUE_NOASSERTION)) {
+					this.copyright = SpdxRdfConstants.NOASSERTION_VALUE;
+				} else if (t.getObject().getURI().equals(SpdxRdfConstants.URI_VALUE_NONE)) {
+					this.copyright = SpdxRdfConstants.NONE_VALUE;
+				} else {
+					this.copyright = t.getObject().toString(false);
+				}
+			} else {
+				this.copyright = t.getObject().toString(false);
+			}
 		}
 		//artifactOf
 		ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
@@ -181,7 +192,15 @@ public class SPDXFile {
 		//copyright
 		if (this.copyright != null) {
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT);
-			fileResource.addProperty(p, this.getCopyright());	
+			if (copyright.equals(SpdxRdfConstants.NONE_VALUE)) {
+				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NONE);
+				fileResource.addProperty(p, r);
+			} else if (copyright.equals(SpdxRdfConstants.NOASSERTION_VALUE)) {
+				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NOASSERTION);
+				fileResource.addProperty(p, r);
+			} else {
+				fileResource.addProperty(p, this.getCopyright());
+			}
 		}
 
 		//artifactof
@@ -267,7 +286,15 @@ public class SPDXFile {
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT);
-			fileResource.addProperty(p, this.getCopyright());
+			if (copyright.equals(SpdxRdfConstants.NONE_VALUE)) {
+				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NONE);
+				fileResource.addProperty(p, r);
+			} else if (copyright.equals(SpdxRdfConstants.NOASSERTION_VALUE)) {
+				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NOASSERTION);
+				fileResource.addProperty(p, r);
+			} else {
+				fileResource.addProperty(p, this.getCopyright());
+			}
 		}	
 	}
 
