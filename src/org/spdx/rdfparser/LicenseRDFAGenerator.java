@@ -83,7 +83,6 @@ public class LicenseRDFAGenerator {
 			usage();
 			return;
 		}
-		String htmlTemplate;
 		File htmlTemplateFile = new File(LICENSE_HTML_TEMPLATE_FILENAME);
 		if (!htmlTemplateFile.exists()) {
 			System.out.println("Missing HTML template file "+htmlTemplateFile.getPath()+".  Check installation");
@@ -93,37 +92,11 @@ public class LicenseRDFAGenerator {
 			System.out.println("Can not read HTML template file "+htmlTemplateFile.getPath()+".  Make sure program is installed in a directory with read permissions.");
 			return;
 		}
-		FileReader reader = null;
-		BufferedReader in = null;
 		
-		try {
-			reader = new FileReader(htmlTemplateFile);
-			in = new BufferedReader(reader);
-			StringBuilder sb = new StringBuilder();
-			String line = in.readLine();
-			while (line != null) {
-				sb.append(line);
-				line = in.readLine();
-			}
-			htmlTemplate = sb.toString();
-		} catch (IOException e) {
-			System.out.println("IO Error copying HTML template files: "+e.getMessage());
+		String htmlTemplate = textFileToString(htmlTemplateFile);
+		if (htmlTemplate == null) {
+			System.out.println("Error: empty HTML template");
 			return;
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
-				}
-			} 
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
-				}
-			}
 		}
 		SPDXLicenseSpreadsheet ss = null;
 		try {
@@ -161,6 +134,46 @@ public class LicenseRDFAGenerator {
 			}
 		}
 	}
+	/**
+	 * @param htmlTemplateFile
+	 * @return
+	 */
+	private static String textFileToString(File htmlTemplateFile) {
+		FileReader reader = null;
+		BufferedReader in = null;
+		String retval = null;
+		try {
+			reader = new FileReader(htmlTemplateFile);
+			in = new BufferedReader(reader);
+			StringBuilder sb = new StringBuilder();
+			String line = in.readLine();
+			while (line != null) {
+				sb.append(line);
+				sb.append('\n');
+				line = in.readLine();
+			}
+			retval = sb.toString();
+		} catch (IOException e) {
+			System.out.println("IO Error copying HTML template files: "+e.getMessage());
+			return null;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
+				}
+			} 
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
+				}
+			}
+		}
+		return retval;
+	}
 	private static void writeCssFile(File dir) throws IOException {
 		File cssFile = new File(dir.getPath()+ File.separator + CSS_FILE_NAME);
 		if (cssFile.exists()) {
@@ -192,7 +205,7 @@ public class LicenseRDFAGenerator {
 				sb.append(licId.charAt(i));
 			}
 		}
-		sb.append(".html");
+//		sb.append(".html");
 		return sb.toString();
 	}
 	private static void usage() {

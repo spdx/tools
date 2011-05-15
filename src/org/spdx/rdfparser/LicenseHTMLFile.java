@@ -118,7 +118,7 @@ public class LicenseHTMLFile {
 			htmlText = htmlText.replace(OTHERWEBPAGE, otherWebPages);
 			htmlText = htmlText.replace(TITLE, escapeHTML(license.getName()));
 			stream = new FileOutputStream(htmlFile);
-			writer = new OutputStreamWriter(stream);
+			writer = new OutputStreamWriter(stream, "UTF-8");
 			writer.write(htmlText);
 		} catch (FileNotFoundException e) {
 			throw(e);
