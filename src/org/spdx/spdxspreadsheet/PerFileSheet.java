@@ -126,10 +126,14 @@ public class PerFileSheet extends AbstractSheet {
 		} else {
 			fileLicenses = null;
 		}
-		SPDXLicenseInfo seenLicenses;
+		SPDXLicenseInfo[] seenLicenses;
 		Cell seenLicenseCell = row.getCell(LIC_INFO_IN_FILE_COL);
 		if (seenLicenseCell != null && !seenLicenseCell.getStringCellValue().isEmpty()) {
-			seenLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(seenLicenseCell.getStringCellValue());
+			String[] licenseStrings = seenLicenseCell.getStringCellValue().split(",");
+			seenLicenses = new SPDXLicenseInfo[licenseStrings.length];
+			for (int i = 0; i < licenseStrings.length; i++) {
+				seenLicenses[i] = SPDXLicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
+			}
 		} else {
 			seenLicenses = null;
 		}
@@ -174,8 +178,7 @@ public class PerFileSheet extends AbstractSheet {
 			artifactOf = new DOAPProject[0];
 		}
 		return new SPDXFile(name, type, sha1, fileLicenses, 
-				new SPDXLicenseInfo[] {seenLicenses}, 
-				licenseComments, copyright, artifactOf);		
+				seenLicenses, licenseComments, copyright, artifactOf);		
 	}
 
 	/* (non-Javadoc)

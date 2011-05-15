@@ -310,13 +310,11 @@ public class PackageInfoSheet extends AbstractSheet {
 		} else if (licenses.length == 1) {
 			return licenses[0].toString();
 		} else {
-			StringBuilder sb = new StringBuilder("(");
-			sb.append(licenses[0].toString());
+			StringBuilder sb = new StringBuilder(licenses[0].toString());
 			for (int i = 1; i < licenses.length; i++) {
-				sb.append(" AND ");
+				sb.append(", ");
 				sb.append(licenses[i].toString());
 			}
-			sb.append(")");
 			return sb.toString();
 		}
 	}

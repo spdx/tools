@@ -97,7 +97,7 @@ public class LicenseTOCHTMLFile {
 		}
 		try {
 			stream = new FileOutputStream(htmlFile);
-			writer = new OutputStreamWriter(stream);
+			writer = new OutputStreamWriter(stream, "UTF-8");
 			writer.write(HTML_FILE_TEMPLATE_FIRST);
 			for (int i = 0; i < this.tableRows.size(); i++) {
 				writer.write(this.tableRows.get(i));
