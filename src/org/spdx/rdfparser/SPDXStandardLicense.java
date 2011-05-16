@@ -161,10 +161,15 @@ public class SPDXStandardLicense extends SPDXLicense {
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SPDXStandardLicense)) {
+			// covers o == null, as null is not an instance of anything
 			return false;
 		}
 		SPDXStandardLicense comp = (SPDXStandardLicense)o;
-		return (this.id.equals(comp.getId()));
+		if (this.id == null) {
+			return (comp.getId() == null);
+		} else {
+			return (this.id.equals(comp.getId()));
+		}
 	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()

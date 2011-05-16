@@ -107,14 +107,16 @@ public class LicenseRDFAGenerator {
 			String tocFileName = "index.html";
 			while (iter.hasNext()) {
 				SPDXStandardLicense license = iter.next();
-				System.out.println("Processing "+license.toString());
-				licHtml.setLicense(license);
-				String licHtmlFileName = formLicenseHTMLFileName(license);
-				String licHTMLReference = "./"+licHtmlFileName;
-				String tocHTMLReference = "./"+tocFileName;
-				File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
-				licHtml.writeToFile(licHtmlFile, tocHTMLReference);
-				tableOfContents.addLicense(license, licHTMLReference);
+				if (license.getId() != null && !license.getId().isEmpty()) {
+					System.out.println("Processing "+license.toString());
+					licHtml.setLicense(license);
+					String licHtmlFileName = formLicenseHTMLFileName(license);
+					String licHTMLReference = "./"+licHtmlFileName;
+					String tocHTMLReference = "./"+tocFileName;
+					File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
+					licHtml.writeToFile(licHtmlFile, tocHTMLReference);
+					tableOfContents.addLicense(license, licHTMLReference);
+				}
 			}
 			File tocHtmlFile = new File(dir.getPath()+File.separator+tocFileName);
 			tableOfContents.writeToFile(tocHtmlFile);
