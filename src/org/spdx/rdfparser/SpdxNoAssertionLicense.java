@@ -68,8 +68,10 @@ public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof SpdxNoAssertionLicense) {
+			// All instances of this type are considered equal
 			return true;
 		} else {
+			// covers o == null, as null is not an instance of anything
 			return false;
 		}
 	}

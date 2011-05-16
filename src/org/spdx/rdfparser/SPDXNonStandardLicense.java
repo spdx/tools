@@ -67,10 +67,15 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SPDXNonStandardLicense)) {
+			// covers o == null, as null is not an instance of anything
 			return false;
 		}
 		SPDXNonStandardLicense comp = (SPDXNonStandardLicense)o;
-		return (this.id.equals(comp.getId()));
+		if (this.id == null) {
+			return (comp.getId() == null);
+		} else {
+			return (this.id.equals(comp.getId()));			
+		}
 	}
 
 	/**

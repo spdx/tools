@@ -79,10 +79,14 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SPDXDisjunctiveLicenseSet)) {
+			// covers o == null, as null is not an instance of anything
 			return false;
 		}
 		SPDXDisjunctiveLicenseSet comp = (SPDXDisjunctiveLicenseSet)o;
 		SPDXLicenseInfo[] compInfos = comp.getSPDXLicenseInfos();
+		if (compInfos.length != this.licenseInfos.size()) {
+			return false;
+		}
 		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
 			SPDXLicenseInfo li = iter.next();
