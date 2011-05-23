@@ -200,7 +200,9 @@ public class PackageInfoSheet extends AbstractSheet {
 		Cell fileNameCell = row.createCell(MACHINE_NAME_COL);
 		fileNameCell.setCellValue(pkgInfo.getFileName());
 		Cell pkgSha1 = row.createCell(PACKAGE_SHA_COL);
-		pkgSha1.setCellValue(pkgInfo.getSha1());
+		if (pkgInfo.getSha1() != null) {
+			pkgSha1.setCellValue(pkgInfo.getSha1());
+		}
 		// add the license infos in files in multiple rows
 		SPDXLicenseInfo[] licenseInfosInFiles = pkgInfo.getLicensesFromFiles();
 		if (licenseInfosInFiles != null && licenseInfosInFiles.length > 0) {
