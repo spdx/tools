@@ -480,9 +480,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			// checksum
 			try {
 				String checksum = this.getSha1();
-				if (checksum == null || checksum.isEmpty()) {
-					retval.add("Missing required package checksum");
-				} else {
+				if (checksum != null && !checksum.isEmpty()) {
 					String verify = SpdxVerificationHelper.verifyChecksumString(checksum);
 					if (verify != null) {
 						retval.add("Package checksum error: "+verify);
