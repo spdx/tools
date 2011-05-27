@@ -102,9 +102,12 @@ public class LicenseHTMLFile {
 			String otherWebPages;
 			if (license.getSourceUrl() != null && !license.getSourceUrl().isEmpty()) {
 				StringBuilder sb = new StringBuilder();
-				String[] sourceUrls = license.getSourceUrl().split("\n");
+				String[] sourceUrls = license.getSourceUrl().split(" ");
 				for (int i = 0; i < sourceUrls.length; i++) {
 					String url = sourceUrls[i].trim();
+					if (url.isEmpty()) {
+						continue;
+					}
 					String site = getSiteFromUrl(url);
 					String urlRow = OTHER_WEB_PAGE_ROW.replace(WEBURL, url);
 					urlRow = urlRow.replace(SITE, site);
@@ -142,7 +145,7 @@ public class LicenseHTMLFile {
 		}
 	}
 	private String escapeHTML(String text) {
-		String retval = StringEscapeUtils.escapeHtml(text);
+		String retval = StringEscapeUtils.escapeXml(text);
 		return retval.replace("\n", "<br/>\n");
 	}
 }
