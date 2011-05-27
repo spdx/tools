@@ -57,6 +57,7 @@ public class LicenseRDFAGenerator {
 		"td,th {\nmargin: 0;\nborder: 1px solid black;\n}\n";
 	static final String CSS_FILE_NAME = "screen.css";
 	static final String LICENSE_HTML_TEMPLATE_FILENAME = "resources/LicenseHTMLTemplate.txt";
+	static final String TOC_HTML_TEMPLATE_FILENAME = "resources/TocHTMLTemplate.txt";
 	/**
 	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
 	 */
@@ -92,17 +93,30 @@ public class LicenseRDFAGenerator {
 			System.out.println("Can not read HTML template file "+htmlTemplateFile.getPath()+".  Make sure program is installed in a directory with read permissions.");
 			return;
 		}
-		
 		String htmlTemplate = textFileToString(htmlTemplateFile);
 		if (htmlTemplate == null) {
 			System.out.println("Error: empty HTML template");
+			return;
+		}
+		File tocTemplateFile = new File(TOC_HTML_TEMPLATE_FILENAME);
+		if (!tocTemplateFile.exists()) {
+			System.out.println("Missing Table of Contents template file "+tocTemplateFile.getPath()+".  Check installation");
+			return;
+		}
+		if (!tocTemplateFile.canRead()) {
+			System.out.println("Can not read Table of Contents template file "+tocTemplateFile.getPath()+".  Make sure program is installed in a directory with read permissions.");
+			return;
+		}
+		String tocTemplate = textFileToString(tocTemplateFile);
+		if (tocTemplate == null) {
+			System.out.println("Error: empty Table of Contents template");
 			return;
 		}
 		SPDXLicenseSpreadsheet ss = null;
 		try {
 			ss = new SPDXLicenseSpreadsheet(ssFile, false, true);
 			LicenseHTMLFile licHtml = new LicenseHTMLFile(htmlTemplate);
-			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile();
+			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(tocTemplate);
 			Iterator<SPDXStandardLicense> iter = ss.getIterator();
 			String tocFileName = "index.html";
 			while (iter.hasNext()) {
@@ -212,7 +226,7 @@ public class LicenseRDFAGenerator {
 	}
 	private static void usage() {
 		System.out.println("Usage:");
-		System.out.println("LicenseRDFAGenerator licenseSpreadsheet.xls, outputDirectory");
+		System.out.println("LicenseRDFAGenerator licenseSpreadsheet.xls outputDirectory");
 	}
 
 }
