@@ -1,0 +1,7 @@
+SPDX Version 0.8
+Implementation Version 0.9.2
+Spreadsheet Version 0.9.1
+
+Changes since last version:
+- Update DOAP Project to return a URI string of "UNKNOWN" if it is an
+anonymous node

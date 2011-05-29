@@ -51,6 +51,7 @@ import java.util.regex.Matcher;
 public class SPDXDocument implements SpdxRdfConstants {
 	
 	public static final String CURRENT_SPDX_VERSION = "SPDX-0.8";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.2";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	

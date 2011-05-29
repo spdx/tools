@@ -32,6 +32,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public class DOAPProject {
+	
+	static final String UNKNOWN_URI = "UNKNOWN";
 	private String name = null;
 	private String homePage = null;
 	private Node projectNode = null;
@@ -137,17 +139,25 @@ public class DOAPProject {
 	}
 	
 	public String getProjectUri() {
-		if (projectNode == null || !projectNode.isURI()) {
-			return uri;
+		if (projectNode == null) {
+			if (uri == null || uri.isEmpty()) {
+				return UNKNOWN_URI;
+			} else {
+				return uri;
+			}
 		} else {
-			return projectNode.getURI();
+			if (projectNode.isURI()) {
+				return projectNode.getURI();
+			} else {
+				return UNKNOWN_URI;
+			}
 		}
 	}
 	
 	public Resource createResource(Model model) {
 		Resource type = model.createResource(SpdxRdfConstants.DOAP_NAMESPACE + SpdxRdfConstants.CLASS_DOAP_PROJECT);
 		Resource retval;
-		if (uri != null) {
+		if (uri != null && !uri.isEmpty() && !uri.equals(UNKNOWN_URI)) {
 			retval = model.createResource(uri, type);
 		} else {
 			retval = model.createResource(type);
@@ -195,7 +205,7 @@ public class DOAPProject {
 				throw(new InvalidSPDXAnalysisException("Can not set a URI value for a resource which has already been created."));
 			}
 		}
-		if (!SpdxVerificationHelper.isValidUri(uri)) {
+		if (!uri.equals(UNKNOWN_URI) &&!SpdxVerificationHelper.isValidUri(uri)) {
 			throw(new InvalidSPDXAnalysisException("Invalid URI for DOAP Project "+this.name+": "+uri));
 		}
 		this.uri = uri;
