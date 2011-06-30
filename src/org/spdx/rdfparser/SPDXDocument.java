@@ -50,13 +50,15 @@ import java.util.regex.Matcher;
  */
 public class SPDXDocument implements SpdxRdfConstants {
 	
-	public static final String CURRENT_SPDX_VERSION = "SPDX-0.8";
+	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-0.9";
 	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.2";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(POINT_EIGHT_SPDX_VERSION);
 	}
 
 	/**
