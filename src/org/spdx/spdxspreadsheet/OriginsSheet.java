@@ -30,8 +30,9 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class OriginsSheet extends AbstractSheet {
 
-	public static final String CURRENT_VERSION = "0.9.1";
-	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION};
+	public static final String CURRENT_VERSION = "0.9.2";
+	public static final String VERSION_0_9_1 = "0.9.1";
+	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION,VERSION_0_9_1};
 	static final int NUM_COLS = 6;
 	static final int SPREADSHEET_VERSION_COL = 0;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;

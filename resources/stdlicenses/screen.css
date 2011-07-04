@@ -1,0 +1,26 @@
+body { font-family: Tahoma, Verdana, sans-serif; }
+
+.license-text {
+background-color: WhiteSmoke;
+border: 1px dashed Black;
+padding: 1ex;
+}
+
+h2 {
+border-bottom: 1px solid Gray;
+}
+dt {
+font-weight: bold;
+}
+
+ul {
+padding-left: 1em;
+}
+
+table {
+border-collapse: collapse;
+}
+td,th {
+margin: 0;
+border: 1px solid black;
+}

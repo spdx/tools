@@ -29,19 +29,20 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class LicenseSheet extends AbstractSheet {
 	
-	static final int NUM_COLS = 7;
+	static final int NUM_COLS = 8;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
 	static final int COL_NOTES = COL_SOURCE_URL + 1;
 	static final int COL_STANDARD_LICENSE_HEADER = COL_NOTES + 1;
-	static final int COL_TEXT = COL_STANDARD_LICENSE_HEADER + 1;
+	static final int COL_OSI_APPROVED = COL_STANDARD_LICENSE_HEADER + 1;
+	static final int COL_TEXT = COL_OSI_APPROVED + 1;
 	static final int COL_TEMPLATE = COL_TEXT + 1;
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
-		false, true, false};
+		false, false, true, false};
 	static final String[] HEADER_TITLES = new String[] {"Full name of License", "License Identifier", "Source/url", "Notes", 
-		"Standard License Header", "Text", "Template"};
+		"OSI Approved", "Standard License Header", "Text", "Template"};
 	
 	public LicenseSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);

@@ -229,6 +229,45 @@ public class TestSPDXDocument {
 		String afterCreate = writer.toString();
 	}
 
+	@Test
+	public void testGetSpdxPackageVersion() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(new SPDXFile[]{testFile});
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		// now we test get/set
+		String version = "MyVersionInfo";
+		pkg.setVersionInfo(version);
+		String tst = pkg.getVersionInfo();
+		assertEquals(version,tst);
+	}
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getSpdxPackage()}.
 	 * @throws InvalidSPDXAnalysisException 

@@ -101,6 +101,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_VERIFICATION_CODE = "packageVerificationCode";
 	public static final String PROP_PACKAGE_LICENSE_INFO_FROM_FILES = "licenseInfoFromFiles";
 	public static final String PROP_PACKAGE_LICENSE_COMMENT = "licenseComments";
+	public static final String PROP_PACKAGE_VERSION_INFO = "versionInfo";
 	
 	// SPDX License Properties
 	public static final String PROP_LICENSE_ID = "licenseId";
