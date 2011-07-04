@@ -97,7 +97,7 @@ public class PerFileSheet extends AbstractSheet {
 			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyright());
 		}
 		if (fileInfo.getSeenLicenses() != null && fileInfo.getSeenLicenses().length > 0) {
-			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getSeenLicenses()));
+			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheetV09d2.licensesToString(fileInfo.getSeenLicenses()));
 		}
 	}
 	

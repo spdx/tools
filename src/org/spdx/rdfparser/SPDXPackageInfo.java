@@ -35,9 +35,45 @@ public class SPDXPackageInfo {
 	private String url;
 	private String licenseComments;
 	private SpdxPackageVerificationCode verificationCode;
+	private String versionInfo;
 
-	public SPDXPackageInfo(String declaredName, String machineName, String sha1,
-			String sourceInfo, SPDXLicenseInfo declaredLicense, 
+	/**
+	 * @return the verificationCode
+	 */
+	public SpdxPackageVerificationCode getVerificationCode() {
+		return verificationCode;
+	}
+
+	/**
+	 * @param verificationCode the verificationCode to set
+	 */
+	public void setVerificationCode(SpdxPackageVerificationCode verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	/**
+	 * @return the versionInfo
+	 */
+	public String getVersionInfo() {
+		return versionInfo;
+	}
+
+	/**
+	 * @param versionInfo the versionInfo to set
+	 */
+	public void setVersionInfo(String versionInfo) {
+		this.versionInfo = versionInfo;
+	}
+
+	/**
+	 * @param concludedLicense the concludedLicense to set
+	 */
+	public void setConcludedLicense(SPDXLicenseInfo concludedLicense) {
+		this.concludedLicense = concludedLicense;
+	}
+
+	public SPDXPackageInfo(String declaredName, String versionInfo, String machineName,
+			String sha1, String sourceInfo, SPDXLicenseInfo declaredLicense, 
 			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
 			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode) {
@@ -54,6 +90,7 @@ public class SPDXPackageInfo {
 		this.description = description;
 		this.url = url;
 		this.verificationCode = spdxPackageVerificationCode;
+		this.versionInfo = versionInfo;
 	}
 
 	/**

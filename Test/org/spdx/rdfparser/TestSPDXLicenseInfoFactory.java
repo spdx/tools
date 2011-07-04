@@ -18,6 +18,14 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -28,6 +36,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.FileManager;
 
 /**
  * @author Source Auditor
@@ -120,6 +129,51 @@ public class TestSPDXLicenseInfoFactory {
 	 */
 	@After
 	public void tearDown() throws Exception {
+	}
+	
+	@Test
+	public void testReadingStandardLicense() throws IOException {
+		try {
+			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+		} catch(java.lang.ClassNotFoundException e) {
+			// do nothing
+		}  
+		String id = "AFL-1.2";
+		String stdLicUri = SPDXLicenseInfoFactory.STANDARD_LICENSE_URI_PREFIX + id;
+		Model model = ModelFactory.createDefaultModel();
+		InputStream in = null;
+		try {
+			in = FileManager.get().open(stdLicUri);
+			model.read(in, stdLicUri, "HTML");
+//			String testOutFilename = "C:\\Users\\Source Auditor\\Documents\\SPDX\\testout.test";
+//			File outfile = new File(testOutFilename);
+//			outfile.createNewFile();
+//			OutputStream os = new FileOutputStream(outfile);
+//			OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(os));
+//			model.write(writer);
+//			writer.close();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					
+				}
+			}
+		}
+
+
+	}
+	
+	@Test
+	public void testGetLicenseFromStdLicModel() throws InvalidSPDXAnalysisException {
+		String id = "AFL-1.2";
+		String stdLicUri = SPDXLicenseInfoFactory.STANDARD_LICENSE_URI_PREFIX + id;
+		SPDXStandardLicense lic = SPDXLicenseInfoFactory.getLicenseFromStdLicModel(stdLicUri);
+		if (lic == null) {
+			fail("license is null");
+		}
+		assertEquals(id, lic.getId());
 	}
 
 	/**

@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
+import org.spdx.spdxspreadsheet.PackageInfoSheetV09d2;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -51,7 +52,7 @@ public class TestPackageInfoSheet {
 		
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
-		PackageInfoSheet pkgInfo = new PackageInfoSheet(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
+		PackageInfoSheet pkgInfo = new PackageInfoSheetV09d2(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
 		String ver = pkgInfo.verify();
 		if (ver != null && !ver.isEmpty()){
 			fail(ver);
@@ -83,17 +84,17 @@ public class TestPackageInfoSheet {
 		SpdxPackageVerificationCode testVerification = new SpdxPackageVerificationCode("value",
 				new String[] {"skippedfil1", "skippedfile2"});
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
-		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "machinename1", 
+		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "Version1", "machinename1", 
 				"sha1-1", "sourceinfo1", testLicense1,
 				testLicense2, testLicenseInfos, "license comments", "dec-copyright1",
 				"short desc1", "desc1", "http://url1", testVerification);
-		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "machinename1", 
+		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "Version2", "machinename1", 
 				"sha1-1", "sourceinfo1", testLicense1,
 				testLicense2, testLicenseInfos, "licensecomments2", "dec-copyright1",
 				"short desc1", "desc1", "http://url1", testVerification);
 		Workbook wb = new HSSFWorkbook();
-		PackageInfoSheet.create(wb, "Package Info");
-		PackageInfoSheet pkgInfoSheet = new PackageInfoSheet(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
+		PackageInfoSheetV09d2.create(wb, "Package Info");
+		PackageInfoSheetV09d2 pkgInfoSheet = new PackageInfoSheetV09d2(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
 		pkgInfoSheet.add(pkgInfo1);
 		pkgInfoSheet.add(pkgInfo2);
 		SPDXPackageInfo tstPkgInfo1 = pkgInfoSheet.getPackageInfo(1);
@@ -109,6 +110,7 @@ public class TestPackageInfoSheet {
 	private void comparePkgInfo(SPDXPackageInfo pkgInfo1,
 			SPDXPackageInfo pkgInfo2) {
 		assertEquals(pkgInfo1.getDeclaredCopyright(), pkgInfo2.getDeclaredCopyright());
+		assertEquals(pkgInfo1.getVersionInfo(), pkgInfo2.getVersionInfo());
 		assertEquals(pkgInfo1.getDeclaredLicenses(), pkgInfo2.getDeclaredLicenses());
 		assertEquals(pkgInfo1.getConcludedLicense(), pkgInfo2.getConcludedLicense());
 		assertEquals(pkgInfo1.getDeclaredName(), pkgInfo2.getDeclaredName());

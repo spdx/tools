@@ -204,6 +204,9 @@ public class SpreadsheetToRDF {
 		spdxPackage.setShortDescription(info.getShortDescription());
 		spdxPackage.setSourceInfo(info.getSourceInfo());
 		spdxPackage.setDownloadUrl(info.getUrl());
+		if (info.getVersionInfo() != null && !info.getVersionInfo().isEmpty()) {
+			spdxPackage.setVersionInfo(info.getVersionInfo());
+		}
 	}
 
 	private static void copyOrigins(OriginsSheet originsSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {

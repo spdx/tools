@@ -52,7 +52,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	
 	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-0.9";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.2";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.3";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -186,6 +186,32 @@ public class SPDXDocument implements SpdxRdfConstants {
 			removeProperties(node, PROP_PACKAGE_SOURCE_INFO);
 			addProperty(node, PROP_PACKAGE_SOURCE_INFO, new String[] {sourceInfo});
 		}
+		
+		/**
+		 * @return Version information of the package
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public String getVersionInfo() throws InvalidSPDXAnalysisException {
+			String[] versionInfos = findDocPropertieStringValues(this.node, PROP_PACKAGE_VERSION_INFO);
+			if (versionInfos == null || versionInfos.length == 0) {
+				return null;
+			}
+			if (versionInfos.length > 1) {
+				throw(new InvalidSPDXAnalysisException("More than one version info for an SPDX package"));
+			}
+			return versionInfos[0];
+		}
+		
+		/**
+		 * Set the version information of the package
+		 * @param versionInfo
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public void setVersionInfo(String versionInfo) throws InvalidSPDXAnalysisException {
+			removeProperties(node, PROP_PACKAGE_VERSION_INFO);
+			addProperty(node, PROP_PACKAGE_VERSION_INFO, new String[] {versionInfo});
+		}
+		
 		/**
 		 * @return the declaredLicenses
 		 * @throws InvalidSPDXAnalysisException 
@@ -408,7 +434,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			s.addProperty(p, verificationCodeResource);
 		}
 		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXAnalysisException {
-			return new SPDXPackageInfo(this.getDeclaredName(), this.getFileName(), 
+			return new SPDXPackageInfo(this.getDeclaredName(), this.getVersionInfo(), this.getFileName(), 
 					this.getSha1(), this.getSourceInfo(), this.getDeclaredLicense(), 
 					this.getConcludedLicenses(), this.getLicenseInfoFromFiles(), 
 					this.getLicenseComment(), this.getDeclaredCopyright(), 

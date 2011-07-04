@@ -6,7 +6,7 @@
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:dc="http://purl.org/dc/terms/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/spec#">
+	xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
 	<title>[TITLE]</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
