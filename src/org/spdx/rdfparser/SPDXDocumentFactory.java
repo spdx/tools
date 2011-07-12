@@ -74,7 +74,7 @@ public class SPDXDocumentFactory {
 			URI s = new URI(src);
 			
 			if (null == s.getScheme())
-				return "file://" + new File(src).getAbsoluteFile().toString();
+				return "file://" + new File(src).getAbsoluteFile().toString().replace("\\", "/");
 			else
 				return s.toString();
 			

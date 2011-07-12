@@ -5,7 +5,8 @@ Spreadsheet Version 0.9.2
 Fixed bug 824 - Added parsing of the SPDX standard licenses from the website or local copy in resources
 Added versionInfo property to package for model and spreadsheet
 Fixed bug 826 - Verification now allows for upper and lowercase hex digits in checksum values
-Fixed Bug 827 -Update list of standard licenses
+Fixed Bug 827 - Update list of standard licenses
+Fixed Bug 823 - Removed unnecessary warnings
 
 SPDX Version 0.8
 Implementation Version 0.9.2
