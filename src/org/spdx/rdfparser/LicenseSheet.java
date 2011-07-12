@@ -34,9 +34,9 @@ public class LicenseSheet extends AbstractSheet {
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
 	static final int COL_NOTES = COL_SOURCE_URL + 1;
-	static final int COL_STANDARD_LICENSE_HEADER = COL_NOTES + 1;
-	static final int COL_OSI_APPROVED = COL_STANDARD_LICENSE_HEADER + 1;
-	static final int COL_TEXT = COL_OSI_APPROVED + 1;
+	static final int COL_OSI_APPROVED = COL_NOTES + 1;	
+	static final int COL_STANDARD_LICENSE_HEADER = COL_OSI_APPROVED + 1;
+	static final int COL_TEXT = COL_STANDARD_LICENSE_HEADER + 1;
 	static final int COL_TEMPLATE = COL_TEXT + 1;
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
@@ -87,6 +87,10 @@ public class LicenseSheet extends AbstractSheet {
 			Cell templateCell = row.createCell(COL_TEMPLATE);
 			templateCell.setCellValue(license.getTemplate());
 		}
+		if (license.isOsiApproved()) {
+			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
+			osiApprovedCell.setCellValue("YES");
+		}
 	}
 	
 	public SPDXStandardLicense getLicense(int rowNum) {
@@ -129,7 +133,15 @@ public class LicenseSheet extends AbstractSheet {
 		if (textCell != null) {
 			text = textCell.getStringCellValue();
 		}
-		return new SPDXStandardLicense(name, id, text, sourceURL, notes, stdLicHeader, template);
+		boolean osiApproved = false;
+		Cell osiApprovedCell = row.getCell(COL_OSI_APPROVED);
+		if (osiApprovedCell != null) {
+			String osiApprovedStr = osiApprovedCell.getStringCellValue();
+			if (osiApprovedStr != null && osiApprovedStr.toUpperCase().trim().startsWith("Y")) {
+				osiApproved = true;
+			}
+		}
+		return new SPDXStandardLicense(name, id, text, sourceURL, notes, stdLicHeader, template, osiApproved);
 	}
 
 	/* (non-Javadoc)

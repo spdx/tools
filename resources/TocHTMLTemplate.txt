@@ -57,11 +57,11 @@
 
 <div id='tabs' class="clearfix">
 <ul>
-                       <!-- node/2449 --><li><a href='/node/2449' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/node/2456' title='Specification'><span>Specification</span></a></li>
-<li><a href='/node/2240' title='Participation'><span>Participation</span></a></li>
+<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
+<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
+<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/node/2475' title='Organization'><span>Organization</span></a></li>
+<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
 
 <br />
@@ -81,7 +81,7 @@
 <h2>Licenses</h2>
 <table>
   <thead><tr>
-    <th>Full name</th><th>Identifier</th><th>Text</th>
+    <th>Full name</th><th>Identifier</th><th>OSI Approved</th><th>Text</th>
   </tr></thead>
 
   <tbody>

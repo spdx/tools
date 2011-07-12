@@ -357,7 +357,7 @@ public class SPDXLicenseInfoFactory {
 				return new SpdxNoAssertionLicense();
 			} 
 			if (isStandardLicenseID(licenseID)) {
-				return new SPDXStandardLicense(licenseID, licenseID, null, null, null, null, null);
+				return new SPDXStandardLicense(licenseID, licenseID, null, null, null, null, null, false);
 			} else {
 				return new SPDXNonStandardLicense(licenseID, null);
 			}
@@ -401,7 +401,7 @@ public class SPDXLicenseInfoFactory {
 					licenseInfoList.add(new SpdxNoAssertionLicense());
 				} 
 				if (isStandardLicenseID(licenseID)) {
-					licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null));
+					licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null, false));
 				} else {
 					licenseInfoList.add(new SPDXNonStandardLicense(licenseID, null));
 				}

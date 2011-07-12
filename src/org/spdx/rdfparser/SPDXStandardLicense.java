@@ -33,15 +33,17 @@ public class SPDXStandardLicense extends SPDXLicense {
 	private String notes;
 	private String standardLicenseHeader;
 	private String template;
+	private boolean osiApproved;
 	
 	public SPDXStandardLicense(String name, String id, String text, String sourceUrl, String notes,
-			String standardLicenseHeader, String template) {
+			String standardLicenseHeader, String template, boolean osiApproved) {
 		super(id, text);
 		this.name = name;
 		this.sourceUrl = sourceUrl;
 		this.notes = notes;
 		this.standardLicenseHeader = standardLicenseHeader;
 		this.template = template;
+		this.osiApproved = osiApproved;
 	}
 	/**
 	 * Constructs an SPDX License from the licenseNode
@@ -197,5 +199,15 @@ public class SPDXStandardLicense extends SPDXLicense {
 			// available
 		}
 		return retval;
+	}
+	/**
+	 * @return true if the license is listed as an approved license on the OSI website
+	 */
+	public boolean isOsiApproved() {
+		return this.osiApproved;
+	}
+	
+	public void setOsiApproved(boolean osiApproved) {
+		this.osiApproved = osiApproved;
 	}
 }

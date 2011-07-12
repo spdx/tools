@@ -37,10 +37,12 @@ public class LicenseTOCHTMLFile {
 	static final String REFNUMBER = "[REFERENCE_NUMBER]";
 	static final String LICENSEID = "[LICENSEID]";
 	static final String LICENSE_NAME = "[LICENSE_NAME]";
+	static final String OSI_APPROVED = "[OSI_APPROVED]";
       static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+
       		"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
       		"      <td about=\""+REFERENCE+"\" typeof=\"spdx:License\">\n"+
       		"      <code property=\"spdx:licenseId\">"+LICENSEID+"</code></td>\n"+
+      		"      <td align=\"center\">"+OSI_APPROVED+"</td>\n"+
       		"      <td><a href=\""+REFERENCE+"#licenseText\">License Text</a></td>\n"+
       		"    </tr>\n";
       ArrayList<String> tableRows = new ArrayList<String>();
@@ -59,6 +61,11 @@ public class LicenseTOCHTMLFile {
 		newRow = newRow.replace(REFNUMBER, String.valueOf(this.currentRefNumber));
 		newRow = newRow.replace(LICENSE_NAME, escapeHTML(license.getName()));
 		newRow = newRow.replace(LICENSEID, escapeHTML(license.getId()));
+		if (license.isOsiApproved()) {
+			newRow = newRow.replace(OSI_APPROVED, "Y");
+		} else {
+			newRow = newRow.replace(OSI_APPROVED, "");
+		}		
 		tableRows.add(newRow);
 	}
 	
