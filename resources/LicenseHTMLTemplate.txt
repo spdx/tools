@@ -52,7 +52,7 @@
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/node/2475' title='Organization'><span>Organization</span></a></li>
+<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
 <br />
 <br />
