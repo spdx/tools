@@ -19,8 +19,10 @@ package org.spdx.rdfparser;
 import java.util.ArrayList;
 
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Source Auditor
@@ -53,20 +55,69 @@ public class SPDXStandardLicense extends SPDXLicense {
 	public SPDXStandardLicense(Model spdxModel, Node licenseNode) throws InvalidSPDXAnalysisException {
 		super(spdxModel, licenseNode);
 		// name
-		//TODO: Implement name rdf parsing
-		this.name = id;
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME).asNode();
+		Triple m = Triple.createMatch(licenseNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.name = t.getObject().toString(false);
+		} else {
+			this.name = id;
+		}
 		// SourceUrl
-		//TODO: Implement SourceUrl rdf parsing
-		this.sourceUrl = "";
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL).asNode();
+		m = Triple.createMatch(licenseNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.sourceUrl = t.getObject().toString(false);
+		} else {
+			this.sourceUrl = "";
+		}
 		// notes
-		//TODO: Implement notes rdf parsing
-		this.notes = "";
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTES).asNode();
+		m = Triple.createMatch(licenseNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.notes = t.getObject().toString(false);
+		} else {
+			this.notes = "";
+		}
 		// standardLicenseHeader
-		//TODO: Implement standardLicenseHeader rdf parsing
-		this.standardLicenseHeader = "";
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER).asNode();
+		m = Triple.createMatch(licenseNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.standardLicenseHeader = t.getObject().toString(false);
+		} else {
+			this.standardLicenseHeader = "";
+		}
 		// template
-		//TODO: Implement template rdf parsing
-		this.template = "";
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE).asNode();
+		m = Triple.createMatch(licenseNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.template = t.getObject().toString(false);
+		} else {
+			this.template = "";
+		}
+		// OSI Approved
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED).asNode();
+		m = Triple.createMatch(licenseNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			if (t.getObject().toString(false).toUpperCase().startsWith("T")) {
+				this.osiApproved = true;
+			} else {
+				this.osiApproved = false;
+			}
+		} else {
+			this.osiApproved = false;
+		}
 	}
 
 	/**
@@ -194,9 +245,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		this.getTemplate();
 		String licenseText = this.getText();
 		if (licenseText == null || licenseText.isEmpty()) {
-//			retval.add("Missing required license text");
-			//TODO: Fill in the properties from the standard license website if
-			// available
+			retval.add("Missing required license text");
 		}
 		return retval;
 	}

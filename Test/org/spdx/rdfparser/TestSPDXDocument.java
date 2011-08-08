@@ -37,6 +37,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
 /**
  * @author Source Auditor
  *
@@ -155,7 +158,7 @@ public class TestSPDXDocument {
 		String afterCreate = writer.toString();
 		String[] testCreatedBy2 = new String[] {
 				"Person: second created", 
-				"Company: another",
+				"Organization: another",
 				"Tool: and another"};
 		SPDXCreatorInformation creator2 = new SPDXCreatorInformation(testCreatedBy2, createdDate, testComment);
 		verify = creator2.verify();
@@ -314,8 +317,128 @@ public class TestSPDXDocument {
 		pkg.setVerificationCode(
 				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
 						skippedFiles));
+		pkg.setOriginator("Person: somone");
+		pkg.setSupplier("Organization: something");
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
+	}
+	
+	@Test
+	public void testSetOriginator() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(new SPDXFile[]{testFile});
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		
+		// person
+		String personString = "Person: somone";
+		pkg.setOriginator(personString);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(personString, pkg.getOriginator());
+		// organization
+		String organizationString = "Organization: org";
+		pkg.setOriginator(organizationString);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(organizationString, pkg.getOriginator());
+		// NOASSERTION
+		pkg.setOriginator(SpdxRdfConstants.NOASSERTION_VALUE);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, pkg.getOriginator());
+		// invalid
+		String invalidString = "NotAPersonOrOrganization";
+		try {
+			pkg.setOriginator(invalidString);
+			fail("Should not have been able to set this as an originator string");
+		} catch (InvalidSPDXAnalysisException e) {
+			// ignore
+		}
+	}
+	
+	@Test
+	public void testSetSupplier() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(new SPDXFile[]{testFile});
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		
+		// person
+		String personString = "Person: somone";
+		pkg.setSupplier(personString);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(personString, pkg.getSupplier());
+		// organization
+		String organizationString = "Organization: org";
+		pkg.setSupplier(organizationString);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(organizationString, pkg.getSupplier());
+		// NOASSERTION
+		pkg.setSupplier(SpdxRdfConstants.NOASSERTION_VALUE);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, pkg.getSupplier());
+		// invalid
+		String invalidString = "NotAPersonOrOrganization";
+		try {
+			pkg.setSupplier(invalidString);
+			fail("Should not have been able to set this as an originator string");
+		} catch (InvalidSPDXAnalysisException e) {
+			// ignore
+		}
 	}
 
 	/**
@@ -556,5 +679,84 @@ public class TestSPDXDocument {
 			assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, t.getObject().getURI());
 		}
 		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, doc.getSpdxPackage().getDeclaredCopyright());
+	}
+	
+	@Test
+	public void testDataLicense() throws InvalidSPDXAnalysisException, InvalidLicenseStringException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		// check default
+		SPDXStandardLicense dataLicense = doc.getDataLicense();
+		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getId());
+		// check set correct license
+		SPDXLicenseInfo pddlLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
+		doc.setDataLicense((SPDXStandardLicense)pddlLicense);
+		dataLicense = doc.getDataLicense();
+		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getId());
+		// check error when setting wrong license
+		SPDXLicenseInfo ngplLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NGPL");
+		try {
+			doc.setDataLicense((SPDXStandardLicense)ngplLicense);
+			fail("Incorrect license allowed to be set for data license");
+		} catch(InvalidSPDXAnalysisException e) {
+			// expected - do nothing
+		}
+	}
+	
+	@Test
+	public void testReferencesFile() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(testFiles);
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		
+		// OK - now we can test to see if the files are there
+		SPDXFile[] pkgFiles = pkg.getFiles();
+		SPDXFile[] docFiles = doc.getFileReferences();
+		
+		assertEquals(testFiles.length, docFiles.length);
+		for (int i = 0; i < testFiles.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < docFiles.length; j++) {
+				if (testFiles[i].getName().equals(docFiles[j].getName())) {
+					found = true;
+					break;
+				}
+			}
+			assertTrue(found);
+		}
 	}
 }

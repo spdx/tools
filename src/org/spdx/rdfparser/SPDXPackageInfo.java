@@ -36,6 +36,8 @@ public class SPDXPackageInfo {
 	private String licenseComments;
 	private SpdxPackageVerificationCode verificationCode;
 	private String versionInfo;
+	private String supplier;
+	private String originator;
 
 	/**
 	 * @return the verificationCode
@@ -76,7 +78,8 @@ public class SPDXPackageInfo {
 			String sha1, String sourceInfo, SPDXLicenseInfo declaredLicense, 
 			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
-			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode) {
+			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode, 
+			String supplier, String originator) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;
 		this.sha1 = sha1;
@@ -91,6 +94,36 @@ public class SPDXPackageInfo {
 		this.url = url;
 		this.verificationCode = spdxPackageVerificationCode;
 		this.versionInfo = versionInfo;
+		this.supplier = supplier;
+		this.originator = originator;
+	}
+
+	/**
+	 * @return the supplier
+	 */
+	public String getSupplier() {
+		return supplier;
+	}
+
+	/**
+	 * @param supplier the supplier to set
+	 */
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
+	/**
+	 * @return the originator
+	 */
+	public String getOriginator() {
+		return originator;
+	}
+
+	/**
+	 * @param originator the originator to set
+	 */
+	public void setOriginator(String originator) {
+		this.originator = originator;
 	}
 
 	/**

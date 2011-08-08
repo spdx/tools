@@ -30,9 +30,11 @@ import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -207,6 +209,12 @@ public class SpreadsheetToRDF {
 		if (info.getVersionInfo() != null && !info.getVersionInfo().isEmpty()) {
 			spdxPackage.setVersionInfo(info.getVersionInfo());
 		}
+		if (info.getOriginator() != null && !info.getOriginator().isEmpty()) {
+			spdxPackage.setOriginator(info.getOriginator());
+		}
+		if (info.getSupplier() != null && !info.getSupplier().isEmpty()) {
+			spdxPackage.setSupplier(info.getSupplier());
+		}
 	}
 
 	private static void copyOrigins(OriginsSheet originsSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
@@ -215,6 +223,21 @@ public class SpreadsheetToRDF {
 		String[] createdBys = originsSheet.getCreatedBy();
 		String creatorComment = originsSheet.getAuthorComments();
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, creatorComment);
+		String dataLicenseId = originsSheet.getDataLicense();
+		if (dataLicenseId == null || dataLicenseId.isEmpty() || dataLicenseId.equals(RdfToSpreadsheet.NOT_SUPPORTED_STRING)) {
+			dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID;
+		}
+		SPDXStandardLicense dataLicense = null;
+		try {
+			dataLicense = (SPDXStandardLicense)SPDXLicenseInfoFactory.parseSPDXLicenseString(dataLicenseId);
+		} catch (Exception ex) {
+			try {
+				dataLicense = (SPDXStandardLicense)SPDXLicenseInfoFactory.parseSPDXLicenseString(SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
+			} catch (InvalidLicenseStringException e) {
+				throw(new InvalidSPDXAnalysisException("Unable to get document license"));
+			}
+		}
+		analysis.setDataLicense(dataLicense);
 		analysis.setCreationInfo(creator);
 		analysis.setSpdxVersion(originsSheet.getSPDXVersion());
 	}

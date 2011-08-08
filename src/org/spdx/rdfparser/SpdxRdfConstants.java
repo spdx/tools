@@ -71,6 +71,8 @@ public interface SpdxRdfConstants {
 	public static final String PROP_SPDX_VERSION = "specVersion";
 	public static final String PROP_SPDX_CREATION_INFO = "creationInfo";
 	public static final String PROP_SPDX_PACKAGE = "describesPackage";
+	public static final String PROP_SPDX_FILE = "referencesFile";
+	public static final String PROP_SPDX_DATA_LICENSE = "dataLicense";
 	
 	// SPDX CreationInfo Properties
 	// - use rdfs:comment	static final String PROP_CREATION_CREATOR_COMMENT = "comment";
@@ -102,11 +104,19 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_LICENSE_INFO_FROM_FILES = "licenseInfoFromFiles";
 	public static final String PROP_PACKAGE_LICENSE_COMMENT = "licenseComments";
 	public static final String PROP_PACKAGE_VERSION_INFO = "versionInfo";
+	public static final String PROP_PACKAGE_ORIGINATOR = "packageOriginator";
+	public static final String PROP_PACKAGE_SUPPLIER = "packageSupplier";
 	
 	// SPDX License Properties
 	public static final String PROP_LICENSE_ID = "licenseId";
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
+	public static final String PROP_STD_LICENSE_NAME = "licenseName";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_URL = "licenseSourceUrl";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_NOTES = "licenseNotes";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_HEADER = "licenseHeader";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_TEMPLATE = "licenseTemplate";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_OSI_APPROVED = "licenseOsiApproved";	//TODO: replace with actual property
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
 	public static final String TERM_LICENSE_NOASSERTION = PROP_VALUE_NOASSERTION;
 	public static final String TERM_LICENSE_NONE = PROP_VALUE_NONE;
@@ -138,4 +148,7 @@ public interface SpdxRdfConstants {
 	// Standard value strings
 	public static String NONE_VALUE = "NONE";
 	public static String NOASSERTION_VALUE = "NOASSERTION";
+	
+	// data license ID
+	public static final String SPDX_DATA_LICENSE_ID = "PDDL-1.0";
 }

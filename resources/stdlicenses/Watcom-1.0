@@ -48,18 +48,18 @@
 <div id="head">
 <div id='tabs' class="clearfix">
 <ul>
-                       <!-- node/2449 --><li><a href='/node/2449' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/node/2456' title='Specification'><span>Specification</span></a></li>
-<li><a href='/node/2240' title='Participation'><span>Participation</span></a></li>
+<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
+<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
+<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/node/2475' title='Organization'><span>Organization</span></a></li>
+<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
 <br />
 <br />
 <br />
 </div> <!-- tabs clearfix -->
 </div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
 </div></div> <!-- /#header-inner, /#header -->
 <h1 property="dc:title">Sybase Open Watcom Public License 1.0</h1>
 <h2 id="information">Information</h2>
@@ -81,7 +81,7 @@
 <p>None</p>
 <h2 id="licenseText">Text</h2>
 
-<div property="spdx:LicenseText" class="license-text">
+<div property="spdx:licenseText" class="license-text">
 Sybase Open Watcom Public License version 1.0<br/>
 <br/>
 USE OF THE SYBASE OPEN WATCOM SOFTWARE DESCRIBED BELOW (&quot;SOFTWARE&quot;) IS SUBJECT TO THE TERMS AND CONDITIONS SET FORTH IN THE SYBASE OPEN WATCOM PUBLIC LICENSE SET FORTH BELOW (&quot;LICENSE&quot;). YOU MAY NOT USE THE SOFTWARE IN ANY MANNER UNLESS YOU ACCEPT THE TERMS AND CONDITIONS OF THE LICENSE. YOU INDICATE YOUR ACCEPTANCE BY IN ANY MANNER USING (INCLUDING WITHOUT LIMITATION BY REPRODUCING, MODIFYING OR DISTRIBUTING) THE SOFTWARE. IF YOU DO NOT ACCEPT ALL OF THE TERMS AND CONDITIONS OF THE LICENSE, DO NOT USE THE SOFTWARE IN ANY MANNER.<br/>

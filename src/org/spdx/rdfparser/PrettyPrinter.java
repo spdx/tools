@@ -63,10 +63,10 @@ public class PrettyPrinter {
 		}
 		if (doc.getSpdxDocUri() != null) {
 			System.out.printf("SPDX Document for %1s\n",doc.getSpdxDocUri());
-		}
-		if (doc.getSpdxVersion() != null && doc.getCreatorInfo().getCreated() != null) {
-			System.out.printf("Version: %1s\tCreated: %2s\n", doc.getSpdxVersion(), doc.getCreatorInfo().getCreated());
-		}
+		}		String spdxVersion = "";
+		if (doc.getSpdxVersion() != null && doc.getCreatorInfo().getCreated() != null) {			spdxVersion = doc.getSpdxVersion();
+			System.out.printf("Version: %1s\tCreated: %2s\n", spdxVersion, doc.getCreatorInfo().getCreated());
+		}		if (!spdxVersion.equals(SPDXDocument.POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(SPDXDocument.POINT_NINE_SPDX_VERSION)) {			SPDXStandardLicense dataLicense = doc.getDataLicense();			if (dataLicense != null) {				System.out.printf("Data License: %1s\n", dataLicense.getName());			}		}
 		if (doc.getCreatorInfo().getCreators() != null && doc.getCreatorInfo().getCreators().length > 0) {
 			System.out.println("Created by:");
 			String[] creators = doc.getCreatorInfo().getCreators();
@@ -134,7 +134,7 @@ public class PrettyPrinter {
 		// File name
 		if (pkg.getFileName() != null && !pkg.getFileName().isEmpty()) {
 			System.out.printf("File name: %1s\n", pkg.getFileName());
-		}
+		}		// Supplier		if (pkg.getSupplier() != null && !pkg.getSupplier().isEmpty()) {			System.out.printf("Supplier: %1s\n", pkg.getSupplier());		}		// Originator		if (pkg.getOriginator() != null && !pkg.getOriginator().isEmpty()) {			System.out.printf("Originator: %1s\n", pkg.getOriginator());		}
 		// sha1
 		if (pkg.getSha1() != null && !pkg.getSha1().isEmpty()) {
 			System.out.printf("SHA1: %1s\n",pkg.getSha1());				

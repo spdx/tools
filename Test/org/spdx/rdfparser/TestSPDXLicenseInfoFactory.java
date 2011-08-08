@@ -18,14 +18,8 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -47,8 +41,9 @@ public class TestSPDXLicenseInfoFactory {
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"2", SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"3",
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"4"};
 	static final String[] NONSTD_TEXTS = new String[] {"text1", "text2", "text3", "text4"};
-	static final String[] STD_IDS = new String[] {"AFL-3", "CECILL-B", "EUPL-1"};
-	static final String[] STD_TEXTS = new String[] {"std text1", "std text2", "std text3"};
+	static final String[] STD_IDS = new String[] {"AFL-3.0", "CECILL-B", "EUPL-1.0"};
+	static final String[] STD_TEXTS = new String[] {"Academic Free License (", "CONTRAT DE LICENCE DE LOGICIEL LIBRE CeCILL-B",
+		"European Union Public Licence"};
 
 	SPDXNonStandardLicense[] NON_STD_LICENSES;
 	SPDXStandardLicense[] STANDARD_LICENSES;
@@ -191,7 +186,10 @@ public class TestSPDXLicenseInfoFactory {
 		assertEquals(0, verify.size());
 		SPDXStandardLicense sli = (SPDXStandardLicense)li;
 		assertEquals(STD_IDS[0], sli.getId());
-		assertEquals(STD_TEXTS[0], sli.getText());
+		String licenseText = sli.getText().trim();
+		if (!licenseText.startsWith(STD_TEXTS[0])) {
+			fail("Incorrect license text");
+		}
 		// non-standard license
 		SPDXLicenseInfo li2 = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, NON_STD_LICENSES_RESOURCES[0].asNode());
 		if (!(li2 instanceof SPDXNonStandardLicense)) {

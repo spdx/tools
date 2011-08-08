@@ -55,6 +55,16 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT).asNode();
 		m = Triple.createMatch(licenseInfoNode, p, null);
 		tripleIter = model.getGraph().find(m);	
+		// The following Kludge is to workaround a bug where the standard license HTML
+		// did not have the correct property name
+		//TODO: Remove kludge once the website is updated
+		// BEGIN KLUDGE
+		if (!tripleIter.hasNext()) {
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, "LicenseText").asNode();
+			m = Triple.createMatch(licenseInfoNode, p, null);
+			tripleIter = model.getGraph().find(m);	
+		}
+		// END KLUDGE
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.text = t.getObject().toString(false);

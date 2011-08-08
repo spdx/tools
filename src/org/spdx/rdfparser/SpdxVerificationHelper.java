@@ -38,7 +38,8 @@ public class SpdxVerificationHelper {
 		VALID_FILE_TYPES.add("ARCHIVE");	VALID_FILE_TYPES.add("OTHER");
 	}
 	
-	static final String[] VALID_CREATOR_PREFIXES = new String[] {"Person:", "Company:", "Tool:"};
+	static final String[] VALID_CREATOR_PREFIXES = new String[] {"Person:", "Organization:", "Tool:"};
+	static final String[] VALID_ORIGINATOR_SUPPLIER_PREFIXES = new String[] {SpdxRdfConstants.NOASSERTION_VALUE, "Person:", "Organization:"};
 
 	static String verifyChecksumString(String checksum) {
 		if (checksum.length() != 40) {
@@ -67,6 +68,7 @@ public class SpdxVerificationHelper {
 	}
 
 	/**
+	 * Verifies a creator string value
 	 * @param creator
 	 * @return
 	 */
@@ -90,7 +92,51 @@ public class SpdxVerificationHelper {
 			return null;
 		}
 	}
+	
+	/**
+	 * Verifies the originator string
+	 * @param originator
+	 * @return
+	 */
+	public static String verifyOriginator(String originator) {
+		return verifyOriginatorOrSupplier(originator);
+	}
+	
+	/**
+	 * Verifies the supplier String
+	 * @param supplier
+	 * @return
+	 */
+	public static String verifySupplier(String supplier) {
+		return verifyOriginatorOrSupplier(supplier);
+	}
 
+	/**
+	 * Verifies a the originator or supplier
+	 * @param creator
+	 * @return
+	 */
+	private static String verifyOriginatorOrSupplier(String originatorOrSupplier) {
+		boolean ok = false;
+		for (int i = 0; i < VALID_ORIGINATOR_SUPPLIER_PREFIXES.length; i++) {
+			if (originatorOrSupplier.startsWith(VALID_ORIGINATOR_SUPPLIER_PREFIXES[i])) {
+				ok = true;
+				break;
+			}
+		}
+		if (!ok) {
+			StringBuilder sb = new StringBuilder("Value must not start with one of ");
+			sb.append(VALID_ORIGINATOR_SUPPLIER_PREFIXES[0]);
+			for (int i = 1; i < VALID_ORIGINATOR_SUPPLIER_PREFIXES.length; i++) {
+				sb.append(", ");
+				sb.append(VALID_ORIGINATOR_SUPPLIER_PREFIXES[i]);
+			}
+			return sb.toString();
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * @param creationDate
 	 * @return

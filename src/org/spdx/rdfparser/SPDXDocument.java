@@ -28,6 +28,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import java.util.regex.Matcher;
 
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
 
 /**
  * 
@@ -51,14 +53,16 @@ import java.util.regex.Matcher;
 public class SPDXDocument implements SpdxRdfConstants {
 	
 	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
-	public static final String CURRENT_SPDX_VERSION = "SPDX-0.9";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.3";
+	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-1.0";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.4";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(POINT_EIGHT_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(POINT_NINE_SPDX_VERSION);
 	}
 
 	/**
@@ -367,6 +371,57 @@ public class SPDXDocument implements SpdxRdfConstants {
 			removeProperties(node, PROP_PACKAGE_DESCRIPTION);
 			addProperty(node, PROP_PACKAGE_DESCRIPTION, new String[] {description});
 		}
+		
+		/**
+		 * Set the originator
+		 * @param originator Either a valid originator string or NOASSERTION
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public void setOriginator(String originator) throws InvalidSPDXAnalysisException {
+			String error = SpdxVerificationHelper.verifyOriginator(originator);
+			if (error != null && !error.isEmpty()) {
+				throw(new InvalidSPDXAnalysisException(error));
+			}
+			removeProperties(node, PROP_PACKAGE_ORIGINATOR);
+			addProperty(node, PROP_PACKAGE_ORIGINATOR, new String[] {originator});
+		}
+		
+		/**
+		 * Set the Supplier
+		 * @param supplier Either a valid originator string or NOASSERTION
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public void setSupplier(String supplier) throws InvalidSPDXAnalysisException {
+			String error = SpdxVerificationHelper.verifySupplier(supplier);
+			if (error != null && !error.isEmpty()) {
+				throw(new InvalidSPDXAnalysisException(error));
+			}
+			removeProperties(node, PROP_PACKAGE_SUPPLIER);
+			addProperty(node, PROP_PACKAGE_SUPPLIER, new String[] {supplier});
+		}
+		
+		public String getOriginator() throws InvalidSPDXAnalysisException {
+			String[] originators = findDocPropertieStringValues(this.node, PROP_PACKAGE_ORIGINATOR);
+			if (originators == null || originators.length == 0) {
+				return null;
+			}
+			if (originators.length > 1) {
+				throw(new InvalidSPDXAnalysisException("More than one originator for a package"));
+			}
+			return(originators[0]);
+		}
+		
+		public String getSupplier() throws InvalidSPDXAnalysisException {
+			String[] suppliers = findDocPropertieStringValues(this.node, PROP_PACKAGE_SUPPLIER);
+			if (suppliers == null || suppliers.length == 0) {
+				return null;
+			}
+			if (suppliers.length > 1) {
+				throw(new InvalidSPDXAnalysisException("More than one supplier for a package"));
+			}
+			return(suppliers[0]);
+		}
+		
 		/**
 		 * @return the files
 		 * @throws InvalidSPDXAnalysisException 
@@ -392,9 +447,12 @@ public class SPDXDocument implements SpdxRdfConstants {
 			removeProperties(node, PROP_PACKAGE_FILE);
 			Resource s = getResource(this.node);
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
+			Resource docResource = getResource(getSpdxDocNode());
+			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
 			for (int i = 0; i < files.length; i++) {				
 				Resource file = files[i].createResource(model);
 				s.addProperty(p, file);
+				docResource.addProperty(docP, file);
 			}
 		}
 		
@@ -439,14 +497,13 @@ public class SPDXDocument implements SpdxRdfConstants {
 					this.getConcludedLicenses(), this.getLicenseInfoFromFiles(), 
 					this.getLicenseComment(), this.getDeclaredCopyright(), 
 					this.getShortDescription(), this.getDescription(), this.getDownloadUrl(), 
-					this.getVerificationCode());
+					this.getVerificationCode(), this.getSupplier(), this.getOriginator());
 		}
 		
 		public void setLicenseInfoFromFiles(SPDXLicenseInfo[] licenseInfo) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
 			Resource s = getResource(this.node);
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
-
 			for (int i = 0; i < licenseInfo.length; i++) {
 				Resource lic = licenseInfo[i].createResource(model);
 				s.addProperty(p, lic);
@@ -609,6 +666,33 @@ public class SPDXDocument implements SpdxRdfConstants {
 				retval.add("Invalid package verification code: "+e.getMessage());
 			}
 
+			// supplier
+			String supplier = null;
+			try {
+				supplier = this.getSupplier();
+				if (supplier != null) {
+					String error = SpdxVerificationHelper.verifySupplier(supplier);
+					if (error != null && !error.isEmpty()) {
+						retval.add("Supplier error - "+error);
+					}
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid supplier: "+e.getMessage());
+			}
+			
+			// originator
+			String originator = null;
+			try {
+				originator = this.getOriginator();
+				if (originator != null) {
+					String error = SpdxVerificationHelper.verifySupplier(originator);
+					if (error != null && !error.isEmpty()) {
+						retval.add("Originator error - "+error);
+					}
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid originator: "+e.getMessage());
+			}
 			return retval;
 		}
 	}
@@ -689,8 +773,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		// specVersion
+		String docSpecVersion = "";	// note - this is used later in verify to verify version specific info
 		try {
-			String docSpecVersion = this.getSpdxVersion();
+			docSpecVersion = this.getSpdxVersion();
 			if (docSpecVersion == null || docSpecVersion.isEmpty()) {
 				retval.add("Missing required SPDX version");
 			} else {
@@ -754,6 +839,20 @@ public class SPDXDocument implements SpdxRdfConstants {
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid extracted licensing info: "+e.getMessage());
 		}
+		// data license
+		if (!docSpecVersion.equals(POINT_EIGHT_SPDX_VERSION) && !docSpecVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
+			try {
+				SPDXStandardLicense dataLicense = this.getDataLicense();
+				if (dataLicense == null) {
+					retval.add("Missing required data license");
+				}
+				if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
+					retval.add("Incorrect data license for SPDX document - found "+dataLicense.getId()+", expected "+SPDX_DATA_LICENSE_ID);
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				retval.add("Invalid data license: "+e.getMessage());
+			}
+		}
 		return retval;
 	}
 	
@@ -791,21 +890,6 @@ public class SPDXDocument implements SpdxRdfConstants {
 		}
 		String[] retval = new String[alResult.size()];
 		return alResult.toArray(retval);
-	}
-
-	/**
-	 * @return the spdxVersion or null if there is no SPDX document
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	public String getSpdxVersion() throws InvalidSPDXAnalysisException {
-		String[] versions = findDocPropertieStringValues(getSpdxDocNode(), PROP_SPDX_VERSION);
-		if (versions == null || versions.length == 0) {
-			return null;
-		}
-		if (versions.length > 1) {
-			throw(new InvalidSPDXAnalysisException("More than one version exists for the SPDX Document"));
-		}
-		return versions[0];
 	}
 	
 	/**
@@ -849,6 +933,21 @@ public class SPDXDocument implements SpdxRdfConstants {
 	}
 
 	/**
+	 * @return the spdxVersion or null if there is no SPDX document
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public String getSpdxVersion() throws InvalidSPDXAnalysisException {
+		String[] versions = findDocPropertieStringValues(getSpdxDocNode(), PROP_SPDX_VERSION);
+		if (versions == null || versions.length == 0) {
+			return null;
+		}
+		if (versions.length > 1) {
+			throw(new InvalidSPDXAnalysisException("More than one version exists for the SPDX Document"));
+		}
+		return versions[0];
+	}
+
+	/**
 	 * @param spdxVersion the spdxVersion to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
@@ -863,6 +962,52 @@ public class SPDXDocument implements SpdxRdfConstants {
 		}
 		removeProperties(spdxDocNode, PROP_SPDX_VERSION);
 		addProperty(spdxDocNode, PROP_SPDX_VERSION, new String[] {spdxVersion});
+	}
+	
+	public SPDXStandardLicense getDataLicense() throws InvalidSPDXAnalysisException {
+		ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_DATA_LICENSE).asNode();
+		Triple m = Triple.createMatch(getSpdxDocNode(), p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+		}
+		if (alLic.size() > 1) {
+			throw(new InvalidSPDXAnalysisException("Too many data licenses"));
+		}
+		if (alLic.size() == 0) {
+			throw(new InvalidSPDXAnalysisException("Missing required data license"));
+		}
+		if (!(alLic.get(0) instanceof SPDXStandardLicense)) {
+			throw(new InvalidSPDXAnalysisException("Incorrect license for datalicense - must be a standard SPDX license type"));
+		}
+		return (SPDXStandardLicense)(alLic.get(0));
+	}
+	
+	public void setDataLicense(SPDXStandardLicense dataLicense) throws InvalidSPDXAnalysisException {
+		if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
+			throw(new InvalidSPDXAnalysisException("Invalid data license for SPDX document - license must have ID "+SPDX_DATA_LICENSE_ID));
+		}
+		removeProperties(getSpdxDocNode(), PROP_SPDX_DATA_LICENSE);
+		Resource s = getResource(getSpdxDocNode());
+		Property p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_DATA_LICENSE);
+
+		Resource lic = dataLicense.createResource(model);
+		s.addProperty(p, lic);
+	}
+	
+	public SPDXFile[] getFileReferences() throws InvalidSPDXAnalysisException {
+		ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE).asNode();
+		Triple m = Triple.createMatch(getSpdxDocNode(), p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			alFiles.add(new SPDXFile(model, t.getObject()));
+		}
+		SPDXFile[] retval = new SPDXFile[alFiles.size()];
+		return alFiles.toArray(retval);
 	}
 
 	@Deprecated
@@ -1170,8 +1315,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * Note: Follow-up calls MUST be made to add the required properties for this
 	 * to be a valid SPDX document
 	 * @param uri URI for the SPDX Document
+	 * @throws InvalidLicenseStringException 
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void createSpdxAnalysis(String uri) {
+	public void createSpdxAnalysis(String uri) throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode != null) {
 			// delete
@@ -1180,6 +1327,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 		model.setNsPrefix("", SPDX_NAMESPACE);
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
 		model.createResource(uri, spdxAnalysisType);
+		// add the default data license
+		SPDXStandardLicense dataLicense;
+		try {
+			dataLicense = (SPDXStandardLicense)(SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID));
+		} catch (InvalidLicenseStringException e) {
+			throw(new InvalidSPDXAnalysisException("Error generating the data license for the SPDX document"));
+		}
+		this.setDataLicense(dataLicense);
 	}
 	
 	/**

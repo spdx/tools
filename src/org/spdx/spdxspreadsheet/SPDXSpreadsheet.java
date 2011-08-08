@@ -67,8 +67,10 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		this.version = this.originsSheet.getSpreadsheetVersion();
 		if (this.version.equals(OriginsSheet.VERSION_0_9_1)) {
 			this.packageInfoSheet = new PackageInfoSheetV9d1(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
-		} else {
+		} else if (this.version.equals(OriginsSheet.VERSION_0_9_2)) {
 			this.packageInfoSheet = new PackageInfoSheetV09d2(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
+		} else {
+			this.packageInfoSheet = new PackageInfoSheetV09d3(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
 		}
 		this.nonStandardLicensesSheet = new NonStandardLicensesSheet(this.workbook, NON_STANDARD_LICENSE_SHEET_NAME, version);
 		this.perFileSheet = new PerFileSheet(this.workbook, PER_FILE_SHEET_NAME, version);
@@ -95,7 +97,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			excelOut = new FileOutputStream(spreadsheetFile);
 			Workbook wb = new HSSFWorkbook();
 			OriginsSheet.create(wb, ORIGIN_SHEET_NAME);
-			PackageInfoSheetV09d2.create(wb, PACKAGE_INFO_SHEET_NAME);
+			PackageInfoSheetV09d3.create(wb, PACKAGE_INFO_SHEET_NAME);
 			NonStandardLicensesSheet.create(wb, NON_STANDARD_LICENSE_SHEET_NAME);
 			PerFileSheet.create(wb, PER_FILE_SHEET_NAME);
 			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);

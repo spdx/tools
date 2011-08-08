@@ -17,6 +17,7 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -28,6 +29,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class SPDXNonStandardLicense extends SPDXLicense {
+	
+	static final Pattern NON_STANDARD_LICENSE_PATTERN = Pattern.compile("[-+_.a-zA-Z0-9]{3,}");
 
 	/**
 	 * @param model
@@ -86,6 +89,9 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		String id = this.getId();
 		if (id == null || id.isEmpty()) {
 			retval.add("Missing required license ID");
+		} else if (!NON_STANDARD_LICENSE_PATTERN.matcher(id).matches()) {
+			retval.add("Invalid license id '"+id+"'.  Must be at least 3 characters long " +
+					"and made up of the characters from the set 'a'-'z', 'A'-'Z', '0'-'9', '+', '_', '.', and '-'.");
 		}
 		String licenseText = this.getText();
 		if (licenseText == null || licenseText.isEmpty()) {
