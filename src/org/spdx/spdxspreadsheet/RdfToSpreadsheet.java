@@ -34,6 +34,7 @@ import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
@@ -49,7 +50,7 @@ public class RdfToSpreadsheet {
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
 	static Pattern datePattern = Pattern.compile(".. ... \\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d GMT$");
-	
+	public static final String NOT_SUPPORTED_STRING = "This field is not yet supported by SPDX";
 	/**
 	 * @param args
 	 */
@@ -169,7 +170,10 @@ public class RdfToSpreadsheet {
 		String[] createdBys = creator.getCreators();
 		originsSheet.setCreatedBy(createdBys);
 		// Data license
-		originsSheet.setDataLicense("This field is not yet supported by SPDX");
+		SPDXStandardLicense dataLicense = doc.getDataLicense();
+		if (dataLicense != null) {
+			originsSheet.setDataLicense(dataLicense.getId());
+		}
 		// Author Comments
 		String comments = creator.getComment();
 		if (comments != null && !comments.isEmpty()) {

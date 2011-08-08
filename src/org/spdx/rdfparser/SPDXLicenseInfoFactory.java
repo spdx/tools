@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -64,7 +65,7 @@ public class SPDXLicenseInfoFactory {
 		"Libpng","LPL-1.02","MS-PL","MS-RL","MirOS","MIT","Motosoto",
 		"MPL-1","MPL-1.1","Multics","NASA-1.3","Nauman","NGPL","Nokia",
 		"NPOSL-3","NTP","OCLC-2","OGTSL","OSL-1","OSL-2","OSL-3","OLDAP-2.8",
-		"OpenSSL","PHP-3","PostgreSQL","Python-CNRI","Python","QPL-1",
+		"OpenSSL","PHP-3","PostgreSQL","Python-CNRI","Python","QPL-1", "PDDL-1.0",
 		"RPSL-1","RPL-1.5","RHeCos-1.1","RSCPL","Ruby","OFL-1.1","Simple-2",
 		"Sleepycat","SugarCRM-1.1.3","SPL","Watcom-1","NCSA","VSL-1",
 		"W3C","WXwindows","Xnet","XFree86-1.1","YPL-1.1","Zimbra-1.3",
@@ -75,12 +76,10 @@ public class SPDXLicenseInfoFactory {
 	
 	static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 	
-	static final HashMap<String, SPDXStandardLicense> STANDARD_LICENSES = new HashMap<String, SPDXStandardLicense>();
+	static HashMap<String, SPDXStandardLicense> STANDARD_LICENSES = null;
 	
 	static {
-		for (int i = 0; i < STANDARD_LICENSE_IDS.length; i++) {
-			STANDARD_LICENSE_ID_SET.add(STANDARD_LICENSE_IDS[i]);
-		}			
+		loadStdLicenseIDs();		
 	}
 	
 	static final HashSet<String> STANDARD_LICENSE_ID_URLS_SET = new HashSet<String>();
@@ -96,9 +95,9 @@ public class SPDXLicenseInfoFactory {
 	public static final String STANDARD_LICENSE_URI_PREFIX = "http://spdx.org/licenses/";
 	private static final String STANDARD_LICENSE_RDF_LOCAL_DIR = "resources" + File.separator + "stdlicenses";
 
-//	private static final String STANDARD_LICENSE_RDF_LOCAL_FILENAME = STANDARD_LICENSE_RDF_LOCAL_DIR + File.separator + "index.html";
+	private static final String STANDARD_LICENSE_RDF_LOCAL_FILENAME = STANDARD_LICENSE_RDF_LOCAL_DIR + File.separator + "index.html";
 	
-//	private static Model standardLicenseModel = null;
+	private static Model standardLicenseModel = null;
 	
 	/**
 	 * Create the appropriate SPDXLicenseInfo from the model and node provided.
@@ -109,7 +108,7 @@ public class SPDXLicenseInfoFactory {
 	 * @param node
 	 * @return
 	 */
-	static SPDXLicenseInfo getLicenseInfoFromModel(Model model, Node node) throws InvalidSPDXAnalysisException {
+	public static SPDXLicenseInfo getLicenseInfoFromModel(Model model, Node node) throws InvalidSPDXAnalysisException {
 		if (!node.isURI() && !node.isBlank()) {
 			throw(new InvalidSPDXAnalysisException("Can not create a LicenseInfo from a literal node"));
 		}
@@ -178,8 +177,7 @@ public class SPDXLicenseInfoFactory {
 		try {
 			try {
 				prefix = uri;
-// uncomment out once the website is updated:
-//				in = FileManager.get().open(uri);
+				in = FileManager.get().open(uri);
 			} catch(Exception ex) {
 				in = null;
 			}
@@ -192,7 +190,6 @@ public class SPDXLicenseInfoFactory {
 				if (in == null) {
 					throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
 				}
-			//TODO: need to check a cache of licenses
 			}
 			retval.read(in, prefix, "HTML");
 			return retval;
@@ -206,47 +203,73 @@ public class SPDXLicenseInfoFactory {
 			}
 		}
 	}
+	
+	private static Model getStandardLicenseModel() throws InvalidSPDXAnalysisException {
+		if (standardLicenseModel == null) {
+			loadStandardLicenseModel();
+		}
+		return standardLicenseModel;
+	}
 
-//	/**
-//	 * 
-//	 */
-//	private static void loadStandardLicenseModel() throws InvalidSPDXAnalysisException {
-//		try {
-//			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-//		} catch(java.lang.ClassNotFoundException e) {
-//			// do nothing
-//		}  
-//
-//		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
-//
-//		String base = STANDARD_LICENSE_URI_PREFIX+"index.html";
-//		InputStream licRdfInput = FileManager.get().open(STANDARD_LICENSE_URI_PREFIX+"index.html");
-//		try {
-//			String fileType = "HTML";
-//			if (licRdfInput == null) {
-//				// need to load a static copy
-//				base = "file://"+STANDARD_LICENSE_RDF_LOCAL_FILENAME;
-//				licRdfInput = FileManager.get().open(STANDARD_LICENSE_RDF_LOCAL_FILENAME);
-//				if (licRdfInput == null) {
-//					throw new NoStandardLicenseRdfModel("Unable to open standard license from website or from local file");
-//				}
-//			}
-//			try {
-//				myStdLicModel.read(licRdfInput, base, fileType);
-//			} catch(Exception ex) {
-//				throw new NoStandardLicenseRdfModel("Unable to read the standard license model", ex);
-//			}
-//			standardLicenseModel = myStdLicModel;	
-//		} finally {
-//			if (licRdfInput != null) {
-//				try {
-//					licRdfInput.close();
-//				} catch (IOException e) {
-//					// ignore
-//				}
-//			}
-//		}
-//	}
+	/**
+	 * Load a standard license model from the index page
+	 */
+	private static void loadStandardLicenseModel() throws InvalidSPDXAnalysisException {
+		try {
+			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+		} catch(java.lang.ClassNotFoundException e) {
+			// do nothing
+		}  
+
+		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
+
+		String base = STANDARD_LICENSE_URI_PREFIX+"index.html";
+		InputStream licRdfInput = FileManager.get().open(STANDARD_LICENSE_URI_PREFIX+"index.html");
+		try {
+			String fileType = "HTML";
+			if (licRdfInput == null) {
+				// need to load a static copy
+				base = "file://"+STANDARD_LICENSE_RDF_LOCAL_FILENAME;
+				licRdfInput = FileManager.get().open(STANDARD_LICENSE_RDF_LOCAL_FILENAME);
+				if (licRdfInput == null) {
+					throw new NoStandardLicenseRdfModel("Unable to open standard license from website or from local file");
+				}
+			}
+			try {
+				myStdLicModel.read(licRdfInput, base, fileType);
+			} catch(Exception ex) {
+				throw new NoStandardLicenseRdfModel("Unable to read the standard license model", ex);
+			}
+			standardLicenseModel = myStdLicModel;	
+		} finally {
+			if (licRdfInput != null) {
+				try {
+					licRdfInput.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
+		}
+	}
+	
+	static void loadStdLicenseIDs() {
+		STANDARD_LICENSES = new HashMap<String, SPDXStandardLicense>();
+		try {
+			Model stdLicenseModel = getStandardLicenseModel();
+			Node p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
+			Triple m = Triple.createMatch(null, p, null);
+			ExtendedIterator<Triple> tripleIter = stdLicenseModel.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				STANDARD_LICENSE_ID_SET.add(t.getObject().toString(false));
+			}
+		} catch (Exception ex) {
+			
+			for (int i = 0; i < STANDARD_LICENSE_IDS.length; i++) {
+				STANDARD_LICENSE_ID_SET.add(STANDARD_LICENSE_IDS[i]);
+			}	
+		}
+	}
 
 	/**
 	 * @param model
@@ -264,7 +287,7 @@ public class SPDXLicenseInfoFactory {
 			if (tripleIter.hasNext()) {
 				throw(new InvalidSPDXAnalysisException("More than one ID associated with license "+id));
 			}
-			if (STANDARD_LICENSE_ID_SET.contains(id)) {
+			if (isStandardLicenseID(id)) {
 				return new SPDXStandardLicense(model, node);
 			} else if (id.startsWith(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM)) {
 				return new SPDXNonStandardLicense(model, node);
@@ -506,9 +529,9 @@ public class SPDXLicenseInfoFactory {
 	/**
 	 * @param licenseID
 	 * @return true if the licenseID belongs to a standard license
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public static boolean isStandardLicenseID(String licenseID) {
-		// TODO Replace with a lookup of the website
+	public static boolean isStandardLicenseID(String licenseID)  {
 		return STANDARD_LICENSE_ID_SET.contains(licenseID);
 	}
 }

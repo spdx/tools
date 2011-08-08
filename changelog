@@ -1,3 +1,14 @@
+SPDX Version 1.0 (DRAFT 20110729)
+Implementation Version 0.9.4
+Spreadsheet Version 0.9.3
+- Added data license
+- Add referencesFile properties to spdxDocument
+- Added Package Supplier - optional, txt, packageSupplier
+- Added Package Originator - optional, txt, packageOriginator
+- Added verification of license ID's
+- Look up standard license IDs on website
+- Added code to get license info from website
+
 Added OSI approved for standard licenses
 
 SPDX Version 0.9

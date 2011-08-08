@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */
+*/
 package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,18 +26,21 @@ import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.SpdxVerificationHelper;
 
 /**
- * Sheet describing the package information for an SPDX Document
- * @author Gary O'Neall
+ * @author Source Auditor
  *
  */
-public class PackageInfoSheetV9d1 extends PackageInfoSheet {
+public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 
-	int NUM_COLS = 14;
+	int NUM_COLS = 17;
 	int NAME_COL = 0;
-	int MACHINE_NAME_COL = NAME_COL+1;
-	int URL_COL = MACHINE_NAME_COL + 1;
+	int VERSION_COL = NAME_COL+1;
+	int MACHINE_NAME_COL = VERSION_COL+1;
+	int SUPPLIER_COL = MACHINE_NAME_COL + 1;
+	int ORIGINATOR_COL = SUPPLIER_COL + 1;
+	int URL_COL = ORIGINATOR_COL + 1;
 	int PACKAGE_SHA_COL = URL_COL + 1;
 	int FILE_VERIFICATION_VALUE_COL = PACKAGE_SHA_COL + 1;
 	int VERIFICATION_EXCLUDED_FILES_COL = FILE_VERIFICATION_VALUE_COL + 1;
@@ -49,15 +52,16 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 	int DECLARED_COPYRIGHT_COL = LICENSE_COMMENT_COL + 1;
 	int SHORT_DESC_COL = DECLARED_COPYRIGHT_COL + 1;
 	int FULL_DESC_COL = SHORT_DESC_COL + 1;
+
 	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, 
+	static final boolean[] REQUIRED = new boolean[] {true, false, true, false, false, true, 
 		true, true, true, false, true, true, true, false, true, false, false};
-	static final String[] HEADER_TITLES = new String[] {"Package Name",
-		"Package FileName", "Package Download Location", "Package Checksum", "Package Verification Code",
+	static final String[] HEADER_TITLES = new String[] {"Package Name", "Package Version", 
+		"Package FileName", "Package Supplier", "Package Originator", "Package Download Location", "Package Checksum", "Package Verification Code",
 		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files", 
 		"License Comments", "Package Copyright Text", "Summary", "Description"};
 	
-	static final int[] COLUMN_WIDTHS = new int[] {30, 30, 50, 25, 25, 40, 30,
+	static final int[] COLUMN_WIDTHS = new int[] {30, 17, 30, 30, 30, 50, 25, 25, 40, 30,
 		40, 40, 90, 50, 50, 50, 80};
 
 	/**
@@ -65,7 +69,7 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 	 * @param sheetName
 	 * @param version 
 	 */
-	public PackageInfoSheetV9d1(Workbook workbook, String sheetName, String version) {
+	public PackageInfoSheetV09d3(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
 
@@ -141,6 +145,28 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 							return "Invalid license infos in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						}
 					}
+				} else if (i == ORIGINATOR_COL) {
+					Cell origCell = row.getCell(ORIGINATOR_COL);
+					if (origCell != null) {
+						String originator = origCell.getStringCellValue();
+						if (originator != null && !originator.isEmpty()) {
+							String error = SpdxVerificationHelper.verifyOriginator(originator);
+							if (error != null && !error.isEmpty()) {
+								return "Invalid originator in row "+String.valueOf(row.getRowNum()) + ": "+error;
+							}
+						}
+					}
+				} else if (i == SUPPLIER_COL) {
+					Cell supplierCell = row.getCell(SUPPLIER_COL);
+					if (supplierCell != null) {
+						String supplier = supplierCell.getStringCellValue();
+						if (supplier != null && !supplier.isEmpty()) {
+							String error = SpdxVerificationHelper.verifySupplier(supplier);
+							if (error != null && !error.isEmpty()) {
+								return "Invalid supplier in row "+String.valueOf(row.getRowNum()) + ": "+error;
+							}
+						}
+					}
 				}
 //				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
 //					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
@@ -179,18 +205,21 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 		Cell concludedLicenseCol = row.createCell(CONCLUDED_LICENSE_COL);
 		concludedLicenseCol.setCellValue(pkgInfo.getConcludedLicense().toString());
 		Cell fileChecksumCell = row.createCell(FILE_VERIFICATION_VALUE_COL);
-		fileChecksumCell.setCellValue(pkgInfo.getPackageVerification().getValue());
-		Cell verificationExcludedFilesCell = row.createCell(VERIFICATION_EXCLUDED_FILES_COL);
-		StringBuilder excFilesStr = new StringBuilder();
-		String[] excludedFiles = pkgInfo.getPackageVerification().getExcludedFileNames();
-		if (excludedFiles.length > 0) {
-			excFilesStr.append(excludedFiles[0]);
-			for (int i = 1;i < excludedFiles.length; i++) {
-				excFilesStr.append(", ");
-				excFilesStr.append(excludedFiles[i]);
+		if (pkgInfo.getPackageVerification() != null) {
+			fileChecksumCell.setCellValue(pkgInfo.getPackageVerification().getValue());
+			Cell verificationExcludedFilesCell = row.createCell(VERIFICATION_EXCLUDED_FILES_COL);
+			StringBuilder excFilesStr = new StringBuilder();
+			String[] excludedFiles = pkgInfo.getPackageVerification().getExcludedFileNames();
+			if (excludedFiles.length > 0) {
+				excFilesStr.append(excludedFiles[0]);
+				for (int i = 1;i < excludedFiles.length; i++) {
+					excFilesStr.append(", ");
+					excFilesStr.append(excludedFiles[i]);
+				}
 			}
+			verificationExcludedFilesCell.setCellValue(excFilesStr.toString());
 		}
-		verificationExcludedFilesCell.setCellValue(excFilesStr.toString());
+
 		if (pkgInfo.getDescription() != null) {
 			Cell descCell = row.createCell(FULL_DESC_COL);
 			descCell.setCellValue(pkgInfo.getDescription());
@@ -224,6 +253,18 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 		}
 		Cell urlCell = row.createCell(URL_COL);
 		urlCell.setCellValue(pkgInfo.getUrl());
+		if (pkgInfo.getVersionInfo() != null) {
+			Cell versionInfoCell = row.createCell(VERSION_COL);
+			versionInfoCell.setCellValue(pkgInfo.getVersionInfo());
+		}
+		if (pkgInfo.getOriginator() != null) {
+			Cell originatorCell = row.createCell(ORIGINATOR_COL);
+			originatorCell.setCellValue(pkgInfo.getOriginator());
+		}
+		if (pkgInfo.getSupplier() != null) {
+			Cell supplierCell = row.createCell(SUPPLIER_COL);
+			supplierCell.setCellValue(pkgInfo.getSupplier());
+		}
 	}
 	
 	public SPDXPackageInfo getPackageInfo(int rowNum) throws SpreadsheetException {
@@ -297,11 +338,47 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 		} else {
 			excludedFiles = new String[0];
 		}
+		Cell versionInfoCell = row.getCell(VERSION_COL);
+		String versionInfo;
+		if (versionInfoCell != null && !versionInfoCell.getStringCellValue().isEmpty()) {
+			versionInfo = versionInfoCell.getStringCellValue();
+		} else {
+			versionInfo = "";
+		}
+		String supplier;
+		Cell supplierCell = row.getCell(SUPPLIER_COL);
+		if (supplierCell != null && !supplierCell.getStringCellValue().isEmpty()) {
+			supplier = supplierCell.getStringCellValue();
+		} else {
+			supplier = "";
+		}
+		String originator;
+		Cell originatorCell = row.getCell(ORIGINATOR_COL);
+		if (originatorCell != null && !originatorCell.getStringCellValue().isEmpty()) {
+			originator = originatorCell.getStringCellValue();
+		} else {
+			originator = "";
+		}
 		SpdxPackageVerificationCode verificationCode = new SpdxPackageVerificationCode(packageVerificationValue, excludedFiles);
-		String notAvailable = "Not available from spreadsheet";
-		return new SPDXPackageInfo(declaredName, notAvailable, machineName, sha1, sourceInfo, 
+		return new SPDXPackageInfo(declaredName, versionInfo, machineName, sha1, sourceInfo, 
 				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
 				licenseComment, declaredCopyright, shortDesc, 
-				description, url, verificationCode, "", "");
+				description, url, verificationCode, supplier, originator);
 	}
+
+	public static String licensesToString(SPDXLicenseInfo[] licenses) {
+		if (licenses == null || licenses.length == 0) {
+			return "";
+		} else if (licenses.length == 1) {
+			return licenses[0].toString();
+		} else {
+			StringBuilder sb = new StringBuilder(licenses[0].toString());
+			for (int i = 1; i < licenses.length; i++) {
+				sb.append(", ");
+				sb.append(licenses[i].toString());
+			}
+			return sb.toString();
+		}
+	}
+
 }

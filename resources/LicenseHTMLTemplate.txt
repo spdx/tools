@@ -79,7 +79,7 @@
 <p>[NOTES]</p>
 <h2 id="licenseText">Text</h2>
 
-<div property="spdx:LicenseText" class="license-text">
+<div property="spdx:licenseText" class="license-text">
 [LICENSE_TEXT]
 </div>
 
