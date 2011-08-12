@@ -74,7 +74,18 @@ public class SPDXLicenseInfoFactory {
 	
 	static final String STANDARD_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	
-	static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
+	
+	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
+	public static final String NONE_LICENSE_NAME = "NONE";
+
+	public static final String STANDARD_LICENSE_URI_PREFIX = "http://spdx.org/licenses/";
+	private static final String STANDARD_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
+
+	private static final String STANDARD_LICENSE_RDF_LOCAL_FILENAME = STANDARD_LICENSE_RDF_LOCAL_DIR + "/" + "index.html";
+	
+	private static Model standardLicenseModel = null;
+	
+static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 	
 	static HashMap<String, SPDXStandardLicense> STANDARD_LICENSES = null;
 	
@@ -89,15 +100,6 @@ public class SPDXLicenseInfoFactory {
 			STANDARD_LICENSE_ID_URLS_SET.add(STANDARD_LICENSE_ID_URL+STANDARD_LICENSE_IDS[i]);
 		}	
 	}
-	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
-	public static final String NONE_LICENSE_NAME = "NONE";
-
-	public static final String STANDARD_LICENSE_URI_PREFIX = "http://spdx.org/licenses/";
-	private static final String STANDARD_LICENSE_RDF_LOCAL_DIR = "resources" + File.separator + "stdlicenses";
-
-	private static final String STANDARD_LICENSE_RDF_LOCAL_FILENAME = STANDARD_LICENSE_RDF_LOCAL_DIR + File.separator + "index.html";
-	
-	private static Model standardLicenseModel = null;
 	
 	/**
 	 * Create the appropriate SPDXLicenseInfo from the model and node provided.

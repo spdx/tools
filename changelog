@@ -1,3 +1,5 @@
+Updated Sha1Collector to normalize the file paths per the spec
+
 SPDX Version 1.0 (DRAFT 20110729)
 Implementation Version 0.9.4
 Spreadsheet Version 0.9.3
@@ -8,6 +10,7 @@ Spreadsheet Version 0.9.3
 - Added verification of license ID's
 - Look up standard license IDs on website
 - Added code to get license info from website
+- Changed packageDownloadLocation to downloadLocation
 
 Added OSI approved for standard licenses
 

@@ -92,7 +92,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_DECLARED_NAME = "name";
 	public static final String PROP_PACKAGE_FILE_NAME = "packageFileName";
 	public static final String PROP_PACKAGE_CHECKSUM = "checksum";
-	public static final String PROP_PACKAGE_DOWNLOAD_URL = "packageDownloadLocation";
+	public static final String PROP_PACKAGE_DOWNLOAD_URL = "downloadLocation";
 	public static final String PROP_PACKAGE_SOURCE_INFO = "sourceInfo";
 	public static final String PROP_PACKAGE_DECLARED_LICENSE = "licenseDeclared";
 	public static final String PROP_PACKAGE_CONCLUDED_LICENSE = "licenseConcluded";
@@ -104,8 +104,8 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_LICENSE_INFO_FROM_FILES = "licenseInfoFromFiles";
 	public static final String PROP_PACKAGE_LICENSE_COMMENT = "licenseComments";
 	public static final String PROP_PACKAGE_VERSION_INFO = "versionInfo";
-	public static final String PROP_PACKAGE_ORIGINATOR = "packageOriginator";
-	public static final String PROP_PACKAGE_SUPPLIER = "packageSupplier";
+	public static final String PROP_PACKAGE_ORIGINATOR = "originator";
+	public static final String PROP_PACKAGE_SUPPLIER = "supplier";
 	
 	// SPDX License Properties
 	public static final String PROP_LICENSE_ID = "licenseId";
