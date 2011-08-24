@@ -17,6 +17,7 @@
 package org.spdx.rdfparser;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Interface for implementations of generators of file checksums
@@ -24,5 +25,5 @@ import java.io.File;
  *
  */
 public interface IFileChecksumGenerator {
-	public String getFileChecksum(File file);
+	public String getFileChecksum(File file) throws IOException;
 }
