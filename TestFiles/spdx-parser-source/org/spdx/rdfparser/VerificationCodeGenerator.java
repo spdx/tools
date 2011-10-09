@@ -119,9 +119,7 @@ public class VerificationCodeGenerator {
 			String[] filePathParts = filePath.split("/");
 			StringBuilder normalizedFilePath = new StringBuilder();
 			for (int j = 0; j < filePathParts.length; j++) {
-				if (j+1 < filePathParts.length && filePathParts[j+1].equals("..")) {
-					// skip this directory
-				} else if (filePathParts[j].equals("..")) {
+				if (filePathParts[j].equals("..")) {
 					// remove these from the filePath
 				} else {
 					if (j > 0) {
@@ -132,12 +130,8 @@ public class VerificationCodeGenerator {
 			}
 			filePath = normalizedFilePath.toString();
 		}
-		filePath = filePath.replace("./", "");
-		if (filePath.startsWith("/")) {
-			filePath = "." + filePath;
-		} else {
-			filePath = "./" + filePath;
-		}
+		filePath.replace("./", "");
+		filePath = "./" + filePath;
 		return filePath;
 	}
 	/**

@@ -42,7 +42,7 @@ public class SPDXDocumentFactory {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	static SPDXDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
+	static SpdxRdfConstants createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
 	}
 	
@@ -58,16 +58,14 @@ public class SPDXDocumentFactory {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {}  // do nothing
 
+		Model model = ModelFactory.createDefaultModel();
+
 		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
 		if (spdxRdfInput == null)
 			throw new FileNotFoundException("Unable to open \"" + fileNameOrUrl + "\" for reading");
 
-		return createSpdxDocument(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
-	}
-	
-	public static SPDXDocument createSpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
-		model.read(input, baseUri, fileType);
+		model.read(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
+
 		return new SPDXDocument(model);
 	}
 	
