@@ -38,8 +38,11 @@ public class SPDXStandardLicense extends SPDXLicense {
 	private boolean osiApproved;
 	
 	public SPDXStandardLicense(String name, String id, String text, String sourceUrl, String notes,
-			String standardLicenseHeader, String template, boolean osiApproved) {
+			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
 		super(id, text);
+		if (!SPDXLicenseInfoFactory.isStandardLicenseID(id)) {
+		    throw new InvalidSPDXAnalysisException("Invalid standard license ID: " + id);
+		}
 		this.name = name;
 		this.sourceUrl = sourceUrl;
 		this.notes = notes;
@@ -245,7 +248,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		this.getTemplate();
 		String licenseText = this.getText();
 		if (licenseText == null || licenseText.isEmpty()) {
-			retval.add("Missing required license text");
+			retval.add("Missing required license text for " + id);
 		}
 		return retval;
 	}

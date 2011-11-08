@@ -93,7 +93,7 @@ public class LicenseSheet extends AbstractSheet {
 		}
 	}
 	
-	public SPDXStandardLicense getLicense(int rowNum) {
+	public SPDXStandardLicense getLicense(int rowNum) throws InvalidSPDXAnalysisException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;

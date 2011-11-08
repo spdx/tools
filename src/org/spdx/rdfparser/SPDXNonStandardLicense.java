@@ -95,7 +95,7 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		}
 		String licenseText = this.getText();
 		if (licenseText == null || licenseText.isEmpty()) {
-			retval.add("Missing required license text");
+			retval.add("Missing required license text for " + id);
 		}
 		return retval;
 	}
