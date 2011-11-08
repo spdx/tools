@@ -17,14 +17,15 @@
 package org.spdx.rdfparser;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Properties;
 
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
-import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -42,38 +43,39 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SPDXLicenseInfoFactory {
 	
 	static  final String[] STANDARD_LICENSE_IDS = new String[] {
-		"AFL-3","AFL-1.1","AFL-1.2","AFL-2","AFL-2.1","APL-1",
-		"Apache-1","Apache-1.1","Apache-2","APSL-1","APSL-1.1",
-		"APSL-1.2","APSL-2","Artistic-1","Artistic-2","AAL",
-		"BSL-1","BSD-2-Clause","BSD-3-Clause","BSD-4-Clause",
-		"CECILL-1","CECILL-2","CECILL-B","CECILL-C","ClArtistic",
-		"CDDL-1","CPAL-1","CPL-1","CATOSL-1.1","CC-BY-1","CC-BY-2",
-		"CC-BY-2.5","CC-BY-3","CC-BY-ND-1","CC-BY-ND-2","CC-BY-ND-2.5",
-		"CC-BY-ND-3","CC-BY-NC-1","CC-BY-NC-2","CC-BY-NC-2.5","CC-BY-NC-3",
-		"CC-BY-NC-ND-1","CC-BY-NC-ND-2","CC-BY-NC-ND-2.5","CC-BY-NC-ND-3",
-		"CC-BY-NC-SA-1","CC-BY-NC-SA-2","CC-BY-NC-SA-2.5","CC-BY-NC-SA-3",
-		"CC-BY-SA-1","CC-BY-SA-2","CC-BY-SA-2.5","CC-BY-SA-3","CUA-OPL-1",
-		"EPL-1","eCos-2","ECL-1","ECL-2","EFL-1","EFL-2","Entessa",
-		"ErlPL-1.1","EUDatagrid","EUPL-1","EUPL-1.1","Fair","Frameworx-1",
-		"AGPL-3","GFDL-1.2","GFDL-1.2","GFDL-1.3","GPL-1","GPL-1+",
-		"GPL-2","GPL-2+","GPL-2-with-autoconf-exception","GPL-2-with-bison-exception",
-		"GPL-2-with-classpath-exception","GPL-2-with-GCC-exception",
-		"GPL-2-with-font-exception","GPL-3","GPL-3+","GPL-3-with-autoconf-exception",
-		"GPL-3-with-GCC-exception","LGPL-2.1","LGPL-2.1+","LGPL-3",
-		"LGPL-3+","LGPL-2","LGPL-2+","LGPL+","gSOAP-1.3b","HPND",
-		"IPL-1","IPA","ISC","LPPL-1","LPPL-1.1","LPPL-1.2","LPPL-1.3c",
-		"Libpng","LPL-1.02","MS-PL","MS-RL","MirOS","MIT","Motosoto",
-		"MPL-1","MPL-1.1","Multics","NASA-1.3","Nauman","NGPL","Nokia",
-		"NPOSL-3","NTP","OCLC-2","OGTSL","OSL-1","OSL-2","OSL-3","OLDAP-2.8",
-		"OpenSSL","PHP-3","PostgreSQL","Python-CNRI","Python","QPL-1", "PDDL-1.0",
-		"RPSL-1","RPL-1.5","RHeCos-1.1","RSCPL","Ruby","OFL-1.1","Simple-2",
-		"Sleepycat","SugarCRM-1.1.3","SPL","Watcom-1","NCSA","VSL-1",
-		"W3C","WXwindows","Xnet","XFree86-1.1","YPL-1.1","Zimbra-1.3",
-		"Zlib","ZPL-1.1","ZPL-2","ZPL-2.1"
+		"AAL", "AFL-1.1", "AFL-1.2", "AFL-2.0", "AFL-2.1", "AFL-3.0", "AGPL-3.0",
+		"ANTLR-PD", "APL-1.0", "APSL-1.0", "APSL-1.1", "APSL-1.2", "APSL-2.0",
+		"Apache-1.0", "Apache-1.1", "Apache-2.0", "Artistic-1.0", "Artistic-2.0",
+		"BSD-2-Clause", "BSD-3-Clause", "BSD-4-Clause", "BSL-1.0", "CATOSL-1.1",
+		"CC-BY-1.0", "CC-BY-2.0", "CC-BY-2.5", "CC-BY-3.0", "CC-BY-NC-1.0",
+		"CC-BY-NC-2.0", "CC-BY-NC-2.5", "CC-BY-NC-3.0", "CC-BY-NC-ND-1.0",
+		"CC-BY-NC-ND-2.0", "CC-BY-NC-ND-2.5", "CC-BY-NC-ND-3.0", "CC-BY-NC-SA-1.0",
+		"CC-BY-NC-SA-2.0", "CC-BY-NC-SA-2.5", "CC-BY-NC-SA-3.0", "CC-BY-ND-1.0",
+		"CC-BY-ND-2.0", "CC-BY-ND-2.5", "CC-BY-ND-3.0", "CC-BY-SA-1.0",
+		"CC-BY-SA-2.0", "CC-BY-SA-2.5", "CC-BY-SA-3.0", "CC0-1.0", "CDDL-1.0",
+		"CECILL-1.0", "CECILL-1.1English", "CECILL-2.0", "CECILL-B", "CECILL-C",
+		"CPAL-1.0", "CPL-1.0", "CUA-OPL-1.0", "ClArtistic", "ECL-1.0", "ECL-2.0",
+		"EFL-1.0", "EFL-2.0", "EPL-1.0", "EUDatagrid", "EUPL-1.0", "EUPL-1.1",
+		"Entessa", "ErlPL-1.1", "Fair", "Frameworx-1.0", "GFDL-1.1", "GFDL-1.2",
+		"GFDL-1.3", "GPL-1.0", "GPL-1.0+", "GPL-2.0", "GPL-2.0+",
+		"GPL-2.0-with-GCC-exception", "GPL-2.0-with-autoconf-exception",
+		"GPL-2.0-with-bison-exception", "GPL-2.0-with-classpath-exception",
+		"GPL-2.0-with-font-exception", "GPL-3.0", "GPL-3.0+",
+		"GPL-3.0-with-GCC-exception", "GPL-3.0-with-autoconf-exception",
+		"HPND", "IPA", "IPL-1.0", "ISC", "LGPL-2.0", "LGPL-2.0+", "LGPL-2.1",
+		"LGPL-2.1+", "LGPL-3.0", "LGPL-3.0+", "LPL-1.02", "LPPL-1.0", "LPPL-1.1",
+		"LPPL-1.2", "LPPL-1.3c", "Libpng", "MIT", "MPL-1.0", "MPL-1.1", "MS-PL",
+		"MS-RL", "MirOS", "Motosoto", "Multics", "NASA-1.3", "NCSA", "NGPL",
+		"NPOSL-3.0", "NTP", "Naumen", "Nokia", "OCLC-2.0", "ODbL-1.0", "OFL-1.1",
+		"OGTSL", "OLDAP-2.8", "OSL-1.0", "OSL-2.0", "OSL-3.0", "OpenSSL",
+		"PDDL-1.0", "PHP-3.01", "PostgreSQL", "Python-2.0", "QPL-1.0",
+		"RHeCos-1.1", "RPL-1.5", "RPSL-1.0", "RSCPL", "Ruby", "SAX-PD", "SPL-1.0",
+		"SimPL-2.0", "Sleepycat", "SugarCRM-1.1.3", "VSL-1.0", "W3C", "WXwindows",
+		"Watcom-1.0", "XFree86-1.1", "Xnet", "YPL-1.1", "ZPL-1.1", "ZPL-2.0",
+		"ZPL-2.1", "Zimbra-1.3", "Zlib", "eCos-2.0", "gSOAP-1.3b"
 	};
 	
 	static final String STANDARD_LICENSE_ID_URL = "http://spdx.org/licenses/";
-	
 	
 	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
 	public static final String NONE_LICENSE_NAME = "NONE";
@@ -82,13 +84,18 @@ public class SPDXLicenseInfoFactory {
 	private static final String STANDARD_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
 
 	private static final String STANDARD_LICENSE_RDF_LOCAL_FILENAME = STANDARD_LICENSE_RDF_LOCAL_DIR + "/" + "index.html";
+	private static final String STANDARD_LICENSE_PROPERTIES_FILENAME = STANDARD_LICENSE_RDF_LOCAL_DIR + "/" + "licenses.properties";
 	
 	private static Model standardLicenseModel = null;
 	
-static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
+	static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 	
 	static HashMap<String, SPDXStandardLicense> STANDARD_LICENSES = null;
-	
+    
+	private static final Properties licenseProperties = loadLicenseProperties();
+    private static final boolean onlyUseLocalLicenses = Boolean.parseBoolean(
+            System.getProperty("SPDXParser.OnlyUseLocalLicenses", licenseProperties.getProperty("OnlyUseLocalLicenses", "false")));
+
 	static {
 		loadStdLicenseIDs();		
 	}
@@ -179,7 +186,9 @@ static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 		try {
 			try {
 				prefix = uri;
-				in = FileManager.get().open(uri);
+				if (!onlyUseLocalLicenses) {
+				    in = FileManager.get().open(uri);
+				}
 			} catch(Exception ex) {
 				in = null;
 			}
@@ -226,7 +235,12 @@ static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
 
 		String base = STANDARD_LICENSE_URI_PREFIX+"index.html";
-		InputStream licRdfInput = FileManager.get().open(STANDARD_LICENSE_URI_PREFIX+"index.html");
+		InputStream licRdfInput;
+		if (onlyUseLocalLicenses) {
+		    licRdfInput = null;
+		} else {
+		    licRdfInput = FileManager.get().open(STANDARD_LICENSE_URI_PREFIX+"index.html");
+		}
 		try {
 			String fileType = "HTML";
 			if (licRdfInput == null) {
@@ -382,7 +396,11 @@ static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 				return new SpdxNoAssertionLicense();
 			} 
 			if (isStandardLicenseID(licenseID)) {
-				return new SPDXStandardLicense(licenseID, licenseID, null, null, null, null, null, false);
+				try {
+                    return new SPDXStandardLicense(licenseID, licenseID, null, null, null, null, null, false);
+                } catch (InvalidSPDXAnalysisException e) {
+                    throw new InvalidLicenseStringException(e.getMessage());
+                }
 			} else {
 				return new SPDXNonStandardLicense(licenseID, null);
 			}
@@ -426,7 +444,11 @@ static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 					licenseInfoList.add(new SpdxNoAssertionLicense());
 				} 
 				if (isStandardLicenseID(licenseID)) {
-					licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null, false));
+					try {
+                        licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null, false));
+                    } catch (InvalidSPDXAnalysisException e) {
+                        throw new InvalidLicenseStringException(e.getMessage());
+                    }
 				} else {
 					licenseInfoList.add(new SPDXNonStandardLicense(licenseID, null));
 				}
@@ -536,4 +558,31 @@ static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 	public static boolean isStandardLicenseID(String licenseID)  {
 		return STANDARD_LICENSE_ID_SET.contains(licenseID);
 	}
+
+	/**
+	 * Tries to load properties from STANDARD_LICENSE_PROPERTIES_FILENAME, ignoring errors
+	 * encountered during the process (e.g., the properties file doesn't exist, etc.).
+	 * 
+	 * @return a (possibly empty) set of properties
+	 */
+	private static Properties loadLicenseProperties() {
+        Properties licenseProperties = new Properties();
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(STANDARD_LICENSE_PROPERTIES_FILENAME);
+            licenseProperties.load(in);
+        } catch (IOException e) {
+            // Ignore it and fall through
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // Ignore it and fall through
+                }
+            }
+        }
+        return licenseProperties;
+    }
+    
 }

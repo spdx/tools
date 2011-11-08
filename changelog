@@ -1,3 +1,10 @@
+Implementation version 0.9.5
+Changes contributed by Todd Cook from Black Duck Software - changes provided under the Apache 2.0 License
+- Updates the list of standard license IDs in SPDXLicenseInfoFactory to match the names under resources/stdlicenses.
+- Changes the "SPDXStandardLicense(String name, String id, String text, String sourceUrl, String notes, String StandardLicenseHeader, String template, boolean osiApproved)" constructor to throw an exception if "id" does not match one of the known standard IDs.
+- Changes the verify() methods in SPDXStandardLicense and SPDXNonStandardLicense to add the license ID to the "Missing required license text" messages.
+- Added "OnlyUseLocalLicenses" property in resources/stdlicenses/licenses.properties to allow the user to configure the licenses to be loaded only from the local cache
+
 Updated Sha1Collector to normalize the file paths per the spec
 
 SPDX Version 1.0 (DRAFT 20110729)

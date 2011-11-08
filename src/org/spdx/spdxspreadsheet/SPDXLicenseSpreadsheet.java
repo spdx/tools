@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.LicenseSheet;
 import org.spdx.rdfparser.SPDXStandardLicense;
 
@@ -37,9 +38,13 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
 
 		private int currentRowNum;
 		SPDXStandardLicense currentLicense;
-		public LicenseIterator() {
+		public LicenseIterator() throws SpreadsheetException {
 			this.currentRowNum = 2;	// skip past header row
-			currentLicense = licenseSheet.getLicense(currentRowNum);
+			try {
+                currentLicense = licenseSheet.getLicense(currentRowNum);
+            } catch (InvalidSPDXAnalysisException e) {
+                throw new SpreadsheetException(e.getMessage());
+            }
 		}
 		@Override
 		public boolean hasNext() {
@@ -54,7 +59,11 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
 		public SPDXStandardLicense next() {
 			SPDXStandardLicense retval = currentLicense;
 			currentRowNum++;
-			currentLicense = licenseSheet.getLicense(currentRowNum);
+			try {
+                currentLicense = licenseSheet.getLicense(currentRowNum);
+            } catch (InvalidSPDXAnalysisException e) {
+                throw new RuntimeException(e.getMessage());
+            }
 			return retval;
 		}
 
@@ -124,7 +133,11 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
 	}
 
 	public Iterator<SPDXStandardLicense> getIterator() {
-		return new LicenseIterator();
+		try {
+            return new LicenseIterator();
+        } catch (SpreadsheetException e) {
+            throw new RuntimeException(e);
+        }
 	}
 	
 	
