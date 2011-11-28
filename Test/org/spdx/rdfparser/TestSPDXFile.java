@@ -44,7 +44,7 @@ public class TestSPDXFile {
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"2", SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"3",
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"4"};
 	static final String[] NONSTD_TEXTS = new String[] {"text1", "text2", "text3", "text4"};
-	static final String[] STD_IDS = new String[] {"AFL-3", "CECILL-B", "EUPL-1"};
+	static final String[] STD_IDS = new String[] {"AFL-3.0", "CECILL-B", "EUPL-1"};
 	static final String[] STD_TEXTS = new String[] {"std text1", "std text2", "std text3"};
 
 	SPDXNonStandardLicense[] NON_STD_LICENSES;
