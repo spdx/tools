@@ -1,3 +1,10 @@
+Added SPDX tag package contributed by Rana Rahal from Protocode.  Contains 2 utilities:
+  - RdfToTag - converts RDF file to a tag file
+  - SpreadsheetToTag - converts the spreadsheet to a tag file
+Replaced the SpdxViewer code with Rana's implementation 
+Added a property to control whether the <TEXT> </TEXT> is included in SPDXViewer output 
+
+
 Implementation version 0.9.5
 Changes contributed by Todd Cook from Black Duck Software - changes provided under the Apache 2.0 License
 - Updates the list of standard license IDs in SPDXLicenseInfoFactory to match the names under resources/stdlicenses.

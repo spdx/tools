@@ -61,12 +61,12 @@ public class VerificationCodeGenerator {
 			String skippedPath = normalizeFilePath(skippedFiles[i].getAbsolutePath().substring(rootLen));
 			skippedFilesPath.add(skippedPath);
 		}
-		ArrayList<String> fileNameAndChecksums = new ArrayList<String>();
-		collectFileData(rootOfDirectory, sourceDirectory, fileNameAndChecksums, skippedFilesPath);
-		Collections.sort(fileNameAndChecksums);
+		ArrayList<String> fileChecksums = new ArrayList<String>();
+		collectFileData(rootOfDirectory, sourceDirectory, fileChecksums, skippedFilesPath);
+		Collections.sort(fileChecksums);
 		MessageDigest verificationCodeDigest = MessageDigest.getInstance("SHA-1");
-		for (int i = 0;i < fileNameAndChecksums.size(); i++) {
-			byte[] hashInput = fileNameAndChecksums.get(i).getBytes(Charset.forName("UTF-8"));
+		for (int i = 0;i < fileChecksums.size(); i++) {
+			byte[] hashInput = fileChecksums.get(i).getBytes(Charset.forName("UTF-8"));
 			verificationCodeDigest.update(hashInput);
 		}
 		String value = convertChecksumToString(verificationCodeDigest.digest());
@@ -101,7 +101,7 @@ public class VerificationCodeGenerator {
 						.substring(prefixForRelative.length()+1));
 				if (!skippedFiles.contains(filePath)) {
 					String checksumValue = this.fileChecksumGenerator.getFileChecksum(filesAndDirs[i]).toLowerCase();
-					fileNameAndChecksums.add(checksumValue+"||"+filePath+END_OF_LINE_CHAR);
+					fileNameAndChecksums.add(checksumValue);
 				}
 			}
 		}

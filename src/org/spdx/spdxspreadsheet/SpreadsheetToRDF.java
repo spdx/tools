@@ -140,7 +140,7 @@ public class SpreadsheetToRDF {
 		}
 	}
 	
-	private static void copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss,
+	public static void copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss,
 			SPDXDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		analysis.createSpdxAnalysis(ss.getPackageInfoSheet().getPackageInfo(1).getUrl()+"#SPDXANALYSIS");		
 		copyOrigins(ss.getOriginsSheet(), analysis);
