@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
+<title>{{name}}</title>
+</head>
+<body>
+<h2>SPDX Document Information</h2>
+<h3>SPDX Version</h3>
+{{specVersion}}
+<h3>Data License</h3>
+{{dataLicense}}
+<h2>Creator Information</h2>
+{{#creationInfo}}
+	<ul>
+	{{#creator}}
+	<li>Creator: {{creator}}</li>
+	{{/creator}}
+	</ul>
+Created on: {{created}}<br />
+{{#comment}}
+Creator comment: {{comment}}
+{{/comment}} <br />
+{{/creationInfo}}
+<h2>Reviewer Information</h2>
+<ul>
+	{{#reviewed}}
+	<li>
+		Reviewer: {{reviewer}}; Review Date: {{reviewDate}}
+		{{#comment}}
+		; Comment: {{comment}}
+		{{/comment}}
+	</li>
+	{{/reviewed}}
+</ul>
+<h2>Package Information</h2>
+{{#describesPackage}}
+Name: {{name}}<br />
+Version: {{versionInfo}}<br />
+{{#downloadLocation}}
+Download Location: {{downloadLocation}}<br />
+{{/downloadLocation}}
+Summary: {{summary}}<br />
+{{#sourceInfo}}
+Source Information: {{sourceInfo}}<br />
+{{/sourceInfo}}
+File name: {{packageFileName}}<br />
+{{#supplier}}
+Supplier: {{supplier}}<br />
+{{/supplier}}
+{{#originator}}
+Originator: {{originator}}<br />
+{{/originator}}
+{{#checksum}}
+Checksum: {{checksum}}<br />
+{{/checksum}}
+{{#packageVerificationCode}}
+<h3>Package Verification Code</h3>
+Value: {{packageVerificationCodeValue}}
+<h4>Skipped Files:</h4>
+<ul>
+	{{#packageVerificationCodeExcludedFile}}
+	<li>{{packageVerificationCodeExcludedFile}}</li>
+	{{/packageVerificationCodeExcludedFile}}
+</ul>
+{{/packageVerificationCode}}
+<h3>Description</h3>
+{{description}}<br />
+Copyright Text: {{copyrightText}}<br />
+Declared License: {{licenseDeclared}}<br />
+Concluded License: {{licenseConcluded}}<br />
+<h3>License information from Files</h3>
+<ul>
+{{#licenseInfoFromFiles}}
+	<li>{{licenseInfoFromFiles}}</li>
+{{/licenseInfoFromFiles}}
+</ul>
+{{#licenseComments}}
+License Comments: {{licenseComments}}
+{{/licenseComments}}
+<h3>File Information</h3>
+{{#hasFile}}
+<h4>File Name: {{fileName}}</h4>
+{{#fileType}}
+File Type: {{fileType}}<br />
+{{/fileType}}
+Concluded License:{{licenseConcluded}}<br />
+<ul>
+{{#licenseInfoInFile}}
+	<li>{{licenseInfoInFile}}</li>
+{{/licenseInfoInFile}}
+</ul>
+{{#licenseComments}}
+License Comments: {{licenseComments}}<br />
+{{/licenseComments}}
+Copyright Text: {{copyrightText}}<br />
+{{#artifactOf}}
+Artifact of Project: {{name}};
+{{#homepage}} 
+Artifact of Home Page: {{homepage}}; 
+{{/homepage}}
+Artifact of URI: {{ArtifactOfProjectURI}}<br />
+{{/artifactOf}}
+{{/hasFile}}
+{{/describesPackage}}
+<h2>Non-Standard License Information</h2>
+{{#hasExtractedLicensingInfo}}
+<h3>License ID {{licenseId}}</h3>
+{{extractedText}}<br />
+{{/hasExtractedLicensingInfo}}
+</body>
+</html>

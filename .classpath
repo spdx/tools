@@ -32,5 +32,16 @@
 	<classpathentry exported="true" kind="lib" path="commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/htmlparser-1.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/java-rdfa-0.5-20100701.145737-3.jar" sourcepath="lib/java-rdfa-0.5-20100701.145737-3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/builder-0.6.2.jar" sourcepath="lib-source/builder-0.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/compiler-0.6.jar"/>
+	<classpathentry kind="lib" path="lib/core-0.6.2.jar" sourcepath="lib-source/core-0.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/handlebar-0.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/java-rdfa-0.5-20100701.145737-3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/java7-support-0.6.jar"/>
+	<classpathentry kind="lib" path="lib/network-0.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/guava-10.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-mapper-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-3.4-complete.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

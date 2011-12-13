@@ -125,7 +125,7 @@ public class SpdxVerificationHelper {
 			}
 		}
 		if (!ok) {
-			StringBuilder sb = new StringBuilder("Value must not start with one of ");
+			StringBuilder sb = new StringBuilder("Value must start with one of ");
 			sb.append(VALID_ORIGINATOR_SUPPLIER_PREFIXES[0]);
 			for (int i = 1; i < VALID_ORIGINATOR_SUPPLIER_PREFIXES.length; i++) {
 				sb.append(", ");

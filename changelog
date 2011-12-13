@@ -1,3 +1,10 @@
+Implementation version 0.9.6
+- Added 
+- Added first pass at HTML viewer
+- Added verification code excluded files to SPDXViewer
+- Fixed error message in verification 
+- Fixed spelling error in License table of contents
+
 Added SPDX tag package contributed by Rana Rahal from Protocode.  Contains 2 utilities:
   - RdfToTag - converts RDF file to a tag file
   - SpreadsheetToTag - converts the spreadsheet to a tag file
