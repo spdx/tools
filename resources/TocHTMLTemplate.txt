@@ -76,7 +76,7 @@
 
 <h1>SPDX Open Source License Registry</h1>
 
-<p>This following is a list of all liceneses currently registered with SPDX.</p>
+<p>This following is a list of all licenses currently registered with SPDX.</p>
 
 <h2>Licenses</h2>
 <table>

@@ -101,3 +101,13 @@ The project was funded by JISC.
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */	 
+ 
+ This package includes Jackson (http://jackson.codehaus.org/Download) licensed under the following license choices:
+ Jackson is dual-licensed under two alternative popular Open Source licenses: Apache (AL 2.0) and GNU Lesser GPL (LGPL 2.1). You choose one or the other, as necessary (if you want to redistribute the code -- for use, you do not need license), and abide by the license rules as defined by the respective license agreement (and only that one). 
+ 
+ This package includes Mustache-Java (https://github.com/spullara/mustache.java)
+ Mustache-Java is licensed under Apache License 2.0
+ 
+ This package includes Google guava-libraries (http://code.google.com/p/guava-libraries/)
+ guava-libraries are licensed under Apache License 2.0
+ 
