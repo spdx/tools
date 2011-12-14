@@ -37,7 +37,7 @@ public class VerificationCodeGeneratorTest {
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"DOAPProject.java",
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"SPDXFile.java"
 	};
-	private static final Object SHA1_RESULT = "c030810b7c1cb64093b493421a07e4731f44fd3a";
+	private static final Object SHA1_RESULT = "559f9215216045864ca5785d1892a00106cf0f6a";
 	/**
 	 * @throws java.lang.Exception
 	 */

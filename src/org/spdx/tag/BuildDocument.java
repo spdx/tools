@@ -108,10 +108,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_DATE"))) {
 			lastReviewer.setReviewDate(value);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_COMMENT"))) {
-			lastReviewer.setReviewDate(value);
+			lastReviewer.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_ID"))) {
 			if (lastExtractedLicense != null) {
-				List<SPDXNonStandardLicense> licenses = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(analysis.getExtractedLicenseInfos()));
+				SPDXNonStandardLicense[] currentNonStdLicenses = analysis.getExtractedLicenseInfos();
+				List<SPDXNonStandardLicense> licenses = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(currentNonStdLicenses));
 				licenses.add(lastExtractedLicense);
 				analysis.setExtractedLicenseInfos(licenses.toArray(new SPDXNonStandardLicense[0]));
 			}
@@ -151,9 +152,12 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			pkg.setSha1(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_VERIFICATION_CODE"))) {
 			if (value.contains("(")) {
-				String[] verification = value.split("(");
-				String[] excudedFiles = value.replace(")", "").split(",");
-				pkg.setVerificationCode(new SpdxPackageVerificationCode(verification[0].trim(), excudedFiles));
+				String[] verification = value.split("\\(");
+				String[] excludedFiles = verification[1].replace(")", "").split(",");
+				for (int i = 0; i < excludedFiles.length; i++) {
+					excludedFiles[i] = excludedFiles[i].trim();
+				}
+				pkg.setVerificationCode(new SpdxPackageVerificationCode(verification[0].trim(), excludedFiles));
 			}
 			else {
 				pkg.setVerificationCode(new SpdxPackageVerificationCode(value, new String[0]));

@@ -123,8 +123,9 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 	/**
 	 * Create a basic SPDXLicense resource of a given type
 	 * If a license with this ID already exists in the model, then that resource
-	 * is returned.  No checking is done to make sure the text matches.  ID's are
-	 * assumed to be unique.
+	 * is returned.  For the case where a license ID already exists, the text in the resource will be updated
+	 *  with the text of this license as long as the text is not null.
+	 *  ID's are assumed to be unique.
 	 * NOTE: the type must be a subclass of SPDXLicense
 	 * @param model
 	 * @param uri 
@@ -169,11 +170,14 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 						SpdxRdfConstants.PROP_LICENSE_ID);
 				r.addProperty(idProperty, this.id);
 			}
-			if (this.text != null) {
-				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-						SpdxRdfConstants.PROP_LICENSE_TEXT);
-				r.addProperty(textProperty, this.text);
-			}
+
+		}
+		if (this.text != null) {
+
+			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_LICENSE_TEXT);
+			model.removeAll(r, textProperty, null);
+			r.addProperty(textProperty, this.text);
 		}
 		return r;
 	}
