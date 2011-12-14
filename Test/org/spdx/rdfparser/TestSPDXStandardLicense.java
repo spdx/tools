@@ -53,7 +53,7 @@ public class TestSPDXStandardLicense {
 	public void testCreate() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		String name = "name";
-		String id = "id";
+		String id = "AFL-3.0";
 		String text = "text";
 		String sourceUrl = "source url";
 		String notes = "notes";
@@ -81,7 +81,7 @@ public class TestSPDXStandardLicense {
 	public void testSetIDandText() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		String name = "name";
-		String id = "id";
+		String id = "AFL-3.0";
 		String text = "text";
 		String sourceUrl = "source url";
 		String notes = "notes";
@@ -115,13 +115,13 @@ public class TestSPDXStandardLicense {
 		// get back the same URI
 		Model model = ModelFactory.createDefaultModel();
 		String name = "name";
-		String id = "id";
+		String id = "AFL-3.0";
 		String text = "text";
 		String sourceUrl = "source url";
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
-		String id2 = "id2";
+		String id2 = "Apache-1.0";
 		String name2 = "name2";
 		
 		try {

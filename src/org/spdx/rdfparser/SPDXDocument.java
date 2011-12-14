@@ -1231,6 +1231,8 @@ public class SPDXDocument implements SpdxRdfConstants {
 	}
 
 	/**
+	 * Resets all ExtractedLicenseInfos to nonStandardLicenses.  Removes references to any ExtractedLicenseInfos not present in nonStandardLicenses.
+	 * If any LicenseID's are already present in the model, the text will be replaced with the text in the new nonStandardLicenses
 	 * @param nonStandardLicenses the nonStandardLicenses to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */

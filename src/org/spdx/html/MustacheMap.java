@@ -18,10 +18,8 @@ package org.spdx.html;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;

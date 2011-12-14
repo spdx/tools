@@ -19,7 +19,6 @@ package org.spdx.html;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 
@@ -30,7 +29,6 @@ import org.spdx.rdfparser.SPDXDocumentFactory;
 import com.sampullara.mustache.Mustache;
 import com.sampullara.mustache.MustacheBuilder;
 import com.sampullara.mustache.MustacheException;
-import com.sampullara.mustache.Scope;
 
 /**
  * Produces a directory of HTML files which renders an SPDX Document

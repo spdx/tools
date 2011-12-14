@@ -348,6 +348,7 @@ public class SPDXFile {
 	 * @param sha1 the sha1 to set
 	 */
 	public void setSha1(String sha1) {
+		this.sha1 = sha1;
 		if (this.model != null && this.node != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
 			Resource fileResource = model.createResource(node.getURI());
