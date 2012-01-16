@@ -20,8 +20,11 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * A non-standard license which is valid only within an SPDXAnalysis
@@ -31,7 +34,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class SPDXNonStandardLicense extends SPDXLicense {
 	
 	static final Pattern NON_STANDARD_LICENSE_PATTERN = Pattern.compile("[-+_.a-zA-Z0-9]{3,}");
-
+	private String text;
+	
 	/**
 	 * @param model
 	 * @param licenseInfoNode
@@ -39,10 +43,19 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	 */
 	public SPDXNonStandardLicense(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
+		// Text
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT).asNode();
+		Triple m = Triple.createMatch(licenseInfoNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.text = t.getObject().toString(false);
+		}
 	}
 	
 	public SPDXNonStandardLicense(String id, String text) {
-		super(id, text);
+		super(id);
+		this.text = text;
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +64,14 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	@Override
 	protected Resource _createResource(Model model) {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
-		return super._createResource(model, type);
+		Resource r = super._createResource(model, type);
+		if (this.text != null) {
+			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_EXTRACTED_TEXT);
+			model.removeAll(r, textProperty, null);
+			r.addProperty(textProperty, this.text);
+		}
+		return r;
 	}
 	
 	/* (non-Javadoc)
@@ -62,6 +82,28 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		// must be only the ID if we are to use this to create 
 		// parseable license strings
 		return this.id;
+	}
+	
+	/**
+	 * @return the text
+	 */
+	public String getText() {
+		return this.text;
+	}
+
+	/**
+	 * @param text the text to set
+	 */
+	public void setText(String text) {
+		this.text = text;
+		if (this.licenseInfoNode != null) {
+			// delete any previous created
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
+			model.removeAll(resource, p, null);
+			// add the property
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
+			resource.addProperty(p, text);
+		}
 	}
 
 	/* (non-Javadoc)

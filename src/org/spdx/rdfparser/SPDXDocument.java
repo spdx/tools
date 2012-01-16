@@ -54,8 +54,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 	
 	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
-	public static final String CURRENT_SPDX_VERSION = "SPDX-1.0";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.6";
+	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.1";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -63,6 +64,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(POINT_EIGHT_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(POINT_NINE_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ZERO_SPDX_VERSION);
 	}
 
 	/**
@@ -846,8 +848,15 @@ public class SPDXDocument implements SpdxRdfConstants {
 				if (dataLicense == null) {
 					retval.add("Missing required data license");
 				}
-				if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
-					retval.add("Incorrect data license for SPDX document - found "+dataLicense.getId()+", expected "+SPDX_DATA_LICENSE_ID);
+				if (docSpecVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
+					{ 
+					if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
+						retval.add("Incorrect data license for SPDX version 1.0 document - found "+dataLicense.getId()+", expected "+SPDX_DATA_LICENSE_ID_VERSION_1_0);
+					}
+				} else {
+					if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
+						retval.add("Incorrect data license for SPDX document - found "+dataLicense.getId()+", expected "+SPDX_DATA_LICENSE_ID);
+					}					
 				}
 			} catch (InvalidSPDXAnalysisException e) {
 				retval.add("Invalid data license: "+e.getMessage());
@@ -986,9 +995,20 @@ public class SPDXDocument implements SpdxRdfConstants {
 	}
 	
 	public void setDataLicense(SPDXStandardLicense dataLicense) throws InvalidSPDXAnalysisException {
-		if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
-			throw(new InvalidSPDXAnalysisException("Invalid data license for SPDX document - license must have ID "+SPDX_DATA_LICENSE_ID));
+		String spdxVersion = this.getSpdxVersion();
+		if (spdxVersion == null) {
+			throw(new InvalidSPDXAnalysisException("Can not set a data license - document does not contain a version.  Set the SPDX version property before setting the data license."));
 		}
+		if (spdxVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) {
+			if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
+				throw(new InvalidSPDXAnalysisException("Invalid data license for version 1 SPDX document - license must have ID "+SPDX_DATA_LICENSE_ID_VERSION_1_0));
+			}
+		} else {
+			if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
+				throw(new InvalidSPDXAnalysisException("Invalid data license for SPDX document - license must have ID "+SPDX_DATA_LICENSE_ID));
+			}
+		}
+		
 		removeProperties(getSpdxDocNode(), PROP_SPDX_DATA_LICENSE);
 		Resource s = getResource(getSpdxDocNode());
 		Property p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_DATA_LICENSE);
@@ -1336,6 +1356,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		} catch (InvalidLicenseStringException e) {
 			throw(new InvalidSPDXAnalysisException("Error generating the data license for the SPDX document"));
 		}
+		this.setSpdxVersion(CURRENT_SPDX_VERSION);
 		this.setDataLicense(dataLicense);
 	}
 	

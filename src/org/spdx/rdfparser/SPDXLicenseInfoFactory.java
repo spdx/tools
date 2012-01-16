@@ -146,6 +146,10 @@ public class SPDXLicenseInfoFactory {
 		return retval;
 	}
 	
+	public static SPDXStandardLicense getStandardLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
+		return getLicenseFromStdLicModel(STANDARD_LICENSE_URI_PREFIX + licenseId);
+	}
+	
 	/**
 	 * @param uri
 	 * @return
@@ -397,7 +401,12 @@ public class SPDXLicenseInfoFactory {
 			} 
 			if (isStandardLicenseID(licenseID)) {
 				try {
-                    return new SPDXStandardLicense(licenseID, licenseID, null, null, null, null, null, false);
+					return getStandardLicenseById(licenseID);
+//					if (STANDARD_LICENSES.get(licenseID) != null) {
+//						return STANDARD_LICENSES.get(licenseID);
+//					} else {
+//						return new SPDXStandardLicense(licenseID, licenseID, "TEMP TEXT", null, null, null, null, false);
+//					}
                 } catch (InvalidSPDXAnalysisException e) {
                     throw new InvalidLicenseStringException(e.getMessage());
                 }
@@ -445,7 +454,7 @@ public class SPDXLicenseInfoFactory {
 				} 
 				if (isStandardLicenseID(licenseID)) {
 					try {
-                        licenseInfoList.add(new SPDXStandardLicense(null, licenseID, null, null, null, null, null, false));
+						licenseInfoList.add(getStandardLicenseById(licenseID));
                     } catch (InvalidSPDXAnalysisException e) {
                         throw new InvalidLicenseStringException(e.getMessage());
                     }
