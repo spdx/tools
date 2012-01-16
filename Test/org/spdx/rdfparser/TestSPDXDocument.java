@@ -104,8 +104,8 @@ public class TestSPDXDocument {
 		writer.close();
 		doc.createSpdxAnalysis(testUri);
 		String noVersion = doc.getSpdxVersion();
-		assertNull(noVersion);
-		String testVersion = SPDXDocument.CURRENT_SPDX_VERSION;
+		assertEquals(noVersion, SPDXDocument.CURRENT_SPDX_VERSION);
+		String testVersion = SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION;
 		doc.setSpdxVersion(testVersion);
 		String resultVersion = doc.getSpdxVersion();
 		assertEquals(testVersion, resultVersion);
@@ -691,8 +691,8 @@ public class TestSPDXDocument {
 		SPDXStandardLicense dataLicense = doc.getDataLicense();
 		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getId());
 		// check set correct license
-		SPDXLicenseInfo pddlLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
-		doc.setDataLicense((SPDXStandardLicense)pddlLicense);
+		SPDXLicenseInfo cc0License = SPDXLicenseInfoFactory.parseSPDXLicenseString(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
+		doc.setDataLicense((SPDXStandardLicense)cc0License);
 		dataLicense = doc.getDataLicense();
 		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getId());
 		// check error when setting wrong license

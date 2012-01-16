@@ -34,7 +34,6 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public abstract class SPDXLicense extends SPDXLicenseInfo {
 	protected String id;
-	protected String text;
 
 	/**
 	 * @param model
@@ -51,30 +50,11 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 			Triple t = tripleIter.next();
 			this.id = t.getObject().toString(false);
 		}
-		// text
-		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT).asNode();
-		m = Triple.createMatch(licenseInfoNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		// The following Kludge is to workaround a bug where the standard license HTML
-		// did not have the correct property name
-		//TODO: Remove kludge once the website is updated
-		// BEGIN KLUDGE
-		if (!tripleIter.hasNext()) {
-			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, "LicenseText").asNode();
-			m = Triple.createMatch(licenseInfoNode, p, null);
-			tripleIter = model.getGraph().find(m);	
-		}
-		// END KLUDGE
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			this.text = t.getObject().toString(false);
-		}
 	}
 	
-	SPDXLicense(String id, String text) {
+	SPDXLicense(String id) {
 		super();
 		this.id = id;
-		this.text = text;
 	}
 	/**
 	 * @return the id
@@ -98,27 +78,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		}
 	}
 
-	/**
-	 * @return the text
-	 */
-	public String getText() {
-		return this.text;
-	}
 
-	/**
-	 * @param text the text to set
-	 */
-	public void setText(String text) {
-		this.text = text;
-		if (this.licenseInfoNode != null) {
-			// delete any previous created
-			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT);
-			model.removeAll(resource, p, null);
-			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT);
-			resource.addProperty(p, text);
-		}
-	}
 	
 	/**
 	 * Create a basic SPDXLicense resource of a given type
@@ -170,14 +130,6 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 						SpdxRdfConstants.PROP_LICENSE_ID);
 				r.addProperty(idProperty, this.id);
 			}
-
-		}
-		if (this.text != null) {
-
-			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_LICENSE_TEXT);
-			model.removeAll(r, textProperty, null);
-			r.addProperty(textProperty, this.text);
 		}
 		return r;
 	}

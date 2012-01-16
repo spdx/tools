@@ -150,5 +150,6 @@ public interface SpdxRdfConstants {
 	public static String NOASSERTION_VALUE = "NOASSERTION";
 	
 	// data license ID
-	public static final String SPDX_DATA_LICENSE_ID = "PDDL-1.0";
+	public static final String SPDX_DATA_LICENSE_ID_VERSION_1_0 = "PDDL-1.0";
+	public static final String SPDX_DATA_LICENSE_ID = "CC0-1.0";
 }

@@ -223,9 +223,15 @@ public class SpreadsheetToRDF {
 		String[] createdBys = originsSheet.getCreatedBy();
 		String creatorComment = originsSheet.getAuthorComments();
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, creatorComment);
+		String specVersion = originsSheet.getSPDXVersion();
+		analysis.setSpdxVersion(specVersion);
 		String dataLicenseId = originsSheet.getDataLicense();
 		if (dataLicenseId == null || dataLicenseId.isEmpty() || dataLicenseId.equals(RdfToSpreadsheet.NOT_SUPPORTED_STRING)) {
-			dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID;
+			if (specVersion.equals(SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION)) {
+				dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0;
+			} else {
+				dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID;
+			}
 		}
 		SPDXStandardLicense dataLicense = null;
 		try {
@@ -239,7 +245,6 @@ public class SpreadsheetToRDF {
 		}
 		analysis.setDataLicense(dataLicense);
 		analysis.setCreationInfo(creator);
-		analysis.setSpdxVersion(originsSheet.getSPDXVersion());
 	}
 
 	private static void usage() {

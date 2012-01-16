@@ -39,7 +39,6 @@ import java.util.TreeSet;
  */
 public class VerificationCodeGenerator {
 
-	private static final String END_OF_LINE_CHAR = "\n";
 	private IFileChecksumGenerator fileChecksumGenerator;
 	
 	public VerificationCodeGenerator(IFileChecksumGenerator fileChecksumGenerator) {
