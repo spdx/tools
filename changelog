@@ -1,3 +1,8 @@
+Implementation version 1.0.2
+- Significant changes to the library structure to reduce disk space required
+- Added examples directory (bug id 988)
+- Changed messages "license infos" to "license information"
+ 
 Implementation version 1.0.1
 - Fix defect 985 Property containing license text in ExtractedLicensingInfo
 - Significant changes to the way the standard licenses are handled.  The model will now reference the full standard license.

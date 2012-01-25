@@ -136,13 +136,13 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 				} else if (i == LICENSE_INFO_IN_FILES_COL) {
 					String[] licenses = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
 					if (licenses.length < 1) {
-						return "Missing licenss infos in files";
+						return "Missing licenss information in files";
 					}
 					for (int j = 0; j < licenses.length; j++) {
 						try {
 							SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim());
 						} catch(SpreadsheetException ex) {
-							return "Invalid license infos in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
+							return "Invalid license information in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						}
 					}
 				} else if (i == ORIGINATOR_COL) {

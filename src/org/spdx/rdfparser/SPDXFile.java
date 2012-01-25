@@ -453,7 +453,7 @@ public class SPDXFile {
 		// license info in files
 		SPDXLicenseInfo[] licenseInfosInFile = this.getSeenLicenses();
 		if (licenseInfosInFile == null || licenseInfosInFile.length == 0) {
-			retval.add("Missing required license infos in file for file "+fileName);
+			retval.add("Missing required license information in file for file "+fileName);
 		} else {
 			for (int i = 0; i < licenseInfosInFile.length; i++) {
 				retval.addAll(licenseInfosInFile[i].verify());

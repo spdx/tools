@@ -122,7 +122,7 @@ public class TestPackageInfoSheet {
 		assertEquals(pkgInfo1.getSourceInfo(), pkgInfo2.getSourceInfo());
 		assertEquals(pkgInfo1.getUrl(), pkgInfo2.getUrl());
 		if (!compareLicenses(pkgInfo1.getLicensesFromFiles(), pkgInfo2.getLicensesFromFiles())) {
-			fail("license infos not equal");
+			fail("license information in files not equal");
 		}
 		assertEquals(pkgInfo1.getPackageVerification().getValue(),
 				pkgInfo2.getPackageVerification().getValue());
