@@ -116,7 +116,11 @@ public class LicenseSheet extends AbstractSheet {
 		String sourceURL = null;
 		Cell sourceURLCell = row.getCell(COL_SOURCE_URL);
 		if (sourceURLCell != null) {
-			sourceURL = sourceURLCell.getStringCellValue();
+			try {
+				sourceURL = sourceURLCell.getStringCellValue();
+			} catch (Exception ex) {
+				sourceURL = "Exception getting URL: "+ex.getMessage();
+			}
 		}
 		String stdLicHeader = null;
 		Cell stdLicHeaderCell = row.getCell(COL_STANDARD_LICENSE_HEADER);

@@ -56,7 +56,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.1";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.2";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -631,14 +631,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 			try {
 				SPDXLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
 				if (licenseInfosFromFiles == null || licenseInfosFromFiles.length == 0) {
-					retval.add("Missing required license infos from files");
+					retval.add("Missing required license information from files");
 				} else {
 					for (int i = 0; i < licenseInfosFromFiles.length; i++) {
 						retval.addAll(licenseInfosFromFiles[i].verify());
 					}
 				}
 			} catch (InvalidSPDXAnalysisException e) {
-				retval.add("Invalid package license infos from files: "+e.getMessage());
+				retval.add("Invalid package license information from files: "+e.getMessage());
 			}
 			
 			// hasFiles mandatory one or more
@@ -1059,7 +1059,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			als.add(new SPDXCreatorInformation(model, t.getObject()));
 		}
 		if (als.size() > 1) {
-			throw(new InvalidSPDXAnalysisException("Too many creation infos for document.  Only one is allowed."));
+			throw(new InvalidSPDXAnalysisException("Too many creation information for document.  Only one is allowed."));
 		}
 		if (als.size() > 0) {
 			return als.get(0);
@@ -1263,7 +1263,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			errors.addAll(nonStandardLicenses[i].verify());
 		}
 		if (errors.size() > 0) {
-			StringBuilder sb = new StringBuilder("Invalid extracted license infos due to the following verification failures:\n");
+			StringBuilder sb = new StringBuilder("Invalid extracted license information due to the following verification failures:\n");
 			for (int i = 0; i < errors.size(); i++) {
 				sb.append(errors.get(i));
 				sb.append('\n');

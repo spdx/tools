@@ -3,45 +3,40 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="Test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/arq-2.8.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/icu4j-3.4.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/iri-0.8.jar"/>
-	<classpathentry kind="lib" path="Jenna-2.6.3/lib/iri-0.8-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3.jar" sourcepath="Jenna-2.6.3/jena-2.6.3-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SPDXParser/Jenna-2.6.3/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="Jenna-2.6.3/lib/jena-2.6.3-tests.jar"/>
-	<classpathentry kind="lib" path="Jenna-2.6.3/lib/junit-4.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/log4j-1.2.13.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/lucene-core-2.3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/slf4j-api-1.5.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/slf4j-log4j12-1.5.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/stax-api-1.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/wstx-asl-3.2.9.jar"/>
-	<classpathentry exported="true" kind="lib" path="Jenna-2.6.3/lib/xercesImpl-2.7.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="ApachePOI/poi-3.5-FINAL-20090928.jar"/>
-	<classpathentry exported="true" kind="lib" path="ApachePOI/poi-ooxml-3.5-FINAL-20090928.jar"/>
-	<classpathentry exported="true" kind="lib" path="commons-lang-2.3/commons-lang-2.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="ApachePOI/xmlbeans-2.3.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="grddl-0.3/lib/BrowserLauncher2-10.jar"/>
-	<classpathentry exported="true" kind="lib" path="grddl-0.3/lib/grddl.jar"/>
-	<classpathentry exported="true" kind="lib" path="grddl-0.3/lib/nekohtml.jar"/>
-	<classpathentry exported="true" kind="lib" path="grddl-0.3/lib/saxon8.jar"/>
-	<classpathentry exported="true" kind="lib" path="commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/htmlparser-1.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/java-rdfa-0.5-20100701.145737-3.jar" sourcepath="lib/java-rdfa-0.5-20100701.145737-3-sources.jar"/>
-	<classpathentry kind="lib" path="lib/builder-0.6.2.jar" sourcepath="lib-source/builder-0.6.2-sources.jar"/>
-	<classpathentry kind="lib" path="lib/compiler-0.6.jar"/>
-	<classpathentry kind="lib" path="lib/core-0.6.2.jar" sourcepath="lib-source/core-0.6.2-sources.jar"/>
-	<classpathentry kind="lib" path="lib/handlebar-0.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/java-rdfa-0.5-20100701.145737-3-sources.jar"/>
-	<classpathentry kind="lib" path="lib/java7-support-0.6.jar"/>
-	<classpathentry kind="lib" path="lib/network-0.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-core-asl-1.9.2.jar"/>
-	<classpathentry kind="lib" path="lib/guava-10.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-mapper-asl-1.9.2.jar"/>
-	<classpathentry kind="lib" path="lib/antlr-3.4-complete.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/builder-0.6.2.jar" sourcepath="lib-source/builder-0.6.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/compiler-0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/core-0.6.2.jar" sourcepath="lib-source/core-0.6.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/handlebar-0.6.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/java-rdfa-0.5-20100701.145737-3-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/java7-support-0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/network-0.6.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-core-asl-1.9.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/guava-10.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-mapper-asl-1.9.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/antlr-3.4-complete.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/BrowserLauncher2-10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/grddl.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/nekohtml.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-3.5-FINAL-20090928.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-3.5-FINAL-20090928.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/saxon8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/arq-2.8.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/icu4j-3.4.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/iri-0.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-2.6.3-tests.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-2.6.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit-4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/lucene-core-2.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/stax-api-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wstx-asl-3.2.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

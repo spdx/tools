@@ -245,7 +245,7 @@ public class PackageContext {
 			try {
 				licenseInfos = pkg.getLicenseInfoFromFiles();
 			} catch (InvalidSPDXAnalysisException e) {
-				retval.add("Error geting license infos from files: "+e.getMessage());
+				retval.add("Error geting license information from files: "+e.getMessage());
 			}
 			if (licenseInfos != null) {
 				for (int i = 0; i < licenseInfos.length; i++) {
