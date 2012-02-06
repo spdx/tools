@@ -44,9 +44,10 @@ public class SPDXStandardLicense extends SPDXLicense {
 	public SPDXStandardLicense(String name, String id, String text, String sourceUrl, String notes,
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
 		super(id);
-		if (!SPDXLicenseInfoFactory.isStandardLicenseID(id)) {
-		    throw new InvalidSPDXAnalysisException("Invalid standard license ID: " + id);
-		}
+// The following check was removed since this class is used in creating the standard licenses for the website
+//		if (!SPDXLicenseInfoFactory.isStandardLicenseID(id)) {
+//		    throw new InvalidSPDXAnalysisException("Invalid standard license ID: " + id);
+//		}
 		this.name = name;
 		this.sourceUrl = sourceUrl;
 		this.notes = notes;
