@@ -156,8 +156,9 @@ public class SpdxVerificationHelper {
 	 * @return
 	 */
 	public static String verifyReviewer(String reviewer) {
-		if (!reviewer.startsWith("Person:")) {
-			return "Reviewer does not start with Person:";
+		if (!reviewer.startsWith("Person:") && !reviewer.startsWith("Tool:") &&
+				!reviewer.startsWith("Organization:")) {
+			return "Reviewer does not start with Person:, Organization:, or Tool:";
 		} else {
 			return null;
 		}

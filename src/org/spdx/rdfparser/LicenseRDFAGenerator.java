@@ -112,12 +112,17 @@ public class LicenseRDFAGenerator {
 			System.out.println("Error: empty Table of Contents template");
 			return;
 		}
-		SPDXLicenseSpreadsheet ss = null;
+		IStandardLicenseProvider licenseProvider = null;
 		try {
-			ss = new SPDXLicenseSpreadsheet(ssFile, false, true);
+			if (ssFile.getName().toLowerCase().endsWith(".xls")) {
+				licenseProvider = new SPDXLicenseSpreadsheet(ssFile, false, true);
+			} else {
+				// we assume it is a csv file
+				licenseProvider = new SpdxLicenseCsv(ssFile);
+			}
 			LicenseHTMLFile licHtml = new LicenseHTMLFile(htmlTemplate);
 			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(tocTemplate);
-			Iterator<SPDXStandardLicense> iter = ss.getIterator();
+			Iterator<SPDXStandardLicense> iter = licenseProvider.getIterator();
 			String tocFileName = "index.html";
 			while (iter.hasNext()) {
 				SPDXStandardLicense license = iter.next();
@@ -137,15 +142,25 @@ public class LicenseRDFAGenerator {
 			writeCssFile(dir);
 		} catch (SpreadsheetException e) {
 			System.out.println("Invalid spreadsheet: "+e.getMessage());
+		} catch (SpdxStdLicenseException e) {
+			System.out.println("Error reading standard licenses: "+e.getMessage());
 		} catch (Exception e) {
 			System.out.println("Unhandled exception generating html:");
 			e.printStackTrace();
 		} finally {
-			if (ss != null) {
+			if (licenseProvider != null && (licenseProvider instanceof SPDXLicenseSpreadsheet)) {
 				try {
-					ss.close();
+					SPDXLicenseSpreadsheet spreadsheet = (SPDXLicenseSpreadsheet)licenseProvider;
+					spreadsheet.close();
 				} catch (SpreadsheetException e) {
 					System.out.println("Error closing spreadsheet file: "+e.getMessage());
+				}
+			} else if (licenseProvider != null && (licenseProvider instanceof SpdxLicenseCsv)) {
+				SpdxLicenseCsv licenseCsv = (SpdxLicenseCsv)licenseProvider;
+				try {
+					licenseCsv.close();
+				} catch (IOException e) {
+					System.out.println("Error closing CSV file: "+e.getMessage());
 				}
 			}
 		}

@@ -26,13 +26,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.LicenseSheet;
 import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.IStandardLicenseProvider;
 
 /**
  * A spreadhseet containing license information
  * @author Source Auditor
  *
  */
-public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
+public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStandardLicenseProvider  {
 	
 	public class LicenseIterator implements Iterator<SPDXStandardLicense> {
 
@@ -139,6 +140,4 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
             throw new RuntimeException(e);
         }
 	}
-	
-	
 }

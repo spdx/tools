@@ -1,3 +1,7 @@
+Implementation version 1.0.3
+- Added support for .csv files to the license RDFa generator
+- Fix bug 988 - added examples to git repo
+- Fix bug 996 - Reviewer validation updated to allow Organization: and Tool:
 Implementation version 1.0.2
 - Significant changes to the library structure to reduce disk space required
 - Added examples directory (bug id 988)
