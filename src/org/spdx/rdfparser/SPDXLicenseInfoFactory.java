@@ -182,7 +182,7 @@ public class SPDXLicenseInfoFactory {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {
-			// do nothing
+			throw(new NoStandardLicenseRdfModel("Could not load the RDFa reader for licenses.  This could be caused by an installation problem - missing java-rdfa jar file"));
 		}  
 		Model retval = ModelFactory.createDefaultModel();
 		InputStream in = null;
@@ -206,7 +206,11 @@ public class SPDXLicenseInfoFactory {
 					throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
 				}
 			}
-			retval.read(in, prefix, "HTML");
+			try {
+				retval.read(in, prefix, "HTML");
+			} catch(Exception ex) {
+				throw(new NoStandardLicenseRdfModel("Error reading the standard licenses: "+ex.getMessage(),ex));
+			}
 			return retval;
 		} finally {
 			if (in != null) {
