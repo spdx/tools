@@ -24,7 +24,6 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.LicenseSheet;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.IStandardLicenseProvider;
 
@@ -40,7 +39,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		private int currentRowNum;
 		SPDXStandardLicense currentLicense;
 		public LicenseIterator() throws SpreadsheetException {
-			this.currentRowNum = 2;	// skip past header row
+			this.currentRowNum = licenseSheet.getFirstDataRow();	// skip past header row
 			try {
                 currentLicense = licenseSheet.getLicense(currentRowNum);
             } catch (InvalidSPDXAnalysisException e) {
@@ -81,7 +80,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create, boolean readonly)
 			throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
-		this.licenseSheet = new LicenseSheet(this.workbook, LICENSE_SHEET_NAME);
+		this.licenseSheet = new LicenseSheet(this.workbook, LICENSE_SHEET_NAME, spreadsheetFile);
 		String verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
 			logger.error(verifyMsg);

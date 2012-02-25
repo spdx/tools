@@ -79,7 +79,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.text = t.getObject().toString(false);
+			this.text = t.getObject().toString(true);
 		}
 		//KLUDGE - work around the fact that some of the old licenses were generated with the incorrect tag - "LicenseText"
 		//Todo: Remove this once the licenses on the website have been updated

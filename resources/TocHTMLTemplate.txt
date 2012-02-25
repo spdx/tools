@@ -52,25 +52,19 @@
 </div> <!-- /#logo-title -->
 
 <br />
+<br />
 
-<div id="head">
-
-<div id='tabs' class="clearfix">
-<ul>
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-
-<br />
-<br />
-<br />
-
-</div> <!-- tabs clearfix -->
-
-</div><!-- close head -->
+</div>
+</div>
 
 </div></div> <!-- /#header-inner, /#header -->
 
