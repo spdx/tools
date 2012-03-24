@@ -1,3 +1,9 @@
+Implementation version 1.0.4
+- Put back HTML formatting to the standard license text 
+- Fix Bug 1007 -Valid file types are rejected as invalid
+- Fix Bug 1008 -Incorrect "Missing required checksum" validation failure
+- Changed the handling of standard licenses to reference the standard license URL rather than copying all field (makes for a cleaner RDF file)
+
 Implementation version 1.0.3
 - Added support for .csv files to the license RDFa generator
 - Fix bug 988 - added examples to git repo
