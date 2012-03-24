@@ -31,13 +31,6 @@ public class SpdxVerificationHelper {
 	
 	static IRIFactory iriFactory = IRIFactory.semanticWebImplementation();
 
-	static HashSet<String> VALID_FILE_TYPES = new HashSet<String>();
-	
-	static {
-		VALID_FILE_TYPES.add("SOURCE");		VALID_FILE_TYPES.add("BINARY");
-		VALID_FILE_TYPES.add("ARCHIVE");	VALID_FILE_TYPES.add("OTHER");
-	}
-	
 	static final String[] VALID_CREATOR_PREFIXES = new String[] {"Person:", "Organization:", "Tool:"};
 	static final String[] VALID_ORIGINATOR_SUPPLIER_PREFIXES = new String[] {SpdxRdfConstants.NOASSERTION_VALUE, "Person:", "Organization:"};
 
@@ -60,7 +53,7 @@ public class SpdxVerificationHelper {
 	 * @return
 	 */
 	public static String verifyFileType(String fileType) {
-		if (!VALID_FILE_TYPES.contains(fileType)) {
+		if (!SPDXFile.FILE_TYPE_TO_RESOURCE.containsKey(fileType)) {
 			return "Unrecognized file type";
 		} else {
 			return null;

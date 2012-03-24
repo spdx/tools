@@ -17,6 +17,7 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -33,13 +34,21 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SPDXChecksum {
 
 	// Supported algorithms
+	public static final HashMap<String, String> ALGORITHM_TO_URI = new HashMap<String, String>();
+	public static final HashMap<String, String> URI_TO_ALGORITHM = new HashMap<String, String>();
+	static {
+		ALGORITHM_TO_URI.put(SpdxRdfConstants.ALGORITHM_SHA1, 
+				SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM_SHA1);
+		URI_TO_ALGORITHM.put(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM_SHA1,
+				SpdxRdfConstants.ALGORITHM_SHA1);
+	}
 	
-	public static final String ALGORITHM_SHA1 = "SHA1";
 	private String algorithm;
 	private String value;
 	private Model model;
 	private Node checksumNode;
 	private Resource checksumResource;
+	
 	
 	public SPDXChecksum(String algorithm, String value) {
 		this.algorithm = algorithm;
@@ -62,7 +71,18 @@ public class SPDXChecksum {
 		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.algorithm = t.getObject().toString(false);
+			if (t.getObject().isLiteral()) {
+				// The following is for compatibility with rdf generated with older
+				// versions of the tool
+				this.algorithm = t.getObject().toString(false);
+			} else if (t.getObject().isURI()) {
+				this.algorithm = URI_TO_ALGORITHM.get(t.getObject().getURI());
+				if (this.algorithm == null) {
+					this.algorithm = "UNKNOWN";
+				}
+			} else {
+				throw(new InvalidSPDXAnalysisException("Invalid checksum algorithm - must be one of the defined algorithms supported by SPDX."));
+			}
 		}
 		
 		// value
@@ -84,19 +104,48 @@ public class SPDXChecksum {
 
 	/**
 	 * @param algorithm the algorithm to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setAlgorithm(String algorithm) {
+	public void setAlgorithm(String algorithm) throws InvalidSPDXAnalysisException {
 		this.algorithm = algorithm;
 		if (this.model != null && this.checksumNode != null) {
+			Resource algResource = algorithmStringToResource(algorithm, this.model);
 			// delete any previous algorithm
 			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			model.removeAll(checksumResource, p, null);
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
-			checksumResource.addProperty(p, algorithm);
+			checksumResource.addProperty(p, algResource);
 		}
 	}
 
+	/**
+	 * Converts a string algorithm to an RDF resource
+	 * @param algorithm
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static Resource  algorithmStringToResource(String algorithm, Model model) throws InvalidSPDXAnalysisException {
+		String resourceUri = ALGORITHM_TO_URI.get(algorithm);
+		if (resourceUri == null) {
+			throw(new InvalidSPDXAnalysisException("Invalid algorithm: "+algorithm));
+		}
+		Resource retval = model.createResource(resourceUri);
+		return retval;
+	}
+	
+	public static String algorithmResourceToString(Resource algorithmResource) throws InvalidSPDXAnalysisException {
+		String uri = algorithmResource.getURI();
+		if (!algorithmResource.isURIResource()) {
+			throw(new InvalidSPDXAnalysisException("Algorithm resource must be a URI"));
+		}
+		String retval = URI_TO_ALGORITHM.get(uri);
+		if (retval == null) {
+			throw(new InvalidSPDXAnalysisException("Invalid algorithm resource."));
+		}
+		return retval;
+	}
+	
 	/**
 	 * @return the value
 	 */
@@ -132,7 +181,8 @@ public class SPDXChecksum {
 		if (algorithm != null) {
 			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
-			r.addProperty(algProperty, this.algorithm);
+			Resource algResource = model.createResource(ALGORITHM_TO_URI.get(algorithm));
+			r.addProperty(algProperty, algResource);
 		}
 		if (this.value != null) {
 			Property valueProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE);
@@ -149,7 +199,7 @@ public class SPDXChecksum {
 		if (algorithm == null || algorithm.isEmpty()) {
 			retval.add("Missing required algorithm");
 		} else {
-			if (!algorithm.equals(ALGORITHM_SHA1)) {
+			if (!ALGORITHM_TO_URI.containsKey(algorithm)) {
 				retval.add("Unsupported checksum algorithm: "+algorithm);
 			}
 		}

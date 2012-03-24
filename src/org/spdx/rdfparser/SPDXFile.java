@@ -17,6 +17,9 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -30,6 +33,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public class SPDXFile {
+	
+	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());
 	private Node node = null;
 	private Model model = null;
 	private String name;
@@ -40,6 +45,29 @@ public class SPDXFile {
 	private String licenseComments;
 	private String copyright;
 	private DOAPProject[] artifactOf;
+	
+	public static HashMap<String, String> FILE_TYPE_TO_RESOURCE = new HashMap<String, String>();
+	public static HashMap<String, String> RESOURCE_TO_FILE_TYPE = new HashMap<String, String>();
+
+	static {
+		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_SOURCE, 
+				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_SOURCE);
+		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_SOURCE, 
+				SpdxRdfConstants.FILE_TYPE_SOURCE);
+		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_BINARY, 
+				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_BINARY);
+		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_BINARY, 
+				SpdxRdfConstants.FILE_TYPE_BINARY);
+		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_ARCHIVE, 
+				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_ARCHIVE);
+		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_ARCHIVE, 
+				SpdxRdfConstants.FILE_TYPE_ARCHIVE);
+		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_OTHER, 
+				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_OTHER);
+		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_OTHER, 
+				SpdxRdfConstants.FILE_TYPE_OTHER);
+	};
+	
 	/**
 	 * Construct an SPDX File form the fileNode
 	 * @param fileNode RDF Graph node representing the SPDX File
@@ -63,7 +91,7 @@ public class SPDXFile {
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			SPDXChecksum cksum = new SPDXChecksum(model, t.getObject());
-			if (cksum.getAlgorithm().equals(SPDXChecksum.ALGORITHM_SHA1)) {
+			if (cksum.getAlgorithm().equals(SpdxRdfConstants.ALGORITHM_SHA1)) {
 				this.sha1 = cksum.getValue();
 			}
 		}
@@ -73,7 +101,17 @@ public class SPDXFile {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.type = t.getObject().toString(false);
+			if (t.getObject().isLiteral()) {
+				// the following is for compatibility with previous versions of the tool which used literals for the file type
+				this.type = t.getObject().toString(false);
+			} else if (t.getObject().isURI()) {
+				this.type = RESOURCE_TO_FILE_TYPE.get(t.getObject().getURI());
+				if (this.type == null) {
+					throw(new InvalidSPDXAnalysisException("Invalid URI for file type resource - must be one of the individual file types in http://spdx.org/rdf/terms"));
+				}
+			} else {
+				throw(new InvalidSPDXAnalysisException("Invalid file type property - must be a URI type specified in http://spdx.org/rdf/terms"));
+			}			
 		}
 		// concluded License
 		ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
@@ -140,7 +178,7 @@ public class SPDXFile {
 		this.artifactOf = alProjects.toArray(new DOAPProject[alProjects.size()]);
 	}
 	
-	public Resource createResource(Model model) {
+	public Resource createResource(Model model) throws InvalidSPDXAnalysisException {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_FILE);
 		Resource retval = model.createResource(type);
 		populateModel(model, retval);
@@ -151,15 +189,16 @@ public class SPDXFile {
 	 * Populates a Jena RDF model with the information from this file declaration
 	 * @param licenseResource
 	 * @param model
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void populateModel(Model model, Resource fileResource) {
+	private void populateModel(Model model, Resource fileResource) throws InvalidSPDXAnalysisException {
 		// name
 		Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME);
 		fileResource.addProperty(p, this.getName());
 
 		if (this.sha1 != null) {
 			// sha1
-			SPDXChecksum cksum = new SPDXChecksum(SPDXChecksum.ALGORITHM_SHA1, sha1);
+			SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
 			Resource cksumResource = cksum.createResource(model);
 
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
@@ -167,7 +206,8 @@ public class SPDXFile {
 		}
 		// type
 		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_TYPE);
-		fileResource.addProperty(p, this.getType());
+		Resource fileTypeResource = fileTypeStringToTypeResource(this.getType(), model);
+		fileResource.addProperty(p, fileTypeResource);
 
 		// detectedLicense
 		if (this.concludedLicenses != null) {
@@ -210,8 +250,7 @@ public class SPDXFile {
 				Resource projectResource = artifactOf[i].createResource(model);
 				fileResource.addProperty(p, projectResource);
 			}
-		}
-		
+		}		
 		this.model = model;
 		this.node = fileResource.asNode();
 	}
@@ -353,7 +392,7 @@ public class SPDXFile {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
-			SPDXChecksum cksum = new SPDXChecksum(SPDXChecksum.ALGORITHM_SHA1, sha1);
+			SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
 			Resource cksumResource = cksum.createResource(model);
 
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
@@ -368,16 +407,47 @@ public class SPDXFile {
 	}
 	/**
 	 * @param type the type to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setType(String type) {
+	public void setType(String type) throws InvalidSPDXAnalysisException {
 		this.type = type;
 		if (this.model != null && this.node != null) {
+			Resource typeResource = fileTypeStringToTypeResource(type, this.model);
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_TYPE);
 			Resource fileResource = model.createResource(node.getURI());
 			model.removeAll(fileResource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_TYPE);
-			fileResource.addProperty(p, this.getType());
+			fileResource.addProperty(p, typeResource);
 		}
+	}
+
+	/**
+	 * Converts a string file type to an RDF resource
+	 * @param fileType
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static Resource  fileTypeStringToTypeResource(String fileType, Model model) throws InvalidSPDXAnalysisException {
+		String resourceUri = FILE_TYPE_TO_RESOURCE.get(fileType);
+		if (resourceUri == null) {
+			// not sure if we want to throw an exception here or just set to "Other"
+			throw(new InvalidSPDXAnalysisException("Invalid file type: "+fileType));
+			//resourceUri = SpdxRdfConstants.PROP_FILE_TYPE_OTHER;
+			
+		}
+		Resource retval = model.createResource(resourceUri);
+		return retval;
+	}
+	
+	public static String fileTypeResourceToString(Resource fileTypeResource) throws InvalidSPDXAnalysisException {
+		if (!fileTypeResource.isURIResource()) {
+			throw(new InvalidSPDXAnalysisException("File type resource must be a URI."));
+		}
+		String retval = fileTypeResource.getURI();
+		if (retval == null) {
+			throw(new InvalidSPDXAnalysisException("Not a recognized file type for an SPDX docuement."));
+		}
+		return retval;
 	}
 
 	/**
@@ -409,7 +479,6 @@ public class SPDXFile {
 				fileResource.addProperty(p, projectResource);
 			}
 		}
-
 	}
 
 	/**

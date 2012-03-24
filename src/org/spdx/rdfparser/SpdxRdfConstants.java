@@ -16,10 +16,12 @@
  */
 package org.spdx.rdfparser;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 /**
- * @author Source Auditor
+ * Constants which map to the SPDX specifications found at http://spdx.org/rdf/terms
+ * @author Gary O'Neall
  *
  */
 public interface SpdxRdfConstants {
@@ -82,6 +84,8 @@ public interface SpdxRdfConstants {
 	// SPDX Checksum Properties
 	public static final String PROP_CHECKSUM_ALGORITHM = "algorithm";
 	public static final String PROP_CHECKSUM_VALUE = "checksumValue";
+	public static final String ALGORITHM_SHA1 = "SHA1";
+	public static final String PROP_CHECKSUM_ALGORITHM_SHA1 = "checksumAlgorithm_sha1";
 	
 	// SPDX PackageVerificationCode Properties
 	public static final String PROP_VERIFICATIONCODE_IGNORED_FILES = "packageVerificationCodeExcludedFile";
@@ -130,6 +134,17 @@ public interface SpdxRdfConstants {
 	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";
 	public static final String PROP_FILE_LIC_COMMENTS = "licenseComments";
 	public static final String PROP_FILE_ARTIFACTOF = "artifactOf";
+	
+	// SPDX File Type Properties
+	public static final String PROP_FILE_TYPE_SOURCE = "fileType_source";
+	public static final String PROP_FILE_TYPE_ARCHIVE = "fileType_archive";
+	public static final String PROP_FILE_TYPE_BINARY = "fileType_binary";
+	public static final String PROP_FILE_TYPE_OTHER = "fileType_other";
+	
+	public static final String FILE_TYPE_SOURCE = "SOURCE";
+	public static final String FILE_TYPE_ARCHIVE = "ARCHIVE";
+	public static final String FILE_TYPE_BINARY = "BINARY";
+	public static final String FILE_TYPE_OTHER = "OTHER";
 	
 	// SPDX Review Properties
 	public static final String PROP_REVIEW_REVIEWER = "reviewer";
