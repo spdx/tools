@@ -37,7 +37,7 @@ import com.hp.hpl.jena.util.FileManager;
 public class SPDXDocumentFactory {
 
 	/**
-	 * Create a new SPDX Document populating the date from the existing model
+	 * Create a new SPDX Document populating the data from the existing model
 	 * @param model
 	 * @return
 	 * @throws InvalidSPDXAnalysisException

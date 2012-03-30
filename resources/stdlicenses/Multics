@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,10 +10,16 @@
 <head>
 	<title>Multics License</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
 	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+<!--[if IE 6]>
+	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+<![endif]-->
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -45,22 +51,24 @@
 	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
 </div> <!-- /#logo-title -->
 <br />
-<div id="head">
-<div id='tabs' class="clearfix">
-<ul>
+<br />
+
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-<br />
-<br />
-<br />
-</div> <!-- tabs clearfix -->
-</div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
+</div>
+</div>
+
 </div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
 <h1 property="dc:title">Multics License</h1>
 <h2 id="information">Information</h2>
 <dl>
@@ -71,7 +79,7 @@
 	<dt>Other web pages for this license</dt>
 	<dd>
 		<ul>
-							<li><a href="http://www.opensource.org/licenses/multics.txt" rel="owl:sameAs">http://www.opensource.org/licenses/multics.txt</a></li>
+							<li><a href="http://www.opensource.org/licenses/Multics" rel="owl:sameAs">http://www.opensource.org/licenses/Multics</a></li>
 
 
 		</ul>
@@ -80,46 +88,44 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
+<pre><div property="spdx:licenseText" class="license-text">Multics License
 
-<div property="spdx:licenseText" class="license-text">
-Multics License<br/>
-<br/>
-Historical Background<br/>
-<br/>
-This edition of the Multics software materials and documentation is<br/>
-provided and donated to Massachusetts Institute of Technology by Group<br/>
-BULL including BULL HN Information Systems Inc. as a contribution to<br/>
-computer science knowledge. This donation is made also to give evidence<br/>
-of the common contributions of Massachusetts Institute of Technology,<br/>
-Bell Laboratories, General Electric, Honeywell Information Systems<br/>
-Inc., Honeywell BULL Inc., Groupe BULL and BULL HN Information Systems<br/>
-Inc. to the development of this operating system. Multics development<br/>
-was initiated by Massachusetts Institute of Technology Project MAC<br/>
-(1963-1970), renamed the MIT Laboratory for Computer Science and<br/>
-Artificial Intelligence in the mid 1970s, under the leadership of<br/>
-Professor Fernando Jose Corbato. Users consider that Multics provided the<br/>
-best software architecture for managing computer hardware properly and<br/>
-for executing programs. Many subsequent operating systems incorporated<br/>
-Multics principles. Multics was distributed in 1975 to 2000 by Group<br/>
-Bull in Europe , and in the U.S. by Bull HN Information Systems Inc., as<br/>
-successor in interest by change in name only to Honeywell Bull Inc. and<br/>
-Honeywell Information Systems Inc. .<br/>
-<br/>
------------------------------------------------------------<br/>
-<br/>
-Permission to use, copy, modify, and distribute these programs and their<br/>
-documentation for any purpose and without fee is hereby granted,provided<br/>
-that the below copyright notice and historical background appear in all<br/>
-copies and that both the copyright notice and historical background and<br/>
-this permission notice appear in supporting documentation, and that<br/>
-the names of MIT, HIS, BULL or BULL HN not be used in advertising or<br/>
-publicity pertaining to distribution of the programs without specific<br/>
-prior written permission.<br/>
-Copyright 1972 by Massachusetts Institute of Technology and Honeywell Information<br/>
-Systems Inc.<br/>
-Copyright 2006 by BULL HN Information Systems Inc.<br/>
-Copyright 2006 by Bull SAS<br/>
-All Rights Reserved
+Historical Background
+
+This edition of the Multics software materials and documentation is
+provided and donated to Massachusetts Institute of Technology by Group
+BULL including BULL HN Information Systems Inc. as a contribution to
+computer science knowledge. This donation is made also to give evidence
+of the common contributions of Massachusetts Institute of Technology,
+Bell Laboratories, General Electric, Honeywell Information Systems
+Inc., Honeywell BULL Inc., Groupe BULL and BULL HN Information Systems
+Inc. to the development of this operating system. Multics development
+was initiated by Massachusetts Institute of Technology Project MAC
+(1963-1970), renamed the MIT Laboratory for Computer Science and
+Artificial Intelligence in the mid 1970s, under the leadership of
+Professor Fernando Jose Corbato. Users consider that Multics provided the
+best software architecture for managing computer hardware properly and
+for executing programs. Many subsequent operating systems incorporated
+Multics principles. Multics was distributed in 1975 to 2000 by Group
+Bull in Europe , and in the U.S. by Bull HN Information Systems Inc., as
+successor in interest by change in name only to Honeywell Bull Inc. and
+Honeywell Information Systems Inc. .
+
+-----------------------------------------------------------
+
+Permission to use, copy, modify, and distribute these programs and their
+documentation for any purpose and without fee is hereby granted,provided
+that the below copyright notice and historical background appear in all
+copies and that both the copyright notice and historical background and
+this permission notice appear in supporting documentation, and that
+the names of MIT, HIS, BULL or BULL HN not be used in advertising or
+publicity pertaining to distribution of the programs without specific
+prior written permission.
+Copyright 1972 by Massachusetts Institute of Technology and Honeywell Information
+Systems Inc.
+Copyright 2006 by BULL HN Information Systems Inc.
+Copyright 2006 by Bull SAS
+All Rights Reserved</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

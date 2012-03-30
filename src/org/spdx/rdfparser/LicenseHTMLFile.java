@@ -146,6 +146,7 @@ public class LicenseHTMLFile {
 	}
 	private String escapeHTML(String text) {
 		String retval = StringEscapeUtils.escapeXml(text);
-		return retval.replace("\n", "<br/>\n");
+//		retval = retval.replace("\n", "<br/>\n");
+		return retval;
 	}
 }

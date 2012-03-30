@@ -18,9 +18,11 @@ package org.spdx.rdfparser;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -170,11 +172,13 @@ public class LicenseRDFAGenerator {
 	 * @return
 	 */
 	private static String textFileToString(File htmlTemplateFile) {
-		FileReader reader = null;
+		FileInputStream fis = null;
+		InputStreamReader reader = null;
 		BufferedReader in = null;
 		String retval = null;
 		try {
-			reader = new FileReader(htmlTemplateFile);
+			fis = new FileInputStream(htmlTemplateFile);
+			reader = new InputStreamReader(fis, "UTF-8");
 			in = new BufferedReader(reader);
 			StringBuilder sb = new StringBuilder();
 			String line = in.readLine();
@@ -188,6 +192,13 @@ public class LicenseRDFAGenerator {
 			System.out.println("IO Error copying HTML template files: "+e.getMessage());
 			return null;
 		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
+				}
+			}
 			if (in != null) {
 				try {
 					in.close();

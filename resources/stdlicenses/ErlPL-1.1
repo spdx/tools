@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,10 +10,16 @@
 <head>
 	<title>Erlang Public License v1.1</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
 	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+<!--[if IE 6]>
+	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+<![endif]-->
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -45,22 +51,24 @@
 	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
 </div> <!-- /#logo-title -->
 <br />
-<div id="head">
-<div id='tabs' class="clearfix">
-<ul>
+<br />
+
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-<br />
-<br />
-<br />
-</div> <!-- tabs clearfix -->
-</div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
+</div>
+</div>
+
 </div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
 <h1 property="dc:title">Erlang Public License v1.1</h1>
 <h2 id="information">Information</h2>
 <dl>
@@ -80,294 +88,292 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
+<pre><div property="spdx:licenseText" class="license-text">ERLANG PUBLIC LICENSE
+Version 1.1
 
-<div property="spdx:licenseText" class="license-text">
-ERLANG PUBLIC LICENSE<br/>
-Version 1.1<br/>
-<br/>
-1. Definitions.<br/>
-<br/>
-1.1. ``Contributor&apos;&apos; means each entity that creates or contributes to<br/>
-the creation of Modifications.<br/>
-<br/>
-1.2. ``Contributor Version&apos;&apos; means the combination of the Original<br/>
-Code, prior Modifications used by a Contributor, and the Modifications<br/>
-made by that particular Contributor.<br/>
-<br/>
-1.3. ``Covered Code&apos;&apos; means the Original Code or Modifications or the<br/>
-combination of the Original Code and Modifications, in each case<br/>
-including portions thereof.<br/>
-<br/>
-1.4. ``Electronic Distribution Mechanism&apos;&apos; means a mechanism generally<br/>
-accepted in the software development community for the electronic<br/>
-transfer of data.<br/>
-<br/>
-1.5. ``Executable&apos;&apos; means Covered Code in any form other than Source<br/>
-Code.<br/>
-<br/>
-1.6. ``Initial Developer&apos;&apos; means the individual or entity identified<br/>
-as the Initial Developer in the Source Code notice required by Exhibit<br/>
-A.<br/>
-<br/>
-1.7. ``Larger Work&apos;&apos; means a work which combines Covered Code or<br/>
-portions thereof with code not governed by the terms of this License.<br/>
-<br/>
-1.8. ``License&apos;&apos; means this document.<br/>
-<br/>
-1.9. ``Modifications&apos;&apos; means any addition to or deletion from the<br/>
-substance or structure of either the Original Code or any previous<br/>
-Modifications. When Covered Code is released as a series of files, a<br/>
-Modification is:<br/>
-<br/>
-A. Any addition to or deletion from the contents of a file containing<br/>
-   Original Code or previous Modifications. <br/>
-<br/>
-B. Any new file that contains any part of the Original Code or<br/>
-   previous Modifications. <br/>
-<br/>
-1.10. ``Original Code&apos;&apos; means Source Code of computer software code<br/>
-which is described in the Source Code notice required by Exhibit A as<br/>
-Original Code, and which, at the time of its release under this<br/>
-License is not already Covered Code governed by this License.<br/>
-<br/>
-1.11. ``Source Code&apos;&apos; means the preferred form of the Covered Code for<br/>
-making modifications to it, including all modules it contains, plus<br/>
-any associated interface definition files, scripts used to control<br/>
-compilation and installation of an Executable, or a list of source<br/>
-code differential comparisons against either the Original Code or<br/>
-another well known, available Covered Code of the Contributor&apos;s<br/>
-choice. The Source Code can be in a compressed or archival form,<br/>
-provided the appropriate decompression or de-archiving software is<br/>
-widely available for no charge.<br/>
-<br/>
-1.12. ``You&apos;&apos; means an individual or a legal entity exercising rights<br/>
-under, and complying with all of the terms of, this License. For legal<br/>
-entities,``You&apos;&apos; includes any entity which controls, is controlled by,<br/>
-or is under common control with You. For purposes of this definition,<br/>
-``control&apos;&apos; means (a) the power, direct or indirect, to cause the<br/>
-direction or management of such entity, whether by contract or<br/>
-otherwise, or (b) ownership of fifty percent (50%) or more of the<br/>
-outstanding shares or beneficial ownership of such entity.<br/>
-<br/>
-2. Source Code License.<br/>
-<br/>
-2.1. The Initial Developer Grant.<br/>
-The Initial Developer hereby grants You a world-wide, royalty-free,<br/>
-non-exclusive license, subject to third party intellectual property<br/>
-claims:<br/>
-<br/>
-(a) to use, reproduce, modify, display, perform, sublicense and<br/>
-    distribute the Original Code (or portions thereof) with or without<br/>
-    Modifications, or as part of a Larger Work; and <br/>
-<br/>
-(b) under patents now or hereafter owned or controlled by Initial<br/>
-    Developer, to make, have made, use and sell (``Utilize&apos;&apos;) the<br/>
-    Original Code (or portions thereof), but solely to the extent that<br/>
-    any such patent is reasonably necessary to enable You to Utilize<br/>
-    the Original Code (or portions thereof) and not to any greater<br/>
-    extent that may be necessary to Utilize further Modifications or<br/>
-    combinations. <br/>
-<br/>
-2.2. Contributor Grant.<br/>
-Each Contributor hereby grants You a world-wide, royalty-free,<br/>
-non-exclusive license, subject to third party intellectual property<br/>
-claims:<br/>
-<br/>
-(a) to use, reproduce, modify, display, perform, sublicense and<br/>
-    distribute the Modifications created by such Contributor (or<br/>
-    portions thereof) either on an unmodified basis, with other<br/>
-    Modifications, as Covered Code or as part of a Larger Work; and <br/>
-<br/>
-(b) under patents now or hereafter owned or controlled by Contributor,<br/>
-    to Utilize the Contributor Version (or portions thereof), but<br/>
-    solely to the extent that any such patent is reasonably necessary<br/>
-    to enable You to Utilize the Contributor Version (or portions<br/>
-    thereof), and not to any greater extent that may be necessary to<br/>
-    Utilize further Modifications or combinations. <br/>
-<br/>
-3. Distribution Obligations.<br/>
-<br/>
-3.1. Application of License.<br/>
-The Modifications which You contribute are governed by the terms of<br/>
-this License, including without limitation Section 2.2. The Source<br/>
-Code version of Covered Code may be distributed only under the terms<br/>
-of this License, and You must include a copy of this License with<br/>
-every copy of the Source Code You distribute. You may not offer or<br/>
-impose any terms on any Source Code version that alters or restricts<br/>
-the applicable version of this License or the recipients&apos; rights<br/>
-hereunder. However, You may include an additional document offering<br/>
-the additional rights described in Section 3.5. <br/>
-<br/>
-3.2. Availability of Source Code.<br/>
-Any Modification which You contribute must be made available in Source<br/>
-Code form under the terms of this License either on the same media as<br/>
-an Executable version or via an accepted Electronic Distribution<br/>
-Mechanism to anyone to whom you made an Executable version available;<br/>
-and if made available via Electronic Distribution Mechanism, must<br/>
-remain available for at least twelve (12) months after the date it<br/>
-initially became available, or at least six (6) months after a<br/>
-subsequent version of that particular Modification has been made<br/>
-available to such recipients. You are responsible for ensuring that<br/>
-the Source Code version remains available even if the Electronic<br/>
-Distribution Mechanism is maintained by a third party.<br/>
-<br/>
-3.3. Description of Modifications.<br/>
-You must cause all Covered Code to which you contribute to contain a<br/>
-file documenting the changes You made to create that Covered Code and<br/>
-the date of any change. You must include a prominent statement that<br/>
-the Modification is derived, directly or indirectly, from Original<br/>
-Code provided by the Initial Developer and including the name of the<br/>
-Initial Developer in (a) the Source Code, and (b) in any notice in an<br/>
-Executable version or related documentation in which You describe the<br/>
-origin or ownership of the Covered Code.<br/>
-<br/>
-3.4. Intellectual Property Matters<br/>
-<br/>
-(a) Third Party Claims.<br/>
-    If You have knowledge that a party claims an intellectual property<br/>
-    right in particular functionality or code (or its utilization<br/>
-    under this License), you must include a text file with the source<br/>
-    code distribution titled ``LEGAL&apos;&apos; which describes the claim and<br/>
-    the party making the claim in sufficient detail that a recipient<br/>
-    will know whom to contact. If you obtain such knowledge after You<br/>
-    make Your Modification available as described in Section 3.2, You<br/>
-    shall promptly modify the LEGAL file in all copies You make<br/>
-    available thereafter and shall take other steps (such as notifying<br/>
-    appropriate mailing lists or newsgroups) reasonably calculated to<br/>
-    inform those who received the Covered Code that new knowledge has<br/>
-    been obtained. <br/>
-<br/>
-(b) Contributor APIs.<br/>
-    If Your Modification is an application programming interface and<br/>
-    You own or control patents which are reasonably necessary to<br/>
-    implement that API, you must also include this information in the<br/>
-    LEGAL file. <br/>
-<br/>
-3.5. Required Notices.<br/>
-You must duplicate the notice in Exhibit A in each file of the Source<br/>
-Code, and this License in any documentation for the Source Code, where<br/>
-You describe recipients&apos; rights relating to Covered Code. If You<br/>
-created one or more Modification(s), You may add your name as a<br/>
-Contributor to the notice described in Exhibit A. If it is not<br/>
-possible to put such notice in a particular Source Code file due to<br/>
-its structure, then you must include such notice in a location (such<br/>
-as a relevant directory file) where a user would be likely to look for<br/>
-such a notice. You may choose to offer, and to charge a fee for,<br/>
-warranty, support, indemnity or liability obligations to one or more<br/>
-recipients of Covered Code. However, You may do so only on Your own<br/>
-behalf, and not on behalf of the Initial Developer or any<br/>
-Contributor. You must make it absolutely clear than any such warranty,<br/>
-support, indemnity or liability obligation is offered by You alone,<br/>
-and You hereby agree to indemnify the Initial Developer and every<br/>
-Contributor for any liability incurred by the Initial Developer or<br/>
-such Contributor as a result of warranty, support, indemnity or<br/>
-liability terms You offer.<br/>
-<br/>
-3.6. Distribution of Executable Versions.<br/>
-You may distribute Covered Code in Executable form only if the<br/>
-requirements of Section 3.1-3.5 have been met for that Covered Code,<br/>
-and if You include a notice stating that the Source Code version of<br/>
-the Covered Code is available under the terms of this License,<br/>
-including a description of how and where You have fulfilled the<br/>
-obligations of Section 3.2. The notice must be conspicuously included<br/>
-in any notice in an Executable version, related documentation or<br/>
-collateral in which You describe recipients&apos; rights relating to the<br/>
-Covered Code. You may distribute the Executable version of Covered<br/>
-Code under a license of Your choice, which may contain terms different<br/>
-from this License, provided that You are in compliance with the terms<br/>
-of this License and that the license for the Executable version does<br/>
-not attempt to limit or alter the recipient&apos;s rights in the Source<br/>
-Code version from the rights set forth in this License. If You<br/>
-distribute the Executable version under a different license You must<br/>
-make it absolutely clear that any terms which differ from this License<br/>
-are offered by You alone, not by the Initial Developer or any<br/>
-Contributor. You hereby agree to indemnify the Initial Developer and<br/>
-every Contributor for any liability incurred by the Initial Developer<br/>
-or such Contributor as a result of any such terms You offer.<br/>
-<br/>
-3.7. Larger Works.<br/>
-You may create a Larger Work by combining Covered Code with other code<br/>
-not governed by the terms of this License and distribute the Larger<br/>
-Work as a single product. In such a case, You must make sure the<br/>
-requirements of this License are fulfilled for the Covered Code.<br/>
-<br/>
-4. Inability to Comply Due to Statute or Regulation.<br/>
-If it is impossible for You to comply with any of the terms of this<br/>
-License with respect to some or all of the Covered Code due to statute<br/>
-or regulation then You must: (a) comply with the terms of this License<br/>
-to the maximum extent possible; and (b) describe the limitations and<br/>
-the code they affect. Such description must be included in the LEGAL<br/>
-file described in Section 3.4 and must be included with all<br/>
-distributions of the Source Code. Except to the extent prohibited by<br/>
-statute or regulation, such description must be sufficiently detailed<br/>
-for a recipient of ordinary skill to be able to understand it.<br/>
-<br/>
-5. Application of this License.<br/>
-<br/>
-This License applies to code to which the Initial Developer has<br/>
-attached the notice in Exhibit A, and to related Covered Code.<br/>
-<br/>
-6. CONNECTION TO MOZILLA PUBLIC LICENSE<br/>
-<br/>
-This Erlang License is a derivative work of the Mozilla Public<br/>
-License, Version 1.0. It contains terms which differ from the Mozilla<br/>
-Public License, Version 1.0.<br/>
-<br/>
-7. DISCLAIMER OF WARRANTY.<br/>
-<br/>
-COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN ``AS IS&apos;&apos; BASIS,<br/>
-WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,<br/>
-WITHOUT LIMITATION, WARRANTIES THAT THE COVERED CODE IS FREE OF<br/>
-DEFECTS, MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR<br/>
-NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF<br/>
-THE COVERED CODE IS WITH YOU. SHOULD ANY COVERED CODE PROVE DEFECTIVE<br/>
-IN ANY RESPECT, YOU (NOT THE INITIAL DEVELOPER OR ANY OTHER<br/>
-CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR<br/>
-CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART<br/>
-OF THIS LICENSE. NO USE OF ANY COVERED CODE IS AUTHORIZED HEREUNDER<br/>
-EXCEPT UNDER THIS DISCLAIMER.<br/>
-<br/>
-8. TERMINATION.<br/>
-This License and the rights granted hereunder will terminate<br/>
-automatically if You fail to comply with terms herein and fail to cure<br/>
-such breach within 30 days of becoming aware of the breach. All<br/>
-sublicenses to the Covered Code which are properly granted shall<br/>
-survive any termination of this License. Provisions which, by their<br/>
-nature, must remain in effect beyond the termination of this License<br/>
-shall survive.<br/>
-<br/>
-9. DISCLAIMER OF LIABILITY<br/>
-Any utilization of Covered Code shall not cause the Initial Developer<br/>
-or any Contributor to be liable for any damages (neither direct nor<br/>
-indirect).<br/>
-<br/>
-10. MISCELLANEOUS<br/>
-This License represents the complete agreement concerning the subject<br/>
-matter hereof. If any provision is held to be unenforceable, such<br/>
-provision shall be reformed only to the extent necessary to make it<br/>
-enforceable. This License shall be construed by and in accordance with<br/>
-the substantive laws of Sweden. Any dispute, controversy or claim<br/>
-arising out of or relating to this License, or the breach, termination<br/>
-or invalidity thereof, shall be subject to the exclusive jurisdiction<br/>
-of Swedish courts, with the Stockholm City Court as the first<br/>
-instance.<br/>
- <br/>
-EXHIBIT A.<br/>
-<br/>
-``The contents of this file are subject to the Erlang Public License,<br/>
-Version 1.1, (the &quot;License&quot;); you may not use this file except in<br/>
-compliance with the License. You should have received a copy of the<br/>
-Erlang Public License along with this software. If not, it can be<br/>
-retrieved via the world wide web at http://www.erlang.org/.<br/>
-<br/>
-Software distributed under the License is distributed on an &quot;AS IS&quot;<br/>
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See<br/>
-the License for the specific language governing rights and limitations<br/>
-under the License.<br/>
-<br/>
-The Initial Developer of the Original Code is Ericsson Utvecklings AB.<br/>
-Portions created by Ericsson are Copyright 1999, Ericsson Utvecklings<br/>
-AB. All Rights Reserved.&apos;&apos;
+1. Definitions.
+
+1.1. ``Contributor&apos;&apos; means each entity that creates or contributes to
+the creation of Modifications.
+
+1.2. ``Contributor Version&apos;&apos; means the combination of the Original
+Code, prior Modifications used by a Contributor, and the Modifications
+made by that particular Contributor.
+
+1.3. ``Covered Code&apos;&apos; means the Original Code or Modifications or the
+combination of the Original Code and Modifications, in each case
+including portions thereof.
+
+1.4. ``Electronic Distribution Mechanism&apos;&apos; means a mechanism generally
+accepted in the software development community for the electronic
+transfer of data.
+
+1.5. ``Executable&apos;&apos; means Covered Code in any form other than Source
+Code.
+
+1.6. ``Initial Developer&apos;&apos; means the individual or entity identified
+as the Initial Developer in the Source Code notice required by Exhibit
+A.
+
+1.7. ``Larger Work&apos;&apos; means a work which combines Covered Code or
+portions thereof with code not governed by the terms of this License.
+
+1.8. ``License&apos;&apos; means this document.
+
+1.9. ``Modifications&apos;&apos; means any addition to or deletion from the
+substance or structure of either the Original Code or any previous
+Modifications. When Covered Code is released as a series of files, a
+Modification is:
+
+A. Any addition to or deletion from the contents of a file containing
+   Original Code or previous Modifications. 
+
+B. Any new file that contains any part of the Original Code or
+   previous Modifications. 
+
+1.10. ``Original Code&apos;&apos; means Source Code of computer software code
+which is described in the Source Code notice required by Exhibit A as
+Original Code, and which, at the time of its release under this
+License is not already Covered Code governed by this License.
+
+1.11. ``Source Code&apos;&apos; means the preferred form of the Covered Code for
+making modifications to it, including all modules it contains, plus
+any associated interface definition files, scripts used to control
+compilation and installation of an Executable, or a list of source
+code differential comparisons against either the Original Code or
+another well known, available Covered Code of the Contributor&apos;s
+choice. The Source Code can be in a compressed or archival form,
+provided the appropriate decompression or de-archiving software is
+widely available for no charge.
+
+1.12. ``You&apos;&apos; means an individual or a legal entity exercising rights
+under, and complying with all of the terms of, this License. For legal
+entities,``You&apos;&apos; includes any entity which controls, is controlled by,
+or is under common control with You. For purposes of this definition,
+``control&apos;&apos; means (a) the power, direct or indirect, to cause the
+direction or management of such entity, whether by contract or
+otherwise, or (b) ownership of fifty percent (50%) or more of the
+outstanding shares or beneficial ownership of such entity.
+
+2. Source Code License.
+
+2.1. The Initial Developer Grant.
+The Initial Developer hereby grants You a world-wide, royalty-free,
+non-exclusive license, subject to third party intellectual property
+claims:
+
+(a) to use, reproduce, modify, display, perform, sublicense and
+    distribute the Original Code (or portions thereof) with or without
+    Modifications, or as part of a Larger Work; and 
+
+(b) under patents now or hereafter owned or controlled by Initial
+    Developer, to make, have made, use and sell (``Utilize&apos;&apos;) the
+    Original Code (or portions thereof), but solely to the extent that
+    any such patent is reasonably necessary to enable You to Utilize
+    the Original Code (or portions thereof) and not to any greater
+    extent that may be necessary to Utilize further Modifications or
+    combinations. 
+
+2.2. Contributor Grant.
+Each Contributor hereby grants You a world-wide, royalty-free,
+non-exclusive license, subject to third party intellectual property
+claims:
+
+(a) to use, reproduce, modify, display, perform, sublicense and
+    distribute the Modifications created by such Contributor (or
+    portions thereof) either on an unmodified basis, with other
+    Modifications, as Covered Code or as part of a Larger Work; and 
+
+(b) under patents now or hereafter owned or controlled by Contributor,
+    to Utilize the Contributor Version (or portions thereof), but
+    solely to the extent that any such patent is reasonably necessary
+    to enable You to Utilize the Contributor Version (or portions
+    thereof), and not to any greater extent that may be necessary to
+    Utilize further Modifications or combinations. 
+
+3. Distribution Obligations.
+
+3.1. Application of License.
+The Modifications which You contribute are governed by the terms of
+this License, including without limitation Section 2.2. The Source
+Code version of Covered Code may be distributed only under the terms
+of this License, and You must include a copy of this License with
+every copy of the Source Code You distribute. You may not offer or
+impose any terms on any Source Code version that alters or restricts
+the applicable version of this License or the recipients&apos; rights
+hereunder. However, You may include an additional document offering
+the additional rights described in Section 3.5. 
+
+3.2. Availability of Source Code.
+Any Modification which You contribute must be made available in Source
+Code form under the terms of this License either on the same media as
+an Executable version or via an accepted Electronic Distribution
+Mechanism to anyone to whom you made an Executable version available;
+and if made available via Electronic Distribution Mechanism, must
+remain available for at least twelve (12) months after the date it
+initially became available, or at least six (6) months after a
+subsequent version of that particular Modification has been made
+available to such recipients. You are responsible for ensuring that
+the Source Code version remains available even if the Electronic
+Distribution Mechanism is maintained by a third party.
+
+3.3. Description of Modifications.
+You must cause all Covered Code to which you contribute to contain a
+file documenting the changes You made to create that Covered Code and
+the date of any change. You must include a prominent statement that
+the Modification is derived, directly or indirectly, from Original
+Code provided by the Initial Developer and including the name of the
+Initial Developer in (a) the Source Code, and (b) in any notice in an
+Executable version or related documentation in which You describe the
+origin or ownership of the Covered Code.
+
+3.4. Intellectual Property Matters
+
+(a) Third Party Claims.
+    If You have knowledge that a party claims an intellectual property
+    right in particular functionality or code (or its utilization
+    under this License), you must include a text file with the source
+    code distribution titled ``LEGAL&apos;&apos; which describes the claim and
+    the party making the claim in sufficient detail that a recipient
+    will know whom to contact. If you obtain such knowledge after You
+    make Your Modification available as described in Section 3.2, You
+    shall promptly modify the LEGAL file in all copies You make
+    available thereafter and shall take other steps (such as notifying
+    appropriate mailing lists or newsgroups) reasonably calculated to
+    inform those who received the Covered Code that new knowledge has
+    been obtained. 
+
+(b) Contributor APIs.
+    If Your Modification is an application programming interface and
+    You own or control patents which are reasonably necessary to
+    implement that API, you must also include this information in the
+    LEGAL file. 
+
+3.5. Required Notices.
+You must duplicate the notice in Exhibit A in each file of the Source
+Code, and this License in any documentation for the Source Code, where
+You describe recipients&apos; rights relating to Covered Code. If You
+created one or more Modification(s), You may add your name as a
+Contributor to the notice described in Exhibit A. If it is not
+possible to put such notice in a particular Source Code file due to
+its structure, then you must include such notice in a location (such
+as a relevant directory file) where a user would be likely to look for
+such a notice. You may choose to offer, and to charge a fee for,
+warranty, support, indemnity or liability obligations to one or more
+recipients of Covered Code. However, You may do so only on Your own
+behalf, and not on behalf of the Initial Developer or any
+Contributor. You must make it absolutely clear than any such warranty,
+support, indemnity or liability obligation is offered by You alone,
+and You hereby agree to indemnify the Initial Developer and every
+Contributor for any liability incurred by the Initial Developer or
+such Contributor as a result of warranty, support, indemnity or
+liability terms You offer.
+
+3.6. Distribution of Executable Versions.
+You may distribute Covered Code in Executable form only if the
+requirements of Section 3.1-3.5 have been met for that Covered Code,
+and if You include a notice stating that the Source Code version of
+the Covered Code is available under the terms of this License,
+including a description of how and where You have fulfilled the
+obligations of Section 3.2. The notice must be conspicuously included
+in any notice in an Executable version, related documentation or
+collateral in which You describe recipients&apos; rights relating to the
+Covered Code. You may distribute the Executable version of Covered
+Code under a license of Your choice, which may contain terms different
+from this License, provided that You are in compliance with the terms
+of this License and that the license for the Executable version does
+not attempt to limit or alter the recipient&apos;s rights in the Source
+Code version from the rights set forth in this License. If You
+distribute the Executable version under a different license You must
+make it absolutely clear that any terms which differ from this License
+are offered by You alone, not by the Initial Developer or any
+Contributor. You hereby agree to indemnify the Initial Developer and
+every Contributor for any liability incurred by the Initial Developer
+or such Contributor as a result of any such terms You offer.
+
+3.7. Larger Works.
+You may create a Larger Work by combining Covered Code with other code
+not governed by the terms of this License and distribute the Larger
+Work as a single product. In such a case, You must make sure the
+requirements of this License are fulfilled for the Covered Code.
+
+4. Inability to Comply Due to Statute or Regulation.
+If it is impossible for You to comply with any of the terms of this
+License with respect to some or all of the Covered Code due to statute
+or regulation then You must: (a) comply with the terms of this License
+to the maximum extent possible; and (b) describe the limitations and
+the code they affect. Such description must be included in the LEGAL
+file described in Section 3.4 and must be included with all
+distributions of the Source Code. Except to the extent prohibited by
+statute or regulation, such description must be sufficiently detailed
+for a recipient of ordinary skill to be able to understand it.
+
+5. Application of this License.
+
+This License applies to code to which the Initial Developer has
+attached the notice in Exhibit A, and to related Covered Code.
+
+6. CONNECTION TO MOZILLA PUBLIC LICENSE
+
+This Erlang License is a derivative work of the Mozilla Public
+License, Version 1.0. It contains terms which differ from the Mozilla
+Public License, Version 1.0.
+
+7. DISCLAIMER OF WARRANTY.
+
+COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN ``AS IS&apos;&apos; BASIS,
+WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+WITHOUT LIMITATION, WARRANTIES THAT THE COVERED CODE IS FREE OF
+DEFECTS, MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR
+NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF
+THE COVERED CODE IS WITH YOU. SHOULD ANY COVERED CODE PROVE DEFECTIVE
+IN ANY RESPECT, YOU (NOT THE INITIAL DEVELOPER OR ANY OTHER
+CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR
+CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART
+OF THIS LICENSE. NO USE OF ANY COVERED CODE IS AUTHORIZED HEREUNDER
+EXCEPT UNDER THIS DISCLAIMER.
+
+8. TERMINATION.
+This License and the rights granted hereunder will terminate
+automatically if You fail to comply with terms herein and fail to cure
+such breach within 30 days of becoming aware of the breach. All
+sublicenses to the Covered Code which are properly granted shall
+survive any termination of this License. Provisions which, by their
+nature, must remain in effect beyond the termination of this License
+shall survive.
+
+9. DISCLAIMER OF LIABILITY
+Any utilization of Covered Code shall not cause the Initial Developer
+or any Contributor to be liable for any damages (neither direct nor
+indirect).
+
+10. MISCELLANEOUS
+This License represents the complete agreement concerning the subject
+matter hereof. If any provision is held to be unenforceable, such
+provision shall be reformed only to the extent necessary to make it
+enforceable. This License shall be construed by and in accordance with
+the substantive laws of Sweden. Any dispute, controversy or claim
+arising out of or relating to this License, or the breach, termination
+or invalidity thereof, shall be subject to the exclusive jurisdiction
+of Swedish courts, with the Stockholm City Court as the first
+instance.
+ 
+EXHIBIT A.
+
+``The contents of this file are subject to the Erlang Public License,
+Version 1.1, (the &quot;License&quot;); you may not use this file except in
+compliance with the License. You should have received a copy of the
+Erlang Public License along with this software. If not, it can be
+retrieved via the world wide web at http://www.erlang.org/.
+
+Software distributed under the License is distributed on an &quot;AS IS&quot;
+basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+the License for the specific language governing rights and limitations
+under the License.
+
+The Initial Developer of the Original Code is Ericsson Utvecklings AB.
+Portions created by Ericsson are Copyright 1999, Ericsson Utvecklings
+AB. All Rights Reserved.&apos;&apos;</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">
