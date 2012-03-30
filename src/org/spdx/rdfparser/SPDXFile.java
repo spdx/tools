@@ -209,7 +209,7 @@ public class SPDXFile {
 		Resource fileTypeResource = fileTypeStringToTypeResource(this.getType(), model);
 		fileResource.addProperty(p, fileTypeResource);
 
-		// detectedLicense
+		// concludedLicenses
 		if (this.concludedLicenses != null) {
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
 			Resource lic = this.concludedLicenses.createResource(model);

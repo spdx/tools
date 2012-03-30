@@ -1,3 +1,9 @@
+Implementation version 1.0.5
+- Fix bug 987 Add version as a parameter to the SPDXDocument in the tools implementation
+- Fix bug 1003 Standard license text is showing escaped HTML in the RDF output by changing template to use <pre> tags
+- Fixed a problem where the File unit tests were failing
+- Updated licenses in the resource directory to current version
+
 Implementation version 1.0.4
 - Put back HTML formatting to the standard license text 
 - Fix Bug 1007 -Valid file types are rejected as invalid

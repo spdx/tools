@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,10 +10,16 @@
 <head>
 	<title>Open Group Test Suite License</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
 	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+<!--[if IE 6]>
+	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+<![endif]-->
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -45,22 +51,24 @@
 	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
 </div> <!-- /#logo-title -->
 <br />
-<div id="head">
-<div id='tabs' class="clearfix">
-<ul>
+<br />
+
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-<br />
-<br />
-<br />
-</div> <!-- tabs clearfix -->
-</div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
+</div>
+</div>
+
 </div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
 <h1 property="dc:title">Open Group Test Suite License</h1>
 <h2 id="information">Information</h2>
 <dl>
@@ -73,6 +81,8 @@
 		<ul>
 							<li><a href="http://www.opengroup.org/testing/downloads/The_Open_Group_TSL.txt" rel="owl:sameAs">http://www.opengroup.org/testing/downloads/The_Open_Group_TSL.txt</a></li>
 
+				<li><a href="http://www.opensource.org/licenses/OGTSL" rel="owl:sameAs">http://www.opensource.org/licenses/OGTSL</a></li>
+
 
 		</ul>
 	</dd>
@@ -80,126 +90,124 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
+<pre><div property="spdx:licenseText" class="license-text">The Open Group Test Suite License
 
-<div property="spdx:licenseText" class="license-text">
-The Open Group Test Suite License<br/>
-<br/>
-Preamble<br/>
-<br/>
-The intent of this document is to state the conditions under which<br/>
-a Package may be copied, such that the Copyright Holder maintains<br/>
-some semblance of artistic control over the development of the<br/>
-package, while giving the users of the package the right to use and<br/>
-distribute the Package in a more-or-less customary fashion, plus<br/>
-the right to make reasonable modifications.<br/>
-<br/>
-Testing is essential for proper development and maintenance of<br/>
-standards-based products.<br/>
-<br/>
-For buyers: adequate conformance testing leads to reduced<br/>
-integration costs and protection of investments in applications,<br/>
-software and people.<br/>
-<br/>
-For software developers: conformance testing of platforms and<br/>
-middleware greatly reduces the cost of developing and maintaining<br/>
-multi-platform application software.<br/>
-<br/>
-For suppliers: In-depth testing increases customer satisfaction and<br/>
-keeps development and support costs in check. API conformance is<br/>
-highly measurable and suppliers who claim it must be able to<br/>
-substantiate that claim.<br/>
-<br/>
-As such, since these are benchmark measures of conformance, we feel<br/>
-the integrity of test tools is of importance. In order to preserve<br/>
-the integrity of the existing conformance modes of this test<br/>
-package and to permit recipients of modified versions of this<br/>
-package to run the original test modes, this license requires that<br/>
-the original test modes be preserved.<br/>
-<br/>
-If you find a bug in one of the standards mode test cases, please<br/>
-let us know so we can feed this back into the original, and also<br/>
-raise any specification issues with the appropriate bodies (for<br/>
-example the POSIX committees).<br/>
-<br/>
-Definitions: <br/>
-<br/>
-     &quot;Package&quot; refers to the collection of files distributed by the<br/>
-     Copyright Holder, and derivatives of that collection of files<br/>
-     created through textual modification. <br/>
-     &quot;Standard Version&quot; refers to such a Package if it has not been<br/>
-     modified, or has been modified in accordance with the wishes<br/>
-     of the Copyright Holder. <br/>
-     &quot;Copyright Holder&quot; is whoever is named in the copyright or<br/>
-     copyrights for the package. &quot;You&quot; is you, if you&apos;re thinking<br/>
-     about copying or distributing this Package. <br/>
-     &quot;Reasonable copying fee&quot; is whatever you can justify on the<br/>
-     basis of media cost, duplication charges, time of people<br/>
-     involved, and so on. (You will not be required to justify it<br/>
-     to the Copyright Holder, but only to the computing community<br/>
-     at large as a market that must bear the fee.) <br/>
-     &quot;Freely Available&quot; means that no fee is charged for the item<br/>
-     itself, though there may be fees involved in handling the<br/>
-     item. It also means that recipients of the item may<br/>
-     redistribute it under the same conditions they received it. <br/>
-<br/>
-1. You may make and give away verbatim copies of the source form of<br/>
-the Standard Version of this Package without restriction, provided<br/>
-that you duplicate all of the original copyright notices and<br/>
-associated disclaimers.<br/>
-<br/>
-2. You may apply bug fixes, portability fixes and other<br/>
-modifications derived from the Public Domain or from the Copyright<br/>
-Holder. A Package modified in such a way shall still be considered<br/>
-the Standard Version.<br/>
-<br/>
-3. You may otherwise modify your copy of this Package in any way,<br/>
-provided that you insert a prominent notice in each changed file<br/>
-stating how and when you changed that file, and provided that you<br/>
-do at least the following:<br/>
-<br/>
-     rename any non-standard executables and testcases so the<br/>
-     names do not conflict with standard executables and<br/>
-     testcases, which must also be provided, and provide a<br/>
-     separate manual page for each non-standard executable and<br/>
-     testcase that clearly documents how it differs from the<br/>
-     Standard Version.<br/>
-<br/>
-4. You may distribute the programs of this Package in object code<br/>
-or executable form, provided that you do at least the following: <br/>
-<br/>
-     accompany any non-standard executables and testcases with<br/>
-     their corresponding Standard Version executables and<br/>
-     testcases, giving the non-standard executables and<br/>
-     testcases non-standard names, and clearly documenting the<br/>
-     differences in manual pages (or equivalent), together with<br/>
-     instructions on where to get the Standard Version.<br/>
-<br/>
-5. You may charge a reasonable copying fee for any distribution of<br/>
-this Package. You may charge any fee you choose for support of this<br/>
-Package. You may not charge a fee for this Package itself. However,<br/>
-you may distribute this Package in aggregate with other (possibly<br/>
-commercial) programs as part of a larger (possibly commercial)<br/>
-software distribution provided that you do not advertise this<br/>
-Package as a product of your own.<br/>
-<br/>
-6. The scripts and library files supplied as input to or produced<br/>
-as output from the programs of this Package do not automatically<br/>
-fall under the copyright of this Package, but belong to whomever<br/>
-generated them, and may be sold commercially, and may be aggregated<br/>
-with this Package.<br/>
-<br/>
-7.Subroutines supplied by you and linked into this Package shall<br/>
-not be considered part of this Package. <br/>
-<br/>
-8. The name of the Copyright Holder may not be used to endorse or<br/>
-promote products derived from this software without specific prior<br/>
-written permission.<br/>
-<br/>
-9. THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT ANY EXPRESS OR<br/>
-IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED<br/>
-WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.<br/>
-<br/>
-The End
+Preamble
+
+The intent of this document is to state the conditions under which
+a Package may be copied, such that the Copyright Holder maintains
+some semblance of artistic control over the development of the
+package, while giving the users of the package the right to use and
+distribute the Package in a more-or-less customary fashion, plus
+the right to make reasonable modifications.
+
+Testing is essential for proper development and maintenance of
+standards-based products.
+
+For buyers: adequate conformance testing leads to reduced
+integration costs and protection of investments in applications,
+software and people.
+
+For software developers: conformance testing of platforms and
+middleware greatly reduces the cost of developing and maintaining
+multi-platform application software.
+
+For suppliers: In-depth testing increases customer satisfaction and
+keeps development and support costs in check. API conformance is
+highly measurable and suppliers who claim it must be able to
+substantiate that claim.
+
+As such, since these are benchmark measures of conformance, we feel
+the integrity of test tools is of importance. In order to preserve
+the integrity of the existing conformance modes of this test
+package and to permit recipients of modified versions of this
+package to run the original test modes, this license requires that
+the original test modes be preserved.
+
+If you find a bug in one of the standards mode test cases, please
+let us know so we can feed this back into the original, and also
+raise any specification issues with the appropriate bodies (for
+example the POSIX committees).
+
+Definitions: 
+
+     &quot;Package&quot; refers to the collection of files distributed by the
+     Copyright Holder, and derivatives of that collection of files
+     created through textual modification. 
+     &quot;Standard Version&quot; refers to such a Package if it has not been
+     modified, or has been modified in accordance with the wishes
+     of the Copyright Holder. 
+     &quot;Copyright Holder&quot; is whoever is named in the copyright or
+     copyrights for the package. &quot;You&quot; is you, if you&apos;re thinking
+     about copying or distributing this Package. 
+     &quot;Reasonable copying fee&quot; is whatever you can justify on the
+     basis of media cost, duplication charges, time of people
+     involved, and so on. (You will not be required to justify it
+     to the Copyright Holder, but only to the computing community
+     at large as a market that must bear the fee.) 
+     &quot;Freely Available&quot; means that no fee is charged for the item
+     itself, though there may be fees involved in handling the
+     item. It also means that recipients of the item may
+     redistribute it under the same conditions they received it. 
+
+1. You may make and give away verbatim copies of the source form of
+the Standard Version of this Package without restriction, provided
+that you duplicate all of the original copyright notices and
+associated disclaimers.
+
+2. You may apply bug fixes, portability fixes and other
+modifications derived from the Public Domain or from the Copyright
+Holder. A Package modified in such a way shall still be considered
+the Standard Version.
+
+3. You may otherwise modify your copy of this Package in any way,
+provided that you insert a prominent notice in each changed file
+stating how and when you changed that file, and provided that you
+do at least the following:
+
+     rename any non-standard executables and testcases so the
+     names do not conflict with standard executables and
+     testcases, which must also be provided, and provide a
+     separate manual page for each non-standard executable and
+     testcase that clearly documents how it differs from the
+     Standard Version.
+
+4. You may distribute the programs of this Package in object code
+or executable form, provided that you do at least the following: 
+
+     accompany any non-standard executables and testcases with
+     their corresponding Standard Version executables and
+     testcases, giving the non-standard executables and
+     testcases non-standard names, and clearly documenting the
+     differences in manual pages (or equivalent), together with
+     instructions on where to get the Standard Version.
+
+5. You may charge a reasonable copying fee for any distribution of
+this Package. You may charge any fee you choose for support of this
+Package. You may not charge a fee for this Package itself. However,
+you may distribute this Package in aggregate with other (possibly
+commercial) programs as part of a larger (possibly commercial)
+software distribution provided that you do not advertise this
+Package as a product of your own.
+
+6. The scripts and library files supplied as input to or produced
+as output from the programs of this Package do not automatically
+fall under the copyright of this Package, but belong to whomever
+generated them, and may be sold commercially, and may be aggregated
+with this Package.
+
+7.Subroutines supplied by you and linked into this Package shall
+not be considered part of this Package. 
+
+8. The name of the Copyright Holder may not be used to endorse or
+promote products derived from this software without specific prior
+written permission.
+
+9. THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+The End</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

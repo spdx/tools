@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,10 +10,16 @@
 <head>
 	<title>Sleepycat License</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
 	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+<!--[if IE 6]>
+	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+<![endif]-->
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -45,22 +51,24 @@
 	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
 </div> <!-- /#logo-title -->
 <br />
-<div id="head">
-<div id='tabs' class="clearfix">
-<ul>
+<br />
+
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-<br />
-<br />
-<br />
-</div> <!-- tabs clearfix -->
-</div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
+</div>
+</div>
+
 </div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
 <h1 property="dc:title">Sleepycat License</h1>
 <h2 id="information">Information</h2>
 <dl>
@@ -71,7 +79,7 @@
 	<dt>Other web pages for this license</dt>
 	<dd>
 		<ul>
-							<li><a href="http://www.opensource.org/licenses/sleepycat.php" rel="owl:sameAs">http://www.opensource.org/licenses/sleepycat.php</a></li>
+							<li><a href="http://www.opensource.org/licenses/Sleepycat" rel="owl:sameAs">http://www.opensource.org/licenses/Sleepycat</a></li>
 
 
 		</ul>
@@ -80,96 +88,94 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
+<pre><div property="spdx:licenseText" class="license-text">The Sleepycat License
+Copyright (c) 1990-1999
+Sleepycat Software. All rights reserved.
 
-<div property="spdx:licenseText" class="license-text">
-The Sleepycat License<br/>
-Copyright (c) 1990-1999<br/>
-Sleepycat Software. All rights reserved.<br/>
-<br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the following conditions<br/>
-are met:<br/>
-<br/>
-Redistributions of source code must retain the above copyright<br/>
-notice, this list of conditions and the following disclaimer.<br/>
-Redistributions in binary form must reproduce the above copyright<br/>
-notice, this list of conditions and the following disclaimer in the<br/>
-documentation and/or other materials provided with the distribution.<br/>
-Redistributions in any form must be accompanied by information on<br/>
-how to obtain complete source code for the DB software and any<br/>
-accompanying software that uses the DB software. The source code<br/>
-must either be included in the distribution or be available for no<br/>
-more than the cost of distribution plus a nominal fee, and must be<br/>
-freely redistributable under reasonable conditions. For an<br/>
-executable file, complete source code means the source code for all<br/>
-modules it contains. It does not include source code for modules or<br/>
-files that typically accompany the major components of the operating<br/>
-system on which the executable file runs.<br/>
-THIS SOFTWARE IS PROVIDED BY SLEEPYCAT SOFTWARE ``AS IS&apos;&apos; AND ANY EXPRESS<br/>
-OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED<br/>
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR<br/>
-NON-INFRINGEMENT, ARE DISCLAIMED. IN NO EVENT SHALL SLEEPYCAT SOFTWARE<br/>
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR<br/>
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF<br/>
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS<br/>
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN<br/>
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF<br/>
-THE POSSIBILITY OF SUCH DAMAGE.<br/>
-<br/>
-Copyright (c) 1990, 1993, 1994, 1995<br/>
-The Regents of the University of California. All rights reserved.<br/>
-<br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the following conditions<br/>
-are met:<br/>
-<br/>
-Redistributions of source code must retain the above copyright<br/>
-notice, this list of conditions and the following disclaimer.<br/>
-Redistributions in binary form must reproduce the above copyright<br/>
-notice, this list of conditions and the following disclaimer in the<br/>
-documentation and/or other materials provided with the distribution.<br/>
-Neither the name of the University nor the names of its contributors<br/>
-may be used to endorse or promote products derived from this software<br/>
-without specific prior written permission.<br/>
-THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS&apos;&apos; AND<br/>
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br/>
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE<br/>
-ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE<br/>
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<br/>
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS<br/>
-OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT<br/>
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY<br/>
-OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF<br/>
-SUCH DAMAGE.<br/>
-<br/>
-Copyright (c) 1995, 1996<br/>
-The President and Fellows of Harvard University. All rights reserved.<br/>
-<br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the following conditions<br/>
-are met:<br/>
-<br/>
-Redistributions of source code must retain the above copyright<br/>
-notice, this list of conditions and the following disclaimer.<br/>
-Redistributions in binary form must reproduce the above copyright<br/>
-notice, this list of conditions and the following disclaimer in the<br/>
-documentation and/or other materials provided with the distribution.<br/>
-Neither the name of the University nor the names of its contributors<br/>
-may be used to endorse or promote products derived from this software<br/>
-without specific prior written permission.<br/>
-THIS SOFTWARE IS PROVIDED BY HARVARD AND ITS CONTRIBUTORS ``AS IS&apos;&apos; AND<br/>
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br/>
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE<br/>
-ARE DISCLAIMED. IN NO EVENT SHALL HARVARD OR ITS CONTRIBUTORS BE LIABLE<br/>
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<br/>
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS<br/>
-OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT<br/>
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY<br/>
-OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF<br/>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+Redistributions in any form must be accompanied by information on
+how to obtain complete source code for the DB software and any
+accompanying software that uses the DB software. The source code
+must either be included in the distribution or be available for no
+more than the cost of distribution plus a nominal fee, and must be
+freely redistributable under reasonable conditions. For an
+executable file, complete source code means the source code for all
+modules it contains. It does not include source code for modules or
+files that typically accompany the major components of the operating
+system on which the executable file runs.
+THIS SOFTWARE IS PROVIDED BY SLEEPYCAT SOFTWARE ``AS IS&apos;&apos; AND ANY EXPRESS
+OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR
+NON-INFRINGEMENT, ARE DISCLAIMED. IN NO EVENT SHALL SLEEPYCAT SOFTWARE
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
+
+Copyright (c) 1990, 1993, 1994, 1995
+The Regents of the University of California. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+Neither the name of the University nor the names of its contributors
+may be used to endorse or promote products derived from this software
+without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS&apos;&apos; AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
+
+Copyright (c) 1995, 1996
+The President and Fellows of Harvard University. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+Neither the name of the University nor the names of its contributors
+may be used to endorse or promote products derived from this software
+without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY HARVARD AND ITS CONTRIBUTORS ``AS IS&apos;&apos; AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL HARVARD OR ITS CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

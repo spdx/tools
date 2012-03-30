@@ -759,4 +759,29 @@ public class TestSPDXDocument {
 			assertTrue(found);
 		}
 	}
+	
+	@Test
+	public void testSpdxDocVersions() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri, SPDXDocument.POINT_NINE_SPDX_VERSION);
+		assertEquals(SPDXDocument.POINT_NINE_SPDX_VERSION, doc.getSpdxVersion());
+		if (doc.getDataLicense() != null) {
+			fail("No license should exist for current data license");
+		}
+		// 1.0
+		model = ModelFactory.createDefaultModel();
+		doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis(testDocUri, SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION);
+		assertEquals(SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION, doc.getSpdxVersion());
+		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0, doc.getDataLicense().getId());
+		
+		// current version
+		model = ModelFactory.createDefaultModel();
+		doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis(testDocUri);
+		assertEquals(SPDXDocument.CURRENT_SPDX_VERSION, doc.getSpdxVersion());
+		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, doc.getDataLicense().getId());
+	}
 }

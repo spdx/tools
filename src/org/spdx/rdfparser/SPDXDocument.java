@@ -56,7 +56,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.4";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.5";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -986,7 +986,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			throw(new InvalidSPDXAnalysisException("Too many data licenses"));
 		}
 		if (alLic.size() == 0) {
-			throw(new InvalidSPDXAnalysisException("Missing required data license"));
+			return null;
 		}
 		if (!(alLic.get(0) instanceof SPDXStandardLicense)) {
 			throw(new InvalidSPDXAnalysisException("Incorrect license for datalicense - must be a standard SPDX license type"));
@@ -1329,7 +1329,19 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public void setModel(Model model) {
 		this.model = model;
 	}
-
+	/**
+	 * Creates a new empty SPDX Document with the current SPDX document version.
+	 * Note: Any previous SPDX documents will be deleted from the model to
+	 * preserve the one and only one constraint.
+	 * Note: Follow-up calls MUST be made to add the required properties for this
+	 * to be a valid SPDX document
+	 * @param uri URI for the SPDX Document
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void createSpdxAnalysis(String uri) throws InvalidSPDXAnalysisException {
+		createSpdxAnalysis(uri, CURRENT_SPDX_VERSION);
+	}
+	
 	/**
 	 * Creates a new empty SPDX Document.
 	 * Note: Any previous SPDX documents will be deleted from the model to
@@ -1337,10 +1349,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * Note: Follow-up calls MUST be made to add the required properties for this
 	 * to be a valid SPDX document
 	 * @param uri URI for the SPDX Document
-	 * @throws InvalidLicenseStringException 
+	 * @param spdxVersion The version of SPDX analysis to create (impacts the data license for some versions)
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void createSpdxAnalysis(String uri) throws InvalidSPDXAnalysisException {
+	public void createSpdxAnalysis(String uri, String spdxVersion) throws InvalidSPDXAnalysisException {
+		String v = verifySpdxVersion(spdxVersion);
+		if (v != null) {
+			throw(new InvalidSPDXAnalysisException("Invalid SPDX Version: "+v));
+		}
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode != null) {
 			// delete
@@ -1349,15 +1365,23 @@ public class SPDXDocument implements SpdxRdfConstants {
 		model.setNsPrefix("", SPDX_NAMESPACE);
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
 		model.createResource(uri, spdxAnalysisType);
+		// add the version
+		this.setSpdxVersion(spdxVersion);
 		// add the default data license
-		SPDXStandardLicense dataLicense;
-		try {
-			dataLicense = (SPDXStandardLicense)(SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID));
-		} catch (InvalidLicenseStringException e) {
-			throw(new InvalidSPDXAnalysisException("Error generating the data license for the SPDX document"));
+		if (!spdxVersion.equals(POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
+			try {
+				SPDXStandardLicense dataLicense;
+				if (spdxVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
+					{ 
+					dataLicense = (SPDXStandardLicense)(SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0));
+				} else {
+					dataLicense = (SPDXStandardLicense)(SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID));				
+				}
+				this.setDataLicense(dataLicense);
+			} catch (InvalidLicenseStringException e) {
+				throw new InvalidSPDXAnalysisException("Unable to create data license", e);
+			}
 		}
-		this.setSpdxVersion(CURRENT_SPDX_VERSION);
-		this.setDataLicense(dataLicense);
 	}
 	
 	/**

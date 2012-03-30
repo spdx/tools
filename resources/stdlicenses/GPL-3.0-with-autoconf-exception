@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,10 +10,16 @@
 <head>
 	<title>GNU General Public License v3.0 w/Autoconf exception</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
 	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+<!--[if IE 6]>
+	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+<![endif]-->
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -45,22 +51,24 @@
 	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
 </div> <!-- /#logo-title -->
 <br />
-<div id="head">
-<div id='tabs' class="clearfix">
-<ul>
+<br />
+
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-<br />
-<br />
-<br />
-</div> <!-- tabs clearfix -->
-</div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
+</div>
+</div>
+
 </div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
 <h1 property="dc:title">GNU General Public License v3.0 w/Autoconf exception</h1>
 <h2 id="information">Information</h2>
 <dl>
@@ -80,34 +88,32 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
+<pre><div property="spdx:licenseText" class="license-text">insert GPL v3 text here
 
-<div property="spdx:licenseText" class="license-text">
-insert GPL v3 text here<br/>
-<br/>
-AUTOCONF CONFIGURE SCRIPT EXCEPTION<br/>
-<br/>
-Version 3.0, 18 August 2009<br/>
-<br/>
-Copyright &#169; 2009 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;<br/>
-<br/>
-Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.<br/>
-<br/>
-This Exception is an additional permission under section 7 of the GNU General Public License, version 3 (&quot;GPLv3&quot;). It applies to a given file that bears a notice placed by the copyright holder of the file stating that the file is governed by GPLv3 along with this Exception.<br/>
-<br/>
-The purpose of this Exception is to allow distribution of Autoconf&apos;s typical output under terms of the recipient&apos;s choice (including proprietary).<br/>
-<br/>
-0. Definitions.<br/>
-&quot;Covered Code&quot; is the source or object code of a version of Autoconf that is a covered work under this License.<br/>
-<br/>
-&quot;Normally Copied Code&quot; for a version of Autoconf means all parts of its Covered Code which that version can copy from its code (i.e., not from its input file) into its minimally verbose, non-debugging and non-tracing output.<br/>
-<br/>
-&quot;Ineligible Code&quot; is Covered Code that is not Normally Copied Code.<br/>
-<br/>
-1. Grant of Additional Permission.<br/>
-You have permission to propagate output of Autoconf, even if such propagation would otherwise violate the terms of GPLv3. However, if by modifying Autoconf you cause any Ineligible Code of the version you received to become Normally Copied Code of your modified version, then you void this Exception for the resulting covered work. If you convey that resulting covered work, you must remove this Exception in accordance with the second paragraph of Section 7 of GPLv3.<br/>
-<br/>
-2. No Weakening of Autoconf Copyleft.<br/>
-The availability of this Exception does not imply any general presumption that third-party software is unaffected by the copyleft requirements of the license of Autoconf.
+AUTOCONF CONFIGURE SCRIPT EXCEPTION
+
+Version 3.0, 18 August 2009
+
+Copyright &#169; 2009 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+This Exception is an additional permission under section 7 of the GNU General Public License, version 3 (&quot;GPLv3&quot;). It applies to a given file that bears a notice placed by the copyright holder of the file stating that the file is governed by GPLv3 along with this Exception.
+
+The purpose of this Exception is to allow distribution of Autoconf&apos;s typical output under terms of the recipient&apos;s choice (including proprietary).
+
+0. Definitions.
+&quot;Covered Code&quot; is the source or object code of a version of Autoconf that is a covered work under this License.
+
+&quot;Normally Copied Code&quot; for a version of Autoconf means all parts of its Covered Code which that version can copy from its code (i.e., not from its input file) into its minimally verbose, non-debugging and non-tracing output.
+
+&quot;Ineligible Code&quot; is Covered Code that is not Normally Copied Code.
+
+1. Grant of Additional Permission.
+You have permission to propagate output of Autoconf, even if such propagation would otherwise violate the terms of GPLv3. However, if by modifying Autoconf you cause any Ineligible Code of the version you received to become Normally Copied Code of your modified version, then you void this Exception for the resulting covered work. If you convey that resulting covered work, you must remove this Exception in accordance with the second paragraph of Section 7 of GPLv3.
+
+2. No Weakening of Autoconf Copyleft.
+The availability of this Exception does not imply any general presumption that third-party software is unaffected by the copyleft requirements of the license of Autoconf.</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

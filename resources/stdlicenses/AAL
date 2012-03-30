@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,10 +10,16 @@
 <head>
 	<title>Attribution Assurance License</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
 	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
 	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+<!--[if IE 6]>
+	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+<![endif]-->
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -45,22 +51,24 @@
 	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
 </div> <!-- /#logo-title -->
 <br />
-<div id="head">
-<div id='tabs' class="clearfix">
-<ul>
+<br />
+
+<div id="tabs">
+<div id="block-menu_block-2" class="block block-menu_block">
+<ul class="menu">
 <li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
 <li><a href='/spec' title='Specification'><span>Specification</span></a></li>
 <li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
 <li><a href='/blog' title='Blog'><span>Blog</span></a></li>
 <li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
 </ul>
-<br />
-<br />
-<br />
-</div> <!-- tabs clearfix -->
-</div><!-- close head -->
-<div class="breadcrumb"><a href="/">Home</a> ? <a href="/licenses">Licenses</a></div>
+</div>
+</div>
+
 </div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
 <h1 property="dc:title">Attribution Assurance License</h1>
 <h2 id="information">Information</h2>
 <dl>
@@ -71,67 +79,65 @@
 	<dt>Other web pages for this license</dt>
 	<dd>
 		<ul>
-							<li><a href="http://www.opensource.org/licenses/attribution.php" rel="owl:sameAs">http://www.opensource.org/licenses/attribution.php</a></li>
+							<li><a href="http://www.opensource.org/licenses/attribution" rel="owl:sameAs">http://www.opensource.org/licenses/attribution</a></li>
 
 
 		</ul>
 	</dd>
 </dl>
 <h2 id="notes">Notes</h2>
-<p>This version was released: 2002<br/>
+<p>This license was released: 2002
 </p>
 <h2 id="licenseText">Text</h2>
+<pre><div property="spdx:licenseText" class="license-text">Attribution Assurance License
+Copyright (c) 2002 by AUTHOR
+PROFESSIONAL IDENTIFICATION * URL
+&quot;PROMOTIONAL SLOGAN FOR AUTHOR&apos;S PROFESSIONAL PRACTICE&quot;
 
-<div property="spdx:licenseText" class="license-text">
-Attribution Assurance License<br/>
-Copyright (c) 2002 by AUTHOR<br/>
-PROFESSIONAL IDENTIFICATION * URL<br/>
-&quot;PROMOTIONAL SLOGAN FOR AUTHOR&apos;S PROFESSIONAL PRACTICE&quot;<br/>
-<br/>
-All Rights Reserved<br/>
-ATTRIBUTION ASSURANCE LICENSE (adapted from the original BSD license)<br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the conditions below are met.<br/>
-These conditions require a modest attribution to &lt;AUTHOR&gt; (the<br/>
-&quot;Author&quot;), who hopes that its promotional value may help justify the<br/>
-thousands of dollars in otherwise billable time invested in writing<br/>
-this and other freely available, open-source software.<br/>
-<br/>
-1. Redistributions of source code, in whole or part and with or without<br/>
-modification (the &quot;Code&quot;), must prominently display this GPG-signed<br/>
-text in verifiable form.<br/>
-2. Redistributions of the Code in binary form must be accompanied by<br/>
-this GPG-signed text in any documentation and, each time the resulting<br/>
-executable program or a program dependent thereon is launched, a<br/>
-prominent display (e.g., splash screen or banner text) of the Author&apos;s<br/>
-attribution information, which includes:<br/>
-(a) Name (&quot;AUTHOR&quot;),<br/>
-(b) Professional identification (&quot;PROFESSIONAL IDENTIFICATION&quot;), and<br/>
-(c) URL (&quot;URL&quot;).<br/>
-3. Neither the name nor any trademark of the Author may be used to<br/>
-endorse or promote products derived from this software without specific<br/>
-prior written permission.<br/>
-4. Users are entirely responsible, to the exclusion of the Author and<br/>
-any other persons, for compliance with (1) regulations set by owners or<br/>
-administrators of employed equipment, (2) licensing terms of any other<br/>
-software, and (3) local regulations regarding use, including those<br/>
-regarding import, export, and use of encryption software.<br/>
-<br/>
-THIS FREE SOFTWARE IS PROVIDED BY THE AUTHOR &quot;AS IS&quot; AND<br/>
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT<br/>
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND<br/>
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO<br/>
-EVENT SHALL THE AUTHOR OR ANY CONTRIBUTOR BE LIABLE FOR<br/>
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR<br/>
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,<br/>
-EFFECTS OF UNAUTHORIZED OR MALICIOUS NETWORK ACCESS;<br/>
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,<br/>
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED<br/>
-AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT<br/>
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN<br/>
-IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br/>
---End of License
+All Rights Reserved
+ATTRIBUTION ASSURANCE LICENSE (adapted from the original BSD license)
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the conditions below are met.
+These conditions require a modest attribution to &lt;AUTHOR&gt; (the
+&quot;Author&quot;), who hopes that its promotional value may help justify the
+thousands of dollars in otherwise billable time invested in writing
+this and other freely available, open-source software.
+
+1. Redistributions of source code, in whole or part and with or without
+modification (the &quot;Code&quot;), must prominently display this GPG-signed
+text in verifiable form.
+2. Redistributions of the Code in binary form must be accompanied by
+this GPG-signed text in any documentation and, each time the resulting
+executable program or a program dependent thereon is launched, a
+prominent display (e.g., splash screen or banner text) of the Author&apos;s
+attribution information, which includes:
+(a) Name (&quot;AUTHOR&quot;),
+(b) Professional identification (&quot;PROFESSIONAL IDENTIFICATION&quot;), and
+(c) URL (&quot;URL&quot;).
+3. Neither the name nor any trademark of the Author may be used to
+endorse or promote products derived from this software without specific
+prior written permission.
+4. Users are entirely responsible, to the exclusion of the Author and
+any other persons, for compliance with (1) regulations set by owners or
+administrators of employed equipment, (2) licensing terms of any other
+software, and (3) local regulations regarding use, including those
+regarding import, export, and use of encryption software.
+
+THIS FREE SOFTWARE IS PROVIDED BY THE AUTHOR &quot;AS IS&quot; AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE AUTHOR OR ANY CONTRIBUTOR BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+EFFECTS OF UNAUTHORIZED OR MALICIOUS NETWORK ACCESS;
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+--End of License</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

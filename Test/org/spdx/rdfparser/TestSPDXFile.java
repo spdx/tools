@@ -159,7 +159,10 @@ public class TestSPDXFile {
 		assertEquals(0, verify.size());
 		Resource fileResource = file.createResource(model);
 		pkgResource.addProperty(p, fileResource);
-
+		writer = new StringWriter();
+		model.write(writer);
+		String afterFileCreate = writer.toString();
+		writer.close();
 		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
 		assertEquals(file.getArtifactOf()[0].getName(), file2.getArtifactOf()[0].getName());
 		assertEquals(file.getArtifactOf()[0].getHomePage(), file2.getArtifactOf()[0].getHomePage());
