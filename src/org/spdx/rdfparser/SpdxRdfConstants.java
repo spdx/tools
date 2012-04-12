@@ -80,6 +80,9 @@ public interface SpdxRdfConstants {
 	// - use rdfs:comment	static final String PROP_CREATION_CREATOR_COMMENT = "comment";
 	public static final String PROP_CREATION_CREATOR = "creator";
 	public static final String PROP_CREATION_CREATED = "created"; // creation timestamp
+	public static final String CREATOR_PREFIX_PERSON = "Person:";
+	public static final String CREATOR_PREFIX_ORGANIZATION = "Organization:";
+	public static final String CREATOR_PREFIX_TOOL = "Tool:";
 	
 	// SPDX Checksum Properties
 	public static final String PROP_CHECKSUM_ALGORITHM = "algorithm";

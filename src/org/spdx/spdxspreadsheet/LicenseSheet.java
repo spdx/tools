@@ -168,8 +168,13 @@ public class LicenseSheet extends AbstractSheet {
 	 * @return
 	 */
 	private String getLicenseText(Cell textCell) {
+		String localFileName = null;
 		if (textCell.getHyperlink() != null && textCell.getHyperlink().getAddress() != null) {
-			String localFileName = textCell.getHyperlink().getAddress();
+			localFileName = textCell.getHyperlink().getAddress();
+		} else if (textCell.getStringCellValue() != null && textCell.getStringCellValue().toUpperCase().endsWith(".TXT")) {
+			localFileName = textCell.getStringCellValue();
+		}
+		if (localFileName != null) {
 			File licenseTextFile = new File(this.workbookPath + File.separator + localFileName);
 			if (!licenseTextFile.exists()) {
 				logger.warn("Can not find linked license text file "+licenseTextFile.getName());
@@ -202,7 +207,7 @@ public class LicenseSheet extends AbstractSheet {
 				logger.warn("Error reading linked license text file "+licenseTextFile.getName()+": "+e.getMessage());
 				return("WARNING: Error reading license text file "+licenseTextFile.getName());
 			}
-		} else {
+		} else {	// no file name
 			return textCell.getStringCellValue();
 		}
 	}
