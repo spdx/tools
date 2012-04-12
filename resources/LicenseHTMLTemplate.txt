@@ -86,7 +86,9 @@
 <h2 id="notes">Notes</h2>
 <p>[NOTES]</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">[LICENSE_TEXT]</pre>
+
+<div property="spdx:licenseText" class="license-text">
+[LICENSE_TEXT]
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

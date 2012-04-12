@@ -31,7 +31,8 @@ public class SpdxVerificationHelper {
 	
 	static IRIFactory iriFactory = IRIFactory.semanticWebImplementation();
 
-	static final String[] VALID_CREATOR_PREFIXES = new String[] {"Person:", "Organization:", "Tool:"};
+	static final String[] VALID_CREATOR_PREFIXES = new String[] {SpdxRdfConstants.CREATOR_PREFIX_PERSON,
+		SpdxRdfConstants.CREATOR_PREFIX_ORGANIZATION, SpdxRdfConstants.CREATOR_PREFIX_TOOL};
 	static final String[] VALID_ORIGINATOR_SUPPLIER_PREFIXES = new String[] {SpdxRdfConstants.NOASSERTION_VALUE, "Person:", "Organization:"};
 
 	static String verifyChecksumString(String checksum) {

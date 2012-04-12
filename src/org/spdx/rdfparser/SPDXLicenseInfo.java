@@ -82,11 +82,11 @@ public abstract class SPDXLicenseInfo {
 	 * @param model
 	 * @return resource created from the model
 	 */
-	public Resource createResource(Model model) {
+	public Resource createResource(Model model) {	
 		if (this.model != null &&
 				(this.model.equals(model) 
-						|| (this instanceof SPDXStandardLicense))	// Remove this line to cause the standard license 
-				&&													// references to reference the URL rather than copy all of the properties into this model
+						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the standard license 
+				&&											// references to reference the URL rather than copy all of the properties into this model
 				this.licenseInfoNode != null &&
 				this.resource != null) {
 			return resource;
