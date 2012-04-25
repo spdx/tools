@@ -385,6 +385,9 @@ public class SPDXLicenseInfoFactory {
 	 * @throws InvalidLicenseStringException 
 	 */
 	public static SPDXLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
+		if (licenseString.isEmpty()) {
+			throw(new InvalidLicenseStringException("Empty license string"));
+		}
 		String parseString = licenseString.trim();
 		if (parseString.startsWith("(")) {
 			if (!parseString.endsWith(")")) {

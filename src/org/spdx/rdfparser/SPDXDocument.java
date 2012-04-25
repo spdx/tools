@@ -687,7 +687,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			try {
 				originator = this.getOriginator();
 				if (originator != null) {
-					String error = SpdxVerificationHelper.verifySupplier(originator);
+					String error = SpdxVerificationHelper.verifyOriginator(originator);
 					if (error != null && !error.isEmpty()) {
 						retval.add("Originator error - "+error);
 					}
