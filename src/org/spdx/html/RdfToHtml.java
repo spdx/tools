@@ -41,7 +41,8 @@ import com.sampullara.mustache.MustacheException;
  *
  */
 public class RdfToHtml {
-	static final String TEMPLATE_PATH = "resources" + File.separator + "htmlTemplate";
+	static final String TEMPLATE_CLASS_PATH = "resources" + "/" + "htmlTemplate";
+	static final String TEMPLATE_ROOT_PATH = "resources" + File.separator + "htmlTemplate";
 	static final String SPDX_HTML_TEMPLATE = "SpdxHTMLTemplate.html";
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
@@ -114,8 +115,13 @@ public class RdfToHtml {
 	}
 
 	public static void rdfToHtml(SPDXDocument doc, Writer writer) throws MustacheException, IOException, InvalidSPDXAnalysisException {
-		File root = new File(TEMPLATE_PATH);
-	    MustacheBuilder builder = new MustacheBuilder(root);
+		File templateDirectoryRoot = new File(TEMPLATE_ROOT_PATH);
+		MustacheBuilder builder = null;
+		if (templateDirectoryRoot.exists() && templateDirectoryRoot.isDirectory()) {
+			builder = new MustacheBuilder(templateDirectoryRoot);
+		} else {
+			builder = new MustacheBuilder(TEMPLATE_CLASS_PATH);
+		}
 	    Mustache mustache;
 	    HashMap<String, Object> mustacheMap = MustacheMap.buildMustachMap(doc);
 		mustache = builder.parseFile(SPDX_HTML_TEMPLATE);
