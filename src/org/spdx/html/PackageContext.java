@@ -17,12 +17,14 @@
 package org.spdx.html;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 
@@ -253,6 +255,7 @@ public class PackageContext {
 				}
 			}
 		}
+		Collections.sort(retval);
 		return retval;
 	}
 	
@@ -271,6 +274,11 @@ public class PackageContext {
 				retval.add(new FileContext(e));
 			}
 		}
+		Collections.sort(retval, new Comparator<FileContext>() {
+            @Override
+            public int compare(FileContext o1, FileContext o2) {
+                return o1.fileName().compareToIgnoreCase(o2.fileName());
+            }} );
 		return retval;
 	}
 	
