@@ -1,3 +1,5 @@
+- Improvements in the HTML output provided by Todd Cook from Black Duck software (sorting license lists and files)
+
 Implementation version 1.0.5
 - Fix bug 987 Add version as a parameter to the SPDXDocument in the tools implementation
 - Fix bug 1003 Standard license text is showing escaped HTML in the RDF output by changing template to use <pre> tags
