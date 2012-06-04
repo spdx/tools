@@ -135,7 +135,19 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 	}
 	
 	@Override
+	public int hashCode() {
+		if (this.getId() == null) {
+			return 0;
+		} else {
+			return this.getId().hashCode();
+		}
+	}
+	
+	@Override
 	public boolean equals(Object comp) {
+		if (comp == this) {
+			return true;
+		}
 		if (!(comp instanceof SPDXLicense)) {
 			return false;
 		}

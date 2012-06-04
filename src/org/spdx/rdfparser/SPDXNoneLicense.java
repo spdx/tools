@@ -28,6 +28,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class SPDXNoneLicense extends SPDXLicenseInfo {
+	
+	static final int NONE_LICENSE_HASHCODE = 147; // prime number - all none licenses should have the same hashcde
 
 	/**
 	 * @param model
@@ -57,19 +59,21 @@ public class SPDXNoneLicense extends SPDXLicenseInfo {
 	public String toString() {
 		return SPDXLicenseInfoFactory.NONE_LICENSE_NAME;
 	}
+	
+	@Override
+	public int hashCode() {
+		return NONE_LICENSE_HASHCODE;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof SPDXNoneLicense) {
-			// All Instances of this type are considered equal
+		if (o == this) {
 			return true;
-		} else {
-			// covers o == null, as null is not an instance of anything
-			return false;
 		}
+		return (o instanceof SPDXNoneLicense);		// All Instances of this type are considered equal
 	}
 
 	/* (non-Javadoc)

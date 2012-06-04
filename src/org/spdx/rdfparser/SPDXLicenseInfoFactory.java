@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.graph.Node;
@@ -75,6 +76,7 @@ public class SPDXLicenseInfoFactory {
 		"ZPL-2.1", "Zimbra-1.3", "Zlib", "eCos-2.0", "gSOAP-1.3b"
 	};
 	
+	static final Logger logger = Logger.getLogger(SPDXLicenseInfoFactory.class.getName());
 	static final String STANDARD_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	
 	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
@@ -121,31 +123,52 @@ public class SPDXLicenseInfoFactory {
 		if (!node.isURI() && !node.isBlank()) {
 			throw(new InvalidSPDXAnalysisException("Can not create a LicenseInfo from a literal node"));
 		}
+		SPDXLicenseInfo retval = null;
 		// check to see if it is a "standard" type of license (NONESEEN, NONE, NOTANALYZED, or STANDARD_LICENSE)
 		if (node.isURI()) {
-			if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE)) {
-				return new SPDXNoneLicense(model, node);
-			} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION)) {
-				return new SpdxNoAssertionLicense(model, node);
-			} else if (node.getURI().startsWith(STANDARD_LICENSE_URI_PREFIX)) {
-				// try to fetch the standard license from the model
-				try {
-					return getLicenseFromStdLicModel(node.getURI());
-				} catch (Exception ex) {
-					// ignore for now - we'll try to get the standard license from the information in the model itself if it exists
-				}
-			}
+			retval = getLicenseInfoByUri(model, node);
 		}
-		SPDXLicenseInfo retval = getLicenseInfoByType(model, node);
-		if (retval == null) {
+		if (retval == null) {	// try by type
+			retval = getLicenseInfoByType(model, node);
+		}
+		if (retval == null) {	// try by ID
 			retval = getLicenseInfoById(model, node);
 		}
-		if (retval == null) {
+		if (retval == null) {	// OK, we give up
+			logger.error("Could not determine the type for a license");
 			throw(new InvalidSPDXAnalysisException("Could not determine the type for a license"));
 		}
 		return retval;
 	}
 	
+	/**
+	 * Obtains an SPDX license by a URI - could be a standard license or a predefined license type
+	 * @param model
+	 * @param node
+	 * @return License Info for the license or NULL if no external standard license info could be found
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private static SPDXLicenseInfo getLicenseInfoByUri(Model model, Node node) throws InvalidSPDXAnalysisException {
+		if (!node.isURI()) {
+			return null;
+		}
+		if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE)) {
+			return new SPDXNoneLicense(model, node);
+		} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION)) {
+			return new SpdxNoAssertionLicense(model, node);
+		} else if (node.getURI().startsWith(STANDARD_LICENSE_URI_PREFIX)) {
+			// try to fetch the standard license from the model
+			try {
+				return getLicenseFromStdLicModel(node.getURI());
+			} catch (Exception ex) {
+				logger.warn("Unable to get license from standard model for "+node.getURI());
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
 	public static SPDXStandardLicense getStandardLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
 		return getLicenseFromStdLicModel(STANDARD_LICENSE_URI_PREFIX + licenseId);
 	}
@@ -195,6 +218,7 @@ public class SPDXLicenseInfoFactory {
 				}
 			} catch(Exception ex) {
 				in = null;
+				logger.warn("Unable to open SPDX standard license model.  Using local file copy for standard licenses");
 			}
 			if (in == null) {
 				// need to fetch from the local file system
@@ -217,7 +241,7 @@ public class SPDXLicenseInfoFactory {
 				try {
 					in.close();
 				} catch (IOException e) {
-					
+					logger.warn("Unable to close model input stream");
 				}
 			}
 		}
@@ -237,7 +261,7 @@ public class SPDXLicenseInfoFactory {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {
-			// do nothing
+			logger.warn("Unable to load Java RDFa reader");
 		}  
 
 		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
@@ -270,7 +294,7 @@ public class SPDXLicenseInfoFactory {
 				try {
 					licRdfInput.close();
 				} catch (IOException e) {
-					// ignore
+					logger.warn("Unable to close license RDF Input Stream");
 				}
 			}
 		}
@@ -288,7 +312,7 @@ public class SPDXLicenseInfoFactory {
 				STANDARD_LICENSE_ID_SET.add(t.getObject().toString(false));
 			}
 		} catch (Exception ex) {
-			
+			logger.warn("Error loading standard license ID's from model.  Using static standard license ID's");
 			for (int i = 0; i < STANDARD_LICENSE_IDS.length; i++) {
 				STANDARD_LICENSE_ID_SET.add(STANDARD_LICENSE_IDS[i]);
 			}	
@@ -385,11 +409,11 @@ public class SPDXLicenseInfoFactory {
 	 * @throws InvalidLicenseStringException 
 	 */
 	public static SPDXLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
-		if (licenseString.isEmpty()) {
+		String parseString = licenseString.trim();
+		if (parseString.isEmpty()) {
 			throw(new InvalidLicenseStringException("Empty license string"));
 		}
-		String parseString = licenseString.trim();
-		if (parseString.startsWith("(")) {
+		if (parseString.charAt(0) == '(') {
 			if (!parseString.endsWith(")")) {
 				throw(new InvalidLicenseStringException("Missing end ')'"));
 			}
@@ -589,12 +613,13 @@ public class SPDXLicenseInfoFactory {
             licenseProperties.load(in);
         } catch (IOException e) {
             // Ignore it and fall through
+        	logger.warn("IO Exception reading standard license properties file: "+e.getMessage());
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    // Ignore it and fall through
+                   logger.warn("Unable to close standard license properties file: "+e.getMessage());
                 }
             }
         }

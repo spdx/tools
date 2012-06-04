@@ -142,11 +142,7 @@ public class TestLicenseSheet {
 				if (lineB == null) {
 					if (lineA.isEmpty()) {
 						lineA = readerA.readLine();
-						if (lineA == null) {
-							return true;
-						} else {
-							return false;
-						}
+						return (lineA == null);
 					}
 				}
 				if (!lineA.equals(lineB)) {
@@ -158,11 +154,7 @@ public class TestLicenseSheet {
 				lineB = readerB.readLine();
 				lineNum++;
 			}
-			if (lineB == null) {
-				return true;
-			} else {
-				return false;
-			}
+			return (lineB == null);
 		} finally {
 			readerA.close();
 			readerB.close();

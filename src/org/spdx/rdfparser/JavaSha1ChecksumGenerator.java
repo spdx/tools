@@ -55,7 +55,7 @@ public class JavaSha1ChecksumGenerator implements IFileChecksumGenerator {
 			for (int i = 0; i < digestBytes.length; i++) {
 				String hex = Integer.toHexString(0xff & digestBytes[i]);
 				if (hex.length() < 2) {
-					sb.append("0");
+					sb.append('0');
 				}
 				sb.append(hex);
 			}

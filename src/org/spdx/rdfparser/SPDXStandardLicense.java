@@ -345,11 +345,23 @@ public class SPDXStandardLicense extends SPDXLicense {
 	private String createStdLicenseUri(String id) {
 		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
 	}
+	
+	@Override
+	public int hashCode() {
+		if (this.getId() != null) {
+			return this.getId().hashCode();
+		} else {
+			return 0;
+		}
+	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SPDXStandardLicense)) {
 			// covers o == null, as null is not an instance of anything
 			return false;

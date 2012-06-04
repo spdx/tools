@@ -112,7 +112,7 @@ public class LicenseHTMLFile {
 					String urlRow = OTHER_WEB_PAGE_ROW.replace(WEBURL, url);
 					urlRow = urlRow.replace(SITE, site);
 					sb.append(urlRow);
-					sb.append("\n");
+					sb.append('\n');
 				}
 				otherWebPages = sb.toString();
 			} else {

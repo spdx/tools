@@ -174,9 +174,30 @@ public class SPDXCreatorInformation {
 			}
 		}
 	}
+	@Override
+	public int hashCode() {
+		// hashcode as an xor of the hashcodes from created, comment, and creators
+		int retval = 41;	// Prime
+		if (this.getCreated() != null) {
+			retval = retval ^ this.getCreated().hashCode();
+		}
+		if (this.getComment() != null) {
+			retval = retval ^ this.getComment().hashCode();
+		}
+		if (this.getCreators() != null) {
+			String[] creators = this.getCreators();
+			for (int i = 0; i < creators.length; i++) {
+				retval = retval ^ creators[i].hashCode();
+			}
+		}
+		return retval;
+	}
 	
 	@Override
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SPDXCreatorInformation)) {
 			return false;
 		}

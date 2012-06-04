@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
@@ -50,6 +51,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  */
 public class SpreadsheetToRDF {
 
+	static final Logger logger = Logger.getLogger(SpreadsheetToRDF.class.getName());
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
 	static DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
@@ -237,6 +239,7 @@ public class SpreadsheetToRDF {
 		try {
 			dataLicense = (SPDXStandardLicense)SPDXLicenseInfoFactory.parseSPDXLicenseString(dataLicenseId);
 		} catch (Exception ex) {
+			logger.warn("Unable to parse the provided standard license ID.  Using "+SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
 			try {
 				dataLicense = (SPDXStandardLicense)SPDXLicenseInfoFactory.parseSPDXLicenseString(SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
 			} catch (InvalidLicenseStringException e) {

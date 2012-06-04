@@ -1,3 +1,5 @@
+Implementation version 1.0.6
+- Fixed several minor quality issues identified by quality scan of code
 - Improvements in the HTML output provided by Todd Cook from Black Duck software (sorting license lists and files)
 
 Implementation version 1.0.5

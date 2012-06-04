@@ -29,7 +29,6 @@ import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -37,7 +36,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**

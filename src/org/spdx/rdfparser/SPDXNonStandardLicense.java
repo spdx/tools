@@ -105,12 +105,24 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 			resource.addProperty(p, text);
 		}
 	}
+	
+	@Override 
+	public int hashCode() {
+		if (this.getId() == null) {
+			return 0;
+		} else {
+			return this.getId().hashCode();
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SPDXNonStandardLicense)) {
 			// covers o == null, as null is not an instance of anything
 			return false;

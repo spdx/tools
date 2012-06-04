@@ -113,19 +113,22 @@ public class RdfToHtml {
 				+ "where rdfxmlfile.rdf is a valid SPDX RDF XML file and htmlfile.html is\n"
 				+ "the output html file.");
 	}
+	
+    public static void rdfToHtml(SPDXDocument doc, Writer writer, String templateDirName, String templateFileName) throws MustacheException, IOException, InvalidSPDXAnalysisException {
+        MustacheBuilder builder = new MustacheBuilder(templateDirName);
+        HashMap<String, Object> mustacheMap = MustacheMap.buildMustachMap(doc);
+        Mustache mustache = builder.parseFile(templateFileName);
+        mustache.execute(writer, mustacheMap);
+    }
+
 
 	public static void rdfToHtml(SPDXDocument doc, Writer writer) throws MustacheException, IOException, InvalidSPDXAnalysisException {
-		File templateDirectoryRoot = new File(TEMPLATE_ROOT_PATH);
-		MustacheBuilder builder = null;
-		if (templateDirectoryRoot.exists() && templateDirectoryRoot.isDirectory()) {
-			builder = new MustacheBuilder(templateDirectoryRoot);
-		} else {
-			builder = new MustacheBuilder(TEMPLATE_CLASS_PATH);
+		String templateDir = TEMPLATE_ROOT_PATH;
+		File templateDirectoryRoot = new File(templateDir);
+		if (!(templateDirectoryRoot.exists() && templateDirectoryRoot.isDirectory())) {
+			templateDir = TEMPLATE_CLASS_PATH;
 		}
-	    Mustache mustache;
-	    HashMap<String, Object> mustacheMap = MustacheMap.buildMustachMap(doc);
-		mustache = builder.parseFile(SPDX_HTML_TEMPLATE);
-		mustache.execute(writer, mustacheMap);
+		rdfToHtml(doc, writer, templateDir, SPDX_HTML_TEMPLATE);
 	}
 
 }

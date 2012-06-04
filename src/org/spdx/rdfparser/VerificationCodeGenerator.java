@@ -124,7 +124,7 @@ public class VerificationCodeGenerator {
 					// remove these from the filePath
 				} else {
 					if (j > 0) {
-						normalizedFilePath.append("/");
+						normalizedFilePath.append('/');
 					}
 					normalizedFilePath.append(filePathParts[j]);
 				}
@@ -132,7 +132,7 @@ public class VerificationCodeGenerator {
 			filePath = normalizedFilePath.toString();
 		}
 		filePath = filePath.replace("./", "");
-		if (filePath.startsWith("/")) {
+		if (!filePath.isEmpty() && filePath.charAt(0) == '/') {
 			filePath = "." + filePath;
 		} else {
 			filePath = "./" + filePath;
@@ -149,7 +149,7 @@ public class VerificationCodeGenerator {
 		for (int i = 0; i < digest.length; i++) {
 			String hex = Integer.toHexString(0xff & digest[i]);
 			if (hex.length() < 2) {
-				sb.append("0");
+				sb.append('0');
 			}
 			sb.append(hex);
 		}
