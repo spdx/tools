@@ -28,6 +28,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
+	
+	static final int NO_ASSERTION_HASHCODE = 89;	// prime number - all NoAssertion licenses should have the same hashcode
 
 	/**
 	 * @param model
@@ -61,19 +63,21 @@ public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
 	public String toString() {
 		return SPDXLicenseInfoFactory.NOASSERTION_LICENSE_NAME;
 	}
+	
+	@Override
+	public int hashCode() {
+		return NO_ASSERTION_HASHCODE;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof SpdxNoAssertionLicense) {
-			// All instances of this type are considered equal
+		if (o == this) {
 			return true;
-		} else {
-			// covers o == null, as null is not an instance of anything
-			return false;
 		}
+		return (o instanceof SpdxNoAssertionLicense);		// All instances of this type are considered equal
 	}
 
 	/* (non-Javadoc)

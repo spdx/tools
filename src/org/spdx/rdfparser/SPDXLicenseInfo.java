@@ -111,6 +111,9 @@ public abstract class SPDXLicenseInfo {
 	
 	// force subclasses to implement equals
 	public abstract boolean equals(Object o);
+	
+	// force subclasses to implement hashcode
+	public abstract int hashCode();
 
 	/**
 	 * @return

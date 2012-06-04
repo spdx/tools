@@ -106,11 +106,7 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 			if (string == null || string.isEmpty()) {
 				return false;
 			}
-			if (string.toUpperCase().equals("Y") || (string.toUpperCase().equals("YES"))) {
-				return true;
-			} else {
-				return false;
-			}
+			return (string.toUpperCase().equals("Y") || (string.toUpperCase().equals("YES")));
 		}
 
 		/* (non-Javadoc)
@@ -118,11 +114,7 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 		 */
 		@Override
 		public boolean hasNext() {
-			if (this.nextStandardLicense == null) {
-				return false;
-			} else {
-				return true;
-			}
+			return (this.nextStandardLicense != null);
 		}
 
 		/* (non-Javadoc)

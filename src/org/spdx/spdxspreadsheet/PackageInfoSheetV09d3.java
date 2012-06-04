@@ -235,7 +235,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 		if (licenseInfosInFiles != null && licenseInfosInFiles.length > 0) {
 			StringBuilder sb = new StringBuilder(licenseInfosInFiles[0].toString());
 			for (int i = 1; i < licenseInfosInFiles.length; i++) {
-				sb.append(",");
+				sb.append(',');
 				sb.append(licenseInfosInFiles[i].toString());
 			}
 			row.createCell(LICENSE_INFO_IN_FILES_COL).setCellValue(sb.toString());

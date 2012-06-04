@@ -266,7 +266,7 @@ public class LicenseSheet extends AbstractSheet {
 		Cell osiApprovedCell = row.getCell(COL_OSI_APPROVED);
 		if (osiApprovedCell != null) {
 			String osiApprovedStr = osiApprovedCell.getStringCellValue();
-			if (osiApprovedStr != null && osiApprovedStr.toUpperCase().trim().startsWith("Y")) {
+			if (osiApprovedStr != null && !osiApprovedStr.isEmpty() && osiApprovedStr.toUpperCase().trim().charAt(0) == 'Y') {
 				osiApproved = true;
 			}
 		}

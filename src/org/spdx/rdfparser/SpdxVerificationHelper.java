@@ -18,7 +18,6 @@ package org.spdx.rdfparser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 
 import com.hp.hpl.jena.iri.IRIFactory;
 

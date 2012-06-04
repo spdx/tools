@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -242,7 +241,7 @@ public class LicenseRDFAGenerator {
 		String licId = license.getId();
 		for (int i = 0; i < licId.length(); i++) {
 			if (INVALID_FILE_CHARS.contains(licId.charAt(i))) {
-				sb.append("_");
+				sb.append('_');
 			} else {
 				sb.append(licId.charAt(i));
 			}

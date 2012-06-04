@@ -48,11 +48,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		}
 		@Override
 		public boolean hasNext() {
-			if (currentLicense == null) {
-				return false;
-			} else {
-				return true;
-			}
+			return currentLicense != null;
 		}
 
 		@Override

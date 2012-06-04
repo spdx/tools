@@ -69,8 +69,19 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 			moreThanOne = true;
 			sb.append(iter.next().toString());
 		}
-		sb.append(")");
+		sb.append(')');
 		return sb.toString();
+	}
+	
+	@Override
+	public int hashCode() {
+		int retval = 41;	// Prime number
+		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+		while (iter.hasNext()) {
+			SPDXLicenseInfo li = iter.next();
+			retval = retval ^ li.hashCode();
+		}
+		return retval;
 	}
 	
 	/* (non-Javadoc)
@@ -78,6 +89,9 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 	 */
 	@Override
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SPDXDisjunctiveLicenseSet)) {
 			// covers o == null, as null is not an instance of anything
 			return false;

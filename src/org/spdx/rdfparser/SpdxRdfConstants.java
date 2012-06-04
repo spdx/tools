@@ -16,7 +16,6 @@
  */
 package org.spdx.rdfparser;
 
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 /**

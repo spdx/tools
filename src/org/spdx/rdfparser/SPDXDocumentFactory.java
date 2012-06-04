@@ -24,6 +24,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
@@ -35,6 +37,8 @@ import com.hp.hpl.jena.util.FileManager;
  *
  */
 public class SPDXDocumentFactory {
+	
+	static final Logger logger = Logger.getLogger(SPDXDocumentFactory.class.getName());
 
 	/**
 	 * Create a new SPDX Document populating the data from the existing model
@@ -56,7 +60,9 @@ public class SPDXDocumentFactory {
 	public static SPDXDocument creatSpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-		} catch(java.lang.ClassNotFoundException e) {}  // do nothing
+		} catch(java.lang.ClassNotFoundException e) {
+			logger.warn("Unable to load the RDFaReader Class");
+		}  
 
 		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
 		if (spdxRdfInput == null)
@@ -81,6 +87,7 @@ public class SPDXDocumentFactory {
 				return s.toString();
 			
 		} catch(URISyntaxException e){
+			logger.error("Invalid URI syntax for "+src);
 			return null;
 		}
 	}

@@ -184,7 +184,25 @@ public class SPDXReview {
 	}
 	
 	@Override
+	public int hashCode() {
+		int retval = 41;	// prime number
+		if (this.getReviewer() != null) {
+			retval = retval ^ this.getReviewer().hashCode();
+		}
+		if (this.getComment() != null) {
+			retval = retval ^ this.getComment().hashCode();
+		}
+		if (this.getReviewDate() != null) {
+			retval = retval ^ this.getReviewDate().hashCode();
+		}
+		return retval;
+	}
+	
+	@Override
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SPDXReview)) {
 			return false;
 		}
