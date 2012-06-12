@@ -154,7 +154,7 @@ public class TestSPDXFile {
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
 		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
 				COMPLEX_LICENSE, seenLic, "License comments", 
-				"Copyrights", artifactOfs);
+				"Copyrights", artifactOfs, "file comments");
 		ArrayList<String> verify = file.verify();
 		assertEquals(0, verify.size());
 		Resource fileResource = file.createResource(model);
@@ -168,6 +168,7 @@ public class TestSPDXFile {
 		assertEquals(file.getArtifactOf()[0].getHomePage(), file2.getArtifactOf()[0].getHomePage());
 		assertEquals(file.getCopyright(), file2.getCopyright());
 		assertEquals(file.getLicenseComments(), file2.getLicenseComments());
+		assertEquals(file.getComment(), file2.getComment());
 		assertEquals(file.getName(), file2.getName());
 		assertEquals(file.getSha1(), file2.getSha1());
 		assertEquals(file.getType(), file2.getType());
@@ -209,5 +210,22 @@ public class TestSPDXFile {
 		}
 		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
 		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, file2.getCopyright());
+	}
+	
+	@Test
+	public void testSetComment() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		String COMMENT1 = "comment1";
+		String COMMENT2 = "comment2";
+		String COMMENT3 = "comment3";
+		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], COMMENT1);
+		assertEquals(file.getComment(), COMMENT1);
+		Resource fileResource = file.createResource(model);
+		file.setLicenseComments("see if this works");
+		file.setComment(COMMENT2);
+		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		assertEquals(file2.getComment(), COMMENT2);
+		file2.setComment(COMMENT3);
+		assertEquals(file2.getComment(), COMMENT3);
 	}
 }

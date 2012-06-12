@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package spdxspreadsheet;
 
 import static org.junit.Assert.*;
 
@@ -23,8 +23,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
+import org.spdx.spdxspreadsheet.PerFileSheetV09d3;
+import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -124,14 +133,14 @@ public class TestPerFileSheet {
 
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheet#add(org.spdx.rdfparser.SPDXFile)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheetV09d3#add(org.spdx.rdfparser.SPDXFile)}.
 	 * @throws SpreadsheetException 
 	 */
 	@Test
 	public void testAddAndGet() throws SpreadsheetException {
 		Workbook wb = new HSSFWorkbook();
 		PerFileSheet.create(wb, "File Info");
-		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info", OriginsSheet.CURRENT_VERSION);
+		PerFileSheet fileInfoSheet = PerFileSheet.openVersion(wb, "File Info", SPDXSpreadsheet.CURRENT_VERSION);
 		SPDXLicenseInfo[] testLicenses1 = new SPDXLicenseInfo[] {COMPLEX_LICENSE};
 		SPDXLicenseInfo[] testLicenses2 = new SPDXLicenseInfo[] {NON_STD_LICENSES[0]};
 		DOAPProject[] testProject2 = new DOAPProject[] {new DOAPProject("artifactof 2", "home page2")};
@@ -221,13 +230,13 @@ public class TestPerFileSheet {
 		}
 	}
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheet#create(org.apache.poi.ss.usermodel.Workbook, java.lang.String)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheetV09d3#create(org.apache.poi.ss.usermodel.Workbook, java.lang.String)}.
 	 */
 	@Test
 	public void testCreate() {
 		Workbook wb = new HSSFWorkbook();
 		PerFileSheet.create(wb, "File Info");
-		PerFileSheet fileInfoSheet = new PerFileSheet(wb, "File Info", OriginsSheet.CURRENT_VERSION);
+		PerFileSheet fileInfoSheet = PerFileSheet.openVersion(wb, "File Info", SPDXSpreadsheet.CURRENT_VERSION);
 		String ver = fileInfoSheet.verify();
 		if (ver != null && !ver.isEmpty()){
 			fail(ver);

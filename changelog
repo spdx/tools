@@ -1,3 +1,13 @@
+Implementation version 1.1.0
+- Updated to to the 1.1 spec
+- Added SPDXDocument property for document comment
+- Added comment property to NonStandardLicense
+- Added license name property to NonStandardLicense
+- Added crossReference / source urls property to NonStandardLicenses
+- Added comment property to SPDXFile
+- Changed License property name from "licenseOsiApproved" to "isOsiApproved" - note licenseOsiApproved will still be recognized for compatability reasons
+- Changed License property name from "licenseNotes" to "rdfs:comment" 
+
 Implementation version 1.0.6
 - Fixed several minor quality issues identified by quality scan of code
 - Improvements in the HTML output provided by Todd Cook from Black Duck software (sorting license lists and files)

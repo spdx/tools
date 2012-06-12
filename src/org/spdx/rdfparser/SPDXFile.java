@@ -35,8 +35,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SPDXFile {
 	
 	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());
-	private Node node = null;
 	private Model model = null;
+	private Resource resource = null;
 	private String name;
 	private SPDXLicenseInfo concludedLicenses;
 	private String sha1;
@@ -45,6 +45,7 @@ public class SPDXFile {
 	private String licenseComments;
 	private String copyright;
 	private DOAPProject[] artifactOf;
+	private String comment = null;
 	
 	public static HashMap<String, String> FILE_TYPE_TO_RESOURCE = new HashMap<String, String>();
 	public static HashMap<String, String> RESOURCE_TO_FILE_TYPE = new HashMap<String, String>();
@@ -69,13 +70,29 @@ public class SPDXFile {
 	};
 	
 	/**
+	 * Convert a node to a resource
+	 * @param cmodel
+	 * @param cnode
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
+		if (cnode.isBlank()) {
+			return cmodel.createResource(cnode.getBlankNodeId());
+		} else if (cnode.isURI()) {
+			return cmodel.createResource(cnode.getURI());
+		} else {
+			throw(new InvalidSPDXAnalysisException("Can not create a file from a literal"));
+		}
+	}
+	/**
 	 * Construct an SPDX File form the fileNode
 	 * @param fileNode RDF Graph node representing the SPDX File
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SPDXFile(Model model, Node fileNode) throws InvalidSPDXAnalysisException {
-		this.node = fileNode;
 		this.model = model;
+		this.resource = convertToResource(model, fileNode);
 		// name
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME).asNode();
 		Triple m = Triple.createMatch(fileNode, p, null);
@@ -166,6 +183,13 @@ public class SPDXFile {
 				this.copyright = t.getObject().toString(false);
 			}
 		}
+		//comment
+		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
+		m = Triple.createMatch(fileNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			this.comment = tripleIter.next().getObject().toString(false);
+		}
 		//artifactOf
 		ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF).asNode();
@@ -182,6 +206,7 @@ public class SPDXFile {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_FILE);
 		Resource retval = model.createResource(type);
 		populateModel(model, retval);
+		this.resource = retval;
 		return retval;
 	}
 	
@@ -242,6 +267,11 @@ public class SPDXFile {
 				fileResource.addProperty(p, this.getCopyright());
 			}
 		}
+		//comment
+		if (this.comment != null) {
+			p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+			fileResource.addProperty(p, this.comment);
+		}
 
 		//artifactof
 		if (this.artifactOf != null) {
@@ -252,12 +282,13 @@ public class SPDXFile {
 			}
 		}		
 		this.model = model;
-		this.node = fileResource.asNode();
+		this.resource = fileResource;
 	}
+	
 	public SPDXFile(String name, String type, String sha1,
 			SPDXLicenseInfo concludedLicenses,
 			SPDXLicenseInfo[] seenLicenses, String licenseComments,
-			String copyright, DOAPProject[] artifactOf) {
+			String copyright, DOAPProject[] artifactOf, String comment) {
 		this.name = name;
 		this.type = type;
 		this.sha1 = sha1;
@@ -266,7 +297,17 @@ public class SPDXFile {
 		this.licenseComments = licenseComments;
 		this.copyright = copyright;
 		this.artifactOf = artifactOf;
+		this.comment = comment;
 	}
+	
+	public SPDXFile(String name, String type, String sha1,
+			SPDXLicenseInfo concludedLicenses,
+			SPDXLicenseInfo[] seenLicenses, String licenseComments,
+			String copyright, DOAPProject[] artifactOf) {
+		this(name, type, sha1, concludedLicenses, seenLicenses,
+				licenseComments, copyright, artifactOf, null);
+	}
+	
 	/**
 	 * @return the seenLicenses
 	 */
@@ -278,15 +319,14 @@ public class SPDXFile {
 	 */
 	public void setSeenLicenses(SPDXLicenseInfo[] seenLicenses) {
 		this.seenLicenses = seenLicenses;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE);
 
 			for (int i = 0; i < seenLicenses.length; i++) {
 				Resource lic = seenLicenses[i].createResource(model);
-				fileResource.addProperty(p, lic);
+				this.resource.addProperty(p, lic);
 			}
 		}
 	}
@@ -301,13 +341,26 @@ public class SPDXFile {
 	 */
 	public void setLicenseComments(String licenseComments) {
 		this.licenseComments = licenseComments;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS);
-			fileResource.addProperty(p, this.getLicenseComments());
+			this.resource.addProperty(p, this.getLicenseComments());
 		}	
+	}
+	
+	public String getComment() {
+		return this.comment;
+	}
+	
+	public void setComment(String comment) {
+	this.comment = comment;
+		if (this.model != null && this.resource != null) {
+			Property p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+			model.removeAll(this.resource, p, null);
+			p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+			this.resource.addProperty(p, this.comment);
+		}
 	}
 	/**
 	 * @return the copyright
@@ -320,19 +373,18 @@ public class SPDXFile {
 	 */
 	public void setCopyright(String copyright) {
 		this.copyright = copyright;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT);
 			if (copyright.equals(SpdxRdfConstants.NONE_VALUE)) {
 				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NONE);
-				fileResource.addProperty(p, r);
+				this.resource.addProperty(p, r);
 			} else if (copyright.equals(SpdxRdfConstants.NOASSERTION_VALUE)) {
 				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NOASSERTION);
-				fileResource.addProperty(p, r);
+				this.resource.addProperty(p, r);
 			} else {
-				fileResource.addProperty(p, this.getCopyright());
+				this.resource.addProperty(p, this.getCopyright());
 			}
 		}	
 	}
@@ -349,12 +401,11 @@ public class SPDXFile {
 	 */
 	public void setName(String name) {
 		this.name = name;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME);
-			fileResource.addProperty(p, this.getName());
+			this.resource.addProperty(p, this.getName());
 		}
 	}
 	/**
@@ -368,13 +419,12 @@ public class SPDXFile {
 	 */
 	public void setConcludedLicenses(SPDXLicenseInfo fileLicenses) {
 		this.concludedLicenses = fileLicenses;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
 			Resource lic = fileLicenses.createResource(model);
-			fileResource.addProperty(p, lic);
+			this.resource.addProperty(p, lic);
 		}
 	}
 	/**
@@ -388,15 +438,14 @@ public class SPDXFile {
 	 */
 	public void setSha1(String sha1) {
 		this.sha1 = sha1;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
 			Resource cksumResource = cksum.createResource(model);
 
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
-			fileResource.addProperty(p, cksumResource);
+			this.resource.addProperty(p, cksumResource);
 		}
 	}
 	/**
@@ -411,13 +460,12 @@ public class SPDXFile {
 	 */
 	public void setType(String type) throws InvalidSPDXAnalysisException {
 		this.type = type;
-		if (this.model != null && this.node != null) {
+		if (this.model != null && this.resource != null) {
 			Resource typeResource = fileTypeStringToTypeResource(type, this.model);
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_TYPE);
-			Resource fileResource = model.createResource(node.getURI());
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_TYPE);
-			fileResource.addProperty(p, typeResource);
+			this.resource.addProperty(p, typeResource);
 		}
 	}
 
@@ -462,10 +510,9 @@ public class SPDXFile {
 	 */
 	public void setArtifactOf(DOAPProject[] artifactOf) {
 		this.artifactOf = artifactOf;
-		if (this.model != null && this.name != null) {
-			Resource fileResource = model.createResource(node.getURI());
+		if (this.model != null && this.resource != null && this.name != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
-			model.removeAll(fileResource, p, null);
+			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
 			for (int i = 0; i < artifactOf.length; i++) {
 				// we need to check on these if it already exists
@@ -476,7 +523,7 @@ public class SPDXFile {
 				} else {
 					projectResource = artifactOf[i].createResource(model);
 				}
-				fileResource.addProperty(p, projectResource);
+				this.resource.addProperty(p, projectResource);
 			}
 		}
 	}
@@ -546,6 +593,20 @@ public class SPDXFile {
 			}
 			for (int i = 0;i < projects.length; i++) {
 				retval.addAll(projects[i].verify());
+			}
+		}	
+		// comment - verify there are not more than one
+		if (this.model != null && this.resource != null) {
+			Node p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
+			Triple m = Triple.createMatch(this.resource.asNode(), p, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			int count = 0;
+			while (tripleIter.hasNext()) {
+				tripleIter.next();
+				count++;
+			}
+			if (count > 1) {
+				retval.add("More than one file comment for file "+this.name);
 			}
 		}	
 		return retval;

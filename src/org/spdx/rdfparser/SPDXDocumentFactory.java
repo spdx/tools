@@ -87,8 +87,14 @@ public class SPDXDocumentFactory {
 				return s.toString();
 			
 		} catch(URISyntaxException e){
-			logger.error("Invalid URI syntax for "+src);
-			return null;
+			String secondTry = "file://" + new File(src).getAbsoluteFile().toString().replace("\\", "/");
+			try {
+				URI s2 = new URI(secondTry);
+				return s2.toString();
+			} catch (URISyntaxException e1) {
+				logger.error("Invalid URI syntax for "+src);
+				return null;
+			}
 		}
 	}
 

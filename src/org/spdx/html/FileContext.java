@@ -144,5 +144,13 @@ public class FileContext {
 		}
 		return retval;
 	}
+	
+	public String comment() {
+		if (spdxFile != null) {
+			return spdxFile.getComment();
+		} else {
+			return null;
+		}
+	}
 
 }

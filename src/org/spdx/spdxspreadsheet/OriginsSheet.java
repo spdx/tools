@@ -18,140 +18,48 @@ package org.spdx.spdxspreadsheet;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- * Sheet containing information about the origins of an SPDX document
+ * Abstract class for sheet containing information about the origins of an SPDX document
+ * Specific versions implemented as subclasses
  * @author Gary O'Neall
  *
  */
-public class OriginsSheet extends AbstractSheet {
-
-	public static final String CURRENT_VERSION = "0.9.4";
-	public static final String VERSION_0_9_3 = "0.9.3";
-	public static final String VERSION_0_9_2 = "0.9.2";
-	public static final String VERSION_0_9_1 = "0.9.1";
-	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION,VERSION_0_9_3, VERSION_0_9_2, VERSION_0_9_1};
-	static final int NUM_COLS = 6;
+public abstract class OriginsSheet extends AbstractSheet {
 	static final int SPREADSHEET_VERSION_COL = 0;
-	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
-	static final int CREATED_BY_COL = SPDX_VERSION_COL + 1;
-	static final int CREATED_COL = CREATED_BY_COL + 1;
-	static final int DATA_LICENSE_COL = CREATED_COL + 1;
-	static final int AUTHOR_COMMENTS_COL = DATA_LICENSE_COL + 1;
-	
 	static final int DATA_ROW_NUM = 1;
 	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
-		true, true, false, false};
+	protected String version;
 
-	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
-		"SPDX Version", "Creator", "Created", "Data License", "Creator Comment"};
-	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 16, 40, 70};
-	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, false};
-	String version = CURRENT_VERSION;	// updated in the verify method
-	
-	public OriginsSheet(Workbook workbook, String sheetName) {
+	public OriginsSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
+		this.version = version;
 	}
 
-	@Override
-	public String verify() {
-		try {
-			if (sheet == null) {
-				return "Worksheet for SPDX Origins does not exist";
-			}
-			// validate version
-			version = getDataCellStringValue(SPREADSHEET_VERSION_COL);
-			if (version == null) {
-				return "Invalid origins spreadsheet - no spreadsheet version found";
-			}
-
-			if (!verifyVersion(version)) {
-				return "Spreadsheet version "+version+" not supported.";
-			}
-			Row firstRow = sheet.getRow(firstRowNum);
-			for (int i = 0; i < NUM_COLS; i++) {
-				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
-						cell.getStringCellValue() == null ||
-						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
-					return "Column "+HEADER_TITLES[i]+" missing for SPDX Origins worksheet";
-				}
-			}
-			// validate rows
-			boolean done = false;
-			int rowNum = firstRowNum + 1;
-			while (!done) {
-				Row row = sheet.getRow(rowNum);
-				if (row == null || row.getCell(SPDX_VERSION_COL) == null) {
-					done = true;
-				} else {
-					String error = validateRow(row);
-					if (error != null) {
-						return error;
-					}
-					rowNum++;
-				}
-			}
-			return null;
-		} catch (Exception ex) {
-			return "Error in verifying SPDX Origins work sheet: "+ex.getMessage();
-		}
-	}
-
-	private String validateRow(Row row) {
-		for (int i = 0; i < NUM_COLS; i++) {
-			Cell cell = row.getCell(i);
-			if (cell == null) {
-				if (REQUIRED[i]) {
-					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum()+" in Origins Spreadsheet");
-				}
-			} else {
-				if (i == CREATED_COL) {
-					if (!(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
-						return "Created column in origin spreadsheet is not of type Date";
-					}
-				}
-//				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
-//					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
-//				}
-			}
-		}
-		return null;
-	}
 	public static void create(Workbook wb, String sheetName) {
-		int sheetNum = wb.getSheetIndex(sheetName);
-		if (sheetNum >= 0) {
-			wb.removeSheetAt(sheetNum);
+		//NOTE: this must be updated to the latest version
+		OriginsSheetV1d1.create(wb, sheetName);
+	}
+
+	/**
+	 * Open an existing worksheet
+	 * @param workbook
+	 * @param originSheetName
+	 * @param version Spreadsheet version
+	 * @return
+	 */
+	public static OriginsSheet openVersion(Workbook workbook,
+			String originSheetName, String version) {
+		if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_4) <= 0) {
+			return new OriginsSheetV0d9d4(workbook, originSheetName, version);
+		} else {
+			return new OriginsSheetV1d1(workbook, originSheetName, version);
 		}
-		
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
-		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
-		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
-		Sheet sheet = wb.createSheet(sheetName);
-		Row row = sheet.createRow(0);
-		for (int i = 0; i < HEADER_TITLES.length; i++) {
-			sheet.setColumnWidth(i, COLUMN_WIDTHS[i]*256);
-			if (LEFT_WRAP[i]) {
-				sheet.setDefaultColumnStyle(i, wrapStyle);
-			} else if (CENTER_NOWRAP[i]) {
-				sheet.setDefaultColumnStyle(i, centerStyle);
-			}
-			Cell cell = row.createCell(i);
-			cell.setCellStyle(headerStyle);
-			cell.setCellValue(HEADER_TITLES[i]);
-		}
-		Row dataRow = sheet.createRow(1);
-		Cell ssVersionCell = dataRow.createCell(SPREADSHEET_VERSION_COL);
-		ssVersionCell.setCellValue(CURRENT_VERSION);
 	}
 	
-	private Row getDataRow() {
+	protected Row getDataRow() {
 		Row dataRow = sheet.getRow(firstRowNum + DATA_ROW_NUM);
 		if (dataRow == null) {
 			dataRow = sheet.createRow(firstRowNum + DATA_ROW_NUM);
@@ -159,7 +67,7 @@ public class OriginsSheet extends AbstractSheet {
 		return dataRow;
 	}
 	
-	private Cell getOrCreateDataCell(int colNum) {
+	protected Cell getOrCreateDataCell(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			cell = getDataRow().createCell(colNum);
@@ -169,18 +77,18 @@ public class OriginsSheet extends AbstractSheet {
 		return cell;
 	}
 	
-	private void setDataCellStringValue(int colNum, String value) {
+	protected void setDataCellStringValue(int colNum, String value) {
 		getOrCreateDataCell(colNum).setCellValue(value);
 	}
 	
-	private void setDataCellDateValue(int colNum, Date value) {
+	protected void setDataCellDateValue(int colNum, Date value) {
 		Cell cell = getOrCreateDataCell(colNum);
 		cell.setCellValue(value);
 		cell.setCellStyle(dateStyle);
 		
 	}
 	
-	private Date getDataCellDateValue(int colNum) {
+	protected Date getDataCellDateValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			return null;
@@ -189,7 +97,7 @@ public class OriginsSheet extends AbstractSheet {
 		}
 	}
 	
-	private String getDataCellStringValue(int colNum) {
+	protected String getDataCellStringValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			return null;
@@ -197,108 +105,65 @@ public class OriginsSheet extends AbstractSheet {
 			return cell.getStringCellValue();
 		}
 	}
-	
-	public void setAuthorComments(String comments) {
-		setDataCellStringValue(AUTHOR_COMMENTS_COL, comments);
-	}
-	
-	public void setCreatedBy(String createdBy) {
-		setDataCellStringValue(CREATED_BY_COL, createdBy);
-	}
-	
-	public void setDataLicense(String dataLicense) {
-		setDataCellStringValue(DATA_LICENSE_COL, dataLicense);
-	}
-	
-	public void setSPDXVersion(String version) {
-		setDataCellStringValue(SPDX_VERSION_COL, version);
-	}
-	
-	public void setSpreadsheetVersion(String version) {
-		setDataCellStringValue(SPREADSHEET_VERSION_COL, version);
-	}
-	
-	public String getAuthorComments() {
-		return getDataCellStringValue(AUTHOR_COMMENTS_COL);
-	}
-	
-	public Date getCreated() {
-		return getDataCellDateValue(CREATED_COL);
-	}
-	
-	public String getDataLicense() {
-		return getDataCellStringValue(DATA_LICENSE_COL);
-	}
-	
-	public String getSPDXVersion() {
-		return getDataCellStringValue(SPDX_VERSION_COL);
-	}
-	
-	public String getSpreadsheetVersion() {
-		return getDataCellStringValue(SPREADSHEET_VERSION_COL);
-	}
-
-	public void setCreatedBy(String[] createdBy) {
-		if (createdBy == null || createdBy.length < 1) {
-			setDataCellStringValue(CREATED_BY_COL, "");
-			int i = firstRowNum + DATA_ROW_NUM + 1;
-			Row nextRow = sheet.getRow(i);
-			while (nextRow != null) {
-				Cell createdByCell = nextRow.getCell(CREATED_BY_COL);
-				if (createdByCell != null) {
-					createdByCell.setCellValue("");
-				}
-				i++;
-				nextRow = sheet.getRow(i);
-			}
-			return;
-		}
-		setDataCellStringValue(CREATED_BY_COL, createdBy[0]);
-		for (int i = 1; i < createdBy.length; i++) {
-			Row row = sheet.getRow(firstRowNum + DATA_ROW_NUM + i);
-			if (row == null) {
-				row = sheet.createRow(firstRowNum + DATA_ROW_NUM + i);
-			}
-			Cell cell = row.getCell(CREATED_BY_COL);
-			if (cell == null) {
-				cell = row.createCell(CREATED_BY_COL);
-			}
-			cell.setCellValue(createdBy[i]);
-		}
-	}
-	
-	public String[] getCreatedBy() {
-		// first count rows
-		int numRows = 0;
-		while (sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows) != null &&
-				sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows).getCell(CREATED_BY_COL) != null &&
-				!sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows).getCell(CREATED_BY_COL).getStringCellValue().isEmpty()) {
-			numRows ++;
-		}
-		String[] retval = new String[numRows];
-		for (int i = 0; i < numRows; i++) {
-			retval[i] = sheet.getRow(firstRowNum + DATA_ROW_NUM + i).getCell(CREATED_BY_COL).getStringCellValue();
-		}
-		return retval;
-	}
-
-	public void setCreated(Date created) {
-		setDataCellDateValue(CREATED_COL, created);
-	}
 
 	/**
-	 * @param versionToCheck
+	 * @param spdxVersion
+	 */
+	public abstract void setSPDXVersion(String spdxVersion);
+
+	/**
+	 * @param createdBys
+	 */
+	public abstract void setCreatedBy(String[] createdBys);
+
+	/**
+	 * @param id
+	 */
+	public abstract void setDataLicense(String id);
+
+	/**
+	 * @param comments
+	 */
+	public abstract void setAuthorComments(String comments);
+
+	/**
+	 * @param parse
+	 */
+	public abstract void setCreated(Date parse);
+
+	/**
 	 * @return
 	 */
-	public static boolean verifyVersion(String versionToCheck) {
-		boolean supported = false;
-		String trVersion = versionToCheck.trim();
-		for (int i = 0; i < SUPPORTED_VERSIONS.length; i++) {
-			if (SUPPORTED_VERSIONS[i].equals(trVersion)) {
-				supported = true;
-				break;
-			}
-		}
-		return supported;
-	}
+	public abstract Date getCreated();
+
+	/**
+	 * @return
+	 */
+	public abstract String[] getCreatedBy();
+
+	/**
+	 * @return
+	 */
+	public abstract String getAuthorComments();
+
+	/**
+	 * @return
+	 */
+	public abstract String getSPDXVersion();
+
+	/**
+	 * @return
+	 */
+	public abstract String getDataLicense();
+
+	/**
+	 * @return
+	 */
+	public abstract String getDocumentDomment();
+
+	/**
+	 * @param docComment
+	 */
+	public abstract void setDocumentComment(String docComment);
+	
 }

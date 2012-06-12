@@ -56,7 +56,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.6";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.0.7";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -526,8 +526,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 			retval = alLic.toArray(retval);
 			return retval;
 		}
+		
 		/**
-		 * @return
+		 * @return Array list of any error messages found in verifying the package model
 		 */
 		public ArrayList<String> verify() {
 			ArrayList<String> retval = new ArrayList<String>();
@@ -862,25 +863,42 @@ public class SPDXDocument implements SpdxRdfConstants {
 				retval.add("Invalid data license: "+e.getMessage());
 			}
 		}
+		// document comment
+		try {
+			String[] comments = findDocPropertieStringValues(getSpdxDocNode(), RDFS_NAMESPACE, RDFS_PROP_COMMENT);
+			if (comments.length > 1) {
+				retval.add("More than one document comment exists for the SPDX Package");
+			}
+		}
+		catch(Exception e) {
+			retval.add("Invalid document comment: "+e.getMessage());
+		}
 		return retval;
 	}
 	
-	/**
-	 * @param propertyName
-	 * @return
-	 */
 	/**
 	 * Find all property string values belonging to the subject
 	 * @param subject
 	 * @param propertyName
 	 * @return string values of the properties or null if the subject or propertyName is null
-	 */
+	 */	
 	private String[] findDocPropertieStringValues(Node subject, String propertyName) {
+		return findDocPropertieStringValues(subject, SPDX_NAMESPACE, propertyName);
+	}
+
+	/**
+	 * Find all property string values belonging to the subject
+	 * @param subject
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return string values of the properties or null if the subject or propertyName is null
+	 */
+	private String[] findDocPropertieStringValues(Node subject, String nameSpace, String propertyName) {
 		if (subject == null || propertyName == null) {
 			return null;
 		}
 		ArrayList<String> alResult = new ArrayList<String>();
-		Node p = model.getProperty(SPDX_NAMESPACE, propertyName).asNode();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(subject, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -908,10 +926,19 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void removeProperties(Node subject, String propertyName) throws InvalidSPDXAnalysisException {
-		Property p = model.getProperty(SPDX_NAMESPACE, propertyName);
+		removeProperties(subject, SPDX_NAMESPACE, propertyName);
+	}
+	
+	/**
+	 * Remove all properties by the property name within the nameSpace from the subject node
+	 * @param node
+	 * @param propertyName
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void removeProperties(Node subject, String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
+		Property p = model.getProperty(nameSpace, propertyName);
 		Resource s = getResource(subject);
 		model.removeAll(s, p, null);
-		
 	}
 	
 	private Resource getResource(Node node) throws InvalidSPDXAnalysisException {
@@ -926,9 +953,29 @@ public class SPDXDocument implements SpdxRdfConstants {
 		return s;
 	}
 	
-	private void addProperty(Node subject, String propertyName, String[] propertyValue) throws InvalidSPDXAnalysisException { Resource s = getResource(subject);
+	/**
+	 * Add a literal string property value
+	 * @param subject
+	 * @param propertyName
+	 * @param propertyValue
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	private void addProperty(Node subject, String propertyName, String[] propertyValue) throws InvalidSPDXAnalysisException { 
+		addProperty(subject, SPDX_NAMESPACE, propertyName, propertyValue);
+	}
+	
+	/**
+	 * Add a literal string property value
+	 * @param subject
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param propertyValue
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	private void addProperty(Node subject, String nameSpace, String propertyName, String[] propertyValue) throws InvalidSPDXAnalysisException { 
+		Resource s = getResource(subject);
 		for (int i = 0; i < propertyValue.length; i++) {
-			Property p = model.createProperty(SPDX_NAMESPACE, propertyName);
+			Property p = model.createProperty(nameSpace, propertyName);
 			if (propertyValue[i].equals(SpdxRdfConstants.NONE_VALUE)) {
 				Resource r = model.createResource(SpdxRdfConstants.URI_VALUE_NONE);
 				s.addProperty(p, r);
@@ -940,7 +987,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			}
 		}
 	}
-
+	
 	/**
 	 * @return the spdxVersion or null if there is no SPDX document
 	 * @throws InvalidSPDXAnalysisException 
@@ -954,6 +1001,36 @@ public class SPDXDocument implements SpdxRdfConstants {
 			throw(new InvalidSPDXAnalysisException("More than one version exists for the SPDX Document"));
 		}
 		return versions[0];
+	}
+
+	/**
+	 * @param comment the documentComment to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setDocumentComment(String comment) throws InvalidSPDXAnalysisException {
+		Node spdxDocNode = getSpdxDocNode();
+		if (spdxDocNode == null) {
+			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before setting spdxVersion"));
+		}
+		removeProperties(spdxDocNode, RDFS_NAMESPACE, RDFS_PROP_COMMENT);
+		if (comment != null && !comment.isEmpty()) {
+			addProperty(spdxDocNode, RDFS_NAMESPACE, RDFS_PROP_COMMENT, new String[] {comment});
+		}
+	}
+
+	/**
+	 * @return the documentComment or null if there is no SPDX document or SPDX document comment
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public String getDocumentComment() throws InvalidSPDXAnalysisException {
+		String[] comments = findDocPropertieStringValues(getSpdxDocNode(), RDFS_NAMESPACE, RDFS_PROP_COMMENT);
+		if (comments == null || comments.length == 0) {
+			return null;
+		}
+		if (comments.length > 1) {
+			throw(new InvalidSPDXAnalysisException("More than one document comment exists for the SPDX Document"));
+		}
+		return comments[0];
 	}
 
 	/**

@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheetV09d3;
+import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -52,7 +53,7 @@ public class TestPackageInfoSheet {
 		
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
-		PackageInfoSheet pkgInfo = new PackageInfoSheetV09d3(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
+		PackageInfoSheet pkgInfo = new PackageInfoSheetV09d3(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
 		String ver = pkgInfo.verify();
 		if (ver != null && !ver.isEmpty()){
 			fail(ver);
@@ -94,7 +95,7 @@ public class TestPackageInfoSheet {
 				"short desc1", "desc1", "http://url1", testVerification, "NOASSERTION", "Person: originator2");
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheetV09d3.create(wb, "Package Info");
-		PackageInfoSheetV09d3 pkgInfoSheet = new PackageInfoSheetV09d3(wb, "Package Info", OriginsSheet.CURRENT_VERSION);
+		PackageInfoSheetV09d3 pkgInfoSheet = new PackageInfoSheetV09d3(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
 		pkgInfoSheet.add(pkgInfo1);
 		pkgInfoSheet.add(pkgInfo2);
 		SPDXPackageInfo tstPkgInfo1 = pkgInfoSheet.getPackageInfo(1);

@@ -21,6 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
@@ -32,11 +35,28 @@ import org.apache.poi.ss.usermodel.Workbook;
  *   - Non-standard licenses - text from any non-standard licenses found
  *   - Per File Info - Information about each file in the document
  *   - Reviewers - Information on any organizations who have reviewed the documents
+ *   
+ *   See notes below on version management
  * @author Gary O'Neall
  *
  */
 public class SPDXSpreadsheet extends AbstractSpreadsheet {
 
+	/*
+	 * The following information relates to the version management for the SPDXSpreadsheet.
+	 * Each sheet in the workbook implements a Factory method to instantiate the correct
+	 * version using the static method <code>openVersion(Workbook wb, String sheetName, String versionNumber)</code>
+	 * Each sheet also implements a method to create the latest version <code>create(Workbook wb, String sheetName)</code>
+	 */
+	public static final String CURRENT_VERSION = "1.1.0";
+	public static final String VERSION_0_9_4 = "0.9.4";
+	public static final String VERSION_0_9_3 = "0.9.3";
+	public static final String VERSION_0_9_2 = "0.9.2";
+	public static final String VERSION_0_9_1 = "0.9.1";
+	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION,VERSION_0_9_4, 
+		VERSION_0_9_3, VERSION_0_9_2, VERSION_0_9_1};
+	public static final String UNKNOWN_VERSION = "UNKNOWN";
+	
 	private OriginsSheet originsSheet;
 	static final String ORIGIN_SHEET_NAME = "Origins";
 	private PackageInfoSheet packageInfoSheet;
@@ -50,6 +70,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	private String version;
 	
 	/**
+	 * Creates a new spreadsheet based on an existing file.  Handles all version compatibilities
 	 * @param spreadsheetFile
 	 * @param create
 	 * @param readonly
@@ -58,28 +79,62 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public SPDXSpreadsheet(File spreadsheetFile, boolean create,
 			boolean readonly) throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
-		this.originsSheet = new OriginsSheet(this.workbook, ORIGIN_SHEET_NAME);
+		this.version = readVersion(this.workbook, ORIGIN_SHEET_NAME);	
+		if (this.version.equals(UNKNOWN_VERSION)) {
+			throw(new SpreadsheetException("The version for the SPDX spreadsheet could not be read."));
+		}
+		this.originsSheet = OriginsSheet.openVersion(this.workbook, ORIGIN_SHEET_NAME, this.version);
 		String verifyMsg = originsSheet.verify();
 		if (verifyMsg != null) {
 			logger.error(verifyMsg);
 			throw(new SpreadsheetException(verifyMsg));
 		}
-		this.version = this.originsSheet.getSpreadsheetVersion();
-		if (this.version.equals(OriginsSheet.VERSION_0_9_1)) {
-			this.packageInfoSheet = new PackageInfoSheetV9d1(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
-		} else if (this.version.equals(OriginsSheet.VERSION_0_9_2)) {
-			this.packageInfoSheet = new PackageInfoSheetV09d2(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
-		} else {
-			this.packageInfoSheet = new PackageInfoSheetV09d3(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
-		}
-		this.nonStandardLicensesSheet = new NonStandardLicensesSheet(this.workbook, NON_STANDARD_LICENSE_SHEET_NAME, version);
-		this.perFileSheet = new PerFileSheet(this.workbook, PER_FILE_SHEET_NAME, version);
+		this.packageInfoSheet = PackageInfoSheet.openVersion(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
+		this.nonStandardLicensesSheet = NonStandardLicensesSheetV0d9d4.openVersion(this.workbook, NON_STANDARD_LICENSE_SHEET_NAME, version);
+		this.perFileSheet = PerFileSheet.openVersion(this.workbook, PER_FILE_SHEET_NAME, version);
 		this.reviewersSheet = new ReviewersSheet(this.workbook, REVIEWERS_SHEET_NAME, version);
+
 		verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
 			logger.error(verifyMsg);
 			throw(new SpreadsheetException(verifyMsg));
 		}
+	}
+
+	/**
+	 * Determine the version of an existing workbook
+	 * @param workbook
+	 * @param originSheetName
+	 * @return
+	 */
+	private String readVersion(Workbook workbook, String originSheetName) {
+		Sheet sheet = workbook.getSheet(originSheetName);
+		int firstRowNum = sheet.getFirstRowNum();
+		Row dataRow = sheet.getRow(firstRowNum + OriginsSheet.DATA_ROW_NUM);
+		if (dataRow == null) {
+			return UNKNOWN_VERSION;
+		}
+		Cell versionCell = dataRow.getCell(OriginsSheet.SPREADSHEET_VERSION_COL);
+		if (versionCell == null) {
+			return UNKNOWN_VERSION;
+		}
+		return versionCell.getStringCellValue();
+	}
+	
+	/**
+	 * @param versionToCheck
+	 * @return
+	 */
+	public static boolean verifyVersion(String versionToCheck) {
+		boolean supported = false;
+		String trVersion = versionToCheck.trim();
+		for (int i = 0; i < SPDXSpreadsheet.SUPPORTED_VERSIONS.length; i++) {
+			if (SPDXSpreadsheet.SUPPORTED_VERSIONS[i].equals(trVersion)) {
+				supported = true;
+				break;
+			}
+		}
+		return supported;
 	}
 
 	/* (non-Javadoc)
@@ -97,7 +152,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			excelOut = new FileOutputStream(spreadsheetFile);
 			Workbook wb = new HSSFWorkbook();
 			OriginsSheet.create(wb, ORIGIN_SHEET_NAME);
-			PackageInfoSheetV09d3.create(wb, PACKAGE_INFO_SHEET_NAME);
+			PackageInfoSheet.create(wb, PACKAGE_INFO_SHEET_NAME);
 			NonStandardLicensesSheet.create(wb, NON_STANDARD_LICENSE_SHEET_NAME);
 			PerFileSheet.create(wb, PER_FILE_SHEET_NAME);
 			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);
@@ -179,7 +234,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 * @param nonStandardLicensesSheet the nonStandardLicensesSheet to set
 	 */
 	public void setNonStandardLicensesSheet(
-			NonStandardLicensesSheet nonStandardLicensesSheet) {
+			NonStandardLicensesSheetV0d9d4 nonStandardLicensesSheet) {
 		this.nonStandardLicensesSheet = nonStandardLicensesSheet;
 	}
 
@@ -193,7 +248,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	/**
 	 * @param perFileSheet the perFileSheet to set
 	 */
-	public void setPerFileSheet(PerFileSheet perFileSheet) {
+	public void setPerFileSheet(PerFileSheetV09d3 perFileSheet) {
 		this.perFileSheet = perFileSheet;
 	}
 

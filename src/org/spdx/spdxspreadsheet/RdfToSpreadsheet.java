@@ -152,7 +152,10 @@ public class RdfToSpreadsheet {
 	private static void copyNonStdLicenses(SPDXNonStandardLicense[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
-			nonStandardLicensesSheet.add(nonStandardLicenses[i].getId(), nonStandardLicenses[i].getText());
+			nonStandardLicensesSheet.add(nonStandardLicenses[i].getId(), nonStandardLicenses[i].getText(), 
+					nonStandardLicenses[i].getLicenseName(),
+					nonStandardLicenses[i].getSourceUrls(),
+					nonStandardLicenses[i].getComment());
 		}
 	}
 
@@ -186,7 +189,11 @@ public class RdfToSpreadsheet {
 		} catch (ParseException e) {
 			throw(new InvalidSPDXAnalysisException("Invalid created date - unable to parse"));
 		}
-		
+		// Document comments
+		String docComment = doc.getDocumentComment();
+		if (docComment != null) {
+			originsSheet.setDocumentComment(docComment);
+		}
 	}
 
 	private static void usage() {

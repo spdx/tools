@@ -43,6 +43,7 @@ public class MustacheMap {
 		retval.put("specVersion", doc.getSpdxVersion());
 		retval.put("dataLicense", getDataLicenseName(doc));
 		retval.put("creationInfo", new CreatorInfoContext(doc));
+		retval.put("docComment", doc.getDocumentComment());
 		retval.put("reviewed", getReviewers(doc));
 		retval.put("describesPackage", new PackageContext(doc));
 		retval.put("hasExtractedLicensingInfo", getExtractedLicensingInfo(doc));

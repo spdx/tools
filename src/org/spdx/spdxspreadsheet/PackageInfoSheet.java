@@ -55,4 +55,23 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	public static void create(Workbook wb, String sheetName) {
 		PackageInfoSheetV09d3.create(wb, sheetName);
 	}
+
+	/**
+	 * Opens an existing PackageInfoSheet
+	 * @param workbook
+	 * @param packageInfoSheetName
+	 * @param version Spreadsheet version
+	 * @return
+	 */
+	public static PackageInfoSheet openVersion(Workbook workbook,
+			String packageInfoSheetName, String version) {
+		
+		if (version.equals(SPDXSpreadsheet.VERSION_0_9_1)) {
+			return new PackageInfoSheetV9d1(workbook, packageInfoSheetName, version);
+		} else if (version.equals(SPDXSpreadsheet.VERSION_0_9_2)) {
+			return new PackageInfoSheetV09d2(workbook, packageInfoSheetName, version);
+		} else {
+			return new PackageInfoSheetV09d3(workbook, packageInfoSheetName, version);
+		} 
+	}
 }
