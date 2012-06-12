@@ -184,7 +184,10 @@ public class SpreadsheetToRDF {
 		SPDXNonStandardLicense[] nonStdLicenses = new SPDXNonStandardLicense[numNonStdLicenses];
 		for (int i = 0; i < nonStdLicenses.length; i++) {
 			nonStdLicenses[i] = new SPDXNonStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
-					nonStandardLicensesSheet.getExtractedText(firstRow+i));
+					nonStandardLicensesSheet.getExtractedText(firstRow+i),
+					nonStandardLicensesSheet.getLicenseName(firstRow+i), 
+					nonStandardLicensesSheet.getCrossRefUrls(firstRow+i),
+					nonStandardLicensesSheet.getComment(firstRow+i));
 		}
 		analysis.setExtractedLicenseInfos(nonStdLicenses);
 	}
@@ -248,6 +251,13 @@ public class SpreadsheetToRDF {
 		}
 		analysis.setDataLicense(dataLicense);
 		analysis.setCreationInfo(creator);
+		String docComment = originsSheet.getDocumentDomment();
+		if (docComment != null) {
+			docComment.trim();
+			if (!docComment.isEmpty()) {
+				analysis.setDocumentComment(docComment);
+			}
+		}
 	}
 
 	private static void usage() {

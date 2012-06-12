@@ -26,8 +26,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 /**
  * Describes a license
  * 
- * All licenses have an ID and text.  Subclasses should extend this class to add
- * additional properties.
+ * All licenses have an ID.  
+ * Subclasses should extend this class to add additional properties.
  * 
  * @author Gary O'Neall
  *
@@ -77,6 +77,8 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 			resource.addProperty(p, id);
 		}
 	}
+	
+
 
 
 	

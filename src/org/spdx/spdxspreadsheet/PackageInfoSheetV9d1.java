@@ -78,7 +78,7 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 			if (sheet == null) {
 				return "Worksheet for SPDX Package Info does not exist";
 			}
-			if (!OriginsSheet.verifyVersion(version)) {
+			if (!SPDXSpreadsheet.verifyVersion(version)) {
 				return "Unsupported version "+version;
 			}
 			Row firstRow = sheet.getRow(firstRowNum);

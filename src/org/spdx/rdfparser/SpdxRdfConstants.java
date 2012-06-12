@@ -34,6 +34,8 @@ public interface SpdxRdfConstants {
 	// RDF Properties
 	public static final String RDF_PROP_TYPE = "type";
 	public static final String RDF_PROP_RESOURCE = "resource";
+	public static final String RDFS_PROP_LABEL = "label";
+	public static final String RDFS_PROP_SEE_ALSO = "seeAlso";
 	
 	// RDFS Properties
 	public static final String RDFS_PROP_COMMENT = "comment";
@@ -117,12 +119,14 @@ public interface SpdxRdfConstants {
 	public static final String PROP_LICENSE_ID = "licenseId";
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
+	public static final String PROP_LICENSE_NAME = "licenseName";
 	public static final String PROP_STD_LICENSE_NAME = "licenseName";	//TODO: replace with actual property
 	public static final String PROP_STD_LICENSE_URL = "licenseSourceUrl";	//TODO: replace with actual property
-	public static final String PROP_STD_LICENSE_NOTES = "licenseNotes";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_NOTES_VERSION_1 = "licenseNotes";	// old property name (pre 1.1 spec)
 	public static final String PROP_STD_LICENSE_HEADER = "licenseHeader";	//TODO: replace with actual property
 	public static final String PROP_STD_LICENSE_TEMPLATE = "licenseTemplate";	//TODO: replace with actual property
-	public static final String PROP_STD_LICENSE_OSI_APPROVED = "licenseOsiApproved";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_OSI_APPROVED = "isOsiApproved";
+	public static final String PROP_STD_LICENSE_OSI_APPROVED_VERSION_1 = "licenseOsiApproved";	// old property name (pre 1.1 spec)
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
 	public static final String TERM_LICENSE_NOASSERTION = PROP_VALUE_NOASSERTION;
 	public static final String TERM_LICENSE_NONE = PROP_VALUE_NONE;

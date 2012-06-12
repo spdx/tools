@@ -32,8 +32,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public abstract class SPDXLicenseInfo {
-
-	//TODO: Consider adding a comment text string
 	
 	Model model = null;
 	Node licenseInfoNode = null;

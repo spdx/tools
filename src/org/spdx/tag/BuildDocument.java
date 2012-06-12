@@ -98,6 +98,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			analysis.getCreatorInfo().setCreated(value);
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_COMMENT"))) {
 			analysis.getCreatorInfo().setComment(value);
+		} else if (tag.equals(constants.getProperty("PROP_SPDX_COMMENT"))) {
+			analysis.setDocumentComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_REVIEWER"))) {
 			if (lastReviewer != null) {
 				List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));
@@ -116,9 +118,19 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				licenses.add(lastExtractedLicense);
 				analysis.setExtractedLicenseInfos(licenses.toArray(new SPDXNonStandardLicense[0]));
 			}
-			lastExtractedLicense = new SPDXNonStandardLicense(value, "WARNING: TEXT IS REQUIRED"); //change text later
+			lastExtractedLicense = new SPDXNonStandardLicense(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
 		} else if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
 			lastExtractedLicense.setText(value);
+		} else if (tag.equals(constants.getProperty("PROP_LICENSE_NAME"))) {
+			lastExtractedLicense.setLicenseName(value);
+		} else if (tag.equals(constants.getProperty("PROP_SOURCE_URLS"))) {
+			String[] values = value.split(",");
+			for (int i = 0; i < values.length; i++) {
+				values[i] = values[i].trim();
+			}
+			lastExtractedLicense.setSourceUrls(values);
+		} else if (tag.equals("PROP_LICENSE_COMMENT")) {
+			lastExtractedLicense.setComment(value);
 		} else {
 			SPDXPackage spdxPackage = analysis.getSpdxPackage();
 			buildPackage(spdxPackage, tag, value);
@@ -215,6 +227,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				lastFile.setLicenseComments(value);
 			} else if (tag.equals(constants.getProperty("PROP_FILE_COPYRIGHT"))) {
 				lastFile.setCopyright(value);
+			} else if (tag.equals(constants.getProperty("PROP_FILE_COMMENT"))) {
+				lastFile.setComment(value);
 			} else {
 				buildProject(lastFile, tag, value);
 			}

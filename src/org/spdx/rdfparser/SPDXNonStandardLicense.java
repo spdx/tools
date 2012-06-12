@@ -35,6 +35,10 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	
 	static final Pattern NON_STANDARD_LICENSE_PATTERN = Pattern.compile("[-+_.a-zA-Z0-9]{3,}");
 	private String text;
+	private String comment = null;
+	private String licenseName = null;
+	private String[] sourceUrls = null;
+
 	
 	/**
 	 * @param model
@@ -51,11 +55,50 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 			Triple t = tripleIter.next();
 			this.text = t.getObject().toString(false);
 		}
+		// comment
+		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
+		m = Triple.createMatch(licenseInfoNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.comment = t.getObject().toString(false);
+		}
+		// license name
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_NAME).asNode();
+		m = Triple.createMatch(licenseInfoNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.licenseName = t.getObject().toString(false);
+		}
+		// license urls
+		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
+		m = Triple.createMatch(licenseInfoNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			ArrayList<String> alLicenseUrls = new ArrayList<String>();
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				alLicenseUrls.add(t.getObject().toString(false));
+			}
+			this.sourceUrls = alLicenseUrls.toArray(new String[alLicenseUrls.size()]);
+		}
 	}
 	
-	public SPDXNonStandardLicense(String id, String text) {
+	public SPDXNonStandardLicense(String id, String text, String licenseName, String[] crossReferenceUrls, String comment) {
 		super(id);
 		this.text = text;
+		this.licenseName = licenseName;
+		this.sourceUrls = crossReferenceUrls;
+		this.comment = comment;
+	}
+
+	/**
+	 * @param licenseID
+	 * @param licenseText
+	 */
+	public SPDXNonStandardLicense(String licenseID, String licenseText) {
+		this(licenseID, licenseText, null, null, null);
 	}
 
 	/* (non-Javadoc)
@@ -70,6 +113,26 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 					SpdxRdfConstants.PROP_EXTRACTED_TEXT);
 			model.removeAll(r, textProperty, null);
 			r.addProperty(textProperty, this.text);
+		}
+		if (this.comment != null && !this.comment.isEmpty()) {
+			Property commentProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, 
+					SpdxRdfConstants.RDFS_PROP_COMMENT);
+			model.removeAll(r, commentProperty, null);
+			r.addProperty(commentProperty, this.comment);
+		}
+		if (this.licenseName != null && !this.licenseName.isEmpty()) {
+			Property nameProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_LICENSE_NAME);
+			model.removeAll(r, nameProperty, null);
+			r.addProperty(nameProperty, this.licenseName);
+		}
+		if (this.sourceUrls != null && this.sourceUrls.length > 0) {
+			Property licenseUrlProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, 
+					SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
+			model.removeAll(r, licenseUrlProperty, null);
+			for (int i = 0; i < sourceUrls.length; i++) {
+				r.addProperty(licenseUrlProperty, sourceUrls[i]);
+			}
 		}
 		return r;
 	}
@@ -103,6 +166,52 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
 			resource.addProperty(p, text);
+		}
+	}
+	
+	/**
+	 * @return License comment (null if none has been set)
+	 */
+	public String getComment() {
+		return this.comment;
+	}
+	
+	/**
+	 * Set the license comment
+	 * @param comment
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+		if (licenseInfoNode != null) {
+			// delete any previous comments
+			Property p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+			model.removeAll(resource, p, null);
+			// add the property
+			p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+			resource.addProperty(p, comment);
+		}
+	}
+	
+	public void setSourceUrls(String[] urls) {
+		this.sourceUrls = urls;
+		if (licenseInfoNode != null) {
+			// delte any previous license URLs
+			Property p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
+			model.removeAll(resource, p, null);
+			for (int i = 0; i < urls.length; i++) {
+				resource.addProperty(p, urls[i]);
+			}
+		}
+	}
+	
+	public void setLicenseName(String name) {
+		this.licenseName = name;
+		if (licenseInfoNode != null) {
+			// delete any previous license name
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_NAME);
+			model.removeAll(resource, p, null);
+			// add the property
+			resource.addProperty(p, name);
 		}
 	}
 	
@@ -151,6 +260,40 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		if (licenseText == null || licenseText.isEmpty()) {
 			retval.add("Missing required license text for " + id);
 		}
+		// comment
+		// make sure there is not more than one comment
+		try {
+			if (licenseInfoNode != null) {
+				Node p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
+				Triple m = Triple.createMatch(licenseInfoNode, p, null);
+				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
+				int count = 0;
+				while (tripleIter.hasNext()) {
+					count++;
+					tripleIter.next();
+				}
+				if (count > 1) {
+					retval.add("More than one comment on Extracted License Info id "+id.toString());
+				}
+			}
+		} catch (Exception e) {
+			retval.add("Error getting license comments: "+e.getMessage());
+		}
+
 		return retval;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getLicenseName() {
+		return this.licenseName;
+	}
+
+	/**
+	 * @return
+	 */
+	public String[] getSourceUrls() {
+		return this.sourceUrls;
 	}
 }

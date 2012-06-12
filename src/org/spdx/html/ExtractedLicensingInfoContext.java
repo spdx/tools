@@ -16,6 +16,9 @@
 */
 package org.spdx.html;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 
@@ -63,6 +66,45 @@ public class ExtractedLicensingInfoContext {
 		} else {
 			return null;
 		}
+	}
+	
+	public String comment() {
+		if (this.license == null && this.error != null) {
+			return "Error getting non-standard license: "+error.getMessage();
+		}
+		if (this.license != null) {
+			return this.license.getComment();
+		} else {
+			return null;
+		}
+	}
+	
+	public String licenseName() {
+		if (this.license == null && this.error != null) {
+			return "Error getting non-standard license: "+error.getMessage();
+		}
+		if (this.license != null) {
+			return this.license.getLicenseName();
+		} else {
+			return null;
+		}
+	}
+	
+	public List<String> crossReferenceUrls() {
+		ArrayList<String> retval = new ArrayList<String>();
+		if (this.license != null) {
+			String[] crossRefUrls = this.license.getSourceUrls();
+			if (crossRefUrls != null) {
+				for (int i = 0; i < crossRefUrls.length; i++) {
+					retval.add(crossRefUrls[i]);
+				}
+			}
+		} else {
+			if (this.error != null) {
+				retval.add("Error getting extracted licensing info: "+this.error);
+			}
+		}
+		return retval;
 	}
 
 }

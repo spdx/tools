@@ -23,6 +23,9 @@ Created on: {{created}}<br />
 Creator comment: {{comment}}
 {{/comment}} <br />
 {{/creationInfo}}
+{{#docComment}}
+Document Comment: {{docComment}}<br />
+{{/docComment}}
 <h2>Reviewer Information</h2>
 <ul>
 	{{#reviewed}}
@@ -102,12 +105,27 @@ Artifact of Home Page: {{homepage}};
 {{/homepage}}
 Artifact of URI: {{ArtifactOfProjectURI}}<br />
 {{/artifactOf}}
+{{#comment}}
+File comment: {{comment}}<br />
+{{/comment}}
 {{/hasFile}}
 {{/describesPackage}}
 <h2>Non-Standard License Information</h2>
 {{#hasExtractedLicensingInfo}}
 <h3>License ID {{licenseId}}</h3>
+<h3>License Text</h3>
 {{extractedText}}<br />
+{{#licenseName}}
+<h3>License Name: {{licenseName}}</h3>
+{{/licenseName}}
+<ul>
+{{#crossReferenceUrls}}
+	<li>{{crossReferenceUrls}}</li>
+{{/crossReferenceUrls}}
+</ul>
+{{#comment}}
+<h3>License comment: {{comment}}</h3>
+{{/comment}}
 {{/hasExtractedLicensingInfo}}
 </body>
 </html>

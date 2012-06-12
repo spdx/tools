@@ -82,7 +82,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 			if (sheet == null) {
 				return "Worksheet for SPDX Package Info does not exist";
 			}
-			if (!OriginsSheet.verifyVersion(version)) {
+			if (!SPDXSpreadsheet.verifyVersion(version)) {
 				return "Unsupported version "+version;
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
@@ -365,20 +365,4 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 				licenseComment, declaredCopyright, shortDesc, 
 				description, url, verificationCode, supplier, originator);
 	}
-
-	public static String licensesToString(SPDXLicenseInfo[] licenses) {
-		if (licenses == null || licenses.length == 0) {
-			return "";
-		} else if (licenses.length == 1) {
-			return licenses[0].toString();
-		} else {
-			StringBuilder sb = new StringBuilder(licenses[0].toString());
-			for (int i = 1; i < licenses.length; i++) {
-				sb.append(", ");
-				sb.append(licenses[i].toString());
-			}
-			return sb.toString();
-		}
-	}
-
 }
