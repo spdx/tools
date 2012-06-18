@@ -38,7 +38,8 @@ public class LicenseTOCHTMLFile {
 	static final String LICENSEID = "[LICENSEID]";
 	static final String LICENSE_NAME = "[LICENSE_NAME]";
 	static final String OSI_APPROVED = "[OSI_APPROVED]";
-      static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+
+	static final String VERSION_STRING = "[VERSION]";
+    static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+
       		"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
       		"      <td about=\""+REFERENCE+"\" typeof=\"spdx:License\">\n"+
       		"      <code property=\"spdx:licenseId\">"+LICENSEID+"</code></td>\n"+
@@ -50,9 +51,24 @@ public class LicenseTOCHTMLFile {
       private int currentRefNumber = 1;
       
       String template;
+      String version;
+      String releaseDate;
       
-      public LicenseTOCHTMLFile(String template) {
+      private String generateVersionString(String version, String releaseDate) {
+    	  if (version == null || version.trim().isEmpty()) {
+    		  return "";
+    	  }
+    	  String retval = "<p>SPDX License List version "+version.trim();
+    	  if (releaseDate != null && !releaseDate.trim().isEmpty()) {
+    		  retval = retval + ", which was released on "+ releaseDate.trim();
+    	  }
+    	  retval = retval + ". </p>";
+    	  return retval;
+      }
+      public LicenseTOCHTMLFile(String template, String version, String releaseDate) {
     	  this.template = template;
+    	  this.version = version;
+    	  this.releaseDate = releaseDate;
       }
       
 	public void addLicense(SPDXStandardLicense license, String licHTMLReference) {
@@ -86,6 +102,7 @@ public class LicenseTOCHTMLFile {
 			writer = new OutputStreamWriter(stream, "UTF-8");
 			int rowLocation = template.indexOf(TABLE_ROW);
 			String firstPart = template.substring(0, rowLocation);
+			firstPart = firstPart.replace(VERSION_STRING, generateVersionString(version, releaseDate));
 			String lastPart = template.substring(rowLocation + TABLE_ROW.length());
 			writer.write(firstPart);
 			for (int i = 0; i < this.tableRows.size(); i++) {

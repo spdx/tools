@@ -49,7 +49,7 @@ public class LicenseRDFAGenerator {
 		INVALID_FILE_CHARS.add('³');
 	}
 	static int MIN_ARGS = 2;
-	static int MAX_ARGS = 2;
+	static int MAX_ARGS = 4;
 	
 	static final String CSS_FILE_TEXT = "body { font-family: Tahoma, Verdana, sans-serif; }\n\n.license-text {\n"+
 		"background-color: WhiteSmoke;\nborder: 1px dashed Black;\npadding: 1ex;\n}\n\nh2 {\n"+
@@ -85,6 +85,14 @@ public class LicenseRDFAGenerator {
 			usage();
 			return;
 		}
+		String version = null;
+		if (args.length > 2) {
+			version = args[2];
+		}
+		String releaseDate = null;
+		if (args.length > 3) {
+			releaseDate = args[3];
+		}
 		File htmlTemplateFile = new File(LICENSE_HTML_TEMPLATE_FILENAME);
 		if (!htmlTemplateFile.exists()) {
 			System.out.println("Missing HTML template file "+htmlTemplateFile.getPath()+".  Check installation");
@@ -116,13 +124,20 @@ public class LicenseRDFAGenerator {
 		IStandardLicenseProvider licenseProvider = null;
 		try {
 			if (ssFile.getName().toLowerCase().endsWith(".xls")) {
-				licenseProvider = new SPDXLicenseSpreadsheet(ssFile, false, true);
+				SPDXLicenseSpreadsheet licenseSpreadsheet = new SPDXLicenseSpreadsheet(ssFile, false, true);
+				licenseProvider = licenseSpreadsheet;
+				if (version == null || version.trim().isEmpty()) {
+					version = licenseSpreadsheet.getLicenseSheet().getVersion();
+				}
+				if (releaseDate == null || releaseDate.trim().isEmpty()) {
+					releaseDate = licenseSpreadsheet.getLicenseSheet().getReleaseDate();
+				}
 			} else {
 				// we assume it is a csv file
 				licenseProvider = new SpdxLicenseCsv(ssFile);
 			}
 			LicenseHTMLFile licHtml = new LicenseHTMLFile(htmlTemplate);
-			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(tocTemplate);
+			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(tocTemplate, version, releaseDate);
 			Iterator<SPDXStandardLicense> iter = licenseProvider.getIterator();
 			String tocFileName = "index.html";
 			while (iter.hasNext()) {
@@ -251,7 +266,8 @@ public class LicenseRDFAGenerator {
 	}
 	private static void usage() {
 		System.out.println("Usage:");
-		System.out.println("LicenseRDFAGenerator licenseSpreadsheet.xls outputDirectory");
+		System.out.println("LicenseRDFAGenerator licenseSpreadsheet.xls outputDirectory [version] [releasedate]");
+		System.out.println("   Note - if version or release date is not specified, the information will be taken from the spreadsheet.");
 	}
 
 }
