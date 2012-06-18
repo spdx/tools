@@ -90,20 +90,24 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 	@Override
 	public void create(File spreadsheetFile) throws IOException,
 			SpreadsheetException {
-		if (!spreadsheetFile.createNewFile()) {
-			logger.error("Unable to create "+spreadsheetFile.getName());
-			throw(new SpreadsheetException("Unable to create "+spreadsheetFile.getName()));
-		}
-		FileOutputStream excelOut = null;
-		try {
-			excelOut = new FileOutputStream(spreadsheetFile);
-			Workbook wb = new HSSFWorkbook();
-			LicenseSheet.create(wb, LICENSE_SHEET_NAME);
-			wb.write(excelOut);
-		} finally {
-			excelOut.close();
-		}
+		create(spreadsheetFile, "Unknown", "Unknown");
 	}
+	
+	public void create(File spreadsheetFile, String version, String releaseDate) throws IOException,
+	SpreadsheetException {
+if (!spreadsheetFile.createNewFile()) {
+	logger.error("Unable to create "+spreadsheetFile.getName());
+	throw(new SpreadsheetException("Unable to create "+spreadsheetFile.getName()));
+}
+FileOutputStream excelOut = null;
+try {
+	excelOut = new FileOutputStream(spreadsheetFile);
+	Workbook wb = new HSSFWorkbook();
+	LicenseSheet.create(wb, LICENSE_SHEET_NAME, version, releaseDate);
+} finally {
+	excelOut.close();
+}
+}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.AbstractSpreadsheet#clear()

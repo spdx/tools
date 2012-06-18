@@ -25,10 +25,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFHyperlink;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -45,7 +47,7 @@ import org.spdx.rdfparser.SPDXStandardLicense;
 public class LicenseSheet extends AbstractSheet {
 	
 	static final Logger logger = Logger.getLogger(LicenseSheet.class.getName());
-	static final int NUM_COLS = 7;
+	static final int NUM_COLS = 9;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
@@ -53,25 +55,49 @@ public class LicenseSheet extends AbstractSheet {
 	static final int COL_OSI_APPROVED = COL_NOTES + 1;	
 	static final int COL_STANDARD_LICENSE_HEADER = COL_OSI_APPROVED + 1;
 	static final int COL_TEXT = COL_STANDARD_LICENSE_HEADER + 1;
-//	static final int COL_TEMPLATE = COL_TEXT + 1;
+	static final int COL_VERSION = COL_TEXT + 1;
+	static final int COL_RELEASE_DATE = COL_VERSION + 1;
+	static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
-		false, false, true, false};
+		false, false, true, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Full name of License", "License Identifier", "Source/url", "Notes", 
-		"OSI Approved", "Standard License Header", "Text", "Template"};
+		"OSI Approved", "Standard License Header", "Text", "License List Version", "License List Release Date"};
 	
 	static final String TEXT_EXTENSION = ".txt";
 	static final String ENCODING = "UTF-8";
 	String workbookPath;
+	String version = null;
+	String releaseDate = null;
 	
 	public LicenseSheet(Workbook workbook, String sheetName, File workbookFile) {
 		super(workbook, sheetName);
 		workbookPath = workbookFile.getParent();
+		Row firstDataRow = sheet.getRow(firstRowNum + 1);
+		if (firstDataRow != null) {
+			// fill in versions
+			Cell versionCell = firstDataRow.getCell(COL_VERSION);
+			if (versionCell != null) {
+				if (versionCell.getCellType() == Cell.CELL_TYPE_STRING) {
+					version = versionCell.getStringCellValue();
+				} else if (versionCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+					version = String.valueOf(versionCell.getNumericCellValue());
+				}
+			}
+			Cell releaseDateCell = firstDataRow.getCell(COL_RELEASE_DATE);
+			if (releaseDateCell != null) {
+				if (releaseDateCell.getCellType() == Cell.CELL_TYPE_STRING) {
+					this.releaseDate = releaseDateCell.getStringCellValue();
+				} else if (releaseDateCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+					this.releaseDate = dateFormat.format(releaseDateCell.getDateCellValue());
+				}
+			}
+		}
 	}
 	/**
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name
 	 */
-	public static void create(Workbook wb, String sheetName) {
+	public static void create(Workbook wb, String sheetName, String version, String releaseDate) {
 		int sheetNum = wb.getSheetIndex(sheetName);
 		if (sheetNum >= 0) {
 			wb.removeSheetAt(sheetNum);
@@ -82,8 +108,25 @@ public class LicenseSheet extends AbstractSheet {
 			Cell cell = row.createCell(i);
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
+		Row firstDataRow = sheet.createRow(1);
+		Cell versionCell = firstDataRow.createCell(COL_VERSION);
+		versionCell.setCellValue(version);
+		Cell releaseDateCell = firstDataRow.createCell(COL_RELEASE_DATE);
+		releaseDateCell.setCellValue(releaseDate);
 	}
 	
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+	/**
+	 * @return the releaseDate
+	 */
+	public String getReleaseDate() {
+		return releaseDate;
+	}
 	public void add(SPDXStandardLicense license) {
 		Row row = addRow();
 		Cell nameCell = row.createCell(COL_NAME);
@@ -104,10 +147,6 @@ public class LicenseSheet extends AbstractSheet {
 		}
 		Cell textCell = row.createCell(COL_TEXT);
 		setLicenseText(textCell, license.getText(), license.getId());
-//		if (license.getTemplate() != null) {
-//			Cell templateCell = row.createCell(COL_TEMPLATE);
-//			templateCell.setCellValue(license.getTemplate());
-//		}
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
@@ -169,13 +208,24 @@ public class LicenseSheet extends AbstractSheet {
 	 */
 	private String getLicenseText(Cell textCell) {
 		String localFileName = null;
-		if (textCell.getHyperlink() != null && textCell.getHyperlink().getAddress() != null) {
-			localFileName = textCell.getHyperlink().getAddress();
-		} else if (textCell.getStringCellValue() != null && textCell.getStringCellValue().toUpperCase().endsWith(".TXT")) {
+		File licenseTextFile = null;
+		Hyperlink cellHyperlink = textCell.getHyperlink();
+		if (cellHyperlink != null && cellHyperlink.getAddress() != null) {
+			localFileName = cellHyperlink.getAddress();
+			licenseTextFile = new File(this.workbookPath + File.separator + localFileName);
+			if (!licenseTextFile.exists()) {
+				// try without the workbook path
+				licenseTextFile = new File(localFileName);
+			}
+			if (!licenseTextFile.exists()) {
+				licenseTextFile = null;
+			}
+		} 
+		if (licenseTextFile == null && textCell.getStringCellValue() != null && textCell.getStringCellValue().toUpperCase().endsWith(".TXT")) {
 			localFileName = textCell.getStringCellValue();
+			licenseTextFile = new File(this.workbookPath + File.separator + localFileName);
 		}
 		if (localFileName != null) {
-			File licenseTextFile = new File(this.workbookPath + File.separator + localFileName);
 			if (!licenseTextFile.exists()) {
 				logger.warn("Can not find linked license text file "+licenseTextFile.getName());
 				return("WARNING: Could not find license text file "+licenseTextFile.getName());
@@ -290,6 +340,16 @@ public class LicenseSheet extends AbstractSheet {
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Licenses worksheet";
 				}
+			}
+			Row firstDataRow = sheet.getRow(firstRowNum + 1);
+			Cell versionCell = firstDataRow.getCell(COL_VERSION);
+			if (versionCell == null) {
+				return "No version";
+			}
+			
+			Cell releaseDateCell = firstDataRow.getCell(COL_RELEASE_DATE);
+			if (releaseDateCell == null) {
+				return "No release date";
 			}
 			// validate rows
 			boolean done = false;
