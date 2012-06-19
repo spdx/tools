@@ -8,7 +8,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>ISC License (Bind, DHCP Server)</title>
+	<title>ISC License</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
 	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
@@ -69,11 +69,11 @@
 
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<h1 property="dc:title">ISC License (Bind, DHCP Server)</h1>
+<h1 property="dc:title">ISC License</h1>
 <h2 id="information">Information</h2>
 <dl>
 	<dt>Full name</dt>
-	<dd property="rdfs:label">ISC License (Bind, DHCP Server)</dd>
+	<dd property="rdfs:label">ISC License</dd>
 	<dt>Short identifier</dt>
 	<dd><code property="spdx:licenseId">ISC</code></dd>
 	<dt>Other web pages for this license</dt>
@@ -90,14 +90,16 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">ISC License:
 
-Copyright &#169; 2004-2010 by Internet Systems Consortium, Inc. (&quot;ISC&quot;)
-Copyright &#169; 1995-2003 by Internet Software Consortium
-
-Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND ISC DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL ISC BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</pre>
+<div property="spdx:licenseText" class="license-text">
+ISC License:<br/>
+<br/>
+Copyright &#65533; 2004-2010 by Internet Systems Consortium, Inc. (&quot;ISC&quot;)<br/>
+Copyright &#65533; 1995-2003 by Internet Software Consortium<br/>
+<br/>
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.<br/>
+<br/>
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND ISC DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL ISC BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

@@ -90,58 +90,60 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">                wxWindows Library Licence, Version 3.1
-                ======================================
 
-  Copyright (C) 1998-2005 Julian Smart, Robert Roebling et al
+<div property="spdx:licenseText" class="license-text">
+                wxWindows Library Licence, Version 3.1<br/>
+                ======================================<br/>
+<br/>
+  Copyright (C) 1998-2005 Julian Smart, Robert Roebling et al<br/>
+<br/>
+  Everyone is permitted to copy and distribute verbatim copies<br/>
+  of this licence document, but changing it is not allowed.<br/>
+<br/>
+                       WXWINDOWS LIBRARY LICENCE<br/>
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION<br/>
+  <br/>
+  This library is free software; you can redistribute it and/or modify it<br/>
+  under the terms of the GNU Library General Public Licence as published by<br/>
+  the Free Software Foundation; either version 2 of the Licence, or (at<br/>
+  your option) any later version.<br/>
+  <br/>
+  This library is distributed in the hope that it will be useful, but<br/>
+  WITHOUT ANY WARRANTY; without even the implied warranty of<br/>
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library<br/>
+  General Public Licence for more details.<br/>
+<br/>
+  You should have received a copy of the GNU Library General Public Licence<br/>
+  along with this software, usually in a file named COPYING.LIB.  If not,<br/>
+  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,<br/>
+  Boston, MA 02111-1307 USA.<br/>
+<br/>
+  EXCEPTION NOTICE<br/>
+<br/>
+  1. As a special exception, the copyright holders of this library give<br/>
+  permission for additional uses of the text contained in this release of<br/>
+  the library as licenced under the wxWindows Library Licence, applying<br/>
+  either version 3.1 of the Licence, or (at your option) any later version of<br/>
+  the Licence as published by the copyright holders of version<br/>
+  3.1 of the Licence document.<br/>
+<br/>
+  2. The exception is that you may use, copy, link, modify and distribute<br/>
+  under your own terms, binary object code versions of works based<br/>
+  on the Library.<br/>
+<br/>
+  3. If you copy code from files distributed under the terms of the GNU<br/>
+  General Public Licence or the GNU Library General Public Licence into a<br/>
+  copy of this library, as this licence permits, the exception does not<br/>
+  apply to the code that you add in this way.  To avoid misleading anyone as<br/>
+  to the status of such modified files, you must delete this exception<br/>
+  notice from such code and/or adjust the licensing conditions notice<br/>
+  accordingly.<br/>
+<br/>
+  4. If you write modifications of your own for this library, it is your<br/>
+  choice whether to permit this exception to apply to your modifications. <br/>
+  If you do not wish that, you must delete the exception notice from such<br/>
+  code and/or adjust the licensing conditions notice accordingly.<br/>
 
-  Everyone is permitted to copy and distribute verbatim copies
-  of this licence document, but changing it is not allowed.
-
-                       WXWINDOWS LIBRARY LICENCE
-     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-  
-  This library is free software; you can redistribute it and/or modify it
-  under the terms of the GNU Library General Public Licence as published by
-  the Free Software Foundation; either version 2 of the Licence, or (at
-  your option) any later version.
-  
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
-  General Public Licence for more details.
-
-  You should have received a copy of the GNU Library General Public Licence
-  along with this software, usually in a file named COPYING.LIB.  If not,
-  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA 02111-1307 USA.
-
-  EXCEPTION NOTICE
-
-  1. As a special exception, the copyright holders of this library give
-  permission for additional uses of the text contained in this release of
-  the library as licenced under the wxWindows Library Licence, applying
-  either version 3.1 of the Licence, or (at your option) any later version of
-  the Licence as published by the copyright holders of version
-  3.1 of the Licence document.
-
-  2. The exception is that you may use, copy, link, modify and distribute
-  under your own terms, binary object code versions of works based
-  on the Library.
-
-  3. If you copy code from files distributed under the terms of the GNU
-  General Public Licence or the GNU Library General Public Licence into a
-  copy of this library, as this licence permits, the exception does not
-  apply to the code that you add in this way.  To avoid misleading anyone as
-  to the status of such modified files, you must delete this exception
-  notice from such code and/or adjust the licensing conditions notice
-  accordingly.
-
-  4. If you write modifications of your own for this library, it is your
-  choice whether to permit this exception to apply to your modifications. 
-  If you do not wish that, you must delete the exception notice from such
-  code and/or adjust the licensing conditions notice accordingly.
-</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

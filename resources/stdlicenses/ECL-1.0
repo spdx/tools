@@ -88,59 +88,63 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">This Educational Community License (the &quot;License&quot;) applies
-to any original work of authorship (the &quot;Original Work&quot;) whose owner
-(the &quot;Licensor&quot;) has placed the following notice immediately following
-the copyright notice for the Original Work:
 
-Copyright (c) &lt;year&gt; &lt;copyright holders&gt;
-
-Licensed under the Educational Community License version 1.0
-
-This Original Work, including software, source code, documents,
-or other related items, is being provided by the copyright holder(s)
-subject to the terms of the Educational Community License. By
-obtaining, using and/or copying this Original Work, you agree that you
-have read, understand, and will comply with the following terms and
-conditions of the Educational Community License:
-
-Permission to use, copy, modify, merge, publish, distribute, and
-sublicense this Original Work and its documentation, with or without
-modification, for any purpose, and without fee or royalty to the
-copyright holder(s) is hereby granted, provided that you include the
-following on ALL copies of the Original Work or portions thereof,
-including modifications or derivatives, that you make:
-
-
-The full text of the Educational Community License in a location viewable to
-users of the redistributed or derivative work.
-
-
-Any pre-existing intellectual property disclaimers, notices, or terms and
-conditions.
-
-
-
-Notice of any changes or modifications to the Original Work, including the
-date the changes were made.
-
-
-Any modifications of the Original Work must be distributed in such a manner as
-to avoid any confusion with the Original Work of the copyright holders.
-
-THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-The name and trademarks of copyright holder(s) may NOT be used
-in advertising or publicity pertaining to the Original or Derivative
-Works without specific, written prior permission. Title to copyright in
-the Original Work and any associated documentation will at all times
-remain with the copyright holders.</pre>
+<div property="spdx:licenseText" class="license-text">
+The Educational Community License<br/>
+<br/>
+This Educational Community License (the &quot;License&quot;) applies<br/>
+to any original work of authorship (the &quot;Original Work&quot;) whose owner<br/>
+(the &quot;Licensor&quot;) has placed the following notice immediately following<br/>
+the copyright notice for the Original Work:<br/>
+<br/>
+Copyright (c) &lt;year&gt; &lt;copyright holders&gt;<br/>
+<br/>
+Licensed under the Educational Community License version 1.0<br/>
+<br/>
+This Original Work, including software, source code, documents,<br/>
+or other related items, is being provided by the copyright holder(s)<br/>
+subject to the terms of the Educational Community License. By<br/>
+obtaining, using and/or copying this Original Work, you agree that you<br/>
+have read, understand, and will comply with the following terms and<br/>
+conditions of the Educational Community License:<br/>
+<br/>
+Permission to use, copy, modify, merge, publish, distribute, and<br/>
+sublicense this Original Work and its documentation, with or without<br/>
+modification, for any purpose, and without fee or royalty to the<br/>
+copyright holder(s) is hereby granted, provided that you include the<br/>
+following on ALL copies of the Original Work or portions thereof,<br/>
+including modifications or derivatives, that you make:<br/>
+<br/>
+<br/>
+The full text of the Educational Community License in a location viewable to<br/>
+users of the redistributed or derivative work.<br/>
+<br/>
+<br/>
+Any pre-existing intellectual property disclaimers, notices, or terms and<br/>
+conditions.<br/>
+<br/>
+<br/>
+<br/>
+Notice of any changes or modifications to the Original Work, including the<br/>
+date the changes were made.<br/>
+<br/>
+<br/>
+Any modifications of the Original Work must be distributed in such a manner as<br/>
+to avoid any confusion with the Original Work of the copyright holders.<br/>
+<br/>
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,<br/>
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<br/>
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.<br/>
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY<br/>
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,<br/>
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE<br/>
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.<br/>
+<br/>
+The name and trademarks of copyright holder(s) may NOT be used<br/>
+in advertising or publicity pertaining to the Original or Derivative<br/>
+Works without specific, written prior permission. Title to copyright in<br/>
+the Original Work and any associated documentation will at all times<br/>
+remain with the copyright holders.
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

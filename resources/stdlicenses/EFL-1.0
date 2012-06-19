@@ -90,29 +90,31 @@
 <h2 id="notes">Notes</h2>
 <p>This license has been superseded by v2.0</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">Eiffel Forum License, version 1
 
-Permission is hereby granted to use, copy, modify and/or distribute
-this package, provided that:
-
-  - copyright notices are retained unchanged
-
-  - any distribution of this package, whether modified or not,
-    includes this file
-
-Permission is hereby also granted to distribute binary programs which
-depend on this package, provided that:
-
-  - if the binary program depends on a modified version of this
-    package, you must publicly release the modified version of this
-    package
-
-THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT WARRANTY. ANY EXPRESS OR
-IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.</pre>
+<div property="spdx:licenseText" class="license-text">
+Eiffel Forum License, version 1<br/>
+<br/>
+Permission is hereby granted to use, copy, modify and/or distribute<br/>
+this package, provided that:<br/>
+<br/>
+  - copyright notices are retained unchanged<br/>
+<br/>
+  - any distribution of this package, whether modified or not,<br/>
+    includes this file<br/>
+<br/>
+Permission is hereby also granted to distribute binary programs which<br/>
+depend on this package, provided that:<br/>
+<br/>
+  - if the binary program depends on a modified version of this<br/>
+    package, you must publicly release the modified version of this<br/>
+    package<br/>
+<br/>
+THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT WARRANTY. ANY EXPRESS OR<br/>
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED<br/>
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE<br/>
+DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR<br/>
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<br/>
+DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

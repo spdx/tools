@@ -90,11 +90,15 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">insert GPL v2 text here
 
-Bison Exception
-As a special exception, you may create a larger work that contains part or all of the Bison parser skeleton and distribute that work under terms of your choice, so long as that work isn&apos;t itself a parser generator using the skeleton or a modified version thereof as a parser skeleton. Alternatively, if you modify or redistribute the parser skeleton itself, you may (at your option) remove this special exception, which will cause the skeleton and the resulting Bison output files to be licensed under the GNU General Public License without this special exception.
-This special exception was added by the Free Software Foundation in version 2.2 of Bison.</pre>
+<div property="spdx:licenseText" class="license-text">
+&#65279;insert GPL v2 text here<br/>
+<br/>
+Bison Exception<br/>
+<br/>
+As a special exception, you may create a larger work that contains part or all of the Bison parser skeleton and distribute that work under terms of your choice, so long as that work isn&apos;t itself a parser generator using the skeleton or a modified version thereof as a parser skeleton. Alternatively, if you modify or redistribute the parser skeleton itself, you may (at your option) remove this special exception, which will cause the skeleton and the resulting Bison output files to be licensed under the GNU General Public License without this special exception.<br/>
+<br/>
+This special exception was added by the Free Software Foundation in version 2.2 of Bison.
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

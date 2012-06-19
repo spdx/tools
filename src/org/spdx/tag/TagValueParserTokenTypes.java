@@ -1,4 +1,4 @@
-// $ANTLR : "data.g" -> "TagValueLexer.java"$
+// $ANTLR 2.7.7 (20060930): "data.g" -> "TagValueLexer.java"$
 
 package org.spdx.tag;
 

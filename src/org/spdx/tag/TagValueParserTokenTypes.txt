@@ -1,4 +1,4 @@
-// $ANTLR : data.g -> TagValueParserTokenTypes.txt$
+// $ANTLR 2.7.7 (20060930): data.g -> TagValueParserTokenTypes.txt$
 TagValueParser    // output token vocab name
 TAG=4
 VALUE=5
