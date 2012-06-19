@@ -88,15 +88,17 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">Fair License
-(plain text)
-&lt;Copyright Information&gt;
 
-Usage of the works is permitted provided that this instrument is retained with the works, so that any entity that uses the works is notified of this instrument.
-
-DISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.
-
-[2004, Fair License: rhid.com/fair (this URL no longer works)]</pre>
+<div property="spdx:licenseText" class="license-text">
+Fair License<br/>
+<br/>
+&lt;Copyright Information&gt;<br/>
+<br/>
+Usage of the works is permitted provided that this instrument is retained with the works, so that any entity that uses the works is notified of this instrument.<br/>
+<br/>
+DISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.<br/>
+<br/>
+[2004, Fair License: rhid.com/fair (this URL no longer works)]
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

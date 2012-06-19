@@ -90,16 +90,18 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">Eiffel Forum License, version 2
 
-Permission is hereby granted to use, copy, modify and/or distribute this package, provided that:
-copyright notices are retained unchanged,
-any distribution of this package, whether modified or not, includes this license text.
-Permission is hereby also granted to distribute binary programs which depend on this package. If the binary program depends on a modified version of this package, you are encouraged to publicly release the modified version of this package.
-***********************
-
+<div property="spdx:licenseText" class="license-text">
+Eiffel Forum License, version 2<br/>
+<br/>
+1.  Permission is hereby granted to use, copy, modify and/or distribute this package, provided that:<br/>
+ - copyright notices are retained unchanged,<br/>
+ - any distribution of this package, whether modified or not, includes this license text.<br/>
+<br/>
+2.  Permission is hereby also granted to distribute binary programs which depend on this package. If the binary program depends on a modified version of this package, you are encouraged to publicly release the modified version of this package.<br/>
+<br/>
+<br/>
 THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT WARRANTY. ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE. 
-***********************</pre>
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

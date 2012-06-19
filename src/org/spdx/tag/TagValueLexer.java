@@ -1,4 +1,4 @@
-// $ANTLR : "data.g" -> "TagValueLexer.java"$
+// $ANTLR 2.7.7 (20060930): "data.g" -> "TagValueLexer.java"$
 
 package org.spdx.tag;
 
@@ -8,17 +8,23 @@ import antlr.TokenStreamIOException;
 import antlr.TokenStreamRecognitionException;
 import antlr.CharStreamException;
 import antlr.CharStreamIOException;
+import antlr.ANTLRException;
 import java.io.Reader;
 import java.util.Hashtable;
+import antlr.CharScanner;
 import antlr.InputBuffer;
 import antlr.ByteBuffer;
 import antlr.CharBuffer;
 import antlr.Token;
+import antlr.CommonToken;
 import antlr.RecognitionException;
 import antlr.NoViableAltForCharException;
+import antlr.MismatchedCharException;
 import antlr.TokenStream;
+import antlr.ANTLRHashString;
 import antlr.LexerSharedInputState;
 import antlr.collections.impl.BitSet;
+import antlr.SemanticException;
 
 public class TagValueLexer extends antlr.CharScanner implements TagValueParserTokenTypes, TokenStream
  {
@@ -82,7 +88,10 @@ tryAgain:
 					try {mLINE_COMMENT(false);}
 					catch(RecognitionException ee) {
 						// horrendous failure: error in filter rule
-						reportError(ee);
+						if (!ee.getMessage().equals(" getColumn()==1 ")) {
+							reportError(ee);	// Don't report this error - expected for '#' in the middle of strings
+						}
+						
 						consume();
 					}
 					continue tryAgain;
@@ -106,10 +115,10 @@ tryAgain:
 		_ttype = TAG_VALUE_TOKEN;
 		int _saveIndex;
 		
-		boolean synPredMatched257 = false;
+		boolean synPredMatched9 = false;
 		if ((((_tokenSet_0.member(LA(1))))&&( getColumn()==1 ))) {
-			int _m257 = mark();
-			synPredMatched257 = true;
+			int _m9 = mark();
+			synPredMatched9 = true;
 			inputState.guessing++;
 			try {
 				{
@@ -118,12 +127,12 @@ tryAgain:
 				}
 			}
 			catch (RecognitionException pe) {
-				synPredMatched257 = false;
+				synPredMatched9 = false;
 			}
-			rewind(_m257);
+			rewind(_m9);
 inputState.guessing--;
 		}
-		if ( synPredMatched257 ) {
+		if ( synPredMatched9 ) {
 			mTAG(false);
 			match(':');
 			match(' ');
@@ -154,8 +163,8 @@ inputState.guessing--;
 		int _saveIndex;
 		
 		{
-		int _cnt260=0;
-		_loop260:
+		int _cnt12=0;
+		_loop12:
 		do {
 			switch ( LA(1)) {
 			case 'a':  case 'b':  case 'c':  case 'd':
@@ -189,10 +198,10 @@ inputState.guessing--;
 			}
 			default:
 			{
-				if ( _cnt260>=1 ) { break _loop260; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
+				if ( _cnt12>=1 ) { break _loop12; } else {throw new NoViableAltForCharException((char)LA(1), getFilename(), getLine(), getColumn());}
 			}
 			}
-			_cnt260++;
+			_cnt12++;
 		} while (true);
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {
@@ -264,9 +273,11 @@ inputState.guessing--;
 		_ttype = LINE_COMMENT;
 		int _saveIndex;
 		
-		match("##");
+		if (!( getColumn()==1 ))
+		  throw new SemanticException(" getColumn()==1 ");
+		match("#");
 		{
-		_loop268:
+		_loop20:
 		do {
 			if ((_tokenSet_1.member(LA(1)))) {
 				{
@@ -274,7 +285,7 @@ inputState.guessing--;
 				}
 			}
 			else {
-				break _loop268;
+				break _loop20;
 			}
 			
 		} while (true);

@@ -87,10 +87,8 @@ MULTI_LINE_VALUE
 // Single-line comment
 protected
 LINE_COMMENT 
-	: "##" 
+	: { getColumn()==1 }? "#" 
 		( ~('\n'|'\r') )*
         ( '\n'|'\r'('\n')? )?
 	    { $setType(Token.SKIP); newline(); } 
 	;
-
-

@@ -1,4 +1,4 @@
-// $ANTLR : "data.g" -> "TagValueParser.java"$
+// $ANTLR 2.7.7 (20060930): "data.g" -> "TagValueParser.java"$
 
 package org.spdx.tag;
 
@@ -58,8 +58,8 @@ public TagValueParser(ParserSharedInputState state) {
 		
 		try {      // for error handling
 			{
-			int _cnt251=0;
-			_loop251:
+			int _cnt3=0;
+			_loop3:
 			do {
 				if ((LA(1)==TAG)) {
 					t = LT(1);
@@ -68,10 +68,10 @@ public TagValueParser(ParserSharedInputState state) {
 					behavior.buildDocument(t.getText(), v);
 				}
 				else {
-					if ( _cnt251>=1 ) { break _loop251; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt3>=1 ) { break _loop3; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt251++;
+				_cnt3++;
 			} while (true);
 			}
 			behavior.exit();
@@ -93,8 +93,8 @@ public TagValueParser(ParserSharedInputState state) {
 		
 		try {      // for error handling
 			{
-			int _cnt254=0;
-			_loop254:
+			int _cnt6=0;
+			_loop6:
 			do {
 				if ((LA(1)==VALUE)) {
 					s = LT(1);
@@ -102,10 +102,10 @@ public TagValueParser(ParserSharedInputState state) {
 					sbuf.append(s.getText());
 				}
 				else {
-					if ( _cnt254>=1 ) { break _loop254; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt6>=1 ) { break _loop6; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt254++;
+				_cnt6++;
 			} while (true);
 			}
 			v=sbuf.toString();

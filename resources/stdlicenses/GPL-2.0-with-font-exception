@@ -88,10 +88,13 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">insert GPL v2 text here
 
-Font Exception
-As a special exception, if you create a document which uses this font, and embed this font or unaltered portions of this font into the document, this font does not by itself cause the resulting document to be covered by the GNU General Public License. This exception does not however invalidate any other reasons why the document might be covered by the GNU General Public License. If you modify this font, you may extend this exception to your version of the font, but you are not obligated to do so. If you do not wish to do so, delete this exception statement from your version.</pre>
+<div property="spdx:licenseText" class="license-text">
+&#65279;insert GPL v2 text here<br/>
+<br/>
+Font Exception<br/>
+<br/>
+As a special exception, if you create a document which uses this font, and embed this font or unaltered portions of this font into the document, this font does not by itself cause the resulting document to be covered by the GNU General Public License. This exception does not however invalidate any other reasons why the document might be covered by the GNU General Public License. If you modify this font, you may extend this exception to your version of the font, but you are not obligated to do so. If you do not wish to do so, delete this exception statement from your version.
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

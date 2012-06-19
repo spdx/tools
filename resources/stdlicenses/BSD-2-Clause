@@ -8,7 +8,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>BSD 2-clause &quot;Simplified&quot; or &quot;FreeBSD&quot; License</title>
+	<title>BSD 2-clause &quot;Simplified&quot; License</title>
 	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
 	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
@@ -69,19 +69,17 @@
 
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<h1 property="dc:title">BSD 2-clause &quot;Simplified&quot; or &quot;FreeBSD&quot; License</h1>
+<h1 property="dc:title">BSD 2-clause &quot;Simplified&quot; License</h1>
 <h2 id="information">Information</h2>
 <dl>
 	<dt>Full name</dt>
-	<dd property="rdfs:label">BSD 2-clause &quot;Simplified&quot; or &quot;FreeBSD&quot; License</dd>
+	<dd property="rdfs:label">BSD 2-clause &quot;Simplified&quot; License</dd>
 	<dt>Short identifier</dt>
 	<dd><code property="spdx:licenseId">BSD-2-Clause</code></dd>
 	<dt>Other web pages for this license</dt>
 	<dd>
 		<ul>
-							<li><a href="http://www.freebsd.org/copyright/freebsd-license.html" rel="owl:sameAs">http://www.freebsd.org/copyright/freebsd-license.html</a></li>
-
-				<li><a href="http://www.opensource.org/licenses/BSD-2-Clause" rel="owl:sameAs">http://www.opensource.org/licenses/BSD-2-Clause</a></li>
+							<li><a href="http://www.opensource.org/licenses/BSD-2-Clause" rel="owl:sameAs">http://www.opensource.org/licenses/BSD-2-Clause</a></li>
 
 
 		</ul>
@@ -90,16 +88,18 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">Copyright (c) &lt;YEAR&gt;, &lt;OWNER&gt;
-All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</pre>
+<div property="spdx:licenseText" class="license-text">
+Copyright (c) &lt;YEAR&gt;, &lt;OWNER&gt;<br/>
+All rights reserved.<br/>
+<br/>
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:<br/>
+<br/>
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.<br/>
+<br/>
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.<br/>
+<br/>
+THIS SOFTWARE IS PROVIDED BY {{THE COPYRIGHT HOLDERS AND CONTRIBUTORS}} &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL {{THE COPYRIGHT HOLDER OR CONTRIBUTORS}} BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

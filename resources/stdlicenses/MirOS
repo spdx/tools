@@ -88,62 +88,49 @@
 <h2 id="notes">Notes</h2>
 <p>None</p>
 <h2 id="licenseText">Text</h2>
-<pre><div property="spdx:licenseText" class="license-text">MirOS License
 
-/*-
-* Copyright &#169; year, year, year, &#8230;
-* First M. Last &lt;user@host.domain&gt;
-*
-* Provided that these terms and disclaimer and all copyright notices
-* are retained or reproduced in an accompanying document, permission
-* is granted to deal in this work without restriction, including un&#8208;
-* limited rights to use, publicly perform, distribute, sell, modify,
-* merge, give away, or sublicence.
-*
-* This work is provided &quot;AS IS&quot; and WITHOUT WARRANTY of any kind, to
-* the utmost extent permitted by applicable law, neither express nor
-* implied; without malicious intent or gross negligence. In no event
-* may a licensor, author or contributor be held liable for indirect,
-* direct, other damage, loss, or other issues arising in any way out
-* of dealing in the work, even if advised of the possibility of such
-* damage or existence of a defect, except proven that it results out
-* of said person&apos;s immediate fault when using the work as intended.
-*/
-
-I_N_S_T_R_U_C_T_I_O_N_S_:_
-To apply the template(&#185;) specify the years of copyright (separated by
-comma, not as a range), the legal names of the copyright holders, and
-the real names of the authors if different. Avoid adding text.
-
-R_A_T_I_O_N_A_L_E_:_
-This licence is apt for any kind of work (such as source code, fonts,
-documentation, graphics, sound etc.) and the preferred terms for work
-added to MirBSD. It has been drafted as universally usable equivalent
-of the &quot;historic permission notice&quot;&#8317;&#178;&#8318; adapted to Europen law because
-in some (droit d&apos;auteur) countries authors cannot disclaim all liabi&#8208;
-lities. Compliance to DFSG&#8317;&#179;&#8318; 1.1 is ensured, and GPLv2 compatibility
-is asserted unless advertising clauses are used. The MirOS Licence is
-certified to conform to OKD&#8317;&#8308;&#8318; 1.0 and OSD&#8317;&#8309;&#8318; 1.9, and qualifies as a
-Free Software&#8317;&#8310;&#8318; and also Free Documentation&#8317;&#8311;&#8318; licence and is inclu&#8208;
-ded in some relevant lists&#8317;&#8312;&#8318;&#8317;&#8313;&#8318;&#8317;&#185;&#8304;&#8318;.
-
-We believe you are not liable for work inserted which is intellectual
-property of third parties, if you were not aware of the fact, act ap&#8208;
-propriately as soon as you become aware of that problem, seek an ami&#8208;
-cable solution for all parties, and never knowingly distribute a work
-without being authorised to do so by its licensors.
-
-R_E_F_E_R_E_N_C_E_S_:_
-&#9312; also at http://mirbsd.de/MirOS-Licence
-&#9313; http://www.opensource.org/licenses/historical.php
-&#9314; http://www.debian.org/social_contract#guidelines
-&#9315; http://www.opendefinition.org/1.0
-&#9316; http://www.opensource.org/docs/osd
-&#9317; http://www.gnu.org/philosophy/free-sw.html
-&#9318; http://www.gnu.org/philosophy/free-doc.html
-&#9319; http://www.ifross.de/ifross_html/lizenzcenter.html
-&#9320; http://www.opendefinition.org/licenses
-&#9321; http://opensource.org/licenses/miros.html</pre>
+<div property="spdx:licenseText" class="license-text">
+MirOS License<br/>
+<br/>
+Copyright &#65533; [YEAR]<br/>
+MirOS Licence  [EMAIL] <br/>
+ <br/>
+Provided that these terms and disclaimer and all copyright notices are retained or reproduced in an accompanying document, permission is granted to deal in this work without restriction, including unlimited rights to use, publicly perform, distribute, sell, modify, merge, give away, or sublicence.<br/>
+ <br/>
+This work is provided &quot;AS IS&quot; and WITHOUT WARRANTY of any kind, to the utmost extent permitted by applicable law, neither express nor implied; without malicious intent or gross negligence. In no event may a licensor, author or contributor be held liable for indirect, direct, other damage, loss, or other issues arising in any way out of dealing in the work, even if advised of the possibility of such damage or existence of a defect, except proven that it results out of said person&apos;s immediate fault when using the work as intended.<br/>
+<br/>
+<br/>
+I_N_S_T_R_U_C_T_I_O_N_S_:_<br/>
+To apply the template(1) specify the years of copyright (separated by<br/>
+comma, not as a range), the legal names of the copyright holders, and<br/>
+the real names of the authors if different. Avoid adding text.<br/>
+<br/>
+R_A_T_I_O_N_A_L_E_:_<br/>
+This licence is apt for any kind of work (such as source code, fonts,<br/>
+documentation, graphics, sound etc.) and the preferred terms for work<br/>
+added to MirBSD. It has been drafted as universally usable equivalent<br/>
+of the &quot;historic permission notice&quot;(2) adapted to Europen law because<br/>
+in some (droit d&apos;auteur) countries authors cannot disclaim all liabi&#8208;<br/>
+lities. Compliance to DFSG(3) 1.1 is ensured, and GPLv2 compatibility<br/>
+is asserted unless advertising clauses are used. The MirOS Licence is<br/>
+certified to conform to OKD(4) 1.0 and OSD(5) 1.9, and qualifies as a<br/>
+Free Software(6) and also Free Documentation(7) licence and is included in some relevant lists(8)(9)(10).<br/>
+<br/>
+We believe you are not liable for work inserted which is intellectual<br/>
+property of third parties, if you were not aware of the fact, act appropriately as soon as you become aware of that problem, seek an amicable solution for all parties, and never knowingly distribute a work<br/>
+without being authorised to do so by its licensors.<br/>
+<br/>
+R_E_F_E_R_E_N_C_E_S_:_<br/>
+(1) also at http://mirbsd.de/MirOS-Licence<br/>
+(2) http://www.opensource.org/licenses/historical.php<br/>
+(3) http://www.debian.org/social_contract#guidelines<br/>
+(4) http://www.opendefinition.org/1.0<br/>
+(5) http://www.opensource.org/docs/osd<br/>
+(6) http://www.gnu.org/philosophy/free-sw.html<br/>
+(7) http://www.gnu.org/philosophy/free-doc.html<br/>
+(8) http://www.ifross.de/ifross_html/lizenzcenter.html<br/>
+(9) http://www.opendefinition.org/licenses<br/>
+(10) http://opensource.org/licenses/miros.html
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">
