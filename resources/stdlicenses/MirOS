@@ -92,7 +92,7 @@
 <div property="spdx:licenseText" class="license-text">
 MirOS License<br/>
 <br/>
-Copyright &#65533; [YEAR]<br/>
+Copyright � [YEAR]<br/>
 MirOS Licence  [EMAIL] <br/>
  <br/>
 Provided that these terms and disclaimer and all copyright notices are retained or reproduced in an accompanying document, permission is granted to deal in this work without restriction, including unlimited rights to use, publicly perform, distribute, sell, modify, merge, give away, or sublicence.<br/>
@@ -110,7 +110,7 @@ This licence is apt for any kind of work (such as source code, fonts,<br/>
 documentation, graphics, sound etc.) and the preferred terms for work<br/>
 added to MirBSD. It has been drafted as universally usable equivalent<br/>
 of the &quot;historic permission notice&quot;(2) adapted to Europen law because<br/>
-in some (droit d&apos;auteur) countries authors cannot disclaim all liabi&#8208;<br/>
+in some (droit d&apos;auteur) countries authors cannot disclaim all liabi‐<br/>
 lities. Compliance to DFSG(3) 1.1 is ensured, and GPLv2 compatibility<br/>
 is asserted unless advertising clauses are used. The MirOS Licence is<br/>
 certified to conform to OKD(4) 1.0 and OSD(5) 1.9, and qualifies as a<br/>

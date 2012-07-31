@@ -92,7 +92,7 @@
 <h2 id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-RealNetworks Public Source License Version 1.0<br/>
+﻿RealNetworks Public Source License Version 1.0<br/>
 <br/>
 (Rev. Date October 28, 2002)<br/>
 <br/>
@@ -204,12 +204,12 @@ RealNetworks Public Source License Version 1.0<br/>
 <br/>
 12.8 Entire Agreement; Governing Law. This License constitutes the entire agreement between the parties with respect to the subject matter hereof. This License shall be governed by the laws of the United States and the State of Washington.<br/>
 <br/>
-Where You are located in the province of Quebec, Canada, the following clause applies: The parties hereby confirm that they have requested that this License and all related documents be drafted in English. Les parties ont exig&#65533; que le pr&#65533;sent contrat et tous les documents connexes soient r&#65533;dig&#65533;s en anglais.<br/>
+Where You are located in the province of Quebec, Canada, the following clause applies: The parties hereby confirm that they have requested that this License and all related documents be drafted in English. Les parties ont exigŽ que le prŽsent contrat et tous les documents connexes soient rŽdigŽs en anglais.<br/>
 <br/>
 <br/>
 EXHIBIT A.<br/>
 <br/>
-&quot;Copyright &#65533; 1995-2002 RealNetworks, Inc. and/or its licensors. All Rights Reserved.<br/>
+&quot;Copyright © 1995-2002 RealNetworks, Inc. and/or its licensors. All Rights Reserved.<br/>
 <br/>
 The contents of this file, and the files included with this file, are subject to the current version of the RealNetworks Public Source License Version 1.0 (the &quot;RPSL&quot;) available at https://www.helixcommunity.org/content/rpsl unless you have licensed the file under the RealNetworks Community Source License Version 1.0 (the &quot;RCSL&quot;) available at https://www.helixcommunity.org/content/rcsl, in which case the RCSL will apply. You may also obtain the license terms directly from RealNetworks. You may not use this file except in compliance with the RPSL or, if you have a valid RCSL with RealNetworks applicable to this file, the RCSL. Please see the applicable RPSL or RCSL for the rights, obligations and limitations governing use of the contents of the file.<br/>
 <br/>
@@ -223,7 +223,7 @@ Technology Compatibility Kit Test Suite(s) Location (if licensed under the RCSL)
 <br/>
 ________________________________&quot;<br/>
 <br/>
-Object Code Notice: Helix DNA Client technology included. Copyright &#65533; RealNetworks, Inc., 1995-2002. All rights reserved.<br/>
+Object Code Notice: Helix DNA Client technology included. Copyright © RealNetworks, Inc., 1995-2002. All rights reserved.<br/>
 <br/>
 EXHIBIT B<br/>
 <br/>

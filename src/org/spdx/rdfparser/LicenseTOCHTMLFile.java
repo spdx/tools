@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * This class holds a formatted HTML file for a license table of contents
@@ -86,7 +86,7 @@ public class LicenseTOCHTMLFile {
 	}
 	
 	private String escapeHTML(String s) {
-		return StringEscapeUtils.escapeHtml(s);
+		return StringEscapeUtils.escapeHtml4(s);
 	}
 
 	public void writeToFile(File htmlFile) throws IOException {

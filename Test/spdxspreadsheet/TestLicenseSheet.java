@@ -191,8 +191,9 @@ public class TestLicenseSheet {
 		assertEquals("AFL-1.1", firstLic.getId());
 		assertEquals("Academic Free License v1.1", firstLic.getName());
 		assertEquals("This license has been superseded by later versions.\n", firstLic.getNotes());
-		assertEquals("http://opensource.linux-mirror.org/licenses/afl-1.1.txt","http://opensource.linux-mirror.org/licenses/afl-1.1.txt", 
-				firstLic.getSourceUrl());
+		assertEquals(1, firstLic.getSourceUrl().length);
+		assertEquals("http://opensource.linux-mirror.org/licenses/afl-1.1.txt", 
+				firstLic.getSourceUrl()[0]);
 		assertEquals("Licensed under the Academic Free License version 1.1.",
 				firstLic.getStandardLicenseHeader());
 //		assertEquals("", firstLic.getTemplate());

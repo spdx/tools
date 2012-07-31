@@ -90,7 +90,7 @@
 <h2 id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-&#65279;insert GPL v2 text here<br/>
+﻿insert GPL v2 text here<br/>
 <br/>
 Font Exception<br/>
 <br/>

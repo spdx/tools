@@ -87,9 +87,14 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 						+", found "+String.valueOf(nextRow.length)));
 			}
 			try {
+				String licenseUrlsString = nextRow[LICENSE_URL_COL];
+				String[] licenseUrls = licenseUrlsString.split("\\s");
+				for (int i = 0; i < licenseUrls.length; i++) {
+					licenseUrls[i] = licenseUrls[i].trim();
+				}
 				nextStandardLicense = new SPDXStandardLicense(nextRow[LICENSE_NAME_COL], 
 						nextRow[LICENSE_ID_COL], nextRow[LICENSE_TEXT_COL],
-						nextRow[LICENSE_URL_COL], nextRow[LICENSE_NOTES_COL],
+						licenseUrls, nextRow[LICENSE_NOTES_COL],
 						nextRow[LICENSE_HEADER_COL], nextRow[LICENSE_TEMPLATE_COL],
 						isTrue(nextRow[IS_OSI_APPROVED_COL]));
 			} catch (InvalidSPDXAnalysisException e) {

@@ -73,7 +73,7 @@ public class TestSPDXLicenseInfoFactory {
 		STANDARD_LICENSES = new SPDXStandardLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
 			STANDARD_LICENSES[i] = new SPDXStandardLicense("Name "+String.valueOf(i), 
-					STD_IDS[i], STD_TEXTS[i], "URL "+String.valueOf(i), "Notes "+String.valueOf(i), 
+					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
 		
