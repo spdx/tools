@@ -90,7 +90,7 @@
 <h2 id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-&#65279;insert GPL v3 text here<br/>
+﻿insert GPL v3 text here<br/>
 <br/>
 GCC RUNTIME LIBRARY EXCEPTION<br/>
 Version 3.1, 31 March 2009<br/>

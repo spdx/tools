@@ -92,7 +92,7 @@
 <h2 id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-&#65279;insert GPL v2 license text here<br/>
+﻿insert GPL v2 license text here<br/>
 <br/>
 Autoconf Exception<br/>
 <br/>

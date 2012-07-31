@@ -24,7 +24,7 @@ import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * This class contains a formatted HTML file for a given license.  Specific
@@ -100,9 +100,9 @@ public class LicenseHTMLFile {
 			}
 			htmlText = htmlText.replace(NOTES, notes);
 			String otherWebPages;
-			if (license.getSourceUrl() != null && !license.getSourceUrl().isEmpty()) {
+			if (license.getSourceUrl() != null && license.getSourceUrl().length > 0) {
 				StringBuilder sb = new StringBuilder();
-				String[] sourceUrls = license.getSourceUrl().split("\\s");
+				String[] sourceUrls = license.getSourceUrl();
 				for (int i = 0; i < sourceUrls.length; i++) {
 					String url = sourceUrls[i].trim();
 					if (url.isEmpty()) {

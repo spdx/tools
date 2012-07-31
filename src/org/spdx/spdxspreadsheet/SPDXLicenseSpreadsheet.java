@@ -104,6 +104,7 @@ try {
 	excelOut = new FileOutputStream(spreadsheetFile);
 	Workbook wb = new HSSFWorkbook();
 	LicenseSheet.create(wb, LICENSE_SHEET_NAME, version, releaseDate);
+	wb.write(excelOut);
 } finally {
 	excelOut.close();
 }

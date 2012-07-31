@@ -19,6 +19,13 @@
 // @author Rana Rahal, Protecode Inc.
 //
  
+// !!NOTE - Whenever the ANTLR is run against this grammar, the output TagValueLexer.java
+// must be patched by adding the following conditional to the catch clause in the
+// nextToken() method around the existing reportError(ee) call to avoid warnings:
+//
+//						if (!ee.getMessage().equals(" getColumn()==1 ")) {
+//							reportError(ee);	// Don't report this error - expected for '#' in the middle of strings
+//						}
 header 
 {
 package org.spdx.tag;
@@ -85,6 +92,8 @@ MULTI_LINE_VALUE
 	;
 		
 // Single-line comment
+// TODO: Figure out a grammar which will not generate an error when there is a "#" not in the first column
+//       and preserve the "#" in the token
 protected
 LINE_COMMENT 
 	: { getColumn()==1 }? "#" 

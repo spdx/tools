@@ -55,12 +55,12 @@ public class TestSPDXStandardLicense {
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
-		String sourceUrl = "source url";
+		String[] sourceUrls = new String[] {"source url1", "source url2"};
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
 		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
-				sourceUrl, notes, standardLicenseHeader, template, true);
+				sourceUrls, notes, standardLicenseHeader, template, true);
 		Resource licResource = stdl.createResource(model);
 		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
 		assertEquals(id, compLic.getId());
@@ -83,12 +83,12 @@ public class TestSPDXStandardLicense {
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
-		String sourceUrl = "source url";
+		String[] sourceUrls = new String[] {"source url2", "source url3"};
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
 		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
-				sourceUrl, notes, standardLicenseHeader, template, true);
+				sourceUrls, notes, standardLicenseHeader, template, true);
 		Resource licResource = stdl.createResource(model);
 		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
 		assertEquals(id, compLic.getId());
@@ -117,7 +117,8 @@ public class TestSPDXStandardLicense {
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
-		String sourceUrl = "source url";
+		String[] sourceUrls1 = new String[] {"source url1", "source url2"};
+		String[] sourceUrls2 = new String[] {"source url3", "source url4"};
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
@@ -126,16 +127,16 @@ public class TestSPDXStandardLicense {
 		
 		try {
     		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
-    				sourceUrl, notes, standardLicenseHeader, template, true);
+    				sourceUrls1, notes, standardLicenseHeader, template, true);
     		Resource licResource = stdl.createResource(model);
     		
     		SPDXStandardLicense stdl3 = new SPDXStandardLicense(name2, id2, text,
-    				sourceUrl, notes, standardLicenseHeader, template, true);
+    				sourceUrls2, notes, standardLicenseHeader, template, true);
     		@SuppressWarnings("unused")
     		Resource compResource3 = stdl3.createResource(model);
     		
     		SPDXStandardLicense stdl2 = new SPDXStandardLicense(name2, id, text,
-    				sourceUrl, notes, standardLicenseHeader, template, true);
+    				sourceUrls2, notes, standardLicenseHeader, template, true);
             
     		Resource compResource = stdl2.createResource(model);
             assertTrue(licResource.equals(compResource));

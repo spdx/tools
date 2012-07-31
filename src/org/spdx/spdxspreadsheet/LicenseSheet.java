@@ -133,9 +133,15 @@ public class LicenseSheet extends AbstractSheet {
 		nameCell.setCellValue(license.getName());
 		Cell idCell = row.createCell(COL_ID);
 		idCell.setCellValue(license.getId());
-		if (license.getSourceUrl() != null) {
+		if (license.getSourceUrl() != null && license.getSourceUrl().length > 0) {
 			Cell sourceUrlCell = row.createCell(COL_SOURCE_URL);
-			sourceUrlCell.setCellValue(license.getSourceUrl());
+			StringBuilder sb = new StringBuilder();
+			sb.append(license.getSourceUrl()[0]);
+			for (int i = 1; i < license.getSourceUrl().length; i++) {
+				sb.append(' ');
+				sb.append(license.getSourceUrl()[i]);
+			}
+			sourceUrlCell.setCellValue(sb.toString());
 		}
 		if (license.getNotes() != null) {
 			Cell notesCell = row.createCell(COL_NOTES);
@@ -150,6 +156,13 @@ public class LicenseSheet extends AbstractSheet {
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
+		}
+		if (row.getRowNum() == firstRowNum + 1) {
+			// need to add version release date
+			Cell versionCell = row.createCell(COL_VERSION);
+			versionCell.setCellValue(this.version);
+			Cell releaseDateCell = row.createCell(COL_RELEASE_DATE);
+			releaseDateCell.setCellValue(this.releaseDate);
 		}
 	}
 	
@@ -288,13 +301,17 @@ public class LicenseSheet extends AbstractSheet {
 		if (notesCell != null) {
 			notes = notesCell.getStringCellValue();
 		}
-		String sourceURL = null;
+		String[] sourceURL = null;
 		Cell sourceURLCell = row.getCell(COL_SOURCE_URL);
 		if (sourceURLCell != null) {
 			try {
-				sourceURL = sourceURLCell.getStringCellValue();
+				String stSourceURL = sourceURLCell.getStringCellValue();
+				sourceURL = stSourceURL.split("\\s");
+				for (int i = 0; i < sourceURL.length; i++) {
+					sourceURL[i] = sourceURL[i].trim();
+				}
 			} catch (Exception ex) {
-				sourceURL = "Exception getting URL: "+ex.getMessage();
+				sourceURL = new String[] {"Exception getting URL: "+ex.getMessage()};
 			}
 		}
 		String stdLicHeader = null;

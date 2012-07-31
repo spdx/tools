@@ -97,7 +97,7 @@ V.1.0 <br/>
 <br/>
 EUPL (c) the European Community 2007 <br/>
 <br/>
-This European Union Public Licence (the &#8220;EUPL&#8221;) applies to the Work or Software (as <br/>
+This European Union Public Licence (the “EUPL”) applies to the Work or Software (as <br/>
 defined below) which is provided under the terms of this Licence. Any use of the Work, other <br/>
 than as authorised under this Licence is prohibited (to the extent such use is covered by a right <br/>
 of the copyright holder of the Work). <br/>
@@ -113,34 +113,34 @@ or has expressed by any other mean his willingness to license under the EUPL. <
 <br/>
 In this Licence, the following terms have the following meaning: <br/>
 <br/>
-&#8722; The Licence: this Licence. <br/>
+− The Licence: this Licence. <br/>
 <br/>
-&#8722; The Original Work or the Software: the software distributed and/or communicated by <br/>
+− The Original Work or the Software: the software distributed and/or communicated by <br/>
 the Licensor under this Licence, available as Source Code and also as Executable <br/>
 Code as the case may be. <br/>
 <br/>
-&#8722; Derivative Works: the works or software that could be created by the Licensee, based <br/>
+− Derivative Works: the works or software that could be created by the Licensee, based <br/>
 upon the Original Work or modifications thereof. This Licence does not define the <br/>
 extent of modification or dependence on the Original Work required in order to <br/>
 classify a work as a Derivative Work; this extent is determined by copyright law <br/>
 applicable in the country mentioned in Article 15.  <br/>
 <br/>
-&#8722; The Work: the Original Work and/or its Derivative Works. <br/>
+− The Work: the Original Work and/or its Derivative Works. <br/>
 <br/>
-&#8722; The Source Code: the human-readable form of the Work which is the most <br/>
+− The Source Code: the human-readable form of the Work which is the most <br/>
 convenient for people to study and modify. <br/>
 <br/>
-&#8722; The Executable Code: any code which has generally been compiled and which is <br/>
+− The Executable Code: any code which has generally been compiled and which is <br/>
 meant to be interpreted by a computer as a program. <br/>
 <br/>
-&#8722; The Licensor: the natural or legal person that  distributes and/or communicates the <br/>
+− The Licensor: the natural or legal person that  distributes and/or communicates the <br/>
 Work under the Licence. <br/>
 <br/>
-&#8722; Contributor(s): any natural or legal person who modifies the Work under the <br/>
+− Contributor(s): any natural or legal person who modifies the Work under the <br/>
 Licence, or otherwise contributes to the creation of a Derivative Work. <br/>
 <br/>
-&#8722; The Licensee or &#8220;You&#8221;:  any natural or legal person  who makes any usage of the <br/>
-Software under the terms of the Licence. &#8722; Distribution and/or Communication: any act of selling,  giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, on-line or <br/>
+− The Licensee or “You”:  any natural or legal person  who makes any usage of the <br/>
+Software under the terms of the Licence. − Distribution and/or Communication: any act of selling,  giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, on-line or <br/>
 off-line, copies of the Work at the disposal of any other natural or legal person. <br/>
 <br/>
 2. Scope of the rights granted by the Licence<br/>
@@ -148,14 +148,14 @@ off-line, copies of the Work at the disposal of any other natural or legal perso
 The Licensor hereby grants You a world-wide,  royalty-free, non-exclusive, sub-licensable <br/>
 licence to do the following, for the duration of copyright vested in the Original Work: <br/>
 <br/>
-&#8722; use the Work in any circumstance and for all usage, <br/>
-&#8722; reproduce the Work, <br/>
-&#8722; modify the Original Work, and make Derivative Works based upon the Work, <br/>
-&#8722; communicate to the public, including the right to make available or display the Work <br/>
+− use the Work in any circumstance and for all usage, <br/>
+− reproduce the Work, <br/>
+− modify the Original Work, and make Derivative Works based upon the Work, <br/>
+− communicate to the public, including the right to make available or display the Work <br/>
 or copies thereof to the public and perform publicly, as the case may be, the Work, <br/>
-&#8722; distribute the Work or copies thereof, <br/>
-&#8722; lend and rent the Work or copies thereof, <br/>
-&#8722; sub-license rights in the Work or copies thereof. <br/>
+− distribute the Work or copies thereof, <br/>
+− lend and rent the Work or copies thereof, <br/>
+− sub-license rights in the Work or copies thereof. <br/>
 <br/>
 Those rights can be exercised on any media, supports and formats, whether now known or <br/>
 later invented, as far as the applicable law permits so. <br/>
@@ -202,8 +202,8 @@ Derivative Work that alter or restrict the terms of the Licence. <br/>
 Compatibility clause: If the Licensee Distributes and/or Communicates Derivative Works or <br/>
 copies thereof based upon both the Original Work and another work licensed under a <br/>
 Compatible Licence, this Distribution and/or Communication can be done under the terms of <br/>
-this Compatible Licence. For the sake of this clause, &#8220;Compatible Licence&#8221; refers to the <br/>
-licences listed in the appendix attached to  this Licence. Should the  Licensee&#8217;s obligations <br/>
+this Compatible Licence. For the sake of this clause, “Compatible Licence” refers to the <br/>
+licences listed in the appendix attached to  this Licence. Should the  Licensee’s obligations <br/>
 under the Compatible Licence conflict with his/her  obligations under this Licence, the <br/>
 obligations of the Compatible Licence shall prevail.  <br/>
 <br/>
@@ -233,10 +233,10 @@ Licence. <br/>
 7. Disclaimer of Warranty<br/>
 <br/>
 The Work is a work in progress, which is continuously improved by numerous contributors. It <br/>
-is not a finished work and may therefore contain defects or &#8220;bugs&#8221; inherent to this type of <br/>
+is not a finished work and may therefore contain defects or “bugs” inherent to this type of <br/>
 software development. <br/>
 <br/>
-For the above reason, the Work is provided under the Licence on an &#8220;as is&#8221; basis and without <br/>
+For the above reason, the Work is provided under the Licence on an “as is” basis and without <br/>
 warranties of any kind concerning the Work,  including without limitation merchantability, <br/>
 fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of <br/>
 intellectual property rights other than copyright as stated in Article 6 of this Licence. <br/>
@@ -267,7 +267,7 @@ warranty or additional liability. <br/>
 <br/>
 10. Acceptance of the Licence<br/>
 <br/>
-The provisions of this Licence can be accepted by clicking on an icon &#8220;I agree&#8221; placed under <br/>
+The provisions of this Licence can be accepted by clicking on an icon “I agree” placed under <br/>
 the bottom of a window displaying the text of this Licence or by affirming consent in any <br/>
 other similar way, in accordance with the rules of applicable law. Clicking on that icon <br/>
 indicates your clear and irrevocable acceptance of this Licence and  all of its terms and <br/>
@@ -328,23 +328,23 @@ resides or has his registered office. <br/>
 <br/>
 This licence shall be governed by the Belgian law if: <br/>
 <br/>
-&#8722; a litigation arises between the European Commission, as a Licensor, and any <br/>
+− a litigation arises between the European Commission, as a Licensor, and any <br/>
 Licensee; <br/>
 <br/>
-&#8722; the Licensor, other than the European Commission, has no residence or registered <br/>
+− the Licensor, other than the European Commission, has no residence or registered <br/>
 office inside a European Union country.  <br/>
 <br/>
 === <br/>
 <br/>
 Appendix<br/>
 <br/>
-&#8220;Compatible Licences&#8221; according to article 5 EUPL are: <br/>
+“Compatible Licences” according to article 5 EUPL are: <br/>
 <br/>
-&#8722; General Public License (GPL) v. 2 <br/>
-&#8722; Open Software License (OSL) v. 2.1, v. 3.0 <br/>
-&#8722; Common Public License v. 1.0 <br/>
-&#8722; Eclipse Public License v. 1.0 <br/>
-&#8722; Cecill v. 2.0 
+− General Public License (GPL) v. 2 <br/>
+− Open Software License (OSL) v. 2.1, v. 3.0 <br/>
+− Common Public License v. 1.0 <br/>
+− Eclipse Public License v. 1.0 <br/>
+− Cecill v. 2.0 
 </div>
 
 <div id="footer"><div id="footer-inner" class="region region-footer">

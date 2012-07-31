@@ -34,11 +34,12 @@ public interface SpdxRdfConstants {
 	// RDF Properties
 	public static final String RDF_PROP_TYPE = "type";
 	public static final String RDF_PROP_RESOURCE = "resource";
-	public static final String RDFS_PROP_LABEL = "label";
-	public static final String RDFS_PROP_SEE_ALSO = "seeAlso";
+
 	
 	// RDFS Properties
 	public static final String RDFS_PROP_COMMENT = "comment";
+	public static final String RDFS_PROP_LABEL = "label";
+	public static final String RDFS_PROP_SEE_ALSO = "seeAlso";
 	
 	// DOAP Class Names
 	public static final String CLASS_DOAP_PROJECT = "Project";
@@ -69,6 +70,7 @@ public interface SpdxRdfConstants {
 	public static final String URI_VALUE_NOASSERTION = SPDX_NAMESPACE + PROP_VALUE_NOASSERTION;
 	
 	// SPDX Document Properties
+	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_SPDX_REVIEWED_BY = "reviewed";
 	public static final String PROP_SPDX_NONSTANDARD_LICENSES = "hasExtractedLicensingInfo";
 	public static final String PROP_SPDX_VERSION = "specVersion";
@@ -76,9 +78,10 @@ public interface SpdxRdfConstants {
 	public static final String PROP_SPDX_PACKAGE = "describesPackage";
 	public static final String PROP_SPDX_FILE = "referencesFile";
 	public static final String PROP_SPDX_DATA_LICENSE = "dataLicense";
+
 	
 	// SPDX CreationInfo Properties
-	// - use rdfs:comment	static final String PROP_CREATION_CREATOR_COMMENT = "comment";
+	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_CREATION_CREATOR = "creator";
 	public static final String PROP_CREATION_CREATED = "created"; // creation timestamp
 	public static final String CREATOR_PREFIX_PERSON = "Person:";
@@ -116,12 +119,13 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_SUPPLIER = "supplier";
 	
 	// SPDX License Properties
+	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_LICENSE_ID = "licenseId";
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
 	public static final String PROP_LICENSE_NAME = "licenseName";
 	public static final String PROP_STD_LICENSE_NAME = "licenseName";	//TODO: replace with actual property
-	public static final String PROP_STD_LICENSE_URL = "licenseSourceUrl";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_URL_VERSION_1 = "licenseSourceUrl";	// This has been replaced with the rdfs:seeAlso property
 	public static final String PROP_STD_LICENSE_NOTES_VERSION_1 = "licenseNotes";	// old property name (pre 1.1 spec)
 	public static final String PROP_STD_LICENSE_HEADER = "licenseHeader";	//TODO: replace with actual property
 	public static final String PROP_STD_LICENSE_TEMPLATE = "licenseTemplate";	//TODO: replace with actual property
@@ -132,6 +136,7 @@ public interface SpdxRdfConstants {
 	public static final String TERM_LICENSE_NONE = PROP_VALUE_NONE;
 	
 	// SPDX File Properties
+	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_FILE_NAME = "fileName";
 	public static final String PROP_FILE_TYPE = "fileType";
 	public static final String PROP_FILE_LICENSE = "licenseConcluded";
@@ -153,6 +158,7 @@ public interface SpdxRdfConstants {
 	public static final String FILE_TYPE_OTHER = "OTHER";
 	
 	// SPDX Review Properties
+	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_REVIEW_REVIEWER = "reviewer";
 	public static final String PROP_REVIEW_DATE = "reviewDate";
 	

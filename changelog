@@ -8,7 +8,8 @@ Implementation version 1.1.0
 - Changed License property name from "licenseOsiApproved" to "isOsiApproved" - note licenseOsiApproved will still be recognized for compatability reasons
 - Changed License property name from "licenseNotes" to "rdfs:comment" 
 - Updated LicenseRDFaGenerator to add version and release date.  Updated templates with new text from legal
-- Fixed bug 
+- Fixed bug 1041
+- Updated to use Apache Commons Lang version 3.1 to improve handling of encoding
 
 Implementation version 1.0.6
 - Fixed several minor quality issues identified by quality scan of code
