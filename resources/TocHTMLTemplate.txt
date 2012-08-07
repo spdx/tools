@@ -76,6 +76,12 @@ standardized short identifier, full name for each license, vetted license
 text, other basic information, and a canonical permanent URL. By providing
 a short identifier, users can efficiently refer to a license without
 having to redundantly reproduce the full license.</p>
+<p>Please see the <a href="http://spdx.org/content/license-list">License List overview</a> for more information about the SPDX License List and its various fields.  
+You may propose additional licenses be added to the SPDX License List by
+following the process at: <a href="http://spdx.org/wiki/spdx-license-list-process-requesting-new-licenses-be-added">SPDX License List: Process for requesting new licenses to be added</a>.
+Guidelines for what constitutes a license match to the SPDX License List 
+when generating an SPDX file can be found here:
+ <a href="http://spdx.org/wiki/spdx-license-list-match-guidelines">SPDX License List Match Guidelines</a>.</p>
 [VERSION]
 
 <h2>Licenses</h2>
@@ -88,12 +94,6 @@ having to redundantly reproduce the full license.</p>
   [TABLEROW]
   </tbody>
 </table>
-<p>You may propose additional licenses be added to the SPDX License List by
-following the process at: <a href="http://spdx.org/wiki/spdx-license-list-process-requesting-new-licenses-be-added">SPDX License List: Process for requesting new licenses to be added</a>.
-Guidelines for what constitutes a license match to the SPDX License List 
-when generating an SPDX file can be found here:
- <a href="http://spdx.org/wiki/spdx-license-list-match-guidelines">SPDX License List Match Guidelines</a>.</p>
-
 <div id="footer"><div id="footer-inner" class="region region-footer">
   <div class="content">
     <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> |
