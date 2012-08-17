@@ -27,7 +27,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
- * A non-standard license which is valid only within an SPDXAnalysis
+ * A non-standard license which is valid only within an SPDXAnalysis.  This is
+ * equivelant to the extractedLicensingInfo
  * @author Gary O'Neall
  *
  */

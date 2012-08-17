@@ -120,11 +120,13 @@ public interface SpdxRdfConstants {
 	
 	// SPDX License Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
+	// the seeAlso property is in the RDFS_PROP_SEE_ALSO property in the rdfs namespace
 	public static final String PROP_LICENSE_ID = "licenseId";
 	public static final String PROP_LICENSE_TEXT = "licenseText";
 	public static final String PROP_EXTRACTED_TEXT = "extractedText";
 	public static final String PROP_LICENSE_NAME = "licenseName";
-	public static final String PROP_STD_LICENSE_NAME = "licenseName";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_NAME_VERSION_1 = "licenseName";	// old property name (pre 1.1 spec)
+	public static final String PROP_STD_LICENSE_NAME = "name";
 	public static final String PROP_STD_LICENSE_URL_VERSION_1 = "licenseSourceUrl";	// This has been replaced with the rdfs:seeAlso property
 	public static final String PROP_STD_LICENSE_NOTES_VERSION_1 = "licenseNotes";	// old property name (pre 1.1 spec)
 	public static final String PROP_STD_LICENSE_HEADER = "licenseHeader";	//TODO: replace with actual property

@@ -625,5 +625,14 @@ public class SPDXLicenseInfoFactory {
         }
         return licenseProperties;
     }
+	
+	
+	/**
+	 * @return Array of all standard license IDs
+	 */
+	public static String[] getStandardLicenseIds() {
+		return STANDARD_LICENSE_ID_SET.toArray(new String[STANDARD_LICENSE_ID_SET.size()]);
+	}
+
     
 }

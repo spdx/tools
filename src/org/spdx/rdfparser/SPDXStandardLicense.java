@@ -71,6 +71,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 	public SPDXStandardLicense(Model spdxModel, Node licenseNode) throws InvalidSPDXAnalysisException {
 		super(spdxModel, licenseNode);
 		// name
+		this.name = null;
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME).asNode();
 		Triple m = Triple.createMatch(licenseNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -78,7 +79,16 @@ public class SPDXStandardLicense extends SPDXLicense {
 			Triple t = tripleIter.next();
 			this.name = t.getObject().toString(false);
 		} else {
-			this.name = id;
+			// try the pre 1.1 name - for backwards compatibility
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME_VERSION_1).asNode();
+			m = Triple.createMatch(licenseNode, p, null);
+			tripleIter = model.getGraph().find(m);	
+			if (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				this.name = t.getObject().toString(false);
+			} else {
+				this.name = id;	// No name hsa been found, default is the ID
+			}
 		}
 		// text
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT).asNode();
@@ -182,6 +192,8 @@ public class SPDXStandardLicense extends SPDXLicense {
 		if (this.licenseInfoNode != null) {
 			// delete any previous created
 			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
+			model.removeAll(resource, p, null);
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME_VERSION_1);
 			model.removeAll(resource, p, null);
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
