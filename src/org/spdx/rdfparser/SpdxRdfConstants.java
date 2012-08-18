@@ -129,7 +129,8 @@ public interface SpdxRdfConstants {
 	public static final String PROP_STD_LICENSE_NAME = "name";
 	public static final String PROP_STD_LICENSE_URL_VERSION_1 = "licenseSourceUrl";	// This has been replaced with the rdfs:seeAlso property
 	public static final String PROP_STD_LICENSE_NOTES_VERSION_1 = "licenseNotes";	// old property name (pre 1.1 spec)
-	public static final String PROP_STD_LICENSE_HEADER = "licenseHeader";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_HEADER_VERSION_1 = "licenseHeader";	// old property name (pre 1.1 spec)
+	public static final String PROP_STD_LICENSE_NOTICE = "standardLicenseNotice";	
 	public static final String PROP_STD_LICENSE_TEMPLATE = "licenseTemplate";	//TODO: replace with actual property
 	public static final String PROP_STD_LICENSE_OSI_APPROVED = "isOsiApproved";
 	public static final String PROP_STD_LICENSE_OSI_APPROVED_VERSION_1 = "licenseOsiApproved";	// old property name (pre 1.1 spec)

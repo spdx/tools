@@ -36,7 +36,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 	private String name;
 	private String[] sourceUrl;
 	private String notes;
-	private String standardLicenseHeader;
+	private String standardLicenseNotice;
 	private String template;
 	private String text;
 	private boolean osiApproved;
@@ -48,7 +48,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 //	}
 	
 	public SPDXStandardLicense(String name, String id, String text, String[] sourceUrl, String notes,
-			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
+			String standardLicenseNotice, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
 		super(id);
 // The following check was removed since this class is used in creating the standard licenses for the website
 //		if (!SPDXLicenseInfoFactory.isStandardLicenseID(id)) {
@@ -57,7 +57,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		this.name = name;
 		this.sourceUrl = sourceUrl;
 		this.notes = notes;
-		this.standardLicenseHeader = standardLicenseHeader;
+		this.standardLicenseNotice = standardLicenseNotice;
 		this.template = template;
 		
 		this.osiApproved = osiApproved;
@@ -134,14 +134,23 @@ public class SPDXStandardLicense extends SPDXLicense {
 			this.notes = null;
 		}
 		// standardLicenseHeader
-		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER).asNode();
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.standardLicenseHeader = t.getObject().toString(false);
+			this.standardLicenseNotice = t.getObject().toString(false);
 		} else {
-			this.standardLicenseHeader = null;
+			// try the 1.0 version name
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1).asNode();
+			m = Triple.createMatch(licenseNode, p, null);
+			tripleIter = model.getGraph().find(m);	
+			if (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				this.standardLicenseNotice = t.getObject().toString(false);
+			} else {
+				this.standardLicenseNotice = null;
+			}
 		}
 		// template
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE).asNode();
@@ -270,24 +279,46 @@ public class SPDXStandardLicense extends SPDXLicense {
 			resource.addProperty(p, this.notes);
 		}
 	}
+	
+	/**
+	 * Replaced by getStandardLicenseNotice
+	 * @return
+	 */
+	@Deprecated
+	public String getStandardLicenseHeader() {
+		return getStandardLicenseNotice();
+	}
+	
 	/**
 	 * @return the standardLicenseHeader
 	 */
-	public String getStandardLicenseHeader() {
-		return standardLicenseHeader;
+	public String getStandardLicenseNotice() {
+		return standardLicenseNotice;
 	}
+	
 	/**
-	 * @param standardLicenseHeader the standardLicenseHeader to set
+	 * Replaced by setStandardLicenseNotice
+	 * @param standardLicenseHeader
 	 */
+	@Deprecated
 	public void setStandardLicenseHeader(String standardLicenseHeader) {
-		this.standardLicenseHeader = standardLicenseHeader;
+		setStandardLicenseNotice(standardLicenseHeader);
+	}
+	
+	/**
+	 * @param standardLicenseNotice the standardLicenseHeader to set
+	 */
+	public void setStandardLicenseNotice(String standardLicenseNotice) {
+		this.standardLicenseNotice = standardLicenseNotice;
 		if (this.licenseInfoNode != null) {
 			// delete any previous created
-			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER);
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
+			model.removeAll(resource, p, null);
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER);
-			resource.addProperty(p, this.standardLicenseHeader);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
+			resource.addProperty(p, this.standardLicenseNotice);
 		}
 	}
 	/**
@@ -353,10 +384,10 @@ public class SPDXStandardLicense extends SPDXLicense {
 			}
 		}
 		//standard license header
-		if (this.standardLicenseHeader != null) {
+		if (this.standardLicenseNotice != null) {
 			Property standardLicenseHeaderPropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_STD_LICENSE_HEADER);
-			r.addProperty(standardLicenseHeaderPropery, this.standardLicenseHeader);
+					SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
+			r.addProperty(standardLicenseHeaderPropery, this.standardLicenseNotice);
 		}
 		//template
 		if (this.template != null) {
