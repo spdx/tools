@@ -78,24 +78,25 @@ public class SPDXDocumentFactory {
 	}
 	
 	private static String figureBaseUri(String src) {
+		
+		URI s = null;
 		try{
-			URI s = new URI(src);
+			s = new URI(src);
+		} catch(URISyntaxException e) {
+			s = null;
+		}
 			
-			if (null == s.getScheme())
-				return "file://" + new File(src).getAbsoluteFile().toString().replace("\\", "/");
-			else
-				return s.toString();
-			
-		} catch(URISyntaxException e){
-			String secondTry = "file://" + new File(src).getAbsoluteFile().toString().replace("\\", "/");
+		if (s == null || s.getScheme() == null) {
+			// assume this is a file path
+			String filePath = "///" + new File(src).getAbsoluteFile().toString().replace('\\', '/');
 			try {
-				URI s2 = new URI(secondTry);
-				return s2.toString();
+				s = new URI("file", filePath, null);
 			} catch (URISyntaxException e1) {
 				logger.error("Invalid URI syntax for "+src);
 				return null;
 			}
 		}
+		return s.toString();
 	}
 
     private static String fileType(String path) {
