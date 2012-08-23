@@ -36,7 +36,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 	private String name;
 	private String[] sourceUrl;
 	private String notes;
-	private String standardLicenseNotice;
+	private String standardLicenseHeader;
 	private String template;
 	private String text;
 	private boolean osiApproved;
@@ -57,7 +57,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		this.name = name;
 		this.sourceUrl = sourceUrl;
 		this.notes = notes;
-		this.standardLicenseNotice = standardLicenseNotice;
+		this.standardLicenseHeader = standardLicenseNotice;
 		this.template = template;
 		
 		this.osiApproved = osiApproved;
@@ -139,7 +139,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		tripleIter = model.getGraph().find(m);	
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.standardLicenseNotice = t.getObject().toString(false);
+			this.standardLicenseHeader = t.getObject().toString(false);
 		} else {
 			// try the 1.0 version name
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1).asNode();
@@ -147,9 +147,9 @@ public class SPDXStandardLicense extends SPDXLicense {
 			tripleIter = model.getGraph().find(m);	
 			if (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				this.standardLicenseNotice = t.getObject().toString(false);
+				this.standardLicenseHeader = t.getObject().toString(false);
 			} else {
-				this.standardLicenseNotice = null;
+				this.standardLicenseHeader = null;
 			}
 		}
 		// template
@@ -281,35 +281,17 @@ public class SPDXStandardLicense extends SPDXLicense {
 	}
 	
 	/**
-	 * Replaced by getStandardLicenseNotice
-	 * @return
-	 */
-	@Deprecated
-	public String getStandardLicenseHeader() {
-		return getStandardLicenseNotice();
-	}
-	
-	/**
 	 * @return the standardLicenseHeader
 	 */
-	public String getStandardLicenseNotice() {
-		return standardLicenseNotice;
+	public String getStandardLicenseHeader() {
+		return standardLicenseHeader;
 	}
 	
 	/**
-	 * Replaced by setStandardLicenseNotice
-	 * @param standardLicenseHeader
+	 * @param standardLicenseHeader the standardLicenseHeader to set
 	 */
-	@Deprecated
 	public void setStandardLicenseHeader(String standardLicenseHeader) {
-		setStandardLicenseNotice(standardLicenseHeader);
-	}
-	
-	/**
-	 * @param standardLicenseNotice the standardLicenseHeader to set
-	 */
-	public void setStandardLicenseNotice(String standardLicenseNotice) {
-		this.standardLicenseNotice = standardLicenseNotice;
+		this.standardLicenseHeader = standardLicenseHeader;
 		if (this.licenseInfoNode != null) {
 			// delete any previous created
 			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
@@ -318,7 +300,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 			model.removeAll(resource, p, null);
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
-			resource.addProperty(p, this.standardLicenseNotice);
+			resource.addProperty(p, this.standardLicenseHeader);
 		}
 	}
 	/**
@@ -384,10 +366,10 @@ public class SPDXStandardLicense extends SPDXLicense {
 			}
 		}
 		//standard license header
-		if (this.standardLicenseNotice != null) {
+		if (this.standardLicenseHeader != null) {
 			Property standardLicenseHeaderPropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
-			r.addProperty(standardLicenseHeaderPropery, this.standardLicenseNotice);
+			r.addProperty(standardLicenseHeaderPropery, this.standardLicenseHeader);
 		}
 		//template
 		if (this.template != null) {
