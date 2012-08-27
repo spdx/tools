@@ -46,7 +46,7 @@ public class SPDXDocumentFactory {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	static SPDXDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
+	public static SPDXDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
 	}
 	
