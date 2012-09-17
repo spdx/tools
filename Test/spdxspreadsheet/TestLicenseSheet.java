@@ -99,7 +99,7 @@ public class TestLicenseSheet {
 					}
 					assertEquals(licenses.get(i).getId(), nextLic.getId());
 					assertEquals(licenses.get(i).getName(), nextLic.getName());
-					assertEquals(licenses.get(i).getNotes(), nextLic.getNotes());
+					assertEquals(licenses.get(i).getComment(), nextLic.getComment());
 					assertEquals(licenses.get(i).getSourceUrl(),nextLic.getSourceUrl());
 					assertEquals(licenses.get(i).getStandardLicenseHeader(),
 							nextLic.getStandardLicenseHeader());
@@ -190,7 +190,7 @@ public class TestLicenseSheet {
 		SPDXStandardLicense firstLic = iter.next();
 		assertEquals("AFL-1.1", firstLic.getId());
 		assertEquals("Academic Free License v1.1", firstLic.getName());
-		assertEquals("This license has been superseded by later versions.\n", firstLic.getNotes());
+		assertEquals("This license has been superseded by later versions.\n", firstLic.getComment());
 		assertEquals(1, firstLic.getSourceUrl().length);
 		assertEquals("http://opensource.linux-mirror.org/licenses/afl-1.1.txt", 
 				firstLic.getSourceUrl()[0]);

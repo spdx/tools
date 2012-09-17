@@ -143,9 +143,9 @@ public class LicenseSheet extends AbstractSheet {
 			}
 			sourceUrlCell.setCellValue(sb.toString());
 		}
-		if (license.getNotes() != null) {
+		if (license.getComment() != null) {
 			Cell notesCell = row.createCell(COL_NOTES);
-			notesCell.setCellValue(license.getNotes());
+			notesCell.setCellValue(license.getComment());
 		}
 		if (license.getStandardLicenseHeader() != null) {
 			Cell standardLicenseHeaderCell = row.createCell(COL_STANDARD_LICENSE_HEADER);

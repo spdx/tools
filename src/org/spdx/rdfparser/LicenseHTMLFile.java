@@ -93,8 +93,8 @@ public class LicenseHTMLFile {
 			htmlText = htmlText.replace(LICENSE_TEXT, escapeHTML(license.getText()));
 			htmlText = htmlText.replace(NAME, escapeHTML(license.getName()));
 			String notes;
-			if (license.getNotes() != null && !license.getNotes().isEmpty()) {
-				notes = escapeHTML(license.getNotes());
+			if (license.getComment() != null && !license.getComment().isEmpty()) {
+				notes = escapeHTML(license.getComment());
 			} else {
 				notes = "None";
 			}

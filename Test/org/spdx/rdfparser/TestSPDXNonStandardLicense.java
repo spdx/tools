@@ -18,6 +18,8 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.io.StringWriter;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -128,6 +130,10 @@ public class TestSPDXNonStandardLicense {
 		assertEquals(ID1, lic2.getId());
 		assertEquals(TEXT1, lic2.getText());
 		assertEquals(COMMENT2, lic2.getComment());
+		StringWriter writer = new StringWriter();
+		model.write(writer);
+		@SuppressWarnings("unused")
+		String rdfstring = writer.toString();
 		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(model, licResource.asNode());
 		assertEquals(COMMENT2, lic3.getComment());	
 	}
