@@ -1,3 +1,5 @@
+Implementation version 1.1.1
+- Replaced StandardLicense.get/setNotes with get/set Comment to match spec.  Deprecated the old methods.
 Implementation version 1.1.0
 - Updated to to the 1.1 spec
 - Added SPDXDocument property for document comment

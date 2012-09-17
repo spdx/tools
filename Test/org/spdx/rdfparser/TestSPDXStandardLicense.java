@@ -19,6 +19,7 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -75,6 +76,38 @@ public class TestSPDXStandardLicense {
 		assertEquals(standardLicenseHeader, compLic.getStandardLicenseHeader());
 		assertEquals(template, compLic.getTemplate());
 */
+	}
+	
+	@Test
+	public void testSetComment() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		String name = "name";
+		String id = "AFL-3.0";
+		String text = "text";
+		String[] sourceUrls = new String[] {"source url2", "source url3"};
+		String comments = "comments1";
+		String comments2 = "comments2";
+		String standardLicenseHeader = "Standard license header";
+		String template = "template";
+		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+				sourceUrls, comments, standardLicenseHeader, template, true);
+		Resource licResource = stdl.createResource(model);
+		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
+		assertEquals(comments, compLic.getComment());
+		
+		compLic.setComment(comments2);
+		assertEquals(comments2, compLic.getComment());
+		SPDXStandardLicense compLic2 = new SPDXStandardLicense(model, licResource.asNode());
+		assertEquals(comments2, compLic2.getComment());
+		StringWriter writer = new StringWriter();
+		model.write(writer);
+		@SuppressWarnings("unused")
+		String rdfstring = writer.toString();
+
+		ArrayList<String> verify = stdl.verify();
+		assertEquals(0, verify.size());
+		verify = compLic.verify();
+		assertEquals(0, verify.size());
 	}
 	
 	@Test
@@ -144,6 +177,7 @@ public class TestSPDXStandardLicense {
 		} catch (InvalidSPDXAnalysisException e) {
 		    throw new RuntimeException(e);
 		}
-
 	}
+	
+	
 }

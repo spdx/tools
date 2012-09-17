@@ -35,7 +35,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 
 	private String name;
 	private String[] sourceUrl;
-	private String notes;
+	private String comments;
 	private String standardLicenseHeader;
 	private String template;
 	private String text;
@@ -56,7 +56,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 //		}
 		this.name = name;
 		this.sourceUrl = sourceUrl;
-		this.notes = notes;
+		this.comments = notes;
 		this.standardLicenseHeader = standardLicenseNotice;
 		this.template = template;
 		
@@ -129,9 +129,9 @@ public class SPDXStandardLicense extends SPDXLicense {
 		}
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.notes = t.getObject().toString(false);
+			this.comments = t.getObject().toString(false);
 		} else {
-			this.notes = null;
+			this.comments = null;
 		}
 		// standardLicenseHeader
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE).asNode();
@@ -257,16 +257,32 @@ public class SPDXStandardLicense extends SPDXLicense {
 		}
 	}
 	/**
-	 * @return the notes
+	 * @return the comments
+	 */
+	public String getComment() {
+		return comments;
+	}
+	@Deprecated
+	/**
+	 * Replaced by <code>getComment()</code>
+	 * @return comments
 	 */
 	public String getNotes() {
-		return notes;
+		return getComment();
 	}
+	@Deprecated
 	/**
-	 * @param notes the notes to set
+	 * Replaced by <code>setComment(String comment)</code>
+	 * @param notes Comment to set
 	 */
 	public void setNotes(String notes) {
-		this.notes = notes;
+		setComment(notes);
+	}
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comments = comment;
 		if (this.licenseInfoNode != null) {
 			// delete any previous created
 			Property p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
@@ -276,7 +292,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 			model.removeAll(resource, p, null);
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
-			resource.addProperty(p, this.notes);
+			resource.addProperty(p, this.comments);
 		}
 	}
 	
@@ -352,10 +368,10 @@ public class SPDXStandardLicense extends SPDXLicense {
 					SpdxRdfConstants.PROP_STD_LICENSE_NAME);
 			r.addProperty(namePropery, this.name);
 		}
-		//notes
-		if (this.notes != null) {
+		// comments
+		if (this.comments != null) {
 			Property notesPropery = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
-			r.addProperty(notesPropery, this.notes);
+			r.addProperty(notesPropery, this.comments);
 		}
 		//source URL
 		if (this.sourceUrl != null && this.sourceUrl.length > 0) {
@@ -437,7 +453,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		if (name == null || name.isEmpty()) {
 			retval.add("Missing required license name");
 		}
-		this.getNotes();
+		this.getComment();
 		this.getSourceUrl();
 		this.getStandardLicenseHeader();
 		this.getTemplate();
