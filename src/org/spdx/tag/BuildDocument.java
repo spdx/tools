@@ -95,8 +95,16 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				analysis.getCreatorInfo().setCreators(creators.toArray(new String[0]));
 			}
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_CREATED"))) {
+			if (analysis.getCreatorInfo() == null) {
+				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] {  }, "", "");
+				analysis.setCreationInfo(creator);
+			}
 			analysis.getCreatorInfo().setCreated(value);
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_COMMENT"))) {
+			if (analysis.getCreatorInfo() == null) {
+				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "");
+				analysis.setCreationInfo(creator);
+			}
 			analysis.getCreatorInfo().setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_SPDX_COMMENT"))) {
 			analysis.setDocumentComment(value);
@@ -108,8 +116,14 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			lastReviewer = new SPDXReview(value, format.format(new Date()), ""); // update date later
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_DATE"))) {
+			if (lastReviewer == null) {
+				throw(new InvalidSpdxTagFileException("Missing Reviewer - A reviewer must be provided before a review date"));
+			}
 			lastReviewer.setReviewDate(value);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_COMMENT"))) {
+			if (lastReviewer == null) {
+				throw(new InvalidSpdxTagFileException("Missing Reviewer - A reviewer must be provided before a review comment"));
+			}
 			lastReviewer.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_ID"))) {
 			if (lastExtractedLicense != null) {
@@ -120,16 +134,28 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			lastExtractedLicense = new SPDXNonStandardLicense(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
 		} else if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text"));
+			}
 			lastExtractedLicense.setText(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_NAME"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license name"));
+			}
 			lastExtractedLicense.setLicenseName(value);
 		} else if (tag.equals(constants.getProperty("PROP_SOURCE_URLS"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license URL"));
+			}
 			String[] values = value.split(",");
 			for (int i = 0; i < values.length; i++) {
 				values[i] = values[i].trim();
 			}
 			lastExtractedLicense.setSourceUrls(values);
 		} else if (tag.equals("PROP_LICENSE_COMMENT")) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
+			}
 			lastExtractedLicense.setComment(value);
 		} else {
 			SPDXPackage spdxPackage = analysis.getSpdxPackage();
@@ -211,6 +237,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			lastFile = new SPDXFile(value, "", "", new SPDXNoneLicense(),
 					new SPDXLicenseInfo[0], "", "", new DOAPProject[0]);
 		} else {
+			if (lastFile == null) {
+				throw(new InvalidSpdxTagFileException("Missing File Name - A file name must be specified before the file properties"));
+			}
 			if (tag.equals(constants.getProperty("PROP_FILE_TYPE"))) {
 				lastFile.setType(value);
 			} else if (constants.getProperty("PROP_FILE_CHECKSUM").startsWith(tag)) {
@@ -248,6 +277,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			lastProject = new DOAPProject(value, "");
 		} else {
+			if (lastProject == null) {
+				throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
+			}
 			if (tag.equals(constants.getProperty("PROP_PROJECT_HOMEPAGE"))) {
 				lastProject.setHomePage(value);
 			} else if (tag.equals(constants.getProperty("PROP_PROJECT_URI"))) {
