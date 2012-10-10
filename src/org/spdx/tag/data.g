@@ -18,14 +18,7 @@
 // 
 // @author Rana Rahal, Protecode Inc.
 //
- 
-// !!NOTE - Whenever the ANTLR is run against this grammar, the output TagValueLexer.java
-// must be patched by adding the following conditional to the catch clause in the
-// nextToken() method around the existing reportError(ee) call to avoid warnings:
-//
-//						if (!ee.getMessage().equals(" getColumn()==1 ")) {
-//							reportError(ee);	// Don't report this error - expected for '#' in the middle of strings
-//						}
+
 header 
 {
 package org.spdx.tag;
@@ -80,7 +73,7 @@ TAG	:	('a'..'z'|'A'..'Z'|'0'..'9')+
 	;
 	
 protected
-VALUE : MULTI_LINE_VALUE (LINE_COMMENT!)?
+VALUE : MULTI_LINE_VALUE (LINE_COMMENT!)
 	  ;
 
 protected
@@ -96,8 +89,9 @@ MULTI_LINE_VALUE
 //       and preserve the "#" in the token
 protected
 LINE_COMMENT 
-	: { getColumn()==1 }? "#" 
+	: ({ getColumn()==1 }? "#" 
 		( ~('\n'|'\r') )*
         ( '\n'|'\r'('\n')? )?
-	    { $setType(Token.SKIP); newline(); } 
+	    { $setType(Token.SKIP); newline(); } ) ?
 	;
+	

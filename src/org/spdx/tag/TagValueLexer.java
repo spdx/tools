@@ -88,10 +88,7 @@ tryAgain:
 					try {mLINE_COMMENT(false);}
 					catch(RecognitionException ee) {
 						// horrendous failure: error in filter rule
-						if (!ee.getMessage().equals(" getColumn()==1 ")) {
-							reportError(ee);	// Don't report this error - expected for '#' in the middle of strings
-						}
-						
+						reportError(ee);
 						consume();
 					}
 					continue tryAgain;
@@ -218,14 +215,9 @@ inputState.guessing--;
 		
 		mMULTI_LINE_VALUE(false);
 		{
-		if ((LA(1)=='#')) {
-			_saveIndex=text.length();
-			mLINE_COMMENT(false);
-			text.setLength(_saveIndex);
-		}
-		else {
-		}
-		
+		_saveIndex=text.length();
+		mLINE_COMMENT(false);
+		text.setLength(_saveIndex);
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {
 			_token = makeToken(_ttype);
@@ -273,50 +265,55 @@ inputState.guessing--;
 		_ttype = LINE_COMMENT;
 		int _saveIndex;
 		
-		if (!( getColumn()==1 ))
-		  throw new SemanticException(" getColumn()==1 ");
-		match("#");
 		{
-		_loop20:
-		do {
-			if ((_tokenSet_1.member(LA(1)))) {
+		if (((LA(1)=='#'))&&( getColumn()==1 )) {
+			match("#");
+			{
+			_loop21:
+			do {
+				if ((_tokenSet_1.member(LA(1)))) {
+					{
+					match(_tokenSet_1);
+					}
+				}
+				else {
+					break _loop21;
+				}
+				
+			} while (true);
+			}
+			{
+			switch ( LA(1)) {
+			case '\n':
+			{
+				match('\n');
+				break;
+			}
+			case '\r':
+			{
+				match('\r');
 				{
-				match(_tokenSet_1);
+				if ((LA(1)=='\n')) {
+					match('\n');
+				}
+				else {
+				}
+				
+				}
+				break;
+			}
+			default:
+				{
 				}
 			}
-			else {
-				break _loop20;
 			}
-			
-		} while (true);
-		}
-		{
-		switch ( LA(1)) {
-		case '\n':
-		{
-			match('\n');
-			break;
-		}
-		case '\r':
-		{
-			match('\r');
-			{
-			if ((LA(1)=='\n')) {
-				match('\n');
-			}
-			else {
-			}
-			
-			}
-			break;
-		}
-		default:
-			{
+			if ( inputState.guessing==0 ) {
+				_ttype = Token.SKIP; newline();
 			}
 		}
+		else {
 		}
-		if ( inputState.guessing==0 ) {
-			_ttype = Token.SKIP; newline();
+		
 		}
 		if ( _createToken && _token==null && _ttype!=Token.SKIP ) {
 			_token = makeToken(_ttype);
