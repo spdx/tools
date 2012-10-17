@@ -38,7 +38,6 @@
 
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
@@ -47,7 +46,7 @@
        <div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
       <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
 
-       <div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+       <div id="site-slogan">Software Package Data Exchange®</div>
 
 </div> <!-- /#logo-title -->
 
@@ -56,14 +55,51 @@
 
 <div id="tabs">
 <div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
+<ul class="menu"><li class="expanded first active-trail"><a href="/about-spdx" title="Introductory Information about the SPDX Specification and the SPDX Organization that manages it." class="active">About SPDX</a><ul class="menu"><li class="leaf first"><a href="/about-spdx/background" title="">Background</a></li>
+<li class="leaf"><a href="/content/vison-strategy-execution" title="Mission, Vision and Execution">Mission, Vision and Execution</a></li>
+<li class="collapsed"><a href="/content/how-participate" title="">How to Participate</a></li>
+<li class="leaf"><a href="/blog" title="News items for SPDX">News</a></li>
+<li class="leaf"><a href="/about/spdx/events" title="Events where we have or will talk about SPDX">Events</a></li>
+<li class="leaf"><a href="/about/spdx/contact" title="Contact Us">Contact Us</a></li>
+<li class="leaf last"><a href="/content/roles-responsibilities" title="">Team Responsibilities</a></li>
+</ul></li>
+<li class="expanded"><a href="/documentation" title="This page captures all Documents created during SPDX Working Group Activities. Documents that can be foudn here include: Specifications; Guidelines; Presentations; Examples; etc...">Documentation</a><ul class="menu"><li class="leaf first"><a href="http://spdx.org/licenses/" title="License List">License List</a></li>
+<li class="expanded"><a href="/content/spdx-specification" title="Current Specification">Current Specification</a><ul class="menu"><li class="leaf first"><a href="/content/examples" title="Examples">Examples</a></li>
+<li class="leaf"><a href="/content/usage-guidelines-faq" title="Usage Guidelines &amp; FAQ">Usage Guidelines &amp; FAQ</a></li>
+<li class="leaf"><a href="http://spdx.org/rdf/terms" title="Vocabulary">RDF Vocabulary</a></li>
+<li class="leaf"><a href="/content/use-spdx-specification" title="Use the SPDX Specification">Use the SPDX Specification</a></li>
+<li class="leaf last"><a href="/content/review-and-comment-spdx-specification" title="Review and Comment the SPDX Specification">Review and Comment SPDX Specification</a></li>
+</ul></li>
+<li class="leaf"><a href="/content/archive-specifications" title="Archive Specifications">Archive Specifications</a></li>
+<li class="leaf"><a href="/content/white-papers" title="White Papers">White Papers</a></li>
+<li class="leaf"><a href="/content/tutorials" title="Tutorials">Tutorials</a></li>
+<li class="leaf"><a href="/content/spdx-launch-collateral" title="SPDX Launch Collateral">SPDX Launch Collateral</a></li>
+<li class="leaf"><a href="/content/vods-webinar" title="VODs &amp; Webinar">VODs &amp; Webinar</a></li>
+<li class="leaf last"><a href="/about/spdx/presentation-materials" title="Presentation Materials">Presentation Materials</a></li>
+</ul></li>
+<li class="expanded"><a href="/content/teams" title="SPDX Team Information Page">Teams</a><ul class="menu"><li class="expanded first"><a href="/content/general-meeting" title="General">General</a><ul class="menu"><li class="leaf first"><a href="/content/meeting-calendar-conference-access" title="Meeting Calendar &amp; Conference Access">Meeting Calendar &amp; Conference Access</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/meeting-minutes-and-decisions" title="General Meeting Minutes &amp; Decisions">Meeting Minutes &amp; Decisions</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/general-meeting" title="Current Priorities / Work in Progress">Team Work Area</a></li>
+<li class="leaf last"><a href="/content/participation-guidelines-sign" title="Participation Guidelines &amp; Sign Up">Participation Guidelines &amp; Sign Up</a></li>
+</ul></li>
+<li class="expanded"><a href="/content/technical-team" title="Technical">Technical</a><ul class="menu"><li class="leaf first"><a href="/content/meeting-calendar-conference-access-0" title="Meeting Calendar &amp; Conference Access">Meeting Calendar &amp; Conference Access</a></li>
+<li class="leaf"><a href="http://www.spdx.org/wiki/meeting-minutes-and-decisions-technical-team" title="Meeting Minutes &amp; Decisions">Meeting Minutes &amp; Decisions</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/spdx/spec-development" title="Current Priorities / Work in Progress / Archived Material">Team Work Area</a></li>
+<li class="leaf last"><a href="/content/participation-guidelines-sign-0" title="Participation Guidelines &amp; Sign Up">Participation Guidelines &amp; Sign Up</a></li>
+</ul></li>
+<li class="expanded"><a href="/content/legal-team" title="Legal">Legal</a><ul class="menu"><li class="leaf first"><a href="/content/meeting-calendar-conference-access-1" title="Meeting Calendar &amp; Conference Access">Meeting Calendar &amp; Conference Access</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/meeting-minutes-and-decisions-legal-team" title="Meeting Minutes &amp; Decisions">Meeting Minutes &amp; Decisions</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/spdx/legal" title="Current Priorities / Work in Progress / Archived Material">Team Work Area</a></li>
+<li class="leaf last"><a href="/content/participation-guidelines-sign-1" title="Participation Guidelines &amp; Sign Up">Participation Guidelines &amp; Sign Up</a></li>
+</ul></li>
+<li class="expanded last"><a href="/content/business-team" title="Business">Business</a><ul class="menu"><li class="leaf first"><a href="/content/meeting-calendar-conference-access-2" title="Meeting Calendar &amp; Conference Access">Meeting Calendar &amp; Conference Access</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/meeting-minutes-and-decisions-business-team" title="Meeting Minutes &amp; Decisions">Meeting Minutes &amp; Decisions</a></li>
+<li class="leaf"><a href="http://spdx.org/wiki/spdx/biz" title="Current Priorities / Work in Progress / Archived Material">Team Work Area</a></li>
+<li class="leaf last"><a href="/content/participation-guidelines-sign-2" title="Participation Guidelines &amp; Sign Up">Participation Guidelines &amp; Sign Up</a></li>
+</ul></li>
+</ul></li>
+<li class="leaf last"><a href="/content/tools" title="Tools to view, produce, and edit SPDX documents">Tools</a></li>
+</ul></div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -108,9 +144,9 @@ when generating an SPDX file can be found here:
 
   <div id="foot">
     <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
+      &#169; 2008-2012 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
       <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
+      Software Package Data Exchange and SPDX are registered trademarks of the Linux Foundation.
       <br />
       Please see our <a href = "/codeOfConduct">code of conduct</a> and
       <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
