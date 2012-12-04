@@ -16,6 +16,7 @@
  */
 package org.spdx.rdfparser;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -23,9 +24,11 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
@@ -56,7 +59,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.1.2";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.1.3";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -457,7 +460,56 @@ public class SPDXDocument implements SpdxRdfConstants {
 				docResource.addProperty(docP, file);
 			}
 		}
+		/**
+		 * Add a file to the package
+		 * @param file
+		 */
+		public void addFile(SPDXFile file) throws InvalidSPDXAnalysisException {
+			Resource s = getResource(this.node);
+			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
+			Resource docResource = getResource(getSpdxDocNode());
+			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);			
+			Resource fileResource = file.createResource(model);
+			s.addProperty(p, fileResource);
+			docResource.addProperty(docP, fileResource);
+		}
 		
+		/**
+		 * Removes all SPDX files by the given name
+		 * @param fileName Name of SPDX file to be removed
+		 * @throws InvalidSPDXAnalysisException 
+		 */
+		public void removeFile(String fileName) throws InvalidSPDXAnalysisException {
+			ArrayList<Node> filesToRemove = new ArrayList<Node>();
+			Node fileNameProperty = model.getProperty(SPDX_NAMESPACE, PROP_FILE_NAME).asNode();
+			Property docFileProperty = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
+			Property pkgFileProperty = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
+			Resource docResource = getResource(getSpdxDocNode());
+			Resource pkgResource = getResource(this.node);
+			Triple m = Triple.createMatch(getSpdxDocNode(), docFileProperty.asNode(), null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			//TODO: See if there is a more efficient search method for files
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				Node fileObject = t.getObject();
+				Triple fileNameMatch = Triple.createMatch(fileObject, fileNameProperty, null);
+				ExtendedIterator<Triple> fileNameIterator = model.getGraph().find(fileNameMatch);
+				while (fileNameIterator.hasNext()) {
+					Triple fileNameTriple = fileNameIterator.next();
+					String searchFileName = fileNameTriple.getObject().toString(false); 
+					if (searchFileName.equals(fileName)) {
+						filesToRemove.add(fileObject);
+					}
+				}
+			}
+			for (int i = 0; i < filesToRemove.size(); i++) {
+				// remove the references files
+				RDFNode o = model.getRDFNode(filesToRemove.get(i));
+				model.removeAll(docResource, docFileProperty, o);
+				// remove the package files
+				model.removeAll(pkgResource, pkgFileProperty, o);				
+			}
+		}
 		public String getDownloadUrl() throws InvalidSPDXAnalysisException {
 			String[] urls = findDocPropertieStringValues(this.node, PROP_PACKAGE_DOWNLOAD_URL);
 			if (urls == null || urls.length == 0) {
