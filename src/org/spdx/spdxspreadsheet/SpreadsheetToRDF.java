@@ -37,6 +37,7 @@ import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -144,7 +145,14 @@ public class SpreadsheetToRDF {
 	
 	public static void copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss,
 			SPDXDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
-		analysis.createSpdxAnalysis(ss.getPackageInfoSheet().getPackageInfo(1).getUrl()+"#SPDXANALYSIS");		
+		// need to create a unique URL
+		// Use the download URL + "#SPDXANALYSIS"
+		String pkgUrl = ss.getPackageInfoSheet().getPackageInfo(1).getUrl();
+		if (!SpdxVerificationHelper.isValidUri(pkgUrl)) {
+			// Since the download location is not valid, replace it with a spdx.org/tempspdxuri
+			pkgUrl = "http://spdx.org/tempspdxuri";
+		}
+		analysis.createSpdxAnalysis(pkgUrl+"#SPDXANALYSIS");		
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		analysis.createSpdxPackage();
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
@@ -170,11 +178,10 @@ public class SpreadsheetToRDF {
 	private static void copyPerFileInfo(PerFileSheet perFileSheet,
 			SPDXPackage spdxPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		int firstRow = perFileSheet.getFirstDataRow();
-		SPDXFile[] files = new SPDXFile[perFileSheet.getNumDataRows()];
-		for (int i = 0; i < files.length; i++) {
-			files[i] = perFileSheet.getFileInfo(firstRow+i);
+		int numFiles = perFileSheet.getNumDataRows();
+		for (int i = 0; i < numFiles; i++) {
+			spdxPackage.addFile(perFileSheet.getFileInfo(firstRow+i));
 		}
-		spdxPackage.setFiles(files);
 	}
 
 	private static void copyNonStdLicenses(

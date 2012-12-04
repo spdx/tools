@@ -230,9 +230,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
 			if (lastFile != null) {
-				List<SPDXFile> files = new ArrayList<SPDXFile>(Arrays.asList(pkg.getFiles()));
-				files.add(lastFile);
-				pkg.setFiles(files.toArray(new SPDXFile[0]));
+				pkg.addFile(lastFile);
 			}
 			lastFile = new SPDXFile(value, "", "", new SPDXNoneLicense(),
 					new SPDXLicenseInfo[0], "", "", new DOAPProject[0]);
@@ -303,9 +301,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			lastProject = null;
 		}
 		if (lastFile != null) {
-			List<SPDXFile> files = new ArrayList<SPDXFile>(Arrays.asList(analysis.getSpdxPackage().getFiles()));
-			files.add(lastFile);
-			analysis.getSpdxPackage().setFiles(files.toArray(new SPDXFile[0]));
+			analysis.getSpdxPackage().addFile(lastFile);
 		}
 		if (lastReviewer != null) {
 			List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));

@@ -782,6 +782,145 @@ public class TestSPDXDocument {
 	}
 	
 	@Test
+	public void testAddFile() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.addFile(testFiles[0]);
+		pkg.addFile(testFiles[1]);
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		
+		// OK - now we can test to see if the files are there
+		SPDXFile[] pkgFiles = pkg.getFiles();
+		
+		assertEquals(testFiles.length, pkgFiles.length);
+		for (int i = 0; i < testFiles.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < pkgFiles.length; j++) {
+				if (testFiles[i].getName().equals(pkgFiles[j].getName())) {
+					found = true;
+					break;
+				}
+			}
+			assertTrue(found);
+		}
+	}
+	
+	@Test
+	public void testRemoveFile() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+		// add the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setDeclaredCopyright("Copyright");
+		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
+		pkg.setDeclaredName("Name");
+		pkg.setDescription("Description");
+		pkg.setDownloadUrl("None");
+		pkg.setFileName("a/b/filename.tar.gz");
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(testFiles);
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		
+		// Remove one the first file
+		pkg.removeFile(testFiles[0].getName());
+		// OK - now we can test to see if the files are there
+		SPDXFile[] pkgFiles = pkg.getFiles();
+		SPDXFile[] refFiles = doc.getFileReferences();
+		assertEquals(testFiles.length-1, pkgFiles.length);
+		for (int i = 1; i < testFiles.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < pkgFiles.length; j++) {
+				if (testFiles[i].getName().equals(pkgFiles[j].getName())) {
+					found = true;
+					break;
+				}
+			}
+			assertTrue(found);
+		}
+		boolean found = false;
+		for (int i = 0; i < pkgFiles.length; i++) {
+			if (testFiles[0].getName().equals(pkgFiles[i].getName())) {
+				found = true;
+				break;
+			}
+		}
+		assertFalse(found);
+		
+		assertEquals(testFiles.length-1, refFiles.length);
+		for (int i = 1; i < testFiles.length; i++) {
+			found = false;
+			for (int j = 0; j < refFiles.length; j++) {
+				if (testFiles[i].getName().equals(refFiles[j].getName())) {
+					found = true;
+					break;
+				}
+			}
+			assertTrue(found);
+		}
+		found = false;
+		for (int i = 0; i < refFiles.length; i++) {
+			if (testFiles[0].getName().equals(refFiles[i].getName())) {
+				found = true;
+				break;
+			}
+		}
+		assertFalse(found);
+	}
+	
+	@Test
 	public void testSpdxDocVersions() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
