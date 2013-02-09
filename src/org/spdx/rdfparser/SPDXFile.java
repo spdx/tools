@@ -518,7 +518,7 @@ public class SPDXFile {
 				// we need to check on these if it already exists
 				Resource projectResource = null;
 				String uri = artifactOf[i].getProjectUri();
-				if (uri != null) {
+				if (uri != null && !uri.isEmpty() && !uri.equals(DOAPProject.UNKNOWN_URI)) {
 					projectResource = model.createResource(uri);
 				} else {
 					projectResource = artifactOf[i].createResource(model);

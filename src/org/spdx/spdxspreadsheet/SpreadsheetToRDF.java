@@ -30,7 +30,6 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
-import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;

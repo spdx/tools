@@ -33,7 +33,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public class DOAPProject {
 	
-	static final String UNKNOWN_URI = "UNKNOWN";
+	public static final String UNKNOWN_URI = "UNKNOWN";
 	private String name = null;
 	private String homePage = null;
 	private Node projectNode = null;
