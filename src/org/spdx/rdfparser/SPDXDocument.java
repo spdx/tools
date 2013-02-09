@@ -16,7 +16,6 @@
  */
 package org.spdx.rdfparser;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -28,7 +27,6 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
@@ -59,7 +57,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.1.3";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.1.5";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	

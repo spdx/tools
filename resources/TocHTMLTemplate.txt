@@ -114,7 +114,7 @@ a short identifier, users can efficiently refer to a license without
 having to redundantly reproduce the full license.</p>
 <p>Please see the <a href="http://spdx.org/content/license-list">License List overview</a> for more information about the SPDX License List and its various fields.  
 You may propose additional licenses be added to the SPDX License List by
-following the process at: <a href="http://spdx.org/wiki/spdx-license-list-process-requesting-new-licenses-be-added">SPDX License List: Process for requesting new licenses to be added</a>.
+following the process at: <a href="http://spdx.org/content/spdx-license-list-process-requesting-new-licenses-be-added">SPDX License List: Process for requesting new licenses to be added</a>.
 Guidelines for what constitutes a license match to the SPDX License List 
 when generating an SPDX file can be found here:
  <a href="http://spdx.org/wiki/spdx-license-list-match-guidelines">SPDX License List Match Guidelines</a>.</p>

@@ -69,7 +69,7 @@ The version used is 1.0. It is redistributed, in binary form, under the GNU Less
 This package includes software developed by the
 Apache Software Foundation (http://www.apache.org/).
 
-This package includes software from Java-RDF (https://github.com/shellac/java-rdfa/wiki) under the following license notice:
+This package includes software from Java-RDFa (https://github.com/shellac/java-rdfa/wiki) under the following license notice:
 This work was developed as part of the STARS project [1] at the ILRT.
 The project was funded by JISC.
 
