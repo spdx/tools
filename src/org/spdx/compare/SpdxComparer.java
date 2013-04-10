@@ -251,12 +251,29 @@ public class SpdxComparer {
 		
 	}
 	
+	/**
+	 * Compares 2 SPDX documents
+	 * @param doc1
+	 * @param doc2
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
+	 */
 	public synchronized void compare(SPDXDocument doc1, SPDXDocument doc2) throws InvalidSPDXAnalysisException, SpdxCompareException {
-		//TODO: Add a monitor function which alows for cancel
+		compare(new SPDXDocument[] {doc1, doc2});
+	}
+	
+	/**
+	 * Compares multiple SPDX documents
+	 * @param compareDocs
+	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void compare(SPDXDocument[] compareDocs) throws InvalidSPDXAnalysisException, SpdxCompareException {
+		//TODO: Add a monitor function which allows for cancel
 		clearCompareResults();
-		this.spdxDocs = new SPDXDocument[] {doc1, doc2};
+		this.spdxDocs = compareDocs;
 		differenceFound = false;
-		performCompare();		
+		performCompare();	
 	}
 
 	/**
@@ -426,11 +443,11 @@ public class SpdxComparer {
 					uniqueAMap.put(spdxDocs[j], uniqueA);					
 				}
 				// compare creator comments
-				if (!creatorInfoA.getComment().trim().equals(creatorInfoB.getComment().trim())) {
+				if (!stringsEqual(creatorInfoA.getComment(), creatorInfoB.getComment())) {
 					this.creatorInformationEquals = false;
 				}
 				// compare creation dates
-				if (!creatorInfoA.getCreated().equals(creatorInfoB.getCreated())) {
+				if (!stringsEqual(creatorInfoA.getCreated(), creatorInfoB.getCreated())) {
 					this.creatorInformationEquals = false;
 				}
 			}
@@ -821,21 +838,9 @@ public class SpdxComparer {
 			this.documentCommentsEqual = true;
 			for (int i = 1; i < spdxDocs.length; i++) {
 				String comment2 = this.spdxDocs[i].getDocumentComment();
-				if (comment2 == null) {
-					if (comment1 != null) {
-						this.documentCommentsEqual = false;
-						break;
-					}
-				} else {
-					if (comment1 == null) {
-						this.documentCommentsEqual = false;
-						break;
-					} else {
-						if (!comment1.equals(comment2)) {
-							this.documentCommentsEqual = false;
-							break;
-						}
-					}
+				if (!stringsEqual(comment1, comment2)) {
+					this.documentCommentsEqual = false;
+					break;
 				}
 			}
 		} catch (InvalidSPDXAnalysisException e) {
@@ -933,9 +938,11 @@ public class SpdxComparer {
 		uniqueLicenses.clear();
 		for (int k = 0; k < extractedLicensesA.length; k++) {
 			boolean foundMatch = false;
+			boolean foundTextMatch = false;
 			for (int q = 0; q < extractedLicensesB.length; q++) {
 				if (LicenseCompareHelper.licensesMatch(extractedLicensesA[k].getText(), 
 						extractedLicensesB[q].getText())) {
+					foundTextMatch = true;
 					if (!foundMatch) {
 						idMap.put(extractedLicensesA[k].getId(), extractedLicensesB[q].getId());
 						// always add to the map any matching licenses.  If more than one, add
@@ -949,7 +956,7 @@ public class SpdxComparer {
 					}
 				}
 			}
-			if (!foundMatch) {
+			if (!foundTextMatch) {	// we treat the licenses as equivalent if the text matches even if other fields do not match
 				uniqueLicenses.add(extractedLicensesA[k]);
 			}
 		}
@@ -1023,25 +1030,26 @@ public class SpdxComparer {
 
 	/**
 	 * Compares two strings returning true if they are equal
-	 * considering null values and trimming the strings
+	 * considering null values and trimming the strings.  Empty strings are
+	 * treated as the same as null values.
 	 * @param stringA
 	 * @param stringB
 	 * @return
 	 */
 	public static boolean stringsEqual(String stringA, String stringB) {
+		String compA;
+		String compB;
 		if (stringA == null) {
-			if (stringB != null) {
-				return false;
-			}
+			compA = "";
 		} else {
-			if (stringB == null) {
-				return false;
-			}
-			if (!stringA.trim().equals(stringB.trim())) {
-				return false;
-			}
+			compA = stringA.trim();
 		}
-		return true;
+		if (stringB == null) {
+			compB = "";
+		} else {
+			compB = stringB.trim();
+		}
+		return (compA.equals(compB));
 	}
 	
 	/**
@@ -1721,4 +1729,10 @@ public class SpdxComparer {
 		return retval;
 	}
 
+	/**
+	 * @return
+	 */
+	public int getNumSpdxDocs() {
+		return this.spdxDocs.length;
+	}
 }

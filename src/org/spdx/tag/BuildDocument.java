@@ -152,7 +152,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				values[i] = values[i].trim();
 			}
 			lastExtractedLicense.setSourceUrls(values);
-		} else if (tag.equals("PROP_LICENSE_COMMENT")) {
+		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
 			}
@@ -275,13 +275,18 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			lastProject = new DOAPProject(value, "");
 		} else {
-			if (lastProject == null) {
-				throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
-			}
 			if (tag.equals(constants.getProperty("PROP_PROJECT_HOMEPAGE"))) {
+				if (lastProject == null) {
+					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
+				}
 				lastProject.setHomePage(value);
 			} else if (tag.equals(constants.getProperty("PROP_PROJECT_URI"))) {
+				if (lastProject == null) {
+					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
+				}
 				lastProject.setUri(value);
+			} else {
+				throw(new InvalidSpdxTagFileException("Unrecognized tag: "+tag));
 			}
 		}
 	}

@@ -23,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.spdx.compare.SpdxFileDifference;
@@ -126,7 +128,14 @@ public class CompareSpdxDocs {
 			try {
 				SpdxComparer comparer = new SpdxComparer();
 				comparer.compare(spdxDoc1, spdxDoc2);
-				printCompareResults(comparer, args[0], args[1], output);
+				// create some more readable document names for the compare results
+				String docName1 = convertDocName(args[0]);
+				String docName2 = convertDocName(args[1]);
+				if (docName1.equals(docName2)) {
+					docName1 = args[0];
+					docName2 = args[1];
+				}
+				printCompareResults(comparer, docName1, docName2, output);
 			} catch (SpdxCompareException e) {
 				output.println("Error in comparing SPDX documents: "+e.getMessage());
 				System.exit(ERROR_STATUS);
@@ -142,6 +151,26 @@ public class CompareSpdxDocs {
 		System.exit(0);
 	}
 	
+	/**
+	 * Converts a file path or URL to a shorter document name
+	 * @param docPath
+	 * @return
+	 */
+	protected static String convertDocName(String docPath) {
+		if (docPath.contains(File.separator)) {
+			File docFile = new File(docPath);
+			return docFile.getName();
+		} else {
+			try {
+				URI uri = new URI(docPath);
+				String path = uri.getPath();
+				return path;
+			} catch (URISyntaxException e) {
+				return docPath;
+			}
+		}
+	}
+
 	/**
 	 * Prints an array list of strings
 	 * @param list
@@ -183,8 +212,16 @@ public class CompareSpdxDocs {
 		// document comment
 		if (!comparer.isDocumentCommentsEqual()) {
 			output.println("SPDX document comments differ.");
-			output.println("\t"+doc1Name+":"+comparer.getSpdxDoc(0).getDocumentComment());
-			output.println("\t"+doc2Name+":"+comparer.getSpdxDoc(1).getDocumentComment());
+			if (comparer.getSpdxDoc(0).getDocumentComment() == null) {
+				output.println("\t"+doc1Name+": [No comment]");
+			} else {
+				output.println("\t"+doc1Name+":"+comparer.getSpdxDoc(0).getDocumentComment());
+			}
+			if (comparer.getSpdxDoc(1).getDocumentComment() == null) {
+				output.println("\t"+doc2Name+": [No comment]");
+			} else {
+				output.println("\t"+doc2Name+":"+comparer.getSpdxDoc(1).getDocumentComment());
+			}
 		}
 		// creator information
 		printCreatorCompareResults(comparer, doc1Name, doc2Name, output);
@@ -244,7 +281,7 @@ public class CompareSpdxDocs {
 			SpdxFileDifference spdxFileDifference, PrintStream output,
 			String doc1Name, String doc2Name) {
 		if (!spdxFileDifference.isConcludedLicenseEquals()) {
-			output.println("File conlucded license differ for file "+spdxFileDifference.getFileName()+":");
+			output.println("File concluded license differ for file "+spdxFileDifference.getFileName()+":");
 			output.println("\t"+doc1Name+":"+spdxFileDifference.getConcludedLicenseA());
 			output.println("\t"+doc2Name+":"+spdxFileDifference.getConcludedLicenseB());
 		}
@@ -415,23 +452,41 @@ public class CompareSpdxDocs {
 			for (int i = 0; i < differentLicenses.length; i++) {
 				if (!differentLicenses[i].isCommentsEqual()) {
 					output.println("The comments differ for the extracted license:");
-					output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+" \""+
-							differentLicenses[i].getCommentA()+"\"");
-					output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+" \""+
-							differentLicenses[i].getCommentB()+"\"");
+					
+					if (differentLicenses[i].getCommentA() == null || differentLicenses[i].getCommentA().length() == 0) {
+						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+": [no comment]");
+					} else {
+						output.print("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+": ");
+						output.println("\""+differentLicenses[i].getCommentA()+"\"");
+					}
+					
+					if (differentLicenses[i].getCommentB() == null || differentLicenses[i].getCommentB().length() == 0) {
+						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+": [no comment]");
+					} else {
+						output.print("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+": ");
+						output.println("\""+differentLicenses[i].getCommentB()+"\"");
+					}
 				}
 				if (!differentLicenses[i].isLicenseNamesEqual()) {
 					output.println("The license names differ for the extracted license:");
-					output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+" \""+
-							differentLicenses[i].getLicenseNameA()+"\"");
-					output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+" \""+
-							differentLicenses[i].getLicenseNameB()+"\"");
+					if (differentLicenses[i].getLicenseNameA() == null || differentLicenses[i].getLicenseNameA().length() == 0) {
+						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+": [no license name]");
+					} else {
+						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+" \""+
+								differentLicenses[i].getLicenseNameA()+"\"");
+					}
+					if (differentLicenses[i].getLicenseNameB() == null || differentLicenses[i].getLicenseNameB().length() == 0) {
+						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+": [no license name]");
+					} else {
+						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+" \""+
+								differentLicenses[i].getLicenseNameB()+"\"");
+					}
 				}
 				if (!differentLicenses[i].isSourceUrlsEqual()) {
 					output.println("The source URL's differ for the extracted license:");
 					String[] sourceUrlsA = differentLicenses[i].getSourceUrlsA();
 					if (sourceUrlsA == null || sourceUrlsA.length == 0) {
-						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+" contains no source URL's");
+						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+": [no source URL]");
 					} else {
 						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+" source URLs:");
 						for(int j = 0; j < sourceUrlsA.length; j++) {
@@ -440,7 +495,7 @@ public class CompareSpdxDocs {
 					}
 					String[] sourceUrlsB = differentLicenses[i].getSourceUrlsB();
 					if (sourceUrlsB == null || sourceUrlsB.length == 0) {
-						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+" contains no source URL's");
+						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+": [no source URL]");
 					} else {
 						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+" source URLs:");
 						for(int j = 0; j < sourceUrlsB.length; j++) {
@@ -487,14 +542,34 @@ public class CompareSpdxDocs {
 			// package name
 			if (!comparer.isPackageNamesEqual()) {
 				output.println("Package names differ.");
-				output.println("\t"+doc1Name+": "+comparer.getSpdxDoc(0).getSpdxPackage().getDeclaredName());
-				output.println("\t"+doc2Name+": "+comparer.getSpdxDoc(1).getSpdxPackage().getDeclaredName());
+				output.print("\t"+doc1Name+": ");
+				if (comparer.getSpdxDoc(0).getSpdxPackage().getDeclaredName() != null) {
+					output.println(comparer.getSpdxDoc(0).getSpdxPackage().getDeclaredName());
+				} else {
+					output.println("[none]");
+				}
+				output.print("\t"+doc2Name+": ");
+				if (comparer.getSpdxDoc(1).getSpdxPackage().getDeclaredName() != null) {
+					output.println(comparer.getSpdxDoc(1).getSpdxPackage().getDeclaredName());
+				} else {
+					output.println("[none]");
+				}
 			}
 			// package version
 			if (!comparer.isPackageVersionsEqual()) {
 				output.println("Package versions differ.");
-				output.println("\t"+doc1Name+": "+comparer.getSpdxDoc(0).getSpdxPackage().getVersionInfo());
-				output.println("\t"+doc2Name+": "+comparer.getSpdxDoc(1).getSpdxPackage().getVersionInfo());
+				output.print("\t"+doc1Name+": ");
+				if (comparer.getSpdxDoc(0).getSpdxPackage().getVersionInfo() != null) {
+					output.println(comparer.getSpdxDoc(0).getSpdxPackage().getVersionInfo());
+				} else {
+					output.println("[none]");
+				}
+				output.print("\t"+doc2Name+": ");
+				if (comparer.getSpdxDoc(1).getSpdxPackage().getVersionInfo() != null) {
+					output.println(comparer.getSpdxDoc(1).getSpdxPackage().getVersionInfo());
+				} else {
+					output.println("[none]");
+				}
 			}
 			// package file name
 			if (!comparer.isPackageFileNamesEqual()) {
@@ -507,13 +582,13 @@ public class CompareSpdxDocs {
 				output.println("Package supplier information differ.");
 				String s1 = comparer.getSpdxDoc(0).getSpdxPackage().getSupplier();
 				if (s1 == null || s1.trim().isEmpty()) {
-					output.println("\t"+doc1Name+": (no supplier information)");
+					output.println("\t"+doc1Name+": [no supplier information]");
 				} else {
 					output.println("\t"+doc1Name+": "+s1);
 				}
 				String s2 = comparer.getSpdxDoc(1).getSpdxPackage().getSupplier();
 				if (s2 == null || s2.trim().isEmpty()) {
-					output.println("\t"+doc2Name+": (no supplier information)");
+					output.println("\t"+doc2Name+": [no supplier information]");
 				} else {
 					output.println("\t"+doc2Name+": "+s2);
 				}
@@ -523,13 +598,13 @@ public class CompareSpdxDocs {
 				output.println("Package originator information differ.");
 				String s1 = comparer.getSpdxDoc(0).getSpdxPackage().getOriginator();
 				if (s1 == null || s1.trim().isEmpty()) {
-					output.println("\t"+doc1Name+": (no originator information)");
+					output.println("\t"+doc1Name+": [no originator information]");
 				} else {
 					output.println("\t"+doc1Name+": "+s1);
 				}
 				String s2 = comparer.getSpdxDoc(1).getSpdxPackage().getOriginator();
 				if (s2 == null || s2.trim().isEmpty()) {
-					output.println("\t"+doc2Name+": (no originator information)");
+					output.println("\t"+doc2Name+": [no originator information]");
 				} else {
 					output.println("\t"+doc2Name+": "+s2);
 				}
@@ -557,13 +632,13 @@ public class CompareSpdxDocs {
 				output.println("Package source information differ.");
 				String s1 = comparer.getSpdxDoc(0).getSpdxPackage().getSourceInfo();
 				if (s1 == null || s1.trim().isEmpty()) {
-					output.println("\t"+doc1Name+": (no source information)");
+					output.println("\t"+doc1Name+": [no source information]");
 				} else {
 					output.println("\t"+doc1Name+": "+s1);
 				}
 				String s2 = comparer.getSpdxDoc(1).getSpdxPackage().getSourceInfo();
 				if (s2 == null || s2.trim().isEmpty()) {
-					output.println("\t"+doc2Name+": (no source information)");
+					output.println("\t"+doc2Name+": [no source information]");
 				} else {
 					output.println("\t"+doc2Name+": "+s2);
 				}
@@ -606,16 +681,16 @@ public class CompareSpdxDocs {
 			}
 			// comments on license
 			if (!comparer.isLicenseCommentsEqual()) {
-				output.println("License comments differ.");
+				output.println("Package license comments differ.");
 				String s1 = comparer.getSpdxDoc(0).getSpdxPackage().getLicenseComment();
 				if (s1 == null || s1.trim().isEmpty()) {
-					output.println("\t"+doc1Name+": (no license comments)");
+					output.println("\t"+doc1Name+": [no license comments]");
 				} else {
 					output.println("\t"+doc1Name+": "+s1);
 				}
 				String s2 = comparer.getSpdxDoc(1).getSpdxPackage().getLicenseComment();
 				if (s2 == null || s2.trim().isEmpty()) {
-					output.println("\t"+doc2Name+": (no license comments)");
+					output.println("\t"+doc2Name+": [no license comments]");
 				} else {
 					output.println("\t"+doc2Name+": "+s2);
 				}
@@ -631,13 +706,13 @@ public class CompareSpdxDocs {
 				output.println("Package summaries differ.");
 				String s1 = comparer.getSpdxDoc(0).getSpdxPackage().getShortDescription();
 				if (s1 == null || s1.trim().isEmpty()) {
-					output.println("\t"+doc1Name+": (no package summary)");
+					output.println("\t"+doc1Name+": [no package summary]");
 				} else {
 					output.println("\t"+doc1Name+": "+s1);
 				}
 				String s2 = comparer.getSpdxDoc(1).getSpdxPackage().getShortDescription();
 				if (s2 == null || s2.trim().isEmpty()) {
-					output.println("\t"+doc2Name+": (no package summary)");
+					output.println("\t"+doc2Name+": [no package summary]");
 				} else {
 					output.println("\t"+doc2Name+": "+s2);
 				}
@@ -647,13 +722,13 @@ public class CompareSpdxDocs {
 				output.println("Package detailed descriptions differ.");
 				String s1 = comparer.getSpdxDoc(0).getSpdxPackage().getDescription();
 				if (s1 == null || s1.trim().isEmpty()) {
-					output.println("\t"+doc1Name+": (no package detailed description)");
+					output.println("\t"+doc1Name+": [no package detailed description]");
 				} else {
 					output.println("\t"+doc1Name+": "+s1);
 				}
 				String s2 = comparer.getSpdxDoc(1).getSpdxPackage().getDescription();
 				if (s2 == null || s2.trim().isEmpty()) {
-					output.println("\t"+doc2Name+": (no package detailed description)");
+					output.println("\t"+doc2Name+": [no package detailed description]");
 				} else {
 					output.println("\t"+doc2Name+": "+s2);
 				}
@@ -708,16 +783,32 @@ public class CompareSpdxDocs {
 			SPDXCreatorInformation doc1CreatorInfo = comparer.getSpdxDoc(0).getCreatorInfo();
 			SPDXCreatorInformation doc2CreatorInfo = comparer.getSpdxDoc(1).getCreatorInfo();
 			// created
-			if (!doc1CreatorInfo.getCreated().equals(doc2CreatorInfo.getCreated())) {
+			if (!SpdxComparer.stringsEqual(doc1CreatorInfo.getCreated(), doc2CreatorInfo.getCreated())) {
 				output.println("Creator creation dates differ.");
-				output.println("\t"+doc1Name+": "+doc1CreatorInfo.getCreated());
-				output.println("\t"+doc2Name+": "+doc2CreatorInfo.getCreated());
+				if (doc1CreatorInfo.getCreated() == null) {
+					output.println("\t"+doc1Name+": No creation date");
+				} else {
+					output.println("\t"+doc1Name+": "+doc1CreatorInfo.getCreated());
+				}
+				if (doc2CreatorInfo.getCreated() == null) {
+					output.println("\t"+doc2Name+": No creation date");
+				} else {
+					output.println("\t"+doc2Name+": "+doc2CreatorInfo.getCreated());
+				}
 			}
 			// creator comments
-			if (!doc1CreatorInfo.getComment().trim().equals(doc2CreatorInfo.getComment().trim())) {
+			if (!SpdxComparer.stringsEqual(doc1CreatorInfo.getComment(),doc2CreatorInfo.getComment())) {
 				output.println("Creator comments differ.");
-				output.println("\t"+doc1Name+": "+doc1CreatorInfo.getComment());
-				output.println("\t"+doc2Name+": "+doc2CreatorInfo.getComment());
+				if (doc1CreatorInfo.getComment() == null) {
+					output.println("\t"+doc1Name+": [No comment]");
+				} else {
+					output.println("\t"+doc1Name+": "+doc1CreatorInfo.getComment());
+				}
+				if (doc2CreatorInfo.getComment() == null) {
+					output.println("\t"+doc2Name+": [No comment]");
+				} else {
+					output.println("\t"+doc2Name+": "+doc2CreatorInfo.getComment());
+				}
 			}
 		}
 	}
@@ -726,7 +817,7 @@ public class CompareSpdxDocs {
 	 * @param spdxDocFileName File name of either an RDF or Tag formated SPDX file
 	 * @return
 	 */
-	private static SPDXDocument openRdfOrTagDoc(String spdxDocFileName) throws SpdxCompareException {
+	protected static SPDXDocument openRdfOrTagDoc(String spdxDocFileName) throws SpdxCompareException {
 		File spdxDocFile = new File(spdxDocFileName);
 		if (!spdxDocFile.exists()) {
 			throw(new SpdxCompareException("SPDX File "+spdxDocFileName+" does not exist."));
@@ -742,6 +833,8 @@ public class CompareSpdxDocs {
 			// ignore - assume this is a tag value file
 		} catch (InvalidSPDXAnalysisException e) {
 			// ignore - assume this is a tag value file
+		} catch (Exception e) {
+			// ignore this as well
 		}
 		if (retval == null) {
 			File tempRdfFile = null;

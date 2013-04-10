@@ -12,11 +12,11 @@ CreatorComment: <text>This is an example of an SPDX spreadsheet format</text>
 ## Review Information
 Reviewer: Person: Joe Reviewer
 ReviewDate: 2010-02-10T00:00:00Z
-ReviewComments: <text>This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses</text>
+ReviewComment: <text>This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses</text>
 
 Reviewer: Person: Suzanne Reviewer
 ReviewDate: 2011-03-13T00:00:00Z
-ReviewComments: <text>Another example reviewer.</text>
+ReviewComment: <text>Another example reviewer.</text>
 
 ## Package Information
 PackageName: SPDX Translator
@@ -28,7 +28,7 @@ PackageFileName: spdxtranslator-1.0.zip
 PackageSupplier: Organization:Linux Foundation
 PackageOriginator: Organization:SPDX
 PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
-PackageVerifcationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
+PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
 PackageDescription: <text>This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.</text>
 
 PackageCopyrightText: <text> Copyright 2010, 2011 Source Auditor Inc.</text>
@@ -63,7 +63,7 @@ FileCopyrightText: <text>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006,
 ArtifactOfProjectName: Jena
 ArtifactOfProjectHomePage: http://www.openjena.org/
 ArtifactOfProjectURI: UNKNOWN
-FileComments: <text>This file belongs to Jena</text>
+FileComment: <text>This file belongs to Jena</text>
 
 
 ## License Information
