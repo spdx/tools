@@ -1,3 +1,6 @@
+Implementation version 1.1.6
+- Fix Bug 1098 - SPDX tools do not recognize License comments for extracted license infos
+- Fix incorrect tag for FileComment(s)
 Implementation version 1.1.5
 - Fix bug 1094 translator tools accept "PackageVerifcationCode" instead of "PackageVerificationCode"
 Implementation version 1.1.4

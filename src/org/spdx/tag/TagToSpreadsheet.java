@@ -74,7 +74,7 @@ public class TagToSpreadsheet {
 		try {
 			// read the tag-value constants from a file
 			Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
-			TagValueLexer lexer = new TagValueLexer(new DataInputStream(spdxTagFile));
+			TagValueLexer lexer = new TagValueLexer(new NoCommentInputStream(spdxTagFile));
 			TagValueParser parser = new TagValueParser(lexer);
 			Model model = ModelFactory.createDefaultModel();
 			doc = new SPDXDocument(model);
