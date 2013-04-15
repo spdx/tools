@@ -16,7 +16,12 @@
  */
 package org.spdx.spdxspreadsheet;
 
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextAttribute;
+import java.text.AttributedString;
+
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
@@ -34,8 +39,12 @@ public abstract class AbstractSheet {
 	protected static final short FONT_SIZE = (short)10*20;
 	static final String CHECKBOX_FONT_NAME = "Wingdings 2";
 	static final String CHECKBOX = "P";
+	private static final short MAX_ROW_LINES = 10;
 	protected CellStyle checkboxStyle;
 	protected CellStyle dateStyle;
+	protected CellStyle greenWrapped;
+	protected CellStyle redWrapped;
+	protected CellStyle yellowWrapped;
 	
 	protected Sheet sheet;
 	protected int lastRowNum;
@@ -84,6 +93,19 @@ public abstract class AbstractSheet {
 		this.dateStyle = wb.createCellStyle();
 		DataFormat df = wb.createDataFormat();
 		this.dateStyle.setDataFormat(df.getFormat("m/d/yy h:mm"));
+		
+		this.greenWrapped = createLeftWrapStyle(wb);
+		this.greenWrapped.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+		this.greenWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		this.greenWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		this.yellowWrapped = createLeftWrapStyle(wb);
+		this.yellowWrapped.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+		this.yellowWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		this.redWrapped = createLeftWrapStyle(wb);
+		this.redWrapped.setFillForegroundColor(HSSFColor.RED.index);
+		this.redWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
 	}
 	
 	/**
@@ -155,6 +177,8 @@ public abstract class AbstractSheet {
 		headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		headerStyle.setFont(headerFont);
 		headerStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerStyle.setWrapText(true);
 		return headerStyle;
 	}
 	
@@ -162,6 +186,7 @@ public abstract class AbstractSheet {
 		CellStyle wrapStyle = wb.createCellStyle();
 		wrapStyle.setWrapText(true);
 		wrapStyle.setAlignment(CellStyle.ALIGN_LEFT);
+		wrapStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		return wrapStyle;
 	}
 	
@@ -170,5 +195,64 @@ public abstract class AbstractSheet {
 		centerStyle.setWrapText(false);
 		centerStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		return centerStyle;
+	}
+	
+	/**
+	 * resize the rows for a best fit.  Will not exceed maximum row height.
+	 */
+	public void resizeRows() {
+		// header row
+		// data rows
+		int lastRow = this.getNumDataRows()+this.getFirstDataRow()-1;
+		for (int i = 0; i <= lastRow; i++) {
+			Row row = sheet.getRow(i);
+			int lastCell = row.getLastCellNum();	// last cell + 1
+			int maxNumLines = 1;
+			for (int j = 0; j < lastCell; j++) {
+				Cell cell = row.getCell(j);
+				if (cell != null) {
+					int cellLines = getNumWrappedLines(cell);
+					if (cellLines > maxNumLines) {
+						maxNumLines = cellLines;
+					}
+				}
+			}
+			if (maxNumLines > MAX_ROW_LINES) {
+				maxNumLines = MAX_ROW_LINES;
+			}
+			if (maxNumLines > 1) {
+				row.setHeight((short) (row.getHeight()*maxNumLines));
+			}		
+		}
+	}
+
+	/**
+	 * @param cell
+	 * @return
+	 */
+	private int getNumWrappedLines(Cell cell) {
+		String val = cell.getStringCellValue();
+		if (val == null || val.isEmpty()) {
+			return 1;
+		}
+		CellStyle style = cell.getCellStyle();
+		if (style == null || !style.getWrapText()) {
+			return 1;
+		}
+		Font font = sheet.getWorkbook().getFontAt(style.getFontIndex());
+		AttributedString astr = new AttributedString(val);
+		java.awt.Font awtFont = new java.awt.Font(font.getFontName(), 0, font.getFontHeightInPoints());
+		float cellWidth = sheet.getColumnWidth(cell.getColumnIndex())/256 * 5.5F;
+		astr.addAttribute(TextAttribute.FONT, awtFont);
+		FontRenderContext context = new FontRenderContext(null, true, true);
+		java.awt.font.LineBreakMeasurer measurer = new java.awt.font.LineBreakMeasurer(astr.getIterator(), context);
+		int pos = 0;
+		int numLines = 0;
+		while (measurer.getPosition() < val.length()) {
+			pos = measurer.nextOffset(cellWidth);
+			numLines++;
+			measurer.setPosition(pos);
+		}
+		return numLines;
 	}
 }

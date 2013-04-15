@@ -85,7 +85,6 @@ public class CreatorSheet extends AbstractSheet {
 		}
 		this.clear();
 		Row header = sheet.getRow(0);
-		int lastRowCreated = 0;
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			Cell headerCell = header.getCell(i);
 			headerCell.setCellValue(docNames[i]);
@@ -93,12 +92,10 @@ public class CreatorSheet extends AbstractSheet {
 			Arrays.sort(creators);
 			for (int j = 0; j < creators.length; j++) {
 				Cell creatorCell = null;
-				if (j+1 > lastRowCreated) {
-					creatorCell = sheet.createRow(j+1).createCell(i);
-					lastRowCreated = j+1;
-				} else {
-					creatorCell = sheet.getRow(j+1).createCell(i);
+				while (j+1 > this.getNumDataRows()) {
+					this.addRow();
 				}
+				creatorCell = sheet.getRow(j+1).createCell(i);
 				creatorCell.setCellValue(creators[j]);
 			}
 		}

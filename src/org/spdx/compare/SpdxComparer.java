@@ -722,6 +722,9 @@ public class SpdxComparer {
 		//Note that the license order need not be the same
 		this.checkDocsIndex(doc1);
 		this.checkDocsIndex(doc2);
+		if (licenseInfoFromFiles.length != licenseInfoFromFiles2.length) {
+			return false;
+		}
 		HashMap<SPDXDocument, HashMap<String, String>> hm = this.extractedLicenseIdMap.get(this.spdxDocs[doc1]);
 		if (hm == null) {
 			throw(new SpdxCompareException("Compare License Error - Extracted license id map has not been initialized."));

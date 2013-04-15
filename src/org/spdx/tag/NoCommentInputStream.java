@@ -109,7 +109,7 @@ public class NoCommentInputStream extends InputStream {
 	 */
 	@Override
 	public int read() throws IOException {
-		while (this.lineIndex >= this.currentLine.length() && !eof) {
+		while (!eof && this.lineIndex >= this.currentLine.length()) {
 			readNextLine();
 			if (eof) {
 				return -1;

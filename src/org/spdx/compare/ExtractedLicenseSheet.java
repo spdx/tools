@@ -132,9 +132,8 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 			extractedLicenses[i] = docExtractedLicenses;
 			licenseIndexes[i] = 0;
 		}
-		int currentRowNum = this.getFirstDataRow();
 		while (!allLicensesExhausted(extractedLicenses, licenseIndexes)) {
-			Row currentRow = sheet.createRow(currentRowNum++);
+			Row currentRow = this.addRow();
 			String extractedLicenseText = getNextExtractedLicenseText(extractedLicenses, licenseIndexes);
 			Cell licenseTextCell = currentRow.createCell(EXTRACTED_TEXT_COL);
 			licenseTextCell.setCellValue(extractedLicenseText);

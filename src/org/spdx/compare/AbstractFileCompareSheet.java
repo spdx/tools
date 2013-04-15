@@ -115,9 +115,8 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 		for (int i = 0; i < fileIndexes.length; i++) {
 			fileIndexes[i] = 0;
 		}
-		int currentRowNum = this.getFirstDataRow();
 		while (!allFilesExhausted(files, fileIndexes)) {
-			Row currentRow = sheet.createRow(currentRowNum++);
+			Row currentRow = this.addRow();
 			String fileName = getNextFileName(files, fileIndexes);
 			Cell fileNameCell = currentRow.createCell(FILENAME_COL);
 			fileNameCell.setCellValue(fileName);
@@ -168,6 +167,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 */
 	private void setCellDifference(Cell cell) {
 		cell.setCellValue(DIFFERENT_VALUE);
+		cell.setCellStyle(yellowWrapped);
 	}
 
 	/**
@@ -175,6 +175,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 */
 	private void setCellAllEqual(Cell cell) {
 		cell.setCellValue(EQUAL_VALUE);
+		cell.setCellStyle(greenWrapped);
 	}
 
 	/**

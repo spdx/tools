@@ -847,7 +847,7 @@ public class CompareSpdxDocs {
 				convertTagValueToRdf(spdxDocFile, tempRdfFile);
 				retval = SPDXDocumentFactory.creatSpdxDocument(tempRdfFile.getPath());
 			} catch (SpdxCompareException e) {
-				throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format"));
+				throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: "+e.getMessage()));
 			} catch (IOException e) {
 				throw(new SpdxCompareException("IO Error reading the converted tag/value file "+spdxDocFileName,e));
 			} catch (InvalidSPDXAnalysisException e) {
@@ -880,7 +880,7 @@ public class CompareSpdxDocs {
 			in = new FileInputStream(tagValueFile);
 			TagToRDF.convertTagFileToRdf(in, out);
 		} catch (Exception e) {
-			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format",e));
+			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
 		} finally {
 			if (out != null) {
 				try {

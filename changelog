@@ -1,3 +1,8 @@
+Implementation version 1.1.7
+- Significant change to Tag/Value code - somewhat of a redesign of the parser
+- Fix bug where tag/value parser interprets anything with a ":" as a tag (even in a <text></text> block
+- Fix bug where the last license is not included in the tag to RDF converter
+- Fix bug where the last file is not included in the tag to RDF converter
 Implementation version 1.1.6
 - Fix Bug 1098 - SPDX tools do not recognize License comments for extracted license infos
 - Fix incorrect tag for FileComment(s)
