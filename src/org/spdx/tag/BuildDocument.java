@@ -50,6 +50,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class BuildDocument implements TagValueBehavior, Serializable {
 	private static final long serialVersionUID = -5490491489627686708L;
 
+	private static final String DEFAULT_SHA1 = "0000000000000000000000000000000000000000";
+	
 	private Properties constants;
 	private SPDXDocument analysis;
 	private DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
@@ -79,6 +81,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	}
 
 	public void buildDocument(String tag, String value) throws Exception {
+		tag = tag.trim()+" ";
 		value = trim(value.trim());
 		// document
 		if (tag.equals(constants.getProperty("PROP_SPDX_VERSION"))) {
@@ -109,12 +112,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		} else if (tag.equals(constants.getProperty("PROP_SPDX_COMMENT"))) {
 			analysis.setDocumentComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_REVIEWER"))) {
-			if (lastReviewer != null) {
-				List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));
-				reviewers.add(lastReviewer);
-				analysis.setReviewers(reviewers.toArray(new SPDXReview[0]));
-			}
 			lastReviewer = new SPDXReview(value, format.format(new Date()), ""); // update date later
+			List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));
+			reviewers.add(lastReviewer);
+			analysis.setReviewers(reviewers.toArray(new SPDXReview[0]));
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_DATE"))) {
 			if (lastReviewer == null) {
 				throw(new InvalidSpdxTagFileException("Missing Reviewer - A reviewer must be provided before a review date"));
@@ -126,13 +127,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			lastReviewer.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_ID"))) {
-			if (lastExtractedLicense != null) {
-				SPDXNonStandardLicense[] currentNonStdLicenses = analysis.getExtractedLicenseInfos();
-				List<SPDXNonStandardLicense> licenses = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(currentNonStdLicenses));
-				licenses.add(lastExtractedLicense);
-				analysis.setExtractedLicenseInfos(licenses.toArray(new SPDXNonStandardLicense[0]));
-			}
 			lastExtractedLicense = new SPDXNonStandardLicense(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
+			SPDXNonStandardLicense[] currentNonStdLicenses = analysis.getExtractedLicenseInfos();
+			List<SPDXNonStandardLicense> licenses = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(currentNonStdLicenses));
+			licenses.add(lastExtractedLicense);
+			analysis.setExtractedLicenseInfos(licenses.toArray(new SPDXNonStandardLicense[0]));
 		} else if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text"));
@@ -229,14 +228,18 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private void buildFile(SPDXPackage pkg, String tag, String value)
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
-			if (lastFile != null) {
-				pkg.addFile(lastFile);
-			}
-			lastFile = new SPDXFile(value, "", "", new SPDXNoneLicense(),
+			lastFile = new SPDXFile(value, SpdxRdfConstants.FILE_TYPE_OTHER, DEFAULT_SHA1, new SPDXNoneLicense(),
 					new SPDXLicenseInfo[0], "", "", new DOAPProject[0]);
+			pkg.addFile(lastFile);
 		} else {
 			if (lastFile == null) {
-				throw(new InvalidSpdxTagFileException("Missing File Name - A file name must be specified before the file properties"));
+				if (tag.equals(constants.getProperty("PROP_FILE_TYPE")) || constants.getProperty("PROP_FILE_CHECKSUM").startsWith(tag) ||
+						tag.equals(constants.getProperty("PROP_FILE_LICENSE")) || tag.equals(constants.getProperty("PROP_FILE_LIC_COMMENTS")) ||
+						tag.equals(constants.getProperty("PROP_FILE_COPYRIGHT")) || tag.equals(constants.getProperty("PROP_FILE_COMMENT"))) {
+					throw(new InvalidSpdxTagFileException("Missing File Name - A file name must be specified before the file properties"));
+				} else {
+					throw(new InvalidSpdxTagFileException("Unrecognized SPDX Tag: "+tag));
+				}
 			}
 			if (tag.equals(constants.getProperty("PROP_FILE_TYPE"))) {
 				lastFile.setType(value);
@@ -268,12 +271,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private void buildProject(SPDXFile file, String tag, String value)
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_PROJECT_NAME"))) {
-			if (lastProject != null) {
-				List<DOAPProject> projects = new ArrayList<DOAPProject>(Arrays.asList(file.getArtifactOf()));
-				projects.add(lastProject);
-				file.setArtifactOf(projects.toArray(new DOAPProject[0]));
-			}
-			lastProject = new DOAPProject(value, "");
+			lastProject = new DOAPProject(value, null);
+			List<DOAPProject> projects = new ArrayList<DOAPProject>(Arrays.asList(file.getArtifactOf()));
+			projects.add(lastProject);
+			file.setArtifactOf(projects.toArray(new DOAPProject[0]));			
 		} else {
 			if (tag.equals(constants.getProperty("PROP_PROJECT_HOMEPAGE"))) {
 				if (lastProject == null) {
@@ -284,7 +285,19 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				if (lastProject == null) {
 					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
 				}
-				lastProject.setUri(value);
+				// can not set the URI since it is already created, we need to replace DOAP project
+				DOAPProject[] existingProjects = file.getArtifactOf();
+				int i = 0;
+				while (i < existingProjects.length && existingProjects[i] != lastProject) {
+					i++;
+				}
+				if (i >= existingProjects.length) {
+					existingProjects = Arrays.copyOf(existingProjects, existingProjects.length+1);
+				}
+				existingProjects[i] = new DOAPProject(lastProject.getName(), lastProject.getHomePage());
+				existingProjects[i].setUri(value);
+				file.setArtifactOf(existingProjects);
+				lastProject = existingProjects[i];
 			} else {
 				throw(new InvalidSpdxTagFileException("Unrecognized tag: "+tag));
 			}
@@ -299,27 +312,6 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	}
 
 	public void exit() throws Exception {
-		if (lastProject != null) {
-			List<DOAPProject> projects = new ArrayList<DOAPProject>(Arrays.asList(lastFile.getArtifactOf()));
-			projects.add(lastProject);
-			lastFile.setArtifactOf(projects.toArray(new DOAPProject[0]));
-			lastProject = null;
-		}
-		if (lastFile != null) {
-			analysis.getSpdxPackage().addFile(lastFile);
-		}
-		if (lastReviewer != null) {
-			List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));
-			reviewers.add(lastReviewer);
-			analysis.setReviewers(reviewers.toArray(new SPDXReview[0]));
-		}
-		if (lastExtractedLicense != null) {
-			List<SPDXNonStandardLicense> licenses = new ArrayList<SPDXNonStandardLicense>(
-						Arrays.asList(analysis.getExtractedLicenseInfos()));
-			licenses.add(lastExtractedLicense);
-			analysis.setExtractedLicenseInfos(licenses.toArray(new SPDXNonStandardLicense[0]));
-		}
-
 		ArrayList<String> warningMessages = analysis.verify();
 		assertEquals("SPDXDocument", 0, warningMessages);
 	}

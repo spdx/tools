@@ -172,17 +172,27 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			files[i] = docFiles;
 		}
 		documentSheet.importCompareResults(comparer, docNames);
+		documentSheet.resizeRows();
 		creatorSheet.importCompareResults(comparer, docNames);
-		packageSheet.importCompareResults(comparer, docNames);
+		creatorSheet.resizeRows();
+		packageSheet.importCompareResults(comparer, docNames);	
+		packageSheet.resizeRows();
 		extractedLicenseSheet.importCompareResults(comparer, docNames);
+		extractedLicenseSheet.resizeRows();
 		fileChecksumSheet.importCompareResults(comparer, files, docNames);
+		fileChecksumSheet.resizeRows();
 		fileConcludedSheet.importCompareResults(comparer, files, docNames);
+		fileConcludedSheet.resizeRows();
 		fileLicenseInfoSheet.importCompareResults(comparer, files, docNames);
+		fileLicenseInfoSheet.resizeRows();
 		fileCommentSheet.importCompareResults(comparer, files, docNames);
+		fileCommentSheet.resizeRows();
 		fileLicenseCommentsSheet.importCompareResults(comparer, files, docNames);
+		fileLicenseCommentsSheet.resizeRows();
 		fileArtifactOfSheet.importCompareResults(comparer, files, docNames);
+		fileArtifactOfSheet.resizeRows();
 		reviewerSheet.importCompareResults(comparer, docNames);
-
+		reviewerSheet.resizeRows();
 	}
 
 	/* (non-Javadoc)
@@ -284,6 +294,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	public void importVerificationErrors(
 			ArrayList<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {
 		this.verificationSheet.importVerificationErrors(verificationErrors, docNames);
+		this.verificationSheet.resizeRows();
 	}
 
 }
