@@ -44,6 +44,8 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	static final String DIFFERENT_VALUE = "Different";
 	static final String EQUAL_VALUE = "Equal";
 	static final String NO_FILE_VALUE = "[No File]";
+	
+	private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 
 	/**
 	 * @param workbook
@@ -127,7 +129,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 			for (int i = 0; i < files.length; i++) {
 				Cell cell = currentRow.createCell(i + FIRST_DOCUMENT_COL);
 				if (fileIndexes[i] < files[i].length && 
-						files[i][fileIndexes[i]].getName().equals(fileName)) {
+						normalizedFileNameComparator.compare(files[i][fileIndexes[i]].getName(), fileName) == 0) {
 					String val = getFileValue(files[i][fileIndexes[i]]);
 					if (allValuesMatch && lastFile != null && 
 							!valuesMatch(comparer, lastFile, lastDocIndex, files[i][fileIndexes[i]], i)) {
@@ -196,12 +198,12 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].length > fileIndexes[i]) {
 				String fileName = files[i][fileIndexes[i]].getName();
-				if (retval == null || retval.compareTo(fileName) > 0) {
+				if (retval == null || normalizedFileNameComparator.compare(retval, fileName) > 0) {
 					retval = fileName;
 				}
 			}
 		}
-		return retval;
+		return NormalizedFileNameComparator.normalizeFileName(retval);
 	}
 
 	/**
