@@ -42,7 +42,7 @@ public class LicenseRDFAGenerator {
 
 		INVALID_FILE_CHARS.add('\\'); INVALID_FILE_CHARS.add('/'); INVALID_FILE_CHARS.add('*');
 		INVALID_FILE_CHARS.add('<'); INVALID_FILE_CHARS.add('>'); INVALID_FILE_CHARS.add('[');
-		INVALID_FILE_CHARS.add(']'); INVALID_FILE_CHARS.add('='); // INVALID_FILE_CHARS.add('+');
+		INVALID_FILE_CHARS.add(']'); INVALID_FILE_CHARS.add('='); 
 		INVALID_FILE_CHARS.add(';'); INVALID_FILE_CHARS.add(':');
 		INVALID_FILE_CHARS.add('\''); INVALID_FILE_CHARS.add('"'); INVALID_FILE_CHARS.add('|');
 		INVALID_FILE_CHARS.add('\t'); INVALID_FILE_CHARS.add('?'); INVALID_FILE_CHARS.add('&');

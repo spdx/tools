@@ -34,6 +34,7 @@ import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXStandardLicense;
 
@@ -54,15 +55,15 @@ public class LicenseSheet extends AbstractSheet {
 	static final int COL_NOTES = COL_SOURCE_URL + 1;
 	static final int COL_OSI_APPROVED = COL_NOTES + 1;	
 	static final int COL_STANDARD_LICENSE_HEADER = COL_OSI_APPROVED + 1;
-	static final int COL_TEXT = COL_STANDARD_LICENSE_HEADER + 1;
-	static final int COL_VERSION = COL_TEXT + 1;
+	static final int COL_TEMPLATE = COL_STANDARD_LICENSE_HEADER + 1;
+	static final int COL_VERSION = COL_TEMPLATE + 1;
 	static final int COL_RELEASE_DATE = COL_VERSION + 1;
 	static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		false, false, true, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Full name of License", "License Identifier", "Source/url", "Notes", 
-		"OSI Approved", "Standard License Header", "Text", "License List Version", "License List Release Date"};
+		"OSI Approved", "Standard License Header", "Template", "License List Version", "License List Release Date"};
 	
 	static final String TEXT_EXTENSION = ".txt";
 	static final String ENCODING = "UTF-8";
@@ -151,8 +152,8 @@ public class LicenseSheet extends AbstractSheet {
 			Cell standardLicenseHeaderCell = row.createCell(COL_STANDARD_LICENSE_HEADER);
 			standardLicenseHeaderCell.setCellValue(license.getStandardLicenseHeader());
 		}
-		Cell textCell = row.createCell(COL_TEXT);
-		setLicenseText(textCell, license.getText(), license.getId());
+		Cell templateCell = row.createCell(COL_TEMPLATE);
+		setTemplateText(templateCell, license.getTemplate(), license.getId());
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
@@ -167,14 +168,14 @@ public class LicenseSheet extends AbstractSheet {
 	}
 	
 	/**
-	 * Adds a license text to a text cell.  First attempts to create a file and
+	 * Adds a license template to a text cell.  First attempts to create a file and
 	 * a hyperlink to the file.  If that fails, will attempt to add the text
 	 * directly to the file.
 	 * 
 	 * @param textCell
 	 * @param text
 	 */
-	private void setLicenseText(Cell textCell, String text, String licenseId) {
+	private void setTemplateText(Cell textCell, String text, String licenseId) {
 		String licenseFileName = licenseId + TEXT_EXTENSION;
 		File licenseTextFile = new File(this.workbookPath + File.separator + licenseFileName);
 		try {
@@ -219,36 +220,36 @@ public class LicenseSheet extends AbstractSheet {
 	 * @param textCell
 	 * @return
 	 */
-	private String getLicenseText(Cell textCell) {
+	private String getLicenseTemplateText(Cell textCell) {
 		String localFileName = null;
-		File licenseTextFile = null;
+		File licenseTemplateTextFile = null;
 		Hyperlink cellHyperlink = textCell.getHyperlink();
 		if (cellHyperlink != null && cellHyperlink.getAddress() != null) {
 			localFileName = cellHyperlink.getAddress();
-			licenseTextFile = new File(this.workbookPath + File.separator + localFileName);
-			if (!licenseTextFile.exists()) {
+			licenseTemplateTextFile = new File(this.workbookPath + File.separator + localFileName);
+			if (!licenseTemplateTextFile.exists()) {
 				// try without the workbook path
-				licenseTextFile = new File(localFileName);
+				licenseTemplateTextFile = new File(localFileName);
 			}
-			if (!licenseTextFile.exists()) {
-				licenseTextFile = null;
+			if (!licenseTemplateTextFile.exists()) {
+				licenseTemplateTextFile = null;
 			}
 		} 
-		if (licenseTextFile == null && textCell.getStringCellValue() != null && textCell.getStringCellValue().toUpperCase().endsWith(".TXT")) {
+		if (licenseTemplateTextFile == null && textCell.getStringCellValue() != null && textCell.getStringCellValue().toUpperCase().endsWith(".TXT")) {
 			localFileName = textCell.getStringCellValue();
-			licenseTextFile = new File(this.workbookPath + File.separator + localFileName);
+			licenseTemplateTextFile = new File(this.workbookPath + File.separator + localFileName);
 		}
 		if (localFileName != null) {
-			if (!licenseTextFile.exists()) {
-				logger.warn("Can not find linked license text file "+licenseTextFile.getName());
-				return("WARNING: Could not find license text file "+licenseTextFile.getName());
+			if (!licenseTemplateTextFile.exists()) {
+				logger.warn("Can not find linked license text file "+licenseTemplateTextFile.getName());
+				return("WARNING: Could not find license text file "+licenseTemplateTextFile.getName());
 			}
-			if (!licenseTextFile.canRead()) {
-				logger.warn("Can not read linked license text file "+licenseTextFile.getName());
-				return("WARNING: Could not read license text file "+licenseTextFile.getName());
+			if (!licenseTemplateTextFile.canRead()) {
+				logger.warn("Can not read linked license text file "+licenseTemplateTextFile.getName());
+				return("WARNING: Could not read license text file "+licenseTemplateTextFile.getName());
 			}
 			try {
-				InputStream in = new FileInputStream(licenseTextFile);
+				InputStream in = new FileInputStream(licenseTemplateTextFile);
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in, ENCODING));
 				try {
 					StringBuilder sb = new StringBuilder();
@@ -267,8 +268,8 @@ public class LicenseSheet extends AbstractSheet {
 					reader.close();
 				}
 			} catch (IOException e) {
-				logger.warn("Error reading linked license text file "+licenseTextFile.getName()+": "+e.getMessage());
-				return("WARNING: Error reading license text file "+licenseTextFile.getName());
+				logger.warn("Error reading linked license template text file "+licenseTemplateTextFile.getName()+": "+e.getMessage());
+				return("WARNING: Error reading license template text file "+licenseTemplateTextFile.getName());
 			}
 		} else {	// no file name
 			return textCell.getStringCellValue();
@@ -320,14 +321,11 @@ public class LicenseSheet extends AbstractSheet {
 			stdLicHeader = stdLicHeaderCell.getStringCellValue();
 		}
 		String template = null;
-//		Cell templateCell = row.getCell(COL_TEMPLATE);
-//		if (templateCell != null) {
-//			template = templateCell.getStringCellValue();
-//		}
 		String text = null;
-		Cell textCell = row.getCell(COL_TEXT);
-		if (textCell != null) {
-			text = getLicenseText(textCell);
+		Cell templateCell = row.getCell(COL_TEMPLATE);
+		if (templateCell != null) {
+			template = getLicenseTemplateText(templateCell);
+			text = convertTemplateToText(template);
 		}
 		boolean osiApproved = false;
 		Cell osiApprovedCell = row.getCell(COL_OSI_APPROVED);
@@ -340,6 +338,14 @@ public class LicenseSheet extends AbstractSheet {
 		return new SPDXStandardLicense(name, id, text, sourceURL, notes, stdLicHeader, template, osiApproved);
 	}
 
+	/**
+	 * Convert a template to a standard SPDX text
+	 * @param template
+	 * @return
+	 */
+	private String convertTemplateToText(String template) {
+		return SpdxLicenseTemplateHelper.templateToText(template);
+	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.AbstractSheet#verify()
 	 */

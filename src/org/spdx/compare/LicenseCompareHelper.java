@@ -86,6 +86,7 @@ public class LicenseCompareHelper {
 		EQUIV_TOKENS.put("wilfull","wilful");   EQUIV_TOKENS.put("wilful","wilfull");   
 		EQUIV_TOKENS.put("noncommercial","non-commercial");   EQUIV_TOKENS.put("non-commercial","noncommercial");    
 		EQUIV_TOKENS.put("copyright-holder", "copyright-owner");   EQUIV_TOKENS.put("copyright-owner", "copyright-holder");
+		EQUIV_TOKENS.put("sub-license", "sublicense"); EQUIV_TOKENS.put("sublicense", "sub-license");
 	}
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
 	static final String PER_CENT_REGEX = "(?i)per\\scent";
@@ -95,6 +96,7 @@ public class LicenseCompareHelper {
 	static final String COPYRIGHT_OWNER_REGEX = "(?i)copyright\\sowner";
 	static final Pattern COPYRIGHT_OWNER_PATTERN = Pattern.compile(COPYRIGHT_OWNER_REGEX, Pattern.CASE_INSENSITIVE);
 	
+	//TODO: Add equiv for quotes
 	/**
 	 * Returns true if two sets of license text is considered a match per
 	 * the SPDX License matching guidlines documented at spdx.org (currently http://spdx.org/wiki/spdx-license-list-match-guidelines)

@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 
 /**
  * This class contains a formatted HTML file for a given license.  Specific
@@ -90,7 +91,13 @@ public class LicenseHTMLFile {
 		}
 		try {
 			String htmlText = template.replace(ID, escapeHTML(license.getId()));
-			htmlText = htmlText.replace(LICENSE_TEXT, escapeHTML(license.getText()));
+			String licenseTextHtml = null;
+			if (license.getTemplate() != null && !license.getTemplate().isEmpty()) {
+				licenseTextHtml = formatTemplateText(license.getTemplate());
+			} else {
+				licenseTextHtml = escapeHTML(license.getText());
+			}
+			htmlText = htmlText.replace(LICENSE_TEXT, licenseTextHtml);
 			htmlText = htmlText.replace(NAME, escapeHTML(license.getName()));
 			String notes;
 			if (license.getComment() != null && !license.getComment().isEmpty()) {
@@ -133,6 +140,14 @@ public class LicenseHTMLFile {
 				stream.close();
 			}
 		}
+	}
+	/**
+	 * Formats the license text from a template
+	 * @param licenseTemplate
+	 * @return
+	 */
+	private String formatTemplateText(String licenseTemplate) {
+		return SpdxLicenseTemplateHelper.templateTextToHtml(licenseTemplate);
 	}
 	@SuppressWarnings("unused")
 	private String getSiteFromUrl(String url) {

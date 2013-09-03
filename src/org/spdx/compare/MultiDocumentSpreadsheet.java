@@ -47,6 +47,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  *   - file licenseInfo: license information from each file
  *   - file license comments: license comments from each file
  *   - file artifactOfs: artifact of for all files
+ *   - file type: file type of all files
  *   - reviewers: review information
  *   - verification: List of any verification errors
  *   
@@ -56,13 +57,15 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
 public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	
 	class SpdxFileComparator implements Comparator<SPDXFile> {
+		
+		private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
 		public int compare(SPDXFile arg0, SPDXFile arg1) {
-			return arg0.getName().compareTo(arg1.getName());
+			return normalizedFileNameComparator.compare(arg0.getName(), arg1.getName());
 		}	
 	}
 	
@@ -89,6 +92,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private FileCommentSheet fileCommentSheet;
 	private static final String FILE_ARTIFACT_OF_SHEET_NAME = "File ArtifactOf";
 	private FileArtifactOfSheet fileArtifactOfSheet;
+	private static final String FILE_TYPE_SHEET_NAME = "File Type";
+	private FileTypeSheet fileTypeSheet;	
 	private static final String REVIEWER_SHEET_NAME = "Reviewers";
 	private ReviewerSheet reviewerSheet;
 	private static final String VERIFICATION_SHEET_NAME = "Verification Errors";
@@ -114,6 +119,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileCommentSheet = new FileCommentSheet(this.workbook, FILE_COMMENT_SHEET_NAME);
 		fileLicenseCommentsSheet = new FileLicenseCommentsSheet(this.workbook, FILE_LICENSE_COMMENT_SHEET_NAME);
 		fileArtifactOfSheet = new FileArtifactOfSheet(this.workbook, FILE_ARTIFACT_OF_SHEET_NAME);
+		fileTypeSheet = new FileTypeSheet(this.workbook, FILE_TYPE_SHEET_NAME);
 		reviewerSheet = new ReviewerSheet(this.workbook, REVIEWER_SHEET_NAME);	
 		verificationSheet = new VerificationSheet(this.workbook, VERIFICATION_SHEET_NAME);	
 		String verify = this.verifyWorkbook();
@@ -147,6 +153,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			FileCommentSheet.create(wb, FILE_COMMENT_SHEET_NAME);
 			FileLicenseCommentsSheet.create(wb, FILE_LICENSE_COMMENT_SHEET_NAME);
 			FileArtifactOfSheet.create(wb, FILE_ARTIFACT_OF_SHEET_NAME);
+			FileTypeSheet.create(wb, FILE_TYPE_SHEET_NAME);
 			ReviewerSheet.create(wb, REVIEWER_SHEET_NAME);	
 			VerificationSheet.create(wb, VERIFICATION_SHEET_NAME);
 			wb.write(excelOut);
@@ -191,6 +198,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileLicenseCommentsSheet.resizeRows();
 		fileArtifactOfSheet.importCompareResults(comparer, files, docNames);
 		fileArtifactOfSheet.resizeRows();
+		fileTypeSheet.importCompareResults(comparer, files, docNames);
+		fileTypeSheet.resizeRows();
 		reviewerSheet.importCompareResults(comparer, docNames);
 		reviewerSheet.resizeRows();
 	}
