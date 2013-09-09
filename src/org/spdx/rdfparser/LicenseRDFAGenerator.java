@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -52,7 +53,10 @@ public class LicenseRDFAGenerator {
 	static int MAX_ARGS = 4;
 	
 	static final String CSS_FILE_TEXT = "body { font-family: Tahoma, Verdana, sans-serif; }\n\n.license-text {\n"+
-		"background-color: WhiteSmoke;\nborder: 1px dashed Black;\npadding: 1ex;\n}\n\nh2 {\n"+
+		"background-color: WhiteSmoke;\nborder: 1px dashed Black;\npadding: 1ex;\n}\n\n" +
+		"."+SpdxLicenseTemplateHelper.REPLACEABLE_LICENSE_TEXT_CLASS+" {\n{color:rgb(0,0,255);\n}\n"+
+		"."+SpdxLicenseTemplateHelper.OPTIONAL_LICENSE_TEXT_CLASS+" {\n{color:rgb(0,255,0);\n}\n"+
+		"h2 {\n"+
 		"border-bottom: 1px solid Gray;\n}\ndt {\nfont-weight: bold;\n}\n\nul {\n"+
 		"padding-left: 1em;\n}\n\ntable {\nborder-collapse: collapse;\n}\n"+
 		"td,th {\nmargin: 0;\nborder: 1px solid black;\n}\n";

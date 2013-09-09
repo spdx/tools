@@ -34,6 +34,7 @@ import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXStandardLicense;
@@ -153,6 +154,10 @@ public class LicenseSheet extends AbstractSheet {
 			standardLicenseHeaderCell.setCellValue(license.getStandardLicenseHeader());
 		}
 		Cell templateCell = row.createCell(COL_TEMPLATE);
+		String templateText = license.getTemplate();
+		if (templateText == null || templateText.trim().isEmpty()) {
+			templateText = license.getText();
+		}
 		setTemplateText(templateCell, license.getTemplate(), license.getId());
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
@@ -325,7 +330,11 @@ public class LicenseSheet extends AbstractSheet {
 		Cell templateCell = row.getCell(COL_TEMPLATE);
 		if (templateCell != null) {
 			template = getLicenseTemplateText(templateCell);
-			text = convertTemplateToText(template);
+			try {
+				text = convertTemplateToText(template);
+			} catch (LicenseTemplateRuleException e) {
+				throw(new InvalidSPDXAnalysisException("Invalid template for "+id,e));
+			}
 		}
 		boolean osiApproved = false;
 		Cell osiApprovedCell = row.getCell(COL_OSI_APPROVED);
@@ -342,8 +351,9 @@ public class LicenseSheet extends AbstractSheet {
 	 * Convert a template to a standard SPDX text
 	 * @param template
 	 * @return
+	 * @throws LicenseTemplateRuleException 
 	 */
-	private String convertTemplateToText(String template) {
+	private String convertTemplateToText(String template) throws LicenseTemplateRuleException {
 		return SpdxLicenseTemplateHelper.templateToText(template);
 	}
 	/* (non-Javadoc)

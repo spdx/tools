@@ -24,7 +24,7 @@ import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 
 /**
@@ -45,6 +45,8 @@ public class LicenseHTMLFile {
 	static final String OTHER_WEB_PAGE_ROW = 
 		"				<li><a href=\""+WEBURL+"\" rel=\"owl:sameAs\">"+SITE+"</a></li>\n";
 	static final String LICENSE_TEXT = "[LICENSE_TEXT]";
+	static final String TEMPLATE = "[LICENSE_TEMPLATE]";
+	static final String HEADER = "[LICENSE_HEADER]";
 	static final Pattern SITE_PATTERN = Pattern.compile("http://(.*)\\.(.*)(\\.org|\\.com|\\.net|\\.info)");
 	
 	private String template;
@@ -81,7 +83,7 @@ public class LicenseHTMLFile {
 		return this.template;
 	}
 
-	public void writeToFile(File htmlFile, String tableOfContentsReference) throws IOException {
+	public void writeToFile(File htmlFile, String tableOfContentsReference) throws IOException, LicenseTemplateRuleException {
 		FileOutputStream stream = null;
 		OutputStreamWriter writer = null;
 		if (!htmlFile.exists()) {
@@ -90,18 +92,22 @@ public class LicenseHTMLFile {
 			}
 		}
 		try {
-			String htmlText = template.replace(ID, escapeHTML(license.getId()));
+			String htmlText = template.replace(ID, SpdxLicenseTemplateHelper.escapeHTML(license.getId()));
 			String licenseTextHtml = null;
-			if (license.getTemplate() != null && !license.getTemplate().isEmpty()) {
-				licenseTextHtml = formatTemplateText(license.getTemplate());
+			String licenseTemplateHtml = "";
+			String templateText = license.getTemplate();
+			if (templateText != null && !templateText.trim().isEmpty()) {
+				licenseTextHtml = formatTemplateText(templateText);
+				licenseTemplateHtml = SpdxLicenseTemplateHelper.escapeHTML(templateText);
 			} else {
-				licenseTextHtml = escapeHTML(license.getText());
+				licenseTextHtml = SpdxLicenseTemplateHelper.escapeHTML(license.getText());
 			}
 			htmlText = htmlText.replace(LICENSE_TEXT, licenseTextHtml);
-			htmlText = htmlText.replace(NAME, escapeHTML(license.getName()));
+			htmlText = htmlText.replace(TEMPLATE, licenseTemplateHtml);
+			htmlText = htmlText.replace(NAME, SpdxLicenseTemplateHelper.escapeHTML(license.getName()));
 			String notes;
 			if (license.getComment() != null && !license.getComment().isEmpty()) {
-				notes = escapeHTML(license.getComment());
+				notes = SpdxLicenseTemplateHelper.escapeHTML(license.getComment());
 			} else {
 				notes = "None";
 			}
@@ -126,7 +132,8 @@ public class LicenseHTMLFile {
 				otherWebPages = "None";
 			}
 			htmlText = htmlText.replace(OTHERWEBPAGE, otherWebPages);
-			htmlText = htmlText.replace(TITLE, escapeHTML(license.getName()));
+			htmlText = htmlText.replace(TITLE, SpdxLicenseTemplateHelper.escapeHTML(license.getName()));
+			htmlText = htmlText.replace(HEADER, SpdxLicenseTemplateHelper.escapeHTML(license.getStandardLicenseHeader()));
 			stream = new FileOutputStream(htmlFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
 			writer.write(htmlText);
@@ -145,8 +152,9 @@ public class LicenseHTMLFile {
 	 * Formats the license text from a template
 	 * @param licenseTemplate
 	 * @return
+	 * @throws LicenseTemplateRuleException 
 	 */
-	private String formatTemplateText(String licenseTemplate) {
+	private String formatTemplateText(String licenseTemplate) throws LicenseTemplateRuleException {
 		return SpdxLicenseTemplateHelper.templateTextToHtml(licenseTemplate);
 	}
 	@SuppressWarnings("unused")
@@ -158,9 +166,5 @@ public class LicenseHTMLFile {
 		} else {
 			return url;
 		}
-	}
-	private String escapeHTML(String text) {
-		String retval = StringEscapeUtils.escapeXml(text);
-		return retval.replace("\n", "<br/>\n");
 	}
 }
