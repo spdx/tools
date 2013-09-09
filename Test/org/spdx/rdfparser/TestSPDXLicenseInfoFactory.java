@@ -169,6 +169,8 @@ public class TestSPDXLicenseInfoFactory {
 			fail("license is null");
 		}
 		assertEquals(id, lic.getId());
+		assertEquals(header, lic.getStandardLicenseHeader());
+		assertEquals(template, lic.getTemplate());
 	}
 
 	/**
