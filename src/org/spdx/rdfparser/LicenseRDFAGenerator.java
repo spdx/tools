@@ -23,16 +23,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.spdx.licenseTemplate.HtmlTemplateOutputHandler;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
+import com.google.common.io.Files;
+
 /**
  * Converts a spreadsheet containing SPDX License information into RDFA 
- * HTML pages describing the licenses.
+ * HTML pages describing the licenses (root of output folder),
+ * license text files (text folder), license template files (template folder), and files
+ * containing only the HTML fragments for the license text (html folder).
  * @author Gary O'Neall
  *
  */
@@ -51,18 +57,15 @@ public class LicenseRDFAGenerator {
 	}
 	static int MIN_ARGS = 2;
 	static int MAX_ARGS = 4;
-	
-	static final String CSS_FILE_TEXT = "body { font-family: Tahoma, Verdana, sans-serif; }\n\n.license-text {\n"+
-		"background-color: WhiteSmoke;\nborder: 1px dashed Black;\npadding: 1ex;\n}\n\n" +
-		"."+SpdxLicenseTemplateHelper.REPLACEABLE_LICENSE_TEXT_CLASS+" {\n{color:rgb(0,0,255);\n}\n"+
-		"."+SpdxLicenseTemplateHelper.OPTIONAL_LICENSE_TEXT_CLASS+" {\n{color:rgb(0,255,0);\n}\n"+
-		"h2 {\n"+
-		"border-bottom: 1px solid Gray;\n}\ndt {\nfont-weight: bold;\n}\n\nul {\n"+
-		"padding-left: 1em;\n}\n\ntable {\nborder-collapse: collapse;\n}\n"+
-		"td,th {\nmargin: 0;\nborder: 1px solid black;\n}\n";
+
+	static final String CSS_TEMPLATE_FILE = "resources/screen.css";
 	static final String CSS_FILE_NAME = "screen.css";
 	static final String LICENSE_HTML_TEMPLATE_FILENAME = "resources/LicenseHTMLTemplate.txt";
 	static final String TOC_HTML_TEMPLATE_FILENAME = "resources/TocHTMLTemplate.txt";
+	static final String TEXT_FOLDER_NAME = "text";
+	static final String TEMPLATE_FOLDER_NAME = "template";
+	static final String HTML_FOLDER_NAME = "html";
+	
 	/**
 	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
 	 */
@@ -140,6 +143,31 @@ public class LicenseRDFAGenerator {
 				// we assume it is a csv file
 				licenseProvider = new SpdxLicenseCsv(ssFile);
 			}
+			File textFolder = new File(dir.getPath() + File.separator +  TEXT_FOLDER_NAME);
+			if (!textFolder.exists()) {
+				textFolder.mkdir();
+			}
+			if (!textFolder.isDirectory()) {
+				System.out.println("Error: text folder is not a directory");
+				return;
+			}
+			File templateFolder = new File(dir.getPath() + File.separator +  TEMPLATE_FOLDER_NAME);
+			if (!templateFolder.exists()) {
+				templateFolder.mkdir();
+			}
+			if (!templateFolder.isDirectory()) {
+				System.out.println("Error: template folder is not a directory");
+				return;
+			}
+			File htmlFolder = new File(dir.getPath() + File.separator +  HTML_FOLDER_NAME);
+			if (!htmlFolder.exists()) {
+				htmlFolder.mkdir();
+			}
+			if (!htmlFolder.isDirectory()) {
+				System.out.println("Error: HTML folder is not a directory");
+				return;
+			}
+			Charset utf8 = Charset.forName("UTF-8");
 			LicenseHTMLFile licHtml = new LicenseHTMLFile(htmlTemplate);
 			LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(tocTemplate, version, releaseDate);
 			Iterator<SPDXStandardLicense> iter = licenseProvider.getIterator();
@@ -155,6 +183,14 @@ public class LicenseRDFAGenerator {
 					File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 					licHtml.writeToFile(licHtmlFile, tocHTMLReference);
 					tableOfContents.addLicense(license, licHTMLReference);
+					File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
+					Files.write(license.getText(), textFile, utf8);
+					if (license.getTemplate() != null && !license.getTemplate().trim().isEmpty()) {
+						File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
+						Files.write(license.getTemplate(), templateFile, utf8);
+					}
+					File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
+					Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getText()), htmlTextFile, utf8);
 				}
 			}
 			File tocHtmlFile = new File(dir.getPath()+File.separator+tocFileName);
@@ -239,22 +275,10 @@ public class LicenseRDFAGenerator {
 		if (cssFile.exists()) {
 			return;	// assume we don't need to create it
 		}
-		FileOutputStream stream = null;
-		OutputStreamWriter writer = null;
-		try {
-			stream = new FileOutputStream(cssFile);
-			writer = new OutputStreamWriter(stream);
-			writer.write(CSS_FILE_TEXT);
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-			if (stream != null) {
-				stream.close();
-			}
-		}
-		
+		File cssTemplateFile = new File(CSS_TEMPLATE_FILE); 
+		Files.copy(cssTemplateFile, cssFile);		
 	}
+	
 	private static String formLicenseHTMLFileName(SPDXStandardLicense license) {
 		StringBuilder sb = new StringBuilder();
 		String licId = license.getId();

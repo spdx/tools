@@ -18,15 +18,21 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
+import sun.nio.cs.StandardCharsets;
+
+import com.google.common.io.Files;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -161,16 +167,70 @@ public class TestSPDXLicenseInfoFactory {
 	}
 	
 	@Test
-	public void testGetLicenseFromStdLicModel() throws InvalidSPDXAnalysisException {
-		String id = "AFL-1.2";
-		String stdLicUri = SPDXLicenseInfoFactory.STANDARD_LICENSE_URI_PREFIX + id;
+	public void testGetLicenseFromStdLicModel() throws InvalidSPDXAnalysisException, IOException {
+		String id = "BSD-3-Clause";
+		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
+		
+		String stdLicUri = "file:///" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
 		SPDXStandardLicense lic = SPDXLicenseInfoFactory.getLicenseFromStdLicModel(stdLicUri);
 		if (lic == null) {
 			fail("license is null");
 		}
+		String header = "Test BSD Standard License Header";
 		assertEquals(id, lic.getId());
 		assertEquals(header, lic.getStandardLicenseHeader());
-		assertEquals(template, lic.getTemplate());
+		String template = readTextFile("TestFiles"+File.separator+"BSD-3-Clause-Template.txt");
+		String licenseTemplate = lic.getTemplate();
+		int result = compareStringsIgnoreSpaces(template, licenseTemplate);
+		assertEquals(0, result);
+	}
+
+	/**
+	 * Compares 2 strings and (same as CompareTo()) but ignores any leading or trailing blanks
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
+	private int compareStringsIgnoreSpaces(String s1,
+			String s2) {
+		String[] s1lines = s1.split("\n");
+		String[] s2lines = s2.split("\n");
+		int i = 0;
+		while (i < s1lines.length && i < s2lines.length) {
+			int result = s1lines[i].trim().compareTo(s2lines[i].trim());
+			if (result != 0) {
+				return result;
+			}
+			i++;
+		}
+		if (s1lines.length > s2lines.length) {
+			return 1;
+		} else if (s1lines.length < s2lines.length) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * Reads in a text file - assumes UTF-8 encoding
+	 * @param filePath
+	 * @return
+	 * @throws IOException 
+	 */
+	private String readTextFile(String filePath) throws IOException {
+		File file = new File(filePath);
+		List<String> lines = Files.readLines(file, new StandardCharsets().charsetForName("UTF-8"));
+		Iterator<String> iter = lines.iterator();
+		StringBuilder sb = new StringBuilder();
+		if (iter.hasNext()) {
+			sb.append(iter.next());
+		}
+		while (iter.hasNext()) {
+			sb.append("\n");
+			sb.append(iter.next());
+		}
+		return sb.toString();
 	}
 
 	/**

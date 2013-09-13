@@ -1,0 +1,39 @@
+body { font-family: Tahoma, Verdana, sans-serif; }
+
+.license-text {
+background-color: WhiteSmoke;
+border: 1px dashed Black;
+padding: 1ex;
+}
+
+
+.license-template {
+background-color: WhiteSmoke;
+border: 1px dashed Black;
+padding: 1ex;
+}
+
+.replacable-license-text {
+{color:rgb(0,0,255);
+}
+.optional-license-text {
+{color:rgb(0,255,0);
+}
+h2 {
+border-bottom: 1px solid Gray;
+}
+dt {
+font-weight: bold;
+}
+
+ul {
+padding-left: 1em;
+}
+
+table {
+border-collapse: collapse;
+}
+td,th {
+margin: 0;
+border: 1px solid black;
+}

@@ -19,6 +19,7 @@ package org.spdx.licenseTemplate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * Implements a license rule
  * @author Gary O'Neall
@@ -26,20 +27,23 @@ import java.util.regex.Pattern;
  */
 public class LicenseTemplateRule {
 	
-	public enum RuleType {REQUIRED, OPTIONAL};
+	public enum RuleType {VARIABLE, BEGIN_OPTIONAL, END_OPTIONAL};
 	
 	RuleType type;
-	String original;
+	String original = null;
 	String name;
-	String example;
-	String match;
+	String example = null;
+	String match = null;
 	
 	static final Pattern SPLIT_REGEX = Pattern.compile("[^\\\\];");
 	private static final String EXAMPLE_KEYWORD = "example";
 	private static final String NAME_KEYWORD = "name";
-	private static final String TYPE_KEYWORD = "type";
 	private static final String ORIGINAL_KEYWORD = "original";
 	private static final String MATCH_KEYWORD = "match";
+	private static final String VARIABLE_RULE_TYPE_STR = "var";
+	private static final String BEGIN_OPTIONAL_TYPE_STR = "beginOptional";
+	private static final String END_OPTIONAL_TYPE_STR = "endOptional";
+	private static final String VALUE_SEPARATOR = "=";
 	
 	/**
 	 * Create a new LicenseTemplateRule
@@ -51,9 +55,9 @@ public class LicenseTemplateRule {
 	 */
 	public LicenseTemplateRule(String name, RuleType type, String original, String match, String example) throws LicenseTemplateRuleException {
 		this.type = type;
-		this.original = original;
+		this.original = formatValue(original);
 		this.name = name;
-		this.example = example;
+		this.example = formatValue(example);
 		this.match = match;
 		validate();
 	}
@@ -63,16 +67,16 @@ public class LicenseTemplateRule {
 	 * @throws LicenseTemplateRuleException 
 	 */
 	public void validate() throws LicenseTemplateRuleException {
-		if (this.name == null) {
-			throw(new LicenseTemplateRuleException("Rule name can not be null."));
-		}
 		if (this.type == null) {
 			throw(new LicenseTemplateRuleException("Rule type can not be null."));
 		}
-		if (this.original == null) {
+		if (this.type != RuleType.END_OPTIONAL && this.name == null) {
+			throw(new LicenseTemplateRuleException("Rule name can not be null."));
+		}
+		if (this.type == RuleType.VARIABLE && this.original == null) {
 			throw(new LicenseTemplateRuleException("Rule original text can not be null."));
 		}
-		if (this.match == null) {
+		if (this.type == RuleType.VARIABLE && this.match == null) {
 			throw(new LicenseTemplateRuleException("Rule match regular expression can not be null."));
 		}
 	}
@@ -85,6 +89,17 @@ public class LicenseTemplateRule {
 	 */
 	public LicenseTemplateRule(String parseableLicenseTemplateRule) throws LicenseTemplateRuleException {
 		parseLicenseTemplateRule(parseableLicenseTemplateRule);
+		validate();
+	}
+
+	/**
+	 * @param ruleName
+	 * @param ruleType
+	 * @throws LicenseTemplateRuleException 
+	 */
+	public LicenseTemplateRule(String ruleName, RuleType ruleType) throws LicenseTemplateRuleException {
+		this.name = ruleName;
+		this.type = ruleType;
 		validate();
 	}
 
@@ -103,6 +118,18 @@ public class LicenseTemplateRule {
 		this.match = null;
 		Matcher rulePartMatcher = SPLIT_REGEX.matcher(parseableLicenseTemplateRule);
 		int start = 0;
+		// parse out the first field - should be the rule type
+		String typeStr = null;
+		if (rulePartMatcher.find()) {
+			typeStr = parseableLicenseTemplateRule.substring(start, rulePartMatcher.start()+1).trim();
+			start = rulePartMatcher.end();
+		} else {
+			typeStr = parseableLicenseTemplateRule.trim();
+			start = parseableLicenseTemplateRule.length();
+		}
+		this.type = typeStringToType(typeStr);
+		
+		// parse out remaining fields
 		while (rulePartMatcher.find()) {
 			String rulePart = parseableLicenseTemplateRule.substring(start, rulePartMatcher.start()+1);
 			parseRulePart(rulePart.trim());
@@ -116,8 +143,22 @@ public class LicenseTemplateRule {
 	}
 
 	/**
-	 * @return the type
+	 * @param typeStr
+	 * @return
+	 * @throws LicenseTemplateRuleException 
 	 */
+	private RuleType typeStringToType(String typeStr) throws LicenseTemplateRuleException {
+		if (typeStr.equals(VARIABLE_RULE_TYPE_STR)) {
+			return RuleType.VARIABLE;
+		} else if (typeStr.equals(BEGIN_OPTIONAL_TYPE_STR)) {
+			return RuleType.BEGIN_OPTIONAL;
+		} else if (typeStr.equals(END_OPTIONAL_TYPE_STR)) {
+			return RuleType.END_OPTIONAL;
+		} else {
+			throw(new LicenseTemplateRuleException("Unknown rule type: "+typeStr));
+		}
+	}
+	
 	public RuleType getType() {
 		return type;
 	}
@@ -196,13 +237,6 @@ public class LicenseTemplateRule {
 			this.example = formatValue(value);
 		} else if (rulePart.startsWith(NAME_KEYWORD)) {
 			this.name = getValue(rulePart, NAME_KEYWORD);
-		} else if (rulePart.startsWith(TYPE_KEYWORD)) {
-			String value = getValue(rulePart, TYPE_KEYWORD);
-			try {				
-				this.type = RuleType.valueOf(value.toUpperCase());
-			} catch(Exception ex) {
-				throw(new LicenseTemplateRuleException("Invalid rule type: "+value));
-			}
 		} else if (rulePart.startsWith(ORIGINAL_KEYWORD)) {
 			String value = getValue(rulePart, ORIGINAL_KEYWORD);
 			this.original = formatValue(value);
@@ -234,8 +268,8 @@ public class LicenseTemplateRule {
 	private String getValue(String rulePart, String keyword) throws LicenseTemplateRuleException {
 		String retval = rulePart.substring(keyword.length());
 		retval = retval.trim();
-		if (!retval.startsWith("=")) {
-			throw(new LicenseTemplateRuleException("Missing '=' for "+keyword));
+		if (!retval.startsWith(VALUE_SEPARATOR)) {
+			throw(new LicenseTemplateRuleException("Missing "+VALUE_SEPARATOR+" for "+keyword));
 		}
 		retval = retval.substring(1).trim();
 		return retval;

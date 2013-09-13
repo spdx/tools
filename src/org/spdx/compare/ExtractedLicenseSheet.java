@@ -141,7 +141,7 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 				if (extractedLicenses[i].length > licenseIndexes[i]) {
 					if  (extractedLicenses[i][licenseIndexes[i]] instanceof SPDXNonStandardLicense) {
 					String compareExtractedText = ((SPDXNonStandardLicense)extractedLicenses[i][licenseIndexes[i]]).getText();
-					if (LicenseCompareHelper.licensesMatch(extractedLicenseText, 
+					if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicenseText, 
 							compareExtractedText)) {
 						Cell licenseIdCell = currentRow.createCell(FIRST_LIC_ID_COL+i);
 						licenseIdCell.setCellValue(formatLicenseInfo((SPDXNonStandardLicense)extractedLicenses[i][licenseIndexes[i]]));

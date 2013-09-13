@@ -32,9 +32,9 @@ import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
  */
 public class TestLicenseTemplateRule {
 	
-	static final String PARSEABLE_RULE = "original=Copyright (c) <year> <owner>\\nAll rights reserved.;match=Copyright \\(c\\) .+All rights reserved.;name=copyright;type=required;example=Copyright (C) 2013 John Doe\\nAll rights reserved.\n";
+	static final String PARSEABLE_RULE = "var;original=Copyright (c) <year> <owner>\\nAll rights reserved.;match=Copyright \\(c\\) .+All rights reserved.;name=copyright;example=Copyright (C) 2013 John Doe\\nAll rights reserved.\n";
 	static final String RULE_NAME = "copyright";
-	static final RuleType RULE_TYPE = RuleType.REQUIRED;
+	static final RuleType RULE_TYPE = RuleType.VARIABLE;
 	static final String RULE_ORIGINAL = "Copyright (c) <year> <owner>\nAll rights reserved.";
 	static final String RULE_MATCH = "Copyright \\(c\\) .+All rights reserved.";
 	static final String RULE_EXAMPLE = "Copyright (C) 2013 John Doe\nAll rights reserved.";
@@ -68,12 +68,28 @@ public class TestLicenseTemplateRule {
 
 	@Test
 	public void testparseLicenseTemplateRule() throws LicenseTemplateRuleException {
-		LicenseTemplateRule rule = new LicenseTemplateRule("Name", RuleType.OPTIONAL, "original", "match", "example");
+		LicenseTemplateRule rule = new LicenseTemplateRule("Name", RuleType.BEGIN_OPTIONAL, "original", "match", "example");
 		rule.parseLicenseTemplateRule(PARSEABLE_RULE);
 		assertEquals(rule.getExample(), RULE_EXAMPLE);
 		assertEquals(rule.getName(), RULE_NAME);
 		assertEquals(rule.getOriginal(), RULE_ORIGINAL);
 		assertEquals(rule.getType(), RULE_TYPE);
 		assertEquals(rule.getMatch(), RULE_MATCH);
+	}
+	
+	@Test
+	public void testBeginOptionalRule() throws LicenseTemplateRuleException {
+		String ruleName = "optionalName";
+		String ruleStr = "beginOptional;name="+ruleName;
+		LicenseTemplateRule rule = new LicenseTemplateRule(ruleStr);
+		assertEquals(RuleType.BEGIN_OPTIONAL, rule.getType());
+		assertEquals(ruleName, rule.getName());
+	}
+	
+	@Test
+	public void testEndOptionalRule() throws LicenseTemplateRuleException {
+		String ruleStr = "endOptional";
+		LicenseTemplateRule rule = new LicenseTemplateRule(ruleStr);
+		assertEquals(RuleType.END_OPTIONAL, rule.getType());
 	}
 }

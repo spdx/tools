@@ -55,20 +55,20 @@ public class LicenseCompareHelperTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.compare.LicenseCompareHelper#licensesMatch(java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.spdx.compare.LicenseCompareHelper#isLicenseTextEquivalent(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testLicensesMatch() {
 		// equal strings
 		String testA = "Now is the time  for all . good. men/to \\come to the aid of their country.";
-		boolean result = LicenseCompareHelper.licensesMatch(testA, testA);
+		boolean result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testA);
 		assertTrue(result);
 		// b is longer
 		String testB = testA + " A bit longer";
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertFalse(result);
 		// first parameter is longer
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertFalse(result);
 		// white space doesn't matter
 		String testPart1 = "Now is the time ";
@@ -76,39 +76,39 @@ public class LicenseCompareHelperTest {
 		String whiteSpace = " \t\n\r";
 		testA = testPart1 + testPart2;
 		testB = testPart1 + whiteSpace + testPart2;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 		// trailing white space
 		testB = testA + whiteSpace;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 		// preceeding white space
 		testB = whiteSpace + testA;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 		// case shouldnt matter
-		result = LicenseCompareHelper.licensesMatch(testA, testA.toUpperCase());
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testA.toUpperCase());
 		assertTrue(result);
 		// punctuation should matter
 		testA = testPart1 + testPart2;
 		String punctuation = ",";
 		testB = testPart1 + punctuation + testPart2;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertFalse(result);
 		// dash variations
 		testA = testPart1 + "-" + testPart2;
 		testB = testPart1 + "\u2013" + testPart2;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 		testB = testPart1 + "\u2014" + testPart2;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 		testB = testPart1 + "\u2015" + testPart2;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 	}
 	
@@ -120,31 +120,31 @@ public class LicenseCompareHelperTest {
 		String cCommentLine = "//";
 		String testA = part1 + part2;
 		String testB = cCommentLine + part1 + cCommentLine + part2 + "\n"+ cCommentLine;
-		boolean result = LicenseCompareHelper.licensesMatch(testA, testB);
+		boolean result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 		// c style multi line
 		String startCMulti = "/*";
 		String endCMulti = "*/";
 		testB = startCMulti + part1 + part2 + endCMulti;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 		// javaDocs comments
 		String startJavaDocs = "/**";
 		testB = startJavaDocs + part1 + part2 + endCMulti;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 		// script line comment
 		String scriptLineComment = "#";
 		testB = scriptLineComment + part1 + scriptLineComment + part2 + "\n"+ scriptLineComment;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
-		result = LicenseCompareHelper.licensesMatch(testB, testA);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 	}
 	
@@ -154,17 +154,17 @@ public class LicenseCompareHelperTest {
 		String part1 = "now is the time for ";
 		String testA = part1 + "per cent";
 		String testB = part1 + "percent";
-		boolean result = LicenseCompareHelper.licensesMatch(testA, testB);
+		boolean result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 		// copyright holder-> copyright owner
 		testA = "Copyright holder "+part1;
 		testB = "copyright Owner "+ part1;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 		// "license","licence"
 		testA = part1 + " license " + part1;
 		testB = part1 + " licence " + part1;
-		result = LicenseCompareHelper.licensesMatch(testA, testB);
+		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 	}
 
