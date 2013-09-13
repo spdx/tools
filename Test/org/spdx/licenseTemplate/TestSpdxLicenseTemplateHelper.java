@@ -23,6 +23,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
 
 /**
  * @author Gary O'Neall
@@ -30,15 +31,73 @@ import org.junit.Test;
  */
 public class TestSpdxLicenseTemplateHelper {
 	
+	String optionalTextString;
+	String normalTextString;
+	LicenseTemplateRule variableRule;
+	LicenseTemplateRule optionalRule;
+	LicenseTemplateRule endOptionalRule;
+	
+	public class TestLicenseTemplateOutputHandler implements ILicenseTemplateOutputHandler {
+		
+		public TestLicenseTemplateOutputHandler() {
+			optionalTextString = null;
+			normalTextString = null;
+			variableRule = null;
+			optionalRule = null;
+			endOptionalRule = null;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#optionalText(java.lang.String)
+		 */
+		@Override
+		public void optionalText(String text) {
+			optionalTextString = text;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#normalText(java.lang.String)
+		 */
+		@Override
+		public void normalText(String text) {
+			normalTextString = text;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#variableRule(org.spdx.licenseTemplate.LicenseTemplateRule)
+		 */
+		@Override
+		public void variableRule(LicenseTemplateRule rule) {
+			variableRule = rule;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#beginOptional(org.spdx.licenseTemplate.LicenseTemplateRule)
+		 */
+		@Override
+		public void beginOptional(LicenseTemplateRule rule) {
+			optionalRule = rule;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#endOptional(org.spdx.licenseTemplate.LicenseTemplateRule)
+		 */
+		@Override
+		public void endOptional(LicenseTemplateRule rule) {
+			endOptionalRule = rule;
+		}
+		
+	}
+	
 	static final String LINE1 = "This is the start of the license.\n";
-	static final String REQUIRED_RULE="<<original=Copyright (c) <year> <owner>\\nAll rights reserved.;match=Copyright \\(c\\) .+All rights reserved.;name=copyright;type=required;example=Copyright (C) 2013 John Doe\\nAll rights reserved.>>";
+	static final String REQUIRED_RULE="<<var;original=Copyright (c) <year> <owner>\\nAll rights reserved.;match=Copyright \\(c\\) .+All rights reserved.;name=copyright;example=Copyright (C) 2013 John Doe\\nAll rights reserved.>>";
 	static final String LINE2 = "\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met";
-	static final String OPTIONAL_RULE="<<original=Original Text;match=Original Text;type=optional;name=optional>>";
+	static final String OPTIONAL_RULE="<<beginOptional;name=optional>>Original Text<<endOptional>>";
 	static final String LINE3="\nLast line of the license";
 	static final String TEMPLATE_TEXT = LINE1+REQUIRED_RULE+LINE2+OPTIONAL_RULE+LINE3;
 	
 	static final String HTML_COPYRIGHT="\n<div id=\"copyright\" class=\"replacable-license-text\">Copyright (c) &lt;year&gt; &lt;owner&gt;<br/>\nAll rights reserved.</div>\n";
-	static final String HTML_OPTIONAL_RULE="\n<div id=\"optional\" class=\"optional-license-text\">Original Text</div>\n";
+	static final String HTML_OPTIONAL_RULE="\n<div id=\"optional\" class=\"optional-license-text\">\nOriginal Text</div>\n";
 	static final String HTML_LICENSE = LINE1.replace("\n", "<br/>\n")+
 			HTML_COPYRIGHT+
 			LINE2.replace("\n", "<br/>\n")+
@@ -48,8 +107,16 @@ public class TestSpdxLicenseTemplateHelper {
 	static final String TEXT_COPYRIGHT = "Copyright (c) <year> <owner>\nAll rights reserved.";
 	static final String TEXT_OPTIONAL_RULE = "Original Text";
 	static final String TEXT_LICENSE = LINE1+TEXT_COPYRIGHT+LINE2+TEXT_OPTIONAL_RULE+LINE3;
+	private static final Object PARSE_OPTIONAL_RULE_NAME = "OptionalRuleName";
+	private static final Object PARSE_VARIABLE_RULE_NAME = "VariableRuleName";
+	private static final Object PARSE_OPTIONAL_TEXT = "Optional Text";
+	private static final Object PARSE_NORMAL_TEXT = "Normal Text";
+	private static final String PARSE_TEXT_STRING = PARSE_NORMAL_TEXT + "<<var;name="+PARSE_VARIABLE_RULE_NAME+
+								";original=original;match=.+this>>"+
+								"<<beginOptional;name="+PARSE_OPTIONAL_RULE_NAME+
+								">>"+PARSE_OPTIONAL_TEXT+"<<endOptional>>";
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception 
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -105,17 +172,43 @@ public class TestSpdxLicenseTemplateHelper {
 		String escaped = "&lt;abc<br/>\nline2&gt;";
 		assertEquals(escaped, SpdxLicenseTemplateHelper.escapeHTML(unEscaped));
 	}
-
+	
 	@Test
-	public void testEscapeIdString() {
-		// not starting with letter
-		String testId = "1test";
-		assertEquals("X"+testId, SpdxLicenseTemplateHelper.escapeIdString(testId));
-		// invalid character
-		String invalidChar = "idWith:Invalid";
-		String validChar = "idWith_Invalid";
-		assertEquals(validChar, SpdxLicenseTemplateHelper.escapeIdString(invalidChar));
-		String allValid = "iDwith0-.valid";
-		assertEquals(allValid, SpdxLicenseTemplateHelper.escapeIdString(allValid));
+	public void testParseTemplate() throws LicenseTemplateRuleException {
+		String noText = "";
+		TestLicenseTemplateOutputHandler handler = new TestLicenseTemplateOutputHandler();
+		SpdxLicenseTemplateHelper.parseTemplate(noText, handler);
+		assertEquals(null, optionalTextString);
+		assertEquals(null, normalTextString);
+		assertEquals(null, variableRule);
+		assertEquals(null, optionalRule);
+		assertEquals(null, endOptionalRule);
+		
+		handler = new TestLicenseTemplateOutputHandler();
+		SpdxLicenseTemplateHelper.parseTemplate(PARSE_TEXT_STRING, handler);
+		assertEquals(PARSE_NORMAL_TEXT, normalTextString);
+		assertEquals(PARSE_OPTIONAL_TEXT, optionalTextString);
+		assertEquals(PARSE_VARIABLE_RULE_NAME, variableRule.getName());
+		assertEquals(RuleType.VARIABLE, variableRule.getType());
+		assertEquals(PARSE_OPTIONAL_RULE_NAME, optionalRule.getName());
+		assertEquals(RuleType.BEGIN_OPTIONAL, optionalRule.getType());
+		assertEquals(RuleType.END_OPTIONAL, endOptionalRule.getType());
+	}
+	
+	@Test
+	public void testAddHtmlFormatting() {
+		String noParagraphs = "lines1\nline2\nline3";
+		String noParagraphsTagged = "lines1<br/>\nline2<br/>\nline3";
+		assertEquals(noParagraphsTagged, SpdxLicenseTemplateHelper.addHtmlFormatting(noParagraphs));
+		String empty = "";
+		assertEquals(empty, SpdxLicenseTemplateHelper.addHtmlFormatting(empty));
+		String oneLine = "one line";
+		assertEquals(oneLine, SpdxLicenseTemplateHelper.addHtmlFormatting(oneLine));
+		String paragraphs = "paragraph1\n\nparagraph2\n\nparagraph3";
+		String paragraphsTagged = "paragraph1\n<p>paragraph2</p>\n<p>paragraph3</p>";
+		assertEquals(paragraphsTagged, SpdxLicenseTemplateHelper.addHtmlFormatting(paragraphs));
+		String tabbed = "paragraph1\n\n     tabbed paragraph\n\nnormal paragraph";
+		String tabbedTagged = "paragraph1\n<p style=\"margin-left: 20px;\">     tabbed paragraph</p>\n<p>normal paragraph</p>";
+		assertEquals(tabbedTagged, SpdxLicenseTemplateHelper.addHtmlFormatting(tabbed));
 	}
 }

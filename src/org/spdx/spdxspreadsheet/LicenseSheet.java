@@ -333,7 +333,7 @@ public class LicenseSheet extends AbstractSheet {
 			try {
 				text = convertTemplateToText(template);
 			} catch (LicenseTemplateRuleException e) {
-				throw(new InvalidSPDXAnalysisException("Invalid template for "+id,e));
+				throw(new InvalidSPDXAnalysisException("Invalid template for "+id+": "+e.getMessage(),e));
 			}
 		}
 		boolean osiApproved = false;

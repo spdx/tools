@@ -22,11 +22,15 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.spdx.licenseTemplate.ILicenseTemplateOutputHandler;
+import org.spdx.licenseTemplate.LicenseTemplateRuleException;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXLicenseSet;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.SPDXStandardLicense;
 
 /**
  * Primarily a static class of helper functions for comparing two SPDX licenses
@@ -35,8 +39,8 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  */
 public class LicenseCompareHelper {
 	
-	static final String TOKEN_DELIM = "\\s";	// white space
-	static final HashSet<String> SKIPPABLE_TOKENS = new HashSet<String>();
+	protected static final String TOKEN_DELIM = "\\s";	// white space
+	protected static final HashSet<String> SKIPPABLE_TOKENS = new HashSet<String>();
 	static {
 		// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 		SKIPPABLE_TOKENS.add("//");		SKIPPABLE_TOKENS.add("/*");
@@ -45,8 +49,9 @@ public class LicenseCompareHelper {
 		SKIPPABLE_TOKENS.add("*");		SKIPPABLE_TOKENS.add("\"\"\"");
 		SKIPPABLE_TOKENS.add("=begin");	SKIPPABLE_TOKENS.add("=end");
 	}
-	static final HashMap<String, String> EQUIV_TOKENS = new HashMap<String, String>();
+	protected static final HashMap<String, String> EQUIV_TOKENS = new HashMap<String, String>();
 	static {
+		//TODO: These should be moved to a property file
 		EQUIV_TOKENS.put("acknowledgement","acknowledgment");   EQUIV_TOKENS.put("acknowledgment","acknowledgement");   
 		EQUIV_TOKENS.put("analog","analogue");   EQUIV_TOKENS.put("analogue","analog");   
 		EQUIV_TOKENS.put("analyze","analyse");   EQUIV_TOKENS.put("analyse","analyze");   
@@ -99,13 +104,13 @@ public class LicenseCompareHelper {
 	//TODO: Add equiv for quotes
 	/**
 	 * Returns true if two sets of license text is considered a match per
-	 * the SPDX License matching guidlines documented at spdx.org (currently http://spdx.org/wiki/spdx-license-list-match-guidelines)
+	 * the SPDX License matching guidelines documented at spdx.org (currently http://spdx.org/wiki/spdx-license-list-match-guidelines)
 	 * There are 2 unimplemented features - bullets/numbering is not considered and comments with no whitespace between text is not skipped
 	 * @param licenseTextA
 	 * @param licenseTextB
 	 * @return
 	 */
-	public static boolean licensesMatch(String licenseTextA, String licenseTextB) {
+	public static boolean isLicenseTextEquivalent(String licenseTextA, String licenseTextB) {
 		//TODO: Handle comment characters without white space before text
 		//TODO: Handle bullets and numbering
 		// Need to take care of multi-word equivalent words - convert to single words with hypens
@@ -176,7 +181,7 @@ public class LicenseCompareHelper {
 	 * @param tokenIndex
 	 * @return
 	 */
-	private static String getTokenAt(String[] tokens, int tokenIndex) {
+	static String getTokenAt(String[] tokens, int tokenIndex) {
 		if (tokenIndex >= tokens.length) {
 			return null;
 		} else {
@@ -189,7 +194,7 @@ public class LicenseCompareHelper {
 	 * @param tokenB
 	 * @return
 	 */
-	private static boolean tokensEquivalent(String tokenA, String tokenB) {
+	static boolean tokensEquivalent(String tokenA, String tokenB) {
 		if (tokenA == null) {
 			if (tokenB == null) {
 				return true;
@@ -218,7 +223,7 @@ public class LicenseCompareHelper {
 	 * @param token
 	 * @return
 	 */
-	private static boolean canSkip(String token) {
+	static boolean canSkip(String token) {
 		if (token == null) {
 			return false;
 		}
@@ -303,5 +308,19 @@ public class LicenseCompareHelper {
 			}
 		}
 		return true;
+	}
+	
+	public static boolean isTextStandardLicense(SPDXStandardLicense license, String compareText) throws SpdxCompareException {
+		String licenseTemplate = license.getTemplate();
+		if (licenseTemplate == null || licenseTemplate.trim().isEmpty()) {
+			return isLicenseTextEquivalent(license.getText(), compareText);
+		}
+		CompareTemplateOutputHandler compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		try {
+			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, compareTemplateOutputHandler);
+		} catch (LicenseTemplateRuleException e) {
+			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
+		}
+		return compareTemplateOutputHandler.matches();
 	}
 }

@@ -943,7 +943,7 @@ public class SpdxComparer {
 			boolean foundMatch = false;
 			boolean foundTextMatch = false;
 			for (int q = 0; q < extractedLicensesB.length; q++) {
-				if (LicenseCompareHelper.licensesMatch(extractedLicensesA[k].getText(), 
+				if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicensesA[k].getText(), 
 						extractedLicensesB[q].getText())) {
 					foundTextMatch = true;
 					if (!foundMatch) {

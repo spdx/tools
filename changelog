@@ -1,3 +1,5 @@
+Implementation version 1.1.8
+- Added support for license templates
 Implementation version 1.1.7
 - Significant change to Tag/Value code - somewhat of a redesign of the parser
 - Fix bug where tag/value parser interprets anything with a ":" as a tag (even in a <text></text> block

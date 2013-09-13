@@ -18,6 +18,11 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -31,8 +36,18 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public class SPDXStandardLicense extends SPDXLicense {
 	
-	//TODO: Sync this up with the spec, since only licenseId and licenseText are currently standardized
-
+	static final String XML_LITERAL = "^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral";
+	
+	/**
+	 * True if the text in the RDF model uses HTML tags.  If this flag is true, the text will
+	 * be converted on import from the model.
+	 */
+	private boolean textInHtml = true;
+	/**
+	 * True if the template in the RDF model uses HTML tags.  If this flag is true, the text will
+	 * be converted on import from the model.
+	 */
+	private boolean templateInHtml = true;
 	private String name;
 	private String[] sourceUrl;
 	private String comments;
@@ -97,6 +112,12 @@ public class SPDXStandardLicense extends SPDXLicense {
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.text = t.getObject().toString(false);
+			if (this.text.endsWith(XML_LITERAL)) {
+				this.text = this.text.substring(0, this.text.length()-XML_LITERAL.length());
+			}
+			if (this.textInHtml) {
+				this.text = SpdxLicenseTemplateHelper.HtmlToText(this.text);
+			}
 		}
 
 		// SourceUrl/seeAlso
@@ -152,6 +173,9 @@ public class SPDXStandardLicense extends SPDXLicense {
 				this.standardLicenseHeader = null;
 			}
 		}
+		if (this.standardLicenseHeader != null) {
+			this.standardLicenseHeader = StringEscapeUtils.unescapeHtml4(this.standardLicenseHeader);
+		}
 		// template
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
@@ -159,6 +183,12 @@ public class SPDXStandardLicense extends SPDXLicense {
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.template = t.getObject().toString(false);
+			if (template.endsWith(XML_LITERAL)) {
+				this.template = this.template.substring(0, this.template.length()-XML_LITERAL.length());
+			}
+			if (this.templateInHtml) {
+				this.template = SpdxLicenseTemplateHelper.HtmlToText(this.template);
+			}
 		} else {
 			this.template = null;
 		}
@@ -229,6 +259,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT);
 			resource.addProperty(p, text);
+			this.textInHtml = false;
 		}
 	}
 	/**
@@ -337,6 +368,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
 			resource.addProperty(p, this.template);
+			this.templateInHtml = false;
 		}
 	}
 	

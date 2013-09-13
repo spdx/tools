@@ -19,8 +19,10 @@ package org.spdx.licenseTemplate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Implements common conversion methods for processing SPDX license templates
@@ -28,15 +30,65 @@ import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
  *
  */
 public class SpdxLicenseTemplateHelper {
-
-	public static final String REPLACEABLE_LICENSE_TEXT_CLASS = "replacable-license-text";
-	public static final String OPTIONAL_LICENSE_TEXT_CLASS = "optional-license-text";
 	
 	static final String START_RULE = "<<";
 	static final String END_RULE = ">>";
-	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*(.+)\\s*"+END_RULE);
-	private static final String STARTS_WITH_LETTER_REGEX = "[A-Za-z].*";
+	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*(.+?)\\s*"+END_RULE);
+	private static final String FIVE_SPACES = "     ";
 
+	/**
+	 * Parses the license template calling the templateOutputHandler for any text and rules found
+	 * @param licenseTemplate License template to be parsed
+	 * @param templateOutputHandler Handles the text, optional text, and variable rules text found
+	 */
+	public static void parseTemplate(String licenseTemplate,
+			ILicenseTemplateOutputHandler templateOutputHandler) throws LicenseTemplateRuleException {
+		Matcher ruleMatcher = RULE_PATTERN.matcher(licenseTemplate);
+		int end = 0;
+		boolean inOptional = false;
+		while (ruleMatcher.find()) {
+			// copy everything up to the start of the find
+			String upToTheFind = licenseTemplate.substring(end, ruleMatcher.start());
+			if (!upToTheFind.isEmpty()) {
+				if (inOptional) {
+					templateOutputHandler.optionalText(upToTheFind);
+				} else {
+					templateOutputHandler.normalText(upToTheFind);
+				}
+			}
+			end = ruleMatcher.end();
+			String ruleString = ruleMatcher.group(1);
+			LicenseTemplateRule rule = new LicenseTemplateRule(ruleString);
+			if (rule.getType() == LicenseTemplateRule.RuleType.VARIABLE) {
+				templateOutputHandler.variableRule(rule);
+			} else if (rule.getType() == LicenseTemplateRule.RuleType.BEGIN_OPTIONAL) {
+				if (inOptional) {
+					throw(new LicenseTemplateRuleException("Invalid nested optional rule found"));
+				} else {
+					inOptional = true;
+					templateOutputHandler.beginOptional(rule);
+				}
+			} else if (rule.getType() == LicenseTemplateRule.RuleType.END_OPTIONAL) {
+				if (inOptional) {
+					inOptional = false;
+					templateOutputHandler.endOptional(rule);
+				} else {
+					throw(new LicenseTemplateRuleException("End optional rule found without a matching begin optional rule"));
+				}
+			} else {
+				throw(new LicenseTemplateRuleException("Unrecognized rule: "+rule.getType().toString()));
+			}
+		}
+		if (inOptional) {
+			throw(new LicenseTemplateRuleException("Missing EndOptional rule"));
+		}
+		// copy the rest of the template to the end
+		String restOfTemplate = licenseTemplate.substring(end);
+		if (!restOfTemplate.isEmpty()) {
+			templateOutputHandler.normalText(restOfTemplate);
+		}
+	}
+	
 	/**
 	 * Converts a license template string to formatted HTML which highlights any 
 	 * rules or tags
@@ -45,114 +97,9 @@ public class SpdxLicenseTemplateHelper {
 	 * @throws LicenseTemplateRuleException 
 	 */
 	public static String templateTextToHtml(String licenseTemplate) throws LicenseTemplateRuleException {
-		Matcher ruleMatcher = RULE_PATTERN.matcher(licenseTemplate);
-		StringBuilder retval = new StringBuilder();
-		int end = 0;
-		while (ruleMatcher.find()) {
-			// copy everything up to the start of the find
-			String upToTheFind = licenseTemplate.substring(end, ruleMatcher.start());
-			retval.append(escapeHTML(upToTheFind));
-			end = ruleMatcher.end();
-			String rule = ruleMatcher.group(1);
-			retval.append(ruleToHTML(rule));
-		}
-		// copy the rest of the template to the end
-		String restOfTemplate = licenseTemplate.substring(end);
-		retval.append(escapeHTML(restOfTemplate));
-		return retval.toString();
-	}
-
-	/**
-	 * @param rule
-	 * @return
-	 * @throws LicenseTemplateRuleException 
-	 */
-	private static String ruleToHTML(String ruleString) throws LicenseTemplateRuleException {
-		LicenseTemplateRule rule = new LicenseTemplateRule(ruleString);
-		if (rule.getType() == RuleType.OPTIONAL) {
-			return formatOptionalHTML(rule.getOriginal(), rule.getName());
-		} else if (rule.getType() == RuleType.REQUIRED) {
-			return formatReplaceabledHTML(rule.getOriginal(), rule.getName());
-		} else {
-			throw(new LicenseTemplateRuleException("Unsupported rule type: "+rule.getType().toString()));
-		}
-	}
-
-	/**
-	 * Format HTML for a replaceable string
-	 * @param text text for the optional license string
-	 * @param id ID used for the div 
-	 * @return
-	 */
-	private static String formatReplaceabledHTML(String text, String id) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\n<div ");
-		if (id != null && !id.trim().isEmpty()) {
-			sb.append("id=\"");
-			sb.append(escapeIdString(id));
-			sb.append("\" ");
-		}
-		sb.append("class=\"");
-		sb.append(REPLACEABLE_LICENSE_TEXT_CLASS);
-		sb.append("\">");
-		sb.append(escapeHTML(text));
-		sb.append("</div>\n");
-		return sb.toString();
-	}
-
-	/**
-	 * Format HTML for an optional string
-	 * @param text text for the optional license string
-	 * @param id ID used for the div 
-	 * @return
-	 */
-	private static String formatOptionalHTML(String text, String id) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\n<div ");
-		if (id != null && !id.trim().isEmpty()) {
-			sb.append("id=\"");
-			sb.append(escapeIdString(id));
-			sb.append("\" ");
-		}
-		sb.append("class=\"");
-		sb.append(OPTIONAL_LICENSE_TEXT_CLASS);
-		sb.append("\">");
-		sb.append(escapeHTML(text));
-		sb.append("</div>\n");
-		return sb.toString();
-	}
-
-	/**
-	 * Escape the ID string to conform to the legal characters for an HTML ID string
-	 * @param id
-	 * @return
-	 */
-	public static String escapeIdString(String id) {
-		String retval = id;
-		if (!retval.matches(STARTS_WITH_LETTER_REGEX)) {
-			retval = "X" + retval;
-		}
-		for (int i = 0; i < retval.length(); i++) {
-			char c = retval.charAt(i);
-			if (!validIdChar(c)) {
-				// replace with "_"
-				retval = retval.replace(c, '_');
-			}
-		}
-		return retval;
-	}
-
-	/**
-	 * @param c
-	 * @return true if c is a valid character for an ID string
-	 */
-	private static boolean validIdChar(char c) {
-		return ((c >= 'a' && c <= 'z') ||
-				(c >= 'A' && c <= 'Z') ||
-				(c >= '0' && c <= '9') ||
-				(c == '-')||
-				(c == '_') ||
-				(c == '.'));
+		HtmlTemplateOutputHandler htmlOutput = new HtmlTemplateOutputHandler();
+		parseTemplate(licenseTemplate, htmlOutput);
+		return htmlOutput.getHtml();
 	}
 
 	/**
@@ -162,27 +109,76 @@ public class SpdxLicenseTemplateHelper {
 	 * @throws LicenseTemplateRuleException 
 	 */
 	public static String templateToText(String template) throws LicenseTemplateRuleException {
-		Matcher ruleMatcher = RULE_PATTERN.matcher(template);
-		StringBuilder retval = new StringBuilder();
-		int end = 0;
-		while (ruleMatcher.find()) {
-			// copy everything up to the start of the find
-			String upToTheFind = template.substring(end, ruleMatcher.start());
-			retval.append(upToTheFind);
-			end = ruleMatcher.end();
-			String ruleString = ruleMatcher.group(1);
-			LicenseTemplateRule rule = new LicenseTemplateRule(ruleString);
-			retval.append(rule.getOriginal());
-		}
-		// copy the rest of the template to the end
-		String restOfTemplate = template.substring(end);
-		retval.append(restOfTemplate);
-		return retval.toString();
+		TextTemplateOutputHandler textOutput = new TextTemplateOutputHandler();
+		parseTemplate(template, textOutput);
+		return textOutput.getText();
 	}
 	
 	public static String escapeHTML(String text) {
 		String retval = StringEscapeUtils.escapeXml(text);
-		return retval.replace("\n", "<br/>\n");
+		return addHtmlFormatting(retval);
+	}
+
+	/**
+	 * Adds HTML formatting <br> and <p>
+	 * @param text
+	 * @return
+	 */
+	public static String addHtmlFormatting(String text) {
+		String[] lines = text.split("\n");
+		StringBuilder result = new StringBuilder();
+		result.append(lines[0]);
+		boolean inParagraph = false;
+		int i = 1;
+		while (i < lines.length) {
+			if (lines[i].trim().isEmpty()) {
+				// paragraph boundary 
+				if (inParagraph) {
+					result.append("</p>");
+				}
+				result.append("\n");
+
+				i++;
+				if (i < lines.length) {
+					if (lines[i].startsWith(FIVE_SPACES)) {
+						result.append("<p style=\"margin-left: 20px;\">");
+					} else {
+						result.append("<p>");
+					}
+					result.append(lines[i++]);
+				} else {
+					result.append("<p>");
+				}
+				inParagraph = true;
+			} else {
+				// just a line break
+				result.append("<br/>");
+				result.append("\n");
+				result.append(lines[i++]);
+			}
+
+		}
+		if (inParagraph) {
+			result.append("</p>");
+		} else if (text.endsWith("\n")) {
+			result.append("<br/>\n");
+		}
+		return result.toString();
+	}
+
+	/**
+	 * Converts an HTML string to text preserving line breaks for <br/> tags
+	 * @param html
+	 * @return
+	 */
+	public static String HtmlToText(String html) {
+		String newlineString = "NeWLineGoesHere";
+		String replaceBrs = html.replaceAll("(?i)<br[^>]*>", newlineString);
+		String replaceBrsAndPs = replaceBrs.replaceAll("(?i)<p[^>]*>", newlineString);
+		Document doc = Jsoup.parse(replaceBrsAndPs);
+		String retval  = doc.text();
+		retval = retval.replace(newlineString, "\n");
+		return retval;
 	}
 
 }
