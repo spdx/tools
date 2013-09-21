@@ -1383,6 +1383,27 @@ public class SpdxComparerTest {
 		assertFalse(comparer.isPackageEqual());
 		assertTrue(comparer.isDifferenceFound());
 	}
+	
+	/**
+	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageHomePagesEqual()}.
+	 */
+	@Test
+	public void testIsPackageHomePagesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
+		SpdxComparer comparer = new SpdxComparer();
+		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		alterExtractedLicenseInfoIds(doc2, 1);
+		comparer.compare(doc1, doc2);
+		assertTrue(comparer.isPackageEqual());
+		assertTrue(comparer.ispackageHomePagesEqual());
+		assertFalse(comparer.isDifferenceFound());
+		
+		doc2.getSpdxPackage().setHomePage("http://different/home/page");
+		comparer.compare(doc1, doc2);
+		assertFalse(comparer.ispackageHomePagesEqual());
+		assertFalse(comparer.isPackageEqual());
+		assertTrue(comparer.isDifferenceFound());
+	}
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageVerificationCodesEqual()}.
@@ -1605,7 +1626,7 @@ public class SpdxComparerTest {
 		String[] oneMore = Arrays.copyOf(origCreators.getCreators(), origCreators.getCreators().length+1);
 		oneMore[oneMore.length-1] = "Person: One More Person";
 		SPDXCreatorInformation updatedCreators = new SPDXCreatorInformation(
-				oneMore, origCreators.getCreated(), origCreators.getComment());
+				oneMore, origCreators.getCreated(), origCreators.getComment(), origCreators.getLicenseListVersion());
 		doc1.setCreationInfo(updatedCreators);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isCreatorInformationEqual());
@@ -1615,7 +1636,7 @@ public class SpdxComparerTest {
 		String[] creatorarray = Arrays.copyOf(origCreators.getCreators(), origCreators.getCreators().length);
 		creatorarray[0] = "Person: Different Person";
 		updatedCreators = new SPDXCreatorInformation(
-				creatorarray, origCreators.getCreated(), origCreators.getComment());
+				creatorarray, origCreators.getCreated(), origCreators.getComment(), origCreators.getLicenseListVersion());
 		doc1.setCreationInfo(updatedCreators);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isCreatorInformationEqual());
@@ -1623,7 +1644,7 @@ public class SpdxComparerTest {
 		
 		// Different creation date
 		updatedCreators = new SPDXCreatorInformation(
-				origCreators.getCreators(), "2013-02-03T00:00:00Z", origCreators.getComment());
+				origCreators.getCreators(), "2013-02-03T00:00:00Z", origCreators.getComment(), origCreators.getLicenseListVersion());
 		doc1.setCreationInfo(updatedCreators);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isCreatorInformationEqual());
@@ -1631,7 +1652,15 @@ public class SpdxComparerTest {
 		
 		// different comment
 		updatedCreators = new SPDXCreatorInformation(
-				origCreators.getCreators(), origCreators.getCreated(), "Different Comment");
+				origCreators.getCreators(), origCreators.getCreated(), "Different Comment", origCreators.getLicenseListVersion());
+		doc1.setCreationInfo(updatedCreators);
+		comparer.compare(doc1, doc2);
+		assertFalse(comparer.isCreatorInformationEqual());
+		assertTrue(comparer.isDifferenceFound());
+		
+		// different license list version
+		updatedCreators = new SPDXCreatorInformation(
+				origCreators.getCreators(), origCreators.getCreated(), origCreators.getLicenseListVersion(), "1.25");
 		doc1.setCreationInfo(updatedCreators);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isCreatorInformationEqual());
@@ -1661,12 +1690,13 @@ public class SpdxComparerTest {
 		String creator3 = "Tool: Creator3";
 		String createdDate = "2013-02-03T00:00:00Z";
 		String creatorComment = "Creator comments";
+		String licenseListVersion = "1.19";
 		String[] creators1 = new String[] {creator1, creator2, creator3};
 		String[] creators2 = new String[] {creator3, creator2, creator1};	
 		SPDXCreatorInformation creationInfo1 = new SPDXCreatorInformation(
-				creators1, createdDate, creatorComment);
+				creators1, createdDate, creatorComment, licenseListVersion);
 		SPDXCreatorInformation creationInfo2 = new SPDXCreatorInformation(
-				creators2, createdDate, creatorComment);
+				creators2, createdDate, creatorComment, licenseListVersion);
 		doc1.setCreationInfo(creationInfo1);
 		doc2.setCreationInfo(creationInfo2);
 		comparer.compare(doc1, doc2);
@@ -1681,9 +1711,9 @@ public class SpdxComparerTest {
 		creators1 = new String[] {creator1, creator2, creator3};
 		creators2 = new String[] {creator1};
 		creationInfo1 = new SPDXCreatorInformation(
-				creators1, createdDate, creatorComment);
+				creators1, createdDate, creatorComment, licenseListVersion);
 		creationInfo2 = new SPDXCreatorInformation(
-				creators2, createdDate, creatorComment);
+				creators2, createdDate, creatorComment, licenseListVersion);
 		doc1.setCreationInfo(creationInfo1);
 		doc2.setCreationInfo(creationInfo2);
 		HashSet<String> additionalCreators = new HashSet<String>();
@@ -1704,9 +1734,9 @@ public class SpdxComparerTest {
 		creators1 = new String[] {creator2, creator3};
 		creators2 = new String[] {creator1, creator2, creator3};
 		creationInfo1 = new SPDXCreatorInformation(
-				creators1, createdDate, creatorComment);
+				creators1, createdDate, creatorComment, licenseListVersion);
 		creationInfo2 = new SPDXCreatorInformation(
-				creators2, createdDate, creatorComment);
+				creators2, createdDate, creatorComment, licenseListVersion);
 		doc1.setCreationInfo(creationInfo1);
 		doc2.setCreationInfo(creationInfo2);
 		additionalCreators.clear();

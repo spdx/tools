@@ -18,6 +18,7 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
 
 /**

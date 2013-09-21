@@ -221,7 +221,7 @@ public abstract class AbstractSheet {
 				maxNumLines = MAX_ROW_LINES;
 			}
 			if (maxNumLines > 1) {
-				row.setHeight((short) (row.getHeight()*maxNumLines));
+				row.setHeight((short) (sheet.getDefaultRowHeight()*maxNumLines));
 			}		
 		}
 	}

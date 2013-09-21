@@ -14,26 +14,29 @@ padding: 1ex;
 }
 
 .replacable-license-text {
-{color:rgb(0,0,255);
+color: #0000cc;
 }
+
 .optional-license-text {
-{color:rgb(0,255,0);
+color: #009900;
 }
+
 h2 {
 border-bottom: 1px solid Gray;
-}
-dt {
-font-weight: bold;
+margin: 5px 5px 10px 0;
+color: #003F69;
 }
 
 ul {
-padding-left: 1em;
+    list-style-type: square;
 }
 
 table {
 border-collapse: collapse;
 }
+
 td,th {
 margin: 0;
+text-align: left;
 border: 1px solid black;
 }

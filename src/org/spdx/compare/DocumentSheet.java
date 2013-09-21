@@ -35,20 +35,21 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class DocumentSheet extends AbstractSheet {
 	
-	int NUM_COLS = 6;
+	int NUM_COLS = 7;
 	int DOCUMENT_NAME_COL = 0;
 	int SPDX_VERSION_COL = DOCUMENT_NAME_COL + 1;
 	int DATA_LICENSE_COL = SPDX_VERSION_COL + 1;
 	int DOCUMENT_COMMENT_COL = DATA_LICENSE_COL + 1;
 	int CREATION_DATE_COL = DOCUMENT_COMMENT_COL + 1;
 	int CREATOR_COMMENT_COL = CREATION_DATE_COL + 1;
+	int LICENSE_LIST_VERSION_COL = CREATOR_COMMENT_COL + 1;
 
 	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, false, true, false};
+	static final boolean[] REQUIRED = new boolean[] {true, true, true, false, true, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Document Name", "SPDX Version", 
-		"Data License", "Document Comment", "Creation Date", "Creator Comment"};
+		"Data License", "Document Comment", "Creation Date", "Creator Comment", "Lic. List. Ver."};
 	
-	static final int[] COLUMN_WIDTHS = new int[] {35, 15, 15, 60, 22, 60};
+	static final int[] COLUMN_WIDTHS = new int[] {35, 15, 15, 60, 22, 60, 22};
 	private static final String DIFFERENT_STRING = "Diff";
 	private static final String EQUAL_STRING = "Equals";
 
@@ -128,6 +129,28 @@ public class DocumentSheet extends AbstractSheet {
 		importDocumentComments(comparer);
 		importCreationDate(comparer);
 		importCreatorComment(comparer);
+		importLicenseListVersions(comparer);
+	}
+
+	/**
+	 * @param comparer
+	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void importLicenseListVersions(SpdxComparer comparer) throws SpdxCompareException, InvalidSPDXAnalysisException {
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(LICENSE_LIST_VERSION_COL);
+		if (comparer.isLicenseListVersionEqual()) {
+			setCellEqualValue(cell);
+		} else {
+			setCellDifferentValue(cell);
+		}
+		// data rows
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(LICENSE_LIST_VERSION_COL);
+			if (comparer.getSpdxDoc(i).getCreatorInfo().getLicenseListVersion() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getCreatorInfo().getLicenseListVersion());
+			}
+		}
 	}
 
 	/**

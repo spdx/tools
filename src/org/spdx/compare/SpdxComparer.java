@@ -246,6 +246,8 @@ public class SpdxComparer {
 	}
 	private Comparator<SPDXFile> fileSortByNameComaprator = new FileByNameComparator();
 	private SpdxFileComparer fileComparer = new SpdxFileComparer();
+	private boolean packageHomePagesEquals;
+	private boolean licenseListVersionEquals;
 	
 	public SpdxComparer() {
 		
@@ -420,6 +422,7 @@ public class SpdxComparer {
 	 */
 	private void compareCreators() throws InvalidSPDXAnalysisException {
 		this.creatorInformationEquals = true;
+		this.licenseListVersionEquals = true;
 		// this will be a N x N comparison of all creators to fill the
 		// hashmap uniqueCreators
 		for (int i = 0; i < spdxDocs.length; i++) {
@@ -449,6 +452,11 @@ public class SpdxComparer {
 				// compare creation dates
 				if (!stringsEqual(creatorInfoA.getCreated(), creatorInfoB.getCreated())) {
 					this.creatorInformationEquals = false;
+				}
+				// compare license list versions
+				if (!stringsEqual(creatorInfoA.getLicenseListVersion(), creatorInfoB.getLicenseListVersion())) {
+					this.creatorInformationEquals = false;
+					this.licenseListVersionEquals = false;
 				}
 			}
 			if (uniqueAMap.keySet().size() > 0) {
@@ -512,6 +520,7 @@ public class SpdxComparer {
 		this.packageCopyrightsEquals = true;
 		this.packageSummaryEquals = true;
 		this.packageDescriptionsEquals = true;
+		this.packageHomePagesEquals = true;
 		
 		if (this.spdxDocs == null || this.spdxDocs.length < 1) {
 			return;
@@ -596,6 +605,16 @@ public class SpdxComparer {
 				}
 			} catch (InvalidSPDXAnalysisException e) {
 				throw(new SpdxCompareException("SPDX error getting package download locations: "+e.getMessage(),e));
+			}
+			// package home pages
+			try {
+				if (!stringsEqual(pkg1.getHomePage(), pkg2.getHomePage())) {
+					this.packageHomePagesEquals = false;
+					this.packagesEquals = false;
+					this.differenceFound = true;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpdxCompareException("SPDX error getting package home page: "+e.getMessage(),e));
 			}
 			// package verification code
 			try {
@@ -1737,5 +1756,25 @@ public class SpdxComparer {
 	 */
 	public int getNumSpdxDocs() {
 		return this.spdxDocs.length;
+	}
+
+	/**
+	 * @return
+	 * @throws SpdxCompareException 
+	 */
+	public boolean ispackageHomePagesEqual() throws SpdxCompareException {
+		this.checkDocsField();
+		this.checkInProgress();
+		return this.packageHomePagesEquals;
+	}
+
+	/**
+	 * @return
+	 * @throws SpdxCompareException 
+	 */
+	public boolean isLicenseListVersionEqual() throws SpdxCompareException {
+		this.checkDocsField();
+		this.checkInProgress();
+		return this.licenseListVersionEquals;
 	}
 }

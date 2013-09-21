@@ -62,6 +62,7 @@ public class PackageSheet extends AbstractSheet {
 	protected static final String PACKAGE_NAME_FIELD_TEXT = "Package Name";
 	protected static final String DIFFERENT_STRING = "Diff";
 	protected static final String EQUAL_STRING = "Equal";
+	protected static final String HOMEPAGE_FIELD_TEXT = "Home Page";
 	
 
 	/**
@@ -160,6 +161,13 @@ public class PackageSheet extends AbstractSheet {
 		} else {
 			setCellDifferentValue(originatorRow.createCell(EQUALS_COL));
 		}
+		Row homePageRow = this.addRow();
+		homePageRow.createCell(FIELD_COL).setCellValue(HOMEPAGE_FIELD_TEXT);
+		if (comparer.ispackageHomePagesEqual()) {
+			setCellEqualValue(homePageRow.createCell(EQUALS_COL));
+		} else {
+			setCellDifferentValue(homePageRow.createCell(EQUALS_COL));
+		}
 		Row downloadRow = this.addRow();
 		downloadRow.createCell(FIELD_COL).setCellValue(DOWNLOAD_FIELD_TEXT);
 		if (comparer.isPackageDownloadLocationsEqual()) {
@@ -253,6 +261,7 @@ public class PackageSheet extends AbstractSheet {
 			fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getFileName());
 			supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSupplier());
 			originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getOriginator());
+			homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomePage());
 			downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadUrl());
 			verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getVerificationCode().getValue());
 			verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getVerificationCode().getExcludedFileNames()));

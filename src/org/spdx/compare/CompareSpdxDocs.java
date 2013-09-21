@@ -305,6 +305,16 @@ public class CompareSpdxDocs {
 			output.println("\t"+doc1Name+":"+spdxFileDifference.getFileTypeA());
 			output.println("\t"+doc2Name+":"+spdxFileDifference.getFileTypeB());
 		}
+		if (!spdxFileDifference.isContributorsEqual()) {
+			output.println("File contributors differ for file "+spdxFileDifference.getFileName()+":");
+			output.println("\t"+doc1Name+":"+spdxFileDifference.getContributorsAAsString());
+			output.println("\t"+doc2Name+":"+spdxFileDifference.getContributorsBAsString());
+		}		
+		if (!spdxFileDifference.isFileDependenciesEqual()) {
+			output.println("File contributors differ for file "+spdxFileDifference.getFileName()+":");
+			output.println("\t"+doc1Name+"dependencies:"+spdxFileDifference.getFileDependenciesAAsString());
+			output.println("\t"+doc2Name+":"+spdxFileDifference.getFileDependenciesBAsString());
+		}	
 		if (!spdxFileDifference.isSeenLicensesEqual()) {
 			if (spdxFileDifference.getUniqueSeenLicensesA() != null && 
 					spdxFileDifference.getUniqueSeenLicensesA().length > 0) {
@@ -615,6 +625,20 @@ public class CompareSpdxDocs {
 				output.println("\t"+doc1Name+": "+comparer.getSpdxDoc(0).getSpdxPackage().getDownloadUrl());
 				output.println("\t"+doc2Name+": "+comparer.getSpdxDoc(1).getSpdxPackage().getDownloadUrl());
 			}
+			// package home page
+			if (!comparer.ispackageHomePagesEqual()) {
+				output.println("Package home page differ.");
+				if (comparer.getSpdxDoc(0).getSpdxPackage().getHomePage() == null) {
+					output.println("\t"+doc1Name+": [No home page information]");
+				} else {
+					output.println("\t"+doc1Name+": "+comparer.getSpdxDoc(0).getSpdxPackage().getHomePage());
+				}
+				if (comparer.getSpdxDoc(1).getSpdxPackage().getHomePage() == null) {
+					output.println("\t"+doc2Name+": [No home page information]");
+				} else {
+					output.println("\t"+doc2Name+": "+comparer.getSpdxDoc(1).getSpdxPackage().getHomePage());
+				}
+			}
 			// package verification code
 			if (!comparer.isPackageVerificationCodesEqual()) {
 				output.println("Package verification codees differ.");
@@ -808,6 +832,20 @@ public class CompareSpdxDocs {
 					output.println("\t"+doc2Name+": [No comment]");
 				} else {
 					output.println("\t"+doc2Name+": "+doc2CreatorInfo.getComment());
+				}
+			}
+			// license list version
+			if (!SpdxComparer.stringsEqual(doc1CreatorInfo.getLicenseListVersion(), doc2CreatorInfo.getLicenseListVersion())) {
+				output.println("License list versions differ.");
+				if (doc1CreatorInfo.getLicenseListVersion() == null) {
+					output.println("\t"+doc1Name+": [No license list version]");
+				} else {
+					output.println("\t"+doc1Name+": "+doc1CreatorInfo.getLicenseListVersion());
+				}
+				if (doc2CreatorInfo.getLicenseListVersion() == null) {
+					output.println("\t"+doc2Name+": [No license list version]");
+				} else {
+					output.println("\t"+doc2Name+": "+doc2CreatorInfo.getLicenseListVersion());
 				}
 			}
 		}

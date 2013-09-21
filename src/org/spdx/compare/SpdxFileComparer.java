@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 
@@ -43,6 +44,30 @@ public class SpdxFileComparer {
 	private boolean concludedLicenseEquals;
 	private boolean seenLicenseEquals;
 	private boolean artifactOfEquals;
+	private boolean fileDependenciesEquals;
+	private boolean contributorsEquals;
+	private boolean noticeTextEquals;
+	/**
+	 * @return the fileDependenciesEquals
+	 */
+	public boolean isFileDependenciesEquals() {
+		return fileDependenciesEquals;
+	}
+
+	/**
+	 * @return the contributorsEquals
+	 */
+	public boolean isContributorsEquals() {
+		return contributorsEquals;
+	}
+
+	/**
+	 * @return the noticeTextEquals
+	 */
+	public boolean isNoticeTextEquals() {
+		return noticeTextEquals;
+	}
+
 	/**
 	 * Seen licenses found in fileB but not in fileA
 	 */
@@ -109,7 +134,7 @@ public class SpdxFileComparer {
 		inProgress = true;
 		differenceFound = false;
 		this.fileA = fileA;
-		this.fileB = fileB;
+		this.fileB = fileB;		
 		// Artifact Of
 		compareArtifactOf(fileA.getArtifactOf(), fileB.getArtifactOf());
 		// Comments
@@ -134,7 +159,7 @@ public class SpdxFileComparer {
 			this.copyrightsEquals = false;
 			this.differenceFound = true;
 		}
-		//
+		// license comments
 		if (SpdxComparer.stringsEqual(fileA.getLicenseComments(),
 				fileB.getLicenseComments())) {
 			this.licenseCommmentsEquals = true;
@@ -166,10 +191,59 @@ public class SpdxFileComparer {
 			this.typesEquals = false;
 			this.differenceFound = true;
 		}
-		
+		// contributors
+		if (SpdxComparer.stringArraysEqual(fileA.getContributors(), fileB.getContributors())) {
+			this.contributorsEquals = true;
+		} else {
+			this.contributorsEquals = false;
+			this.differenceFound = true;
+		}
+		// notice text
+		if (SpdxComparer.stringsEqual(fileA.getNoticeText(), fileB.getNoticeText())) {
+			this.noticeTextEquals = true;
+		} else {
+			this.noticeTextEquals = false;
+			this.differenceFound = true;
+		}
+		// file dependencies
+		if (fileNamesEquals(fileA.getFileDependencies(), fileB.getFileDependencies())) {
+			this.fileDependenciesEquals = true;
+		} else {
+			this.fileDependenciesEquals = false;
+			this.differenceFound = true;
+		}
 		inProgress = false;
 	}
 	
+	/**
+	 * Compare the file names from two arrays of SPDX files for equality ignoring order
+	 * @param filesA
+	 * @param filesB
+	 * @return
+	 */
+	private boolean fileNamesEquals(SPDXFile[] filesA,
+			SPDXFile[] filesB) {
+		String[] fileNamesA = filesToFileNames(filesA);
+		String[] fileNamesB = filesToFileNames(filesB);
+		return SpdxComparer.stringArraysEqual(fileNamesA, fileNamesB);
+	}
+
+	/**
+	 * Extracts out the file names into a string array
+	 * @param files
+	 * @return
+	 */
+	static public String[] filesToFileNames(SPDXFile[] files) {
+		if (files == null) {
+			return null;
+		}
+		String[] retval = new String[files.length];
+		for (int i = 0; i < files.length; i++) {
+			retval[i] = files[i].getName();
+		}
+		return retval;
+	}
+
 	/**
 	 * Compares seen licenses and initializes the uniqueSeenLicenses arrays
 	 * as well as the seenLicenseEquals flag and sets the differenceFound to
@@ -418,8 +492,12 @@ public class SpdxFileComparer {
 		if (!fileA.getName().equals(fileB.getName())) {
 			throw(new SpdxCompareException("Can not create an SPDX file difference for two files with different names"));
 		}
-		return new SpdxFileDifference(fileA, fileB, concludedLicenseEquals, seenLicenseEquals, 
-				uniqueSeenLicensesA, uniqueSeenLicensesB, artifactOfEquals, 
-				uniqueArtifactOfA, uniqueArtifactOfB);
+		try {
+			return new SpdxFileDifference(fileA, fileB, concludedLicenseEquals, seenLicenseEquals, 
+					uniqueSeenLicensesA, uniqueSeenLicensesB, artifactOfEquals, 
+					uniqueArtifactOfA, uniqueArtifactOfB);
+		} catch (InvalidSPDXAnalysisException e) {
+			throw (new SpdxCompareException("Error reading SPDX file propoerties: "+e.getMessage(),e));
+		}
 	}	
 }

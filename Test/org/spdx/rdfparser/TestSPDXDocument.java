@@ -165,7 +165,8 @@ public class TestSPDXDocument {
 		String testComment = "My comment";
 		DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		String createdDate = format.format(new Date());
-		SPDXCreatorInformation creator = new SPDXCreatorInformation(testCreatedBy, createdDate, testComment);
+		String licenseListVersion = "1.18";
+		SPDXCreatorInformation creator = new SPDXCreatorInformation(testCreatedBy, createdDate, testComment, licenseListVersion);
 		ArrayList<String> verify = creator.verify();
 		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator);
@@ -174,6 +175,7 @@ public class TestSPDXDocument {
 		compareArrays(testCreatedBy, resultCreatedBy);
 		assertEquals(creator.getCreated(), result.getCreated());
 		assertEquals(creator.getComment(), result.getComment());
+		assertEquals(creator.getLicenseListVersion(), result.getLicenseListVersion());
 		writer = new StringWriter();
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
@@ -181,13 +183,15 @@ public class TestSPDXDocument {
 				"Person: second created", 
 				"Organization: another",
 				"Tool: and another"};
-		SPDXCreatorInformation creator2 = new SPDXCreatorInformation(testCreatedBy2, createdDate, testComment);
+		String testLicVersion2 = "1.16";
+		SPDXCreatorInformation creator2 = new SPDXCreatorInformation(testCreatedBy2, createdDate, testComment, testLicVersion2);
 		verify = creator2.verify();
 		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator2);
 		SPDXCreatorInformation result2 = doc.getCreatorInfo();
 		String[] resultCreatedBy2 = result2.getCreators();
 		compareArrays(testCreatedBy2, resultCreatedBy2);
+		assertEquals(testLicVersion2, result2.getLicenseListVersion());
 	}
 
 	private void compareArrays(Object[] a1,
@@ -553,6 +557,19 @@ public class TestSPDXDocument {
 		assertEquals(declaredLicenses, result);
 		assertEquals(TEST_LICENSE_ID, ((SPDXNonStandardLicense)result).getId());
 	}
+	
+	@Test
+	public void testSpdxPackageHomePage() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testUri);
+		doc.createSpdxPackage();
+		String TEST_HOME_PAGE = "http://www.homepage.com";
+		doc.getSpdxPackage().setHomePage(TEST_HOME_PAGE);
+		String result = doc.getSpdxPackage().getHomePage();
+		assertEquals(TEST_HOME_PAGE, result);
+	}
 
 	@Test
 	public void testAddNonStandardLicense() throws InvalidSPDXAnalysisException {
@@ -611,6 +628,8 @@ public class TestSPDXDocument {
 		pkg.setDescription("Description");
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
+		String homePage = "http://www.home.page";
+		pkg.setHomePage(homePage);
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
@@ -630,7 +649,7 @@ public class TestSPDXDocument {
 		DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		String date = format.format(new Date());
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] {"Person: creator"},
-				date, "");
+				date, "", null);
 		verify = creator.verify();
 		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator);

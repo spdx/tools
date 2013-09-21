@@ -19,8 +19,6 @@ package org.spdx.rdfparser;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 
 import com.hp.hpl.jena.graph.Node;

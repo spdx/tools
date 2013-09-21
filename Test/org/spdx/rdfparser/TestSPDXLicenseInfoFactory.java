@@ -177,12 +177,18 @@ public class TestSPDXLicenseInfoFactory {
 			fail("license is null");
 		}
 		String header = "Test BSD Standard License Header";
+		String note = "BSD 3 clause notes";
+		String url = "http://www.opensource.org/licenses/BSD-3-Clause";
 		assertEquals(id, lic.getId());
 		assertEquals(header, lic.getStandardLicenseHeader());
 		String template = readTextFile("TestFiles"+File.separator+"BSD-3-Clause-Template.txt");
 		String licenseTemplate = lic.getTemplate();
 		int result = compareStringsIgnoreSpaces(template, licenseTemplate);
 		assertEquals(0, result);
+		assertEquals(note, lic.getComment());
+		assertEquals(1, lic.getSourceUrl().length);
+		assertEquals(url, lic.getSourceUrl()[0]);
+		assertTrue(lic.isOsiApproved());
 	}
 
 	/**

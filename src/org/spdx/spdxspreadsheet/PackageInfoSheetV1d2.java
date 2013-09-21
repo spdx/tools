@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011 Source Auditor Inc.
+ * Copyright (c) 2013 Source Auditor Inc.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -29,19 +29,22 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
 /**
- * @author Source Auditor
+ * Version 1.2 implementation of PackageInfo Sheet - added home page column
+ * @author Gary O'Neall
  *
  */
-public class PackageInfoSheetV09d3 extends PackageInfoSheet {
+public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 
-	int NUM_COLS = 17;
+
+	int NUM_COLS = 18;
 	int NAME_COL = 0;
 	int VERSION_COL = NAME_COL+1;
 	int MACHINE_NAME_COL = VERSION_COL+1;
 	int SUPPLIER_COL = MACHINE_NAME_COL + 1;
 	int ORIGINATOR_COL = SUPPLIER_COL + 1;
-	int URL_COL = ORIGINATOR_COL + 1;
-	int PACKAGE_SHA_COL = URL_COL + 1;
+	int HOME_PAGE_COL = ORIGINATOR_COL + 1;
+	int DOWNLOAD_URL_COL = HOME_PAGE_COL + 1;
+	int PACKAGE_SHA_COL = DOWNLOAD_URL_COL + 1;
 	int FILE_VERIFICATION_VALUE_COL = PACKAGE_SHA_COL + 1;
 	int VERIFICATION_EXCLUDED_FILES_COL = FILE_VERIFICATION_VALUE_COL + 1;
 	int SOURCE_INFO_COL = VERIFICATION_EXCLUDED_FILES_COL + 1;
@@ -54,14 +57,15 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 	int FULL_DESC_COL = SHORT_DESC_COL + 1;
 
 	
-	static final boolean[] REQUIRED = new boolean[] {true, false, true, false, false, true, 
+	static final boolean[] REQUIRED = new boolean[] {true, false, true, false, false, false, true, 
 		true, true, true, false, true, true, true, false, true, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package Name", "Package Version", 
-		"Package FileName", "Package Supplier", "Package Originator", "Package Download Location", "Package Checksum", "Package Verification Code",
+		"Package FileName", "Package Supplier", "Package Originator", "Home Page",
+		"Package Download Location", "Package Checksum", "Package Verification Code",
 		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files", 
 		"License Comments", "Package Copyright Text", "Summary", "Description"};
 	
-	static final int[] COLUMN_WIDTHS = new int[] {30, 17, 30, 30, 30, 50, 25, 25, 40, 30,
+	static final int[] COLUMN_WIDTHS = new int[] {30, 17, 30, 30, 30, 50, 50, 25, 25, 40, 30,
 		40, 40, 90, 50, 50, 50, 80};
 
 	/**
@@ -69,7 +73,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 	 * @param sheetName
 	 * @param version 
 	 */
-	public PackageInfoSheetV09d3(Workbook workbook, String sheetName, String version) {
+	public PackageInfoSheetV1d2(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
 
@@ -251,7 +255,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 			Cell sourceInfoCell = row.createCell(SOURCE_INFO_COL);
 			sourceInfoCell.setCellValue(pkgInfo.getSourceInfo());
 		}
-		Cell urlCell = row.createCell(URL_COL);
+		Cell urlCell = row.createCell(DOWNLOAD_URL_COL);
 		urlCell.setCellValue(pkgInfo.getUrl());
 		if (pkgInfo.getVersionInfo() != null) {
 			Cell versionInfoCell = row.createCell(VERSION_COL);
@@ -264,6 +268,10 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 		if (pkgInfo.getSupplier() != null) {
 			Cell supplierCell = row.createCell(SUPPLIER_COL);
 			supplierCell.setCellValue(pkgInfo.getSupplier());
+		}
+		if (pkgInfo.getHomePage() != null) {
+			Cell homePageCell = row.createCell(HOME_PAGE_COL);
+			homePageCell.setCellValue(pkgInfo.getHomePage());
 		}
 	}
 	
@@ -326,7 +334,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 		} else {
 			description = "";
 		}
-		String url = row.getCell(URL_COL).getStringCellValue();
+		String url = row.getCell(DOWNLOAD_URL_COL).getStringCellValue();
 		String packageVerificationValue = row.getCell(FILE_VERIFICATION_VALUE_COL).getStringCellValue();
 		String[] excludedFiles;
 		String excludedFilesStr = row.getCell(VERIFICATION_EXCLUDED_FILES_COL).getStringCellValue();
@@ -359,10 +367,17 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 		} else {
 			originator = "";
 		}
+		String homePage;
+		Cell homePageCell = row.getCell(HOME_PAGE_COL);
+		if (homePageCell != null && !homePageCell.getStringCellValue().isEmpty()) {
+			homePage = homePageCell.getStringCellValue();
+		} else {
+			homePage = "";
+		}
 		SpdxPackageVerificationCode verificationCode = new SpdxPackageVerificationCode(packageVerificationValue, excludedFiles);
 		return new SPDXPackageInfo(declaredName, versionInfo, machineName, sha1, sourceInfo, 
 				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
 				licenseComment, declaredCopyright, shortDesc, 
-				description, url, verificationCode, supplier, originator, "");
+				description, url, verificationCode, supplier, originator, homePage);
 	}
 }

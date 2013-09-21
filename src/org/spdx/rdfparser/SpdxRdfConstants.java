@@ -84,6 +84,7 @@ public interface SpdxRdfConstants {
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_CREATION_CREATOR = "creator";
 	public static final String PROP_CREATION_CREATED = "created"; // creation timestamp
+	public static final String PROP_LICENSE_LIST_VERSION = "licenseListVersion";
 	public static final String CREATOR_PREFIX_PERSON = "Person:";
 	public static final String CREATOR_PREFIX_ORGANIZATION = "Organization:";
 	public static final String CREATOR_PREFIX_TOOL = "Tool:";
@@ -148,6 +149,9 @@ public interface SpdxRdfConstants {
 	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";
 	public static final String PROP_FILE_LIC_COMMENTS = "licenseComments";
 	public static final String PROP_FILE_ARTIFACTOF = "artifactOf";
+	public static final String PROP_FILE_FILE_DEPENDENCY = "fileDependency"; 
+	public static final String PROP_FILE_CONTRIBUTOR = "fileContributor";
+	public static final String PROP_FILE_NOTICE = "noticeText";
 	
 	// SPDX File Type Properties
 	public static final String PROP_FILE_TYPE_SOURCE = "fileType_source";

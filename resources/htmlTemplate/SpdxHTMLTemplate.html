@@ -22,6 +22,9 @@ Created on: {{created}}<br />
 {{#comment}}
 Creator comment: {{comment}}
 {{/comment}} <br />
+{{#licenseListVersion}}
+License List Version: {{licenseListVersion}}
+{{/licenseListVersion}} <br />
 {{/creationInfo}}
 {{#docComment}}
 Document Comment: {{docComment}}<br />
@@ -44,6 +47,9 @@ Version: {{versionInfo}}<br />
 {{#downloadLocation}}
 Download Location: {{downloadLocation}}<br />
 {{/downloadLocation}}
+{{#homePage}}
+Home Page: {{homePage}}<br />
+{{/homePage}}
 Summary: {{summary}}<br />
 {{#sourceInfo}}
 Source Information: {{sourceInfo}}<br />
@@ -98,6 +104,9 @@ Concluded License:{{licenseConcluded}}<br />
 License Comments: {{licenseComments}}<br />
 {{/licenseComments}}
 Copyright Text: {{copyrightText}}<br />
+{{#noticeText}}
+Notice Text: {{noticeText}}<br />
+{{/noticeText}}
 {{#artifactOf}}
 Artifact of Project: {{name}};
 {{#homepage}} 
@@ -105,6 +114,18 @@ Artifact of Home Page: {{homepage}};
 {{/homepage}}
 Artifact of URI: {{ArtifactOfProjectURI}}<br />
 {{/artifactOf}}
+Contributors:<br />
+<ul>
+{{#contributors}}
+<li>{{contributors}}</li>
+{{/contributors}}
+</ul>
+Depdendencies:<br />
+<ul>
+{{#fileDependencies}}
+<li>{{fileDependencies}}</li>
+{{/fileDependencies}}
+</ul>
 {{#comment}}
 File comment: {{comment}}<br />
 {{/comment}}
