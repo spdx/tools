@@ -40,7 +40,7 @@ public abstract class OriginsSheet extends AbstractSheet {
 
 	public static void create(Workbook wb, String sheetName) {
 		//NOTE: this must be updated to the latest version
-		OriginsSheetV1d1.create(wb, sheetName);
+		OriginsSheetV1d2.create(wb, sheetName);
 	}
 
 	/**
@@ -54,15 +54,24 @@ public abstract class OriginsSheet extends AbstractSheet {
 			String originSheetName, String version) {
 		if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_4) <= 0) {
 			return new OriginsSheetV0d9d4(workbook, originSheetName, version);
-		} else {
+		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_1_0) <=0) {
 			return new OriginsSheetV1d1(workbook, originSheetName, version);
+		} else {
+			return new OriginsSheetV1d2(workbook, originSheetName, version);
 		}
 	}
 	
 	protected Row getDataRow() {
-		Row dataRow = sheet.getRow(firstRowNum + DATA_ROW_NUM);
+		return getDataRow(0);
+	}
+	
+	protected Row getDataRow(int rowIndex) {
+		while (firstRowNum + DATA_ROW_NUM + rowIndex > lastRowNum) {
+			addRow();
+		}
+		Row dataRow = sheet.getRow(firstRowNum + DATA_ROW_NUM + rowIndex);
 		if (dataRow == null) {
-			dataRow = sheet.createRow(firstRowNum + DATA_ROW_NUM);
+			dataRow = sheet.createRow(firstRowNum + DATA_ROW_NUM + rowIndex);
 		}
 		return dataRow;
 	}
@@ -71,9 +80,8 @@ public abstract class OriginsSheet extends AbstractSheet {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			cell = getDataRow().createCell(colNum);
+			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 		}
-		cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-//TODO: add date format		cell.setCellStyle(dateStyle);
 		return cell;
 	}
 	
@@ -102,7 +110,11 @@ public abstract class OriginsSheet extends AbstractSheet {
 		if (cell == null) {
 			return null;
 		} else {
-			return cell.getStringCellValue();
+			if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {				
+				return Double.toString(cell.getNumericCellValue());
+			} else {
+				return cell.getStringCellValue();
+			}
 		}
 	}
 
@@ -159,11 +171,20 @@ public abstract class OriginsSheet extends AbstractSheet {
 	/**
 	 * @return
 	 */
-	public abstract String getDocumentDomment();
+	public abstract String getDocumentComment();
 
 	/**
 	 * @param docComment
 	 */
 	public abstract void setDocumentComment(String docComment);
 	
+	/**
+	 * @return
+	 */
+	public abstract String getLicenseListVersion();
+	
+	/**
+	 * @param licenseVersion
+	 */
+	public abstract void setLicenseListVersion(String licenseVersion);	
 }

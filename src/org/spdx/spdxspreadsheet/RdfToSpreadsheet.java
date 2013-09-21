@@ -194,6 +194,11 @@ public class RdfToSpreadsheet {
 		if (docComment != null) {
 			originsSheet.setDocumentComment(docComment);
 		}
+		// License List Version
+		String licenseListVersion = doc.getCreatorInfo().getLicenseListVersion();
+		if (licenseListVersion != null) {
+			originsSheet.setLicenseListVersion(licenseListVersion);
+		}
 	}
 
 	private static void usage() {

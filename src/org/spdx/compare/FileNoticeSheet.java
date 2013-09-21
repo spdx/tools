@@ -20,36 +20,24 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.SPDXFile;
 
 /**
- * Sheet continaing results for file comment comparison
+ * Sheet for file notice comparison results
  * @author Gary O'Neall
  *
  */
-public class FileCommentSheet extends AbstractFileCompareSheet {
-	
-	private static final int FILE_COMMENT_COL_WIDTH = 60;
+public class FileNoticeSheet extends AbstractFileCompareSheet {
+
+	private static final int FILE_NOTICE_COL_WIDTH = 60;
 	
 	/**
 	 * @param workbook
 	 * @param sheetName
 	 */
-	public FileCommentSheet(Workbook workbook, String sheetName) {
+	public FileNoticeSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
 
 	static void create(Workbook wb, String sheetName) {
-		AbstractFileCompareSheet.create(wb, sheetName, FILE_COMMENT_COL_WIDTH);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
-	 */
-	@Override
-	String getFileValue(SPDXFile spdxFile) {
-		if (spdxFile.getComment()== null) {
-			return "";
-		} else {
-			return spdxFile.getComment();
-		}
+		AbstractFileCompareSheet.create(wb, sheetName, FILE_NOTICE_COL_WIDTH);
 	}
 
 	/* (non-Javadoc)
@@ -58,7 +46,20 @@ public class FileCommentSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA,
 			SPDXFile fileB, int docIndexB) throws SpdxCompareException {
-		return SpdxComparer.stringsEqual(fileA.getComment(), fileB.getComment());
+		return SpdxComparer.stringsEqual(fileA.getNoticeText(), fileB.getNoticeText());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
+	 */
+	@Override
+	String getFileValue(SPDXFile spdxFile) {
+		String retval = spdxFile.getNoticeText();
+		if (retval == null) {
+			return "";
+		} else {
+			return retval;
+		}
 	}
 
 }

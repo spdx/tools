@@ -834,7 +834,182 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isTypesEquals());
 	}
+	
+	/**
+	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isContributorsEquals()}.
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Test
+	public void testIsContributorsEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
+		String fileNameA = "a/b/c/name.txt";
+		String fileNameB = fileNameA;
+		String fileTypeA = SpdxRdfConstants.FILE_TYPE_SOURCE;
+		String fileTypeB = fileTypeA;
+		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
+		String sha1B = sha1A;
+		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
+		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
+				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+				};
+		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		String licenseCommentsA = "License Comments";
+		String licenseCommentsB = licenseCommentsA;
+		String copyrightA = "Copyright";
+		String copyrightB = copyrightA;
+		String proj1HomePage = "http://home.page";
+		String proj1Name = "project1";
+		DOAPProject proj1 = new DOAPProject(proj1Name, proj1HomePage);
+		DOAPProject[] artifactOfA = new DOAPProject[] {proj1};
+		DOAPProject[] artifactOfB = artifactOfA;
+		String fileCommentA = "file comment";
+		String fileCommentB = fileCommentA;
+		SPDXFile[] fileADependencies = new SPDXFile[0];
+		String[] fileAContributors = new String[] {"ContributorA", "ContributorB"};
+		String fileANotice = "File A Notice";
+		SPDXFile[] fileBDependencies = fileADependencies;
+		String[] fileBContributors = new String[] {"Different", "Contributors", "Entirely"};
+		String fileBNotice = fileANotice;
+		SPDXFile fileA = new SPDXFile(fileNameA,
+				fileTypeA, sha1A, concludedLicenseA,
+				seenLicenseA, licenseCommentsA, copyrightA,
+				artifactOfA, fileCommentA, fileADependencies, fileAContributors, fileANotice);
+		
+		SPDXFile fileB = new SPDXFile(fileNameB,
+				fileTypeB, sha1B, concludedLicenseB,
+				seenLicenseB, licenseCommentsB, copyrightB,
+				artifactOfB, fileCommentB, fileBDependencies, fileBContributors, fileBNotice);
+		
+		SpdxFileComparer fc = new SpdxFileComparer();
+		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
+		fc.compare(fileA, fileB, licenseXlationMap);
+		assertTrue(fc.isDifferenceFound());
+		assertFalse(fc.isContributorsEquals());
+		SpdxFileDifference diff = fc.getFileDifference();
+		assertFalse(diff.isContributorsEqual());
+		fileA.setContributors(fileBContributors);
+		fc.compare(fileA, fileB, licenseXlationMap);
+		assertFalse(fc.isDifferenceFound());
+		assertTrue(fc.isContributorsEquals());
+	}
 
+	/**
+	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isFileDependenciesEquals()}.
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Test
+	public void testIsFileDependenciesEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
+		String fileNameA = "a/b/c/name.txt";
+		String fileNameB = fileNameA;
+		String fileTypeA = SpdxRdfConstants.FILE_TYPE_SOURCE;
+		String fileTypeB = fileTypeA;
+		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
+		String sha1B = sha1A;
+		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
+		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
+				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+				};
+		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		String licenseCommentsA = "License Comments";
+		String licenseCommentsB = licenseCommentsA;
+		String copyrightA = "Copyright";
+		String copyrightB = copyrightA;
+		String proj1HomePage = "http://home.page";
+		String proj1Name = "project1";
+		DOAPProject proj1 = new DOAPProject(proj1Name, proj1HomePage);
+		DOAPProject[] artifactOfA = new DOAPProject[] {proj1};
+		DOAPProject[] artifactOfB = artifactOfA;
+		String fileCommentA = "file comment";
+		String fileCommentB = fileCommentA;
+		SPDXFile[] fileADependencies = new SPDXFile[0];
+		String[] fileAContributors = new String[] {"ContributorA", "ContributorB"};
+		String fileANotice = "File A Notice";
+
+		String[] fileBContributors = fileAContributors;
+		String fileBNotice = fileANotice;
+		SPDXFile fileA = new SPDXFile(fileNameA,
+				fileTypeA, sha1A, concludedLicenseA,
+				seenLicenseA, licenseCommentsA, copyrightA,
+				artifactOfA, fileCommentA, fileADependencies, fileAContributors, fileANotice);
+		SPDXFile[] fileBDependencies = new SPDXFile[] {fileA};
+		SPDXFile fileB = new SPDXFile(fileNameB,
+				fileTypeB, sha1B, concludedLicenseB,
+				seenLicenseB, licenseCommentsB, copyrightB,
+				artifactOfB, fileCommentB, fileBDependencies, fileBContributors, fileBNotice);
+		
+		SpdxFileComparer fc = new SpdxFileComparer();
+		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
+		fc.compare(fileA, fileB, licenseXlationMap);
+		assertTrue(fc.isDifferenceFound());
+		assertFalse(fc.isFileDependenciesEquals());
+		SpdxFileDifference diff = fc.getFileDifference();
+		assertFalse(diff.isFileDependenciesEqual());
+		fileA.setFileDependencies(fileBDependencies);
+		fc.compare(fileA, fileB, licenseXlationMap);
+		assertFalse(fc.isDifferenceFound());
+		assertTrue(fc.isFileDependenciesEquals());
+	}
+	
+	/**
+	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isNoticeTextEqual()}.
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Test
+	public void testIsNoticeTextEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
+		String fileNameA = "a/b/c/name.txt";
+		String fileNameB = fileNameA;
+		String fileTypeA = SpdxRdfConstants.FILE_TYPE_SOURCE;
+		String fileTypeB = fileTypeA;
+		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
+		String sha1B = sha1A;
+		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
+		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
+				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+				};
+		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		String licenseCommentsA = "License Comments";
+		String licenseCommentsB = licenseCommentsA;
+		String copyrightA = "Copyright";
+		String copyrightB = copyrightA;
+		String proj1HomePage = "http://home.page";
+		String proj1Name = "project1";
+		DOAPProject proj1 = new DOAPProject(proj1Name, proj1HomePage);
+		DOAPProject[] artifactOfA = new DOAPProject[] {proj1};
+		DOAPProject[] artifactOfB = artifactOfA;
+		String fileCommentA = "file comment";
+		String fileCommentB = fileCommentA;
+		SPDXFile[] fileADependencies = new SPDXFile[0];
+		String[] fileAContributors = new String[] {"ContributorA", "ContributorB"};
+		String fileANotice = "File A Notice";
+		SPDXFile[] fileBDependencies = fileADependencies;
+		
+		String[] fileBContributors = fileAContributors;
+		String fileBNotice = "file B Notice which is different";
+		SPDXFile fileA = new SPDXFile(fileNameA,
+				fileTypeA, sha1A, concludedLicenseA,
+				seenLicenseA, licenseCommentsA, copyrightA,
+				artifactOfA, fileCommentA, fileADependencies, fileAContributors, fileANotice);
+
+		SPDXFile fileB = new SPDXFile(fileNameB,
+				fileTypeB, sha1B, concludedLicenseB,
+				seenLicenseB, licenseCommentsB, copyrightB,
+				artifactOfB, fileCommentB, fileBDependencies, fileBContributors, fileBNotice);
+		
+		SpdxFileComparer fc = new SpdxFileComparer();
+		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
+		fc.compare(fileA, fileB, licenseXlationMap);
+		assertTrue(fc.isDifferenceFound());
+		assertFalse(fc.isNoticeTextEquals());
+		SpdxFileDifference diff = fc.getFileDifference();
+		assertFalse(diff.isNoticeTextsEqual());
+		fileA.setNoticeText(fileBNotice);
+		fc.compare(fileA, fileB, licenseXlationMap);
+		assertFalse(fc.isDifferenceFound());
+		assertTrue(fc.isNoticeTextEquals());
+	}
+	
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isDifferenceFound()}.
 	 */

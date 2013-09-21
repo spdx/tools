@@ -1,3 +1,12 @@
+Implementation version 1.2.0
+- Added support for spec version 1.2
+  - Added fileDependency property to SPDXFile (RDF, tag, Spreadsheet, comparer)
+  - Added contributors property to SPDXFile (RDF, tag, Spreadsheet, comparer)
+  - Added licenseListVersion property to SPDXCreationInformation (RDF, tag, spreadsheet, comparer)
+  - Added homepage property to SPDXPackage (RDF, tag, Spreadsheet, comparer)  
+  - Added noticeText property to SPDXFile (RDF, tag, Spreadsheet, comparer)  
+  - Changed cardinality of ArtifactOf to allow multiple projects (RDF, tag, Spreadsheet, comparer)
+  
 Implementation version 1.1.8
 - Added support for license templates
 Implementation version 1.1.7

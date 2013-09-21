@@ -210,4 +210,27 @@ public class DOAPProject {
 		}
 		this.uri = uri;
 	}
+	
+	@Override 
+	public boolean equals(Object o) {
+		if (!(o instanceof DOAPProject)) {
+			return false;
+		}
+		DOAPProject compare = (DOAPProject)o;
+		// Compare URI's first as they are definitive
+		if (compare.getProjectUri() != null && this.getProjectUri() != null &&
+				!compare.getProjectUri().equals(UNKNOWN_URI) && !this.getProjectUri().equals(UNKNOWN_URI)) {
+			return this.getProjectUri().equals(compare.getProjectUri());
+		}
+		if ((compare.getProjectUri() != null && !compare.getProjectUri().equals(UNKNOWN_URI)) || 
+				(this.getProjectUri() != null && !this.getProjectUri().equals(UNKNOWN_URI))) {
+			return false;
+		}
+		// if the home pages are the same and the project names are the same, we can assume they are equal
+		if (compare.getHomePage() != null && this.getHomePage() != null) {
+			return (compare.getHomePage().equals(this.getHomePage()) && compare.getName().equals(this.getName()));
+		}
+		// just use the object compares if the above shortcuts did not work out
+		return super.equals(o);
+	}
 }

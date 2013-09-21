@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package spdxspreadsheet;
 
 import static org.junit.Assert.*;
 
@@ -24,6 +24,13 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.SPDXNoneLicense;
+import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheetV09d3;
@@ -53,7 +60,7 @@ public class TestPackageInfoSheet {
 		
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
-		PackageInfoSheet pkgInfo = new PackageInfoSheetV09d3(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
+		PackageInfoSheet pkgInfo = PackageInfoSheet.openVersion(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
 		String ver = pkgInfo.verify();
 		if (ver != null && !ver.isEmpty()){
 			fail(ver);
@@ -88,14 +95,16 @@ public class TestPackageInfoSheet {
 		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "Version1", "machinename1", 
 				"sha1-1", "sourceinfo1", testLicense1,
 				testLicense2, testLicenseInfos, "license comments", "dec-copyright1",
-				"short desc1", "desc1", "http://url1", testVerification, "Person: supplier1", "Organization: originator1");
+				"short desc1", "desc1", "http://url1", testVerification, "Person: supplier1", "Organization: originator1",
+				"http://www.home.page1");
 		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "Version2", "machinename1", 
 				"sha1-1", "sourceinfo1", testLicense1,
 				testLicense2, testLicenseInfos, "licensecomments2", "dec-copyright1",
-				"short desc1", "desc1", "http://url1", testVerification, "NOASSERTION", "Person: originator2");
+				"short desc1", "desc1", "http://url1", testVerification, "NOASSERTION", "Person: originator2",
+				"http://www.home.page2");
 		Workbook wb = new HSSFWorkbook();
-		PackageInfoSheetV09d3.create(wb, "Package Info");
-		PackageInfoSheetV09d3 pkgInfoSheet = new PackageInfoSheetV09d3(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
+		PackageInfoSheet.create(wb, "Package Info");
+		PackageInfoSheet pkgInfoSheet = PackageInfoSheet.openVersion(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
 		pkgInfoSheet.add(pkgInfo1);
 		pkgInfoSheet.add(pkgInfo2);
 		SPDXPackageInfo tstPkgInfo1 = pkgInfoSheet.getPackageInfo(1);
@@ -135,6 +144,7 @@ public class TestPackageInfoSheet {
 		}
 		assertEquals(pkgInfo1.getSupplier(), pkgInfo2.getSupplier());
 		assertEquals(pkgInfo1.getOriginator(), pkgInfo2.getOriginator());
+		assertEquals(pkgInfo1.getHomePage(), pkgInfo2.getHomePage());		
 	}
 
 	/**

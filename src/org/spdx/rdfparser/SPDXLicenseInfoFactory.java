@@ -32,6 +32,7 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -215,6 +216,23 @@ public class SPDXLicenseInfoFactory {
 				prefix = uri;
 				if (!onlyUseLocalLicenses) {
 				    in = FileManager.get().open(uri);
+					try {
+						retval.read(in, prefix, "HTML");
+						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
+				    	if (retval.isEmpty() || !retval.contains(null, p)) {
+					    	try {
+								in.close();
+							} catch (IOException e) {
+								logger.warn("Error closing standard license input");
+							}
+					    	in = null;
+				    	}
+					} catch(Exception ex) {
+
+						if (in != null) {
+							in.close();
+						}
+					}
 				}
 			} catch(Exception ex) {
 				in = null;
@@ -229,11 +247,11 @@ public class SPDXLicenseInfoFactory {
 				if (in == null) {
 					throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
 				}
-			}
-			try {
-				retval.read(in, prefix, "HTML");
-			} catch(Exception ex) {
-				throw(new NoStandardLicenseRdfModel("Error reading the standard licenses: "+ex.getMessage(),ex));
+				try {
+					retval.read(in, prefix, "HTML");
+				} catch(Exception ex) {
+					throw(new NoStandardLicenseRdfModel("Error reading the standard licenses: "+ex.getMessage(),ex));
+				}
 			}
 			return retval;
 		} finally {
@@ -265,16 +283,34 @@ public class SPDXLicenseInfoFactory {
 		}  
 
 		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
-
+		String fileType = "HTML";
 		String base = STANDARD_LICENSE_URI_PREFIX+"index.html";
 		InputStream licRdfInput;
 		if (onlyUseLocalLicenses) {
 		    licRdfInput = null;
 		} else {
 		    licRdfInput = FileManager.get().open(STANDARD_LICENSE_URI_PREFIX+"index.html");
-		}
+		    try {
+		    	myStdLicModel.read(licRdfInput, base, fileType);
+				Property p = myStdLicModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
+		    	if (myStdLicModel.isEmpty() || !myStdLicModel.contains(null, p)) {
+			    	try {
+						licRdfInput.close();
+					} catch (IOException e) {
+						logger.warn("Error closing standard license input");
+					}
+			    	licRdfInput = null;
+		    	}
+		    }
+		    catch(Exception ex) {
+	    	try {
+				licRdfInput.close();
+			} catch (IOException e) {
+				logger.warn("Error closing standard license input");
+			}
+	    	licRdfInput = null;			    }
+	    }	
 		try {
-			String fileType = "HTML";
 			if (licRdfInput == null) {
 				// need to load a static copy
 				base = "file://"+STANDARD_LICENSE_RDF_LOCAL_FILENAME;
@@ -282,12 +318,13 @@ public class SPDXLicenseInfoFactory {
 				if (licRdfInput == null) {
 					throw new NoStandardLicenseRdfModel("Unable to open standard license from website or from local file");
 				}
+				try {
+					myStdLicModel.read(licRdfInput, base, fileType);
+				} catch(Exception ex) {
+					throw new NoStandardLicenseRdfModel("Unable to read the standard license model", ex);
+				}
 			}
-			try {
-				myStdLicModel.read(licRdfInput, base, fileType);
-			} catch(Exception ex) {
-				throw new NoStandardLicenseRdfModel("Unable to read the standard license model", ex);
-			}
+
 			standardLicenseModel = myStdLicModel;	
 		} finally {
 			if (licRdfInput != null) {

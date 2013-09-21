@@ -226,6 +226,9 @@ public class SpreadsheetToRDF {
 		if (info.getSupplier() != null && !info.getSupplier().isEmpty()) {
 			spdxPackage.setSupplier(info.getSupplier());
 		}
+		if (info.getHomePage() != null && !info.getHomePage().isEmpty()) {
+			spdxPackage.setHomePage(info.getHomePage());
+		}
 	}
 
 	private static void copyOrigins(OriginsSheet originsSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
@@ -233,7 +236,8 @@ public class SpreadsheetToRDF {
 		String created  = format.format(createdDate);
 		String[] createdBys = originsSheet.getCreatedBy();
 		String creatorComment = originsSheet.getAuthorComments();
-		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, creatorComment);
+		String licenseListVersion = originsSheet.getLicenseListVersion();
+		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, creatorComment, licenseListVersion);
 		String specVersion = originsSheet.getSPDXVersion();
 		analysis.setSpdxVersion(specVersion);
 		String dataLicenseId = originsSheet.getDataLicense();
@@ -257,7 +261,7 @@ public class SpreadsheetToRDF {
 		}
 		analysis.setDataLicense(dataLicense);
 		analysis.setCreationInfo(creator);
-		String docComment = originsSheet.getDocumentDomment();
+		String docComment = originsSheet.getDocumentComment();
 		if (docComment != null) {
 			docComment.trim();
 			if (!docComment.isEmpty()) {

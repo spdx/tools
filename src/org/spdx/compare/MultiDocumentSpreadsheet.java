@@ -96,6 +96,12 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private FileTypeSheet fileTypeSheet;	
 	private static final String REVIEWER_SHEET_NAME = "Reviewers";
 	private ReviewerSheet reviewerSheet;
+	private static final String FILE_CONTRIBUTOR_SHEET_NAME = "File Contributors";
+	private FileContributorsSheet fileContributorsSheet;
+	private static final String FILE_DEPENDENCIES_SHEET_NAME = "File Dependencies";
+	private FileDependenciesSheet fileDependenciesSheet;
+	private static final String FILE_NOTICE_SHEET_NAME = "File Notices";
+	private FileNoticeSheet fileNoticeSheet;
 	private static final String VERIFICATION_SHEET_NAME = "Verification Errors";
 	public static final int MAX_DOCUMENTS = 25;
 	private VerificationSheet verificationSheet;
@@ -120,6 +126,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileLicenseCommentsSheet = new FileLicenseCommentsSheet(this.workbook, FILE_LICENSE_COMMENT_SHEET_NAME);
 		fileArtifactOfSheet = new FileArtifactOfSheet(this.workbook, FILE_ARTIFACT_OF_SHEET_NAME);
 		fileTypeSheet = new FileTypeSheet(this.workbook, FILE_TYPE_SHEET_NAME);
+		fileContributorsSheet = new FileContributorsSheet(this.workbook, FILE_CONTRIBUTOR_SHEET_NAME);
+		fileDependenciesSheet = new FileDependenciesSheet(this.workbook, FILE_DEPENDENCIES_SHEET_NAME);
+		fileNoticeSheet = new FileNoticeSheet(this.workbook, FILE_NOTICE_SHEET_NAME);
 		reviewerSheet = new ReviewerSheet(this.workbook, REVIEWER_SHEET_NAME);	
 		verificationSheet = new VerificationSheet(this.workbook, VERIFICATION_SHEET_NAME);	
 		String verify = this.verifyWorkbook();
@@ -154,6 +163,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			FileLicenseCommentsSheet.create(wb, FILE_LICENSE_COMMENT_SHEET_NAME);
 			FileArtifactOfSheet.create(wb, FILE_ARTIFACT_OF_SHEET_NAME);
 			FileTypeSheet.create(wb, FILE_TYPE_SHEET_NAME);
+			FileContributorsSheet.create(wb, FILE_CONTRIBUTOR_SHEET_NAME);
+			FileDependenciesSheet.create(wb, FILE_DEPENDENCIES_SHEET_NAME);
+			FileNoticeSheet.create(wb, FILE_NOTICE_SHEET_NAME);
 			ReviewerSheet.create(wb, REVIEWER_SHEET_NAME);	
 			VerificationSheet.create(wb, VERIFICATION_SHEET_NAME);
 			wb.write(excelOut);
@@ -200,6 +212,12 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileArtifactOfSheet.resizeRows();
 		fileTypeSheet.importCompareResults(comparer, files, docNames);
 		fileTypeSheet.resizeRows();
+		fileContributorsSheet.importCompareResults(comparer, files, docNames);
+		fileContributorsSheet.resizeRows();
+		fileDependenciesSheet.importCompareResults(comparer, files, docNames);
+		fileDependenciesSheet.resizeRows();
+		fileNoticeSheet.importCompareResults(comparer, files, docNames);
+		fileNoticeSheet.resizeRows();
 		reviewerSheet.importCompareResults(comparer, docNames);
 		reviewerSheet.resizeRows();
 	}
@@ -221,6 +239,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		reviewerSheet.clear();	
 		verificationSheet.clear();
 		fileCommentSheet.clear();
+		fileContributorsSheet.clear();
+		fileDependenciesSheet.clear();
+		fileNoticeSheet.clear();
 	}
 
 	/* (non-Javadoc)
@@ -279,6 +300,21 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			sb.append(sheetVerify);
 		}
 		sheetVerify = reviewerSheet.verify();	
+		if (sheetVerify != null && !sheetVerify.isEmpty()) {
+			sb.append("; ");
+			sb.append(sheetVerify);
+		}
+		sheetVerify = fileContributorsSheet.verify();	
+		if (sheetVerify != null && !sheetVerify.isEmpty()) {
+			sb.append("; ");
+			sb.append(sheetVerify);
+		}
+		sheetVerify = fileDependenciesSheet.verify();	
+		if (sheetVerify != null && !sheetVerify.isEmpty()) {
+			sb.append("; ");
+			sb.append(sheetVerify);
+		}
+		sheetVerify = fileNoticeSheet.verify();	
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);

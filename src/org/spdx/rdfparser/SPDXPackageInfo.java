@@ -38,6 +38,7 @@ public class SPDXPackageInfo {
 	private String versionInfo;
 	private String supplier;
 	private String originator;
+	private String homePage;
 
 	/**
 	 * @return the verificationCode
@@ -79,7 +80,7 @@ public class SPDXPackageInfo {
 			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
 			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode, 
-			String supplier, String originator) {
+			String supplier, String originator, String homePage) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;
 		this.sha1 = sha1;
@@ -96,6 +97,7 @@ public class SPDXPackageInfo {
 		this.versionInfo = versionInfo;
 		this.supplier = supplier;
 		this.originator = originator;
+		this.homePage = homePage;
 	}
 
 	/**
@@ -306,5 +308,20 @@ public class SPDXPackageInfo {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return home page for the project
+	 */
+	public String getHomePage() {
+		return this.homePage;
+	}
+	
+	/**
+	 * Set the home page for the project
+	 * @param homePage
+	 */
+	public void setHomePage(String homePage) {
+		this.homePage = homePage;
 	}
 }

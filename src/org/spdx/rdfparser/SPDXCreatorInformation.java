@@ -35,6 +35,7 @@ public class SPDXCreatorInformation {
 	private String[] creators = null;
 	private String comment = null;
 	private String createdDate = null;
+	private String licenseListVersion = null;
 	private Node creatorNode = null;
 	private Model model = null;
 	private Resource creatorResource = null;
@@ -62,7 +63,25 @@ public class SPDXCreatorInformation {
 			}
 		}
 	}
+	
+	public String getLicenseListVersion() {
+		return this.licenseListVersion;
+	}
 
+	
+	public void setLicenseListVersion(String licenseListVersion) {
+		this.licenseListVersion = licenseListVersion;
+		if (this.creatorNode != null) {
+			// delete any previous comments
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION);
+			model.removeAll(creatorResource, p, null);
+			// add the property
+			if (this.licenseListVersion != null) {
+				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION);
+				creatorResource.addProperty(p,this.licenseListVersion);
+			}
+		}
+	}
 	/**
 	 * @return the comment
 	 */
@@ -87,10 +106,11 @@ public class SPDXCreatorInformation {
 		}
 	}
 
-	public SPDXCreatorInformation(String[] creators, String createdDate, String comment) {
+	public SPDXCreatorInformation(String[] creators, String createdDate, String comment, String licenseListVersion) {
 		this.creators = creators;
 		this.createdDate = createdDate;
 		this.comment = comment;
+		this.licenseListVersion = licenseListVersion;
 	}
 	
 	public SPDXCreatorInformation(Model spdxModel, Node creatorNode) throws InvalidSPDXAnalysisException {
@@ -129,6 +149,14 @@ public class SPDXCreatorInformation {
 			Triple t = tripleIter.next();
 			this.createdDate = t.getObject().toString(false);
 		}
+		// licenseListVersion
+		p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION).asNode();
+		m = Triple.createMatch(creatorNode, p, null);
+		tripleIter = spdxModel.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.licenseListVersion = t.getObject().toString(false);
+		}
 	}
 	
 	public Resource createResource(Model model) {
@@ -151,6 +179,11 @@ public class SPDXCreatorInformation {
 		if (this.createdDate != null) {
 			Property createdDateProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CREATION_CREATED);
 			r.addProperty(createdDateProperty, this.createdDate);
+		}
+		// licenseList Version
+		if (this.licenseListVersion != null) {
+			Property createdDateProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION);
+			r.addProperty(createdDateProperty, this.licenseListVersion);
 		}
 		this.creatorNode = r.asNode();
 		this.creatorResource = r;
@@ -245,6 +278,17 @@ public class SPDXCreatorInformation {
 				}
 			}
 		}
+		if (compCreator.licenseListVersion == null) {
+			if (this.licenseListVersion != null) {
+				return false;
+			}
+		} else {
+			if (this.licenseListVersion == null) {
+				return false;
+			} else if (!this.licenseListVersion.equals(compCreator.licenseListVersion)) {
+				return false;
+			}
+		}
 		return true;
 		
 	}
@@ -262,6 +306,10 @@ public class SPDXCreatorInformation {
 		if (createdDate != null && !createdDate.isEmpty()) {
 			sb.append("; Created on ");
 			sb.append(createdDate);
+		}
+		if (licenseListVersion != null && !licenseListVersion.isEmpty()) {
+			sb.append("; License List Version=");
+			sb.append(this.licenseListVersion);
 		}
 		if (comment != null && !comment.isEmpty()) {
 			sb.append("; Comment: ");
@@ -298,6 +346,23 @@ public class SPDXCreatorInformation {
 		@SuppressWarnings("unused")
 		String createdComments = this.getComment();
 		// anything to verify for comments?
+		// ListList Verions
+		String licenseListVersion = this.getLicenseListVersion();
+		if (licenseListVersion != null) {
+			String verify =  verifyLicenseListVersion(licenseListVersion);
+			if (verify != null) {
+				retval.add(verify);
+			}
+		}
 		return retval;
+	}
+
+	/**
+	 * @param version
+	 * @return
+	 */
+	private String verifyLicenseListVersion(String version) {
+		// Currently, there is no rules for the format of a version
+		return null;
 	}
 }

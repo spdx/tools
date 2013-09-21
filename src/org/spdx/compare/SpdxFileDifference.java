@@ -18,6 +18,7 @@
 package org.spdx.compare;
 
 import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 
@@ -203,6 +204,12 @@ public class SpdxFileDifference {
 	private String sha1B;
 	private String fileTypeA;
 	private String fileTypeB;
+	private String[] contributorsA;
+	private String noticeA;
+	private String[] contributorsB;
+	private String noticeB;
+	private String[] dependantFileNamesA;
+	private String[] dependantFileNamesB;
 
 	public SpdxFileDifference(SPDXFile fileA, SPDXFile fileB, 
 			boolean concludedLicensesEqual, boolean seenLicensesEqual,
@@ -210,7 +217,7 @@ public class SpdxFileDifference {
 			SPDXLicenseInfo[] uniqueSeenLicensesB,
 			boolean artifactOfsEquals,
 			DOAPProject[] uniqueArtifactOfA,
-			DOAPProject[] uniqueArtifactOfB) {
+			DOAPProject[] uniqueArtifactOfB) throws InvalidSPDXAnalysisException {
 		this.fileName = fileA.getName();
 		this.artifactsOfA = fileA.getArtifactOf();
 		if (this.artifactsOfA == null) {
@@ -257,6 +264,24 @@ public class SpdxFileDifference {
 		this.sha1B = fileB.getSha1();
 		this.fileTypeA = fileA.getType();
 		this.fileTypeB = fileB.getType();	
+		this.contributorsA = fileA.getContributors();
+		this.contributorsB = fileB.getContributors();
+		this.noticeA = fileA.getNoticeText();
+		this.noticeB = fileB.getNoticeText();
+		this.dependantFileNamesA = SpdxFileComparer.filesToFileNames(fileA.getFileDependencies());
+		this.dependantFileNamesB = SpdxFileComparer.filesToFileNames(fileB.getFileDependencies());
+	}
+	
+	public boolean isContributorsEqual() {
+		return SpdxComparer.stringArraysEqual(this.contributorsA, this.contributorsB);
+	}
+	
+	public boolean isNoticeTextsEqual() {
+		return SpdxComparer.stringsEqual(this.noticeA, this.noticeB);
+	}
+	
+	public boolean isFileDependenciesEqual() {
+		return SpdxComparer.stringArraysEqual(this.dependantFileNamesA, this.dependantFileNamesB);
 	}
 		
 	public boolean isCommentsEqual() {
@@ -283,5 +308,47 @@ public class SpdxFileDifference {
 	 */
 	public boolean isChecksumsEqual() {
 		return SpdxComparer.stringsEqual(sha1A, sha1B);
+	}
+
+	/**
+	 * @return
+	 */
+	public String getContributorsAAsString() {
+		return stringArrayToString(this.contributorsA);
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getContributorsBAsString() {
+		return stringArrayToString(this.contributorsB);
+	}
+	
+	
+	
+	static String stringArrayToString(String[] s) {
+		StringBuilder sb = new StringBuilder();
+		if (s != null && s.length > 0) {
+			sb.append(s[0]);
+		}
+		for (int i = 1; i < s.length; i++) {
+			sb.append(", ");
+			sb.append(s[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * @return
+	 */
+	public String getFileDependenciesAAsString() {
+		return stringArrayToString(this.dependantFileNamesA);
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getFileDependenciesBAsString() {
+		return stringArrayToString(this.dependantFileNamesB);
 	}
 }

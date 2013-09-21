@@ -19,15 +19,12 @@ package org.spdx.rdfparser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import org.spdx.licenseTemplate.HtmlTemplateOutputHandler;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;

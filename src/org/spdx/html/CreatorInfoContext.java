@@ -48,6 +48,19 @@ public class CreatorInfoContext {
 		}
 	}
 	
+	public String licenseListVersion() {
+		String retval;
+		try {
+			retval = this.doc.getCreatorInfo().getLicenseListVersion();
+		} catch (InvalidSPDXAnalysisException e) {
+			return "Error getting license list version: "+e.getMessage();
+		};
+		if (retval == null) {
+			retval = "";
+		}
+		return retval;
+	}
+	
 	public List<String> creator() {
 		ArrayList<String> creators = new ArrayList<String>();
 		try {

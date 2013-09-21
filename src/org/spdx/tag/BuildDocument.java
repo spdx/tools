@@ -22,8 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -62,6 +66,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private SPDXNonStandardLicense lastExtractedLicense = null;
 	private SPDXFile lastFile = null;
 	private DOAPProject lastProject = null;
+	// Keep track of all file dependencies since these need to be added after all of the files
+	// have been parsed.  Map of file dependency file name to the SPDX files which depends on it
+	private HashMap<String, ArrayList<SPDXFile>> fileDependencyMap = 
+		new HashMap<String, ArrayList<SPDXFile>>();
 
 	public BuildDocument(Model model, SPDXDocument spdxDocument, Properties constants) {
 		this.constants = constants;
@@ -90,7 +98,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			analysis.getDataLicense().setName(value);
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_CREATOR"))) {
 			if (analysis.getCreatorInfo() == null) {
-				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "");
+				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "", "");
 				analysis.setCreationInfo(creator);
 			} else {
 				List<String> creators = new ArrayList<String>(Arrays.asList(analysis.getCreatorInfo().getCreators()));
@@ -99,16 +107,22 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_CREATED"))) {
 			if (analysis.getCreatorInfo() == null) {
-				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] {  }, "", "");
+				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] {  }, "", "", "");
 				analysis.setCreationInfo(creator);
 			}
 			analysis.getCreatorInfo().setCreated(value);
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_COMMENT"))) {
 			if (analysis.getCreatorInfo() == null) {
-				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "");
+				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "", "");
 				analysis.setCreationInfo(creator);
 			}
 			analysis.getCreatorInfo().setComment(value);
+		} else if (tag.equals(constants.getProperty("PROP_LICENSE_LIST_VERSION"))) {
+			if (analysis.getCreatorInfo() == null) {
+				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "", "");
+				analysis.setCreationInfo(creator);
+			}
+			analysis.getCreatorInfo().setLicenseListVersion(value);
 		} else if (tag.equals(constants.getProperty("PROP_SPDX_COMMENT"))) {
 			analysis.setDocumentComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_REVIEWER"))) {
@@ -175,6 +189,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DOWNLOAD_URL"))) {
 			// TODO can we set analysis.getModel() uri?
 			pkg.setDownloadUrl(value);
+		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_HOMEPAGE_URL"))) {
+			pkg.setHomePage(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_SHORT_DESC"))) {
 			pkg.setShortDescription(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_SOURCE_INFO"))) {
@@ -259,10 +275,49 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				lastFile.setCopyright(value);
 			} else if (tag.equals(constants.getProperty("PROP_FILE_COMMENT"))) {
 				lastFile.setComment(value);
+			} else if (tag.equals(constants.getProperty("PROP_FILE_DEPENDENCY"))) {
+				addFileDependency(lastFile, value);
+			} else if (tag.equals(constants.getProperty("PROP_FILE_CONTRIBUTOR"))) {
+				addFileContributor(lastFile, value);
+			} else if (tag.equals(constants.getProperty("PROP_FILE_NOTICE_TEXT"))) {
+				lastFile.setNoticeText(value);
 			} else {
 				buildProject(lastFile, tag, value);
 			}
 		}
+	}
+
+	/**
+	 * Adds a file contributor to the list of contributors for this file
+	 * @param file
+	 * @param contributor
+	 */
+	private void addFileContributor(SPDXFile file, String contributor) {
+		String[] contributors = file.getContributors();
+		if (contributors == null) {
+			contributors = new String[] {contributor};
+			
+		} else {
+			contributors = Arrays.copyOf(contributors, contributors.length + 1);
+			contributors[contributors.length-1] = contributor;
+		}
+		file.setContributors(contributors);
+	}
+
+	/**
+	 * Adds a file dependency to a file
+	 * @param file
+	 * @param dependentFileName
+	 */
+	private void addFileDependency(SPDXFile file, String dependentFileName) {
+		// Since the files have not all been parsed, we just keep track of the
+		// dependencies in a hashmap until we finish all processing and are building the package
+		ArrayList<SPDXFile> filesWithThisAsADependency = this.fileDependencyMap.get(dependentFileName);
+		if (filesWithThisAsADependency == null) {
+			filesWithThisAsADependency = new ArrayList<SPDXFile>();
+			this.fileDependencyMap.put(dependentFileName, filesWithThisAsADependency);
+		}
+		filesWithThisAsADependency.add(file);
 	}
 
 	/**
@@ -288,7 +343,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				// can not set the URI since it is already created, we need to replace DOAP project
 				DOAPProject[] existingProjects = file.getArtifactOf();
 				int i = 0;
-				while (i < existingProjects.length && existingProjects[i] != lastProject) {
+				while (i < existingProjects.length && !existingProjects[i].equals(lastProject)) {
 					i++;
 				}
 				if (i >= existingProjects.length) {
@@ -312,9 +367,66 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	}
 
 	public void exit() throws Exception {
+		fixFileDependencies();
 		ArrayList<String> warningMessages = analysis.verify();
 		assertEquals("SPDXDocument", 0, warningMessages);
 	}
+	
+	/**
+	 * Go through all of the file dependencies and add them to the file
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void fixFileDependencies() throws InvalidSPDXAnalysisException {
+		// be prepared - it is complicate to make this efficient
+		// the HashMap fileDependencyMap contains a map from a file name to all SPDX files which
+		// reference that file name as a dependency
+		// This method goes through all of the files in the analysis in a single pass and creates
+		// a new HashMap of files (as the key) and the dependency files (arraylist) as the values
+		// Once that hashmap is built, the actual dependencies are then added.
+		// the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
+		HashMap<SPDXFile, ArrayList<SPDXFile>> filesWithDependencies = 
+			new HashMap<SPDXFile, ArrayList<SPDXFile>>();
+		SPDXFile[] allFiles = analysis.getFileReferences();
+		// fill in the filesWithDependencies map
+		for (int i = 0;i < allFiles.length; i++) {
+			ArrayList<SPDXFile> alFilesHavingThisDependency = this.fileDependencyMap.get(allFiles[i].getName());
+			if (alFilesHavingThisDependency != null) {
+				for (int j = 0; j < alFilesHavingThisDependency.size(); j++) {
+					SPDXFile fileWithDependency = alFilesHavingThisDependency.get(j);
+					ArrayList<SPDXFile> alDepdenciesForThisFile = filesWithDependencies.get(fileWithDependency);
+					if (alDepdenciesForThisFile == null) {
+						alDepdenciesForThisFile = new ArrayList<SPDXFile>();
+						filesWithDependencies.put(fileWithDependency, alDepdenciesForThisFile);
+					}
+					alDepdenciesForThisFile.add(allFiles[i]);
+				}
+				// remove from the file dependency map so we can keep track of any files which did
+				// not match at the end
+				this.fileDependencyMap.remove(allFiles[i].getName());
+			}
+		}
+		// Go through the hashmap we just created and add the dependent files
+		Iterator<Entry<SPDXFile, ArrayList<SPDXFile>>> iter = filesWithDependencies.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<SPDXFile, ArrayList<SPDXFile>> entry = iter.next();
+			ArrayList<SPDXFile> alDependencies = entry.getValue();
+			if (alDependencies != null && alDependencies.size() > 0) {
+				entry.getKey().setFileDependencies(alDependencies.toArray(new SPDXFile[alDependencies.size()]));
+			}
+		}
+		// Check to see if there are any left over and and throw an error if the dependent files were
+		// not found
+		Set<String> missingDependencies = this.fileDependencyMap.keySet();
+		if (missingDependencies != null && missingDependencies.size() > 0) {
+			System.out.println("The following file names were listed as file dependencies but were not found in the list of files:");
+			Iterator<String> missingIter = missingDependencies.iterator();
+			while(missingIter.hasNext()) {
+				System.out.println("\t"+missingIter.next());
+			}
+		}
+		
+	}
+
 	
 	private static void assertEquals(String name, int expected,
 			ArrayList<String> verify) {

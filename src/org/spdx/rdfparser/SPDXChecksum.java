@@ -214,5 +214,16 @@ public class SPDXChecksum {
 		}
 		return retval;
 	}
-
+	
+	@Override 
+	public boolean equals(Object o) {
+		if (!(o instanceof SPDXChecksum)) {
+			return false;
+		}
+		SPDXChecksum compare = (SPDXChecksum)o;
+		if (!compare.getAlgorithm().equals(this.getAlgorithm())) {
+			return false;
+		}
+		return compare.getValue().compareToIgnoreCase(this.getValue()) == 0;
+	}
 }

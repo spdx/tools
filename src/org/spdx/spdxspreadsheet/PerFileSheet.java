@@ -16,8 +16,15 @@
 */
 package org.spdx.spdxspreadsheet;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.SPDXFile;
+
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * Abstract class for PerFileSheet.  Specific version implementations are implemented
@@ -27,6 +34,9 @@ import org.spdx.rdfparser.SPDXFile;
  *
  */
 public abstract class PerFileSheet extends AbstractSheet {
+	
+	static final char CSV_SEPARATOR_CHAR = ',';
+	static final char CSV_QUOTING_CHAR = '"';
 	
 	protected String version;
 	
@@ -46,8 +56,55 @@ public abstract class PerFileSheet extends AbstractSheet {
 			String perFileSheetName, String version) {
 		if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_0_9_4) <= 0) {
 			return new PerFileSheetV09d3(workbook, perFileSheetName, version);
-		} else {
+		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_1_0) <= 0) {
 			return new PerFileSheetV1d1(workbook, perFileSheetName, version);
+		} else {
+			return new PerFileSheetV1d2(workbook, perFileSheetName, version);
+		}
+	}
+	
+	/**
+	 * converts an array of strings to a comma separated list
+	 * @param strings
+	 * @return
+	 */
+	public static String stringsToCsv(String[] strings) {
+		StringWriter writer = new StringWriter();
+		CSVWriter csvWriter = new CSVWriter(writer, CSV_SEPARATOR_CHAR, CSV_QUOTING_CHAR);
+		try {
+			csvWriter.writeNext(strings);
+			csvWriter.flush();
+			String retval = writer.toString().trim();
+			return retval;
+		} catch (Exception e) {
+			return "ERROR PARSING CONTRIBUTORS FROM SPX FILE";
+		} finally {
+			try {
+				csvWriter.close();
+			} catch (IOException e) {
+				// ignore the close errors
+			}
+		}
+	}
+	
+	/**
+	 * Converts a comma separated CSV string to an array of strings
+	 * @param csv
+	 * @return
+	 */
+	public static String[] csvToStrings(String csv) {
+		StringReader reader = new StringReader(csv);
+		CSVReader csvReader = new CSVReader(reader, CSV_SEPARATOR_CHAR, CSV_QUOTING_CHAR);
+		try {
+			return csvReader.readNext();
+		} catch (IOException e) {
+			return new String[] {"ERROR PARSING CSV String"};
+		} finally {
+			try {
+				csvReader.close();
+			} catch (IOException e) {
+				// Ignore
+			}
 		}
 	}
 	
@@ -70,8 +127,8 @@ public abstract class PerFileSheet extends AbstractSheet {
 	 * @param perFileSheetName
 	 */
 	public static void create(Workbook wb, String perFileSheetName) {
-		//NOTE: This needs to be udpated the the most current version
-		PerFileSheetV1d1.create(wb, perFileSheetName);
+		//NOTE: This needs to be updated the the most current version
+		PerFileSheetV1d2.create(wb, perFileSheetName);
 	}
 
 }

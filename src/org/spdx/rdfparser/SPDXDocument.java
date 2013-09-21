@@ -56,8 +56,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
-	public static final String CURRENT_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.1.8";
+	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-1.2";
+	
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.0";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -66,6 +68,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		SUPPORTED_SPDX_VERSIONS.add(POINT_EIGHT_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(POINT_NINE_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ZERO_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ONE_SPDX_VERSION);
 	}
 
 	/**
@@ -524,6 +527,22 @@ public class SPDXDocument implements SpdxRdfConstants {
 			addProperty(node, PROP_PACKAGE_DOWNLOAD_URL, new String[] {url});
 		}
 		
+		public String getHomePage() throws InvalidSPDXAnalysisException {
+			String[] urls = findDocPropertieStringValues(this.node, DOAP_NAMESPACE, PROP_PROJECT_HOMEPAGE);
+			if (urls == null || urls.length == 0) {
+				return null;
+			}
+			if (urls.length > 1) {
+				throw(new InvalidSPDXAnalysisException("More than one home page for a package"));
+			}
+			return(urls[0]);
+		}
+		
+		public void setHomePage(String url) throws InvalidSPDXAnalysisException {
+			removeProperties(node, DOAP_NAMESPACE, PROP_PROJECT_HOMEPAGE);
+			addProperty(node, DOAP_NAMESPACE, PROP_PROJECT_HOMEPAGE, new String[] {url});
+		}
+		
 		public SpdxPackageVerificationCode getVerificationCode() throws InvalidSPDXAnalysisException {			
 			SpdxPackageVerificationCode retval = null;
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE).asNode();
@@ -549,7 +568,8 @@ public class SPDXDocument implements SpdxRdfConstants {
 					this.getConcludedLicenses(), this.getLicenseInfoFromFiles(), 
 					this.getLicenseComment(), this.getDeclaredCopyright(), 
 					this.getShortDescription(), this.getDescription(), this.getDownloadUrl(), 
-					this.getVerificationCode(), this.getSupplier(), this.getOriginator());
+					this.getVerificationCode(), this.getSupplier(), this.getOriginator(), 
+					this.getHomePage());
 		}
 		
 		public void setLicenseInfoFromFiles(SPDXLicenseInfo[] licenseInfo) throws InvalidSPDXAnalysisException {

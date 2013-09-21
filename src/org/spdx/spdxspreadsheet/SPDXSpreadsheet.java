@@ -48,7 +48,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 * version using the static method <code>openVersion(Workbook wb, String sheetName, String versionNumber)</code>
 	 * Each sheet also implements a method to create the latest version <code>create(Workbook wb, String sheetName)</code>
 	 */
-	public static final String CURRENT_VERSION = "1.1.0";
+	public static final String CURRENT_VERSION = "1.2.0";
+	public static final String VERSION_1_1_0 = "1.1.0";
 	public static final String VERSION_0_9_4 = "0.9.4";
 	public static final String VERSION_0_9_3 = "0.9.3";
 	public static final String VERSION_0_9_2 = "0.9.2";

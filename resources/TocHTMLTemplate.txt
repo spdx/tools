@@ -8,9 +8,9 @@
       xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-  <title>SPDX Standard Licenses</title>
+  <title>SPDX License List</title>
   <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+  <link rel="stylesheet" href="screen-v1.css" media="screen" type="text/css" />
   <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
   <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
   <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
@@ -57,22 +57,18 @@
 </div></div> <!-- /#header-inner, /#header -->
 
 <h1>SPDX License List</h1>
-<p>The SPDX License List is a list of commonly found open source software
-licenses for the purposes of being able to easily and efficiently identify
-such licenses in an SPDX document. The SPDX License List includes a
-standardized short identifier, full name for each license, vetted license
-text, other basic information, and a canonical permanent URL. By providing
-a short identifier, users can efficiently refer to a license without
-having to redundantly reproduce the full license.</p>
-<p>Please see the <a href="http://spdx.org/content/license-list">License List overview</a> for more information about the SPDX License List and its various fields.  
-You may propose additional licenses be added to the SPDX License List by
-following the process at: <a href="http://spdx.org/content/spdx-license-list-process-requesting-new-licenses-be-added">SPDX License List: Process for requesting new licenses to be added</a>.
-Guidelines for what constitutes a license match to the SPDX License List 
-when generating an SPDX file can be found here:
- <a href="http://spdx.org/wiki/spdx-license-list-match-guidelines">SPDX License List Match Guidelines</a>.</p>
+<p>The SPDX License List is a list of commonly found open source software licenses for the purposes of being able to easily and efficiently identify such licenses in an SPDX document. The SPDX License List includes a standardized short identifier, full name for each license, vetted license text, other basic information, and a canonical permanent URL. By providing a short identifier, users can efficiently refer to a license without having to redundantly reproduce the full license.</p>
+
+<p>Other information relevant to the SPDX License List:</p>
+<ul style="list-style-type: square; padding: 5px;">
+      <li style="margin:0px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/license-list-overview">Overview</a>: For general information about the SPDX License List, including principles for inclusion of a license and an explanation of the field contained on the list.</li>
+      <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/request-new-license">Request New License</a>: For instructions on how to propose additional liscenses be added to the SPDX License List.</li>
+      <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/matching-guidelines">Matching Guidelines</a>:  Guidelines for what constitutes a license match to the SPDX License List when generating an SPDX file.</li>
+</ul>
+
 [VERSION]
 
-<h2>Licenses</h2>
+<h2 style="color: #003F69;">Licenses</h2>
 <table>
   <thead><tr>
     <th>Full name</th><th>Identifier</th><th>OSI Approved</th><th>Text</th>
@@ -102,15 +98,15 @@ when generating an SPDX file can be found here:
   <div class="content">
     <ul style="list-style:none;margin:0px;padding:0px;">
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
 </ul>
   </div>
 
@@ -121,15 +117,15 @@ when generating an SPDX file can be found here:
   <div class="content">
     <ul style="list-style:none;margin:0px;padding:0px;">
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
 </ul>
   </div>
 
@@ -140,15 +136,15 @@ when generating an SPDX file can be found here:
   <div class="content">
     <ul style="list-style:none;margin:0px;padding:0px;">
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
 <li>
-		<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
 </ul>
   </div>
 

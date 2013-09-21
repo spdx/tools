@@ -53,7 +53,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	}
 	
 	public static void create(Workbook wb, String sheetName) {
-		PackageInfoSheetV09d3.create(wb, sheetName);
+		PackageInfoSheetV1d2.create(wb, sheetName);
 	}
 
 	/**
@@ -66,12 +66,14 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	public static PackageInfoSheet openVersion(Workbook workbook,
 			String packageInfoSheetName, String version) {
 		
-		if (version.equals(SPDXSpreadsheet.VERSION_0_9_1)) {
+		if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_1) <= 0) {
 			return new PackageInfoSheetV9d1(workbook, packageInfoSheetName, version);
-		} else if (version.equals(SPDXSpreadsheet.VERSION_0_9_2)) {
+		} else if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_2) <= 0) {
 			return new PackageInfoSheetV09d2(workbook, packageInfoSheetName, version);
-		} else {
+		} else if (version.compareTo(SPDXSpreadsheet.VERSION_1_1_0) <= 0) {
 			return new PackageInfoSheetV09d3(workbook, packageInfoSheetName, version);
-		} 
+		} else {
+			return new PackageInfoSheetV1d2(workbook, packageInfoSheetName, version);
+		}
 	}
 }

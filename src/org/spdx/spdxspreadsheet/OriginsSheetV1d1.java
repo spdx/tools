@@ -242,7 +242,7 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getDocumentDomment()
 	 */
 	@Override
-	public String getDocumentDomment() {
+	public String getDocumentComment() {
 		return getDataCellStringValue(DOCUMENT_COMMENT_COL);
 	}
 
@@ -252,5 +252,21 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 	@Override
 	public void setDocumentComment(String docComment) {
 		setDataCellStringValue(DOCUMENT_COMMENT_COL, docComment);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getLicenseListVersion()
+	 */
+	@Override
+	public String getLicenseListVersion() {
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setLicenseListVersion(java.lang.String)
+	 */
+	@Override
+	public void setLicenseListVersion(String licenseVersion) {
+		
 	}
 }

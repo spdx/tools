@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2011 Source Auditor Inc.
+ * Copyright (c) 2013 Source Auditor Inc.
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -12,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */
+*/
 package org.spdx.spdxspreadsheet;
 
 import java.util.Date;
@@ -24,32 +25,34 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- * Sheet containing information about the origins of an SPDX document
  * @author Gary O'Neall
  *
  */
-public class OriginsSheetV0d9d4 extends OriginsSheet {
+public class OriginsSheetV1d2 extends OriginsSheet {
 
-	static final int NUM_COLS = 6;
-	static final int SPREADSHEET_VERSION_COL = 0;
+	static final int NUM_COLS = 9;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
 	static final int CREATED_BY_COL = SPDX_VERSION_COL + 1;
 	static final int CREATED_COL = CREATED_BY_COL + 1;
 	static final int DATA_LICENSE_COL = CREATED_COL + 1;
-	static final int AUTHOR_COMMENTS_COL = DATA_LICENSE_COL + 1;
-	
-	static final int DATA_ROW_NUM = 1;
+	static final int LICENSE_LIST_VERSION_COL = DATA_LICENSE_COL + 1;
+	static final int AUTHOR_COMMENTS_COL = LICENSE_LIST_VERSION_COL + 1;
+	static final int DOCUMENT_COMMENT_COL = AUTHOR_COMMENTS_COL + 1;
+	static final int USER_DEFINED_COL = DOCUMENT_COMMENT_COL + 1;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
-		true, true, false, false};
+		true, true, false, false, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
-		"SPDX Version", "Creator", "Created", "Data License", "Creator Comment"};
-	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 16, 40, 70};
-	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, false};
+		"SPDX Version", "Creator", "Created", "Data License", "License List Version",  
+		"Creator Comment", "Document Comment", "Optional User Defined Columns..."};
+	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 16, 40, 20, 70, 70, 70};
+	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, true,
+		true, true, true};
+	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, false,
+		false, false, false};
 	
-	public OriginsSheetV0d9d4(Workbook workbook, String sheetName, String version) {
+	public OriginsSheetV1d2(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
 
@@ -145,6 +148,7 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 		ssVersionCell.setCellValue(SPDXSpreadsheet.CURRENT_VERSION);
 	}
 	
+
 	
 	public void setAuthorComments(String comments) {
 		setDataCellStringValue(AUTHOR_COMMENTS_COL, comments);
@@ -203,15 +207,20 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 		}
 		setDataCellStringValue(CREATED_BY_COL, createdBy[0]);
 		for (int i = 1; i < createdBy.length; i++) {
-			Row row = sheet.getRow(firstRowNum + DATA_ROW_NUM + i);
-			if (row == null) {
-				row = sheet.createRow(firstRowNum + DATA_ROW_NUM + i);
-			}
+			Row row = getDataRow(i);
 			Cell cell = row.getCell(CREATED_BY_COL);
 			if (cell == null) {
 				cell = row.createCell(CREATED_BY_COL);
 			}
 			cell.setCellValue(createdBy[i]);
+		}
+		// delete any remaining rows
+		for (int i = firstRowNum + DATA_ROW_NUM + createdBy.length; i <= this.lastRowNum; i++) {
+			Row row = sheet.getRow(i);
+			Cell cell = row.getCell(CREATED_BY_COL);
+			if (cell != null) {
+				row.removeCell(cell);
+			}
 		}
 	}
 	
@@ -239,7 +248,7 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 	 */
 	@Override
 	public String getDocumentComment() {
-		return null;	// not implemented in this version
+		return getDataCellStringValue(DOCUMENT_COMMENT_COL);
 	}
 
 	/* (non-Javadoc)
@@ -247,7 +256,7 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 	 */
 	@Override
 	public void setDocumentComment(String docComment) {
-		// Not implemented in this version - just ignore
+		setDataCellStringValue(DOCUMENT_COMMENT_COL, docComment);
 	}
 
 	/* (non-Javadoc)
@@ -255,7 +264,7 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 	 */
 	@Override
 	public String getLicenseListVersion() {
-		return null;
+		return getDataCellStringValue(LICENSE_LIST_VERSION_COL);
 	}
 
 	/* (non-Javadoc)
@@ -263,6 +272,7 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 	 */
 	@Override
 	public void setLicenseListVersion(String licenseVersion) {
-		
+		setDataCellStringValue(LICENSE_LIST_VERSION_COL, licenseVersion);
 	}
+
 }

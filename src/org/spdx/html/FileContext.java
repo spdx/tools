@@ -17,6 +17,7 @@
 package org.spdx.html;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.spdx.rdfparser.DOAPProject;
@@ -151,6 +152,33 @@ public class FileContext {
 		} else {
 			return null;
 		}
+	}
+	
+	public String noticeText() {
+		if (spdxFile != null) {
+			return spdxFile.getNoticeText();
+		} else {
+			return null;
+		}
+	}
+	
+	public List<String> contributors() {
+		if (spdxFile == null || spdxFile.getContributors() == null) {
+			return null;
+		}
+		return Arrays.asList(spdxFile.getContributors());
+	}
+	
+	public List<String> fileDependencies() {
+		if (spdxFile == null || spdxFile.getFileDependencies() == null) {
+			return null;
+		}
+		ArrayList<String> retval = new ArrayList<String>();
+		SPDXFile[] dep = this.spdxFile.getFileDependencies();
+		for (int i = 0; i < dep.length; i++) {
+			retval.add(dep[i].getName());
+		}
+		return retval;
 	}
 
 }

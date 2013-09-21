@@ -302,6 +302,6 @@ public class PackageInfoSheetV9d1 extends PackageInfoSheet {
 		return new SPDXPackageInfo(declaredName, notAvailable, machineName, sha1, sourceInfo, 
 				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
 				licenseComment, declaredCopyright, shortDesc, 
-				description, url, verificationCode, "", "");
+				description, url, verificationCode, "", "", "");
 	}
 }

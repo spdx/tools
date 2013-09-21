@@ -240,6 +240,18 @@ public class PackageContext {
 		}
 	}
 	
+	public String homePage() {
+		if (pkg != null) {
+			try {
+				return pkg.getHomePage();
+			} catch (InvalidSPDXAnalysisException e) {
+				return "Error getting SPDX Package hone page: "+e.getMessage();
+			}
+		} else {
+			return  null;
+		}
+	}
+	
 	public List<String> licenseInfoFromFiles() {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (pkg != null) {
