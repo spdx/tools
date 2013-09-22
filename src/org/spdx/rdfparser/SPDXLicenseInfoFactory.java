@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -180,7 +182,14 @@ public class SPDXLicenseInfoFactory {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected static SPDXStandardLicense getLicenseFromStdLicModel(String uri) throws InvalidSPDXAnalysisException {
-		String id = uri.substring(STANDARD_LICENSE_URI_PREFIX.length());
+		URL licenseUrl = null;
+		try {
+			licenseUrl = new URL(uri);
+		} catch (MalformedURLException e) {
+			throw new InvalidSPDXAnalysisException("Invalid standard license URL: "+e.getMessage());
+		}
+		String[] pathParts = licenseUrl.getFile().split("/");
+		String id = pathParts[pathParts.length-1];
 		if (STANDARD_LICENSES.containsKey(id)) {
 			return STANDARD_LICENSES.get(id);
 		}
