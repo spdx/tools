@@ -233,4 +233,11 @@ public class DOAPProject {
 		// just use the object compares if the above shortcuts did not work out
 		return super.equals(o);
 	}
+
+	/**
+	 * @return
+	 */
+	public Resource getResource() {
+		return this.projectResource;
+	}
 }

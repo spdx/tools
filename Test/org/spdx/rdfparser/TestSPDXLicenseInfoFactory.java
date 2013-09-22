@@ -171,7 +171,7 @@ public class TestSPDXLicenseInfoFactory {
 		String id = "BSD-3-Clause";
 		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
 		
-		String stdLicUri = "file:///" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
+		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
 		SPDXStandardLicense lic = SPDXLicenseInfoFactory.getLicenseFromStdLicModel(stdLicUri);
 		if (lic == null) {
 			fail("license is null");

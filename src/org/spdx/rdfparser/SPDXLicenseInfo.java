@@ -117,4 +117,11 @@ public abstract class SPDXLicenseInfo {
 	 * @return
 	 */
 	public abstract ArrayList<String> verify();
+
+	/**
+	 * @return
+	 */
+	public Resource getResource() {
+		return this.resource;
+	}
 }

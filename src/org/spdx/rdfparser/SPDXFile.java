@@ -40,7 +40,7 @@ public class SPDXFile {
 	private Resource resource = null;
 	private String name;
 	private SPDXLicenseInfo concludedLicenses;
-	private String sha1;
+	private SPDXChecksum sha1;
 	private String type;
 	private SPDXLicenseInfo[] seenLicenses;
 	private String licenseComments;
@@ -111,10 +111,7 @@ public class SPDXFile {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			SPDXChecksum cksum = new SPDXChecksum(model, t.getObject());
-			if (cksum.getAlgorithm().equals(SpdxRdfConstants.ALGORITHM_SHA1)) {
-				this.sha1 = cksum.getValue();
-			}
+			this.sha1  = new SPDXChecksum(model, t.getObject());
 		}
 		// type
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_TYPE).asNode();
@@ -261,8 +258,10 @@ public class SPDXFile {
 		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
 		model.removeAll(fileResource, p, null);
 		if (this.sha1 != null) {
-			SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
-			Resource cksumResource = cksum.createResource(model);
+			Resource cksumResource = this.sha1.getResource();
+			if (cksumResource == null) {
+				cksumResource = this.sha1.createResource(model);
+			}
 			fileResource.addProperty(p, cksumResource);
 		}
 		// type
@@ -400,7 +399,7 @@ public class SPDXFile {
 			String noticeText) {
 		this.name = name;
 		this.type = type;
-		this.sha1 = sha1;
+		this.sha1 = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
 		this.concludedLicenses = concludedLicenses;
 		this.seenLicenses = seenLicenses;
 		this.licenseComments = licenseComments;
@@ -442,23 +441,46 @@ public class SPDXFile {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SPDXLicenseInfo[] getSeenLicenses() {
-		/* TODO: Fix consistency with existing model - currently, this creates a new object which is slow and has equality problems
 		if (this.model != null && this.resource != null) {
 			try {
-				ArrayList<SPDXLicenseInfo >alLic = new ArrayList<SPDXLicenseInfo>();		
+				ArrayList<Node> alLicNode = new ArrayList<Node>();		
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator <Triple> tripleIter = model.getGraph().find(m);	
 				while (tripleIter.hasNext()) {
 					Triple t = tripleIter.next();
-					alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+					alLicNode.add(t.getObject());
 				}
-				this.seenLicenses = alLic.toArray(new SPDXLicenseInfo[alLic.size()]);
+				boolean seenLicensesMatch = (this.seenLicenses.length == alLicNode.size());
+				int i = 0;
+				while (seenLicensesMatch && i < this.seenLicenses.length) {
+					Resource licResource = this.seenLicenses[i++].getResource();
+					if (licResource == null) {
+						seenLicensesMatch = false;
+					} else {
+						boolean found = false;
+						for (int j = 0; j < alLicNode.size(); j++) {
+							if (alLicNode.get(j).equals(licResource.asNode())) {
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							seenLicensesMatch = false;
+						}
+					}
+				}
+				if (!seenLicensesMatch) {
+					this.seenLicenses = new SPDXLicenseInfo[alLicNode.size()];
+					for (int k = 0; i < this.seenLicenses.length; k++) {
+						this.seenLicenses[k] = SPDXLicenseInfoFactory.getLicenseInfoFromModel(
+								model,alLicNode.get(k));
+					}
+				}
 			} catch(InvalidSPDXAnalysisException e) {
 				// just use the original exception
 			}
 		}
-		*/
 		return seenLicenses;
 	}
 	/**
@@ -635,29 +657,27 @@ public class SPDXFile {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SPDXLicenseInfo getConcludedLicenses() {
-		/* TODO: Fix consistency with existing model - currently, this creates a new object which is slow and has equality problems
 		if (this.model != null && this.resource != null) {
 			try {
-				ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+				Triple t = null;
 				while (tripleIter.hasNext()) {
-					Triple t = tripleIter.next();
-					alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+					t = tripleIter.next();
+					if (this.concludedLicenses != null &&
+							t.getObject().equals(this.concludedLicenses.getResource().asNode())) {
+						break;
+					}
 				}
-				if (alLic.size() > 1) {
-					throw(new InvalidSPDXAnalysisException("Too many concluded licenses for file"));
+				if (this.concludedLicenses == null ||
+						!t.getObject().equals(this.concludedLicenses.getResource().asNode())) {
+					this.concludedLicenses = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject());
 				}
-				if (alLic.size() == 0) {
-					throw(new InvalidSPDXAnalysisException("Missing required concluded license"));
-				}
-				this.concludedLicenses = alLic.get(0);
 			}	catch(InvalidSPDXAnalysisException e) {
 				// just use the original property
 			}
 		}
-		*/
 		return this.concludedLicenses;
 	}
 	/**
@@ -678,37 +698,41 @@ public class SPDXFile {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public String getSha1()  {
-		/* TODO: Fix consistency with existing model - currently, this creates a new object which is slow and has equality problems
 		if (this.model != null && this.resource != null) {
 			try {
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+				Triple t = null;
 				while (tripleIter.hasNext()) {
-					Triple t = tripleIter.next();
-					SPDXChecksum cksum = new SPDXChecksum(model, t.getObject());
-					if (cksum.getAlgorithm().equals(SpdxRdfConstants.ALGORITHM_SHA1)) {
-						this.sha1 = cksum.getValue();
+					t = tripleIter.next();
+					if (this.sha1 != null && nodesEquals(this.sha1.getResource().asNode(), t.getObject())) {
+						break;
 					}
+				}
+				if (this.sha1 == null || !nodesEquals(this.sha1.getResource().asNode(), t.getObject())) {
+					this.sha1 = new SPDXChecksum(model, t.getObject());
 				}
 			} catch (InvalidSPDXAnalysisException e) {
 				// just use the original sha1
 			}
 		}
-		*/
-		return this.sha1;
+		return this.sha1.getValue();
 	}
+	
+	private boolean nodesEquals(Node n1, Node n2) {
+		return n1.equals(n2);
+	}
+	
 	/**
 	 * @param sha1 the sha1 to set
 	 */
 	public void setSha1(String sha1) {
-		this.sha1 = sha1;
+		this.sha1 = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
 		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
 			model.removeAll(this.resource, p, null);
-			SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
-			Resource cksumResource = cksum.createResource(model);
-
+			Resource cksumResource = this.sha1.createResource(model);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CHECKSUM);
 			this.resource.addProperty(p, cksumResource);
 		}
@@ -792,23 +816,47 @@ public class SPDXFile {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public DOAPProject[] getArtifactOf()  {
-		/* TODO: Fix consistency with existing model - currently, this creates a new object which is slow and has equality problems
 		if (this.model != null && this.resource != null) {
 			try {
-				ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
+				ArrayList<Node> alProjectNodes = new ArrayList<Node>();
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 				while (tripleIter.hasNext()) {
 					Triple t = tripleIter.next();
-					alProjects.add(new DOAPProject(model, t.getObject()));
+					alProjectNodes.add(t.getObject());					
 				}
-				this.artifactOf = alProjects.toArray(new DOAPProject[alProjects.size()]);
+				ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
+				boolean projectsDifferent = this.artifactOf.length != alProjectNodes.size();
+				for (int i = 0; i < this.artifactOf.length; i++) {
+					Resource projectResource = this.artifactOf[i].getResource();
+					if (projectResource == null) {
+						projectsDifferent = true;
+					} else {
+						boolean found = false;
+						for (int j = 0; j < alProjectNodes.size(); j++) {
+							if (alProjectNodes.get(j).equals(projectResource.asNode())) {
+								found = true;
+								alProjects.add(this.artifactOf[i]);
+								alProjects.remove(j);
+								break;
+							}
+						}
+						if (!found) {
+							projectsDifferent = true;
+						}
+					}
+				}
+				if (projectsDifferent) {
+					for(int i = 0; i < alProjectNodes.size(); i++) {
+						alProjects.add(new DOAPProject(model, alProjectNodes.get(i)));
+					}
+					this.artifactOf = alProjects.toArray(new DOAPProject[alProjects.size()]);
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				// just use the original artifactOf
 			}
 		}
-		*/
 		return artifactOf;
 	}
 
@@ -945,23 +993,46 @@ public class SPDXFile {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SPDXFile[] getFileDependencies() {
-		/* TODO: Fix consistency with existing model - currently, this creates a new object which is slow and has equality problems
 		if (this.model != null && this.resource != null) {
 			try {
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
-				ArrayList<SPDXFile> alDependencies = new ArrayList<SPDXFile>();
+				ArrayList<Node> alDependencyNodes = new ArrayList<Node>();
 				ExtendedIterator<Triple >tripleIter = model.getGraph().find(m);	
 				while (tripleIter.hasNext()) {
 					Triple t = tripleIter.next();
-					alDependencies.add(new SPDXFile(model, t.getObject()));
+					alDependencyNodes.add(t.getObject());
 				}
-				this.fileDependencies = alDependencies.toArray(new SPDXFile[alDependencies.size()]);
+				boolean fileDependenciesMatch = (this.fileDependencies.length == alDependencyNodes.size());
+				int i = 0;
+				while (i < this.fileDependencies.length && fileDependenciesMatch) {
+					Resource fileDependencyResource = this.fileDependencies[i++].getResource();					
+					if (fileDependencyResource == null) {
+						fileDependenciesMatch = false;
+					} else {
+						Node fileDependancyNode = fileDependencyResource.asNode();
+						boolean found = false;
+						for (int j = 0; j < alDependencyNodes.size(); j++) {
+							if (alDependencyNodes.get(j).equals(fileDependancyNode)) {
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							fileDependenciesMatch = false;
+						}
+					}
+				}
+				if (!fileDependenciesMatch) {
+					this.fileDependencies = new SPDXFile[alDependencyNodes.size()];
+					for (int k = 0; k < this.fileDependencies.length; k++) {
+						this.fileDependencies[k] = new SPDXFile(model, alDependencyNodes.get(k));
+					}
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				// just the the original property
 			}
 		}
-		*/
 		return this.fileDependencies;
 	}
 	/**
@@ -1001,28 +1072,37 @@ public class SPDXFile {
 		SPDXFile compareFile = (SPDXFile)o;
 		if (this.model != null && this.resource != null) {
 			Resource compareFileResource = compareFile.getResource();
-			if (compareFileResource == null) {
-				return false;
-			}
-			if (this.resource.isAnon()) {
-				if (!compareFileResource.isAnon()) {
-					return false;
-				}
-				return this.resource.getId().equals(compareFileResource.getId());
-			} else {
-				if (!compareFileResource.isURIResource()) {
-					return false;
-				}
-				return this.resource.getURI().equals(compareFileResource.getURI());
-			} 
+			return resourcesEqual(this.resource, compareFileResource);
 		} else {
 			// no resource
 			Resource compareFileResource = compareFile.getResource();
 			if (compareFileResource != null) {
 				return false;
 			}
-			return (this.name.equals(compareFile.getName()) && this.sha1.equals(compareFile.getSha1()));
+			return super.equals(o);
 		}
+	}
+	/**
+	 * @param r1
+	 * @param r2
+	 * @return
+	 */
+	private boolean resourcesEqual(Resource r1,
+			Resource r2) {
+		if (r2 == null) {
+			return false;
+		}
+		if (r1.isAnon()) {
+			if (!r2.isAnon()) {
+				return false;
+			}
+			return r1.getId().equals(r2.getId());
+		} else {
+			if (!r2.isURIResource()) {
+				return false;
+			}
+			return r1.getURI().equals(r2.getURI());
+		} 
 	}
 	/**
 	 * @return the Jena resource if it exists in the model

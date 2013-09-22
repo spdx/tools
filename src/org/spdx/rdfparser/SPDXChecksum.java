@@ -226,4 +226,11 @@ public class SPDXChecksum {
 		}
 		return compare.getValue().compareToIgnoreCase(this.getValue()) == 0;
 	}
+
+	/**
+	 * @return
+	 */
+	public Resource getResource() {
+		return this.checksumResource;
+	}
 }
