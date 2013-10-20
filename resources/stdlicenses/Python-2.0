@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:dc="http://purl.org/dc/terms/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/rdf/terms#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>Python License 2.0</title>
-	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+    <title>Python License 2.0</title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
-	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
 <![endif]-->
-	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
 <!--[if IE 6]>
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
 <![endif]-->
   <script type="text/javascript">
 
@@ -41,28 +44,17 @@
 <div id="util_nav">
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 <div id="logo-title">
-	<div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-	<div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
 </div> <!-- /#logo-title -->
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -70,35 +62,31 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Python License 2.0</h1>
-<h2 id="information">Information</h2>
-<dl>
-	<dt>Full name</dt>
-	<dd property="rdfs:label">Python License 2.0</dd>
-	<dt>Short identifier</dt>
-	<dd><code property="spdx:licenseId">Python-2.0</code></dd>
-	<dt>Other web pages for this license</dt>
-	<dd>
-		<ul>
-							<li><a href="http://www.opensource.org/licenses/Python-2.0" rel="owl:sameAs">http://www.opensource.org/licenses/Python-2.0</a></li>
 
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">Python License 2.0</p></div>
 
-		</ul>
-	</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>overall Python license</p>
-<h2 id="licenseText">Text</h2>
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">Python-2.0</code></p>
+
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://www.opensource.org/licenses/Python-2.0" rel="owl:sameAs">http://www.opensource.org/licenses/Python-2.0</a></li>
+
+</p>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">overall Python license</p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2<br/>
---------------------------------------------<br/>
-<br/>
-1. This LICENSE AGREEMENT is between the Python Software Foundation<br/>
+--------------------------------------------
+<p>1. This LICENSE AGREEMENT is between the Python Software Foundation<br/>
 (&quot;PSF&quot;), and the Individual or Organization (&quot;Licensee&quot;) accessing and<br/>
 otherwise using this software (&quot;Python&quot;) in source or binary form and<br/>
-its associated documentation.<br/>
-<br/>
-2. Subject to the terms and conditions of this License Agreement, PSF<br/>
+its associated documentation.</p>
+<p>2. Subject to the terms and conditions of this License Agreement, PSF<br/>
 hereby grants Licensee a nonexclusive, royalty-free, world-wide<br/>
 license to reproduce, analyze, test, perform and/or display publicly,<br/>
 prepare derivative works, distribute, and otherwise use Python<br/>
@@ -106,74 +94,60 @@ alone or in any derivative version, provided, however, that PSF&apos;s<br/>
 License Agreement and PSF&apos;s notice of copyright, i.e., &quot;Copyright (c)<br/>
 2001, 2002, 2003, 2004, 2005, 2006 Python Software Foundation; All Rights<br/>
 Reserved&quot; are retained in Python alone or in any derivative version<br/>
-prepared by Licensee.<br/>
-<br/>
-3. In the event Licensee prepares a derivative work that is based on<br/>
+prepared by Licensee.</p>
+<p>3. In the event Licensee prepares a derivative work that is based on<br/>
 or incorporates Python or any part thereof, and wants to make<br/>
 the derivative work available to others as provided herein, then<br/>
 Licensee hereby agrees to include in any such work a brief summary of<br/>
-the changes made to Python.<br/>
-<br/>
-4. PSF is making Python available to Licensee on an &quot;AS IS&quot;<br/>
+the changes made to Python.</p>
+<p>4. PSF is making Python available to Licensee on an &quot;AS IS&quot;<br/>
 basis. PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR<br/>
 IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND<br/>
 DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS<br/>
 FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT<br/>
-INFRINGE ANY THIRD PARTY RIGHTS.<br/>
-<br/>
-5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON<br/>
+INFRINGE ANY THIRD PARTY RIGHTS.</p>
+<p>5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON<br/>
 FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS<br/>
 A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON,<br/>
-OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.<br/>
-<br/>
-6. This License Agreement will automatically terminate upon a material<br/>
-breach of its terms and conditions.<br/>
-<br/>
-7. Nothing in this License Agreement shall be deemed to create any<br/>
+OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.</p>
+<p>6. This License Agreement will automatically terminate upon a material<br/>
+breach of its terms and conditions.</p>
+<p>7. Nothing in this License Agreement shall be deemed to create any<br/>
 relationship of agency, partnership, or joint venture between PSF and<br/>
 Licensee. This License Agreement does not grant permission to use PSF<br/>
 trademarks or trade name in a trademark sense to endorse or promote<br/>
-products or services of Licensee, or any third party.<br/>
-<br/>
-8. By copying, installing or otherwise using Python, Licensee<br/>
+products or services of Licensee, or any third party.</p>
+<p>8. By copying, installing or otherwise using Python, Licensee<br/>
 agrees to be bound by the terms and conditions of this License<br/>
-Agreement.<br/>
-<br/>
-BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0<br/>
--------------------------------------------<br/>
-<br/>
-BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1<br/>
-<br/>
-1. This LICENSE AGREEMENT is between BeOpen.com (&quot;BeOpen&quot;), having an<br/>
+Agreement.</p>
+<p>BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0<br/>
+-------------------------------------------</p>
+<p>BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1</p>
+<p>1. This LICENSE AGREEMENT is between BeOpen.com (&quot;BeOpen&quot;), having an<br/>
 office at 160 Saratoga Avenue, Santa Clara, CA 95051, and the<br/>
 Individual or Organization (&quot;Licensee&quot;) accessing and otherwise using<br/>
 this software in source or binary form and its associated<br/>
-documentation (&quot;the Software&quot;).<br/>
-<br/>
-2. Subject to the terms and conditions of this BeOpen Python License<br/>
+documentation (&quot;the Software&quot;).</p>
+<p>2. Subject to the terms and conditions of this BeOpen Python License<br/>
 Agreement, BeOpen hereby grants Licensee a non-exclusive,<br/>
 royalty-free, world-wide license to reproduce, analyze, test, perform<br/>
 and/or display publicly, prepare derivative works, distribute, and<br/>
 otherwise use the Software alone or in any derivative version,<br/>
 provided, however, that the BeOpen Python License is retained in the<br/>
-Software, alone or in any derivative version prepared by Licensee.<br/>
-<br/>
-3. BeOpen is making the Software available to Licensee on an &quot;AS IS&quot;<br/>
+Software, alone or in any derivative version prepared by Licensee.</p>
+<p>3. BeOpen is making the Software available to Licensee on an &quot;AS IS&quot;<br/>
 basis. BEOPEN MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR<br/>
 IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, BEOPEN MAKES NO AND<br/>
 DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS<br/>
 FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE WILL NOT<br/>
-INFRINGE ANY THIRD PARTY RIGHTS.<br/>
-<br/>
-4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE<br/>
+INFRINGE ANY THIRD PARTY RIGHTS.</p>
+<p>4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE<br/>
 SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS<br/>
 AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THE SOFTWARE, OR ANY<br/>
-DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.<br/>
-<br/>
-5. This License Agreement will automatically terminate upon a material<br/>
-breach of its terms and conditions.<br/>
-<br/>
-6. This License Agreement shall be governed by and interpreted in all<br/>
+DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.</p>
+<p>5. This License Agreement will automatically terminate upon a material<br/>
+breach of its terms and conditions.</p>
+<p>6. This License Agreement shall be governed by and interpreted in all<br/>
 respects by the law of the State of California, excluding conflict of<br/>
 law provisions. Nothing in this License Agreement shall be deemed to<br/>
 create any relationship of agency, partnership, or joint venture<br/>
@@ -182,126 +156,344 @@ permission to use BeOpen trademarks or trade names in a trademark<br/>
 sense to endorse or promote products or services of Licensee, or any<br/>
 third party. As an exception, the &quot;BeOpen Python&quot; logos available at<br/>
 http://www.pythonlabs.com/logos.html may be used according to the<br/>
-permissions granted on that web page.<br/>
-<br/>
-7. By copying, installing or otherwise using the software, Licensee<br/>
+permissions granted on that web page.</p>
+<p>7. By copying, installing or otherwise using the software, Licensee<br/>
 agrees to be bound by the terms and conditions of this License<br/>
-Agreement.<br/>
-<br/>
-CNRI OPEN SOURCE LICENSE AGREEMENT (for Python 1.6b1)<br/>
---------------------------------------------------<br/>
-<br/>
-IMPORTANT: PLEASE READ THE FOLLOWING AGREEMENT CAREFULLY.<br/>
-<br/>
-BY CLICKING ON &quot;ACCEPT&quot; WHERE INDICATED BELOW, OR BY COPYING,<br/>
+Agreement.</p>
+<p>CNRI OPEN SOURCE LICENSE AGREEMENT (for Python 1.6b1)<br/>
+--------------------------------------------------</p>
+<p>IMPORTANT: PLEASE READ THE FOLLOWING AGREEMENT CAREFULLY.</p>
+<p>BY CLICKING ON &quot;ACCEPT&quot; WHERE INDICATED BELOW, OR BY COPYING,<br/>
 INSTALLING OR OTHERWISE USING PYTHON 1.6, beta 1 SOFTWARE, YOU ARE<br/>
 DEEMED TO HAVE AGREED TO THE TERMS AND CONDITIONS OF THIS LICENSE<br/>
-AGREEMENT.<br/>
-<br/>
-1. This LICENSE AGREEMENT is between the Corporation for National<br/>
+AGREEMENT.</p>
+<p>1. This LICENSE AGREEMENT is between the Corporation for National<br/>
 Research Initiatives, having an office at 1895 Preston White Drive,<br/>
 Reston, VA 20191 (&quot;CNRI&quot;), and the Individual or Organization<br/>
 (&quot;Licensee&quot;) accessing and otherwise using Python 1.6, beta 1<br/>
 software in source or binary form and its associated documentation,<br/>
 as released at the www.python.org Internet site on August 4, 2000<br/>
-(&quot;Python 1.6b1&quot;).<br/>
-<br/>
-2. Subject to the terms and conditions of this License Agreement, CNRI<br/>
+(&quot;Python 1.6b1&quot;).</p>
+<p>2. Subject to the terms and conditions of this License Agreement, CNRI<br/>
 hereby grants Licensee a non-exclusive, royalty-free, world-wide<br/>
 license to reproduce, analyze, test, perform and/or display<br/>
 publicly, prepare derivative works, distribute, and otherwise use<br/>
 Python 1.6b1 alone or in any derivative version, provided, however,<br/>
 that CNRIs License Agreement is retained in Python 1.6b1, alone or<br/>
-in any derivative version prepared by Licensee.<br/>
-<br/>
-Alternately, in lieu of CNRIs License Agreement, Licensee may<br/>
+in any derivative version prepared by Licensee.</p>
+<p>Alternately, in lieu of CNRIs License Agreement, Licensee may<br/>
 substitute the following text (omitting the quotes): &quot;Python 1.6,<br/>
 beta 1, is made available subject to the terms and conditions in<br/>
 CNRIs License Agreement. This Agreement may be located on the<br/>
 Internet using the following unique, persistent identifier (known<br/>
 as a handle): 1895.22/1011. This Agreement may also be obtained<br/>
 from a proxy server on the Internet using the<br/>
-URL:http://hdl.handle.net/1895.22/1011&quot;.<br/>
-<br/>
-3. In the event Licensee prepares a derivative work that is based on<br/>
+URL:http://hdl.handle.net/1895.22/1011&quot;.</p>
+<p>3. In the event Licensee prepares a derivative work that is based on<br/>
 or incorporates Python 1.6b1 or any part thereof, and wants to make<br/>
 the derivative work available to the public as provided herein,<br/>
 then Licensee hereby agrees to indicate in any such work the nature<br/>
-of the modifications made to Python 1.6b1.<br/>
-<br/>
-4. CNRI is making Python 1.6b1 available to Licensee on an &quot;AS IS&quot;<br/>
+of the modifications made to Python 1.6b1.</p>
+<p>4. CNRI is making Python 1.6b1 available to Licensee on an &quot;AS IS&quot;<br/>
 basis. CNRI MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR<br/>
 IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, CNRI MAKES NO AND<br/>
 DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR<br/>
 FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON 1.6b1<br/>
-WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.<br/>
-<br/>
-5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE<br/>
+WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.</p>
+<p>5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE<br/>
 SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR<br/>
 LOSS AS A RESULT OF USING, MODIFYING OR DISTRIBUTING PYTHON 1.6b1,<br/>
 OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY<br/>
-THEREOF.<br/>
-<br/>
-6. This License Agreement will automatically terminate upon a material<br/>
-breach of its terms and conditions.<br/>
-<br/>
-7. This License Agreement shall be governed by and interpreted in all<br/>
+THEREOF.</p>
+<p>6. This License Agreement will automatically terminate upon a material<br/>
+breach of its terms and conditions.</p>
+<p>7. This License Agreement shall be governed by and interpreted in all<br/>
 respects by the law of the State of Virginia, excluding conflict of<br/>
 law provisions. Nothing in this License Agreement shall be deemed<br/>
 to create any relationship of agency, partnership, or joint venture<br/>
 between CNRI and Licensee. This License Agreement does not grant<br/>
 permission to use CNRI trademarks or trade name in a trademark<br/>
 sense to endorse or promote products or services of Licensee, or<br/>
-any third party.<br/>
-<br/>
-8. By clicking on the &quot;ACCEPT&quot; button where indicated, or by copying,<br/>
+any third party.</p>
+<p>8. By clicking on the &quot;ACCEPT&quot; button where indicated, or by copying,<br/>
 installing or otherwise using Python 1.6b1, Licensee agrees to be<br/>
-bound by the terms and conditions of this License Agreement.<br/>
-<br/>
-ACCEPT<br/>
-<br/>
-CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2<br/>
---------------------------------------------------<br/>
-<br/>
-Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,<br/>
-The Netherlands. All rights reserved.<br/>
-<br/>
-Permission to use, copy, modify, and distribute this software and its<br/>
+bound by the terms and conditions of this License Agreement.</p>
+<p>ACCEPT</p>
+<p>CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2<br/>
+--------------------------------------------------</p>
+<p>Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,<br/>
+The Netherlands. All rights reserved.</p>
+<p>Permission to use, copy, modify, and distribute this software and its<br/>
 documentation for any purpose and without fee is hereby granted,<br/>
 provided that the above copyright notice appear in all copies and that<br/>
 both that copyright notice and this permission notice appear in<br/>
 supporting documentation, and that the name of Stichting Mathematisch<br/>
 Centrum or CWI not be used in advertising or publicity pertaining to<br/>
 distribution of the software without specific, written prior<br/>
-permission.<br/>
-<br/>
-STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO<br/>
+permission.</p>
+<p>STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO<br/>
 THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND<br/>
 FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE<br/>
 FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES<br/>
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN<br/>
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT<br/>
-OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 </div>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text"></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2<br/>
+--------------------------------------------
+<p>1. This LICENSE AGREEMENT is between the Python Software Foundation<br/>
+(&quot;PSF&quot;), and the Individual or Organization (&quot;Licensee&quot;) accessing and<br/>
+otherwise using this software (&quot;Python&quot;) in source or binary form and<br/>
+its associated documentation.</p>
+<p>2. Subject to the terms and conditions of this License Agreement, PSF<br/>
+hereby grants Licensee a nonexclusive, royalty-free, world-wide<br/>
+license to reproduce, analyze, test, perform and/or display publicly,<br/>
+prepare derivative works, distribute, and otherwise use Python<br/>
+alone or in any derivative version, provided, however, that PSF&apos;s<br/>
+License Agreement and PSF&apos;s notice of copyright, i.e., &quot;Copyright (c)<br/>
+2001, 2002, 2003, 2004, 2005, 2006 Python Software Foundation; All Rights<br/>
+Reserved&quot; are retained in Python alone or in any derivative version<br/>
+prepared by Licensee.</p>
+<p>3. In the event Licensee prepares a derivative work that is based on<br/>
+or incorporates Python or any part thereof, and wants to make<br/>
+the derivative work available to others as provided herein, then<br/>
+Licensee hereby agrees to include in any such work a brief summary of<br/>
+the changes made to Python.</p>
+<p>4. PSF is making Python available to Licensee on an &quot;AS IS&quot;<br/>
+basis. PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR<br/>
+IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND<br/>
+DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS<br/>
+FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT<br/>
+INFRINGE ANY THIRD PARTY RIGHTS.</p>
+<p>5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON<br/>
+FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS<br/>
+A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON,<br/>
+OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.</p>
+<p>6. This License Agreement will automatically terminate upon a material<br/>
+breach of its terms and conditions.</p>
+<p>7. Nothing in this License Agreement shall be deemed to create any<br/>
+relationship of agency, partnership, or joint venture between PSF and<br/>
+Licensee. This License Agreement does not grant permission to use PSF<br/>
+trademarks or trade name in a trademark sense to endorse or promote<br/>
+products or services of Licensee, or any third party.</p>
+<p>8. By copying, installing or otherwise using Python, Licensee<br/>
+agrees to be bound by the terms and conditions of this License<br/>
+Agreement.</p>
+<p>BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0<br/>
+-------------------------------------------</p>
+<p>BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1</p>
+<p>1. This LICENSE AGREEMENT is between BeOpen.com (&quot;BeOpen&quot;), having an<br/>
+office at 160 Saratoga Avenue, Santa Clara, CA 95051, and the<br/>
+Individual or Organization (&quot;Licensee&quot;) accessing and otherwise using<br/>
+this software in source or binary form and its associated<br/>
+documentation (&quot;the Software&quot;).</p>
+<p>2. Subject to the terms and conditions of this BeOpen Python License<br/>
+Agreement, BeOpen hereby grants Licensee a non-exclusive,<br/>
+royalty-free, world-wide license to reproduce, analyze, test, perform<br/>
+and/or display publicly, prepare derivative works, distribute, and<br/>
+otherwise use the Software alone or in any derivative version,<br/>
+provided, however, that the BeOpen Python License is retained in the<br/>
+Software, alone or in any derivative version prepared by Licensee.</p>
+<p>3. BeOpen is making the Software available to Licensee on an &quot;AS IS&quot;<br/>
+basis. BEOPEN MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR<br/>
+IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, BEOPEN MAKES NO AND<br/>
+DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS<br/>
+FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE WILL NOT<br/>
+INFRINGE ANY THIRD PARTY RIGHTS.</p>
+<p>4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE<br/>
+SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS<br/>
+AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THE SOFTWARE, OR ANY<br/>
+DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.</p>
+<p>5. This License Agreement will automatically terminate upon a material<br/>
+breach of its terms and conditions.</p>
+<p>6. This License Agreement shall be governed by and interpreted in all<br/>
+respects by the law of the State of California, excluding conflict of<br/>
+law provisions. Nothing in this License Agreement shall be deemed to<br/>
+create any relationship of agency, partnership, or joint venture<br/>
+between BeOpen and Licensee. This License Agreement does not grant<br/>
+permission to use BeOpen trademarks or trade names in a trademark<br/>
+sense to endorse or promote products or services of Licensee, or any<br/>
+third party. As an exception, the &quot;BeOpen Python&quot; logos available at<br/>
+http://www.pythonlabs.com/logos.html may be used according to the<br/>
+permissions granted on that web page.</p>
+<p>7. By copying, installing or otherwise using the software, Licensee<br/>
+agrees to be bound by the terms and conditions of this License<br/>
+Agreement.</p>
+<p>CNRI OPEN SOURCE LICENSE AGREEMENT (for Python 1.6b1)<br/>
+--------------------------------------------------</p>
+<p>IMPORTANT: PLEASE READ THE FOLLOWING AGREEMENT CAREFULLY.</p>
+<p>BY CLICKING ON &quot;ACCEPT&quot; WHERE INDICATED BELOW, OR BY COPYING,<br/>
+INSTALLING OR OTHERWISE USING PYTHON 1.6, beta 1 SOFTWARE, YOU ARE<br/>
+DEEMED TO HAVE AGREED TO THE TERMS AND CONDITIONS OF THIS LICENSE<br/>
+AGREEMENT.</p>
+<p>1. This LICENSE AGREEMENT is between the Corporation for National<br/>
+Research Initiatives, having an office at 1895 Preston White Drive,<br/>
+Reston, VA 20191 (&quot;CNRI&quot;), and the Individual or Organization<br/>
+(&quot;Licensee&quot;) accessing and otherwise using Python 1.6, beta 1<br/>
+software in source or binary form and its associated documentation,<br/>
+as released at the www.python.org Internet site on August 4, 2000<br/>
+(&quot;Python 1.6b1&quot;).</p>
+<p>2. Subject to the terms and conditions of this License Agreement, CNRI<br/>
+hereby grants Licensee a non-exclusive, royalty-free, world-wide<br/>
+license to reproduce, analyze, test, perform and/or display<br/>
+publicly, prepare derivative works, distribute, and otherwise use<br/>
+Python 1.6b1 alone or in any derivative version, provided, however,<br/>
+that CNRIs License Agreement is retained in Python 1.6b1, alone or<br/>
+in any derivative version prepared by Licensee.</p>
+<p>Alternately, in lieu of CNRIs License Agreement, Licensee may<br/>
+substitute the following text (omitting the quotes): &quot;Python 1.6,<br/>
+beta 1, is made available subject to the terms and conditions in<br/>
+CNRIs License Agreement. This Agreement may be located on the<br/>
+Internet using the following unique, persistent identifier (known<br/>
+as a handle): 1895.22/1011. This Agreement may also be obtained<br/>
+from a proxy server on the Internet using the<br/>
+URL:http://hdl.handle.net/1895.22/1011&quot;.</p>
+<p>3. In the event Licensee prepares a derivative work that is based on<br/>
+or incorporates Python 1.6b1 or any part thereof, and wants to make<br/>
+the derivative work available to the public as provided herein,<br/>
+then Licensee hereby agrees to indicate in any such work the nature<br/>
+of the modifications made to Python 1.6b1.</p>
+<p>4. CNRI is making Python 1.6b1 available to Licensee on an &quot;AS IS&quot;<br/>
+basis. CNRI MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR<br/>
+IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, CNRI MAKES NO AND<br/>
+DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR<br/>
+FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON 1.6b1<br/>
+WILL NOT INFRINGE ANY THIRD PARTY RIGHTS.</p>
+<p>5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE<br/>
+SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR<br/>
+LOSS AS A RESULT OF USING, MODIFYING OR DISTRIBUTING PYTHON 1.6b1,<br/>
+OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY<br/>
+THEREOF.</p>
+<p>6. This License Agreement will automatically terminate upon a material<br/>
+breach of its terms and conditions.</p>
+<p>7. This License Agreement shall be governed by and interpreted in all<br/>
+respects by the law of the State of Virginia, excluding conflict of<br/>
+law provisions. Nothing in this License Agreement shall be deemed<br/>
+to create any relationship of agency, partnership, or joint venture<br/>
+between CNRI and Licensee. This License Agreement does not grant<br/>
+permission to use CNRI trademarks or trade name in a trademark<br/>
+sense to endorse or promote products or services of Licensee, or<br/>
+any third party.</p>
+<p>8. By clicking on the &quot;ACCEPT&quot; button where indicated, or by copying,<br/>
+installing or otherwise using Python 1.6b1, Licensee agrees to be<br/>
+bound by the terms and conditions of this License Agreement.</p>
+<p>ACCEPT</p>
+<p>CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2<br/>
+--------------------------------------------------</p>
+<p>Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,<br/>
+The Netherlands. All rights reserved.</p>
+<p>Permission to use, copy, modify, and distribute this software and its<br/>
+documentation for any purpose and without fee is hereby granted,<br/>
+provided that the above copyright notice appear in all copies and that<br/>
+both that copyright notice and this permission notice appear in<br/>
+supporting documentation, and that the name of Stichting Mathematisch<br/>
+Centrum or CWI not be used in advertising or publicity pertaining to<br/>
+distribution of the software without specific, written prior<br/>
+permission.</p>
+<p>STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO<br/>
+THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND<br/>
+FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE<br/>
+FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES<br/>
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN<br/>
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT<br/>
+OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> | <a href="/codeOfConduct">Code of Conduct</a> | <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
 
 </div></div> <!-- /#page-inner, /#page -->
 
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 </body>
 </html>

@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:dc="http://purl.org/dc/terms/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/rdf/terms#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>Artistic License 2.0</title>
-	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+    <title>Artistic License 2.0</title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
-	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
 <![endif]-->
-	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
 <!--[if IE 6]>
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
 <![endif]-->
   <script type="text/javascript">
 
@@ -41,28 +44,17 @@
 <div id="util_nav">
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 <div id="logo-title">
-	<div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-	<div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
 </div> <!-- /#logo-title -->
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -70,250 +62,227 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Artistic License 2.0</h1>
-<h2 id="information">Information</h2>
-<dl>
-	<dt>Full name</dt>
-	<dd property="rdfs:label">Artistic License 2.0</dd>
-	<dt>Short identifier</dt>
-	<dd><code property="spdx:licenseId">Artistic-2.0</code></dd>
-	<dt>Other web pages for this license</dt>
-	<dd>
-		<ul>
-							<li><a href="http://www.perlfoundation.org/artistic_license_2_0" rel="owl:sameAs">http://www.perlfoundation.org/artistic_license_2_0</a></li>
+
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">Artistic License 2.0</p></div>
+
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">Artistic-2.0</code></p>
+
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://www.perlfoundation.org/artistic_license_2_0" rel="owl:sameAs">http://www.perlfoundation.org/artistic_license_2_0</a></li>
 
 				<li><a href="http://www.opensource.org/licenses/artistic-license-2.0" rel="owl:sameAs">http://www.opensource.org/licenses/artistic-license-2.0</a></li>
 
-
-		</ul>
-	</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>This license was released: 2006<br/>
 </p>
-<h2 id="licenseText">Text</h2>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">This license was released: 2006<br/>
+</p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-         The Artistic License 2.0<br/>
-<br/>
-     Copyright (c) 2000-2006, The Perl Foundation.<br/>
-<br/>
-     Everyone is permitted to copy and distribute verbatim copies<br/>
-      of this license document, but changing it is not allowed.<br/>
-<br/>
-Preamble<br/>
-<br/>
-This license establishes the terms under which a given free software<br/>
-Package may be copied, modified, distributed, and/or redistributed.<br/>
-The intent is that the Copyright Holder maintains some artistic<br/>
-control over the development of that Package while still keeping the<br/>
-Package available as open source and free software.<br/>
-<br/>
-You are always permitted to make arrangements wholly outside of this<br/>
-license directly with the Copyright Holder of a given Package.  If the<br/>
-terms of this license do not permit the full use that you propose to<br/>
-make of the Package, you should contact the Copyright Holder and seek<br/>
-a different licensing arrangement. <br/>
-<br/>
-Definitions<br/>
-<br/>
-    &quot;Copyright Holder&quot; means the individual(s) or organization(s)<br/>
-    named in the copyright notice for the entire Package.<br/>
-<br/>
-    &quot;Contributor&quot; means any party that has contributed code or other<br/>
-    material to the Package, in accordance with the Copyright Holder&apos;s<br/>
-    procedures.<br/>
-<br/>
-    &quot;You&quot; and &quot;your&quot; means any person who would like to copy,<br/>
-    distribute, or modify the Package.<br/>
-<br/>
-    &quot;Package&quot; means the collection of files distributed by the<br/>
-    Copyright Holder, and derivatives of that collection and/or of<br/>
-    those files. A given Package may consist of either the Standard<br/>
-    Version, or a Modified Version.<br/>
-<br/>
-    &quot;Distribute&quot; means providing a copy of the Package or making it<br/>
-    accessible to anyone else, or in the case of a company or<br/>
-    organization, to others outside of your company or organization.<br/>
-<br/>
-    &quot;Distributor Fee&quot; means any fee that you charge for Distributing<br/>
-    this Package or providing support for this Package to another<br/>
-    party.  It does not mean licensing fees.<br/>
-<br/>
-    &quot;Standard Version&quot; refers to the Package if it has not been<br/>
-    modified, or has been modified only in ways explicitly requested<br/>
-    by the Copyright Holder.<br/>
-<br/>
-    &quot;Modified Version&quot; means the Package, if it has been changed, and<br/>
-    such changes were not explicitly requested by the Copyright<br/>
-    Holder. <br/>
-<br/>
-    &quot;Original License&quot; means this Artistic License as Distributed with<br/>
-    the Standard Version of the Package, in its current version or as<br/>
-    it may be modified by The Perl Foundation in the future.<br/>
-<br/>
-    &quot;Source&quot; form means the source code, documentation source, and<br/>
-    configuration files for the Package.<br/>
-<br/>
-    &quot;Compiled&quot; form means the compiled bytecode, object code, binary,<br/>
-    or any other form resulting from mechanical transformation or<br/>
-    translation of the Source form.<br/>
-<br/>
-<br/>
-Permission for Use and Modification Without Distribution<br/>
-<br/>
-(1)  You are permitted to use the Standard Version and create and use<br/>
-Modified Versions for any purpose without restriction, provided that<br/>
-you do not Distribute the Modified Version.<br/>
-<br/>
-<br/>
-Permissions for Redistribution of the Standard Version<br/>
-<br/>
-(2)  You may Distribute verbatim copies of the Source form of the<br/>
-Standard Version of this Package in any medium without restriction,<br/>
-either gratis or for a Distributor Fee, provided that you duplicate<br/>
-all of the original copyright notices and associated disclaimers.  At<br/>
-your discretion, such verbatim copies may or may not include a<br/>
-Compiled form of the Package.<br/>
-<br/>
-(3)  You may apply any bug fixes, portability changes, and other<br/>
-modifications made available from the Copyright Holder.  The resulting<br/>
-Package will still be considered the Standard Version, and as such<br/>
-will be subject to the Original License.<br/>
-<br/>
-<br/>
-Distribution of Modified Versions of the Package as Source <br/>
-<br/>
-(4)  You may Distribute your Modified Version as Source (either gratis<br/>
-or for a Distributor Fee, and with or without a Compiled form of the<br/>
-Modified Version) provided that you clearly document how it differs<br/>
-from the Standard Version, including, but not limited to, documenting<br/>
-any non-standard features, executables, or modules, and provided that<br/>
-you do at least ONE of the following:<br/>
-<br/>
-    (a)  make the Modified Version available to the Copyright Holder<br/>
-    of the Standard Version, under the Original License, so that the<br/>
-    Copyright Holder may include your modifications in the Standard<br/>
-    Version.<br/>
-<br/>
-    (b)  ensure that installation of your Modified Version does not<br/>
-    prevent the user installing or running the Standard Version. In<br/>
-    addition, the Modified Version must bear a name that is different<br/>
-    from the name of the Standard Version.<br/>
-<br/>
-    (c)  allow anyone who receives a copy of the Modified Version to<br/>
-    make the Source form of the Modified Version available to others<br/>
-    under<br/>
-  <br/>
- 	(i)  the Original License or<br/>
-<br/>
- 	(ii)  a license that permits the licensee to freely copy,<br/>
- 	modify and redistribute the Modified Version using the same<br/>
- 	licensing terms that apply to the copy that the licensee<br/>
- 	received, and requires that the Source form of the Modified<br/>
- 	Version, and of any works derived from it, be made freely<br/>
- 	available in that license fees are prohibited but Distributor<br/>
- 	Fees are allowed.<br/>
-<br/>
-<br/>
-Distribution of Compiled Forms of the Standard Version <br/>
-or Modified Versions without the Source<br/>
-<br/>
-(5)  You may Distribute Compiled forms of the Standard Version without<br/>
-the Source, provided that you include complete instructions on how to<br/>
-get the Source of the Standard Version.  Such instructions must be<br/>
-valid at the time of your distribution.  If these instructions, at any<br/>
-time while you are carrying out such distribution, become invalid, you<br/>
-must provide new instructions on demand or cease further distribution.<br/>
-If you provide valid instructions or cease distribution within thirty<br/>
-days after you become aware that the instructions are invalid, then<br/>
-you do not forfeit any of your rights under this license.<br/>
-<br/>
-(6)  You may Distribute a Modified Version in Compiled form without<br/>
-the Source, provided that you comply with Section 4 with respect to<br/>
-the Source of the Modified Version.<br/>
-<br/>
-<br/>
-Aggregating or Linking the Package <br/>
-<br/>
-(7)  You may aggregate the Package (either the Standard Version or<br/>
-Modified Version) with other packages and Distribute the resulting<br/>
-aggregation provided that you do not charge a licensing fee for the<br/>
-Package.  Distributor Fees are permitted, and licensing fees for other<br/>
-components in the aggregation are permitted. The terms of this license<br/>
-apply to the use and Distribution of the Standard or Modified Versions<br/>
-as included in the aggregation.<br/>
-<br/>
-(8) You are permitted to link Modified and Standard Versions with<br/>
-other works, to embed the Package in a larger work of your own, or to<br/>
-build stand-alone binary or bytecode versions of applications that<br/>
-include the Package, and Distribute the result without restriction,<br/>
-provided the result does not expose a direct interface to the Package.<br/>
-<br/>
-<br/>
-Items That are Not Considered Part of a Modified Version <br/>
-<br/>
-(9) Works (including, but not limited to, modules and scripts) that<br/>
-merely extend or make use of the Package, do not, by themselves, cause<br/>
-the Package to be a Modified Version.  In addition, such works are not<br/>
-considered parts of the Package itself, and are not subject to the<br/>
-terms of this license.<br/>
-<br/>
-<br/>
-General Provisions<br/>
-<br/>
-(10)  Any use, modification, and distribution of the Standard or<br/>
-Modified Versions is governed by this Artistic License. By using,<br/>
-modifying or distributing the Package, you accept this license. Do not<br/>
-use, modify, or distribute the Package, if you do not accept this<br/>
-license.<br/>
-<br/>
-(11)  If your Modified Version has been derived from a Modified<br/>
-Version made by someone other than you, you are nevertheless required<br/>
-to ensure that your Modified Version complies with the requirements of<br/>
-this license.<br/>
-<br/>
-(12)  This license does not grant you the right to use any trademark,<br/>
-service mark, tradename, or logo of the Copyright Holder.<br/>
-<br/>
-(13)  This license includes the non-exclusive, worldwide,<br/>
-free-of-charge patent license to make, have made, use, offer to sell,<br/>
-sell, import and otherwise transfer the Package with respect to any<br/>
-patent claims licensable by the Copyright Holder that are necessarily<br/>
-infringed by the Package. If you institute patent litigation<br/>
-(including a cross-claim or counterclaim) against any party alleging<br/>
-that the Package constitutes direct or contributory patent<br/>
-infringement, then this Artistic License to you shall terminate on the<br/>
-date that such litigation is filed.<br/>
-<br/>
-(14)  Disclaimer of Warranty:<br/>
-THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS &quot;AS<br/>
-IS&apos; AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES. THE IMPLIED<br/>
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR<br/>
-NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY YOUR LOCAL<br/>
-LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR CONTRIBUTOR WILL<br/>
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL<br/>
-DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE, EVEN IF<br/>
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+The Artistic License 2.0
+<p>Copyright (c) 2000-2006, The Perl Foundation.</p>
+<p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
+<p>Preamble</p>
+<p>This license establishes the terms under which a given free software Package may be copied, modified, distributed, and/or redistributed. The intent is that the Copyright Holder maintains some artistic control over the development of that Package while still keeping the Package available as open source and free software.</p>
+<p>You are always permitted to make arrangements wholly outside of this license directly with the Copyright Holder of a given Package.  If the terms of this license do not permit the full use that you propose to make of the Package, you should contact the Copyright Holder and seek a different licensing arrangement. </p>
+<p>Definitions</p>
+<p>&quot;Copyright Holder&quot; means the individual(s) or organization(s) named in the copyright notice for the entire Package.</p>
+<p>&quot;Contributor&quot; means any party that has contributed code or other material to the Package, in accordance with the Copyright Holder&apos;s procedures.</p>
+<p>&quot;You&quot; and &quot;your&quot; means any person who would like to copy, distribute, or modify the Package.</p>
+<p>&quot;Package&quot; means the collection of files distributed by the Copyright Holder, and derivatives of that collection and/or of those files. A given Package may consist of either the Standard Version, or a Modified Version.</p>
+<p>&quot;Distribute&quot; means providing a copy of the Package or making it accessible to anyone else, or in the case of a company or organization, to others outside of your company or organization.</p>
+<p>&quot;Distributor Fee&quot; means any fee that you charge for Distributing this Package or providing support for this Package to another party.  It does not mean licensing fees.</p>
+<p>&quot;Standard Version&quot; refers to the Package if it has not been modified, or has been modified only in ways explicitly requested by the Copyright Holder.</p>
+<p>&quot;Modified Version&quot; means the Package, if it has been changed, and such changes were not explicitly requested by the Copyright Holder. </p>
+<p>&quot;Original License&quot; means this Artistic License as Distributed with the Standard Version of the Package, in its current version or as it may be modified by The Perl Foundation in the future.</p>
+<p>&quot;Source&quot; form means the source code, documentation source, and configuration files for the Package.</p>
+<p>&quot;Compiled&quot; form means the compiled bytecode, object code, binary, or any other form resulting from mechanical transformation or translation of the Source form.</p>
+<p>Permission for Use and Modification Without Distribution</p>
+<p>(1)  You are permitted to use the Standard Version and create and use Modified Versions for any purpose without restriction, provided that you do not Distribute the Modified Version.</p>
+<p><br/>
+Permissions for Redistribution of the Standard Version</p>
+<p>(2)  You may Distribute verbatim copies of the Source form of the Standard Version of this Package in any medium without restriction, either gratis or for a Distributor Fee, provided that you duplicate all of the original copyright notices and associated disclaimers.  At your discretion, such verbatim copies may or may not include a Compiled form of the Package.</p>
+<p>(3)  You may apply any bug fixes, portability changes, and other modifications made available from the Copyright Holder.  The resulting Package will still be considered the Standard Version, and as such will be subject to the Original License.</p>
+<p><br/>
+Distribution of Modified Versions of the Package as Source </p>
+<p>(4)  You may Distribute your Modified Version as Source (either gratis or for a Distributor Fee, and with or without a Compiled form of the Modified Version) provided that you clearly document how it differs from the Standard Version, including, but not limited to, documenting any non-standard features, executables, or modules, and provided that you do at least ONE of the following:</p>
+<p>    (a)  make the Modified Version available to the Copyright Holder of the Standard Version, under the Original License, so that the Copyright Holder may include your modifications in the Standard Version.</p>
+<p>    (b)  ensure that installation of your Modified Version does not prevent the user installing or running the Standard Version. In addition, the Modified Version must bear a name that is different from the name of the Standard Version.</p>
+<p>    (c)  allow anyone who receives a copy of the Modified Version to make the Source form of the Modified Version available to others under</p>
+<p> 	(i)  the Original License or</p>
+<p> 	(ii)  a license that permits the licensee to freely copy, modify and redistribute the Modified Version using the same licensing terms that apply to the copy that the licensee received, and requires that the Source form of the Modified Version, and of any works derived from it, be made freely available in that license fees are prohibited but Distributor Fees are allowed.</p>
+<p><br/>
+Distribution of Compiled Forms of the Standard Version or Modified Versions without the Source</p>
+<p>(5)  You may Distribute Compiled forms of the Standard Version without the Source, provided that you include complete instructions on how to get the Source of the Standard Version.  Such instructions must be valid at the time of your distribution.  If these instructions, at any time while you are carrying out such distribution, become invalid, you must provide new instructions on demand or cease further distribution. If you provide valid instructions or cease distribution within thirty days after you become aware that the instructions are invalid, then you do not forfeit any of your rights under this license.</p>
+<p>(6)  You may Distribute a Modified Version in Compiled form without the Source, provided that you comply with Section 4 with respect to the Source of the Modified Version.</p>
+<p><br/>
+Aggregating or Linking the Package </p>
+<p>(7)  You may aggregate the Package (either the Standard Version or Modified Version) with other packages and Distribute the resulting aggregation provided that you do not charge a licensing fee for the Package.  Distributor Fees are permitted, and licensing fees for other components in the aggregation are permitted. The terms of this license apply to the use and Distribution of the Standard or Modified Versions as included in the aggregation.</p>
+<p>(8) You are permitted to link Modified and Standard Versions with other works, to embed the Package in a larger work of your own, or to build stand-alone binary or bytecode versions of applications that include the Package, and Distribute the result without restriction, provided the result does not expose a direct interface to the Package.</p>
+<p><br/>
+Items That are Not Considered Part of a Modified Version </p>
+<p>(9) Works (including, but not limited to, modules and scripts) that merely extend or make use of the Package, do not, by themselves, cause the Package to be a Modified Version.  In addition, such works are not considered parts of the Package itself, and are not subject to the terms of this license.</p>
+<p><br/>
+General Provisions</p>
+<p>(10)  Any use, modification, and distribution of the Standard or Modified Versions is governed by this Artistic License. By using, modifying or distributing the Package, you accept this license. Do not use, modify, or distribute the Package, if you do not accept this license.</p>
+<p>(11)  If your Modified Version has been derived from a Modified Version made by someone other than you, you are nevertheless required to ensure that your Modified Version complies with the requirements of this license.</p>
+<p>(12)  This license does not grant you the right to use any trademark, service mark, tradename, or logo of the Copyright Holder.</p>
+<p>(13)  This license includes the non-exclusive, worldwide, free-of-charge patent license to make, have made, use, offer to sell, sell, import and otherwise transfer the Package with respect to any patent claims licensable by the Copyright Holder that are necessarily infringed by the Package. If you institute patent litigation (including a cross-claim or counterclaim) against any party alleging that the Package constitutes direct or contributory patent infringement, then this Artistic License to you shall terminate on the date that such litigation is filed.</p>
+<p>(14)  Disclaimer of Warranty:<br/>
+THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS &quot;AS IS&apos; AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES. THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 </div>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text"></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">The Artistic License 2.0
+<p>Copyright (c) 2000-2006, The Perl Foundation.</p>
+<p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
+<p>Preamble</p>
+<p>This license establishes the terms under which a given free software Package may be copied, modified, distributed, and/or redistributed. The intent is that the Copyright Holder maintains some artistic control over the development of that Package while still keeping the Package available as open source and free software.</p>
+<p>You are always permitted to make arrangements wholly outside of this license directly with the Copyright Holder of a given Package.  If the terms of this license do not permit the full use that you propose to make of the Package, you should contact the Copyright Holder and seek a different licensing arrangement. </p>
+<p>Definitions</p>
+<p>&quot;Copyright Holder&quot; means the individual(s) or organization(s) named in the copyright notice for the entire Package.</p>
+<p>&quot;Contributor&quot; means any party that has contributed code or other material to the Package, in accordance with the Copyright Holder&apos;s procedures.</p>
+<p>&quot;You&quot; and &quot;your&quot; means any person who would like to copy, distribute, or modify the Package.</p>
+<p>&quot;Package&quot; means the collection of files distributed by the Copyright Holder, and derivatives of that collection and/or of those files. A given Package may consist of either the Standard Version, or a Modified Version.</p>
+<p>&quot;Distribute&quot; means providing a copy of the Package or making it accessible to anyone else, or in the case of a company or organization, to others outside of your company or organization.</p>
+<p>&quot;Distributor Fee&quot; means any fee that you charge for Distributing this Package or providing support for this Package to another party.  It does not mean licensing fees.</p>
+<p>&quot;Standard Version&quot; refers to the Package if it has not been modified, or has been modified only in ways explicitly requested by the Copyright Holder.</p>
+<p>&quot;Modified Version&quot; means the Package, if it has been changed, and such changes were not explicitly requested by the Copyright Holder. </p>
+<p>&quot;Original License&quot; means this Artistic License as Distributed with the Standard Version of the Package, in its current version or as it may be modified by The Perl Foundation in the future.</p>
+<p>&quot;Source&quot; form means the source code, documentation source, and configuration files for the Package.</p>
+<p>&quot;Compiled&quot; form means the compiled bytecode, object code, binary, or any other form resulting from mechanical transformation or translation of the Source form.</p>
+<p>Permission for Use and Modification Without Distribution</p>
+<p>(1)  You are permitted to use the Standard Version and create and use Modified Versions for any purpose without restriction, provided that you do not Distribute the Modified Version.</p>
+<p><br/>
+Permissions for Redistribution of the Standard Version</p>
+<p>(2)  You may Distribute verbatim copies of the Source form of the Standard Version of this Package in any medium without restriction, either gratis or for a Distributor Fee, provided that you duplicate all of the original copyright notices and associated disclaimers.  At your discretion, such verbatim copies may or may not include a Compiled form of the Package.</p>
+<p>(3)  You may apply any bug fixes, portability changes, and other modifications made available from the Copyright Holder.  The resulting Package will still be considered the Standard Version, and as such will be subject to the Original License.</p>
+<p><br/>
+Distribution of Modified Versions of the Package as Source </p>
+<p>(4)  You may Distribute your Modified Version as Source (either gratis or for a Distributor Fee, and with or without a Compiled form of the Modified Version) provided that you clearly document how it differs from the Standard Version, including, but not limited to, documenting any non-standard features, executables, or modules, and provided that you do at least ONE of the following:</p>
+<p>    (a)  make the Modified Version available to the Copyright Holder of the Standard Version, under the Original License, so that the Copyright Holder may include your modifications in the Standard Version.</p>
+<p>    (b)  ensure that installation of your Modified Version does not prevent the user installing or running the Standard Version. In addition, the Modified Version must bear a name that is different from the name of the Standard Version.</p>
+<p>    (c)  allow anyone who receives a copy of the Modified Version to make the Source form of the Modified Version available to others under</p>
+<p> 	(i)  the Original License or</p>
+<p> 	(ii)  a license that permits the licensee to freely copy, modify and redistribute the Modified Version using the same licensing terms that apply to the copy that the licensee received, and requires that the Source form of the Modified Version, and of any works derived from it, be made freely available in that license fees are prohibited but Distributor Fees are allowed.</p>
+<p><br/>
+Distribution of Compiled Forms of the Standard Version or Modified Versions without the Source</p>
+<p>(5)  You may Distribute Compiled forms of the Standard Version without the Source, provided that you include complete instructions on how to get the Source of the Standard Version.  Such instructions must be valid at the time of your distribution.  If these instructions, at any time while you are carrying out such distribution, become invalid, you must provide new instructions on demand or cease further distribution. If you provide valid instructions or cease distribution within thirty days after you become aware that the instructions are invalid, then you do not forfeit any of your rights under this license.</p>
+<p>(6)  You may Distribute a Modified Version in Compiled form without the Source, provided that you comply with Section 4 with respect to the Source of the Modified Version.</p>
+<p><br/>
+Aggregating or Linking the Package </p>
+<p>(7)  You may aggregate the Package (either the Standard Version or Modified Version) with other packages and Distribute the resulting aggregation provided that you do not charge a licensing fee for the Package.  Distributor Fees are permitted, and licensing fees for other components in the aggregation are permitted. The terms of this license apply to the use and Distribution of the Standard or Modified Versions as included in the aggregation.</p>
+<p>(8) You are permitted to link Modified and Standard Versions with other works, to embed the Package in a larger work of your own, or to build stand-alone binary or bytecode versions of applications that include the Package, and Distribute the result without restriction, provided the result does not expose a direct interface to the Package.</p>
+<p><br/>
+Items That are Not Considered Part of a Modified Version </p>
+<p>(9) Works (including, but not limited to, modules and scripts) that merely extend or make use of the Package, do not, by themselves, cause the Package to be a Modified Version.  In addition, such works are not considered parts of the Package itself, and are not subject to the terms of this license.</p>
+<p><br/>
+General Provisions</p>
+<p>(10)  Any use, modification, and distribution of the Standard or Modified Versions is governed by this Artistic License. By using, modifying or distributing the Package, you accept this license. Do not use, modify, or distribute the Package, if you do not accept this license.</p>
+<p>(11)  If your Modified Version has been derived from a Modified Version made by someone other than you, you are nevertheless required to ensure that your Modified Version complies with the requirements of this license.</p>
+<p>(12)  This license does not grant you the right to use any trademark, service mark, tradename, or logo of the Copyright Holder.</p>
+<p>(13)  This license includes the non-exclusive, worldwide, free-of-charge patent license to make, have made, use, offer to sell, sell, import and otherwise transfer the Package with respect to any patent claims licensable by the Copyright Holder that are necessarily infringed by the Package. If you institute patent litigation (including a cross-claim or counterclaim) against any party alleging that the Package constitutes direct or contributory patent infringement, then this Artistic License to you shall terminate on the date that such litigation is filed.</p>
+<p>(14)  Disclaimer of Warranty:<br/>
+THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS &quot;AS IS&apos; AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES. THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> | <a href="/codeOfConduct">Code of Conduct</a> | <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
 
 </div></div> <!-- /#page-inner, /#page -->
 
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 </body>
 </html>

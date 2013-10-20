@@ -8,12 +8,12 @@
       xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-  <title>SPDX Standard Licenses</title>
-  <link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-  <link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-  <link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-  <link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+  <title>SPDX License List</title>
+  <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="screen-v1.css" media="screen" type="text/css" />
+  <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+  <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+  <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -38,47 +38,37 @@
 
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 
 <div id="logo-title">
-       <div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+       <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
       <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
 
-       <div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+       <div id="site-slogan">Software Package Data Exchange®</div>
 
 </div> <!-- /#logo-title -->
 
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
-</div>
 
 </div></div> <!-- /#header-inner, /#header -->
 
 <h1>SPDX License List</h1>
-<p>The SPDX License List is a list of commonly found open source software
-licenses for the purposes of being able to easily and efficiently identify
-such licenses in an SPDX document. The SPDX License List includes a
-standardized short identifier, full name for each license, vetted license
-text, other basic information, and a canonical permanent URL. By providing
-a short identifier, users can efficiently refer to a license without
-having to redundantly reproduce the full license.</p>
-<p>SPDX License List version 1.16, which was released on Jun 20, 2012. </p>
+<p>The SPDX License List is a list of commonly found open source software licenses for the purposes of being able to easily and efficiently identify such licenses in an SPDX document. The SPDX License List includes a standardized short identifier, full name for each license, vetted license text, other basic information, and a canonical permanent URL. By providing a short identifier, users can efficiently refer to a license without having to redundantly reproduce the full license.</p>
 
-<h2>Licenses</h2>
+<p>Other information relevant to the SPDX License List:</p>
+<ul style="list-style-type: square; padding: 5px;">
+      <li style="margin:0px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/license-list-overview">Overview</a>: For general information about the SPDX License List, including principles for inclusion of a license and an explanation of the field contained on the list.</li>
+      <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/request-new-license">Request New License</a>: For instructions on how to propose additional liscenses be added to the SPDX License List.</li>
+      <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/matching-guidelines">Matching Guidelines</a>:  Guidelines for what constitutes a license match to the SPDX License List when generating an SPDX file.</li>
+</ul>
+
+<p>SPDX License List version 1.19. </p>
+
+<h2 style="color: #003F69;">Licenses</h2>
 <table>
   <thead><tr>
     <th>Full name</th><th>Identifier</th><th>OSI Approved</th><th>Text</th>
@@ -128,1170 +118,1565 @@ having to redundantly reproduce the full license.</p>
       <td><a href="./APL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ANTLR-PD" rel="rdf:_8">ANTLR Software Rights Notice</a></td>
+      <td><a href="./Aladdin" rel="rdf:_8">Aladdin Free Public License</a></td>
+      <td about="./Aladdin" typeof="spdx:License">
+      <code property="spdx:licenseId">Aladdin</code></td>
+      <td align="center"></td>
+      <td><a href="./Aladdin#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./ANTLR-PD" rel="rdf:_9">ANTLR Software Rights Notice</a></td>
       <td about="./ANTLR-PD" typeof="spdx:License">
       <code property="spdx:licenseId">ANTLR-PD</code></td>
       <td align="center"></td>
       <td><a href="./ANTLR-PD#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Apache-1.0" rel="rdf:_9">Apache License 1.0</a></td>
+      <td><a href="./Apache-1.0" rel="rdf:_10">Apache License 1.0</a></td>
       <td about="./Apache-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">Apache-1.0</code></td>
       <td align="center"></td>
       <td><a href="./Apache-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Apache-1.1" rel="rdf:_10">Apache License 1.1</a></td>
+      <td><a href="./Apache-1.1" rel="rdf:_11">Apache License 1.1</a></td>
       <td about="./Apache-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">Apache-1.1</code></td>
       <td align="center">Y</td>
       <td><a href="./Apache-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Apache-2.0" rel="rdf:_11">Apache License 2.0</a></td>
+      <td><a href="./Apache-2.0" rel="rdf:_12">Apache License 2.0</a></td>
       <td about="./Apache-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">Apache-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./Apache-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./APSL-1.0" rel="rdf:_12">Apple Public Source License 1.0</a></td>
+      <td><a href="./APSL-1.0" rel="rdf:_13">Apple Public Source License 1.0</a></td>
       <td about="./APSL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">APSL-1.0</code></td>
-      <td align="center"></td>
+      <td align="center">Y</td>
       <td><a href="./APSL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./APSL-1.1" rel="rdf:_13">Apple Public Source License 1.1</a></td>
+      <td><a href="./APSL-1.1" rel="rdf:_14">Apple Public Source License 1.1</a></td>
       <td about="./APSL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">APSL-1.1</code></td>
-      <td align="center"></td>
+      <td align="center">Y</td>
       <td><a href="./APSL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./APSL-1.2" rel="rdf:_14">Apple Public Source License 1.2</a></td>
+      <td><a href="./APSL-1.2" rel="rdf:_15">Apple Public Source License 1.2</a></td>
       <td about="./APSL-1.2" typeof="spdx:License">
       <code property="spdx:licenseId">APSL-1.2</code></td>
       <td align="center">Y</td>
       <td><a href="./APSL-1.2#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./APSL-2.0" rel="rdf:_15">Apple Public Source License 2.0</a></td>
+      <td><a href="./APSL-2.0" rel="rdf:_16">Apple Public Source License 2.0</a></td>
       <td about="./APSL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">APSL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./APSL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Artistic-1.0" rel="rdf:_16">Artistic License 1.0</a></td>
+      <td><a href="./Artistic-1.0" rel="rdf:_17">Artistic License 1.0</a></td>
       <td about="./Artistic-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">Artistic-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./Artistic-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Artistic-2.0" rel="rdf:_17">Artistic License 2.0</a></td>
+      <td><a href="./Artistic-1.0-cl8" rel="rdf:_18">Artistic License 1.0 w/clause 8</a></td>
+      <td about="./Artistic-1.0-cl8" typeof="spdx:License">
+      <code property="spdx:licenseId">Artistic-1.0-cl8</code></td>
+      <td align="center">Y</td>
+      <td><a href="./Artistic-1.0-cl8#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./Artistic-1.0-Perl" rel="rdf:_19">Artistic License 1.0 (Perl)</a></td>
+      <td about="./Artistic-1.0-Perl" typeof="spdx:License">
+      <code property="spdx:licenseId">Artistic-1.0-Perl</code></td>
+      <td align="center"></td>
+      <td><a href="./Artistic-1.0-Perl#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./Artistic-2.0" rel="rdf:_20">Artistic License 2.0</a></td>
       <td about="./Artistic-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">Artistic-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./Artistic-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./AAL" rel="rdf:_18">Attribution Assurance License</a></td>
+      <td><a href="./AAL" rel="rdf:_21">Attribution Assurance License</a></td>
       <td about="./AAL" typeof="spdx:License">
       <code property="spdx:licenseId">AAL</code></td>
       <td align="center">Y</td>
       <td><a href="./AAL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./BSL-1.0" rel="rdf:_19">Boost Software License 1.0</a></td>
+      <td><a href="./BitTorrent-1.0" rel="rdf:_22">BitTorrent Open Source License v1.0</a></td>
+      <td about="./BitTorrent-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">BitTorrent-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./BitTorrent-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./BitTorrent-1.1" rel="rdf:_23">BitTorrent Open Source License v1.1</a></td>
+      <td about="./BitTorrent-1.1" typeof="spdx:License">
+      <code property="spdx:licenseId">BitTorrent-1.1</code></td>
+      <td align="center"></td>
+      <td><a href="./BitTorrent-1.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./BSL-1.0" rel="rdf:_24">Boost Software License 1.0</a></td>
       <td about="./BSL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">BSL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./BSL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./BSD-2-Clause" rel="rdf:_20">BSD 2-clause &quot;Simplified&quot; License</a></td>
+      <td><a href="./BSD-2-Clause" rel="rdf:_25">BSD 2-clause &quot;Simplified&quot; License</a></td>
       <td about="./BSD-2-Clause" typeof="spdx:License">
       <code property="spdx:licenseId">BSD-2-Clause</code></td>
       <td align="center">Y</td>
       <td><a href="./BSD-2-Clause#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./BSD-2-Clause-NetBSD" rel="rdf:_21">BSD 2-clause &quot;NetBSD&quot; License</a></td>
-      <td about="./BSD-2-Clause-NetBSD" typeof="spdx:License">
-      <code property="spdx:licenseId">BSD-2-Clause-NetBSD</code></td>
-      <td align="center"></td>
-      <td><a href="./BSD-2-Clause-NetBSD#licenseText">License Text</a></td>
-    </tr>
-    <tr>
-      <td><a href="./BSD-2-Clause-FreeBSD" rel="rdf:_22">BSD 2-clause &quot;FreeBSD&quot; License</a></td>
+      <td><a href="./BSD-2-Clause-FreeBSD" rel="rdf:_26">BSD 2-clause FreeBSD License</a></td>
       <td about="./BSD-2-Clause-FreeBSD" typeof="spdx:License">
       <code property="spdx:licenseId">BSD-2-Clause-FreeBSD</code></td>
       <td align="center"></td>
       <td><a href="./BSD-2-Clause-FreeBSD#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./BSD-3-Clause" rel="rdf:_23">BSD 3-clause &quot;New&quot; or &quot;Revised&quot; License</a></td>
+      <td><a href="./BSD-2-Clause-NetBSD" rel="rdf:_27">BSD 2-clause NetBSD License</a></td>
+      <td about="./BSD-2-Clause-NetBSD" typeof="spdx:License">
+      <code property="spdx:licenseId">BSD-2-Clause-NetBSD</code></td>
+      <td align="center"></td>
+      <td><a href="./BSD-2-Clause-NetBSD#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./BSD-3-Clause" rel="rdf:_28">BSD 3-clause &quot;New&quot; or &quot;Revised&quot; License</a></td>
       <td about="./BSD-3-Clause" typeof="spdx:License">
       <code property="spdx:licenseId">BSD-3-Clause</code></td>
       <td align="center">Y</td>
       <td><a href="./BSD-3-Clause#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./BSD-4-Clause" rel="rdf:_24">BSD 4-clause &quot;Original&quot; or &quot;Old&quot; License</a></td>
+      <td><a href="./BSD-3-Clause-Clear" rel="rdf:_29">BSD 3-clause Clear License</a></td>
+      <td about="./BSD-3-Clause-Clear" typeof="spdx:License">
+      <code property="spdx:licenseId">BSD-3-Clause-Clear</code></td>
+      <td align="center"></td>
+      <td><a href="./BSD-3-Clause-Clear#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./BSD-4-Clause" rel="rdf:_30">BSD 4-clause &quot;Original&quot; or &quot;Old&quot; License</a></td>
       <td about="./BSD-4-Clause" typeof="spdx:License">
       <code property="spdx:licenseId">BSD-4-Clause</code></td>
       <td align="center"></td>
       <td><a href="./BSD-4-Clause#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./BSD-4-Clause-UC" rel="rdf:_25">BSD-4-Clause (University of California-Specific)</a></td>
+      <td><a href="./BSD-4-Clause-UC" rel="rdf:_31">BSD-4-Clause (University of California-Specific)</a></td>
       <td about="./BSD-4-Clause-UC" typeof="spdx:License">
       <code property="spdx:licenseId">BSD-4-Clause-UC</code></td>
       <td align="center"></td>
       <td><a href="./BSD-4-Clause-UC#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CECILL-1.0" rel="rdf:_26">CeCILL Free Software License Agreement v1.0</a></td>
+      <td><a href="./CECILL-1.0" rel="rdf:_32">CeCILL Free Software License Agreement v1.0</a></td>
       <td about="./CECILL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CECILL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CECILL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CECILL-1.1" rel="rdf:_27">CeCILL Free Software License Agreement v1.1</a></td>
+      <td><a href="./CECILL-1.1" rel="rdf:_33">CeCILL Free Software License Agreement v1.1</a></td>
       <td about="./CECILL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">CECILL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./CECILL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CECILL-2.0" rel="rdf:_28">CeCILL Free Software License Agreement v2.0</a></td>
+      <td><a href="./CECILL-2.0" rel="rdf:_34">CeCILL Free Software License Agreement v2.0</a></td>
       <td about="./CECILL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CECILL-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CECILL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CECILL-B" rel="rdf:_29">CeCILL-B Free Software License Agreement</a></td>
+      <td><a href="./CECILL-B" rel="rdf:_35">CeCILL-B Free Software License Agreement</a></td>
       <td about="./CECILL-B" typeof="spdx:License">
       <code property="spdx:licenseId">CECILL-B</code></td>
       <td align="center"></td>
       <td><a href="./CECILL-B#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CECILL-C" rel="rdf:_30">CeCILL-C Free Software License Agreement</a></td>
+      <td><a href="./CECILL-C" rel="rdf:_36">CeCILL-C Free Software License Agreement</a></td>
       <td about="./CECILL-C" typeof="spdx:License">
       <code property="spdx:licenseId">CECILL-C</code></td>
       <td align="center"></td>
       <td><a href="./CECILL-C#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ClArtistic" rel="rdf:_31">Clarified Artistic License</a></td>
+      <td><a href="./ClArtistic" rel="rdf:_37">Clarified Artistic License</a></td>
       <td about="./ClArtistic" typeof="spdx:License">
       <code property="spdx:licenseId">ClArtistic</code></td>
       <td align="center"></td>
       <td><a href="./ClArtistic#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CNRI-Python-GPL-Compatible" rel="rdf:_32">CNRI Python Open Source GPL Compatible License Agreement</a></td>
-      <td about="./CNRI-Python-GPL-Compatible" typeof="spdx:License">
-      <code property="spdx:licenseId">CNRI-Python-GPL-Compatible</code></td>
-      <td align="center"></td>
-      <td><a href="./CNRI-Python-GPL-Compatible#licenseText">License Text</a></td>
-    </tr>
-    <tr>
-      <td><a href="./CNRI-Python" rel="rdf:_33">CNRI Python License</a></td>
+      <td><a href="./CNRI-Python" rel="rdf:_38">CNRI Python License</a></td>
       <td about="./CNRI-Python" typeof="spdx:License">
       <code property="spdx:licenseId">CNRI-Python</code></td>
       <td align="center">Y</td>
       <td><a href="./CNRI-Python#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CDDL-1.0" rel="rdf:_34">Common Development and Distribution License 1.0</a></td>
+      <td><a href="./CNRI-Python-GPL-Compatible" rel="rdf:_39">CNRI Python Open Source GPL Compatible License Agreement</a></td>
+      <td about="./CNRI-Python-GPL-Compatible" typeof="spdx:License">
+      <code property="spdx:licenseId">CNRI-Python-GPL-Compatible</code></td>
+      <td align="center"></td>
+      <td><a href="./CNRI-Python-GPL-Compatible#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./CPOL-1.02" rel="rdf:_40">Code Project Open License 1.02</a></td>
+      <td about="./CPOL-1.02" typeof="spdx:License">
+      <code property="spdx:licenseId">CPOL-1.02</code></td>
+      <td align="center"></td>
+      <td><a href="./CPOL-1.02#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./CDDL-1.0" rel="rdf:_41">Common Development and Distribution License 1.0</a></td>
       <td about="./CDDL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CDDL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./CDDL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CDDL-1.1" rel="rdf:_35">Common Development and Distribution License 1.1</a></td>
+      <td><a href="./CDDL-1.1" rel="rdf:_42">Common Development and Distribution License 1.1</a></td>
       <td about="./CDDL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">CDDL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./CDDL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CPAL-1.0" rel="rdf:_36">Common Public Attribution License 1.0 </a></td>
+      <td><a href="./CPAL-1.0" rel="rdf:_43">Common Public Attribution License 1.0 </a></td>
       <td about="./CPAL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CPAL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./CPAL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CPL-1.0" rel="rdf:_37">Common Public License 1.0</a></td>
+      <td><a href="./CPL-1.0" rel="rdf:_44">Common Public License 1.0</a></td>
       <td about="./CPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./CPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CATOSL-1.1" rel="rdf:_38">Computer Associates Trusted Open Source License 1.1</a></td>
+      <td><a href="./CATOSL-1.1" rel="rdf:_45">Computer Associates Trusted Open Source License 1.1</a></td>
       <td about="./CATOSL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">CATOSL-1.1</code></td>
       <td align="center">Y</td>
       <td><a href="./CATOSL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-1.0" rel="rdf:_39">Creative Commons Attribution 1.0</a></td>
+      <td><a href="./Condor-1.1" rel="rdf:_46">Condor Public License v1.1</a></td>
+      <td about="./Condor-1.1" typeof="spdx:License">
+      <code property="spdx:licenseId">Condor-1.1</code></td>
+      <td align="center"></td>
+      <td><a href="./Condor-1.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./CC-BY-1.0" rel="rdf:_47">Creative Commons Attribution 1.0</a></td>
       <td about="./CC-BY-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-2.0" rel="rdf:_40">Creative Commons Attribution 2.0</a></td>
+      <td><a href="./CC-BY-2.0" rel="rdf:_48">Creative Commons Attribution 2.0</a></td>
       <td about="./CC-BY-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-2.5" rel="rdf:_41">Creative Commons Attribution 2.5</a></td>
+      <td><a href="./CC-BY-2.5" rel="rdf:_49">Creative Commons Attribution 2.5</a></td>
       <td about="./CC-BY-2.5" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-2.5</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-2.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-3.0" rel="rdf:_42">Creative Commons Attribution 3.0</a></td>
+      <td><a href="./CC-BY-3.0" rel="rdf:_50">Creative Commons Attribution 3.0</a></td>
       <td about="./CC-BY-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-3.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-ND-1.0" rel="rdf:_43">Creative Commons Attribution No Derivatives 1.0</a></td>
+      <td><a href="./CC-BY-ND-1.0" rel="rdf:_51">Creative Commons Attribution No Derivatives 1.0</a></td>
       <td about="./CC-BY-ND-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-ND-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-ND-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-ND-2.0" rel="rdf:_44">Creative Commons Attribution No Derivatives 2.0</a></td>
+      <td><a href="./CC-BY-ND-2.0" rel="rdf:_52">Creative Commons Attribution No Derivatives 2.0</a></td>
       <td about="./CC-BY-ND-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-ND-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-ND-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-ND-2.5" rel="rdf:_45">Creative Commons Attribution No Derivatives 2.5</a></td>
+      <td><a href="./CC-BY-ND-2.5" rel="rdf:_53">Creative Commons Attribution No Derivatives 2.5</a></td>
       <td about="./CC-BY-ND-2.5" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-ND-2.5</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-ND-2.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-ND-3.0" rel="rdf:_46">Creative Commons Attribution No Derivatives 3.0</a></td>
+      <td><a href="./CC-BY-ND-3.0" rel="rdf:_54">Creative Commons Attribution No Derivatives 3.0</a></td>
       <td about="./CC-BY-ND-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-ND-3.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-ND-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-1.0" rel="rdf:_47">Creative Commons Attribution Non Commercial 1.0</a></td>
+      <td><a href="./CC-BY-NC-1.0" rel="rdf:_55">Creative Commons Attribution Non Commercial 1.0</a></td>
       <td about="./CC-BY-NC-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-2.0" rel="rdf:_48">Creative Commons Attribution Non Commercial 2.0</a></td>
+      <td><a href="./CC-BY-NC-2.0" rel="rdf:_56">Creative Commons Attribution Non Commercial 2.0</a></td>
       <td about="./CC-BY-NC-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-2.5" rel="rdf:_49">Creative Commons Attribution Non Commercial 2.5</a></td>
+      <td><a href="./CC-BY-NC-2.5" rel="rdf:_57">Creative Commons Attribution Non Commercial 2.5</a></td>
       <td about="./CC-BY-NC-2.5" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-2.5</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-2.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-3.0" rel="rdf:_50">Creative Commons Attribution Non Commercial 3.0</a></td>
+      <td><a href="./CC-BY-NC-3.0" rel="rdf:_58">Creative Commons Attribution Non Commercial 3.0</a></td>
       <td about="./CC-BY-NC-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-3.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-ND-1.0" rel="rdf:_51">Creative Commons Attribution Non Commercial No Derivatives 1.0</a></td>
+      <td><a href="./CC-BY-NC-ND-1.0" rel="rdf:_59">Creative Commons Attribution Non Commercial No Derivatives 1.0</a></td>
       <td about="./CC-BY-NC-ND-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-ND-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-ND-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-ND-2.0" rel="rdf:_52">Creative Commons Attribution Non Commercial No Derivatives 2.0</a></td>
+      <td><a href="./CC-BY-NC-ND-2.0" rel="rdf:_60">Creative Commons Attribution Non Commercial No Derivatives 2.0</a></td>
       <td about="./CC-BY-NC-ND-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-ND-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-ND-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-ND-2.5" rel="rdf:_53">Creative Commons Attribution Non Commercial No Derivatives 2.5</a></td>
+      <td><a href="./CC-BY-NC-ND-2.5" rel="rdf:_61">Creative Commons Attribution Non Commercial No Derivatives 2.5</a></td>
       <td about="./CC-BY-NC-ND-2.5" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-ND-2.5</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-ND-2.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-ND-3.0" rel="rdf:_54">Creative Commons Attribution Non Commercial No Derivatives 3.0</a></td>
+      <td><a href="./CC-BY-NC-ND-3.0" rel="rdf:_62">Creative Commons Attribution Non Commercial No Derivatives 3.0</a></td>
       <td about="./CC-BY-NC-ND-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-ND-3.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-ND-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-SA-1.0" rel="rdf:_55">Creative Commons Attribution Non Commercial Share Alike 1.0</a></td>
+      <td><a href="./CC-BY-NC-SA-1.0" rel="rdf:_63">Creative Commons Attribution Non Commercial Share Alike 1.0</a></td>
       <td about="./CC-BY-NC-SA-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-SA-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-SA-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-SA-2.0" rel="rdf:_56">Creative Commons Attribution Non Commercial Share Alike 2.0</a></td>
+      <td><a href="./CC-BY-NC-SA-2.0" rel="rdf:_64">Creative Commons Attribution Non Commercial Share Alike 2.0</a></td>
       <td about="./CC-BY-NC-SA-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-SA-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-SA-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-SA-2.5" rel="rdf:_57">Creative Commons Attribution Non Commercial Share Alike 2.5</a></td>
+      <td><a href="./CC-BY-NC-SA-2.5" rel="rdf:_65">Creative Commons Attribution Non Commercial Share Alike 2.5</a></td>
       <td about="./CC-BY-NC-SA-2.5" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-SA-2.5</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-SA-2.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-NC-SA-3.0" rel="rdf:_58">Creative Commons Attribution Non Commercial Share Alike 3.0</a></td>
+      <td><a href="./CC-BY-NC-SA-3.0" rel="rdf:_66">Creative Commons Attribution Non Commercial Share Alike 3.0</a></td>
       <td about="./CC-BY-NC-SA-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-NC-SA-3.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-NC-SA-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-SA-1.0" rel="rdf:_59">Creative Commons Attribution Share Alike 1.0</a></td>
+      <td><a href="./CC-BY-SA-1.0" rel="rdf:_67">Creative Commons Attribution Share Alike 1.0</a></td>
       <td about="./CC-BY-SA-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-SA-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-SA-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-SA-2.0" rel="rdf:_60">Creative Commons Attribution Share Alike 2.0</a></td>
+      <td><a href="./CC-BY-SA-2.0" rel="rdf:_68">Creative Commons Attribution Share Alike 2.0</a></td>
       <td about="./CC-BY-SA-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-SA-2.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-SA-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-SA-2.5" rel="rdf:_61">Creative Commons Attribution Share Alike 2.5</a></td>
+      <td><a href="./CC-BY-SA-2.5" rel="rdf:_69">Creative Commons Attribution Share Alike 2.5</a></td>
       <td about="./CC-BY-SA-2.5" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-SA-2.5</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-SA-2.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC-BY-SA-3.0" rel="rdf:_62">Creative Commons Attribution Share Alike 3.0</a></td>
+      <td><a href="./CC-BY-SA-3.0" rel="rdf:_70">Creative Commons Attribution Share Alike 3.0</a></td>
       <td about="./CC-BY-SA-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC-BY-SA-3.0</code></td>
       <td align="center"></td>
       <td><a href="./CC-BY-SA-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CC0-1.0" rel="rdf:_63">Creative Commons Zero v1.0 Universal</a></td>
+      <td><a href="./CC0-1.0" rel="rdf:_71">Creative Commons Zero v1.0 Universal</a></td>
       <td about="./CC0-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CC0-1.0</code></td>
       <td align="center"></td>
       <td><a href="./CC0-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./CUA-OPL-1.0" rel="rdf:_64">CUA Office Public License v1.0</a></td>
+      <td><a href="./CUA-OPL-1.0" rel="rdf:_72">CUA Office Public License v1.0</a></td>
       <td about="./CUA-OPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">CUA-OPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./CUA-OPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./EPL-1.0" rel="rdf:_65">Eclipse Public License 1.0</a></td>
+      <td><a href="./D-FSL-1.0" rel="rdf:_73">Deutsche Freie Software Lizenz</a></td>
+      <td about="./D-FSL-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">D-FSL-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./D-FSL-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./WTFPL" rel="rdf:_74">Do What The F*ck You Want To Public License</a></td>
+      <td about="./WTFPL" typeof="spdx:License">
+      <code property="spdx:licenseId">WTFPL</code></td>
+      <td align="center"></td>
+      <td><a href="./WTFPL#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./EPL-1.0" rel="rdf:_75">Eclipse Public License 1.0</a></td>
       <td about="./EPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">EPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./EPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./eCos-2.0" rel="rdf:_66">eCos license version 2.0</a></td>
+      <td><a href="./eCos-2.0" rel="rdf:_76">eCos license version 2.0</a></td>
       <td about="./eCos-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">eCos-2.0</code></td>
       <td align="center"></td>
       <td><a href="./eCos-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ECL-1.0" rel="rdf:_67">Educational Community License v1.0</a></td>
+      <td><a href="./ECL-1.0" rel="rdf:_77">Educational Community License v1.0</a></td>
       <td about="./ECL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">ECL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./ECL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ECL-2.0" rel="rdf:_68">Educational Community License v2.0</a></td>
+      <td><a href="./ECL-2.0" rel="rdf:_78">Educational Community License v2.0</a></td>
       <td about="./ECL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">ECL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./ECL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./EFL-1.0" rel="rdf:_69">Eiffel Forum License v1.0</a></td>
+      <td><a href="./EFL-1.0" rel="rdf:_79">Eiffel Forum License v1.0</a></td>
       <td about="./EFL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">EFL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./EFL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./EFL-2.0" rel="rdf:_70">Eiffel Forum License v2.0</a></td>
+      <td><a href="./EFL-2.0" rel="rdf:_80">Eiffel Forum License v2.0</a></td>
       <td about="./EFL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">EFL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./EFL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Entessa" rel="rdf:_71">Entessa Public License v1.0</a></td>
+      <td><a href="./Entessa" rel="rdf:_81">Entessa Public License v1.0</a></td>
       <td about="./Entessa" typeof="spdx:License">
       <code property="spdx:licenseId">Entessa</code></td>
       <td align="center">Y</td>
       <td><a href="./Entessa#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ErlPL-1.1" rel="rdf:_72">Erlang Public License v1.1</a></td>
+      <td><a href="./ErlPL-1.1" rel="rdf:_82">Erlang Public License v1.1</a></td>
       <td about="./ErlPL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">ErlPL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./ErlPL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./EUDatagrid" rel="rdf:_73">EU DataGrid Software License</a></td>
+      <td><a href="./EUDatagrid" rel="rdf:_83">EU DataGrid Software License</a></td>
       <td about="./EUDatagrid" typeof="spdx:License">
       <code property="spdx:licenseId">EUDatagrid</code></td>
       <td align="center">Y</td>
       <td><a href="./EUDatagrid#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./EUPL-1.0" rel="rdf:_74">European Union Public License 1.0</a></td>
+      <td><a href="./EUPL-1.0" rel="rdf:_84">European Union Public License 1.0</a></td>
       <td about="./EUPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">EUPL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./EUPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./EUPL-1.1" rel="rdf:_75">European Union Public License 1.1</a></td>
+      <td><a href="./EUPL-1.1" rel="rdf:_85">European Union Public License 1.1</a></td>
       <td about="./EUPL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">EUPL-1.1</code></td>
       <td align="center">Y</td>
       <td><a href="./EUPL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Fair" rel="rdf:_76">Fair License</a></td>
+      <td><a href="./Fair" rel="rdf:_86">Fair License</a></td>
       <td about="./Fair" typeof="spdx:License">
       <code property="spdx:licenseId">Fair</code></td>
       <td align="center">Y</td>
       <td><a href="./Fair#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Frameworx-1.0" rel="rdf:_77">Frameworx Open License 1.0</a></td>
+      <td><a href="./Frameworx-1.0" rel="rdf:_87">Frameworx Open License 1.0</a></td>
       <td about="./Frameworx-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">Frameworx-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./Frameworx-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./AGPL-3.0" rel="rdf:_78">GNU Affero General Public License v3.0</a></td>
+      <td><a href="./FTL" rel="rdf:_88">Freetype Project License</a></td>
+      <td about="./FTL" typeof="spdx:License">
+      <code property="spdx:licenseId">FTL</code></td>
+      <td align="center"></td>
+      <td><a href="./FTL#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./AGPL-1.0" rel="rdf:_89">GNU Affero General Public License v1.0</a></td>
+      <td about="./AGPL-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">AGPL-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./AGPL-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./AGPL-3.0" rel="rdf:_90">GNU Affero General Public License v3.0</a></td>
       <td about="./AGPL-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">AGPL-3.0</code></td>
       <td align="center">Y</td>
       <td><a href="./AGPL-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GFDL-1.1" rel="rdf:_79">GNU Free Documentation License v1.1</a></td>
+      <td><a href="./GFDL-1.1" rel="rdf:_91">GNU Free Documentation License v1.1</a></td>
       <td about="./GFDL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">GFDL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./GFDL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GFDL-1.2" rel="rdf:_80">GNU Free Documentation License v1.2</a></td>
+      <td><a href="./GFDL-1.2" rel="rdf:_92">GNU Free Documentation License v1.2</a></td>
       <td about="./GFDL-1.2" typeof="spdx:License">
       <code property="spdx:licenseId">GFDL-1.2</code></td>
       <td align="center"></td>
       <td><a href="./GFDL-1.2#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GFDL-1.3" rel="rdf:_81">GNU Free Documentation License v1.3</a></td>
+      <td><a href="./GFDL-1.3" rel="rdf:_93">GNU Free Documentation License v1.3</a></td>
       <td about="./GFDL-1.3" typeof="spdx:License">
       <code property="spdx:licenseId">GFDL-1.3</code></td>
       <td align="center"></td>
       <td><a href="./GFDL-1.3#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-1.0" rel="rdf:_82">GNU General Public License v1.0 only</a></td>
+      <td><a href="./GPL-1.0" rel="rdf:_94">GNU General Public License v1.0 only</a></td>
       <td about="./GPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./GPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-1.0+" rel="rdf:_83">GNU General Public License v1.0 or later</a></td>
+      <td><a href="./GPL-1.0+" rel="rdf:_95">GNU General Public License v1.0 or later</a></td>
       <td about="./GPL-1.0+" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-1.0+</code></td>
       <td align="center"></td>
       <td><a href="./GPL-1.0+#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0" rel="rdf:_84">GNU General Public License v2.0 only</a></td>
+      <td><a href="./GPL-2.0" rel="rdf:_96">GNU General Public License v2.0 only</a></td>
       <td about="./GPL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0+" rel="rdf:_85">GNU General Public License v2.0 or later</a></td>
+      <td><a href="./GPL-2.0+" rel="rdf:_97">GNU General Public License v2.0 or later</a></td>
       <td about="./GPL-2.0+" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0+</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0+#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0-with-autoconf-exception" rel="rdf:_86">GNU General Public License v2.0 w/Autoconf exception</a></td>
+      <td><a href="./GPL-2.0-with-autoconf-exception" rel="rdf:_98">GNU General Public License v2.0 w/Autoconf exception</a></td>
       <td about="./GPL-2.0-with-autoconf-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0-with-autoconf-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0-with-autoconf-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0-with-bison-exception" rel="rdf:_87">GNU General Public License v2.0 w/Bison exception</a></td>
+      <td><a href="./GPL-2.0-with-bison-exception" rel="rdf:_99">GNU General Public License v2.0 w/Bison exception</a></td>
       <td about="./GPL-2.0-with-bison-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0-with-bison-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0-with-bison-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0-with-classpath-exception" rel="rdf:_88">GNU General Public License v2.0 w/Classpath exception</a></td>
+      <td><a href="./GPL-2.0-with-classpath-exception" rel="rdf:_100">GNU General Public License v2.0 w/Classpath exception</a></td>
       <td about="./GPL-2.0-with-classpath-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0-with-classpath-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0-with-classpath-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0-with-font-exception" rel="rdf:_89">GNU General Public License v2.0 w/Font exception</a></td>
+      <td><a href="./GPL-2.0-with-font-exception" rel="rdf:_101">GNU General Public License v2.0 w/Font exception</a></td>
       <td about="./GPL-2.0-with-font-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0-with-font-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0-with-font-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-2.0-with-GCC-exception" rel="rdf:_90">GNU General Public License v2.0 w/GCC Runtime Library exception</a></td>
+      <td><a href="./GPL-2.0-with-GCC-exception" rel="rdf:_102">GNU General Public License v2.0 w/GCC Runtime Library exception</a></td>
       <td about="./GPL-2.0-with-GCC-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-2.0-with-GCC-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-2.0-with-GCC-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-3.0" rel="rdf:_91">GNU General Public License v3.0 only</a></td>
+      <td><a href="./GPL-3.0" rel="rdf:_103">GNU General Public License v3.0 only</a></td>
       <td about="./GPL-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-3.0</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-3.0+" rel="rdf:_92">GNU General Public License v3.0 or later</a></td>
+      <td><a href="./GPL-3.0+" rel="rdf:_104">GNU General Public License v3.0 or later</a></td>
       <td about="./GPL-3.0+" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-3.0+</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-3.0+#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-3.0-with-autoconf-exception" rel="rdf:_93">GNU General Public License v3.0 w/Autoconf exception</a></td>
+      <td><a href="./GPL-3.0-with-autoconf-exception" rel="rdf:_105">GNU General Public License v3.0 w/Autoconf exception</a></td>
       <td about="./GPL-3.0-with-autoconf-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-3.0-with-autoconf-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-3.0-with-autoconf-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./GPL-3.0-with-GCC-exception" rel="rdf:_94">GNU General Public License v3.0 w/GCC Runtime Library exception</a></td>
+      <td><a href="./GPL-3.0-with-GCC-exception" rel="rdf:_106">GNU General Public License v3.0 w/GCC Runtime Library exception</a></td>
       <td about="./GPL-3.0-with-GCC-exception" typeof="spdx:License">
       <code property="spdx:licenseId">GPL-3.0-with-GCC-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./GPL-3.0-with-GCC-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LGPL-2.1" rel="rdf:_95">GNU Lesser General Public License v2.1 only</a></td>
+      <td><a href="./LGPL-2.1" rel="rdf:_107">GNU Lesser General Public License v2.1 only</a></td>
       <td about="./LGPL-2.1" typeof="spdx:License">
       <code property="spdx:licenseId">LGPL-2.1</code></td>
       <td align="center">Y</td>
       <td><a href="./LGPL-2.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LGPL-2.1+" rel="rdf:_96">GNU Lesser General Public License v2.1 or later</a></td>
+      <td><a href="./LGPL-2.1+" rel="rdf:_108">GNU Lesser General Public License v2.1 or later</a></td>
       <td about="./LGPL-2.1+" typeof="spdx:License">
       <code property="spdx:licenseId">LGPL-2.1+</code></td>
       <td align="center">Y</td>
       <td><a href="./LGPL-2.1+#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LGPL-3.0" rel="rdf:_97">GNU Lesser General Public License v3.0 only</a></td>
+      <td><a href="./LGPL-3.0" rel="rdf:_109">GNU Lesser General Public License v3.0 only</a></td>
       <td about="./LGPL-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">LGPL-3.0</code></td>
       <td align="center">Y</td>
       <td><a href="./LGPL-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LGPL-3.0+" rel="rdf:_98">GNU Lesser General Public License v3.0 or later</a></td>
+      <td><a href="./LGPL-3.0+" rel="rdf:_110">GNU Lesser General Public License v3.0 or later</a></td>
       <td about="./LGPL-3.0+" typeof="spdx:License">
       <code property="spdx:licenseId">LGPL-3.0+</code></td>
       <td align="center">Y</td>
       <td><a href="./LGPL-3.0+#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LGPL-2.0" rel="rdf:_99">GNU Library General Public License v2 only</a></td>
+      <td><a href="./LGPL-2.0" rel="rdf:_111">GNU Library General Public License v2 only</a></td>
       <td about="./LGPL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">LGPL-2.0</code></td>
-      <td align="center"></td>
+      <td align="center">Y</td>
       <td><a href="./LGPL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LGPL-2.0+" rel="rdf:_100">GNU Library General Public License v2 or later</a></td>
+      <td><a href="./LGPL-2.0+" rel="rdf:_112">GNU Library General Public License v2 or later</a></td>
       <td about="./LGPL-2.0+" typeof="spdx:License">
       <code property="spdx:licenseId">LGPL-2.0+</code></td>
-      <td align="center"></td>
+      <td align="center">Y</td>
       <td><a href="./LGPL-2.0+#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./gSOAP-1.3b" rel="rdf:_101">gSOAP Public License v1.3b</a></td>
+      <td><a href="./gSOAP-1.3b" rel="rdf:_113">gSOAP Public License v1.3b</a></td>
       <td about="./gSOAP-1.3b" typeof="spdx:License">
       <code property="spdx:licenseId">gSOAP-1.3b</code></td>
       <td align="center"></td>
       <td><a href="./gSOAP-1.3b#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./HPND" rel="rdf:_102">Historic Permission Notice and Disclaimer</a></td>
+      <td><a href="./HPND" rel="rdf:_114">Historic Permission Notice and Disclaimer</a></td>
       <td about="./HPND" typeof="spdx:License">
       <code property="spdx:licenseId">HPND</code></td>
       <td align="center">Y</td>
       <td><a href="./HPND#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./IPL-1.0" rel="rdf:_103">IBM Public License v1.0</a></td>
+      <td><a href="./IBM-pibs" rel="rdf:_115">IBM PowerPC Initialization and Boot Software </a></td>
+      <td about="./IBM-pibs" typeof="spdx:License">
+      <code property="spdx:licenseId">IBM-pibs</code></td>
+      <td align="center"></td>
+      <td><a href="./IBM-pibs#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./IPL-1.0" rel="rdf:_116">IBM Public License v1.0</a></td>
       <td about="./IPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">IPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./IPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./IPA" rel="rdf:_104">IPA Font License</a></td>
+      <td><a href="./Imlib2" rel="rdf:_117">Imlib2 License</a></td>
+      <td about="./Imlib2" typeof="spdx:License">
+      <code property="spdx:licenseId">Imlib2</code></td>
+      <td align="center"></td>
+      <td><a href="./Imlib2#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./IJG" rel="rdf:_118">Independent JPEG Group License</a></td>
+      <td about="./IJG" typeof="spdx:License">
+      <code property="spdx:licenseId">IJG</code></td>
+      <td align="center"></td>
+      <td><a href="./IJG#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./Intel" rel="rdf:_119">Intel Open Source License</a></td>
+      <td about="./Intel" typeof="spdx:License">
+      <code property="spdx:licenseId">Intel</code></td>
+      <td align="center">Y</td>
+      <td><a href="./Intel#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./IPA" rel="rdf:_120">IPA Font License</a></td>
       <td about="./IPA" typeof="spdx:License">
       <code property="spdx:licenseId">IPA</code></td>
       <td align="center">Y</td>
       <td><a href="./IPA#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ISC" rel="rdf:_105">ISC License</a></td>
+      <td><a href="./ISC" rel="rdf:_121">ISC License</a></td>
       <td about="./ISC" typeof="spdx:License">
       <code property="spdx:licenseId">ISC</code></td>
       <td align="center">Y</td>
       <td><a href="./ISC#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LPPL-1.0" rel="rdf:_106">LaTeX Project Public License v1.0</a></td>
+      <td><a href="./JSON" rel="rdf:_122">JSON License</a></td>
+      <td about="./JSON" typeof="spdx:License">
+      <code property="spdx:licenseId">JSON</code></td>
+      <td align="center"></td>
+      <td><a href="./JSON#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./LPPL-1.3a" rel="rdf:_123">LaTeX Project Public License 1.3a </a></td>
+      <td about="./LPPL-1.3a" typeof="spdx:License">
+      <code property="spdx:licenseId">LPPL-1.3a</code></td>
+      <td align="center"></td>
+      <td><a href="./LPPL-1.3a#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./LPPL-1.0" rel="rdf:_124">LaTeX Project Public License v1.0</a></td>
       <td about="./LPPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">LPPL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./LPPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LPPL-1.1" rel="rdf:_107">LaTeX Project Public License v1.1</a></td>
+      <td><a href="./LPPL-1.1" rel="rdf:_125">LaTeX Project Public License v1.1</a></td>
       <td about="./LPPL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">LPPL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./LPPL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LPPL-1.2" rel="rdf:_108">LaTeX Project Public License v1.2</a></td>
+      <td><a href="./LPPL-1.2" rel="rdf:_126">LaTeX Project Public License v1.2</a></td>
       <td about="./LPPL-1.2" typeof="spdx:License">
       <code property="spdx:licenseId">LPPL-1.2</code></td>
       <td align="center"></td>
       <td><a href="./LPPL-1.2#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LPPL-1.3c" rel="rdf:_109">LaTeX Project Public License v1.3c</a></td>
+      <td><a href="./LPPL-1.3c" rel="rdf:_127">LaTeX Project Public License v1.3c</a></td>
       <td about="./LPPL-1.3c" typeof="spdx:License">
       <code property="spdx:licenseId">LPPL-1.3c</code></td>
       <td align="center">Y</td>
       <td><a href="./LPPL-1.3c#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Libpng" rel="rdf:_110">libpng License</a></td>
+      <td><a href="./Libpng" rel="rdf:_128">libpng License</a></td>
       <td about="./Libpng" typeof="spdx:License">
       <code property="spdx:licenseId">Libpng</code></td>
       <td align="center"></td>
       <td><a href="./Libpng#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./LPL-1.0" rel="rdf:_111">Lucent Public License Version 1.0 (Plan9)</a></td>
-      <td about="./LPL-1.0" typeof="spdx:License">
-      <code property="spdx:licenseId">LPL-1.0</code></td>
-      <td align="center">Y</td>
-      <td><a href="./LPL-1.0#licenseText">License Text</a></td>
-    </tr>
-    <tr>
-      <td><a href="./LPL-1.02" rel="rdf:_112">Lucent Public License v1.02</a></td>
+      <td><a href="./LPL-1.02" rel="rdf:_129">Lucent Public License v1.02</a></td>
       <td about="./LPL-1.02" typeof="spdx:License">
       <code property="spdx:licenseId">LPL-1.02</code></td>
       <td align="center">Y</td>
       <td><a href="./LPL-1.02#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MS-PL" rel="rdf:_113">Microsoft Public License</a></td>
+      <td><a href="./LPL-1.0" rel="rdf:_130">Lucent Public License Version 1.0</a></td>
+      <td about="./LPL-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">LPL-1.0</code></td>
+      <td align="center">Y</td>
+      <td><a href="./LPL-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./MS-PL" rel="rdf:_131">Microsoft Public License</a></td>
       <td about="./MS-PL" typeof="spdx:License">
       <code property="spdx:licenseId">MS-PL</code></td>
       <td align="center">Y</td>
       <td><a href="./MS-PL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MS-RL" rel="rdf:_114">Microsoft Reciprocal License</a></td>
+      <td><a href="./MS-RL" rel="rdf:_132">Microsoft Reciprocal License</a></td>
       <td about="./MS-RL" typeof="spdx:License">
       <code property="spdx:licenseId">MS-RL</code></td>
       <td align="center">Y</td>
       <td><a href="./MS-RL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MirOS" rel="rdf:_115">MirOS Licence</a></td>
+      <td><a href="./MirOS" rel="rdf:_133">MirOS Licence</a></td>
       <td about="./MirOS" typeof="spdx:License">
       <code property="spdx:licenseId">MirOS</code></td>
       <td align="center">Y</td>
       <td><a href="./MirOS#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MIT" rel="rdf:_116">MIT License</a></td>
+      <td><a href="./MIT" rel="rdf:_134">MIT License</a></td>
       <td about="./MIT" typeof="spdx:License">
       <code property="spdx:licenseId">MIT</code></td>
       <td align="center">Y</td>
       <td><a href="./MIT#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Motosoto" rel="rdf:_117">Motosoto License</a></td>
+      <td><a href="./Motosoto" rel="rdf:_135">Motosoto License</a></td>
       <td about="./Motosoto" typeof="spdx:License">
       <code property="spdx:licenseId">Motosoto</code></td>
       <td align="center">Y</td>
       <td><a href="./Motosoto#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MPL-1.0" rel="rdf:_118">Mozilla Public License 1.0</a></td>
+      <td><a href="./MPL-1.0" rel="rdf:_136">Mozilla Public License 1.0</a></td>
       <td about="./MPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">MPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./MPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MPL-1.1" rel="rdf:_119">Mozilla Public License 1.1 </a></td>
+      <td><a href="./MPL-1.1" rel="rdf:_137">Mozilla Public License 1.1 </a></td>
       <td about="./MPL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">MPL-1.1</code></td>
       <td align="center">Y</td>
       <td><a href="./MPL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MPL-2.0" rel="rdf:_120">Mozilla Public License 2.0</a></td>
+      <td><a href="./MPL-2.0" rel="rdf:_138">Mozilla Public License 2.0</a></td>
       <td about="./MPL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">MPL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./MPL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./MPL-2.0-no-copyleft-exception" rel="rdf:_121">Mozilla Public License 2.0</a></td>
+      <td><a href="./MPL-2.0-no-copyleft-exception" rel="rdf:_139">Mozilla Public License 2.0 (no copyleft exception)</a></td>
       <td about="./MPL-2.0-no-copyleft-exception" typeof="spdx:License">
       <code property="spdx:licenseId">MPL-2.0-no-copyleft-exception</code></td>
       <td align="center">Y</td>
       <td><a href="./MPL-2.0-no-copyleft-exception#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Multics" rel="rdf:_122">Multics License</a></td>
+      <td><a href="./Multics" rel="rdf:_140">Multics License</a></td>
       <td about="./Multics" typeof="spdx:License">
       <code property="spdx:licenseId">Multics</code></td>
       <td align="center">Y</td>
       <td><a href="./Multics#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./NASA-1.3" rel="rdf:_123">NASA Open Source Agreement 1.3</a></td>
+      <td><a href="./NASA-1.3" rel="rdf:_141">NASA Open Source Agreement 1.3</a></td>
       <td about="./NASA-1.3" typeof="spdx:License">
       <code property="spdx:licenseId">NASA-1.3</code></td>
       <td align="center">Y</td>
       <td><a href="./NASA-1.3#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Naumen" rel="rdf:_124">Naumen Public License</a></td>
+      <td><a href="./Naumen" rel="rdf:_142">Naumen Public License</a></td>
       <td about="./Naumen" typeof="spdx:License">
       <code property="spdx:licenseId">Naumen</code></td>
       <td align="center">Y</td>
       <td><a href="./Naumen#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./NGPL" rel="rdf:_125">Nethack General Public License</a></td>
+      <td><a href="./NBPL-1.0" rel="rdf:_143">Net Boolean Public License v1 </a></td>
+      <td about="./NBPL-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">NBPL-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./NBPL-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./NGPL" rel="rdf:_144">Nethack General Public License</a></td>
       <td about="./NGPL" typeof="spdx:License">
       <code property="spdx:licenseId">NGPL</code></td>
       <td align="center">Y</td>
       <td><a href="./NGPL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Nokia" rel="rdf:_126">Nokia Open Source License</a></td>
+      <td><a href="./NOSL" rel="rdf:_145">Netizen Open Source License</a></td>
+      <td about="./NOSL" typeof="spdx:License">
+      <code property="spdx:licenseId">NOSL</code></td>
+      <td align="center"></td>
+      <td><a href="./NOSL#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./NPL-1.0" rel="rdf:_146">Netscape Public License v1.0</a></td>
+      <td about="./NPL-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">NPL-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./NPL-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./NPL-1.1" rel="rdf:_147">Netscape Public License v1.1</a></td>
+      <td about="./NPL-1.1" typeof="spdx:License">
+      <code property="spdx:licenseId">NPL-1.1</code></td>
+      <td align="center"></td>
+      <td><a href="./NPL-1.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./Nokia" rel="rdf:_148">Nokia Open Source License</a></td>
       <td about="./Nokia" typeof="spdx:License">
       <code property="spdx:licenseId">Nokia</code></td>
       <td align="center">Y</td>
       <td><a href="./Nokia#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./NPOSL-3.0" rel="rdf:_127">Non-Profit Open Software License 3.0</a></td>
+      <td><a href="./NPOSL-3.0" rel="rdf:_149">Non-Profit Open Software License 3.0</a></td>
       <td about="./NPOSL-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">NPOSL-3.0</code></td>
       <td align="center">Y</td>
       <td><a href="./NPOSL-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./NTP" rel="rdf:_128">NTP License</a></td>
+      <td><a href="./NTP" rel="rdf:_150">NTP License</a></td>
       <td about="./NTP" typeof="spdx:License">
       <code property="spdx:licenseId">NTP</code></td>
       <td align="center">Y</td>
       <td><a href="./NTP#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OCLC-2.0" rel="rdf:_129">OCLC Research Public License 2.0</a></td>
+      <td><a href="./OCLC-2.0" rel="rdf:_151">OCLC Research Public License 2.0</a></td>
       <td about="./OCLC-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">OCLC-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./OCLC-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ODbL-1.0" rel="rdf:_130">ODC Open Database License v1.0</a></td>
+      <td><a href="./ODbL-1.0" rel="rdf:_152">ODC Open Database License v1.0</a></td>
       <td about="./ODbL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">ODbL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./ODbL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./PDDL-1.0" rel="rdf:_131">ODC Public Domain Dedication &amp; License 1.0</a></td>
+      <td><a href="./PDDL-1.0" rel="rdf:_153">ODC Public Domain Dedication &amp; License 1.0</a></td>
       <td about="./PDDL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">PDDL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./PDDL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OGTSL" rel="rdf:_132">Open Group Test Suite License</a></td>
+      <td><a href="./OGTSL" rel="rdf:_154">Open Group Test Suite License</a></td>
       <td about="./OGTSL" typeof="spdx:License">
       <code property="spdx:licenseId">OGTSL</code></td>
       <td align="center">Y</td>
       <td><a href="./OGTSL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OSL-1.0" rel="rdf:_133">Open Software License 1.0</a></td>
+      <td><a href="./OLDAP-2.2.2" rel="rdf:_155">Open LDAP Public License  2.2.2</a></td>
+      <td about="./OLDAP-2.2.2" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.2.2</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.2.2#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-1.1" rel="rdf:_156">Open LDAP Public License v1.1</a></td>
+      <td about="./OLDAP-1.1" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-1.1</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-1.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-1.2" rel="rdf:_157">Open LDAP Public License v1.2 </a></td>
+      <td about="./OLDAP-1.2" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-1.2</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-1.2#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-1.3" rel="rdf:_158">Open LDAP Public License v1.3</a></td>
+      <td about="./OLDAP-1.3" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-1.3</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-1.3#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-1.4" rel="rdf:_159">Open LDAP Public License v1.4</a></td>
+      <td about="./OLDAP-1.4" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-1.4</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-1.4#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.0" rel="rdf:_160">Open LDAP Public License v2.0 (or possibly 2.0A and 2.0B)</a></td>
+      <td about="./OLDAP-2.0" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.0</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.0.1" rel="rdf:_161">Open LDAP Public License v2.0.1</a></td>
+      <td about="./OLDAP-2.0.1" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.0.1</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.0.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.1" rel="rdf:_162">Open LDAP Public License v2.1</a></td>
+      <td about="./OLDAP-2.1" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.1</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.2" rel="rdf:_163">Open LDAP Public License v2.2</a></td>
+      <td about="./OLDAP-2.2" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.2</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.2#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.2.1" rel="rdf:_164">Open LDAP Public License v2.2.1</a></td>
+      <td about="./OLDAP-2.2.1" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.2.1</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.2.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.3" rel="rdf:_165">Open LDAP Public License v2.3</a></td>
+      <td about="./OLDAP-2.3" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.3</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.3#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.4" rel="rdf:_166">Open LDAP Public License v2.4</a></td>
+      <td about="./OLDAP-2.4" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.4</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.4#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.5" rel="rdf:_167">Open LDAP Public License v2.5</a></td>
+      <td about="./OLDAP-2.5" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.5</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.5#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.6" rel="rdf:_168">Open LDAP Public License v2.6</a></td>
+      <td about="./OLDAP-2.6" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.6</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.6#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OLDAP-2.7" rel="rdf:_169">Open LDAP Public License v2.7</a></td>
+      <td about="./OLDAP-2.7" typeof="spdx:License">
+      <code property="spdx:licenseId">OLDAP-2.7</code></td>
+      <td align="center"></td>
+      <td><a href="./OLDAP-2.7#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OPL-1.0" rel="rdf:_170">Open Public License v1.0</a></td>
+      <td about="./OPL-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">OPL-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./OPL-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OSL-1.0" rel="rdf:_171">Open Software License 1.0</a></td>
       <td about="./OSL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">OSL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./OSL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OSL-2.0" rel="rdf:_134">Open Software License 2.0</a></td>
+      <td><a href="./OSL-2.0" rel="rdf:_172">Open Software License 2.0</a></td>
       <td about="./OSL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">OSL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./OSL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OSL-2.1" rel="rdf:_135">Open Software License 2.1</a></td>
+      <td><a href="./OSL-2.1" rel="rdf:_173">Open Software License 2.1</a></td>
       <td about="./OSL-2.1" typeof="spdx:License">
       <code property="spdx:licenseId">OSL-2.1</code></td>
       <td align="center">Y</td>
       <td><a href="./OSL-2.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OSL-3.0" rel="rdf:_136">Open Software License 3.0</a></td>
+      <td><a href="./OSL-3.0" rel="rdf:_174">Open Software License 3.0</a></td>
       <td about="./OSL-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">OSL-3.0</code></td>
       <td align="center">Y</td>
       <td><a href="./OSL-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OLDAP-2.8" rel="rdf:_137">OpenLDAP Public License v2.8</a></td>
+      <td><a href="./OLDAP-2.8" rel="rdf:_175">OpenLDAP Public License v2.8</a></td>
       <td about="./OLDAP-2.8" typeof="spdx:License">
       <code property="spdx:licenseId">OLDAP-2.8</code></td>
       <td align="center"></td>
       <td><a href="./OLDAP-2.8#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OpenSSL" rel="rdf:_138">OpenSSL License</a></td>
+      <td><a href="./OpenSSL" rel="rdf:_176">OpenSSL License</a></td>
       <td about="./OpenSSL" typeof="spdx:License">
       <code property="spdx:licenseId">OpenSSL</code></td>
       <td align="center"></td>
       <td><a href="./OpenSSL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./PHP-3.0" rel="rdf:_139">PHP License v3.0</a></td>
+      <td><a href="./PHP-3.0" rel="rdf:_177">PHP License v3.0</a></td>
       <td about="./PHP-3.0" typeof="spdx:License">
       <code property="spdx:licenseId">PHP-3.0</code></td>
       <td align="center">Y</td>
       <td><a href="./PHP-3.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./PHP-3.01" rel="rdf:_140">PHP LIcense v3.01</a></td>
+      <td><a href="./PHP-3.01" rel="rdf:_178">PHP License v3.01</a></td>
       <td about="./PHP-3.01" typeof="spdx:License">
       <code property="spdx:licenseId">PHP-3.01</code></td>
       <td align="center"></td>
       <td><a href="./PHP-3.01#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./PostgreSQL" rel="rdf:_141">PostgreSQL License</a></td>
+      <td><a href="./PostgreSQL" rel="rdf:_179">PostgreSQL License</a></td>
       <td about="./PostgreSQL" typeof="spdx:License">
       <code property="spdx:licenseId">PostgreSQL</code></td>
       <td align="center">Y</td>
       <td><a href="./PostgreSQL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Python-2.0" rel="rdf:_142">Python License 2.0</a></td>
+      <td><a href="./Python-2.0" rel="rdf:_180">Python License 2.0</a></td>
       <td about="./Python-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">Python-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./Python-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./QPL-1.0" rel="rdf:_143">Q Public License 1.0</a></td>
+      <td><a href="./QPL-1.0" rel="rdf:_181">Q Public License 1.0</a></td>
       <td about="./QPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">QPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./QPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./RPSL-1.0" rel="rdf:_144">RealNetworks Public Source License v1.0</a></td>
+      <td><a href="./RPSL-1.0" rel="rdf:_182">RealNetworks Public Source License v1.0</a></td>
       <td about="./RPSL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">RPSL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./RPSL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./RPL-1.5" rel="rdf:_145">Reciprocal Public License 1.5 </a></td>
+      <td><a href="./RPL-1.1" rel="rdf:_183">Reciprocal Public License 1.1</a></td>
+      <td about="./RPL-1.1" typeof="spdx:License">
+      <code property="spdx:licenseId">RPL-1.1</code></td>
+      <td align="center">Y</td>
+      <td><a href="./RPL-1.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./RPL-1.5" rel="rdf:_184">Reciprocal Public License 1.5 </a></td>
       <td about="./RPL-1.5" typeof="spdx:License">
       <code property="spdx:licenseId">RPL-1.5</code></td>
       <td align="center">Y</td>
       <td><a href="./RPL-1.5#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./RHeCos-1.1" rel="rdf:_146">Red Hat eCos Public License v1.1</a></td>
+      <td><a href="./RHeCos-1.1" rel="rdf:_185">Red Hat eCos Public License v1.1</a></td>
       <td about="./RHeCos-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">RHeCos-1.1</code></td>
       <td align="center"></td>
       <td><a href="./RHeCos-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./RSCPL" rel="rdf:_147">Ricoh Source Code Public License</a></td>
+      <td><a href="./RSCPL" rel="rdf:_186">Ricoh Source Code Public License</a></td>
       <td about="./RSCPL" typeof="spdx:License">
       <code property="spdx:licenseId">RSCPL</code></td>
       <td align="center">Y</td>
       <td><a href="./RSCPL#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Ruby" rel="rdf:_148">Ruby License</a></td>
+      <td><a href="./Ruby" rel="rdf:_187">Ruby License</a></td>
       <td about="./Ruby" typeof="spdx:License">
       <code property="spdx:licenseId">Ruby</code></td>
       <td align="center"></td>
       <td><a href="./Ruby#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./SAX-PD" rel="rdf:_149">Sax Public Domain Notice</a></td>
+      <td><a href="./SAX-PD" rel="rdf:_188">Sax Public Domain Notice</a></td>
       <td about="./SAX-PD" typeof="spdx:License">
       <code property="spdx:licenseId">SAX-PD</code></td>
       <td align="center"></td>
       <td><a href="./SAX-PD#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OFL-1.0" rel="rdf:_150">SIL Open Font License 1.0</a></td>
+      <td><a href="./SGI-B-1.0" rel="rdf:_189">SGI Free Software License B v1.0</a></td>
+      <td about="./SGI-B-1.0" typeof="spdx:License">
+      <code property="spdx:licenseId">SGI-B-1.0</code></td>
+      <td align="center"></td>
+      <td><a href="./SGI-B-1.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./SGI-B-1.1" rel="rdf:_190">SGI Free Software License B v1.1</a></td>
+      <td about="./SGI-B-1.1" typeof="spdx:License">
+      <code property="spdx:licenseId">SGI-B-1.1</code></td>
+      <td align="center"></td>
+      <td><a href="./SGI-B-1.1#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./SGI-B-2.0" rel="rdf:_191">SGI Free Software License B v2.0</a></td>
+      <td about="./SGI-B-2.0" typeof="spdx:License">
+      <code property="spdx:licenseId">SGI-B-2.0</code></td>
+      <td align="center"></td>
+      <td><a href="./SGI-B-2.0#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./OFL-1.0" rel="rdf:_192">SIL Open Font License 1.0</a></td>
       <td about="./OFL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">OFL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./OFL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./OFL-1.1" rel="rdf:_151">SIL Open Font License 1.1</a></td>
+      <td><a href="./OFL-1.1" rel="rdf:_193">SIL Open Font License 1.1</a></td>
       <td about="./OFL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">OFL-1.1</code></td>
       <td align="center">Y</td>
       <td><a href="./OFL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./SimPL-2.0" rel="rdf:_152">Simple Public License 2.0</a></td>
+      <td><a href="./SimPL-2.0" rel="rdf:_194">Simple Public License 2.0</a></td>
       <td about="./SimPL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">SimPL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./SimPL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Sleepycat" rel="rdf:_153">Sleepycat License</a></td>
+      <td><a href="./Sleepycat" rel="rdf:_195">Sleepycat License</a></td>
       <td about="./Sleepycat" typeof="spdx:License">
       <code property="spdx:licenseId">Sleepycat</code></td>
       <td align="center">Y</td>
       <td><a href="./Sleepycat#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./SugarCRM-1.1.3" rel="rdf:_154">SugarCRM Public License v1.1.3</a></td>
+      <td><a href="./SMLNJ" rel="rdf:_196">Standard ML of New Jersey License</a></td>
+      <td about="./SMLNJ" typeof="spdx:License">
+      <code property="spdx:licenseId">SMLNJ</code></td>
+      <td align="center"></td>
+      <td><a href="./SMLNJ#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./SugarCRM-1.1.3" rel="rdf:_197">SugarCRM Public License v1.1.3</a></td>
       <td about="./SugarCRM-1.1.3" typeof="spdx:License">
       <code property="spdx:licenseId">SugarCRM-1.1.3</code></td>
       <td align="center"></td>
       <td><a href="./SugarCRM-1.1.3#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./SPL-1.0" rel="rdf:_155">Sun Public License v1.0</a></td>
+      <td><a href="./SISSL" rel="rdf:_198">Sun Industry Standards Source License v1.1</a></td>
+      <td about="./SISSL" typeof="spdx:License">
+      <code property="spdx:licenseId">SISSL</code></td>
+      <td align="center">Y</td>
+      <td><a href="./SISSL#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./SISSL-1.2" rel="rdf:_199">Sun Industry Standards Source License v1.2</a></td>
+      <td about="./SISSL-1.2" typeof="spdx:License">
+      <code property="spdx:licenseId">SISSL-1.2</code></td>
+      <td align="center"></td>
+      <td><a href="./SISSL-1.2#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./SPL-1.0" rel="rdf:_200">Sun Public License v1.0</a></td>
       <td about="./SPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">SPL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./SPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Watcom-1.0" rel="rdf:_156">Sybase Open Watcom Public License 1.0</a></td>
+      <td><a href="./Watcom-1.0" rel="rdf:_201">Sybase Open Watcom Public License 1.0</a></td>
       <td about="./Watcom-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">Watcom-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./Watcom-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./NCSA" rel="rdf:_157">University of Illinois/NCSA Open Source License</a></td>
+      <td><a href="./NCSA" rel="rdf:_202">University of Illinois/NCSA Open Source License</a></td>
       <td about="./NCSA" typeof="spdx:License">
       <code property="spdx:licenseId">NCSA</code></td>
       <td align="center">Y</td>
       <td><a href="./NCSA#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./VSL-1.0" rel="rdf:_158">Vovida Software License v1.0</a></td>
+      <td><a href="./VSL-1.0" rel="rdf:_203">Vovida Software License v1.0</a></td>
       <td about="./VSL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">VSL-1.0</code></td>
       <td align="center">Y</td>
       <td><a href="./VSL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./W3C" rel="rdf:_159">W3C Software and Notice License</a></td>
+      <td><a href="./W3C" rel="rdf:_204">W3C Software Notice and License</a></td>
       <td about="./W3C" typeof="spdx:License">
       <code property="spdx:licenseId">W3C</code></td>
       <td align="center">Y</td>
       <td><a href="./W3C#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./WXwindows" rel="rdf:_160">wxWindows Library License</a></td>
+      <td><a href="./WXwindows" rel="rdf:_205">wxWindows Library License</a></td>
       <td about="./WXwindows" typeof="spdx:License">
       <code property="spdx:licenseId">WXwindows</code></td>
       <td align="center">Y</td>
       <td><a href="./WXwindows#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Xnet" rel="rdf:_161">X.Net License</a></td>
+      <td><a href="./Xnet" rel="rdf:_206">X.Net License</a></td>
       <td about="./Xnet" typeof="spdx:License">
       <code property="spdx:licenseId">Xnet</code></td>
       <td align="center">Y</td>
       <td><a href="./Xnet#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./XFree86-1.1" rel="rdf:_162">XFree86 License 1.1</a></td>
+      <td><a href="./X11" rel="rdf:_207">X11 License</a></td>
+      <td about="./X11" typeof="spdx:License">
+      <code property="spdx:licenseId">X11</code></td>
+      <td align="center"></td>
+      <td><a href="./X11#licenseText">License Text</a></td>
+    </tr>
+    <tr>
+      <td><a href="./XFree86-1.1" rel="rdf:_208">XFree86 License 1.1</a></td>
       <td about="./XFree86-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">XFree86-1.1</code></td>
       <td align="center"></td>
       <td><a href="./XFree86-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./YPL-1.0" rel="rdf:_163">Yahoo! Public License v1.0</a></td>
+      <td><a href="./YPL-1.0" rel="rdf:_209">Yahoo! Public License v1.0</a></td>
       <td about="./YPL-1.0" typeof="spdx:License">
       <code property="spdx:licenseId">YPL-1.0</code></td>
       <td align="center"></td>
       <td><a href="./YPL-1.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./YPL-1.1" rel="rdf:_164">Yahoo! Public License v1.1</a></td>
+      <td><a href="./YPL-1.1" rel="rdf:_210">Yahoo! Public License v1.1</a></td>
       <td about="./YPL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">YPL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./YPL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Zimbra-1.3" rel="rdf:_165">Zimbra Public License v1.3</a></td>
+      <td><a href="./Zimbra-1.3" rel="rdf:_211">Zimbra Public License v1.3</a></td>
       <td about="./Zimbra-1.3" typeof="spdx:License">
       <code property="spdx:licenseId">Zimbra-1.3</code></td>
       <td align="center"></td>
       <td><a href="./Zimbra-1.3#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./Zlib" rel="rdf:_166">zlib License</a></td>
+      <td><a href="./Zlib" rel="rdf:_212">zlib License</a></td>
       <td about="./Zlib" typeof="spdx:License">
       <code property="spdx:licenseId">Zlib</code></td>
       <td align="center">Y</td>
       <td><a href="./Zlib#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ZPL-1.1" rel="rdf:_167">Zope Public License 1.1</a></td>
+      <td><a href="./ZPL-1.1" rel="rdf:_213">Zope Public License 1.1</a></td>
       <td about="./ZPL-1.1" typeof="spdx:License">
       <code property="spdx:licenseId">ZPL-1.1</code></td>
       <td align="center"></td>
       <td><a href="./ZPL-1.1#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ZPL-2.0" rel="rdf:_168">Zope Public License 2.0</a></td>
+      <td><a href="./ZPL-2.0" rel="rdf:_214">Zope Public License 2.0</a></td>
       <td about="./ZPL-2.0" typeof="spdx:License">
       <code property="spdx:licenseId">ZPL-2.0</code></td>
       <td align="center">Y</td>
       <td><a href="./ZPL-2.0#licenseText">License Text</a></td>
     </tr>
     <tr>
-      <td><a href="./ZPL-2.1" rel="rdf:_169">Zope Public License 2.1</a></td>
+      <td><a href="./ZPL-2.1" rel="rdf:_215">Zope Public License 2.1</a></td>
       <td about="./ZPL-2.1" typeof="spdx:License">
       <code property="spdx:licenseId">ZPL-2.1</code></td>
       <td align="center"></td>
       <td><a href="./ZPL-2.1#licenseText">License Text</a></td>
     </tr>
+    <tr>
+      <td><a href="./Unlicense" rel="rdf:_216">The Unlicense</a></td>
+      <td about="./Unlicense" typeof="spdx:License">
+      <code property="spdx:licenseId">Unlicense</code></td>
+      <td align="center"></td>
+      <td><a href="./Unlicense#licenseText">License Text</a></td>
+    </tr>
 
   </tbody>
 </table>
-<p>You may propose additional licenses be added to the SPDX License List by
-following the process at: <a href="http://spdx.org/wiki/spdx-license-list-process-requesting-new-licenses-be-added">SPDX License List: Process for requesting new licenses to be added</a>.
-Guidelines for what constitutes a license match to the SPDX License List 
-when generating an SPDX file can be found here:
- <a href="http://spdx.org/wiki/spdx-license-list-match-guidelines">SPDX License List Match Guidelines</a>.</p>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+
+
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> |
-       <a href="/codeOfConduct">Code of Conduct</a> |
-       <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> |
-       <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
+
 
 </div></div> <!-- /#page-inner, /#page -->
-
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 
 </body>
 </html>

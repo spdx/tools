@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:dc="http://purl.org/dc/terms/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/rdf/terms#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>Attribution Assurance License</title>
-	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+    <title>Attribution Assurance License</title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
-	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
 <![endif]-->
-	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
 <!--[if IE 6]>
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
 <![endif]-->
   <script type="text/javascript">
 
@@ -41,28 +44,17 @@
 <div id="util_nav">
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 <div id="logo-title">
-	<div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-	<div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
 </div> <!-- /#logo-title -->
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -70,96 +62,155 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Attribution Assurance License</h1>
-<h2 id="information">Information</h2>
-<dl>
-	<dt>Full name</dt>
-	<dd property="rdfs:label">Attribution Assurance License</dd>
-	<dt>Short identifier</dt>
-	<dd><code property="spdx:licenseId">AAL</code></dd>
-	<dt>Other web pages for this license</dt>
-	<dd>
-		<ul>
-							<li><a href="http://www.opensource.org/licenses/attribution" rel="owl:sameAs">http://www.opensource.org/licenses/attribution</a></li>
 
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">Attribution Assurance License</p></div>
 
-		</ul>
-	</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>This license was released: 2002<br/>
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">AAL</code></p>
+
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://www.opensource.org/licenses/attribution" rel="owl:sameAs">http://www.opensource.org/licenses/attribution</a></li>
+
 </p>
-<h2 id="licenseText">Text</h2>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">This license was released: 2002<br/>
+</p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
 Attribution Assurance License<br/>
-Copyright (c) 2002 by AUTHOR<br/>
-PROFESSIONAL IDENTIFICATION * URL<br/>
-&quot;PROMOTIONAL SLOGAN FOR AUTHOR&apos;S PROFESSIONAL PRACTICE&quot;<br/>
-<br/>
-All Rights Reserved<br/>
-ATTRIBUTION ASSURANCE LICENSE (adapted from the original BSD license)<br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the conditions below are met.<br/>
-These conditions require a modest attribution to &lt;AUTHOR&gt; (the<br/>
-&quot;Author&quot;), who hopes that its promotional value may help justify the<br/>
-thousands of dollars in otherwise billable time invested in writing<br/>
-this and other freely available, open-source software.<br/>
-<br/>
-1. Redistributions of source code, in whole or part and with or without<br/>
-modification (the &quot;Code&quot;), must prominently display this GPG-signed<br/>
-text in verifiable form.<br/>
-2. Redistributions of the Code in binary form must be accompanied by<br/>
-this GPG-signed text in any documentation and, each time the resulting<br/>
-executable program or a program dependent thereon is launched, a<br/>
-prominent display (e.g., splash screen or banner text) of the Author&apos;s<br/>
-attribution information, which includes:<br/>
-(a) Name (&quot;AUTHOR&quot;),<br/>
-(b) Professional identification (&quot;PROFESSIONAL IDENTIFICATION&quot;), and<br/>
-(c) URL (&quot;URL&quot;).<br/>
-3. Neither the name nor any trademark of the Author may be used to<br/>
-endorse or promote products derived from this software without specific<br/>
-prior written permission.<br/>
-4. Users are entirely responsible, to the exclusion of the Author and<br/>
-any other persons, for compliance with (1) regulations set by owners or<br/>
-administrators of employed equipment, (2) licensing terms of any other<br/>
-software, and (3) local regulations regarding use, including those<br/>
-regarding import, export, and use of encryption software.<br/>
-<br/>
-THIS FREE SOFTWARE IS PROVIDED BY THE AUTHOR &quot;AS IS&quot; AND<br/>
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT<br/>
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND<br/>
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO<br/>
-EVENT SHALL THE AUTHOR OR ANY CONTRIBUTOR BE LIABLE FOR<br/>
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR<br/>
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,<br/>
-EFFECTS OF UNAUTHORIZED OR MALICIOUS NETWORK ACCESS;<br/>
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,<br/>
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED<br/>
-AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT<br/>
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN<br/>
-IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br/>
---End of License
+Copyright (c) 2002 by AUTHOR PROFESSIONAL IDENTIFICATION * URL<br/>
+&quot;PROMOTIONAL SLOGAN FOR AUTHOR&apos;S PROFESSIONAL PRACTICE&quot;
+<p>All Rights Reserved<br/>
+ATTRIBUTION ASSURANCE LICENSE (adapted from the original BSD license)</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the conditions below are met. These conditions require a modest attribution to &lt;AUTHOR&gt; (the &quot;Author&quot;), who hopes that its promotional value may help justify the thousands of dollars in otherwise billable time invested in writing this and other freely available, open-source software.</p>
+<p>1. Redistributions of source code, in whole or part and with or without modification (the &quot;Code&quot;), must prominently display this GPG-signed text in verifiable form.</p>
+<p>2. Redistributions of the Code in binary form must be accompanied by this GPG-signed text in any documentation and, each time the resulting executable program or a program dependent thereon is launched, a prominent display (e.g., splash screen or banner text) of the Author&apos;s attribution information, which includes:<br/>
+  (a) Name (&quot;AUTHOR&quot;),<br/>
+  (b) Professional identification (&quot;PROFESSIONAL IDENTIFICATION&quot;), and<br/>
+  (c) URL (&quot;URL&quot;).</p>
+<p>3. Neither the name nor any trademark of the Author may be used to endorse or promote products derived from this software without specific prior written permission.</p>
+<p>4. Users are entirely responsible, to the exclusion of the Author and any other persons, for compliance with (1) regulations set by owners or administrators of employed equipment, (2) licensing terms of any other software, and (3) local regulations regarding use, including those regarding import, export, and use of encryption software.</p>
+<p>THIS FREE SOFTWARE IS PROVIDED BY THE AUTHOR &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR ANY CONTRIBUTOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, EFFECTS OF UNAUTHORIZED OR MALICIOUS NETWORK ACCESS; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>--End of License</p>
+<p>Originally written by Edwin A. Suominen for licensing his PRIVARIA secure networking software (see www.privaria.org). The author, who is not an attorney, places this license template into the public domain along with a complete disclaimer of any warranty or responsibility for its content or legal efficacy. You may use or modify the language freely, but entirely at your own risk.</p>
 </div>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text"></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">Attribution Assurance License<br/>
+Copyright (c) 2002 by AUTHOR PROFESSIONAL IDENTIFICATION * URL<br/>
+&quot;PROMOTIONAL SLOGAN FOR AUTHOR&apos;S PROFESSIONAL PRACTICE&quot;
+<p>All Rights Reserved<br/>
+ATTRIBUTION ASSURANCE LICENSE (adapted from the original BSD license)</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the conditions below are met. These conditions require a modest attribution to &lt;AUTHOR&gt; (the &quot;Author&quot;), who hopes that its promotional value may help justify the thousands of dollars in otherwise billable time invested in writing this and other freely available, open-source software.</p>
+<p>1. Redistributions of source code, in whole or part and with or without modification (the &quot;Code&quot;), must prominently display this GPG-signed text in verifiable form.</p>
+<p>2. Redistributions of the Code in binary form must be accompanied by this GPG-signed text in any documentation and, each time the resulting executable program or a program dependent thereon is launched, a prominent display (e.g., splash screen or banner text) of the Author&apos;s attribution information, which includes:<br/>
+  (a) Name (&quot;AUTHOR&quot;),<br/>
+  (b) Professional identification (&quot;PROFESSIONAL IDENTIFICATION&quot;), and<br/>
+  (c) URL (&quot;URL&quot;).</p>
+<p>3. Neither the name nor any trademark of the Author may be used to endorse or promote products derived from this software without specific prior written permission.</p>
+<p>4. Users are entirely responsible, to the exclusion of the Author and any other persons, for compliance with (1) regulations set by owners or administrators of employed equipment, (2) licensing terms of any other software, and (3) local regulations regarding use, including those regarding import, export, and use of encryption software.</p>
+<p>THIS FREE SOFTWARE IS PROVIDED BY THE AUTHOR &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR ANY CONTRIBUTOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, EFFECTS OF UNAUTHORIZED OR MALICIOUS NETWORK ACCESS; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>--End of License</p>
+<p>Originally written by Edwin A. Suominen for licensing his PRIVARIA secure networking software (see www.privaria.org). The author, who is not an attorney, places this license template into the public domain along with a complete disclaimer of any warranty or responsibility for its content or legal efficacy. You may use or modify the language freely, but entirely at your own risk.</p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> | <a href="/codeOfConduct">Code of Conduct</a> | <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
 
 </div></div> <!-- /#page-inner, /#page -->
 
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 </body>
 </html>

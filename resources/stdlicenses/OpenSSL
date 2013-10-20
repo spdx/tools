@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:dc="http://purl.org/dc/terms/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/rdf/terms#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>OpenSSL License</title>
-	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+    <title>OpenSSL License</title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
-	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
 <![endif]-->
-	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
 <!--[if IE 6]>
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
 <![endif]-->
   <script type="text/javascript">
 
@@ -41,28 +44,17 @@
 <div id="util_nav">
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 <div id="logo-title">
-	<div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-	<div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
 </div> <!-- /#logo-title -->
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -70,63 +62,52 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">OpenSSL License</h1>
-<h2 id="information">Information</h2>
-<dl>
-	<dt>Full name</dt>
-	<dd property="rdfs:label">OpenSSL License</dd>
-	<dt>Short identifier</dt>
-	<dd><code property="spdx:licenseId">OpenSSL</code></dd>
-	<dt>Other web pages for this license</dt>
-	<dd>
-		<ul>
-							<li><a href="http://www.openssl.org/source/license.html" rel="owl:sameAs">http://www.openssl.org/source/license.html</a></li>
 
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">OpenSSL License</p></div>
 
-		</ul>
-	</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>The OpenSSL toolkit stays under a dual license, i.e. both the conditions of the OpenSSL License and the original SSLeay license apply to the toolkit. </p>
-<h2 id="licenseText">Text</h2>
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">OpenSSL</code></p>
+
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://www.openssl.org/source/license.html" rel="owl:sameAs">http://www.openssl.org/source/license.html</a></li>
+
+</p>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">The OpenSSL toolkit stays under a dual license, i.e. both the conditions of the OpenSSL License and the original SSLeay license apply to the toolkit. </p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-OpenSSL License<br/>
-<br/>
- ====================================================================<br/>
-  Copyright (c) 1998-2008 The OpenSSL Project.  All rights reserved.<br/>
- <br/>
-  Redistribution and use in source and binary forms, with or without<br/>
+OpenSSL License
+<p> ====================================================================<br/>
+  Copyright (c) 1998-2008 The OpenSSL Project.  All rights reserved.</p>
+<p>  Redistribution and use in source and binary forms, with or without<br/>
   modification, are permitted provided that the following conditions<br/>
-  are met:<br/>
- <br/>
-  1. Redistributions of source code must retain the above copyright<br/>
-     notice, this list of conditions and the following disclaimer.<br/>
- <br/>
-  2. Redistributions in binary form must reproduce the above copyright<br/>
+  are met:</p>
+<p>  1. Redistributions of source code must retain the above copyright<br/>
+     notice, this list of conditions and the following disclaimer.</p>
+<p>  2. Redistributions in binary form must reproduce the above copyright<br/>
      notice, this list of conditions and the following disclaimer in<br/>
      the documentation and/or other materials provided with the<br/>
-     distribution.<br/>
- <br/>
-  3. All advertising materials mentioning features or use of this<br/>
+     distribution.</p>
+<p>  3. All advertising materials mentioning features or use of this<br/>
      software must display the following acknowledgment:<br/>
      &quot;This product includes software developed by the OpenSSL Project<br/>
-     for use in the OpenSSL Toolkit. (http://www.openssl.org/)&quot;<br/>
- <br/>
-  4. The names &quot;OpenSSL Toolkit&quot; and &quot;OpenSSL Project&quot; must not be used to<br/>
+     for use in the OpenSSL Toolkit. (http://www.openssl.org/)&quot;</p>
+<p>  4. The names &quot;OpenSSL Toolkit&quot; and &quot;OpenSSL Project&quot; must not be used to<br/>
      endorse or promote products derived from this software without<br/>
      prior written permission. For written permission, please contact<br/>
-     openssl-core@openssl.org.<br/>
- <br/>
-  5. Products derived from this software may not be called &quot;OpenSSL&quot;<br/>
+     openssl-core@openssl.org.</p>
+<p>  5. Products derived from this software may not be called &quot;OpenSSL&quot;<br/>
      nor may &quot;OpenSSL&quot; appear in their names without prior written<br/>
-     permission of the OpenSSL Project.<br/>
- <br/>
-  6. Redistributions of any form whatsoever must retain the following<br/>
+     permission of the OpenSSL Project.</p>
+<p>  6. Redistributions of any form whatsoever must retain the following<br/>
      acknowledgment:<br/>
      &quot;This product includes software developed by the OpenSSL Project<br/>
-     for use in the OpenSSL Toolkit (http://www.openssl.org/)&quot;<br/>
- <br/>
-  THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS&apos;&apos; AND ANY<br/>
+     for use in the OpenSSL Toolkit (http://www.openssl.org/)&quot;</p>
+<p>  THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS&apos;&apos; AND ANY<br/>
   EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br/>
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR<br/>
   PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR<br/>
@@ -138,38 +119,31 @@ OpenSSL License<br/>
   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED<br/>
   OF THE POSSIBILITY OF SUCH DAMAGE.<br/>
-  ====================================================================<br/>
- <br/>
-  This product includes cryptographic software written by Eric Young<br/>
+  ====================================================================</p>
+<p>  This product includes cryptographic software written by Eric Young<br/>
   (eay@cryptsoft.com).  This product includes software written by Tim<br/>
-  Hudson (tjh@cryptsoft.com).<br/>
- <br/>
-<br/>
+  Hudson (tjh@cryptsoft.com).</p>
+<p><br/>
  Original SSLeay License<br/>
- -----------------------<br/>
-<br/>
-Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)<br/>
-All rights reserved.<br/>
- <br/>
-  This package is an SSL implementation written<br/>
+ -----------------------</p>
+<p>Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)<br/>
+All rights reserved.</p>
+<p>  This package is an SSL implementation written<br/>
   by Eric Young (eay@cryptsoft.com).<br/>
-  The implementation was written so as to conform with Netscapes SSL.<br/>
- <br/>
-  This library is free for commercial and non-commercial use as long as<br/>
+  The implementation was written so as to conform with Netscapes SSL.</p>
+<p>  This library is free for commercial and non-commercial use as long as<br/>
   the following conditions are aheared to.  The following conditions<br/>
   apply to all code found in this distribution, be it the RC4, RSA,<br/>
   lhash, DES, etc., code; not just the SSL code.  The SSL documentation<br/>
   included with this distribution is covered by the same copyright terms<br/>
-  except that the holder is Tim Hudson (tjh@cryptsoft.com).<br/>
- <br/>
-  Copyright remains Eric Young&apos;s, and as such any Copyright notices in<br/>
+  except that the holder is Tim Hudson (tjh@cryptsoft.com).</p>
+<p>  Copyright remains Eric Young&apos;s, and as such any Copyright notices in<br/>
   the code are not to be removed.<br/>
   If this package is used in a product, Eric Young should be given attribution<br/>
   as the author of the parts of the library used.<br/>
   This can be in the form of a textual message at program startup or<br/>
-  in documentation (online or textual) provided with the package.<br/>
- <br/>
-  Redistribution and use in source and binary forms, with or without<br/>
+  in documentation (online or textual) provided with the package.</p>
+<p>  Redistribution and use in source and binary forms, with or without<br/>
   modification, are permitted provided that the following conditions<br/>
   are met:<br/>
   1. Redistributions of source code must retain the copyright<br/>
@@ -185,35 +159,195 @@ All rights reserved.<br/>
      being used are not cryptographic related :-).<br/>
   4. If you include any Windows specific code (or a derivative thereof) from<br/>
      the apps directory (application code) you must include an acknowledgement:<br/>
-     &quot;This product includes software written by Tim Hudson (tjh@cryptsoft.com)&quot;<br/>
- <br/>
-  THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br/>
- <br/>
-  The licence and distribution terms for any publically available version or derivative of this code cannot be changed.  i.e. this code cannot simply be copied and put under another distribution licence<br/>
-  [including the GNU Public Licence.]<br/>
- <br/>
-
+     &quot;This product includes software written by Tim Hudson (tjh@cryptsoft.com)&quot;</p>
+<p>  THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>  The licence and distribution terms for any publically available version or derivative of this code cannot be changed.  i.e. this code cannot simply be copied and put under another distribution licence<br/>
+  [including the GNU Public Licence.]</p>
+<p></p>
 </div>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text"></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">OpenSSL License
+<p> ====================================================================<br/>
+  Copyright (c) 1998-2008 The OpenSSL Project.  All rights reserved.</p>
+<p>  Redistribution and use in source and binary forms, with or without<br/>
+  modification, are permitted provided that the following conditions<br/>
+  are met:</p>
+<p>  1. Redistributions of source code must retain the above copyright<br/>
+     notice, this list of conditions and the following disclaimer.</p>
+<p>  2. Redistributions in binary form must reproduce the above copyright<br/>
+     notice, this list of conditions and the following disclaimer in<br/>
+     the documentation and/or other materials provided with the<br/>
+     distribution.</p>
+<p>  3. All advertising materials mentioning features or use of this<br/>
+     software must display the following acknowledgment:<br/>
+     &quot;This product includes software developed by the OpenSSL Project<br/>
+     for use in the OpenSSL Toolkit. (http://www.openssl.org/)&quot;</p>
+<p>  4. The names &quot;OpenSSL Toolkit&quot; and &quot;OpenSSL Project&quot; must not be used to<br/>
+     endorse or promote products derived from this software without<br/>
+     prior written permission. For written permission, please contact<br/>
+     openssl-core@openssl.org.</p>
+<p>  5. Products derived from this software may not be called &quot;OpenSSL&quot;<br/>
+     nor may &quot;OpenSSL&quot; appear in their names without prior written<br/>
+     permission of the OpenSSL Project.</p>
+<p>  6. Redistributions of any form whatsoever must retain the following<br/>
+     acknowledgment:<br/>
+     &quot;This product includes software developed by the OpenSSL Project<br/>
+     for use in the OpenSSL Toolkit (http://www.openssl.org/)&quot;</p>
+<p>  THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS&apos;&apos; AND ANY<br/>
+  EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br/>
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR<br/>
+  PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR<br/>
+  ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,<br/>
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT<br/>
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;<br/>
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,<br/>
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED<br/>
+  OF THE POSSIBILITY OF SUCH DAMAGE.<br/>
+  ====================================================================</p>
+<p>  This product includes cryptographic software written by Eric Young<br/>
+  (eay@cryptsoft.com).  This product includes software written by Tim<br/>
+  Hudson (tjh@cryptsoft.com).</p>
+<p><br/>
+ Original SSLeay License<br/>
+ -----------------------</p>
+<p>Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)<br/>
+All rights reserved.</p>
+<p>  This package is an SSL implementation written<br/>
+  by Eric Young (eay@cryptsoft.com).<br/>
+  The implementation was written so as to conform with Netscapes SSL.</p>
+<p>  This library is free for commercial and non-commercial use as long as<br/>
+  the following conditions are aheared to.  The following conditions<br/>
+  apply to all code found in this distribution, be it the RC4, RSA,<br/>
+  lhash, DES, etc., code; not just the SSL code.  The SSL documentation<br/>
+  included with this distribution is covered by the same copyright terms<br/>
+  except that the holder is Tim Hudson (tjh@cryptsoft.com).</p>
+<p>  Copyright remains Eric Young&apos;s, and as such any Copyright notices in<br/>
+  the code are not to be removed.<br/>
+  If this package is used in a product, Eric Young should be given attribution<br/>
+  as the author of the parts of the library used.<br/>
+  This can be in the form of a textual message at program startup or<br/>
+  in documentation (online or textual) provided with the package.</p>
+<p>  Redistribution and use in source and binary forms, with or without<br/>
+  modification, are permitted provided that the following conditions<br/>
+  are met:<br/>
+  1. Redistributions of source code must retain the copyright<br/>
+     notice, this list of conditions and the following disclaimer.<br/>
+  2. Redistributions in binary form must reproduce the above copyright<br/>
+     notice, this list of conditions and the following disclaimer in the<br/>
+     documentation and/or other materials provided with the distribution.<br/>
+  3. All advertising materials mentioning features or use of this software<br/>
+     must display the following acknowledgement:<br/>
+     &quot;This product includes cryptographic software written by<br/>
+      Eric Young (eay@cryptsoft.com)&quot;<br/>
+     The word &apos;cryptographic&apos; can be left out if the rouines from the library<br/>
+     being used are not cryptographic related :-).<br/>
+  4. If you include any Windows specific code (or a derivative thereof) from<br/>
+     the apps directory (application code) you must include an acknowledgement:<br/>
+     &quot;This product includes software written by Tim Hudson (tjh@cryptsoft.com)&quot;</p>
+<p>  THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>  The licence and distribution terms for any publically available version or derivative of this code cannot be changed.  i.e. this code cannot simply be copied and put under another distribution licence<br/>
+  [including the GNU Public Licence.]</p>
+<p></p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> | <a href="/codeOfConduct">Code of Conduct</a> | <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
 
 </div></div> <!-- /#page-inner, /#page -->
 
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 </body>
 </html>

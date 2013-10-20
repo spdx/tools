@@ -1508,6 +1508,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			model.removeAll();
 		}
 		model.setNsPrefix("", SPDX_NAMESPACE);
+		model.setNsPrefix("doap", DOAP_NAMESPACE);
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
 		model.createResource(uri, spdxAnalysisType);
 		// add the version
