@@ -1,0 +1,848 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
+<head>
+    <title>LaTeX Project Public License 1.3a </title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+<!--[if IE 6]>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
+<![endif]-->
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
+<!--[if IE 6]>
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
+<![endif]-->
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3676394-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+</head>
+<body typeof="spdx:License">
+<div id="page"><div id="page-inner">
+<div id="header"><div id="header-inner" class="clear-block">
+<div id="util_nav">
+ <ul class="inline_list list_icon float_left" style="padding-top:2px;">
+        <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
+        <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
+ </ul>
+</div> <!-- close util_nav -->
+<div id="logo-title">
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
+</div> <!-- /#logo-title -->
+<br />
+<br />
+
+</div>
+
+</div></div> <!-- /#header-inner, /#header -->
+
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+
+<h1 property="dc:title">LaTeX Project Public License 1.3a </h1>
+
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">LaTeX Project Public License 1.3a </p></div>
+
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">LPPL-1.3a</code></p>
+
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://www.latex-project.org/lppl/lppl-1-3a.txt" rel="owl:sameAs">http://www.latex-project.org/lppl/lppl-1-3a.txt</a></li>
+
+</p>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">This license was released 1 Oct 2004</p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
+
+<div property="spdx:licenseText" class="license-text">
+The LaTeX Project Public License<br/>
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+<p>LPPL Version 1.3a  2004-10-01</p>
+<p>Copyright 1999 2002-04 LaTeX3 Project<br/>
+    Everyone is allowed to distribute verbatim copies of this<br/>
+    license document, but modification of it is not allowed.</p>
+<p><br/>
+PREAMBLE<br/>
+========</p>
+<p>The LaTeX Project Public License (LPPL) is the primary license under<br/>
+which the the LaTeX kernel and the base LaTeX packages are distributed.</p>
+<p>You may use this license for any work of which you hold the copyright<br/>
+and which you wish to distribute.  This license may be particularly<br/>
+suitable if your work is TeX-related (such as a LaTeX package), but<br/>
+you may use it with small modifications even if your work is unrelated<br/>
+to TeX.</p>
+<p>The section `WHETHER AND HOW TO DISTRIBUTE WORKS UNDER THIS LICENSE&apos;,<br/>
+below, gives instructions, examples, and recommendations for authors<br/>
+who are considering distributing their works under this license.</p>
+<p>This license gives conditions under which a work may be distributed<br/>
+and modified, as well as conditions under which modified versions of<br/>
+that work may be distributed.</p>
+<p>We, the LaTeX3 Project, believe that the conditions below give you<br/>
+the freedom to make and distribute modified versions of your work<br/>
+that conform with whatever technical specifications you wish while<br/>
+maintaining the availability, integrity, and reliability of<br/>
+that work.  If you do not see how to achieve your goal while<br/>
+meeting these conditions, then read the document `cfgguide.tex&apos;<br/>
+and `modguide.tex&apos; in the base LaTeX distribution for suggestions.</p>
+<p><br/>
+DEFINITIONS<br/>
+===========</p>
+<p>In this license document the following terms are used:</p>
+<p>   `Work&apos;<br/>
+    Any work being distributed under this License.</p>
+<p>   `Derived Work&apos;<br/>
+    Any work that under any applicable law is derived from the Work.</p>
+<p>   `Modification&apos; <br/>
+    Any procedure that produces a Derived Work under any applicable<br/>
+    law -- for example, the production of a file containing an<br/>
+    original file associated with the Work or a significant portion of<br/>
+    such a file, either verbatim or with modifications and/or<br/>
+    translated into another language.</p>
+<p>   `Modify&apos;<br/>
+    To apply any procedure that produces a Derived Work under any<br/>
+    applicable law.</p>
+<p>   `Distribution&apos;<br/>
+    Making copies of the Work available from one person to another, in<br/>
+    whole or in part.  Distribution includes (but is not limited to)<br/>
+    making any electronic components of the Work accessible by<br/>
+    file transfer protocols such as FTP or HTTP or by shared file<br/>
+    systems such as Sun&apos;s Network File System (NFS).</p>
+<p>   `Compiled Work&apos;<br/>
+    A version of the Work that has been processed into a form where it<br/>
+    is directly usable on a computer system.  This processing may<br/>
+    include using installation facilities provided by the Work,<br/>
+    transformations of the Work, copying of components of the Work, or<br/>
+    other activities.  Note that modification of any installation<br/>
+    facilities provided by the Work constitutes modification of the Work.</p>
+<p>   `Current Maintainer&apos;<br/>
+    A person or persons nominated as such within the Work.  If there is<br/>
+    no such explicit nomination then it is the `Copyright Holder&apos; under<br/>
+    any applicable law.</p>
+<p>   `Base Interpreter&apos; <br/>
+    A program or process that is normally needed for running or<br/>
+    interpreting a part or the whole of the Work.    <br/>
+    A Base Interpreter may depend on external components but these<br/>
+    are not considered part of the Base Interpreter provided that each<br/>
+    external component clearly identifies itself whenever it is used<br/>
+    interactively.  Unless explicitly specified when applying the<br/>
+    license to the Work, the only applicable Base Interpreter is a<br/>
+    &quot;LaTeX-Format&quot;.</p>
+<p></p>
+<p>CONDITIONS ON DISTRIBUTION AND MODIFICATION<br/>
+===========================================</p>
+<p>1.  Activities other than distribution and/or modification of the Work<br/>
+are not covered by this license; they are outside its scope.  In<br/>
+particular, the act of running the Work is not restricted and no<br/>
+requirements are made concerning any offers of support for the Work.</p>
+<p>2.  You may distribute a complete, unmodified copy of the Work as you<br/>
+received it.  Distribution of only part of the Work is considered<br/>
+modification of the Work, and no right to distribute such a Derived<br/>
+Work may be assumed under the terms of this clause.</p>
+<p>3.  You may distribute a Compiled Work that has been generated from a<br/>
+complete, unmodified copy of the Work as distributed under Clause 2<br/>
+above, as long as that Compiled Work is distributed in such a way that<br/>
+the recipients may install the Compiled Work on their system exactly<br/>
+as it would have been installed if they generated a Compiled Work<br/>
+directly from the Work.</p>
+<p>4.  If you are the Current Maintainer of the Work, you may, without<br/>
+restriction, modify the Work, thus creating a Derived Work.  You may<br/>
+also distribute the Derived Work without restriction, including<br/>
+Compiled Works generated from the Derived Work.  Derived Works<br/>
+distributed in this manner by the Current Maintainer are considered to<br/>
+be updated versions of the Work.</p>
+<p>5.  If you are not the Current Maintainer of the Work, you may modify<br/>
+your copy of the Work, thus creating a Derived Work based on the Work,<br/>
+and compile this Derived Work, thus creating a Compiled Work based on<br/>
+the Derived Work.</p>
+<p>6.  If you are not the Current Maintainer of the Work, you may<br/>
+distribute a Derived Work provided the following conditions are met<br/>
+for every component of the Work unless that component clearly states<br/>
+in the copyright notice that it is exempt from that condition.  Only<br/>
+the Current Maintainer is allowed to add such statements of exemption <br/>
+to a component of the Work. </p>
+<p>  a. If a component of this Derived Work can be a direct replacement<br/>
+     for a component of the Work when that component is used with the<br/>
+     Base Interpreter, then, wherever this component of the Work<br/>
+     identifies itself to the user when used interactively with that<br/>
+     Base Interpreter, the replacement component of this Derived Work<br/>
+     clearly and unambiguously identifies itself as a modified version<br/>
+     of this component to the user when used interactively with that<br/>
+     Base Interpreter.</p>
+<p>  b. Every component of the Derived Work contains prominent notices<br/>
+     detailing the nature of the changes to that component, or a<br/>
+     prominent reference to another file that is distributed as part<br/>
+     of the Derived Work and that contains a complete and accurate log<br/>
+     of the changes.</p>
+<p>  c. No information in the Derived Work implies that any persons,<br/>
+     including (but not limited to) the authors of the original version<br/>
+     of the Work, provide any support, including (but not limited to)<br/>
+     the reporting and handling of errors, to recipients of the<br/>
+     Derived Work unless those persons have stated explicitly that<br/>
+     they do provide such support for the Derived Work.</p>
+<p>  d. You distribute at least one of the following with the Derived Work:</p>
+<p style="margin-left: 20px;">       1. A complete, unmodified copy of the Work; <br/>
+          if your distribution of a modified component is made by<br/>
+          offering access to copy the modified component from a<br/>
+          designated place, then offering equivalent access to copy<br/>
+          the Work from the same or some similar place meets this<br/>
+          condition, even though third parties are not compelled to<br/>
+          copy the Work along with the modified component;</p>
+<p style="margin-left: 20px;">       2. Information that is sufficient to obtain a complete, unmodified<br/>
+          copy of the Work.</p>
+<p>7.  If you are not the Current Maintainer of the Work, you may<br/>
+distribute a Compiled Work generated from a Derived Work, as long as<br/>
+the Derived Work is distributed to all recipients of the Compiled<br/>
+Work, and as long as the conditions of Clause 6, above, are met with<br/>
+regard to the Derived Work.</p>
+<p>8.  The conditions above are not intended to prohibit, and hence do<br/>
+not apply to, the modification, by any method, of any component so that it<br/>
+becomes identical to an  updated version of that component of the Work as<br/>
+it is distributed by the Current Maintainer under Clause 4, above.</p>
+<p>9.  Distribution of the Work or any Derived Work in an alternative<br/>
+format, where the Work or that Derived Work (in whole or in part) is<br/>
+then produced by applying some process to that format, does not relax or<br/>
+nullify any sections of this license as they pertain to the results of<br/>
+applying that process.</p>
+<p>10. a. A Derived Work may be distributed under a different license<br/>
+       provided that license itself honors the conditions listed in<br/>
+       Clause 6 above, in regard to the Work, though it does not have<br/>
+       to honor the rest of the conditions in this license.</p>
+<p>    b. If a Derived Work is distributed under this license, that<br/>
+       Derived Work must provide sufficient documentation as part of<br/>
+       itself to allow each recipient of that Derived Work to honor the <br/>
+       restrictions in Clause 6 above, concerning changes from the Work.</p>
+<p>11. This license places no restrictions on works that are unrelated to<br/>
+the Work, nor does this license place any restrictions on aggregating<br/>
+such works with the Work by any means.</p>
+<p>12.  Nothing in this license is intended to, or may be used to, prevent<br/>
+complete compliance by all parties with all applicable laws.</p>
+<p><br/>
+NO WARRANTY<br/>
+===========</p>
+<p>There is no warranty for the Work.  Except when otherwise stated in<br/>
+writing, the Copyright Holder provides the Work `as is&apos;, without<br/>
+warranty of any kind, either expressed or implied, including, but not<br/>
+limited to, the implied warranties of merchantability and fitness for<br/>
+a particular purpose.  The entire risk as to the quality and performance<br/>
+of the Work is with you.  Should the Work prove defective, you<br/>
+assume the cost of all necessary servicing, repair, or correction.</p>
+<p>In no event unless required by applicable law or agreed to in writing<br/>
+will The Copyright Holder, or any author named in the components of<br/>
+the Work, or any other party who may distribute and/or modify the Work<br/>
+as permitted above, be liable to you for damages, including any<br/>
+general, special, incidental or consequential damages arising out of<br/>
+any use of the Work or out of inability to use the Work (including,<br/>
+but not limited to, loss of data, data being rendered inaccurate, or<br/>
+losses sustained by anyone as a result of any failure of the Work to<br/>
+operate with any other programs), even if the Copyright Holder or said<br/>
+author or said other party has been advised of the possibility of such<br/>
+damages.</p>
+<p><br/>
+MAINTENANCE OF THE WORK<br/>
+=======================</p>
+<p>The Work has the status `author-maintained&apos; if the Copyright Holder<br/>
+explicitly and prominently states near the primary copyright notice in<br/>
+the Work that the Work can only be maintained by the Copyright Holder<br/>
+or simply that is `author-maintained&apos;.</p>
+<p>The Work has the status `maintained&apos; if there is a Current Maintainer<br/>
+who has indicated in the Work that they are willing to receive error<br/>
+reports for the Work (for example, by supplying a valid e-mail<br/>
+address). It is not required for the Current Maintainer to acknowledge<br/>
+or act upon these error reports.</p>
+<p>The Work changes from status `maintained&apos; to `unmaintained&apos; if there<br/>
+is no Current Maintainer, or the person stated to be Current<br/>
+Maintainer of the work cannot be reached through the indicated means<br/>
+of communication for a period of six months, and there are no other<br/>
+significant signs of active maintenance.</p>
+<p>You can become the Current Maintainer of the Work by agreement with<br/>
+any existing Current Maintainer to take over this role.</p>
+<p>If the Work is unmaintained, you can become the Current Maintainer of<br/>
+the Work through the following steps:</p>
+<p> 1.  Make a reasonable attempt to trace the Current Maintainer (and<br/>
+     the Copyright Holder, if the two differ) through the means of<br/>
+     an Internet or similar search.</p>
+<p> 2.  If this search is successful, then enquire whether the Work<br/>
+     is still maintained.</p>
+<p>  a. If it is being maintained, then ask the Current Maintainer<br/>
+     to update their communication data within one month.</p>
+<p>  b. If the search is unsuccessful or no action to resume active<br/>
+     maintenance is taken by the Current Maintainer, then announce<br/>
+     within the pertinent community your intention to take over<br/>
+     maintenance.  (If the Work is a LaTeX work, this could be<br/>
+     done, for example, by posting to comp.text.tex.)</p>
+<p> 3a. If the Current Maintainer is reachable and agrees to pass<br/>
+     maintenance of the Work to you, then this takes effect<br/>
+     immediately upon announcement.</p>
+<p>  b. If the Current Maintainer is not reachable and the Copyright<br/>
+     Holder agrees that maintenance of the Work be passed to you,<br/>
+     then this takes effect immediately upon announcement.  </p>
+<p> 4.  If you make an `intention announcement&apos; as described in 2b. above<br/>
+     and after three months your intention is challenged neither by<br/>
+     the Current Maintainer nor by the Copyright Holder nor by other<br/>
+     people, then you may arrange for the Work to be changed so as<br/>
+     to name you as the (new) Current Maintainer.</p>
+<p> 5.  If the previously unreachable Current Maintainer becomes<br/>
+     reachable once more within three months of a change completed<br/>
+     under the terms of 3b) or 4), then that Current Maintainer must<br/>
+     become or remain the Current Maintainer upon request provided<br/>
+     they then update their communication data within one month.</p>
+<p>A change in the Current Maintainer does not, of itself, alter the fact<br/>
+that the Work is distributed under the LPPL license.</p>
+<p>If you become the Current Maintainer of the Work, you should<br/>
+immediately provide, within the Work, a prominent and unambiguous<br/>
+statement of your status as Current Maintainer.  You should also<br/>
+announce your new status to the same pertinent community as<br/>
+in 2b) above.</p>
+<p><br/>
+WHETHER AND HOW TO DISTRIBUTE WORKS UNDER THIS LICENSE<br/>
+======================================================</p>
+<p>This section contains important instructions, examples, and<br/>
+recommendations for authors who are considering distributing their<br/>
+works under this license.  These authors are addressed as `you&apos; in<br/>
+this section.</p>
+<p>Choosing This License or Another License<br/>
+----------------------------------------</p>
+<p>If for any part of your work you want or need to use *distribution*<br/>
+conditions that differ significantly from those in this license, then<br/>
+do not refer to this license anywhere in your work but, instead,<br/>
+distribute your work under a different license.  You may use the text<br/>
+of this license as a model for your own license, but your license<br/>
+should not refer to the LPPL or otherwise give the impression that<br/>
+your work is distributed under the LPPL.</p>
+<p>The document `modguide.tex&apos; in the base LaTeX distribution explains<br/>
+the motivation behind the conditions of this license.  It explains,<br/>
+for example, why distributing LaTeX under the GNU General Public<br/>
+License (GPL) was considered inappropriate.  Even if your work is<br/>
+unrelated to LaTeX, the discussion in `modguide.tex&apos; may still be<br/>
+relevant, and authors intending to distribute their works under any<br/>
+license are encouraged to read it.</p>
+<p>A Recommendation on Modification Without Distribution<br/>
+-----------------------------------------------------</p>
+<p>It is wise never to modify a component of the Work, even for your own<br/>
+personal use, without also meeting the above conditions for<br/>
+distributing the modified component.  While you might intend that such<br/>
+modifications will never be distributed, often this will happen by<br/>
+accident -- you may forget that you have modified that component; or<br/>
+it may not occur to you when allowing others to access the modified<br/>
+version that you are thus distributing it and violating the conditions<br/>
+of this license in ways that could have legal implications and, worse,<br/>
+cause problems for the community.  It is therefore usually in your<br/>
+best interest to keep your copy of the Work identical with the public<br/>
+one.  Many works provide ways to control the behavior of that work<br/>
+without altering any of its licensed components.</p>
+<p>How to Use This License<br/>
+-----------------------</p>
+<p>To use this license, place in each of the components of your work both<br/>
+an explicit copyright notice including your name and the year the work<br/>
+was authored and/or last substantially modified.  Include also a<br/>
+statement that the distribution and/or modification of that<br/>
+component is constrained by the conditions in this license.</p>
+<p>Here is an example of such a notice and statement:</p>
+<p>  %% pig.dtx<br/>
+  %% Copyright 2003 M. Y. Name<br/>
+  %<br/>
+  % This work may be distributed and/or modified under the<br/>
+  % conditions of the LaTeX Project Public License, either version 1.3<br/>
+  % of this license or (at your option) any later version.<br/>
+  % The latest version of this license is in<br/>
+  %   http://www.latex-project.org/lppl.txt<br/>
+  % and version 1.3 or later is part of all distributions of LaTeX<br/>
+  % version 2003/12/01 or later.<br/>
+  %<br/>
+  % This work has the LPPL maintenance status &quot;maintained&quot;.<br/>
+  % <br/>
+  % This Current Maintainer of this work is M. Y. Name.<br/>
+  %<br/>
+  % This work consists of the files pig.dtx and pig.ins<br/>
+  % and the derived file pig.sty.</p>
+<p>Given such a notice and statement in a file, the conditions<br/>
+given in this license document would apply, with the `Work&apos; referring<br/>
+to the three files `pig.dtx&apos;, `pig.ins&apos;, and `pig.sty&apos; (the last being<br/>
+generated from `pig.dtx&apos; using `pig.ins&apos;), the `Base Interpreter&apos;<br/>
+referring to any &quot;LaTeX-Format&quot;, and both `Copyright Holder&apos; and<br/>
+`Current Maintainer&apos; referring to the person `M. Y. Name&apos;.</p>
+<p>If you do not want the Maintenance section of LPPL to apply to your<br/>
+Work, change &quot;maintained&quot; above into &quot;author-maintained&quot;.  <br/>
+However, we recommend that you use &quot;maintained&quot; as the Maintenance<br/>
+section was added in order to ensure that your Work remains useful to<br/>
+the community even when you can no longer maintain and support it<br/>
+yourself.</p>
+<p><br/>
+Important Recommendations<br/>
+-------------------------</p>
+<p> Defining What Constitutes the Work</p>
+<p>   The LPPL requires that distributions of the Work contain all the<br/>
+   files of the Work.  It is therefore important that you provide a<br/>
+   way for the licensee to determine which files constitute the Work.<br/>
+   This could, for example, be achieved by explicitly listing all the<br/>
+   files of the Work near the copyright notice of each file or by<br/>
+   using a line such as:</p>
+<p>    % This work consists of all files listed in manifest.txt.</p>
+<p>   in that place.  In the absence of an unequivocal list it might be<br/>
+   impossible for the licensee to determine what is considered by you<br/>
+   to comprise the Work and, in such a case, the licensee would be<br/>
+   entitled to make reasonable conjectures as to which files comprise<br/>
+   the Work.</p>
+</div>
+
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text">[filename]<br/>
+Copyright [year] [name]
+<p>This work may be distributed and/or modified under the conditions of the LaTeX Project Public License, either version 1.3<br/>
+of this license or (at your option) any later version.</p>
+<p>The latest version of this license is in<br/>
+http://www.latex-project.org/lppl.txt<br/>
+and version 1.3 or later is part of all distributions of LaTeX version 2003/12/01 or later.</p>
+<p>This work has the LPPL maintenance status &quot;maintained&quot;.</p>
+<p>This Current Maintainer of this work is [name].</p>
+<p>This work consists of the files [filename] and [filename] and the derived file [filename].</p></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">The LaTeX Project Public License<br/>
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+<p>LPPL Version 1.3a  2004-10-01</p>
+<p>Copyright 1999 2002-04 LaTeX3 Project<br/>
+    Everyone is allowed to distribute verbatim copies of this<br/>
+    license document, but modification of it is not allowed.</p>
+<p><br/>
+PREAMBLE<br/>
+========</p>
+<p>The LaTeX Project Public License (LPPL) is the primary license under<br/>
+which the the LaTeX kernel and the base LaTeX packages are distributed.</p>
+<p>You may use this license for any work of which you hold the copyright<br/>
+and which you wish to distribute.  This license may be particularly<br/>
+suitable if your work is TeX-related (such as a LaTeX package), but<br/>
+you may use it with small modifications even if your work is unrelated<br/>
+to TeX.</p>
+<p>The section `WHETHER AND HOW TO DISTRIBUTE WORKS UNDER THIS LICENSE&apos;,<br/>
+below, gives instructions, examples, and recommendations for authors<br/>
+who are considering distributing their works under this license.</p>
+<p>This license gives conditions under which a work may be distributed<br/>
+and modified, as well as conditions under which modified versions of<br/>
+that work may be distributed.</p>
+<p>We, the LaTeX3 Project, believe that the conditions below give you<br/>
+the freedom to make and distribute modified versions of your work<br/>
+that conform with whatever technical specifications you wish while<br/>
+maintaining the availability, integrity, and reliability of<br/>
+that work.  If you do not see how to achieve your goal while<br/>
+meeting these conditions, then read the document `cfgguide.tex&apos;<br/>
+and `modguide.tex&apos; in the base LaTeX distribution for suggestions.</p>
+<p><br/>
+DEFINITIONS<br/>
+===========</p>
+<p>In this license document the following terms are used:</p>
+<p>   `Work&apos;<br/>
+    Any work being distributed under this License.</p>
+<p>   `Derived Work&apos;<br/>
+    Any work that under any applicable law is derived from the Work.</p>
+<p>   `Modification&apos; <br/>
+    Any procedure that produces a Derived Work under any applicable<br/>
+    law -- for example, the production of a file containing an<br/>
+    original file associated with the Work or a significant portion of<br/>
+    such a file, either verbatim or with modifications and/or<br/>
+    translated into another language.</p>
+<p>   `Modify&apos;<br/>
+    To apply any procedure that produces a Derived Work under any<br/>
+    applicable law.</p>
+<p>   `Distribution&apos;<br/>
+    Making copies of the Work available from one person to another, in<br/>
+    whole or in part.  Distribution includes (but is not limited to)<br/>
+    making any electronic components of the Work accessible by<br/>
+    file transfer protocols such as FTP or HTTP or by shared file<br/>
+    systems such as Sun&apos;s Network File System (NFS).</p>
+<p>   `Compiled Work&apos;<br/>
+    A version of the Work that has been processed into a form where it<br/>
+    is directly usable on a computer system.  This processing may<br/>
+    include using installation facilities provided by the Work,<br/>
+    transformations of the Work, copying of components of the Work, or<br/>
+    other activities.  Note that modification of any installation<br/>
+    facilities provided by the Work constitutes modification of the Work.</p>
+<p>   `Current Maintainer&apos;<br/>
+    A person or persons nominated as such within the Work.  If there is<br/>
+    no such explicit nomination then it is the `Copyright Holder&apos; under<br/>
+    any applicable law.</p>
+<p>   `Base Interpreter&apos; <br/>
+    A program or process that is normally needed for running or<br/>
+    interpreting a part or the whole of the Work.    <br/>
+    A Base Interpreter may depend on external components but these<br/>
+    are not considered part of the Base Interpreter provided that each<br/>
+    external component clearly identifies itself whenever it is used<br/>
+    interactively.  Unless explicitly specified when applying the<br/>
+    license to the Work, the only applicable Base Interpreter is a<br/>
+    &quot;LaTeX-Format&quot;.</p>
+<p></p>
+<p>CONDITIONS ON DISTRIBUTION AND MODIFICATION<br/>
+===========================================</p>
+<p>1.  Activities other than distribution and/or modification of the Work<br/>
+are not covered by this license; they are outside its scope.  In<br/>
+particular, the act of running the Work is not restricted and no<br/>
+requirements are made concerning any offers of support for the Work.</p>
+<p>2.  You may distribute a complete, unmodified copy of the Work as you<br/>
+received it.  Distribution of only part of the Work is considered<br/>
+modification of the Work, and no right to distribute such a Derived<br/>
+Work may be assumed under the terms of this clause.</p>
+<p>3.  You may distribute a Compiled Work that has been generated from a<br/>
+complete, unmodified copy of the Work as distributed under Clause 2<br/>
+above, as long as that Compiled Work is distributed in such a way that<br/>
+the recipients may install the Compiled Work on their system exactly<br/>
+as it would have been installed if they generated a Compiled Work<br/>
+directly from the Work.</p>
+<p>4.  If you are the Current Maintainer of the Work, you may, without<br/>
+restriction, modify the Work, thus creating a Derived Work.  You may<br/>
+also distribute the Derived Work without restriction, including<br/>
+Compiled Works generated from the Derived Work.  Derived Works<br/>
+distributed in this manner by the Current Maintainer are considered to<br/>
+be updated versions of the Work.</p>
+<p>5.  If you are not the Current Maintainer of the Work, you may modify<br/>
+your copy of the Work, thus creating a Derived Work based on the Work,<br/>
+and compile this Derived Work, thus creating a Compiled Work based on<br/>
+the Derived Work.</p>
+<p>6.  If you are not the Current Maintainer of the Work, you may<br/>
+distribute a Derived Work provided the following conditions are met<br/>
+for every component of the Work unless that component clearly states<br/>
+in the copyright notice that it is exempt from that condition.  Only<br/>
+the Current Maintainer is allowed to add such statements of exemption <br/>
+to a component of the Work. </p>
+<p>  a. If a component of this Derived Work can be a direct replacement<br/>
+     for a component of the Work when that component is used with the<br/>
+     Base Interpreter, then, wherever this component of the Work<br/>
+     identifies itself to the user when used interactively with that<br/>
+     Base Interpreter, the replacement component of this Derived Work<br/>
+     clearly and unambiguously identifies itself as a modified version<br/>
+     of this component to the user when used interactively with that<br/>
+     Base Interpreter.</p>
+<p>  b. Every component of the Derived Work contains prominent notices<br/>
+     detailing the nature of the changes to that component, or a<br/>
+     prominent reference to another file that is distributed as part<br/>
+     of the Derived Work and that contains a complete and accurate log<br/>
+     of the changes.</p>
+<p>  c. No information in the Derived Work implies that any persons,<br/>
+     including (but not limited to) the authors of the original version<br/>
+     of the Work, provide any support, including (but not limited to)<br/>
+     the reporting and handling of errors, to recipients of the<br/>
+     Derived Work unless those persons have stated explicitly that<br/>
+     they do provide such support for the Derived Work.</p>
+<p>  d. You distribute at least one of the following with the Derived Work:</p>
+<p style="margin-left: 20px;">       1. A complete, unmodified copy of the Work; <br/>
+          if your distribution of a modified component is made by<br/>
+          offering access to copy the modified component from a<br/>
+          designated place, then offering equivalent access to copy<br/>
+          the Work from the same or some similar place meets this<br/>
+          condition, even though third parties are not compelled to<br/>
+          copy the Work along with the modified component;</p>
+<p style="margin-left: 20px;">       2. Information that is sufficient to obtain a complete, unmodified<br/>
+          copy of the Work.</p>
+<p>7.  If you are not the Current Maintainer of the Work, you may<br/>
+distribute a Compiled Work generated from a Derived Work, as long as<br/>
+the Derived Work is distributed to all recipients of the Compiled<br/>
+Work, and as long as the conditions of Clause 6, above, are met with<br/>
+regard to the Derived Work.</p>
+<p>8.  The conditions above are not intended to prohibit, and hence do<br/>
+not apply to, the modification, by any method, of any component so that it<br/>
+becomes identical to an  updated version of that component of the Work as<br/>
+it is distributed by the Current Maintainer under Clause 4, above.</p>
+<p>9.  Distribution of the Work or any Derived Work in an alternative<br/>
+format, where the Work or that Derived Work (in whole or in part) is<br/>
+then produced by applying some process to that format, does not relax or<br/>
+nullify any sections of this license as they pertain to the results of<br/>
+applying that process.</p>
+<p>10. a. A Derived Work may be distributed under a different license<br/>
+       provided that license itself honors the conditions listed in<br/>
+       Clause 6 above, in regard to the Work, though it does not have<br/>
+       to honor the rest of the conditions in this license.</p>
+<p>    b. If a Derived Work is distributed under this license, that<br/>
+       Derived Work must provide sufficient documentation as part of<br/>
+       itself to allow each recipient of that Derived Work to honor the <br/>
+       restrictions in Clause 6 above, concerning changes from the Work.</p>
+<p>11. This license places no restrictions on works that are unrelated to<br/>
+the Work, nor does this license place any restrictions on aggregating<br/>
+such works with the Work by any means.</p>
+<p>12.  Nothing in this license is intended to, or may be used to, prevent<br/>
+complete compliance by all parties with all applicable laws.</p>
+<p><br/>
+NO WARRANTY<br/>
+===========</p>
+<p>There is no warranty for the Work.  Except when otherwise stated in<br/>
+writing, the Copyright Holder provides the Work `as is&apos;, without<br/>
+warranty of any kind, either expressed or implied, including, but not<br/>
+limited to, the implied warranties of merchantability and fitness for<br/>
+a particular purpose.  The entire risk as to the quality and performance<br/>
+of the Work is with you.  Should the Work prove defective, you<br/>
+assume the cost of all necessary servicing, repair, or correction.</p>
+<p>In no event unless required by applicable law or agreed to in writing<br/>
+will The Copyright Holder, or any author named in the components of<br/>
+the Work, or any other party who may distribute and/or modify the Work<br/>
+as permitted above, be liable to you for damages, including any<br/>
+general, special, incidental or consequential damages arising out of<br/>
+any use of the Work or out of inability to use the Work (including,<br/>
+but not limited to, loss of data, data being rendered inaccurate, or<br/>
+losses sustained by anyone as a result of any failure of the Work to<br/>
+operate with any other programs), even if the Copyright Holder or said<br/>
+author or said other party has been advised of the possibility of such<br/>
+damages.</p>
+<p><br/>
+MAINTENANCE OF THE WORK<br/>
+=======================</p>
+<p>The Work has the status `author-maintained&apos; if the Copyright Holder<br/>
+explicitly and prominently states near the primary copyright notice in<br/>
+the Work that the Work can only be maintained by the Copyright Holder<br/>
+or simply that is `author-maintained&apos;.</p>
+<p>The Work has the status `maintained&apos; if there is a Current Maintainer<br/>
+who has indicated in the Work that they are willing to receive error<br/>
+reports for the Work (for example, by supplying a valid e-mail<br/>
+address). It is not required for the Current Maintainer to acknowledge<br/>
+or act upon these error reports.</p>
+<p>The Work changes from status `maintained&apos; to `unmaintained&apos; if there<br/>
+is no Current Maintainer, or the person stated to be Current<br/>
+Maintainer of the work cannot be reached through the indicated means<br/>
+of communication for a period of six months, and there are no other<br/>
+significant signs of active maintenance.</p>
+<p>You can become the Current Maintainer of the Work by agreement with<br/>
+any existing Current Maintainer to take over this role.</p>
+<p>If the Work is unmaintained, you can become the Current Maintainer of<br/>
+the Work through the following steps:</p>
+<p> 1.  Make a reasonable attempt to trace the Current Maintainer (and<br/>
+     the Copyright Holder, if the two differ) through the means of<br/>
+     an Internet or similar search.</p>
+<p> 2.  If this search is successful, then enquire whether the Work<br/>
+     is still maintained.</p>
+<p>  a. If it is being maintained, then ask the Current Maintainer<br/>
+     to update their communication data within one month.</p>
+<p>  b. If the search is unsuccessful or no action to resume active<br/>
+     maintenance is taken by the Current Maintainer, then announce<br/>
+     within the pertinent community your intention to take over<br/>
+     maintenance.  (If the Work is a LaTeX work, this could be<br/>
+     done, for example, by posting to comp.text.tex.)</p>
+<p> 3a. If the Current Maintainer is reachable and agrees to pass<br/>
+     maintenance of the Work to you, then this takes effect<br/>
+     immediately upon announcement.</p>
+<p>  b. If the Current Maintainer is not reachable and the Copyright<br/>
+     Holder agrees that maintenance of the Work be passed to you,<br/>
+     then this takes effect immediately upon announcement.  </p>
+<p> 4.  If you make an `intention announcement&apos; as described in 2b. above<br/>
+     and after three months your intention is challenged neither by<br/>
+     the Current Maintainer nor by the Copyright Holder nor by other<br/>
+     people, then you may arrange for the Work to be changed so as<br/>
+     to name you as the (new) Current Maintainer.</p>
+<p> 5.  If the previously unreachable Current Maintainer becomes<br/>
+     reachable once more within three months of a change completed<br/>
+     under the terms of 3b) or 4), then that Current Maintainer must<br/>
+     become or remain the Current Maintainer upon request provided<br/>
+     they then update their communication data within one month.</p>
+<p>A change in the Current Maintainer does not, of itself, alter the fact<br/>
+that the Work is distributed under the LPPL license.</p>
+<p>If you become the Current Maintainer of the Work, you should<br/>
+immediately provide, within the Work, a prominent and unambiguous<br/>
+statement of your status as Current Maintainer.  You should also<br/>
+announce your new status to the same pertinent community as<br/>
+in 2b) above.</p>
+<p><br/>
+WHETHER AND HOW TO DISTRIBUTE WORKS UNDER THIS LICENSE<br/>
+======================================================</p>
+<p>This section contains important instructions, examples, and<br/>
+recommendations for authors who are considering distributing their<br/>
+works under this license.  These authors are addressed as `you&apos; in<br/>
+this section.</p>
+<p>Choosing This License or Another License<br/>
+----------------------------------------</p>
+<p>If for any part of your work you want or need to use *distribution*<br/>
+conditions that differ significantly from those in this license, then<br/>
+do not refer to this license anywhere in your work but, instead,<br/>
+distribute your work under a different license.  You may use the text<br/>
+of this license as a model for your own license, but your license<br/>
+should not refer to the LPPL or otherwise give the impression that<br/>
+your work is distributed under the LPPL.</p>
+<p>The document `modguide.tex&apos; in the base LaTeX distribution explains<br/>
+the motivation behind the conditions of this license.  It explains,<br/>
+for example, why distributing LaTeX under the GNU General Public<br/>
+License (GPL) was considered inappropriate.  Even if your work is<br/>
+unrelated to LaTeX, the discussion in `modguide.tex&apos; may still be<br/>
+relevant, and authors intending to distribute their works under any<br/>
+license are encouraged to read it.</p>
+<p>A Recommendation on Modification Without Distribution<br/>
+-----------------------------------------------------</p>
+<p>It is wise never to modify a component of the Work, even for your own<br/>
+personal use, without also meeting the above conditions for<br/>
+distributing the modified component.  While you might intend that such<br/>
+modifications will never be distributed, often this will happen by<br/>
+accident -- you may forget that you have modified that component; or<br/>
+it may not occur to you when allowing others to access the modified<br/>
+version that you are thus distributing it and violating the conditions<br/>
+of this license in ways that could have legal implications and, worse,<br/>
+cause problems for the community.  It is therefore usually in your<br/>
+best interest to keep your copy of the Work identical with the public<br/>
+one.  Many works provide ways to control the behavior of that work<br/>
+without altering any of its licensed components.</p>
+<p>How to Use This License<br/>
+-----------------------</p>
+<p>To use this license, place in each of the components of your work both<br/>
+an explicit copyright notice including your name and the year the work<br/>
+was authored and/or last substantially modified.  Include also a<br/>
+statement that the distribution and/or modification of that<br/>
+component is constrained by the conditions in this license.</p>
+<p>Here is an example of such a notice and statement:</p>
+<p>  %% pig.dtx<br/>
+  %% Copyright 2003 M. Y. Name<br/>
+  %<br/>
+  % This work may be distributed and/or modified under the<br/>
+  % conditions of the LaTeX Project Public License, either version 1.3<br/>
+  % of this license or (at your option) any later version.<br/>
+  % The latest version of this license is in<br/>
+  %   http://www.latex-project.org/lppl.txt<br/>
+  % and version 1.3 or later is part of all distributions of LaTeX<br/>
+  % version 2003/12/01 or later.<br/>
+  %<br/>
+  % This work has the LPPL maintenance status &quot;maintained&quot;.<br/>
+  % <br/>
+  % This Current Maintainer of this work is M. Y. Name.<br/>
+  %<br/>
+  % This work consists of the files pig.dtx and pig.ins<br/>
+  % and the derived file pig.sty.</p>
+<p>Given such a notice and statement in a file, the conditions<br/>
+given in this license document would apply, with the `Work&apos; referring<br/>
+to the three files `pig.dtx&apos;, `pig.ins&apos;, and `pig.sty&apos; (the last being<br/>
+generated from `pig.dtx&apos; using `pig.ins&apos;), the `Base Interpreter&apos;<br/>
+referring to any &quot;LaTeX-Format&quot;, and both `Copyright Holder&apos; and<br/>
+`Current Maintainer&apos; referring to the person `M. Y. Name&apos;.</p>
+<p>If you do not want the Maintenance section of LPPL to apply to your<br/>
+Work, change &quot;maintained&quot; above into &quot;author-maintained&quot;.  <br/>
+However, we recommend that you use &quot;maintained&quot; as the Maintenance<br/>
+section was added in order to ensure that your Work remains useful to<br/>
+the community even when you can no longer maintain and support it<br/>
+yourself.</p>
+<p><br/>
+Important Recommendations<br/>
+-------------------------</p>
+<p> Defining What Constitutes the Work</p>
+<p>   The LPPL requires that distributions of the Work contain all the<br/>
+   files of the Work.  It is therefore important that you provide a<br/>
+   way for the licensee to determine which files constitute the Work.<br/>
+   This could, for example, be achieved by explicitly listing all the<br/>
+   files of the Work near the copyright notice of each file or by<br/>
+   using a line such as:</p>
+<p>    % This work consists of all files listed in manifest.txt.</p>
+<p>   in that place.  In the absence of an unequivocal list it might be<br/>
+   impossible for the licensee to determine what is considered by you<br/>
+   to comprise the Work and, in such a case, the licensee would be<br/>
+   entitled to make reasonable conjectures as to which files comprise<br/>
+   the Work.</p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
+  <div class="content">
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
+
+</div></div> <!-- /#page-inner, /#page -->
+
+</body>
+</html>

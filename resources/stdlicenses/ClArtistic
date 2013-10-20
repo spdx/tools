@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:dc="http://purl.org/dc/terms/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/rdf/terms#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>Clarified Artistic License</title>
-	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+    <title>Clarified Artistic License</title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
-	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
 <![endif]-->
-	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
 <!--[if IE 6]>
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
 <![endif]-->
   <script type="text/javascript">
 
@@ -41,28 +44,17 @@
 <div id="util_nav">
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 <div id="logo-title">
-	<div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-	<div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
 </div> <!-- /#logo-title -->
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -70,116 +62,90 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Clarified Artistic License</h1>
-<h2 id="information">Information</h2>
-<dl>
-	<dt>Full name</dt>
-	<dd property="rdfs:label">Clarified Artistic License</dd>
-	<dt>Short identifier</dt>
-	<dd><code property="spdx:licenseId">ClArtistic</code></dd>
-	<dt>Other web pages for this license</dt>
-	<dd>
-		<ul>
-							<li><a href="http://www.ncftp.com/ncftp/doc/LICENSE.txt" rel="owl:sameAs">http://www.ncftp.com/ncftp/doc/LICENSE.txt</a></li>
 
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">Clarified Artistic License</p></div>
 
-		</ul>
-	</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>None</p>
-<h2 id="licenseText">Text</h2>
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">ClArtistic</code></p>
+
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://www.ncftp.com/ncftp/doc/LICENSE.txt" rel="owl:sameAs">http://www.ncftp.com/ncftp/doc/LICENSE.txt</a></li>
+
+</p>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">None</p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-The Clarified Artistic License<br/>
-<br/>
-Preamble<br/>
-<br/>
-The intent of this document is to state the conditions under which a<br/>
+The Clarified Artistic License
+<p>Preamble</p>
+<p>The intent of this document is to state the conditions under which a<br/>
 Package may be copied, such that the Copyright Holder maintains some<br/>
 semblance of artistic control over the development of the package,<br/>
 while giving the users of the package the right to use and distribute<br/>
 the Package in a more-or-less customary fashion, plus the right to make<br/>
-reasonable modifications.<br/>
-<br/>
-Definitions:<br/>
-<br/>
- &quot;Package&quot; refers to the collection of files distributed by the<br/>
+reasonable modifications.</p>
+<p>Definitions:</p>
+<p> &quot;Package&quot; refers to the collection of files distributed by the<br/>
  Copyright Holder, and derivatives of that collection of files<br/>
- created through textual modification.<br/>
-<br/>
- &quot;Standard Version&quot; refers to such a Package if it has not been<br/>
+ created through textual modification.</p>
+<p> &quot;Standard Version&quot; refers to such a Package if it has not been<br/>
  modified, or has been modified in accordance with the wishes<br/>
- of the Copyright Holder as specified below.<br/>
-<br/>
- &quot;Copyright Holder&quot; is whoever is named in the copyright or<br/>
- copyrights for the package.<br/>
-<br/>
- &quot;You&quot; is you, if you&apos;re thinking about copying or distributing<br/>
- this Package.<br/>
-<br/>
- &quot;Distribution fee&quot; is a fee you charge for providing a copy<br/>
- of this Package to another party.<br/>
-<br/>
- &quot;Freely Available&quot; means that no fee is charged for the right to<br/>
+ of the Copyright Holder as specified below.</p>
+<p> &quot;Copyright Holder&quot; is whoever is named in the copyright or<br/>
+ copyrights for the package.</p>
+<p> &quot;You&quot; is you, if you&apos;re thinking about copying or distributing<br/>
+ this Package.</p>
+<p> &quot;Distribution fee&quot; is a fee you charge for providing a copy<br/>
+ of this Package to another party.</p>
+<p> &quot;Freely Available&quot; means that no fee is charged for the right to<br/>
  use the item, though there may be fees involved in handling the<br/>
  item.  It also means that recipients of the item may redistribute<br/>
- it under the same conditions they received it.<br/>
-<br/>
-1. You may make and give away verbatim copies of the source form of the<br/>
+ it under the same conditions they received it.</p>
+<p>1. You may make and give away verbatim copies of the source form of the<br/>
 Standard Version of this Package without restriction, provided that you<br/>
-duplicate all of the original copyright notices and associated disclaimers.<br/>
-<br/>
-2. You may apply bug fixes, portability fixes and other modifications<br/>
+duplicate all of the original copyright notices and associated disclaimers.</p>
+<p>2. You may apply bug fixes, portability fixes and other modifications<br/>
 derived from the Public Domain, or those made Freely Available, or from<br/>
 the Copyright Holder.  A Package modified in such a way shall still be<br/>
-considered the Standard Version.<br/>
-<br/>
-3. You may otherwise modify your copy of this Package in any way, provided<br/>
+considered the Standard Version.</p>
+<p>3. You may otherwise modify your copy of this Package in any way, provided<br/>
 that you insert a prominent notice in each changed file stating how and<br/>
 when you changed that file, and provided that you do at least ONE of the<br/>
-following:<br/>
-<br/>
-    a) place your modifications in the Public Domain or otherwise make them<br/>
+following:</p>
+<p>    a) place your modifications in the Public Domain or otherwise make them<br/>
     Freely Available, such as by posting said modifications to Usenet or an<br/>
     equivalent medium, or placing the modifications on a major network<br/>
     archive site allowing unrestricted access to them, or by allowing the<br/>
     Copyright Holder to include your modifications in the Standard Version<br/>
-    of the Package.<br/>
-<br/>
-    b) use the modified Package only within your corporation or organization.<br/>
-<br/>
-    c) rename any non-standard executables so the names do not conflict<br/>
+    of the Package.</p>
+<p>    b) use the modified Package only within your corporation or organization.</p>
+<p>    c) rename any non-standard executables so the names do not conflict<br/>
     with standard executables, which must also be provided, and provide<br/>
     a separate manual page for each non-standard executable that clearly<br/>
-    documents how it differs from the Standard Version.<br/>
-<br/>
-    d) make other distribution arrangements with the Copyright Holder.<br/>
-<br/>
-    e) permit and encourge anyone who receives a copy of the modified Package<br/>
+    documents how it differs from the Standard Version.</p>
+<p>    d) make other distribution arrangements with the Copyright Holder.</p>
+<p>    e) permit and encourge anyone who receives a copy of the modified Package<br/>
     permission to make your modifications Freely Available<br/>
-    in some specific way.<br/>
-<br/>
-<br/>
+    in some specific way.</p>
+<p><br/>
 4. You may distribute the programs of this Package in object code or<br/>
-executable form, provided that you do at least ONE of the following:<br/>
-<br/>
-    a) distribute a Standard Version of the executables and library files,<br/>
+executable form, provided that you do at least ONE of the following:</p>
+<p>    a) distribute a Standard Version of the executables and library files,<br/>
     together with instructions (in the manual page or equivalent) on where<br/>
-    to get the Standard Version.<br/>
-<br/>
-    b) accompany the distribution with the machine-readable source of<br/>
-    the Package with your modifications.<br/>
-<br/>
-    c) give non-standard executables non-standard names, and clearly<br/>
+    to get the Standard Version.</p>
+<p>    b) accompany the distribution with the machine-readable source of<br/>
+    the Package with your modifications.</p>
+<p>    c) give non-standard executables non-standard names, and clearly<br/>
     document the differences in manual pages (or equivalent), together<br/>
-    with instructions on where to get the Standard Version.<br/>
-<br/>
-    d) make other distribution arrangements with the Copyright Holder.<br/>
-<br/>
-    e) offer the machine-readable source of the Package, with your<br/>
-    modifications, by mail order.<br/>
-<br/>
-5. You may charge a distribution fee for any distribution of this Package.<br/>
+    with instructions on where to get the Standard Version.</p>
+<p>    d) make other distribution arrangements with the Copyright Holder.</p>
+<p>    e) offer the machine-readable source of the Package, with your<br/>
+    modifications, by mail order.</p>
+<p>5. You may charge a distribution fee for any distribution of this Package.<br/>
 If you offer support for this Package, you may charge any fee you choose<br/>
 for that support.  You may not charge a license fee for the right to use<br/>
 this Package itself.  You may distribute this Package in aggregate with<br/>
@@ -190,9 +156,8 @@ provided that you do not advertise this Package as a product of your own.<br/>
 If the Package includes an interpreter, You may embed this Package&apos;s<br/>
 interpreter within an executable of yours (by linking); this shall be<br/>
 construed as a mere form of aggregation, provided that the complete<br/>
-Standard Version of the interpreter is so embedded.<br/>
-<br/>
-6. The scripts and library files supplied as input to or produced as<br/>
+Standard Version of the interpreter is so embedded.</p>
+<p>6. The scripts and library files supplied as input to or produced as<br/>
 output from the programs of this Package do not automatically fall<br/>
 under the copyright of this Package, but belong to whoever generated<br/>
 them, and may be sold commercially, and may be aggregated with this<br/>
@@ -202,50 +167,229 @@ binary executable image, then distribution of such an image shall<br/>
 neither be construed as a distribution of this Package nor shall it<br/>
 fall under the restrictions of Paragraphs 3 and 4, provided that you do<br/>
 not represent such an executable image as a Standard Version of this<br/>
-Package.<br/>
-<br/>
-7. C subroutines (or comparably compiled subroutines in other<br/>
+Package.</p>
+<p>7. C subroutines (or comparably compiled subroutines in other<br/>
 languages) supplied by you and linked into this Package in order to<br/>
 emulate subroutines and variables of the language defined by this<br/>
 Package shall not be considered part of this Package, but are the<br/>
 equivalent of input as in Paragraph 6, provided these subroutines do<br/>
 not change the language in any way that would cause it to fail the<br/>
-regression tests for the language.<br/>
-<br/>
-8. Aggregation of the Standard Version of the Package with a commercial<br/>
+regression tests for the language.</p>
+<p>8. Aggregation of the Standard Version of the Package with a commercial<br/>
 distribution is always permitted provided that the use of this Package<br/>
 is embedded; that is, when no overt attempt is made to make this Package&apos;s<br/>
 interfaces visible to the end user of the commercial distribution.<br/>
-Such use shall not be construed as a distribution of this Package.<br/>
-<br/>
-9. The name of the Copyright Holder may not be used to endorse or promote<br/>
-products derived from this software without specific prior written permission.<br/>
-<br/>
-10. THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT ANY EXPRESS OR<br/>
+Such use shall not be construed as a distribution of this Package.</p>
+<p>9. The name of the Copyright Holder may not be used to endorse or promote<br/>
+products derived from this software without specific prior written permission.</p>
+<p>10. THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT ANY EXPRESS OR<br/>
 IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED<br/>
-WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.<br/>
-<br/>
-The End
+WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p>
+<p>The End</p>
 </div>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text"></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">The Clarified Artistic License
+<p>Preamble</p>
+<p>The intent of this document is to state the conditions under which a<br/>
+Package may be copied, such that the Copyright Holder maintains some<br/>
+semblance of artistic control over the development of the package,<br/>
+while giving the users of the package the right to use and distribute<br/>
+the Package in a more-or-less customary fashion, plus the right to make<br/>
+reasonable modifications.</p>
+<p>Definitions:</p>
+<p> &quot;Package&quot; refers to the collection of files distributed by the<br/>
+ Copyright Holder, and derivatives of that collection of files<br/>
+ created through textual modification.</p>
+<p> &quot;Standard Version&quot; refers to such a Package if it has not been<br/>
+ modified, or has been modified in accordance with the wishes<br/>
+ of the Copyright Holder as specified below.</p>
+<p> &quot;Copyright Holder&quot; is whoever is named in the copyright or<br/>
+ copyrights for the package.</p>
+<p> &quot;You&quot; is you, if you&apos;re thinking about copying or distributing<br/>
+ this Package.</p>
+<p> &quot;Distribution fee&quot; is a fee you charge for providing a copy<br/>
+ of this Package to another party.</p>
+<p> &quot;Freely Available&quot; means that no fee is charged for the right to<br/>
+ use the item, though there may be fees involved in handling the<br/>
+ item.  It also means that recipients of the item may redistribute<br/>
+ it under the same conditions they received it.</p>
+<p>1. You may make and give away verbatim copies of the source form of the<br/>
+Standard Version of this Package without restriction, provided that you<br/>
+duplicate all of the original copyright notices and associated disclaimers.</p>
+<p>2. You may apply bug fixes, portability fixes and other modifications<br/>
+derived from the Public Domain, or those made Freely Available, or from<br/>
+the Copyright Holder.  A Package modified in such a way shall still be<br/>
+considered the Standard Version.</p>
+<p>3. You may otherwise modify your copy of this Package in any way, provided<br/>
+that you insert a prominent notice in each changed file stating how and<br/>
+when you changed that file, and provided that you do at least ONE of the<br/>
+following:</p>
+<p>    a) place your modifications in the Public Domain or otherwise make them<br/>
+    Freely Available, such as by posting said modifications to Usenet or an<br/>
+    equivalent medium, or placing the modifications on a major network<br/>
+    archive site allowing unrestricted access to them, or by allowing the<br/>
+    Copyright Holder to include your modifications in the Standard Version<br/>
+    of the Package.</p>
+<p>    b) use the modified Package only within your corporation or organization.</p>
+<p>    c) rename any non-standard executables so the names do not conflict<br/>
+    with standard executables, which must also be provided, and provide<br/>
+    a separate manual page for each non-standard executable that clearly<br/>
+    documents how it differs from the Standard Version.</p>
+<p>    d) make other distribution arrangements with the Copyright Holder.</p>
+<p>    e) permit and encourge anyone who receives a copy of the modified Package<br/>
+    permission to make your modifications Freely Available<br/>
+    in some specific way.</p>
+<p><br/>
+4. You may distribute the programs of this Package in object code or<br/>
+executable form, provided that you do at least ONE of the following:</p>
+<p>    a) distribute a Standard Version of the executables and library files,<br/>
+    together with instructions (in the manual page or equivalent) on where<br/>
+    to get the Standard Version.</p>
+<p>    b) accompany the distribution with the machine-readable source of<br/>
+    the Package with your modifications.</p>
+<p>    c) give non-standard executables non-standard names, and clearly<br/>
+    document the differences in manual pages (or equivalent), together<br/>
+    with instructions on where to get the Standard Version.</p>
+<p>    d) make other distribution arrangements with the Copyright Holder.</p>
+<p>    e) offer the machine-readable source of the Package, with your<br/>
+    modifications, by mail order.</p>
+<p>5. You may charge a distribution fee for any distribution of this Package.<br/>
+If you offer support for this Package, you may charge any fee you choose<br/>
+for that support.  You may not charge a license fee for the right to use<br/>
+this Package itself.  You may distribute this Package in aggregate with<br/>
+other (possibly commercial and possibly nonfree) programs as part of a<br/>
+larger (possibly commercial and possibly nonfree) software distribution,<br/>
+and charge license fees for other parts of that software distribution,<br/>
+provided that you do not advertise this Package as a product of your own.<br/>
+If the Package includes an interpreter, You may embed this Package&apos;s<br/>
+interpreter within an executable of yours (by linking); this shall be<br/>
+construed as a mere form of aggregation, provided that the complete<br/>
+Standard Version of the interpreter is so embedded.</p>
+<p>6. The scripts and library files supplied as input to or produced as<br/>
+output from the programs of this Package do not automatically fall<br/>
+under the copyright of this Package, but belong to whoever generated<br/>
+them, and may be sold commercially, and may be aggregated with this<br/>
+Package.  If such scripts or library files are aggregated with this<br/>
+Package via the so-called &quot;undump&quot; or &quot;unexec&quot; methods of producing a<br/>
+binary executable image, then distribution of such an image shall<br/>
+neither be construed as a distribution of this Package nor shall it<br/>
+fall under the restrictions of Paragraphs 3 and 4, provided that you do<br/>
+not represent such an executable image as a Standard Version of this<br/>
+Package.</p>
+<p>7. C subroutines (or comparably compiled subroutines in other<br/>
+languages) supplied by you and linked into this Package in order to<br/>
+emulate subroutines and variables of the language defined by this<br/>
+Package shall not be considered part of this Package, but are the<br/>
+equivalent of input as in Paragraph 6, provided these subroutines do<br/>
+not change the language in any way that would cause it to fail the<br/>
+regression tests for the language.</p>
+<p>8. Aggregation of the Standard Version of the Package with a commercial<br/>
+distribution is always permitted provided that the use of this Package<br/>
+is embedded; that is, when no overt attempt is made to make this Package&apos;s<br/>
+interfaces visible to the end user of the commercial distribution.<br/>
+Such use shall not be construed as a distribution of this Package.</p>
+<p>9. The name of the Copyright Holder may not be used to endorse or promote<br/>
+products derived from this software without specific prior written permission.</p>
+<p>10. THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT ANY EXPRESS OR<br/>
+IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED<br/>
+WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p>
+<p>The End</p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> | <a href="/codeOfConduct">Code of Conduct</a> | <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
 
 </div></div> <!-- /#page-inner, /#page -->
 
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 </body>
 </html>

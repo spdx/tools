@@ -1,24 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:dc="http://purl.org/dc/terms/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:spdx="http://spdx.org/rdf/terms#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-	<title>GNU General Public License v2.0 w/Autoconf exception</title>
-	<link rel="shortcut icon" href="/sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
+    <title>GNU General Public License v2.0 w/Autoconf exception</title>
+    
+    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
-	<script type="text/javascript" src="/sites/all/themes/spdx/suckerfish.js"></script>
+    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
 <![endif]-->
-	<link rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/universe_nav.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/style.css?a" />
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/zen.css?a" />
+    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
+
+
 <!--[if IE 6]>
-	<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/spdx/ie6.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
 <![endif]-->
   <script type="text/javascript">
 
@@ -41,28 +44,17 @@
 <div id="util_nav">
  <ul class="inline_list list_icon float_left" style="padding-top:2px;">
         <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px; padding-right:4px; border-right:1px solid;"><a href="https://fossbazaar.org/" class="" style="background:0; padding-right:0">FOSSBAZAAR</a></li>
         <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
  </ul>
 </div> <!-- close util_nav -->
 <div id="logo-title">
-	<div id="logo"><a href="/" title="Home" rel="home"><img src="/images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-	<div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-	<div id="site-slogan">Software Package Data Exchange<sup>TM</sup></div>
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
+    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
+    <div id="site-slogan">Software Package Data Exchange®</div>
 </div> <!-- /#logo-title -->
 <br />
 <br />
 
-<div id="tabs">
-<div id="block-menu_block-2" class="block block-menu_block">
-<ul class="menu">
-<li><a href='/spdx' title='Home' id='activetab'><span>Home</span></a></li>
-<li><a href='/spec' title='Specification'><span>Specification</span></a></li>
-<li><a href='/wiki/spdx' title='Participation'><span>Participation</span></a></li>
-<li><a href='/blog' title='Blog'><span>Blog</span></a></li>
-<li><a href='/about/spdx' title='Organization'><span>Organization</span></a></li>
-</ul>
-</div>
 </div>
 
 </div></div> <!-- /#header-inner, /#header -->
@@ -70,57 +62,132 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">GNU General Public License v2.0 w/Autoconf exception</h1>
-<h2 id="information">Information</h2>
-<dl>
-	<dt>Full name</dt>
-	<dd property="rdfs:label">GNU General Public License v2.0 w/Autoconf exception</dd>
-	<dt>Short identifier</dt>
-	<dd><code property="spdx:licenseId">GPL-2.0-with-autoconf-exception</code></dd>
-	<dt>Other web pages for this license</dt>
-	<dd>
-		<ul>
-							<li><a href="none" rel="owl:sameAs">none</a></li>
 
-				<li><a href="found" rel="owl:sameAs">found</a></li>
+<h2 style="color: #003F69;">Full name</h2>
+    <div property="rdfs:label"><p style="margin-left: 20px;">GNU General Public License v2.0 w/Autoconf exception</p></div>
 
+<h2 style="color: #003F69;">Short identifier</h2>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">GPL-2.0-with-autoconf-exception</code></p>
 
-		</ul>
-	</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>None</p>
-<h2 id="licenseText">Text</h2>
+<h2 style="color: #003F69;">Other web pages for this license</h2>
+    <p style="margin-left: 20px;">				<li><a href="http://ac-archive.sourceforge.net/doc/copyright.html" rel="owl:sameAs">http://ac-archive.sourceforge.net/doc/copyright.html</a></li>
+
+</p>
+
+<h2 style="color: #003F69;" id="notes">Notes</h2>
+    <p style="margin-left: 20px;">None</p>
+
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-﻿insert GPL v2 license text here<br/>
-<br/>
-Autoconf Exception<br/>
-<br/>
-As a special exception, the Free Software Foundation gives unlimited permission to copy, distribute and modify the configure scripts that are the output of Autoconf. You need not follow the terms of the GNU General Public License when using or distributing such scripts, even though portions of the text of Autoconf appear in them. The GNU General Public License (GPL) does govern all other use of the material that constitutes the Autoconf program.<br/>
-<br/>
-Certain portions of the Autoconf source text are designed to be copied (in certain cases, depending on the input) into the output of Autoconf. We call these the &quot;data&quot; portions. The rest of the Autoconf source text consists of comments plus executable code that decides which of the data portions to output in any given case. We call these comments and executable code the &quot;non-data&quot; portions. Autoconf never copies any of the non-data portions into its output.<br/>
-<br/>
-This special exception to the GPL applies to versions of Autoconf released by the Free Software Foundation. When you make and distribute a modified version of Autoconf, you may extend this special exception to the GPL to apply to your modified version as well, *unless* your modified version has the potential to copy into its output some of the text that was the non-data portion of the version that you started with. (In other words, unless your change moves or copies text from the non-data portions to the data portions.) If your modification has such potential, you must delete any notice of this special exception to the GPL from your modified version.
+﻿insert GPL v2 license text here
+<p>Autoconf Exception</p>
+<p>As a special exception, the Free Software Foundation gives unlimited permission to copy, distribute and modify the configure scripts that are the output of Autoconf. You need not follow the terms of the GNU General Public License when using or distributing such scripts, even though portions of the text of Autoconf appear in them. The GNU General Public License (GPL) does govern all other use of the material that constitutes the Autoconf program.</p>
+<p>Certain portions of the Autoconf source text are designed to be copied (in certain cases, depending on the input) into the output of Autoconf. We call these the &quot;data&quot; portions. The rest of the Autoconf source text consists of comments plus executable code that decides which of the data portions to output in any given case. We call these comments and executable code the &quot;non-data&quot; portions. Autoconf never copies any of the non-data portions into its output.</p>
+<p>This special exception to the GPL applies to versions of Autoconf released by the Free Software Foundation. When you make and distribute a modified version of Autoconf, you may extend this special exception to the GPL to apply to your modified version as well, *unless* your modified version has the potential to copy into its output some of the text that was the non-data portion of the version that you started with. (In other words, unless your change moves or copies text from the non-data portions to the data portions.) If your modification has such potential, you must delete any notice of this special exception to the GPL from your modified version.</p>
 </div>
 
-<div id="footer"><div id="footer-inner" class="region region-footer">
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text"></div>
+
+<!--
+<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
+<div property="spdx:licenseTemplate" class="license-template">﻿insert GPL v2 license text here
+<p>Autoconf Exception</p>
+<p>As a special exception, the Free Software Foundation gives unlimited permission to copy, distribute and modify the configure scripts that are the output of Autoconf. You need not follow the terms of the GNU General Public License when using or distributing such scripts, even though portions of the text of Autoconf appear in them. The GNU General Public License (GPL) does govern all other use of the material that constitutes the Autoconf program.</p>
+<p>Certain portions of the Autoconf source text are designed to be copied (in certain cases, depending on the input) into the output of Autoconf. We call these the &quot;data&quot; portions. The rest of the Autoconf source text consists of comments plus executable code that decides which of the data portions to output in any given case. We call these comments and executable code the &quot;non-data&quot; portions. Autoconf never copies any of the non-data portions into its output.</p>
+<p>This special exception to the GPL applies to versions of Autoconf released by the Free Software Foundation. When you make and distribute a modified version of Autoconf, you may extend this special exception to the GPL to apply to your modified version as well, *unless* your modified version has the potential to copy into its output some of the text that was the non-data portion of the version that you started with. (In other words, unless your change moves or copies text from the non-data portions to the data portions.) If your modification has such potential, you must delete any notice of this special exception to the GPL from your modified version.</p></div> -->
+
+    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
+  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
+  
   <div class="content">
-    <p><a href="/about/spdx">About SPDX</a> |  <a href="/about/spdx/contact">Contact Us</a> | <a href="/codeOfConduct">Code of Conduct</a> | <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.linuxfoundation.org/terms">Terms of Use</a></p>
+    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
+<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
   </div>
 
-</div></div> <!-- /#footer-inner, /#footer -->
+  </div><!-- /.block -->
+<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
+      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
+  
+  <div class="content">
+    <ul style="list-style:none;margin:0px;padding:0px;">
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
+<li>
+        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
+</ul>
+  </div>
+
+  </div><!-- /.block -->
+</div><!-- /.region -->
+      <div class="clearfix"></div>
+
+    </div>
+
+
+<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
+<div class="section">
+
+        
+<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
+reserved.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+
+<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
+        
+        
+      </div>
+
+</div> <!-- /#footer-inner, /#footer -->
 
 </div></div> <!-- /#page-inner, /#page -->
 
-  <div id="foot">
-    <p>
-      &#169; 2008-2011 The Linux Foundation.  Linux is a registered trademark of Linus Torvalds.
-      <br />
-      Software Package Data Exchange and SPDX are trademarks of the Linux Foundation.
-      <br />
-      Please see our <a href = "/codeOfConduct">code of conduct</a> and
-      <a href = "http://www.linuxfoundation.org/privacy">privacy policy</a>.
-    </p>
-  </div>
 </body>
 </html>
