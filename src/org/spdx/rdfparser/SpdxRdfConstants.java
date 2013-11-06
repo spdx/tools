@@ -132,7 +132,8 @@ public interface SpdxRdfConstants {
 	public static final String PROP_STD_LICENSE_NOTES_VERSION_1 = "licenseNotes";	// old property name (pre 1.1 spec)
 	public static final String PROP_STD_LICENSE_HEADER_VERSION_1 = "licenseHeader";	// old property name (pre 1.1 spec)
 	public static final String PROP_STD_LICENSE_NOTICE = "standardLicenseHeader";	
-	public static final String PROP_STD_LICENSE_TEMPLATE = "licenseTemplate";	//TODO: replace with actual property
+	public static final String PROP_STD_LICENSE_TEMPLATE_VERSION_1 = "licenseTemplate";		// old property name (pre 1.2 spec)
+	public static final String PROP_STD_LICENSE_TEMPLATE = "standardLicenseTemplate";
 	public static final String PROP_STD_LICENSE_OSI_APPROVED = "isOsiApproved";
 	public static final String PROP_STD_LICENSE_OSI_APPROVED_VERSION_1 = "licenseOsiApproved";	// old property name (pre 1.1 spec)
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";

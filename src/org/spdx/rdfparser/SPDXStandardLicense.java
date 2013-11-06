@@ -120,7 +120,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 
 		// SourceUrl/seeAlso
 		ArrayList<String> alsourceUrls = new ArrayList<String>();
-		p = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
+		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -188,7 +188,22 @@ public class SPDXStandardLicense extends SPDXLicense {
 				this.template = SpdxLicenseTemplateHelper.HtmlToText(this.template);
 			}
 		} else {
-			this.template = null;
+			// try version 1
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE_VERSION_1).asNode();
+			m = Triple.createMatch(licenseNode, p, null);
+			tripleIter = model.getGraph().find(m);	
+			if (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				this.template = t.getObject().toString(false);
+				if (template.endsWith(XML_LITERAL)) {
+					this.template = this.template.substring(0, this.template.length()-XML_LITERAL.length());
+				}
+				if (this.templateInHtml) {
+					this.template = SpdxLicenseTemplateHelper.HtmlToText(this.template);
+				}
+			} else {
+				this.template = null;
+			}
 		}
 		// OSI Approved
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED).asNode();
@@ -361,7 +376,9 @@ public class SPDXStandardLicense extends SPDXLicense {
 		this.template = template;
 		if (this.licenseInfoNode != null) {
 			// delete any previous created
-			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE_VERSION_1);
+			model.removeAll(resource, p, null);
+			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
 			model.removeAll(resource, p, null);
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);

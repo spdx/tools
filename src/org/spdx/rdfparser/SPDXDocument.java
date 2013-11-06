@@ -59,7 +59,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.2";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.0";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.1";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	

@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +36,7 @@ import sun.nio.cs.StandardCharsets;
 import com.google.common.io.Files;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.FileManager;
 
@@ -167,6 +169,42 @@ public class TestSPDXLicenseInfoFactory {
 	}
 	
 	@Test
+	public void testLocalUri() throws IOException {
+		String id = "BSD-3-Clause";
+		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
+		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
+		byte[] buf = new byte[2048];
+
+		InputStream in = FileManager.get().open(stdLicUri);
+		try {
+			int readLen = in.read(buf, 0, 2048);
+			assertTrue(readLen > 0);
+		} finally {
+			in.close();
+		}
+	}
+	
+	@Test
+	public void testParseLocalUri() throws IOException, ClassNotFoundException {
+		Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+		String id = "BSD-3-Clause";
+		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
+		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
+		String prefix = "http://spdx.org/licenses/BSD-3-Clause";
+		InputStream in = FileManager.get().open(stdLicUri);
+		try {
+			Model retval = ModelFactory.createDefaultModel();
+			retval.read(in, prefix, "HTML");
+			StringWriter writer = new StringWriter();
+			retval.write(writer);
+			Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
+			assertTrue(retval.contains(null, p));
+			
+		} finally {
+			in.close();
+		}
+	}
+	@Test
 	public void testGetLicenseFromStdLicModel() throws InvalidSPDXAnalysisException, IOException {
 		String id = "BSD-3-Clause";
 		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
@@ -202,20 +240,35 @@ public class TestSPDXLicenseInfoFactory {
 		String[] s1lines = s1.split("\n");
 		String[] s2lines = s2.split("\n");
 		int i = 0;
-		while (i < s1lines.length && i < s2lines.length) {
-			int result = s1lines[i].trim().compareTo(s2lines[i].trim());
-			if (result != 0) {
-				return result;
+		int j = 0;
+		while (i < s1lines.length && j < s2lines.length) {
+			if (s1lines[i].trim().isEmpty()) {
+				i++;
 			}
-			i++;
+			else if (s2lines[j].trim().isEmpty()) {
+				j++;
+			} else {
+				int result = s1lines[i++].trim().compareTo(s2lines[j++].trim());
+				if (result != 0) {
+					return result;
+				}
+			}
 		}
-		if (s1lines.length > s2lines.length) {
-			return 1;
-		} else if (s1lines.length < s2lines.length) {
-			return -1;
-		} else {
-			return 0;
+		if (i < s1lines.length) {
+			for (int ii = i; ii < s1lines.length; ii++) {
+				if (!s1lines[ii].trim().isEmpty()) {
+					return 1;
+				}
+			}
 		}
+		if (j < s2lines.length) {
+			for (int jj = j; jj < s2lines.length; jj++) {
+				if (!s2lines[jj].trim().isEmpty()) {
+					return -1;
+				}
+			}
+		}
+		return 0;
 	}
 
 	/**
