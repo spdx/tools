@@ -43,10 +43,11 @@ public class LicenseHTMLFile {
 	static final String NOTES = "[NOTES]";
 	static final String OTHERWEBPAGE = "[OTHERWEBPAGE]";
 	static final String OTHER_WEB_PAGE_ROW = 
-		"				<li><a href=\""+WEBURL+"\" rel=\"owl:sameAs\">"+SITE+"</a></li>\n";
+		"				<li><a href=\""+WEBURL+"\" rel=\"rdfs:seeAlso\">"+SITE+"</a></li>\n";
 	static final String LICENSE_TEXT = "[LICENSE_TEXT]";
 	static final String TEMPLATE = "[LICENSE_TEMPLATE]";
 	static final String HEADER = "[LICENSE_HEADER]";
+	static final String OSI_APPROVED = "[OSI_APPROVED]";
 	static final Pattern SITE_PATTERN = Pattern.compile("http://(.*)\\.(.*)(\\.org|\\.com|\\.net|\\.info)");
 	
 	private String template;
@@ -112,6 +113,11 @@ public class LicenseHTMLFile {
 				notes = "None";
 			}
 			htmlText = htmlText.replace(NOTES, notes);
+			String osiApproved = "false";
+			if (license.isOsiApproved()) {
+				osiApproved = "true";
+			}
+			htmlText = htmlText.replace(OSI_APPROVED, osiApproved);
 			String otherWebPages;
 			if (license.getSourceUrl() != null && license.getSourceUrl().length > 0) {
 				StringBuilder sb = new StringBuilder();

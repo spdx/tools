@@ -193,11 +193,12 @@ public class SPDXLicenseInfoFactory {
 		if (STANDARD_LICENSES.containsKey(id)) {
 			return STANDARD_LICENSES.get(id);
 		}
-		Model licenseModel = getLicenseModel(uri);
+		String base = STANDARD_LICENSE_ID_URL + id;
+		Model licenseModel = getLicenseModel(uri, base);
 		if (licenseModel == null) {
 			throw(new InvalidSPDXAnalysisException("No standard license was found at "+uri));
 		}
-		Resource licResource = licenseModel.getResource(uri);
+		Resource licResource = licenseModel.getResource(base);
 		if (licResource == null || !licenseModel.containsResource(licenseModel.asRDFNode(licResource.asNode()))) {
 			throw(new InvalidSPDXAnalysisException("No standard license was found at "+uri));
 		}
@@ -207,11 +208,12 @@ public class SPDXLicenseInfoFactory {
 	}
 
 	/**
-	 * @param uri
+	 * @param uri - URI of the actual resource
+	 * @param base - base for any fragments present in the license model
 	 * @return
 	 * @throws NoStandardLicenseRdfModel 
 	 */
-	private static Model getLicenseModel(String uri) throws NoStandardLicenseRdfModel {
+	private static Model getLicenseModel(String uri, String base) throws NoStandardLicenseRdfModel {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {
@@ -219,15 +221,13 @@ public class SPDXLicenseInfoFactory {
 		}  
 		Model retval = ModelFactory.createDefaultModel();
 		InputStream in = null;
-		String prefix = null;
 		try {
 			try {
-				prefix = uri;
 				if (!onlyUseLocalLicenses) {
 				    in = FileManager.get().open(uri);
 					try {
-						retval.read(in, prefix, "HTML");
-						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
+						retval.read(in, base, "HTML");
+						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 				    	if (retval.isEmpty() || !retval.contains(null, p)) {
 					    	try {
 								in.close();
@@ -240,6 +240,7 @@ public class SPDXLicenseInfoFactory {
 
 						if (in != null) {
 							in.close();
+							in = null;
 						}
 					}
 				}
@@ -254,10 +255,14 @@ public class SPDXLicenseInfoFactory {
 //				prefix = "file://"+fileName.replace("\\", "/");
 				in = FileManager.get().open(fileName);
 				if (in == null) {
-					throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
+					fileName = fileName.replace("\\", "/");
+					in = FileManager.get().open(fileName);
+					if (in == null) {
+						throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
+					}
 				}
 				try {
-					retval.read(in, prefix, "HTML");
+					retval.read(in, base, "HTML");
 				} catch(Exception ex) {
 					throw(new NoStandardLicenseRdfModel("Error reading the standard licenses: "+ex.getMessage(),ex));
 				}
@@ -310,14 +315,17 @@ public class SPDXLicenseInfoFactory {
 					}
 			    	licRdfInput = null;
 		    	}
-		    }
-		    catch(Exception ex) {
-	    	try {
-				licRdfInput.close();
-			} catch (IOException e) {
-				logger.warn("Error closing standard license input");
-			}
-	    	licRdfInput = null;			    }
+		    } catch(Exception ex) {	    	
+	    		logger.warn("Exception loading standard licenses: "+ex.getMessage());
+	    		if (licRdfInput != null) {
+	    			try {
+	    				licRdfInput.close();
+	    			} catch (IOException e) {
+	    				logger.warn("Error closing standard license input");
+	    			}
+	    			licRdfInput = null;	
+	    		}
+	    	}
 	    }	
 		try {
 			if (licRdfInput == null) {

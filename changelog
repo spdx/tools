@@ -1,3 +1,6 @@
+Implementation version 1.2.1
+- Fixed null pointer exception when unable to connect to the SPDX standard license list website
+- changed property name for standard license template to match spec (from licenseTemplate to standardLicenseTemplate)
 Implementation version 1.2.0
 - Added support for spec version 1.2
   - Added fileDependency property to SPDXFile (RDF, tag, Spreadsheet, comparer)
