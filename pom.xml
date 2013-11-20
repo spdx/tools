@@ -106,6 +106,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -120,7 +121,15 @@
 					<include>**/*</include>
 				</includes>
 			</resource>
-
+			<resource>
+				<targetPath>META-INF</targetPath>
+				<filtering>false</filtering>
+				<directory>.</directory>
+				<includes>
+					<include>NOTICE</include>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
 			<resource>
 				<directory>src</directory>
 				<excludes>
@@ -171,7 +180,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.spdx.rdfparser.LicenseRDFAGenerator</mainClass>
+							<mainClass>org.spdx.rdfparser.PrettyPrinter</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -188,8 +197,36 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<quiet>true</quiet>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-
-
 	</build>
 </project>
