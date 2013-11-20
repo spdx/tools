@@ -1,14 +1,4 @@
 - check TestFiles/spdx_licenselist_v1.19.xls difference to released version
-- start tools by cmdline parameter with a single Main, e.g.
-    java -jar spdx-tools-x.x.x-SNAPSHOT-jar-with-dependencies.jar <function> <parameters>
-
-    function                parameter
-    ---------------------------------------------------------
-    TagToSpreadsheet        spdxfile.spdx spreadsheetfile.xls
-    TagToRDF                spdxfile.spdx rdfxmlfile.rdf
-    RdfToTag                rdfxmlfile.rdf spdxfile.spdx
-    RdfToHtml               rdfxmlfile.rdf htmlfile.html
-    SPDXViewer              file
-    PrettyPrinter           file
-    CompareMultipleSpdxDoc  output.xls doc1 doc2 ... docN
-    CompareSpdxDoc          doc1 doc2 [output]");
+- cleanup licensing
+- provide webservice
+- provide a spdx file
