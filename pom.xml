@@ -180,7 +180,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.spdx.rdfparser.PrettyPrinter</mainClass>
+							<mainClass>org.spdx.tools.PrettyPrinter</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

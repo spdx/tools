@@ -15,11 +15,14 @@
  *   limitations under the License.
  *
 */
-package org.spdx.compare;
+package org.spdx.tools;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import org.spdx.compare.MultiDocumentSpreadsheet;
+import org.spdx.compare.SpdxCompareException;
+import org.spdx.compare.SpdxComparer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.spdxspreadsheet.SpreadsheetException;

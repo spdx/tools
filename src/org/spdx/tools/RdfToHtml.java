@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.html;
+package org.spdx.tools;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 
+import org.spdx.html.MustacheMap;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
