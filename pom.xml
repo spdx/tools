@@ -128,6 +128,8 @@
 				<includes>
 					<include>NOTICE</include>
 					<include>LICENSE</include>
+					<include>README.txt</include>
+					<include>changelog</include>
 				</includes>
 			</resource>
 			<resource>
@@ -180,7 +182,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.spdx.tools.PrettyPrinter</mainClass>
+							<mainClass>org.spdx.tools.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
