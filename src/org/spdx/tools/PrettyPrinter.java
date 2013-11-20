@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
  */
-package org.spdx.rdfparser;import java.util.ArrayList;import org.spdx.rdfparser.SPDXDocument.SPDXPackage;/**
+package org.spdx.tools;import java.util.ArrayList;import org.spdx.rdfparser.DOAPProject;import org.spdx.rdfparser.InvalidSPDXAnalysisException;import org.spdx.rdfparser.SPDXDocument;import org.spdx.rdfparser.SPDXDocument.SPDXPackage;import org.spdx.rdfparser.SPDXDocumentFactory;import org.spdx.rdfparser.SPDXFile;import org.spdx.rdfparser.SPDXLicenseInfo;import org.spdx.rdfparser.SPDXNonStandardLicense;import org.spdx.rdfparser.SPDXReview;import org.spdx.rdfparser.SPDXStandardLicense;/**
  * Simple pretty printer for SPDX RDF XML files.  Writes output to System.out.
  * Usage: PrettyPrinter SPDXRdfXMLFile > textFile
  * where SPDXRdfXMLFile is a valid SPDX RDF XML file
