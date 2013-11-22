@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: org.spdx.rdfparser.PrettyPrinter
-Class-Path: jena-2.6.3/lib/wstx-asl-3.2.9.jar jena-2.6.3/lib/stax-api-1.0.1.jar jena-2.6.3/lib/lucene-core-2.3.1.jar jena-2.6.3/lib/arq-2.8.4.jar jena-2.6.3/lib/icu4j-3.4.4.jar jena-2.6.3/lib/iri-0.8.jar jena-2.6.3/lib/xercesImpl-2.7.1.jar jena-2.6.3/lib/log4j-1.2.13.jar jena-2.6.3/lib/slf4j-log4j12-1.5.8.jar jena-2.6.3/lib/slf4j-api-1.5.8.jar jena-2.6.3/lib/jena-2.6.3.jar
