@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
  */
-package org.spdx.spdxspreadsheet;
+package org.spdx.tools;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +32,17 @@ import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
+import org.spdx.spdxspreadsheet.OriginsSheet;
+import org.spdx.spdxspreadsheet.PackageInfoSheet;
+import org.spdx.spdxspreadsheet.PerFileSheet;
+import org.spdx.spdxspreadsheet.ReviewersSheet;
+import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
+import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 /**
  * Translates an RDF XML file to a SPDX Spreadsheet format

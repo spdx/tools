@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.spdxspreadsheet.RdfToSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.spdx.tag.BuildDocument;

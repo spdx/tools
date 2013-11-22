@@ -1,27 +1,37 @@
-See the SPDX Tools documentation located at http://spdx.org/tools for usage information.
-
 Usage
 =====
 java -jar spdx-tools-jar-with-dependencies.jar <function> <parameters> 
 
-function                parameter                         example 
------------------------------------------------------------------ 
-TagToSpreadsheet        inputFile outputFile              Examples/SPDXTagExample.tag TagToSpreadsheet.xls 
-TagToRDF                inputFile outputFile              Examples/SPDXTagExample.tag TagToRDF.rdf 
-RdfToTag                inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToTag.tag 
-RdfToHtml               inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToHtml.html 
-SPDXViewer              inputFile                         TestFiles/SPDXRdfExample.rdf 
-PrettyPrinter           inputFile                         TestFiles/SPDXRdfExample.rdf 
-CompareMultipleSpdxDocs output.xls doc1 doc2 ... docN 
-CompareSpdxDocs         doc1 doc2 [output] 
-LicenseRDFAGenerator    licenseSpreadsheet.xls outputDirectory [version] [releasedate] 
+function                 parameter                         example 
+------------------------------------------------------------------------------------------------------------------- 
+TagToSpreadsheet         inputFile outputFile              Examples/SPDXTagExample.tag TagToSpreadsheet.xls
+TagToRDF                 inputFile outputFile              Examples/SPDXTagExample.tag TagToRDF.rdf
+RdfToTag                 inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToTag.tag
+RdfToHtml                inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToHtml.html
+RdfToSpreadsheet         inputFile outputFile              TestFiles/SPDXRdfExample.rdf RdfToSpreadsheet.xls
+SpreadsheetToRDF         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToRDF.rdf
+SpreadsheetToTag         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToTag.tag
+SPDXViewer               inputFile                         TestFiles/SPDXRdfExample.rdf
+PrettyPrinter            inputFile                         TestFiles/SPDXRdfExample.rdf
+CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN 
+CompareSpdxDocs          doc1 doc2 [output] 
+LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] 
+GenerateVerificationCode sourceDirectory
+
+See the SPDX Tools documentation located at http://spdx.org/tools for usage details.
+
+Build
+=====
+You need Apache Maven to build the project:
+mvn clean install
+
 
 License
 =========================
 See the NOTICE file for licensing information
 including info from 3rd Party Software
 
-see LICENSE file for full license text
+See LICENSE file for full license text
 
 SPDX-License-Identifier:	Apache-2.0
 PackageLicenseDeclared:		Apache-2.0
