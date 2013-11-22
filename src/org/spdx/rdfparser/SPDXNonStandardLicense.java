@@ -34,7 +34,6 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public class SPDXNonStandardLicense extends SPDXLicense {
 	
-	static final Pattern NON_STANDARD_LICENSE_PATTERN = Pattern.compile("[-+_.a-zA-Z0-9]{3,}");
 	private String text;
 	private String comment = null;
 	private String licenseName = null;
@@ -253,9 +252,11 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		String id = this.getId();
 		if (id == null || id.isEmpty()) {
 			retval.add("Missing required license ID");
-		} else if (!NON_STANDARD_LICENSE_PATTERN.matcher(id).matches()) {
-			retval.add("Invalid license id '"+id+"'.  Must be at least 3 characters long " +
-					"and made up of the characters from the set 'a'-'z', 'A'-'Z', '0'-'9', '+', '_', '.', and '-'.");
+		} else {
+			String idError = SpdxVerificationHelper.verifyNonStdLicenseid(id);
+			if (idError != null && !idError.isEmpty()) {
+				retval.add(idError);
+			}
 		}
 		String licenseText = this.getText();
 		if (licenseText == null || licenseText.isEmpty()) {

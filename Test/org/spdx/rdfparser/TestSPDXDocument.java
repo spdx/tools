@@ -963,4 +963,73 @@ public class TestSPDXDocument {
 		assertEquals(SPDXDocument.CURRENT_SPDX_VERSION, doc.getSpdxVersion());
 		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, doc.getDataLicense().getId());
 	}
+	
+	@Test
+	public void testextractedLicenseExists() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testUri);
+		doc.createSpdxPackage();
+		String NON_STD_LIC_ID1 = "LicenseRef-nonstd1";
+		String NON_STD_LIC_TEXT1 = "licenseText1";
+		String NON_STD_LIC_NAME1 = "licenseName1";
+		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
+		String NON_STD_LIC_COMMENT1 = "License 1 comment";
+		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
+		
+		String NON_STD_LIC_TEXT2 = "LicenseText2";
+
+		SPDXNonStandardLicense[] emptyLic = doc.getExtractedLicenseInfos();
+		assertEquals(0,emptyLic.length);
+		assertTrue(!doc.extractedLicenseExists(NON_STD_LIC_ID1));
+		
+		doc.addNewExtractedLicenseInfo(lic1);
+		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
+		
+		SPDXNonStandardLicense lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
+		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
+		assertTrue(doc.extractedLicenseExists(lic2.getId()));
+	}
+	
+	@Test
+	public void addNewExtractedLicenseInfoLicense() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testUri);
+		doc.createSpdxPackage();
+		String NON_STD_LIC_ID1 = "LicenseRef-nonstd1";
+		String NON_STD_LIC_TEXT1 = "licenseText1";
+		String NON_STD_LIC_NAME1 = "licenseName1";
+		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
+		String NON_STD_LIC_COMMENT1 = "License 1 comment";
+		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
+		String NON_STD_LIC_ID2 = "LicenseRef-623";
+		String NON_STD_LIC_TEXT2 = "LicenseText2";
+		String NON_STD_LIC_NAME2 = "licenseName2";
+		String[] NON_STD_LIC_REFERENCES2 = new String[] {"ref2"};
+		String NON_STD_LIC_COMMENT2 = "License 2 comment";
+		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(NON_STD_LIC_ID2, NON_STD_LIC_TEXT2, 
+				NON_STD_LIC_NAME2, NON_STD_LIC_REFERENCES2, NON_STD_LIC_COMMENT2);
+		SPDXNonStandardLicense[] emptyLic = doc.getExtractedLicenseInfos();
+		assertEquals(0,emptyLic.length);
+		doc.addNewExtractedLicenseInfo(lic1);
+		SPDXNonStandardLicense[] licresult1 = doc.getExtractedLicenseInfos();
+		assertEquals(1, licresult1.length);
+		assertEquals(NON_STD_LIC_ID1, licresult1[0].getId());
+		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getText());
+		assertEquals(NON_STD_LIC_NAME1, licresult1[0].getLicenseName());
+		assertEquals(NON_STD_LIC_COMMENT1, licresult1[0].getComment());
+		assertEquals(1, licresult1[0].getSourceUrls().length);
+		assertEquals(NON_STD_LIC_REFERENCES1[0], licresult1[0].getSourceUrls()[0]);
+		doc.addNewExtractedLicenseInfo(lic2);
+		SPDXNonStandardLicense[] licresult2 = doc.getExtractedLicenseInfos();
+		assertEquals(2, licresult2.length);
+		if (!licresult2[0].getId().equals(NON_STD_LIC_ID2) && !licresult2[1].getId().equals(NON_STD_LIC_ID2)) {
+			fail("second license not found");
+		}
+	}
 }
