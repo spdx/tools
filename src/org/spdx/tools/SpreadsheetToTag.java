@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
  */
-package org.spdx.tag;
+package org.spdx.tools;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -30,7 +30,8 @@ import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
-import org.spdx.spdxspreadsheet.SpreadsheetToRDF;
+import org.spdx.tools.SpreadsheetToRDF;
+import org.spdx.tag.CommonCode;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;

@@ -35,12 +35,20 @@ public class Main {
 			RdfToTag.main(args);
 		} else if (spdxTool.equalsIgnoreCase("RdfToHtml")) {
 			RdfToHtml.main(args);
+		} else if (spdxTool.equalsIgnoreCase("RdfToSpreadsheet")) {
+			RdfToSpreadsheet.main(args);
+		} else if (spdxTool.equalsIgnoreCase("SpreadsheetToRDF")) {
+			SpreadsheetToRDF.main(args);
+		} else if (spdxTool.equalsIgnoreCase("SpreadsheetToTag")){
+			SpreadsheetToTag.main(args);
 		} else if (spdxTool.equalsIgnoreCase("CompareMultipleSpdxDocs")) {
 			CompareMultpleSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("CompareSpdxDocs")) {
 			CompareSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("LicenseRDFAGenerator")) {
 			LicenseRDFAGenerator.main(args);
+		} else if (spdxTool.equalsIgnoreCase("GenerateVerificationCode")) {
+			GenerateVerificationCode.main(args);
 		} else {
 			usage();
 		}
@@ -51,16 +59,20 @@ public class Main {
 		System.out
 				.println(""
 						+ "Usage: java -jar spdx-tools-jar-with-dependencies.jar <function> <parameters> \n"
-						+ "function                parameter                         example \n"
-						+ "----------------------------------------------------------------- \n"
-						+ "TagToSpreadsheet        inputFile outputFile              Examples/SPDXTagExample.tag TagToSpreadsheet.xls \n"
-						+ "TagToRDF                inputFile outputFile              Examples/SPDXTagExample.tag TagToRDF.rdf \n"
-						+ "RdfToTag                inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToTag.tag \n"
-						+ "RdfToHtml               inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToHtml.html \n"
-						+ "SPDXViewer              inputFile                         TestFiles/SPDXRdfExample.rdf \n"
-						+ "PrettyPrinter           inputFile                         TestFiles/SPDXRdfExample.rdf \n"
-						+ "CompareMultipleSpdxDocs output.xls doc1 doc2 ... docN \n"
-						+ "CompareSpdxDocs         doc1 doc2 [output] \n"
-						+ "LicenseRDFAGenerator    licenseSpreadsheet.xls outputDirectory [version] [releasedate] ");
+						+ "function                 parameter                         example \n"
+						+ "------------------------------------------------------------------------------------------------------------------- \n"
+						+ "TagToSpreadsheet         inputFile outputFile              Examples/SPDXTagExample.tag TagToSpreadsheet.xls \n"
+						+ "TagToRDF                 inputFile outputFile              Examples/SPDXTagExample.tag TagToRDF.rdf \n"
+						+ "RdfToTag                 inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToTag.tag \n"
+						+ "RdfToHtml                inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToHtml.html \n"
+						+ "RdfToSpreadsheet         inputFile outputFile              TestFiles/SPDXRdfExample.rdf RdfToSpreadsheet.xls \n"
+						+ "SpreadsheetToRDF         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToRDF.rdf \n"
+						+ "SpreadsheetToTag         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToTag.tag \n"
+						+ "SPDXViewer               inputFile                         TestFiles/SPDXRdfExample.rdf \n"
+						+ "PrettyPrinter            inputFile                         TestFiles/SPDXRdfExample.rdf \n"
+						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
+						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
+						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] \n"
+						+ "GenerateVerificationCode sourceDirectory");
 	}
 }
