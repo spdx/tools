@@ -18,6 +18,7 @@ package org.spdx.rdfparser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.regex.Pattern;
 
 import com.hp.hpl.jena.iri.IRIFactory;
 
@@ -33,7 +34,16 @@ public class SpdxVerificationHelper {
 	static final String[] VALID_CREATOR_PREFIXES = new String[] {SpdxRdfConstants.CREATOR_PREFIX_PERSON,
 		SpdxRdfConstants.CREATOR_PREFIX_ORGANIZATION, SpdxRdfConstants.CREATOR_PREFIX_TOOL};
 	static final String[] VALID_ORIGINATOR_SUPPLIER_PREFIXES = new String[] {SpdxRdfConstants.NOASSERTION_VALUE, "Person:", "Organization:"};
-
+	static final Pattern NON_STANDARD_LICENSE_PATTERN = Pattern.compile("LicenseRef-[-+_.a-zA-Z0-9]+");
+	
+	public static String verifyNonStdLicenseid(String licenseId) {
+		if (NON_STANDARD_LICENSE_PATTERN.matcher(licenseId).matches()) {
+			return null;
+		} else {
+			return "Invalid license id '"+licenseId+"'.  Must be at least 3 characters long " +
+					"and made up of the characters from the set 'a'-'z', 'A'-'Z', '0'-'9', '+', '_', '.', and '-'.";
+		}
+	}
 	static String verifyChecksumString(String checksum) {
 		if (checksum.length() != 40) {
 			return "Invalid number of characters for checksum";

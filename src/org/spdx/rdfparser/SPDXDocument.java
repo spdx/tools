@@ -1439,14 +1439,46 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @return the newly created NonStandardLicense
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public synchronized SPDXNonStandardLicense addNewExtractedLicenseInfo(String licenseText) throws InvalidSPDXAnalysisException {
-		int nextLicNum = this.getAndIncrementNextLicenseRef();
-		String licenseID = formNonStandardLicenseID(nextLicNum);
+	public SPDXNonStandardLicense addNewExtractedLicenseInfo(String licenseText) throws InvalidSPDXAnalysisException {
+		String licenseID = getNextLicenseRef();
 		SPDXNonStandardLicense retval = new SPDXNonStandardLicense(licenseID, licenseText);
+		addNewExtractedLicenseInfo(retval);
+		return retval;
+	}
+	
+	/**
+	 * Adds the license as a new ExtractedLicenseInfo
+	 * @param license
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public void addNewExtractedLicenseInfo(SPDXNonStandardLicense license) throws InvalidSPDXAnalysisException {
+		if (extractedLicenseExists(license.getId())) {
+			throw(new InvalidSPDXAnalysisException("Can not add license - ID "+license.getId()+" already exists."));
+		}
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
-		s.addProperty(p, retval.createResource(model));
-		return retval;
+		s.addProperty(p, license.createResource(model));		
+	}
+	
+	/**
+	 * @param id
+	 * @return true if the license ID is already in the model as an extracted license info
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected boolean extractedLicenseExists(String id) throws InvalidSPDXAnalysisException {
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_LICENSE_ID).asNode();
+		Node o = Node.createLiteral(id);
+		Triple m = Triple.createMatch(null, p, o);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		return tripleIter.hasNext();
+	}
+
+	/**
+	 * @return next available license ID for an ExtractedLicenseInfo
+	 */
+	public synchronized String getNextLicenseRef() {
+		int nextLicNum = this.getAndIncrementNextLicenseRef();
+		return formNonStandardLicenseID(nextLicNum);
 	}
 
 	/**
