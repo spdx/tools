@@ -40,7 +40,7 @@ public class SpdxVerificationHelper {
 		if (NON_STANDARD_LICENSE_PATTERN.matcher(licenseId).matches()) {
 			return null;
 		} else {
-			return "Invalid license id '"+licenseId+"'.  Must be at least 3 characters long " +
+			return "Invalid license id '"+licenseId+"'.  Must start with 'LicenseRef-' " +
 					"and made up of the characters from the set 'a'-'z', 'A'-'Z', '0'-'9', '+', '_', '.', and '-'.";
 		}
 	}
