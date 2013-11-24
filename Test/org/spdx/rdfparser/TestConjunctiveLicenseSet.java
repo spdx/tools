@@ -35,7 +35,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class TestConjunctiveLicenseSet {
 	
-	String[] IDS = new String[] {"id1", "id2", "id3", "id4"};
+	String[] IDS = new String[] {"LicenseRef-id1", "LicenseRef-id2", "LicenseRef-id3", "LicenseRef-id4"};
 	String[] TEXTS = new String[] {"text1", "text2", "text3", "text4"};
 	SPDXNonStandardLicense[] NON_STD_LICENSES;
 	Model model;
