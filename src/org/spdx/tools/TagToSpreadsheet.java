@@ -14,9 +14,8 @@
  *   limitations under the License.
  *
  */
-package org.spdx.tag;
+package org.spdx.tools;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,13 +23,16 @@ import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.spdxspreadsheet.RdfToSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
+import org.spdx.tag.BuildDocument;
+import org.spdx.tag.CommonCode;
+import org.spdx.tag.NoCommentInputStream;
+import org.spdx.tag.TagValueLexer;
+import org.spdx.tag.TagValueParser;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-
 /**
  * Translates an tag-value file to a SPDX Spreadsheet format Usage:
  * TagToSpreadsheet spdxfile.spdx spreadsheetfile.xls where spdxfile.spdx is a

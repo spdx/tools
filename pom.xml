@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.spdx</groupId>
 	<artifactId>spdx-tools</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<name>SPDX tools</name>
 	<description>SPDX tools</description>
 	<licenses>
@@ -128,6 +128,8 @@
 				<includes>
 					<include>NOTICE</include>
 					<include>LICENSE</include>
+					<include>README.txt</include>
+					<include>changelog</include>
 				</includes>
 			</resource>
 			<resource>
@@ -180,7 +182,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.spdx.rdfparser.PrettyPrinter</mainClass>
+							<mainClass>org.spdx.tools.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
