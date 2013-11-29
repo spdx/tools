@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
  */
-package org.spdx.rdfparser;
+package org.spdx.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +26,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+import org.spdx.rdfparser.IStandardLicenseProvider;
+import org.spdx.rdfparser.LicenseHTMLFile;
+import org.spdx.rdfparser.LicenseTOCHTMLFile;
+import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.SpdxLicenseCsv;
+import org.spdx.rdfparser.SpdxStdLicenseException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -50,7 +56,7 @@ public class LicenseRDFAGenerator {
 		INVALID_FILE_CHARS.add(';'); INVALID_FILE_CHARS.add(':');
 		INVALID_FILE_CHARS.add('\''); INVALID_FILE_CHARS.add('"'); INVALID_FILE_CHARS.add('|');
 		INVALID_FILE_CHARS.add('\t'); INVALID_FILE_CHARS.add('?'); INVALID_FILE_CHARS.add('&');
-		INVALID_FILE_CHARS.add('³');
+		INVALID_FILE_CHARS.add('Â³');
 	}
 	static int MIN_ARGS = 2;
 	static int MAX_ARGS = 4;

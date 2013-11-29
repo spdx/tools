@@ -15,7 +15,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.compare;
+package org.spdx.tools;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,9 +27,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import org.spdx.compare.SpdxCompareException;
+import org.spdx.compare.SpdxComparer;
+import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
 import org.spdx.compare.SpdxFileDifference;
 import org.spdx.compare.SpdxLicenseDifference;
-import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
@@ -40,7 +42,6 @@ import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
-import org.spdx.tag.TagToRDF;
 
 /**
  * Command line application to compare two SPDX documents

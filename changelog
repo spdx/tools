@@ -1,3 +1,10 @@
+Improved SPDX Tools structure (contributed by Roger Meier)
+- moved tools to org.spdx.tools namespace
+- common main class
+- See README.txt file for launch syntax
+Moved to Maven build (contributed by Roger Meier)
+- Added pom.xml file
+- Removed libraries from repository
 Implementation version 1.2.1
 - Fixed null pointer exception when unable to connect to the SPDX standard license list website
 - changed property name for standard license template to match spec (from licenseTemplate to standardLicenseTemplate)

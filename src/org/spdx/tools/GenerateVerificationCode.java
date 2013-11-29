@@ -14,11 +14,15 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.tools;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+
+import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.VerificationCodeGenerator;
 
 /**
  * Generates a verification code for a specific directory
