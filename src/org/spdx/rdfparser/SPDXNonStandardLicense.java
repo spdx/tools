@@ -17,7 +17,6 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;

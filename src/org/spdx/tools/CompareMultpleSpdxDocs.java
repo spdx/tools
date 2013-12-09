@@ -64,6 +64,7 @@ public class CompareMultpleSpdxDocs {
 		}
 		SPDXDocument[] compareDocs = new SPDXDocument[args.length-1];
 		String[] docNames = new String[args.length-1];
+		@SuppressWarnings("unchecked")
 		ArrayList<String>[] verificationErrors = new ArrayList[args.length-1];
 		for (int i = 1; i < args.length; i++) {
 			try {

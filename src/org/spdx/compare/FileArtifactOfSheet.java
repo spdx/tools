@@ -20,7 +20,6 @@ package org.spdx.compare;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.spdxspreadsheet.AbstractSheet;
 
 /**
  * @author Source Auditor

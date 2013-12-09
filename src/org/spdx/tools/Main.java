@@ -62,7 +62,7 @@ public class Main {
 						+ "function                 parameter                         example \n"
 						+ "------------------------------------------------------------------------------------------------------------------- \n"
 						+ "TagToSpreadsheet         inputFile outputFile              Examples/SPDXTagExample.tag TagToSpreadsheet.xls \n"
-						+ "TagToRDF                 inputFile outputFile              Examples/SPDXTagExample.tag TagToRDF.rdf \n"
+						+ "TagToRDF                 inputFile outputFile [format]     Examples/SPDXTagExample.tag TagToRDF.rdf \n"
 						+ "RdfToTag                 inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToTag.tag \n"
 						+ "RdfToHtml                inputFile outputFile              TestFiles/SPDXRdfExample.rdf  RdfToHtml.html \n"
 						+ "RdfToSpreadsheet         inputFile outputFile              TestFiles/SPDXRdfExample.rdf RdfToSpreadsheet.xls \n"

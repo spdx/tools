@@ -19,6 +19,7 @@ package org.spdx.tools;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -70,6 +71,11 @@ public class TagToSpreadsheet {
 		if (spdxSpreadsheetFile.exists()) {
 			System.out
 					.println("Spreadsheet file already exists - please specify a new file.");
+			try {
+				spdxTagFile.close();
+			} catch (IOException e) {
+				System.out.println("Warning: Unable to close output SPDX tag file on error: "+e.getMessage());
+			}
 			return;
 		}
 		SPDXDocument doc = null;
