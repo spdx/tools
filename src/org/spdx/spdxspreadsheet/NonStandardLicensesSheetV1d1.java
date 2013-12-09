@@ -39,7 +39,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 	
 	static boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Identifier", "Extracted Text",
-		"License Name", "Cross Reference URLs", "Comment", "Optional (User Defined) Columns…"};
+		"License Name", "Cross Reference URLs", "Comment", "Optional (User Defined) Columns\u0085"};
 	static final int[] COLUMN_WIDTHS = new int[] {15, 120, 50, 80, 80, 50};
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, true, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, false, true, false, false, false};
