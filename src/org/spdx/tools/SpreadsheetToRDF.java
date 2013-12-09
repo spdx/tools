@@ -114,6 +114,11 @@ public class SpreadsheetToRDF {
 			analysis = new SPDXDocument(model);
 		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Analysis: "+ex.getMessage());
+			try {
+				out.close();
+			} catch (IOException e) {
+				System.out.println("Warning - unable to close output file on error: "+e.getMessage());
+			}
 			return;
 		}
 		SPDXSpreadsheet ss = null;

@@ -59,7 +59,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.2";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.1";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.2";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -1539,8 +1539,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 			// delete
 			model.removeAll();
 		}
-		model.setNsPrefix("", SPDX_NAMESPACE);
+		model.setNsPrefix("spdx", SPDX_NAMESPACE);
 		model.setNsPrefix("doap", DOAP_NAMESPACE);
+		model.setNsPrefix("rdfs", RDFS_NAMESPACE);
+		model.setNsPrefix("rdf", RDF_NAMESPACE);
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
 		model.createResource(uri, spdxAnalysisType);
 		// add the version

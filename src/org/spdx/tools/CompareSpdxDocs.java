@@ -917,7 +917,7 @@ public class CompareSpdxDocs {
 		try {
 			out = new FileOutputStream(rdfFile);
 			in = new FileInputStream(tagValueFile);
-			TagToRDF.convertTagFileToRdf(in, out);
+			TagToRDF.convertTagFileToRdf(in, out, TagToRDF.DEFAULT_OUTPUT_FORMAT);
 		} catch (Exception e) {
 			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
 		} finally {
