@@ -121,6 +121,19 @@ public class TestSPDXChecksum {
 	}
 	
 	@Test
+	public void testFindSpdxChecksum() throws InvalidSPDXAnalysisException {
+		Resource[] checksumResources = new Resource[TEST_CHECKSUMS.length-1];
+		for (int i = 0; i < checksumResources.length; i++) {
+			checksumResources[i] = TEST_CHECKSUMS[i].createResource(model);
+		}
+		for (int i = 0;i < checksumResources.length; i++) {
+			assertEquals(checksumResources[i], SPDXChecksum.findSpdxChecksum(model, TEST_CHECKSUMS[i]));
+		}
+		Resource r = SPDXChecksum.findSpdxChecksum(model, TEST_CHECKSUMS[TEST_CHECKSUMS.length-1]);
+		assertTrue(r == null);
+	}
+	
+	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
 		SPDXChecksum checksum = new SPDXChecksum("SHA1", "0123456789abcdef0123456789abcdef01234567");
 		ArrayList<String> verify = checksum.verify();

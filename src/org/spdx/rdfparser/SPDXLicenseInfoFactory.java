@@ -89,7 +89,7 @@ public class SPDXLicenseInfoFactory {
 		"Zimbra-1.3","Zlib","ZPL-1.1","ZPL-2.0","ZPL-2.1","Unlicense"
 	};
 	
-	static final String DEFAULT_LICENSE_LIST_VERSION = "1.19";
+	public static final String DEFAULT_LICENSE_LIST_VERSION = "1.19";
 	static final Logger logger = Logger.getLogger(SPDXLicenseInfoFactory.class.getName());
 	static final String STANDARD_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	

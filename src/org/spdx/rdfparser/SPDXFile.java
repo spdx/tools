@@ -89,6 +89,7 @@ public class SPDXFile {
 			throw(new InvalidSPDXAnalysisException("Can not create a file from a literal"));
 		}
 	}
+	
 	/**
 	 * Construct an SPDX File form the fileNode
 	 * @param fileNode RDF Graph node representing the SPDX File
