@@ -49,6 +49,56 @@ public class SPDXChecksum {
 	private Node checksumNode;
 	private Resource checksumResource;
 	
+	/**
+	 * Convert a node to a resource
+	 * @param cmodel
+	 * @param cnode
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected static Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
+		if (cnode.isBlank()) {
+			return cmodel.createResource(cnode.getBlankNodeId());
+		} else if (cnode.isURI()) {
+			return cmodel.createResource(cnode.getURI());
+		} else {
+			throw(new InvalidSPDXAnalysisException("Can not create a checksum from a literal"));
+		}
+	}
+	
+	protected static Resource findSpdxChecksum(Model model, SPDXChecksum checksum) throws InvalidSPDXAnalysisException {
+		// find any matching checksum values
+		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
+		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, Node.createLiteral(checksum.getValue()));
+		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
+		while (checksumMatchIter.hasNext()) {
+			Triple checksumMatchTriple = checksumMatchIter.next();
+			Node checksumNode = checksumMatchTriple.getSubject();
+			// check the algorithm
+			Node algorithmProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM).asNode();
+			Triple algorithmMatch = Triple.createMatch(checksumNode, algorithmProperty, null);
+			ExtendedIterator<Triple> algorithmMatchIterator = model.getGraph().find(algorithmMatch);
+			if (algorithmMatchIterator.hasNext()) {
+				String algorithm = "UNKNOWN";
+				Triple algorithmMatchTriple = algorithmMatchIterator.next();
+				if (algorithmMatchTriple.getObject().isLiteral()) {
+					// The following is for compatibility with rdf generated with older
+					// versions of the tool
+					algorithm = algorithmMatchTriple.getObject().toString(false);
+				} else if (algorithmMatchTriple.getObject().isURI()) {
+					algorithm = URI_TO_ALGORITHM.get(algorithmMatchTriple.getObject().getURI());
+					if (algorithm == null) {
+						algorithm = "UNKNOWN";
+					}
+				}
+				if (algorithm.equals(checksum.getAlgorithm())) {
+					return convertToResource(model, checksumNode);
+				}
+			}
+		}
+		// if we get to here, we did not find a match
+		return null;
+	}
 	
 	public SPDXChecksum(String algorithm, String value) {
 		this.algorithm = algorithm;
@@ -177,7 +227,17 @@ public class SPDXChecksum {
 		this.model = model;
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE +
 				SpdxRdfConstants.CLASS_SPDX_CHECKSUM);
-		Resource r = model.createResource(type);
+		
+		Resource r;
+		try {
+			r = findSpdxChecksum(model, this);
+		} catch (InvalidSPDXAnalysisException e) {
+			// if we run into an error finding the checksum, we'll just create a new one
+			r = null;
+		}		// prevent duplicate checksum objects
+		if (r == null) {
+			r = model.createResource(type);
+		}
 		if (algorithm != null) {
 			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
