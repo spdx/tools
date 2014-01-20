@@ -30,10 +30,14 @@ public interface SpdxRdfConstants {
 	public static final String RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
 	public static final String SPDX_NAMESPACE = "http://spdx.org/rdf/terms#";
 	public static final String DOAP_NAMESPACE = "http://usefulinc.com/ns/doap#";
+	public static final String OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 	
 	// RDF Properties
 	public static final String RDF_PROP_TYPE = "type";
 	public static final String RDF_PROP_RESOURCE = "resource";
+	
+	// OWL Properties
+	public static final String PROP_OWL_SAME_AS = "sameAs";
 
 	
 	// RDFS Properties

@@ -839,7 +839,7 @@ public class SPDXFile {
 							if (alProjectNodes.get(j).equals(projectResource.asNode())) {
 								found = true;
 								alProjects.add(this.artifactOf[i]);
-								alProjects.remove(j);
+								alProjectNodes.remove(j);
 								break;
 							}
 						}
