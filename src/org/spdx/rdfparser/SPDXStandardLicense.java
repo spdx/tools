@@ -135,6 +135,13 @@ public class SPDXStandardLicense extends SPDXLicense {
 			Triple t = tripleIter.next();
 			alsourceUrls.add(t.getObject().toString(false));
 		}
+		p = model.getProperty(SpdxRdfConstants.OWL_NAMESPACE, SpdxRdfConstants.PROP_OWL_SAME_AS).asNode();
+		m = Triple.createMatch(licenseNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			alsourceUrls.add(t.getObject().toString(false));
+		}
 		this.sourceUrl = alsourceUrls.toArray(new String[alsourceUrls.size()]);
 		// notes
 		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
