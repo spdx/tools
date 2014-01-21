@@ -33,7 +33,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class SPDXFile {
+public class SPDXFile implements Comparable<SPDXFile>{
 	
 	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());
 	private Model model = null;
@@ -1152,4 +1152,14 @@ public class SPDXFile {
 			}
 		}
 	}
+
+    /**
+     * This method is used for sorting a list of SPDX files
+     * @param file SPDXFile that is compared
+     * @return 
+     */
+    @Override
+    public int compareTo(SPDXFile file) {
+        return this.getName().compareTo(file.getName());        
+    }
 }

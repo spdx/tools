@@ -22,7 +22,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -150,9 +153,15 @@ public class RdfToSpreadsheet {
 	}
 
 	private static void copyPerFileInfo(SPDXFile[] files,
-			PerFileSheet perFileSheet) {
-		for (int i = 0; i < files.length; i++) {
-			perFileSheet.add(files[i]);
+			PerFileSheet perFileSheet) {            
+             /* Add files to a List */
+            List<SPDXFile> sortedFileList = new ArrayList<SPDXFile>();
+            /* Sort the SPDX files before printout */
+            sortedFileList = Arrays.asList(files);
+            Collections.sort(sortedFileList);
+            /* Print out sorted files */            
+		for (SPDXFile file : sortedFileList) {
+			perFileSheet.add(file);
 		}
 	}
 
