@@ -1,4 +1,5 @@
 Implementation version 1.2.4
+- Fix bug 1129 (sorting files) contributed by Daniel Hamacher
 - Fix bug where standard licenses were using owl:sameAs for cross reference URL's.  Changed to rdfs:seeAlso
 - Fix bug relating to SPDXFile.getArtifactOf()
 Implementation version 1.2.3
