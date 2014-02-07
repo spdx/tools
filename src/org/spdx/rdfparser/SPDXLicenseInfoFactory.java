@@ -17,7 +17,6 @@
 package org.spdx.rdfparser;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -263,15 +262,10 @@ public class SPDXLicenseInfoFactory {
 			if (in == null) {
 				// need to fetch from the local file system
 				String id = uri.substring(STANDARD_LICENSE_URI_PREFIX.length());
-				String fileName = STANDARD_LICENSE_RDF_LOCAL_DIR + File.separator + id;
-//				prefix = "file://"+fileName.replace("\\", "/");
-				in = FileManager.get().open(fileName);
+				String fileName = STANDARD_LICENSE_RDF_LOCAL_DIR + "/" + id;
+				in = SPDXLicenseInfoFactory.class.getResourceAsStream("/" + fileName);
 				if (in == null) {
-					fileName = fileName.replace("\\", "/");
-					in = FileManager.get().open(fileName);
-					if (in == null) {
-						throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
-					}
+					throw(new NoStandardLicenseRdfModel("Standard license "+uri+" could not be read."));
 				}
 				try {
 					retval.read(in, base, "HTML");
@@ -328,7 +322,7 @@ public class SPDXLicenseInfoFactory {
 			    	licRdfInput = null;
 		    	}
 		    } catch(Exception ex) {	    	
-	    		logger.warn("Exception loading standard licenses: "+ex.getMessage());
+	    		logger.warn("Unable to access the SPDX standard licenses at http://www.spdx.org/licenses.  Using local file copy of standard licenses");
 	    		if (licRdfInput != null) {
 	    			try {
 	    				licRdfInput.close();
@@ -344,6 +338,10 @@ public class SPDXLicenseInfoFactory {
 				// need to load a static copy
 				base = "file://"+STANDARD_LICENSE_RDF_LOCAL_FILENAME;
 				licRdfInput = FileManager.get().open(STANDARD_LICENSE_RDF_LOCAL_FILENAME);
+				if ( licRdfInput == null ) {
+					// try the class loader
+					licRdfInput = SPDXLicenseInfoFactory.class.getResourceAsStream("/" + STANDARD_LICENSE_RDF_LOCAL_FILENAME);
+				}
 				if (licRdfInput == null) {
 					throw new NoStandardLicenseRdfModel("Unable to open standard license from website or from local file");
 				}
@@ -506,11 +504,6 @@ public class SPDXLicenseInfoFactory {
 			if (isStandardLicenseID(licenseID)) {
 				try {
 					return getStandardLicenseById(licenseID);
-//					if (STANDARD_LICENSES.get(licenseID) != null) {
-//						return STANDARD_LICENSES.get(licenseID);
-//					} else {
-//						return new SPDXStandardLicense(licenseID, licenseID, "TEMP TEXT", null, null, null, null, false);
-//					}
                 } catch (InvalidSPDXAnalysisException e) {
                     throw new InvalidLicenseStringException(e.getMessage());
                 }
@@ -680,9 +673,9 @@ public class SPDXLicenseInfoFactory {
 	 */
 	private static Properties loadLicenseProperties() {
         Properties licenseProperties = new Properties();
-        FileInputStream in = null;
+        InputStream in = null;
         try {
-            in = new FileInputStream(STANDARD_LICENSE_PROPERTIES_FILENAME);
+            in = SPDXLicenseInfoFactory.class.getResourceAsStream("/" + STANDARD_LICENSE_PROPERTIES_FILENAME);
             licenseProperties.load(in);
         } catch (IOException e) {
             // Ignore it and fall through

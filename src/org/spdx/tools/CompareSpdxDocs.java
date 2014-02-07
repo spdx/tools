@@ -248,7 +248,7 @@ public class CompareSpdxDocs {
 		if (!comparer.isfilesEquals()) {
 			SPDXFile[] inDoc1notInDoc2 = comparer.getUniqueFiles(0, 1);
 			if (inDoc1notInDoc2 != null && inDoc1notInDoc2.length > 0) {
-				output.println("The following license(s) are in "+doc1Name+
+				output.println("The following file(s) are in "+doc1Name+
 						" but not in "+doc2Name);
 				for (int i = 0; i < inDoc1notInDoc2.length; i++) {
 					printSpdxFile(inDoc1notInDoc2[i], output);
@@ -256,7 +256,7 @@ public class CompareSpdxDocs {
 			}
 			SPDXFile[] inDoc2notInDoc1 = comparer.getUniqueFiles(1, 0);
 			if (inDoc2notInDoc1 != null && inDoc2notInDoc1.length > 0) {
-				output.println("The following license(s) are in "+doc2Name+
+				output.println("The following file(s) are in "+doc2Name+
 						" but not in "+doc1Name);
 				for (int i = 0; i < inDoc2notInDoc1.length; i++) {
 					printSpdxFile(inDoc2notInDoc1[i], output);

@@ -1,3 +1,6 @@
+Implementation version 1.2.5
+- Fix bug in compare utility - reporting incorrect comparison result
+- Change SPDXStandardLicenseInfoFactory to use the classLoader to load the local license repository and properties - will allow for WAR deployment of library
 Implementation version 1.2.4
 - Fix bug 1129 (sorting files) contributed by Daniel Hamacher
 - Fix bug where standard licenses were using owl:sameAs for cross reference URL's.  Changed to rdfs:seeAlso

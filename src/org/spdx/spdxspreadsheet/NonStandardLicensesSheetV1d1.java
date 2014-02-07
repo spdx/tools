@@ -39,7 +39,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 	
 	static boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Identifier", "Extracted Text",
-		"License Name", "Cross Reference URLs", "Comment", "Optional (User Defined) Columns\u0085"};
+		"License Name", "Cross Reference URLs", "Comment", "User Defined Columns..."};
 	static final int[] COLUMN_WIDTHS = new int[] {15, 120, 50, 80, 80, 50};
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, true, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, false, true, false, false, false};
@@ -64,7 +64,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 				return "Worksheet for non-standard Licenses does not exist";
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
-			for (int i = 0; i < NUM_COLS; i++) {
+			for (int i = 0; i < NUM_COLS-1; i++) {	// Don't check the user defined column which is always last
 				Cell cell = firstRow.getCell(i+firstCellNum);
 				if (cell == null || 
 						cell.getStringCellValue() == null ||

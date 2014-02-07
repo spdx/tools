@@ -36,7 +36,7 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 
 
-	int NUM_COLS = 18;
+
 	int NAME_COL = 0;
 	int VERSION_COL = NAME_COL+1;
 	int MACHINE_NAME_COL = VERSION_COL+1;
@@ -55,18 +55,20 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 	int DECLARED_COPYRIGHT_COL = LICENSE_COMMENT_COL + 1;
 	int SHORT_DESC_COL = DECLARED_COPYRIGHT_COL + 1;
 	int FULL_DESC_COL = SHORT_DESC_COL + 1;
+	int USER_DEFINED_COL = FULL_DESC_COL + 1;
+	int NUM_COLS = USER_DEFINED_COL;
 
 	
 	static final boolean[] REQUIRED = new boolean[] {true, false, true, false, false, false, true, 
-		true, true, true, false, true, true, true, false, true, false, false};
+		true, true, true, false, true, true, true, false, true, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package Name", "Package Version", 
 		"Package FileName", "Package Supplier", "Package Originator", "Home Page",
 		"Package Download Location", "Package Checksum", "Package Verification Code",
 		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files", 
-		"License Comments", "Package Copyright Text", "Summary", "Description"};
+		"License Comments", "Package Copyright Text", "Summary", "Description", "User Defined Columns..."};
 	
 	static final int[] COLUMN_WIDTHS = new int[] {30, 17, 30, 30, 30, 50, 50, 25, 25, 40, 30,
-		40, 40, 90, 50, 50, 50, 80};
+		40, 40, 90, 50, 50, 50, 80, 50};
 
 	/**
 	 * @param workbook
@@ -90,7 +92,7 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 				return "Unsupported version "+version;
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
-			for (int i = 0; i < NUM_COLS; i++) {
+			for (int i = 0; i < NUM_COLS - 1; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
 				if (cell == null || 
 						cell.getStringCellValue() == null ||

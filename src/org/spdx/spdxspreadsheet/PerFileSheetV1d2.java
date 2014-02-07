@@ -294,7 +294,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 				return "Worksheet for SPDX File does not exist";
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
-			for (int i = 0; i < NUM_COLS; i++) {
+			for (int i = 0; i < NUM_COLS- 1; i++) { 	// Don't check the last (user defined) column
 				Cell cell = firstRow.getCell(i+firstCellNum);
 				if (cell == null || 
 						cell.getStringCellValue() == null ||
