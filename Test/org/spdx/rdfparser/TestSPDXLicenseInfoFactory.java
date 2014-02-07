@@ -147,7 +147,9 @@ public class TestSPDXLicenseInfoFactory {
 		InputStream in = null;
 		try {
 			in = FileManager.get().open(stdLicUri);
-			model.read(in, stdLicUri, "HTML");
+			if ( in != null ) {
+				model.read(in, stdLicUri, "HTML");
+			}
 //			String testOutFilename = "C:\\Users\\Source Auditor\\Documents\\SPDX\\testout.test";
 //			File outfile = new File(testOutFilename);
 //			outfile.createNewFile();

@@ -72,7 +72,7 @@ public class OriginsSheetV1d2 extends OriginsSheet {
 				return "Spreadsheet version "+version+" not supported.";
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
-			for (int i = 0; i < NUM_COLS; i++) {
+			for (int i = 0; i < NUM_COLS-1; i++) {	// don't check the last col - which is the user defined column
 				Cell cell = firstRow.getCell(i+firstCellNum);
 				if (cell == null || 
 						cell.getStringCellValue() == null ||
