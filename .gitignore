@@ -5,3 +5,5 @@
 /bin
 /target
 /reports
+/release.properties
+/pom.xml.releaseBackup
