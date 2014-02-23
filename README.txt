@@ -12,11 +12,10 @@ RdfToSpreadsheet         inputFile outputFile              TestFiles/SPDXRdfExam
 SpreadsheetToRDF         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToRDF.rdf
 SpreadsheetToTag         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToTag.tag
 SPDXViewer               inputFile                         TestFiles/SPDXRdfExample.rdf
-PrettyPrinter            inputFile                         TestFiles/SPDXRdfExample.rdf
 CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN 
 CompareSpdxDocs          doc1 doc2 [output] 
 LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] 
-GenerateVerificationCode sourceDirectory
+GenerateVerificationCode sourceDirectory [skippedFileRegex]
 
 See the SPDX Tools documentation located at http://spdx.org/tools for usage details.
 

@@ -1,4 +1,4 @@
-  Copyright 2010, 2011, 2012 Source Auditor Inc.
+  Copyright 2010, 2011, 2012, 2013, 2014 Source Auditor Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@
  */
 
 This package includes the GRDDL parser developed by Hewlett Packard under the following license:
-© Copyright 2007 Hewlett-Packard Development Company, LP
+ï¿½ Copyright 2007 Hewlett-Packard Development Company, LP
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
 
@@ -147,7 +147,7 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
 The jsoup code-base (include source and compiled packages) are distributed under the open source MIT license as described below.
 
 The MIT License
-Copyright © 2009 - 2013 Jonathan Hedley (jonathan@hedley.net)
+Copyright ï¿½ 2009 - 2013 Jonathan Hedley (jonathan@hedley.net)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
