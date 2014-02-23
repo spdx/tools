@@ -26,6 +26,16 @@
 		<name>Linux Foundation</name>
 		<url>http://www.linuxfoundation.org</url>
 	</organization>
+	   <scm>
+        <url>http://git.spdx.org/spdx-tools.git</url>
+        <connection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</connection>
+        <developerConnection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</developerConnection>
+    </scm>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -239,14 +249,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<scm>
-		<url>http://git.spdx.org/spdx-tools.git</url>
-		<connection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</connection>
-		<developerConnection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</developerConnection>
-	</scm>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>9</version>
-	</parent>
 </project>

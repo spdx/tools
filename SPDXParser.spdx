@@ -3,6 +3,10 @@
     xmlns:doap="http://usefulinc.com/ns/doap#"
     xmlns="http://spdx.org/rdf/terms#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+  <Checksum>
+    <checksumValue>ce8beda7a106ce514ddf9d68c3c420e49d516104</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <SpdxDocument rdf:about="http://www.spdx.org/spdxdocs/SPDXParser">
     <referencesFile>
       <File rdf:nodeID="A0">
@@ -7668,13 +7672,13 @@
     <referencesFile>
       <File rdf:nodeID="A255">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-        <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <checksum>
           <Checksum>
-            <checksumValue>ce8beda7a106ce514ddf9d68c3c420e49d516104</checksumValue>
+            <checksumValue>e4883abf396189691ab2506c49255cbe16cfe1f2</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
           </Checksum>
         </checksum>
+        <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <rdfs:comment></rdfs:comment>
         <fileName>src/org/spdx/rdfparser/SPDXDocument.java</fileName>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -9933,6 +9937,11 @@
         <hasFile rdf:nodeID="A151"/>
         <hasFile rdf:nodeID="A37"/>
         <hasFile rdf:nodeID="A148"/>
+        <packageVerificationCode>
+          <PackageVerificationCode>
+            <packageVerificationCodeValue>3fe6c770d6226ec6751b8d9daad00efd15f40bdc</packageVerificationCodeValue>
+          </PackageVerificationCode>
+        </packageVerificationCode>
         <hasFile rdf:nodeID="A264"/>
         <hasFile rdf:nodeID="A173"/>
         <hasFile rdf:nodeID="A132"/>
@@ -11036,11 +11045,6 @@
         <hasFile rdf:nodeID="A61"/>
         <hasFile rdf:nodeID="A24"/>
         <hasFile rdf:nodeID="A269"/>
-        <packageVerificationCode>
-          <PackageVerificationCode>
-            <packageVerificationCodeValue>5e2bb5dc53533539b5c604eb08af2e62e85a0ee6</packageVerificationCodeValue>
-          </PackageVerificationCode>
-        </packageVerificationCode>
         <hasFile rdf:nodeID="A88"/>
         <hasFile>
           <File rdf:nodeID="A360">
@@ -11847,4 +11851,7 @@
     <referencesFile rdf:nodeID="A346"/>
     <referencesFile rdf:nodeID="A373"/>
   </SpdxDocument>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>5e2bb5dc53533539b5c604eb08af2e62e85a0ee6</packageVerificationCodeValue>
+  </PackageVerificationCode>
 </rdf:RDF>
