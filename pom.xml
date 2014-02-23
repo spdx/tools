@@ -26,7 +26,7 @@
 		<name>Linux Foundation</name>
 		<url>http://www.linuxfoundation.org</url>
 	</organization>
-	   <scm>
+	<scm>
         <url>http://git.spdx.org/spdx-tools.git</url>
         <connection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</connection>
         <developerConnection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</developerConnection>

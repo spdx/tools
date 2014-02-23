@@ -56,7 +56,7 @@ Sample usage:
 
   * GenerateVerificationCode sourceDirectory
 
-        java -jar spdx-tools-jar-with-dependencies.jar GenerateVerificationCode sourceDirectory
+        java -jar spdx-tools-jar-with-dependencies.jar GenerateVerificationCode sourceDirectory [ignoredFilesRegex]
 
 # License
 See the [NOTICE](NOTICE) file for licensing information
