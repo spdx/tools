@@ -62,11 +62,12 @@
 <p>Other information relevant to the SPDX License List:</p>
 <ul style="list-style-type: square; padding: 5px;">
       <li style="margin:0px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/license-list-overview">Overview</a>: For general information about the SPDX License List, including principles for inclusion of a license and an explanation of the field contained on the list.</li>
-      <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/request-new-license">Request New License</a>: For instructions on how to propose additional liscenses be added to the SPDX License List.</li>
+      <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/request-new-license">Request New License</a>: For instructions on how to propose additional licenses be added to the SPDX License List.</li>
       <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/matching-guidelines">Matching Guidelines</a>:  Guidelines for what constitutes a license match to the SPDX License List when generating an SPDX file.</li>
+      <li style="margin:5px 0 5px 10px;"><a href="http://git.spdx.org/?p=license-list.git;a=summary">Master Files</a>:  The HTML pages you see here are generated from the master files for the SPDX License List.  The master files include both a spreadsheet listing all the licenses and fields; and the text for each license in a .txt file.  These files are available in a Git repository.</li>
 </ul>
 
-[VERSION]
+<p><strong>Version:</strong> [VERSION]</p>
 
 <h2 style="color: #003F69;">Licenses</h2>
 <table>

@@ -58,12 +58,11 @@ public class LicenseTOCHTMLFile {
     	  if (version == null || version.trim().isEmpty()) {
     		  return "";
     	  }
-    	  String retval = "<p>SPDX License List version <code property=\"spdx:licenseListVersion\">" + 
+    	  String retval = "<code property=\"spdx:licenseListVersion\">" + 
     	  					version.trim() + "</code>";
     	  if (releaseDate != null && !releaseDate.trim().isEmpty()) {
-    		  retval = retval + ", which was released on "+ releaseDate.trim();
+    		  retval = retval + " "+ releaseDate.trim();
     	  }
-    	  retval = retval + ". </p>";
     	  return retval;
       }
       public LicenseTOCHTMLFile(String template, String version, String releaseDate) {

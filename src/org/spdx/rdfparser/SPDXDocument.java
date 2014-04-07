@@ -458,7 +458,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			Resource docResource = getResource(getSpdxDocNode());
 			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
 			for (int i = 0; i < files.length; i++) {				
-				Resource file = files[i].createResource(model);
+				Resource file = files[i].createResource(getDocument(), getDocumentNamespace() + getNextSpdxElementRef());
 				s.addProperty(p, file);
 				docResource.addProperty(docP, file);
 			}
@@ -472,7 +472,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 			Resource docResource = getResource(getSpdxDocNode());
 			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);			
-			Resource fileResource = file.createResource(model);
+			Resource fileResource = file.createResource(getDocument(), getDocumentNamespace() + getNextSpdxElementRef());
 			s.addProperty(p, fileResource);
 			docResource.addProperty(docP, fileResource);
 		}
@@ -772,13 +772,90 @@ public class SPDXDocument implements SpdxRdfConstants {
 		
 	Model model;
 	SPDXPackage spdxPackage = null;
+	/**
+	 * Namespace for all SPDX document elements
+	 */
+	private String documentNamespace;
+	private int nextElementRef;
 	
 	public SPDXDocument(Model model) throws InvalidSPDXAnalysisException {
 		this.model = model;
+		initialize();
+
+	}
+
+	/**
+	 * Initialize the next license ref and next element reference variables
+	 * @return any verification errors encountered
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private ArrayList<String> initialize() throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode != null) {	// not empty - we should verify
-			verify();
+			if (!spdxDocNode.isURI()) {
+				throw(new InvalidSPDXAnalysisException("SPDX Documents must have a unique URI"));
+			}
+			String docUri = spdxDocNode.getURI();
+			this.documentNamespace = this.formDocNamespace(docUri);
+			ArrayList<String> errors = verify();
 			initializeNextLicenseRef();
+			initializeNextElementRef();
+			return errors;
+		} else {
+			return new ArrayList<String>();
+		}
+	}
+
+	/**
+	 * Initialize the next SPDX element reference used for creating new SPDX element URIs
+	 */
+	private void initializeNextElementRef() {
+		int highestElementRef = 0;
+		Triple m = Triple.createMatch(null, null, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	// find everything
+		while (tripleIter.hasNext()) {
+			// iterate through everything looking for matches to this SPDX document URI
+			Triple trip = tripleIter.next();
+			if (trip.getSubject().isURI()) {	// check the subject
+				String subjectUri = trip.getSubject().getURI();
+				if (subjectUri.startsWith(this.documentNamespace + SPDX_ELEMENT_REF_PRENUM)) {
+					String elementRef = subjectUri.substring(this.documentNamespace.length());
+					if (SPDX_ELEMENT_REF_PATTERN.matcher(elementRef).matches()) {
+						int elementRefNum = getElementRefNumber(elementRef);
+						if (elementRefNum > highestElementRef) {
+							highestElementRef = elementRefNum;
+						}
+					}
+				}
+			}
+			if (trip.getObject().isURI()) {		// check the object
+				String objectUri = trip.getObject().getURI();
+				if (objectUri.startsWith(this.documentNamespace + SPDX_ELEMENT_REF_PRENUM)) {
+					String elementRef = objectUri.substring(this.documentNamespace.length());
+					if (SPDX_ELEMENT_REF_PATTERN.matcher(elementRef).matches()) {
+						int elementRefNum = getElementRefNumber(elementRef);
+						if (elementRefNum > highestElementRef) {
+							highestElementRef = elementRefNum;
+						}
+					}
+				}
+			}
+		}
+		
+		this.nextElementRef = highestElementRef + 1;
+	}
+
+	/**
+	 * Parses out the reference number for an SPDX element reference
+	 * @param elementReference Element reference to parse
+	 * @return element reference or -1 if the element reference is not valid
+	 */
+	public static int getElementRefNumber(String elementReference) {
+		String numPart = elementReference.substring(SPDX_ELEMENT_REF_PRENUM.length());
+		try {
+			return Integer.parseInt(numPart);
+		} catch(Exception ex) {
+			return -1;
 		}
 	}
 
@@ -1366,12 +1443,12 @@ public class SPDXDocument implements SpdxRdfConstants {
 	}
 	
 	public void createSpdxPackage() throws InvalidSPDXAnalysisException {
-		// generate a unique URI by appending a "?package" to the end of the doc URI
+		// generate a unique URI by appending the next available SPDX element ref to the document namespace
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before creating an SPDX Package"));
 		}
-		createSpdxPackage(spdxDocNode.getURI()+"?package");
+		createSpdxPackage(this.documentNamespace + this.getNextSpdxElementRef());
 	}
 
 	/**
@@ -1482,6 +1559,27 @@ public class SPDXDocument implements SpdxRdfConstants {
 		int nextLicNum = this.getAndIncrementNextLicenseRef();
 		return formNonStandardLicenseID(nextLicNum);
 	}
+	
+	/**
+	 * @return return the next available SPDX element reference.
+	 */
+	public String getNextSpdxElementRef() {
+		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
+		return formSpdxElementRef(nextSpdxElementNum);
+	}
+
+	public static String formSpdxElementRef(int refNum) {
+		return SPDX_ELEMENT_REF_PRENUM + String.valueOf(refNum);
+	}
+	
+	/**
+	 * @return
+	 */
+	synchronized int getAndIncrementNextElementRef() {
+		int retval = this.nextElementRef;
+		this.nextElementRef++;
+		return retval;
+	}
 
 	/**
 	 * @return the URI of the SPDX Document
@@ -1504,9 +1602,21 @@ public class SPDXDocument implements SpdxRdfConstants {
 
 	/**
 	 * @param model the model to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setModel(Model model) {
+	public void setModel(Model model) throws InvalidSPDXAnalysisException {
+		Model oldModel = this.model;
 		this.model = model;
+		try {
+			ArrayList<String> errors = initialize();
+			if (errors != null && errors.size() > 0) {
+				this.model = oldModel;
+				throw(new InvalidSPDXAnalysisException("New model contains verification errors"));
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			this.model = oldModel;
+			throw(e);
+		}
 	}
 	/**
 	 * Creates a new empty SPDX Document with the current SPDX document version.
@@ -1545,10 +1655,16 @@ public class SPDXDocument implements SpdxRdfConstants {
 		model.setNsPrefix("doap", DOAP_NAMESPACE);
 		model.setNsPrefix("rdfs", RDFS_NAMESPACE);
 		model.setNsPrefix("rdf", RDF_NAMESPACE);
+		this.documentNamespace = formDocNamespace(uri);
+		model.setNsPrefix("", this.documentNamespace);
+		// set the default namespace to the document namespace
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
 		model.createResource(uri, spdxAnalysisType);
 		// add the version
 		this.setSpdxVersion(spdxVersion);
+		// reset the next license number and next spdx element num
+		this.nextElementRef = 1;
+		this.nextLicenseRef = 1;
 		// add the default data license
 		if (!spdxVersion.equals(POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
 			try {
@@ -1567,6 +1683,21 @@ public class SPDXDocument implements SpdxRdfConstants {
 	}
 	
 	/**
+	 * Form the document namespace URI from the SPDX document URI
+	 * @param docUriString String form of the SPDX document URI
+	 * @return
+	 */
+	private String formDocNamespace(String docUriString) {
+		// just remove any fragments for the DOC URI
+		int fragmentIndex = docUriString.indexOf('#');
+		if (fragmentIndex <= 0) {
+			return docUriString + "#";
+		} else {
+			return docUriString.substring(0, fragmentIndex) + "#";
+		}
+	}
+
+	/**
 	 * @return the spdx doc node from the model
 	 */
 	private Node getSpdxDocNode() {
@@ -1580,5 +1711,16 @@ public class SPDXDocument implements SpdxRdfConstants {
 			spdxDocNode = docTriple.getSubject();
 		}
 		return spdxDocNode;
+	}
+
+	/**
+	 * @return Document namespace
+	 */
+	public String getDocumentNamespace() {
+		return this.documentNamespace;
+	}
+	
+	protected SPDXDocument getDocument() {
+		return this;
 	}
 }

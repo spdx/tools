@@ -945,7 +945,7 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isFileDependenciesEquals());
 		SpdxFileDifference diff = fc.getFileDifference();
 		assertFalse(diff.isFileDependenciesEqual());
-		fileA.setFileDependencies(fileBDependencies);
+		fileA.setFileDependencies(fileBDependencies, null);
 		fc.compare(fileA, fileB, licenseXlationMap);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isFileDependenciesEquals());

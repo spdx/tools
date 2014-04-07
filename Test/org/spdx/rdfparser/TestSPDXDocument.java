@@ -1032,4 +1032,58 @@ public class TestSPDXDocument {
 			fail("second license not found");
 		}
 	}
+	
+	@Test
+	public void testGetElementRefNumber() {
+		int refNum1 = 5532;
+		int refNum2 = 12;
+		String ref1 = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(refNum1);
+		String ref2 = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(refNum2);
+		String invalidRef = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "xaf234";
+		int result = SPDXDocument.getElementRefNumber(ref1);
+		assertEquals(refNum1, result);
+		result = SPDXDocument.getElementRefNumber(ref2);
+		assertEquals(refNum2, result);
+		result = SPDXDocument.getElementRefNumber(invalidRef);
+		assertEquals(-1, result);		
+	}
+	
+	@Test
+	public void testGetDocumentNamespace() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		// without a part
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis(docUri);
+		String result = doc.getDocumentNamespace();
+		// with part
+		assertEquals(docUri + "#", result);
+		doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis(docUri + "#SPDXDocument");
+		result = doc.getDocumentNamespace();
+		assertEquals(docUri + "#", result);	
+	}
+	
+	@Test
+	public void testGetNextSpdxRef() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis(docUri);
+		String nextSpdxElementRef = doc.getNextSpdxElementRef();
+		String expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(1);
+		assertEquals(expected, nextSpdxElementRef);
+		nextSpdxElementRef = doc.getNextSpdxElementRef();
+		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(2);
+		assertEquals(expected, nextSpdxElementRef);
+		// test that it survives across a new doc
+		doc.createSpdxPackage(doc.getDocumentNamespace() + nextSpdxElementRef);
+		SPDXDocument doc2 = new SPDXDocument(model);
+		nextSpdxElementRef = doc2.getNextSpdxElementRef();
+		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(3);
+		assertEquals(expected, nextSpdxElementRef);
+		nextSpdxElementRef = doc.getNextSpdxElementRef();
+		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(3);
+		assertEquals(expected, nextSpdxElementRef);	// original SPDX doc should maintain its own
+	}
 }

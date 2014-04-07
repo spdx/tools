@@ -411,7 +411,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			Entry<SPDXFile, ArrayList<SPDXFile>> entry = iter.next();
 			ArrayList<SPDXFile> alDependencies = entry.getValue();
 			if (alDependencies != null && alDependencies.size() > 0) {
-				entry.getKey().setFileDependencies(alDependencies.toArray(new SPDXFile[alDependencies.size()]));
+				entry.getKey().setFileDependencies(alDependencies.toArray(new SPDXFile[alDependencies.size()]), this.analysis);
 			}
 		}
 		// Check to see if there are any left over and and throw an error if the dependent files were
