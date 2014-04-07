@@ -233,13 +233,21 @@ public class SPDXFile implements Comparable<SPDXFile>{
 		}
 	}
 	
-	public Resource createResource(Model model) throws InvalidSPDXAnalysisException {
+	/**
+	 * Create a resource for this SPDX file
+	 * @param uri URI for the file resource
+	 * @param doc SPDX document containing the SPDX file
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public Resource createResource(SPDXDocument doc, String uri) throws InvalidSPDXAnalysisException {
+		Model model = doc.getModel();
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_FILE);
 		Resource retval = findFileResource(model, this);	// prevent duplicate files in the model
 		if (retval == null) {
-			retval = model.createResource(type);
+			retval = model.createResource(uri, type);
 		}
-		populateModel(model, retval);
+		populateModel(doc, retval);
 		this.resource = retval;
 		return retval;
 	}
@@ -250,7 +258,8 @@ public class SPDXFile implements Comparable<SPDXFile>{
 	 * @param model
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void populateModel(Model model, Resource fileResource) throws InvalidSPDXAnalysisException {
+	private void populateModel(SPDXDocument doc, Resource fileResource) throws InvalidSPDXAnalysisException {
+		Model model = doc.getModel();
 		// name
 		Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME);
 		fileResource.addProperty(p, this.getName());
@@ -299,7 +308,7 @@ public class SPDXFile implements Comparable<SPDXFile>{
 					// see if the file already exists in the model - prevents creating a duplicate file
 					dep = findFileResource(model, this.fileDependencies[i]);
 					if (dep == null) {	// need to add this file dependency to a resource
-						dep = this.fileDependencies[i].createResource(model);
+						dep = this.fileDependencies[i].createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 					}
 				}
 				fileResource.addProperty(p, dep);
@@ -896,7 +905,6 @@ public class SPDXFile implements Comparable<SPDXFile>{
 			fileName = "UNKNOWN";
 		}
 		// fileType
-		//TODO: Resolve whether mandatory or not
 		String fileType = this.getType();
 		if (fileType == null || fileType.isEmpty()) {
 			retval.add("Missing required file type");
@@ -907,7 +915,6 @@ public class SPDXFile implements Comparable<SPDXFile>{
 			}
 		}
 		// copyrightText
-		//TODO: Resolve whether mandatory or not
 		String copyrightText = this.getCopyright();
 		if (copyrightText == null || copyrightText.isEmpty()) {
 			retval.add("Missing required copyright text for file "+fileName);
@@ -1039,9 +1046,10 @@ public class SPDXFile implements Comparable<SPDXFile>{
 	/**
 	 * Set the file dependencies for this file
 	 * @param fileDependencies
+	 * @param doc SPDX Document containing the file dependencies
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setFileDependencies(SPDXFile[] fileDependencies) throws InvalidSPDXAnalysisException {
+	public void setFileDependencies(SPDXFile[] fileDependencies, SPDXDocument doc) throws InvalidSPDXAnalysisException {
 		if (fileDependencies == null) {
 			this.fileDependencies = new SPDXFile[0];
 		} else {
@@ -1055,7 +1063,7 @@ public class SPDXFile implements Comparable<SPDXFile>{
 			for (int i = 0; i < this.fileDependencies.length; i++) {
 				Resource dep = this.fileDependencies[i].getResource();
 				if (dep == null) {
-					dep = this.fileDependencies[i].createResource(model);
+					dep = this.fileDependencies[i].createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 				}
 				this.resource.addProperty(p, dep);
 			}

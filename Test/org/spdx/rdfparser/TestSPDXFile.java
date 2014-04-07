@@ -167,7 +167,7 @@ public class TestSPDXFile {
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
 		ArrayList<String> verify = file.verify();
 		assertEquals(0, verify.size());
-		Resource fileResource = file.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		pkgResource.addProperty(p, fileResource);
 		writer = new StringWriter();
 		model.write(writer);
@@ -194,8 +194,10 @@ public class TestSPDXFile {
 	@Test
 	public void testNoneCopyright() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
-		Resource fileResource = file.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
 		Triple m = Triple.createMatch(null, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -211,8 +213,10 @@ public class TestSPDXFile {
 	@Test
 	public void testNoassertionCopyright() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0]);
-		Resource fileResource = file.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
 		Triple m = Triple.createMatch(null, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -228,12 +232,14 @@ public class TestSPDXFile {
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		String COMMENT1 = "comment1";
 		String COMMENT2 = "comment2";
 		String COMMENT3 = "comment3";
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], COMMENT1);
 		assertEquals(file.getComment(), COMMENT1);
-		Resource fileResource = file.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		file.setLicenseComments("see if this works");
 		file.setComment(COMMENT2);
 		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
@@ -245,6 +251,8 @@ public class TestSPDXFile {
 	@Test
 	public void testSetContributors() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		String CONTRIBUTOR1 = "Contributor 1";
 		String CONTRIBUTOR2 = "Contributor 2";
 		String CONTRIBUTOR3 = "Contributor 3";
@@ -256,7 +264,7 @@ public class TestSPDXFile {
 										new SPDXFile[0], oneContributor, null);
 		assertEquals(1, file.getContributors().length);
 		String[] result = file.getContributors();
-		Resource fileResource = file.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		file.setContributors(contributors);
 		result = file.getContributors();
 		assertStringArraysEqual(contributors, result);
@@ -270,13 +278,15 @@ public class TestSPDXFile {
 	@Test
 	public void testSetNoticeText() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		String fileNotice = "This is a file notice";
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], "",
 										new SPDXFile[0], null, null);
 		if (file.getNoticeText() != null && !file.getNoticeText().isEmpty()) {
 			fail("nto null notice text");
 		}
-		Resource fileResource = file.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		file.setNoticeText(fileNotice);
 		String result  = file.getNoticeText();
 		assertEquals(fileNotice, result);
@@ -310,6 +320,8 @@ public class TestSPDXFile {
 	@Test
 	public void testSetFileDependencies() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		String FileDependencyName1  = "Dependency1";
 		String FileDependencyName2 = "dependencies/Dependency2";
 		String FileDependencyName3 = "Depenedency3";
@@ -318,14 +330,14 @@ public class TestSPDXFile {
 		SPDXFile fileDependency1 = new SPDXFile(FileDependencyName1, "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], COMMENT1);
 		SPDXFile fileDependency2 = new SPDXFile(FileDependencyName2, "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], COMMENT1);
 		SPDXFile fileDependency3 = new SPDXFile(FileDependencyName3, "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], COMMENT1);
-		Resource fileResource = file.createResource(model);
-		Resource fileDependencyResource1 = fileDependency1.createResource(model);
-		Resource fileDependencyResource2 = fileDependency2.createResource(model);
-		Resource fileDependencyResource3 = fileDependency3.createResource(model);
+		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
+		Resource fileDependencyResource1 = fileDependency1.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
+		Resource fileDependencyResource2 = fileDependency2.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
+		Resource fileDependencyResource3 = fileDependency3.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		SPDXFile[] fileDependencies = new SPDXFile[] {fileDependency1, fileDependency2, fileDependency3};
 		SPDXFile[] noDependencies = file.getFileDependencies();
 		assertEquals(0, noDependencies.length);
-		file.setFileDependencies(fileDependencies);
+		file.setFileDependencies(fileDependencies, doc);
 		SPDXFile[] result = file.getFileDependencies();
 		assertFileArraysEqual(fileDependencies, result);
 		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
@@ -358,6 +370,8 @@ public class TestSPDXFile {
 	@Test
 	public void testFindFileResource() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		doc.createSpdxAnalysis("http://somethingunique");
 		String FILE1_NAME = "./file/name/name1";
 		String FILE1_SHA1 = "sha1";
 		String FILE2_NAME = "./file2/name/name2";
@@ -365,9 +379,9 @@ public class TestSPDXFile {
 		String FILE3_NAME = "./a/different/name";
 		String FILE4_SHA1 = "sha4";
 		SPDXFile file1 = new SPDXFile(FILE1_NAME, "BINARY", FILE1_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
-		Resource file1Resource = file1.createResource(model);
+		Resource file1Resource = file1.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		SPDXFile file2 = new SPDXFile(FILE2_NAME, "BINARY", FILE2_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
-		Resource file2Resource = file2.createResource(model);
+		Resource file2Resource = file2.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		
 		SPDXFile testFile1 = new SPDXFile(FILE1_NAME, "BINARY", FILE1_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
 		SPDXFile testFile2 = new SPDXFile(FILE2_NAME, "BINARY", FILE2_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);

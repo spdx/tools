@@ -182,6 +182,10 @@ public interface SpdxRdfConstants {
 	public static String NON_STD_LICENSE_ID_PRENUM = "LicenseRef-";
 	public static Pattern LICENSE_ID_PATTERN = Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"(\\d+)$");
 	
+	// SPDX Element Reference format
+	public static String SPDX_ELEMENT_REF_PRENUM = "SPDXRef-";
+	public static Pattern SPDX_ELEMENT_REF_PATTERN = Pattern.compile(SPDX_ELEMENT_REF_PRENUM+"(\\d+)$");
+	
 	public static Pattern SPDX_VERSION_PATTERN = Pattern.compile("^SPDX-(\\d+)\\.(\\d+)$");
 
 	// Standard value strings

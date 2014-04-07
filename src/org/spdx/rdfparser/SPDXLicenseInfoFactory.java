@@ -182,6 +182,11 @@ public class SPDXLicenseInfoFactory {
 		}
 	}
 
+	/**
+	 * @param licenseId SPDX Standard License ID
+	 * @return SPDX standard license
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	public static SPDXStandardLicense getStandardLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
 		return getLicenseFromStdLicModel(STANDARD_LICENSE_URI_PREFIX + licenseId);
 	}
@@ -699,6 +704,9 @@ public class SPDXLicenseInfoFactory {
 		return STANDARD_LICENSE_ID_SET.toArray(new String[STANDARD_LICENSE_ID_SET.size()]);
 	}
 	
+	/**
+	 * @return Version of the license list being used by the SPDXLicenseInfoFactory
+	 */
 	public static String getLicenseListVersion() {
 		return LICENSE_LIST_VERSION;
 	}   
