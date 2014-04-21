@@ -59,7 +59,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.2";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.6";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.7";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -870,27 +870,34 @@ public class SPDXDocument implements SpdxRdfConstants {
 	private void initializeNextLicenseRef(SPDXNonStandardLicense[] existingLicenses) throws InvalidSPDXAnalysisException {
 		int highestNonStdLicense = 0;
 		for (int i = 0; i < existingLicenses.length; i++) {
+			try {
 			int idNum = getLicenseRefNum(existingLicenses[i].getId());
 			if (idNum > highestNonStdLicense) {
 				highestNonStdLicense = idNum;
 			}
+			} catch (NonNumericLicenseIdException ex) {
+				// just continue
+			}
 		}	
 		this.nextLicenseRef = highestNonStdLicense + 1;
 	}
+	
 	/**
 	 * Parses a license ID and return the integer representing the ID number (e.g. N in LicenseRef-N)
+	 * Note that in SPDX 1.2, non-numeric license IDs are allowed. This method will throw a NonNumericException if
+	 * a non numeric license ID passed as a licenseID parameter
 	 * @param licenseID
 	 * @return
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws NonNumericLicenseIdException If the non-standard license ID is not of the form LicenseRef-NN
 	 */
-	public int getLicenseRefNum(String licenseID) throws InvalidSPDXAnalysisException {
-		Matcher matcher = LICENSE_ID_PATTERN.matcher(licenseID);
+	public int getLicenseRefNum(String licenseID) throws NonNumericLicenseIdException {
+		Matcher matcher = LICENSE_ID_PATTERN_NUMERIC.matcher(licenseID);
 		if (!matcher.matches()) {
-			throw(new InvalidSPDXAnalysisException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
+			throw(new NonNumericLicenseIdException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
 		}
 		int numGroups = matcher.groupCount();
 		if (numGroups != 1) {
-			throw(new InvalidSPDXAnalysisException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
+			throw(new NonNumericLicenseIdException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
 		}
 		int idNum = Integer.decode(matcher.group(1));
 		return idNum;
