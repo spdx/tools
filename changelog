@@ -1,3 +1,6 @@
+Implementation version 1.2.6
+- Support absolute URI references for SPDXFile and SPDXPackage
+- Fix bug 1201 - Error opening an SPDX document with a non-numeric SPDX license ID
 Implementation version 1.2.5
 - Fix bug in compare utility - reporting incorrect comparison result
 - Change SPDXStandardLicenseInfoFactory to use the classLoader to load the local license repository and properties - will allow for WAR deployment of library
