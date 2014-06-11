@@ -1,4 +1,4 @@
-Implementation version 1.2.6
+Implementation version 1.2.7
 - Support absolute URI references for SPDXFile and SPDXPackage
 - Fix bug 1201 - Error opening an SPDX document with a non-numeric SPDX license ID
 Implementation version 1.2.5
