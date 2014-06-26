@@ -18,6 +18,7 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -32,11 +33,8 @@ public class SpdxFileInfoMerger {
 
 	ArrayList<SPDXDocument> spdxDocList = new ArrayList<SPDXDocument>();
 	ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
+	HashSet<SPDXFile> tempSet = new HashSet<SPDXFile>();
 	SPDXFile[] tempfileArray;
-	private String fileNameA;
-	private String fileNameB;
-	private String sha1A;
-	private String sha1B;
 	
 	public ArrayList<SPDXFile> FileInfoMerge
 		(HashMap<String,SPDXDocument> spdxDocMap)throws InvalidSPDXAnalysisException{
@@ -51,32 +49,12 @@ public class SpdxFileInfoMerger {
 	        		 alFiles.add(j,tempfileArray[j]);
 	        	 }
 	        }
-	        //compare each file name and sha1 in the list, and remove the duplicated info
-	        for (int i= alFiles.size(); i >= 0; i--){
-	        		fileNameA = alFiles.get(i).getName();
-	        		sha1A = alFiles.get(i).getSha1();
-	        		for (int j = alFiles.size(); j >= 0; i--){
-	        			if(i == j){
-	        				continue;
-	        			}
-	        			else{
-	        				fileNameB = alFiles.get(j).getName();
-	        				sha1B = alFiles.get(j).getSha1();
-	        			}
-	        			if(fileNameA.equals(fileNameB)&& sha1A.equals(sha1B)){
-	        					alFiles.remove(j); 				
-	        			}
-	        			else{
-	        				fileNameA ="";
-	        				fileNameB ="";
-	        				sha1A ="";
-	        				sha1B ="";
-	        			}
-	        	}
-	        }
-            
+	        //use HashSet to remove duplicate file info.
+	        tempSet.addAll(alFiles);
+	        alFiles.clear();
+	        alFiles.addAll(tempSet);
+	             
 			return alFiles;		
 	}
-	
 }
 
