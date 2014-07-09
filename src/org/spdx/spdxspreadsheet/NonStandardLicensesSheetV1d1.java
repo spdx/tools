@@ -77,7 +77,9 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 			int rowNum = firstRowNum + 1;
 			while (!done) {
 				Row row = sheet.getRow(rowNum);
-				if (row == null || row.getCell(firstCellNum) == null) {
+				if (row == null || row.getCell(firstCellNum) == null || 
+						row.getCell(firstCellNum).getStringCellValue() == null ||
+						row.getCell(firstCellNum).getStringCellValue().trim().isEmpty()) {
 					done = true;
 				} else {
 					String error = validateRow(row);

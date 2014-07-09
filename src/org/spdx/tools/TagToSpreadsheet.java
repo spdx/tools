@@ -16,6 +16,7 @@
  */
 package org.spdx.tools;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,6 +29,7 @@ import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.spdx.tag.BuildDocument;
 import org.spdx.tag.CommonCode;
+import org.spdx.tag.HandBuiltParser;
 import org.spdx.tag.NoCommentInputStream;
 import org.spdx.tag.TagValueLexer;
 import org.spdx.tag.TagValueParser;
@@ -82,8 +84,8 @@ public class TagToSpreadsheet {
 		try {
 			// read the tag-value constants from a file
 			Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
-			TagValueLexer lexer = new TagValueLexer(new NoCommentInputStream(spdxTagFile));
-			TagValueParser parser = new TagValueParser(lexer);
+			NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
+			HandBuiltParser parser = new HandBuiltParser(new DataInputStream(nci));
 			Model model = ModelFactory.createDefaultModel();
 			doc = new SPDXDocument(model);
 			parser.setBehavior(new BuildDocument(model, doc, constants));

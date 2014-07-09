@@ -41,7 +41,7 @@ public class OriginsSheetV1d2 extends OriginsSheet {
 	static final int USER_DEFINED_COL = DOCUMENT_COMMENT_COL + 1;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
-		true, true, false, false, false, false};
+		true, false, false, false, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
 		"SPDX Version", "Creator", "Created", "Data License", "License List Version",  
