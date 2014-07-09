@@ -60,7 +60,7 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 
 	
 	static final boolean[] REQUIRED = new boolean[] {true, false, true, false, false, false, true, 
-		true, true, true, false, true, true, true, false, true, false, false, false};
+		true, true, false, false, true, true, true, false, true, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package Name", "Package Version", 
 		"Package FileName", "Package Supplier", "Package Originator", "Home Page",
 		"Package Download Location", "Package Checksum", "Package Verification Code",
@@ -339,7 +339,12 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 		String url = row.getCell(DOWNLOAD_URL_COL).getStringCellValue();
 		String packageVerificationValue = row.getCell(FILE_VERIFICATION_VALUE_COL).getStringCellValue();
 		String[] excludedFiles;
-		String excludedFilesStr = row.getCell(VERIFICATION_EXCLUDED_FILES_COL).getStringCellValue();
+		
+		Cell excludedFilesCell = row.getCell(VERIFICATION_EXCLUDED_FILES_COL);
+		String excludedFilesStr = null;
+		if (excludedFilesCell != null) {
+			excludedFilesStr = excludedFilesCell.getStringCellValue();
+		}
 		if (excludedFilesStr != null && !excludedFilesStr.isEmpty()) {
 			excludedFiles = excludedFilesStr.split(",");
 			for (int i = 0;i < excludedFiles.length; i++) {
