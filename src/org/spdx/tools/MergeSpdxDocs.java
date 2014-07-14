@@ -35,6 +35,7 @@ import org.spdx.rdfparser.SPDXFile;
  * Commend line application to merge multiple SPDX documents into one single documents
  * Usage: MergeSpdxDocs doc1 doc2 doc3 ... [output]
  * where doc1 doc2 doc3 are SPDX documents either RDF/XML or tag/value format
+ * And doc1 will be used as master document. The output SPDX document is built based on the master document.
  * 
  * @author Gang Ling
  *
@@ -84,8 +85,15 @@ public class MergeSpdxDocs {
 					System.exit(ERROR_STATUS);
 				}
 			}
+			SPDXDocument outDoc = null;
+			try{
+				outDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
+			}
+			catch(Exception e){
+				System.out.println("Error to create new output SPDX Document "+e.getMessage());
+			}
 			
-			
+			HashMap<SPDXDocument, HashMap<String, String>> licenseIdMap = new HashMap<SPDXDocument, HashMap<String, String>>();
 	}
 			
 
@@ -94,5 +102,6 @@ public class MergeSpdxDocs {
     		System.out.println("Usage: doc1 doc2 doc3...[output]");
     		System.out.println("where doc1, doc2, doc3... is a serial of vaild SPDX documents in RDF/XML format");
     		System.out.println("[output] is a vaild name for output document");
+    		System.out.println("Note: the doc1 will be used as master document to build the finail output document ");
     }
 }
