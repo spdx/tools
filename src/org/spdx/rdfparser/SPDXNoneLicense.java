@@ -84,4 +84,12 @@ public class SPDXNoneLicense extends SPDXLicenseInfo {
 		return new ArrayList<String>();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#clone()
+	 */
+	@Override
+	public SPDXLicenseInfo clone() {
+		return new SPDXNoneLicense();
+	}
+
 }

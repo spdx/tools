@@ -60,8 +60,8 @@ public class SPDXStandardLicense extends SPDXLicense {
 //		this(name, id, text, new String[] {sourceUrl}, notes, standardLicenseHeader, template, osiApproved);
 //	}
 	
-	public SPDXStandardLicense(String name, String id, String text, String[] sourceUrl, String notes,
-			String standardLicenseNotice, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
+	public SPDXStandardLicense(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
 		super(id);
 // The following check was removed since this class is used in creating the standard licenses for the website
 //		if (!SPDXLicenseInfoFactory.isStandardLicenseID(id)) {
@@ -69,8 +69,8 @@ public class SPDXStandardLicense extends SPDXLicense {
 //		}
 		this.name = name;
 		this.sourceUrl = sourceUrl;
-		this.comments = notes;
-		this.standardLicenseHeader = standardLicenseNotice;
+		this.comments = comments;
+		this.standardLicenseHeader = standardLicenseHeader;
 		this.template = template;
 		
 		this.osiApproved = osiApproved;
@@ -538,6 +538,20 @@ public class SPDXStandardLicense extends SPDXLicense {
 				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
 				resource.addProperty(p, String.valueOf(this.osiApproved));
 			}
+		}
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#clone()
+	 */
+	@Override
+	public SPDXLicenseInfo clone() {
+		try {
+			return new SPDXStandardLicense(this.getName(), this.getId(),
+					this.getText(), this.getSourceUrl(), this.getComment(),
+					this.getStandardLicenseHeader(), this.getTemplate(), this.isOsiApproved());
+		} catch (InvalidSPDXAnalysisException e) {
+			// Hmmm - TODO: Figure out what to do in this case
+			return null;
 		}
 	}
 }

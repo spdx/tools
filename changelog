@@ -1,5 +1,6 @@
 Implementation version 1.2.8
 - No longer require excluded file names in package sheet for spreadsheet
+- Added clone() interfaces for SPDXFile and SPDXLicenseInfo
 - Fix bug 1216  TagToSpreadsheet parser fails
 - Set the base to the namespace for the SPDX document itself
 Implementation version 1.2.7
