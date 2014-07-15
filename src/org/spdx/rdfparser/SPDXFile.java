@@ -33,7 +33,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class SPDXFile implements Comparable<SPDXFile>{
+public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	
 	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());
 	private Model model = null;
@@ -1170,4 +1170,151 @@ public class SPDXFile implements Comparable<SPDXFile>{
     public int compareTo(SPDXFile file) {
         return this.getName().compareTo(file.getName());        
     }
+    
+    /**
+     * Create a deep copy or clone of this file including all properties.
+     * The cloned SPDX file is created within the SPDX document using the
+     * provided fileUri and the SPDXDocument model is populated with all of the
+     * properties.
+     * @param doc Document containing the Model used to create the copy of this SPDX file
+     * @param fileUri
+     * @return
+     * @throws InvalidSPDXAnalysisException 
+     */
+    public SPDXFile clone(SPDXDocument doc, String fileUri) throws InvalidSPDXAnalysisException {
+    	SPDXFile retval = this.clone();
+    	retval.createResource(doc, fileUri);
+    	return retval;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     * Creates a deep copy including clones of the files and artifactOfs referenced in the fileDependencies
+     */
+    public SPDXFile clone() {
+    	SPDXFile[] cloneFileDependencies;
+    	if (this.fileDependencies == null) {
+    		cloneFileDependencies = new SPDXFile[0];
+    	} else {
+    		cloneFileDependencies = new SPDXFile[this.fileDependencies.length];
+    		for (int i = 0; i < cloneFileDependencies.length; i++) {
+    			cloneFileDependencies[i] = this.fileDependencies[i].clone();
+    		}
+    	}
+    	DOAPProject[] cloneArtifactOfs;
+    	if (this.artifactOf == null) {
+    		cloneArtifactOfs = new DOAPProject[0];
+    	} else {
+    		cloneArtifactOfs = new DOAPProject[this.artifactOf.length];
+    		for (int i = 0; i < cloneArtifactOfs.length; i++) {
+    			cloneArtifactOfs[i] = this.artifactOf[i].clone();
+    		}
+    	}
+    	SPDXLicenseInfo clonedConcludedLicense = concludedLicenses.clone();
+    	SPDXLicenseInfo[] clonedSeenLicenses;
+    	if (this.seenLicenses == null) {
+    		clonedSeenLicenses = new SPDXLicenseInfo[0];
+    	} else {
+    		clonedSeenLicenses = new SPDXLicenseInfo[seenLicenses.length];
+    		for (int i = 0; i < clonedSeenLicenses.length; i++) {
+    			if (seenLicenses[i] != null) {
+    				clonedSeenLicenses[i] = seenLicenses[i].clone();
+    			}
+    		}
+    	}
+    	return new SPDXFile(this.getName(), this.getType(), 
+    			this.getSha1(), clonedConcludedLicense, 
+    			clonedSeenLicenses, this.getLicenseComments(),
+    			this.getCopyright(), cloneArtifactOfs, this.getComment(), 
+    			cloneFileDependencies, this.getContributors(), this.getNoticeText());
+    }
+
+	/**
+	 * Returns true if all of the properties of the compareToFile are 
+	 * equivalent or equal to all properties of this SPDXFile.  Equivalent
+	 * is different from equals in that the equals method will only return true
+	 * if it is the same object.
+	 * @param compareToFile
+	 * @return
+	 */
+	public boolean equivalent(SPDXFile compareToFile) {
+		if (!SpdxVerificationHelper.equivalentArray(this.artifactOf, compareToFile.getArtifactOf())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.comment, compareToFile.getComment())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.concludedLicenses, compareToFile.getConcludedLicenses())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equivalentArray(this.contributors, compareToFile.getContributors())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.copyright, compareToFile.getCopyright())) {
+			return false;
+		}
+		if (!equivalentFileDependencies(this.fileDependencies, compareToFile.getFileDependencies())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.licenseComments, compareToFile.getLicenseComments())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.name, compareToFile.getName())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.noticeText, compareToFile.getNoticeText())) {
+			return false;
+		}
+		if (!SpdxVerificationHelper.equivalentArray(this.seenLicenses, compareToFile.getSeenLicenses())) {
+			return false;
+		}
+		if (sha1 == null) {
+			if (compareToFile.getSha1() != null) {
+				return false;
+			}
+		} else {
+			if (compareToFile.getSha1() == null) {
+				return false;
+			}
+			if (!SpdxVerificationHelper.equalsWithNull(this.sha1.getValue(), compareToFile.getSha1())) {
+				return false;
+			}
+		}
+		if (!SpdxVerificationHelper.equalsWithNull(this.type, compareToFile.getType())) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns true if two arrays of file dependencies are equivalent indpendent of order and considering nulls
+	 * @param fileDependencies1
+	 * @param fileDependencies2
+	 * @return
+	 */
+	private boolean equivalentFileDependencies(SPDXFile[] dependencies1,
+			SPDXFile[] dependencies2) {
+		if (dependencies1 == null) {
+			return (dependencies2 == null);
+		}
+		if (dependencies2 == null) {
+			return false;
+		}
+		if (dependencies1.length != dependencies2.length) {
+			return false;
+		}
+		for (int i = 0; i < dependencies1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < dependencies2.length; j++) {
+				if (dependencies1[i].equivalent(dependencies2[j])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

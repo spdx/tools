@@ -117,4 +117,18 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 		}
 		return true;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#clone()
+	 */
+	@Override
+	public SPDXLicenseInfo clone() {
+		SPDXLicenseInfo[] clonedSet = new SPDXLicenseInfo[this.licenseInfos.size()];
+		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+		int i = 0;
+		while (iter.hasNext()) {
+			clonedSet[i++] = iter.next().clone();
+		}
+		return new SPDXDisjunctiveLicenseSet(clonedSet);
+	}
 }

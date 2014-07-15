@@ -31,7 +31,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class DOAPProject {
+public class DOAPProject implements Cloneable {
 	
 	public static final String UNKNOWN_URI = "UNKNOWN";
 	private String name = null;
@@ -233,11 +233,40 @@ public class DOAPProject {
 		// just use the object compares if the above shortcuts did not work out
 		return super.equals(o);
 	}
+	
+	@Override
+	public int hashCode() {
+		// need this method to match the equals for proper behavior
+		if (this.getProjectUri() != null && !this.getProjectUri().equals(UNKNOWN_URI)) {
+			return(this.getProjectUri().hashCode());
+		} else if (this.getHomePage() != null) {
+			return this.getHomePage().hashCode();
+		} else {
+			return super.hashCode();
+		}		
+	}
 
 	/**
 	 * @return
 	 */
 	public Resource getResource() {
 		return this.projectResource;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 * Provides a deep copy of the DOAPProject
+	 */
+	@Override
+	public DOAPProject clone() {
+		DOAPProject retval = new DOAPProject(this.getName(), this.getHomePage());
+		if (this.getProjectUri() != null) {
+			try {
+				retval.setUri(this.getProjectUri());
+			} catch (InvalidSPDXAnalysisException e) {
+				// ignore the exception and just go without the URI
+			}
+		}
+		return retval;
 	}
 }

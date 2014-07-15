@@ -174,4 +174,52 @@ public class SpdxVerificationHelper {
 	public static boolean isValidUri(String uri) {
 		return !iriFactory.create(uri).hasViolation(false);
 	}
+	
+	/**
+	 * Returns true if s1 equals s2 taking into account the possibility of null values
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
+	public static boolean equalsWithNull(Object s1, Object s2) {
+		if (s1 == null) {
+			return (s2 == null);
+		}
+		if (s2 == null) {
+			return false;
+		}
+		return s1.equals(s2);
+	}
+	
+	/**
+	 * Returns true if the array s1 contains the same objects as s2 independent of order
+	 * and allowing for null values
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
+	public static boolean equivalentArray(Object[] s1, Object[] s2) {
+		if (s1 == null) {
+			return (s2 == null);
+		}
+		if (s2 == null) {
+			return false;
+		}
+		if (s1.length != s2.length) {
+			return false;
+		}
+		for (int i = 0; i < s1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < s2.length; j++) {
+				if (equalsWithNull(s1[i], s2[j])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
