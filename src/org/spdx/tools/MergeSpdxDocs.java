@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Source Auditor Inc.
+ * Copyright (c) 2014 Gang Ling.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
 import org.spdx.merge.SpdxMergeException;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -31,98 +32,76 @@ import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 
 /**
- * @author gling
+ * Commend line application to merge multiple SPDX documents into one single documents
+ * Usage: MergeSpdxDocs doc1 doc2 doc3 ... [output]
+ * where doc1 doc2 doc3 are SPDX documents either RDF/XML or tag/value format
+ * And doc1 will be used as master document. The output SPDX document is built based on the master document.
+ * 
+ * @author Gang Ling
  *
  */
 public class MergeSpdxDocs {
 
 	static final int MIN_ARGS = 2;
-	static final int ERROR_STATUS =1;
-	private static String spdxDocName;
-	private static ArrayList<SPDXFile> alFiles;
-	
+	static final int ERROR_STATUS =1;	
 	
 	/**
-	 * @param args
+	 * @param args (input SPDX documents; the last item in the args will be the output file name)
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws InvalidSPDXAnalysisException, SpdxMergeException {
 			if (args.length < MIN_ARGS){
 					System.out.println("Insufficient arguments");
 					usage();
 					System.exit(ERROR_STATUS);
 			}
+			//check the output file name to avoid the miss input value
+			File outFile = new File(args[args.length-1]);
+			if(outFile.exists()){
+				System.out.println("Output file "+args[args.length-1]+" already exist");
+				System.exit(ERROR_STATUS);
+			}
 			
-			HashMap <String, SPDXDocument> spdxDocMap = new HashMap<String, SPDXDocument>();
-			SPDXDocument spdxDoc = null;
-	
-			try{
-				for(int i=0; i < args.length; i++){
-					try{
-						spdxDoc = openRdfDoc(args[i].trim());
-						spdxDocName = convertDocName(args[i]);
-				       }catch (SpdxMergeException e){
-				    	   System.out.println("Error opening "+ spdxDocName+":"+e.getMessage());
-				    	   usage();
-				    	   System.exit(ERROR_STATUS);
+			//store inputed SPDX documents in the array "mergeDocs" for later parsing 
+			SPDXDocument[] mergeDocs = new SPDXDocument[args.length-1];
+
+			String[] docNames = new String[args.length-1];
+			@SuppressWarnings("unchecked")
+			ArrayList<String>[] verficationError = new ArrayList[args.length-1];
+			
+			//call methods from CompareSpdxDocs class
+			CompareSpdxDocs compareUtility = new CompareSpdxDocs ();
+			for(int i = 0; i < args.length-1; i++){
+				try{
+					mergeDocs[i] = compareUtility.openRdfOrTagDoc(args[i]);
+					docNames[i] = compareUtility.convertDocName(args[i]);
+					verficationError[i] = mergeDocs[i].verify();
+					if(verficationError[i] != null && verficationError[i].size() > 0){
+						System.out.println("Warning: "+docNames[i]+" contains verfication errors.");
+					}			
+				}catch(SpdxCompareException e){
+					System.out.println("Error opening SPDX document "+args[i]+" : "+e.getMessage());
+					System.exit(ERROR_STATUS);
 				}
-			   spdxDocMap.put(spdxDocName,spdxDoc);
 			}
-			SpdxFileInfoMerger MergeFileInfo = new SpdxFileInfoMerger();
-				alFiles = MergeFileInfo.FileInfoMerge(spdxDocMap);
-		}
-		finally{
-				System.out.println("Program executed");
-		}
-	}
-	
-    protected static SPDXDocument openRdfDoc(String spdxDocFileName)throws SpdxMergeException{
-			File spdxDocFile = new File(spdxDocFileName);
-			if (!spdxDocFile.exists()){
-					throw(new SpdxMergeException("SPDX File "+spdxDocFileName+" does not exist."));		
-			}
-			if (!spdxDocFile.canRead()){
-					throw(new SpdxMergeException("SPDX File "+spdxDocFileName+" can not be read."));
-			}
-			SPDXDocument retval = null;
+			SPDXDocument outDoc = null;
 			try{
-					retval = SPDXDocumentFactory.creatSpdxDocument(spdxDocFileName);
-			}catch (IOException e){				
-			}catch (InvalidSPDXAnalysisException e){				
-			}catch (Exception e){
-            }
-			if(retval == null){
-				throw(new SpdxMergeException ("File "+spdxDocFileName+" is not a recognized RDF/XML format"));
+				outDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
 			}
-			return retval;
+			catch(Exception e){
+				System.out.println("Error to create new output SPDX Document "+e.getMessage());
+			}
+			
+			HashMap<SPDXDocument, HashMap<String, String>> licenseIdMap = new HashMap<SPDXDocument, HashMap<String, String>>();
 	}
-    
-	/**
-	 * Method has taken credit from CompareSpdxDocs.java
-	 * Original author: Gary O'Neall
-	 * Converts a file path or URL to a shorter document name
-	 * @param docPath
-	 * @return
-	 */
-    protected static String convertDocName(String docPath){
-    		if (docPath.contains(File.separator)){
-    			File docFile = new File(docPath);
-    			return docFile.getName();
-    		}
-    		else {
-    				try{
-    					URI uri = new URI(docPath);
-    					String path = uri.getPath();
-    					return path;
-    				}catch(URISyntaxException e){
-    					return docPath;
-    				}
-    		}
-    }
+			
+
     
     private static void usage(){
-    		System.out.println("Usage: doc1 doc2 ...");
-    		System.out.println("where doc1, doc2,... is a serial of vaild SPDX documents");
-    		System.out.println("in RDF/XML format");
+    		System.out.println("Usage: doc1 doc2 doc3...[output]");
+    		System.out.println("where doc1, doc2, doc3... is a serial of vaild SPDX documents in RDF/XML format");
+    		System.out.println("[output] is a vaild name for output document");
+    		System.out.println("Note: the doc1 will be used as master document to build the finail output document ");
     }
 }
