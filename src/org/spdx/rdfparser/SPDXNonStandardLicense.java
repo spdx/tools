@@ -297,4 +297,13 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	public String[] getSourceUrls() {
 		return this.sourceUrls;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#clone()
+	 */
+	@Override
+	public SPDXLicenseInfo clone() {
+		return new SPDXNonStandardLicense(this.getId(), this.getText(), this.getLicenseName(), 
+				this.getSourceUrls(), this.getComment());
+	}
 }

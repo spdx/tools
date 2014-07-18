@@ -183,5 +183,25 @@ public class TestDOAPProject {
 			assertEquals(0, verify.size());
 		}
 	}
+	
+	@Test
+	public void testClone() {
+		Resource[] projectResources = new Resource[TEST_PROJECTS.length];
+		for (int i = 0; i < projectResources.length; i++) {
+			projectResources[i] = TEST_PROJECTS[i].createResource(model);
+		}
+		for (int i = 0; i < TEST_PROJECTS.length; i++) {
+			DOAPProject clone = TEST_PROJECTS[i].clone();
+			if (clone.getResource() != null) {
+				fail("Cloned project has a resource");
+			}
+			if (TEST_PROJECTS[i].getResource() == null) {
+				fail("original project does not contain a resource");
+			}
+			assertEquals(TEST_PROJECTS[i].getHomePage(), clone.getHomePage());
+			assertEquals(TEST_PROJECTS[i].getName(), clone.getName());
+			assertEquals(TEST_PROJECTS[i].getProjectUri(), clone.getProjectUri());
+		}
+	}
 
 }
