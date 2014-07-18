@@ -31,7 +31,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public abstract class SPDXLicenseInfo {
+public abstract class SPDXLicenseInfo implements Cloneable {
 	
 	Model model = null;
 	Node licenseInfoNode = null;
@@ -124,4 +124,6 @@ public abstract class SPDXLicenseInfo {
 	public Resource getResource() {
 		return this.resource;
 	}
+	
+	public abstract SPDXLicenseInfo clone();
 }

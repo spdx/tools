@@ -358,7 +358,7 @@ public class TestSPDXFile {
 			SPDXFile compareFile1 = files1[i];
 			boolean found = false;
 			for (int j = 0; j < files2.length; j++) {
-				if (files2[j].equals(compareFile1)) {
+				if (files2[j].equivalent(compareFile1)) {
 					found = true;
 					break;
 				}
@@ -399,5 +399,114 @@ public class TestSPDXFile {
 		if (retval != null) {
 			fail("Should be null due to different checksums");
 		}
+	}
+	
+	@Test
+	public void testCloneSimple() throws InvalidSPDXAnalysisException, IOException {
+	
+		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};
+		String[] contributors = new String[] {"Contrib1", "Contrib2"};
+		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
+		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
+				"Copyrights", artifactOfs, "file comments");
+		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
+				"Copyrights", artifactOfs, "file comments");
+		SPDXFile[] fileDependencies = new SPDXFile[] {fileDep1, fileDep2};
+		String fileNotice = "File Notice";
+		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
+				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
+		ArrayList<String> verify = file.verify();
+		assertEquals(0, verify.size());
+
+		// clone without a model assigned to the original file
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument toDoc1 = new SPDXDocument(model);
+		String testDocUri = "https://my/test/doc1";
+		toDoc1.createSpdxAnalysis(testDocUri);
+		String pkgUri = "https://my/test/doc1#doc1";
+		toDoc1.createSpdxPackage(pkgUri);
+		String toFileUri = "https://my/test/doc1#file1";
+		
+		SPDXFile toFile = file.clone(toDoc1, toFileUri);
+		assertEquals(file.getArtifactOf()[0].getName(), toFile.getArtifactOf()[0].getName());
+		assertEquals(file.getArtifactOf()[0].getHomePage(), toFile.getArtifactOf()[0].getHomePage());
+		assertEquals(file.getCopyright(), toFile.getCopyright());
+		assertEquals(file.getLicenseComments(), toFile.getLicenseComments());
+		assertEquals(file.getComment(), toFile.getComment());
+		assertEquals(file.getName(), toFile.getName());
+		assertEquals(file.getSha1(), toFile.getSha1());
+		assertEquals(file.getType(), toFile.getType());
+		assertEquals(file.getConcludedLicenses(), toFile.getConcludedLicenses());
+		assertEquals(file.getNoticeText(), toFile.getNoticeText());
+		assertStringArraysEqual(contributors, toFile.getContributors());
+		TestPackageInfoSheet.compareLicenseDeclarations(file.getSeenLicenses(), toFile.getSeenLicenses());
+		assertFileArraysEqual(file.getFileDependencies(), toFile.getFileDependencies());
+		verify = toFile.verify();
+		assertEquals(0, verify.size());
+	}
+	
+	@Test
+	public void testCloneModelSimple() throws InvalidSPDXAnalysisException, IOException {
+	
+		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};
+		String[] contributors = new String[] {"Contrib1", "Contrib2"};
+		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
+		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
+				"Copyrights", artifactOfs, "file comments");
+		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
+				"Copyrights", artifactOfs, "file comments");
+		SPDXFile[] fileDependencies = new SPDXFile[] {fileDep1, fileDep2};
+		String fileNotice = "File Notice";
+		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
+				COMPLEX_LICENSE, seenLic, "License comments", 
+				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
+		ArrayList<String> verify = file.verify();
+		assertEquals(0, verify.size());
+		
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument toDoc1 = new SPDXDocument(model);
+		String testDocUri = "https://my/test/doc1";
+		toDoc1.createSpdxAnalysis(testDocUri);
+		String pkgUri = "https://my/test/doc1#doc1";
+		toDoc1.createSpdxPackage(pkgUri);
+		String toFileUri = "https://my/test/doc1#file1";
+
+		// assign a model to the original, then clone
+		Model fromModel = ModelFactory.createDefaultModel();
+		SPDXDocument fromDoc2 = new SPDXDocument(fromModel);
+		String fromDocUri = "https://my/test/doc2";
+		fromDoc2.createSpdxAnalysis(fromDocUri);
+		String fromPkgUri = "https://my/test/doc2#doc2";
+		fromDoc2.createSpdxPackage(fromPkgUri);
+		String fromFileUri = "https://my/test/doc2#file2";
+		Resource fileResource = file.createResource(fromDoc2, fromFileUri);
+		Model toModel2 = ModelFactory.createDefaultModel();
+		SPDXDocument toDoc2 = new SPDXDocument(toModel2);
+		String testDocUri2 = "https://my/test/doc3";
+		toDoc1.createSpdxAnalysis(testDocUri2);
+		String pkgUri2 = "https://my/test/doc3#doc3";
+		toDoc1.createSpdxPackage(pkgUri2);
+		String toFileUri2 = "https://my/test/doc3#file3";
+		SPDXFile toFile = file.clone(toDoc2, toFileUri2);
+		assertEquals(file.getArtifactOf()[0].getName(), toFile.getArtifactOf()[0].getName());
+		assertEquals(file.getArtifactOf()[0].getHomePage(), toFile.getArtifactOf()[0].getHomePage());
+		assertEquals(file.getCopyright(), toFile.getCopyright());
+		assertEquals(file.getLicenseComments(), toFile.getLicenseComments());
+		assertEquals(file.getComment(), toFile.getComment());
+		assertEquals(file.getName(), toFile.getName());
+		assertEquals(file.getSha1(), toFile.getSha1());
+		assertEquals(file.getType(), toFile.getType());
+		assertEquals(file.getConcludedLicenses(), toFile.getConcludedLicenses());
+		assertEquals(file.getNoticeText(), toFile.getNoticeText());
+		assertStringArraysEqual(contributors, toFile.getContributors());
+		TestPackageInfoSheet.compareLicenseDeclarations(file.getSeenLicenses(), toFile.getSeenLicenses());
+		assertFileArraysEqual(file.getFileDependencies(), toFile.getFileDependencies());
+		verify = toFile.verify();
+		assertEquals(0, verify.size());
 	}
 }
