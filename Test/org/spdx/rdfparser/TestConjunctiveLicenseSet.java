@@ -81,4 +81,32 @@ public class TestConjunctiveLicenseSet {
 		verify = cls.verify();
 		assertEquals(0, verify.size());
 	}
+	
+	@Test
+	public void testCloneConjunctive() throws InvalidSPDXAnalysisException {
+		SPDXConjunctiveLicenseSet cls = new SPDXConjunctiveLicenseSet(NON_STD_LICENSES);
+		@SuppressWarnings("unused")
+		Resource clsResource = cls.createResource(model);
+		SPDXConjunctiveLicenseSet cls2 = (SPDXConjunctiveLicenseSet)cls.clone();
+		assertTrue(cls.equals(cls2));
+		ArrayList<String> verify = cls2.verify();
+		assertEquals(0, verify.size());
+		verify = cls.verify();
+		assertEquals(0, verify.size());
+		assertTrue(cls2.getResource() == null);
+	}
+	
+	@Test
+	public void testCloneDisjunctive() throws InvalidSPDXAnalysisException {
+		SPDXDisjunctiveLicenseSet cls = new SPDXDisjunctiveLicenseSet(NON_STD_LICENSES);
+		@SuppressWarnings("unused")
+		Resource clsResource = cls.createResource(model);
+		SPDXDisjunctiveLicenseSet cls2 = (SPDXDisjunctiveLicenseSet)cls.clone();
+		assertTrue(cls.equals(cls2));
+		ArrayList<String> verify = cls2.verify();
+		assertEquals(0, verify.size());
+		verify = cls.verify();
+		assertEquals(0, verify.size());
+		assertTrue(cls2.getResource() == null);
+	}
 }

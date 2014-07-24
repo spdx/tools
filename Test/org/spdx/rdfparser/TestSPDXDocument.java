@@ -1086,4 +1086,45 @@ public class TestSPDXDocument {
 		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(3);
 		assertEquals(expected, nextSpdxElementRef);	// original SPDX doc should maintain its own
 	}
+	
+	@Test
+	public void testAddClonedFileWithUri() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument docA = new SPDXDocument(model);
+		docA.createSpdxAnalysis(docUri);
+		docA.createSpdxPackage(docA.getDocumentNamespace() + docA.getNextSpdxElementRef());
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		
+		String fileUri = docA.getDocumentNamespace()+docA.getNextSpdxElementRef();
+		SPDXFile clonedFile = testFile.clone(docA, fileUri);
+		docA.getSpdxPackage().addFile(clonedFile);
+		SPDXFile[] result = docA.getSpdxPackage().getFiles();
+		assertEquals(result.length, 1);
+		assertEquals(clonedFile, result[0]);
+		assertEquals(fileUri, result[0].getResource().getURI());
+	}
+	
+	@Test
+	public void testAddClonedFileNoUri() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument docA = new SPDXDocument(model);
+		docA.createSpdxAnalysis(docUri);
+		docA.createSpdxPackage(docA.getDocumentNamespace() + docA.getNextSpdxElementRef());
+		
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		
+		SPDXFile clonedFile = testFile.clone();
+		docA.getSpdxPackage().addFile(clonedFile);
+		SPDXFile[] result = docA.getSpdxPackage().getFiles();
+		assertEquals(result.length, 1);
+		assertEquals(clonedFile, result[0]);
+		assertTrue(clonedFile.getResource().getURI().startsWith(docA.getDocumentNamespace()));
+	}
 }
