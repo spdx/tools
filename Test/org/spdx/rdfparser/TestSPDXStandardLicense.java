@@ -179,5 +179,56 @@ public class TestSPDXStandardLicense {
 		}
 	}
 	
-	
+	@Test
+	public void testClone() throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		String name = "name";
+		String id = "AFL-3.0";
+		String text = "text";
+		String[] sourceUrls = new String[] {"source url1", "source url2"};
+		String notes = "notes";
+		String standardLicenseHeader = "Standard license header";
+		String template = "template";
+		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+				sourceUrls, notes, standardLicenseHeader, template, true);
+		Resource licResource = stdl.createResource(model);
+		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
+
+		
+		SPDXStandardLicense lic2 = (SPDXStandardLicense)compLic.clone();
+
+		assertEquals(id, lic2.getId());
+		assertEquals(text, lic2.getText());
+		assertEquals(notes, lic2.getComment());
+		assertEquals(name, lic2.getName());
+		assertTrue(compareArrayContent(sourceUrls, lic2.getSourceUrl()));
+		assertEquals(standardLicenseHeader, lic2.getStandardLicenseHeader());
+		assertEquals(template, lic2.getTemplate());
+		assertTrue(lic2.getResource() == null);
+	}
+
+	/**
+	 * @param strings1
+	 * @param strings2
+	 * @return true if both arrays contain the same content independent of order
+	 */
+	private boolean compareArrayContent(String[] strings1,
+			String[] strings2) {
+		if (strings1.length != strings2.length) {
+			return false;
+		}
+		for (int i = 0; i < strings1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < strings2.length; j++) {
+				if (strings1[i].equals(strings2[j])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

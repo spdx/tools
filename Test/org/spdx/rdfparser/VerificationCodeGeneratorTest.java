@@ -38,11 +38,34 @@ public class VerificationCodeGeneratorTest {
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"SPDXFile.java"
 	};
 	private static final Object SHA1_RESULT = "559f9215216045864ca5785d1892a00106cf0f6a";
+	
+	private static String[] SPDX_FILE_NAMES = new String[] {
+		"file/path/abc-not-skipped.java", "file/path/skipped.spdx", "file/path/not-skipped"
+	};
+	private static String[] SPDX_SKIPPED_FILE_NAMES = new String[] {
+		SPDX_FILE_NAMES[1]
+	};
+	private static String[] SPDX_FILE_SHA1S = new String[] {
+		"dddd9215216045864ca5785d1892a00106cf0f6a",
+		"bbbb9215216045864ca5785d1892a00106cf0f6a",
+		"cccc9215216045864ca5785d1892a00106cf0f6a"
+	};
+	
+	private static String SPDX_FILE_SHA1_RESULT = "9d373ca70e34ac867e304dd3356f0e8084881449";
+	private SPDXFile[] SPDX_FILES;
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		SPDX_FILES = new SPDXFile[SPDX_FILE_NAMES.length];
+		for (int i = 0; i < SPDX_FILES.length; i++) {
+			SPDX_FILES[i] = new SPDXFile(SPDX_FILE_NAMES[i], "SOURCE", 
+					SPDX_FILE_SHA1S[i], new SpdxNoAssertionLicense(), 
+					new SPDXLicenseInfo[] {new SpdxNoAssertionLicense()},
+					"", "", new DOAPProject[0]);
+		}
+		
 	}
 
 	/**
@@ -115,6 +138,13 @@ public class VerificationCodeGeneratorTest {
 		assertEquals(ns4, VerificationCodeGenerator.normalizeFilePath(s4));
 		assertEquals(ns5, VerificationCodeGenerator.normalizeFilePath(s5));
 		assertEquals(ns6, VerificationCodeGenerator.normalizeFilePath(s6));
+	}
+	
+	@Test
+	public void testGenerateVerificationCodeSpdxFiles() throws NoSuchAlgorithmException {
+		VerificationCodeGenerator vg = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
+		SpdxPackageVerificationCode result = vg.generatePackageVerificationCode(SPDX_FILES, SPDX_SKIPPED_FILE_NAMES);
+		assertEquals(SPDX_FILE_SHA1_RESULT, result.getValue());
 	}
 
 }
