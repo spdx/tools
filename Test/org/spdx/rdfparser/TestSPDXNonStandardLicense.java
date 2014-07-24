@@ -189,4 +189,21 @@ public class TestSPDXNonStandardLicense {
 		}
 		return true;
 	}
+	
+	@Test
+	public void testClone() {
+		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1, 
+				LICENSENAME1, SOURCEURLS1, COMMENT1);
+		@SuppressWarnings("unused")
+		Resource licResource = lic.createResource(model);
+		
+		SPDXNonStandardLicense lic2 = (SPDXNonStandardLicense)lic.clone();
+
+		assertEquals(ID1, lic2.getId());
+		assertEquals(TEXT1, lic2.getText());
+		assertEquals(COMMENT1, lic2.getComment());
+		assertEquals(LICENSENAME1, lic2.getLicenseName());
+		assertTrue(compareArrayContent(SOURCEURLS1, lic2.getSourceUrls()));
+		assertTrue(lic2.getResource() == null);
+	}
 }

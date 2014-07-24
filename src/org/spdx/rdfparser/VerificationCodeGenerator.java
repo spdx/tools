@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
- * Generates a package verification code from a directory of source code.  
+ * Generates a package verification code from a directory of source code or an array of <code>SPDXFile</code>s.  
  * 
  * A class implementing the IFileChecksumGenerator is supplied as a parameter to the constructor.
  * The method <code>getFileChecksum</code> is called for each file in the directory.  This can
@@ -44,6 +44,38 @@ public class VerificationCodeGenerator {
 	public VerificationCodeGenerator(IFileChecksumGenerator fileChecksumGenerator) {
 		this.fileChecksumGenerator = fileChecksumGenerator;
 	}
+	
+	/**
+	 * Generate the SPDX Package Verification Code from an array of SPDXFiles
+	 * @param spdxFiles Files to generate the VerificationCode from
+	 * @param skippedFilePaths File path names to not include in the VerificationCode
+	 * @return VerificationCode based on all files in spdxFiles minus the skippedFilePaths
+	 * @throws NoSuchAlgorithmException
+	 */
+	public SpdxPackageVerificationCode generatePackageVerificationCode(SPDXFile[] spdxFiles, String[] skippedFilePaths) throws NoSuchAlgorithmException {
+		if (spdxFiles == null) {
+			return null;
+		}
+		TreeSet<String> skippedFilePathSet = new TreeSet<String>();
+		if (skippedFilePaths != null) {
+			for (int i = 0; i < skippedFilePaths.length; i++) {
+				if (skippedFilePaths[i] != null) {
+					skippedFilePathSet.add(skippedFilePaths[i]);
+				}
+			}
+		}
+		ArrayList<String> fileChecksums = new ArrayList<String>();
+		for (int i = 0; i < spdxFiles.length; i++) {
+			if (spdxFiles[i] != null && spdxFiles[i].getName() != null && 
+					!skippedFilePathSet.contains(spdxFiles[i].getName())) {
+				fileChecksums.add(spdxFiles[i].getSha1());
+			}
+		}
+		Collections.sort(fileChecksums);
+		return generatePackageVerificationCode(fileChecksums, skippedFilePaths);
+	}
+	
+	
 	/**
 	 * Generate the SPDX Package Verification Code from a directory of files included in the archive
 	 * @param sourceDirectory
@@ -62,6 +94,17 @@ public class VerificationCodeGenerator {
 		}
 		ArrayList<String> fileChecksums = new ArrayList<String>();
 		collectFileData(rootOfDirectory, sourceDirectory, fileChecksums, skippedFilesPath);
+		String[] skippedFileNames = new String[skippedFilesPath.size()];
+		Iterator<String> iter = skippedFilesPath.iterator();
+		int i = 0;
+		while (iter.hasNext()) {
+			skippedFileNames[i++] = iter.next();
+		}
+		return generatePackageVerificationCode(fileChecksums, skippedFileNames);
+	}
+	
+	protected SpdxPackageVerificationCode generatePackageVerificationCode(ArrayList<String> fileChecksums,
+			String[] skippedFilePaths) throws NoSuchAlgorithmException {
 		Collections.sort(fileChecksums);
 		MessageDigest verificationCodeDigest = MessageDigest.getInstance("SHA-1");
 		for (int i = 0;i < fileChecksums.size(); i++) {
@@ -69,13 +112,7 @@ public class VerificationCodeGenerator {
 			verificationCodeDigest.update(hashInput);
 		}
 		String value = convertChecksumToString(verificationCodeDigest.digest());
-		String[] skippedFileNames = new String[skippedFilesPath.size()];
-		Iterator<String> iter = skippedFilesPath.iterator();
-		int i = 0;
-		while (iter.hasNext()) {
-			skippedFileNames[i++] = iter.next();
-		}
-		SpdxPackageVerificationCode retval = new SpdxPackageVerificationCode(value, skippedFileNames);
+		SpdxPackageVerificationCode retval = new SpdxPackageVerificationCode(value, skippedFilePaths);
 		return retval;
 	}
 
