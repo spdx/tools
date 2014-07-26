@@ -25,11 +25,13 @@ import java.util.HashMap;
 
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
+import org.spdx.merge.SpdxLicenseInfoMerger;
 import org.spdx.merge.SpdxMergeException;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
 
 /**
  * Commend line application to merge multiple SPDX documents into one single documents
@@ -94,6 +96,9 @@ public class MergeSpdxDocs {
 			}
 			
 			HashMap<SPDXDocument, HashMap<String, String>> licenseIdMap = new HashMap<SPDXDocument, HashMap<String, String>>();
+			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
+			//merge non-standard license information
+			ArrayList<SPDXNonStandardLicense> licInfoResult = NonStandardLicMerger.mergeNonStandardLic(mergeDocs, licenseIdMap);
 	}
 			
 
