@@ -17,7 +17,6 @@
 package org.spdx.merge;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import org.spdx.compare.LicenseCompareHelper;
@@ -26,35 +25,47 @@ import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 
 /**
+ * Application to merge SPDX documents' non-standard license information and return the results to the merge main class
+ * The non-standard license information from the master SPDX document will add to the result arraylist directly.
+ * The non-standard license information from the child SPDX document will be compared with license information in the result arraylist.
+ * Any new license information will add to the result arraylist with replacing the license ID. 
+ * A HashMap will track the changing of license IDs.
+ *  
  * @author Gang Ling
  *
  */
 public class SpdxLicenseInfoMerger {
-
-	private int licId = 0;//an index number to track license id
 	
-	public Collection<SPDXNonStandardLicense> mergeNonStandardLic(SPDXDocument[] mergeDocs,
+    /**	
+     * @param mergeDocs
+     * @param licIdMap
+     * @return licInfoResut
+     * @throws InvalidSPDXAnalysisException
+     */
+	public ArrayList<SPDXNonStandardLicense> mergeNonStandardLic(SPDXDocument[] mergeDocs,
 					HashMap<SPDXDocument,HashMap<String,String>> licIdMap) throws InvalidSPDXAnalysisException{
 		
 		//an array to hold the final result 
 		ArrayList<SPDXNonStandardLicense> licInfoResult = new ArrayList<SPDXNonStandardLicense>();
+		
 		//an array to hold the non-standard license info from master SPDX document
 		SPDXNonStandardLicense[] MasterNonStandardLicInfo = mergeDocs[0].getExtractedLicenseInfos();
 
 		//first, add master's non-standard license into the final result array
 		for(int q = 0; q < MasterNonStandardLicInfo.length; q++){
-			SPDXNonStandardLicense temp = MasterNonStandardLicInfo[q];
-			licInfoResult.add(temp);
-			licId +=1;
-			temp = null;
+			licInfoResult.add(MasterNonStandardLicInfo[q]);
 		}
-		//compare and merge non-standard license info
+		
+		//read each child SPDX document
 		for(int i = 1; i < mergeDocs.length; i++){
+			
 			//an array to hold non-standard license info from current child SPDX document
 			SPDXNonStandardLicense[] childNonStandardLicInfo = mergeDocs[i].getExtractedLicenseInfos();
+			
 			//an HashMap to track the changing of license ID from current child SPDX document
 			HashMap<String, String> idMap = new HashMap<String, String>();
 			
+			//compare non-standard license info
 	        for(int k = 0; k < licInfoResult.size(); k++){
 	        	boolean foundTextMatch = false;
 	        	for(int p = 0; p < childNonStandardLicInfo.length; p++){
@@ -62,12 +73,10 @@ public class SpdxLicenseInfoMerger {
 	        			foundTextMatch = true;
 	           		}
 	        		if(!foundTextMatch){
-	        			licId +=1;
-	        			String orgLicId = null;
-	        			String newLicId = null;
-	        			SPDXNonStandardLicense clonedLicInfo = null;
-	        			cloneLicenseInfo(childNonStandardLicInfo[p],clonedLicInfo,orgLicId,newLicId);
-	        			//over-write the license ID
+	        			String orgLicId = childNonStandardLicInfo[p].getId();
+	        		    String newLicId = mergeDocs[0].getNextLicenseRef();
+	        			SPDXNonStandardLicense clonedLicInfo = (SPDXNonStandardLicense) childNonStandardLicInfo[p].clone();
+	        	        clonedLicInfo.setId(newLicId);
 	        			idMap.putIfAbsent(orgLicId, newLicId);
 	        			licInfoResult.add(clonedLicInfo);
 	        		}
@@ -76,18 +85,5 @@ public class SpdxLicenseInfoMerger {
 	        licIdMap.put(mergeDocs[i], idMap);			
 		}
 		return licInfoResult;
-	}
-	public void cloneLicenseInfo(SPDXNonStandardLicense childLicInfo, SPDXNonStandardLicense clonedLicInfo,String orgLicId, String newLicId){
-			orgLicId = childLicInfo.getId();
-			String childLicText = childLicInfo.getText();
-			String childLicName = childLicInfo.getLicenseName();
-			String[] childLicSourceUrls = childLicInfo.getSourceUrls();
-			String childLicComment = childLicInfo.getComment();
-			newLicId = "LicenseRef-" + licId;
-			clonedLicInfo.setId(newLicId);
-			clonedLicInfo.setText(childLicText);
-			clonedLicInfo.setLicenseName(childLicName);
-			clonedLicInfo.setSourceUrls(childLicSourceUrls);
-			clonedLicInfo.setComment(childLicComment);
 	}
 }
