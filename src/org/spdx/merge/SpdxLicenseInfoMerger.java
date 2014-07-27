@@ -17,6 +17,7 @@
 package org.spdx.merge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.spdx.compare.LicenseCompareHelper;
@@ -29,7 +30,7 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  * The non-standard license information from the master SPDX document will add to the result arraylist directly.
  * The non-standard license information from the child SPDX document will be compared with license information in the result arraylist.
  * Any new license information will add to the result arraylist with replacing the license ID. 
- * A HashMap will track the changing of license IDs.
+ * A HashMap will track the changing of license.
  *  
  * @author Gang Ling
  *
@@ -43,29 +44,24 @@ public class SpdxLicenseInfoMerger {
      * @throws InvalidSPDXAnalysisException
      */
 	public ArrayList<SPDXNonStandardLicense> mergeNonStandardLic(SPDXDocument[] mergeDocs,
-					HashMap<SPDXDocument,HashMap<String,String>> licIdMap) throws InvalidSPDXAnalysisException{
+					HashMap<SPDXDocument,HashMap<SPDXNonStandardLicense,SPDXNonStandardLicense>> licIdMap) throws InvalidSPDXAnalysisException{
 		
-		//an array to hold the final result 
-		ArrayList<SPDXNonStandardLicense> licInfoResult = new ArrayList<SPDXNonStandardLicense>();
+		//an array to hold the non-standard license info from master SPDX document and clone the data
+		SPDXNonStandardLicense[] masterNonStandardLicInfo = mergeDocs[0].getExtractedLicenseInfos().clone();
 		
-		//an array to hold the non-standard license info from master SPDX document
-		SPDXNonStandardLicense[] MasterNonStandardLicInfo = mergeDocs[0].getExtractedLicenseInfos();
+		//an arrayList to hold the final result 
+		ArrayList<SPDXNonStandardLicense> licInfoResult = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStandardLicInfo));
 
-		//first, add master's non-standard license into the final result array
-		for(int q = 0; q < MasterNonStandardLicInfo.length; q++){
-			licInfoResult.add(MasterNonStandardLicInfo[q]);
-		}
-		
 		//read each child SPDX document
 		for(int i = 1; i < mergeDocs.length; i++){
 			
-			//an array to hold non-standard license info from current child SPDX document
-			SPDXNonStandardLicense[] childNonStandardLicInfo = mergeDocs[i].getExtractedLicenseInfos();
+			//an array to hold non-standard license info from current child SPDX document and clone the data
+			SPDXNonStandardLicense[] childNonStandardLicInfo = mergeDocs[i].getExtractedLicenseInfos().clone();
 			
 			//an HashMap to track the changing of license ID from current child SPDX document
-			HashMap<String, String> idMap = new HashMap<String, String>();
+			HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> idMap = new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
 			
-			//compare non-standard license info
+			//compare non-standard license info. Note: the method may run as over-comparison
 	        for(int k = 0; k < licInfoResult.size(); k++){
 	        	boolean foundTextMatch = false;
 	        	for(int p = 0; p < childNonStandardLicInfo.length; p++){
@@ -73,14 +69,12 @@ public class SpdxLicenseInfoMerger {
 	        			foundTextMatch = true;
 	           		}
 	        		if(!foundTextMatch){
-	        			String orgLicId = childNonStandardLicInfo[p].getId();
 	        		    String newLicId = mergeDocs[0].getNextLicenseRef();
-	        			SPDXNonStandardLicense clonedLicInfo = (SPDXNonStandardLicense) childNonStandardLicInfo[p].clone();
-	        	        clonedLicInfo.setId(newLicId);
-	        			idMap.putIfAbsent(orgLicId, newLicId);
-	        			licInfoResult.add(clonedLicInfo);
+	        	        childNonStandardLicInfo[p].setId(newLicId);
+	        	        licInfoResult.add(childNonStandardLicInfo[p]);	        	        
+	        			idMap.put(childNonStandardLicInfo[p], childNonStandardLicInfo[p]);        			
 	        		}
-	        	}	      
+	        	}
 	        }
 	        licIdMap.put(mergeDocs[i], idMap);			
 		}
