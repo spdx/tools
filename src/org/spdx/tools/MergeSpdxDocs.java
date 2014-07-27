@@ -17,9 +17,6 @@
 package org.spdx.tools;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -95,10 +92,15 @@ public class MergeSpdxDocs {
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
 			}
 			
-			HashMap<SPDXDocument, HashMap<String, String>> licenseIdMap = new HashMap<SPDXDocument, HashMap<String, String>>();
+			HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> licenseIdMap = 
+					new HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>>();
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
 			//merge non-standard license information
 			ArrayList<SPDXNonStandardLicense> licInfoResult = NonStandardLicMerger.mergeNonStandardLic(mergeDocs, licenseIdMap);
+			
+			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger();
+			//merge file information 
+			ArrayList<SPDXFile> FileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs, licenseIdMap);
 	}
 			
 
