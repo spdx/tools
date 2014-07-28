@@ -97,7 +97,7 @@ public class MergeSpdxDocs {
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
 			//merge non-standard license information
 			ArrayList<SPDXNonStandardLicense> licInfoResult = NonStandardLicMerger.mergeNonStandardLic(mergeDocs, licenseIdMap);
-			
+				
 			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger();
 			//merge file information 
 			ArrayList<SPDXFile> fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs, licenseIdMap);
