@@ -69,12 +69,10 @@ public class MergeSpdxDocs {
 			@SuppressWarnings("unchecked")
 			ArrayList<String>[] verficationError = new ArrayList[args.length-1];
 			
-			//call methods from CompareSpdxDocs class
-			CompareSpdxDocs compareUtility = new CompareSpdxDocs ();
 			for(int i = 0; i < args.length-1; i++){
 				try{
-					mergeDocs[i] = compareUtility.openRdfOrTagDoc(args[i]);
-					docNames[i] = compareUtility.convertDocName(args[i]);
+					mergeDocs[i] = CompareSpdxDocs.openRdfOrTagDoc(args[i]);
+					docNames[i] = CompareSpdxDocs.convertDocName(args[i]);
 					verficationError[i] = mergeDocs[i].verify();
 					if(verficationError[i] != null && verficationError[i].size() > 0){
 						System.out.println("Warning: "+docNames[i]+" contains verfication errors.");
@@ -105,7 +103,7 @@ public class MergeSpdxDocs {
 
     /**
      * 
-     */
+     */	
     private static void usage(){
     		System.out.println("Usage: doc1 doc2 doc3...[output]");
     		System.out.println("where doc1, doc2, doc3... is a serial of vaild SPDX documents in RDF/XML format");
