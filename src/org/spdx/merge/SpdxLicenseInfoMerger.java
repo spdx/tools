@@ -46,8 +46,8 @@ public class SpdxLicenseInfoMerger {
 	public ArrayList<SPDXNonStandardLicense> mergeNonStandardLic(SPDXDocument[] mergeDocs,
 					HashMap<SPDXDocument,HashMap<SPDXNonStandardLicense,SPDXNonStandardLicense>> licIdMap) throws InvalidSPDXAnalysisException{
 		
-		//an array to hold the non-standard license info from master SPDX document and clone the data
-		SPDXNonStandardLicense[] masterNonStandardLicInfo = mergeDocs[0].getExtractedLicenseInfos().clone();
+		//an array to hold the non-standard license info from master SPDX document
+		SPDXNonStandardLicense[] masterNonStandardLicInfo = cloneNonStdLic(mergeDocs[0].getExtractedLicenseInfos());
 		
 		//an arrayList to hold the final result 
 		ArrayList<SPDXNonStandardLicense> licInfoResult = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStandardLicInfo));
@@ -56,7 +56,7 @@ public class SpdxLicenseInfoMerger {
 		for(int i = 1; i < mergeDocs.length; i++){
 			
 			//an array to hold non-standard license info from current child SPDX document and clone the data
-			SPDXNonStandardLicense[] childNonStandardLicInfo = mergeDocs[i].getExtractedLicenseInfos().clone();
+			SPDXNonStandardLicense[] childNonStandardLicInfo = cloneNonStdLic(mergeDocs[i].getExtractedLicenseInfos());
 			
 			//an HashMap to track the changing of license ID from current child SPDX document
 			HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> idMap = new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
@@ -79,5 +79,18 @@ public class SpdxLicenseInfoMerger {
 	        licIdMap.put(mergeDocs[i], idMap);			
 		}
 		return licInfoResult;
+	}
+	
+	/**
+	 * 
+	 * @param orgNonStdLicArray
+	 * @return clonedNonStdLicArray
+	 */
+	public SPDXNonStandardLicense[] cloneNonStdLic(SPDXNonStandardLicense[] orgNonStdLicArray){
+		SPDXNonStandardLicense[] clonedNonStdLicArray = new SPDXNonStandardLicense[orgNonStdLicArray.length];
+		for(int q = 0; q < orgNonStdLicArray.length; q++){
+			clonedNonStdLicArray[q] = (SPDXNonStandardLicense) orgNonStdLicArray[q].clone();
+		}
+		return clonedNonStdLicArray;
 	}
 }
