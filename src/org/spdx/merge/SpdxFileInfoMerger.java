@@ -46,14 +46,14 @@ public class SpdxFileInfoMerger{
 		            HashMap<SPDXDocument,HashMap<SPDXNonStandardLicense,SPDXNonStandardLicense>> licIdMap)throws InvalidSPDXAnalysisException{
 			
 	        //an array to store an deep copy of file information from master document.
-			SPDXFile[] masterFileInfo = mergeDocs[0].getSpdxPackage().getFiles().clone();
+			SPDXFile[] masterFileInfo = mergeDocs[0].getSpdxPackage().getFiles();
 			
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
-			ArrayList<SPDXFile> fileInfoResult = new ArrayList<SPDXFile>(Arrays.asList(masterFileInfo));
+			ArrayList<SPDXFile> fileInfoResult = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
 			
 			for(int q = 1; q < mergeDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
-				SPDXFile[] childFileInfo = mergeDocs[q].getSpdxPackage().getFiles().clone();
+				SPDXFile[] childFileInfo = cloneFiles(mergeDocs[q].getSpdxPackage().getFiles());
 				for(int k = 0; k < fileInfoResult.size(); k++){
 					boolean foundNameMatch = false;
 					boolean foundSha1Match = false;
@@ -86,15 +86,15 @@ public class SpdxFileInfoMerger{
 						    	foundChildDOAP = true;
 						    }
 						    if(foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] masterArtifactOf = fileInfoResult.get(k).getArtifactOf();
-						    	DOAPProject[] childArtifactOfA = childFileInfo[p].getArtifactOf();
+						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(fileInfoResult.get(k).getArtifactOf());
+						    	DOAPProject[] childArtifactOfA = cloneDOAPProject(childFileInfo[p].getArtifactOf());
 						    	DOAPProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, childArtifactOfA);
 						    	fileInfoResult.get(k).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
 						    	
 						    }
 						    //if master doesn't have DOAPProject information but child file has 
 						    if(!foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] childArtifactOfB = childFileInfo[p].getArtifactOf();
+						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(childFileInfo[p].getArtifactOf());
 						    	fileInfoResult.get(k).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
 						    }
 						}
@@ -103,7 +103,7 @@ public class SpdxFileInfoMerger{
 			}				
 		return fileInfoResult;
 	}
-
+	
 	/**
 	 * 
 	 * @param childFileInfo
@@ -161,5 +161,31 @@ public class SpdxFileInfoMerger{
 		retval.toArray(mergedArtifactOf);
 		retval.clear();
 		return mergedArtifactOf;
+	}
+	
+	/**
+	 * 
+	 * @param orgFilesArray
+	 * @return clonedFilesArray
+	 */
+	public SPDXFile[] cloneFiles(SPDXFile[] orgFilesArray){
+		SPDXFile[] clonedFilesArray = new SPDXFile[orgFilesArray.length];
+		for(int h = 0; h < orgFilesArray.length; h++){
+			clonedFilesArray[h] = orgFilesArray[h].clone();
+		}
+		return clonedFilesArray;
+	}
+	
+	/**
+	 * 
+	 * @param orgProjectArray
+	 * @return clonedProjectArray
+	 */
+	public DOAPProject[] cloneDOAPProject(DOAPProject[] orgProjectArray){
+		DOAPProject[] clonedProjectArray = new DOAPProject[orgProjectArray.length];
+		for(int j = 0; j < orgProjectArray.length; j++){
+			clonedProjectArray[j] = orgProjectArray[j].clone();
+		}
+		return clonedProjectArray;		
 	}
 }
