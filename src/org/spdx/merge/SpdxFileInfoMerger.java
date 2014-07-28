@@ -103,8 +103,6 @@ public class SpdxFileInfoMerger{
 			}
 				
 		return fileInfoResult;
-		
-
 	}
 	
 	/**
