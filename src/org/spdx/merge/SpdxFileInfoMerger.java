@@ -103,7 +103,7 @@ public class SpdxFileInfoMerger{
 			}				
 		return fileInfoResult;
 	}
-	
+
 	/**
 	 * 
 	 * @param childFileInfo
@@ -163,4 +163,3 @@ public class SpdxFileInfoMerger{
 		return mergedArtifactOf;
 	}
 }
-
