@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Source Auditor Inc.
+ * Copyright (c) 2014 Gang Ling
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package org.spdx.merge;
 
 /**
- * @author gling
+ * @author Gang Ling
  *
  */
 public class SpdxMergeException extends Exception{
