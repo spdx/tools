@@ -91,7 +91,6 @@ public class MergeSpdxDocs {
 			catch(Exception e){
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
 			}
-			
 
 			HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> licenseIdMap = 
 					new HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>>();
