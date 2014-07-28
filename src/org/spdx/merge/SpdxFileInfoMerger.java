@@ -104,6 +104,7 @@ public class SpdxFileInfoMerger{
 				
 		return fileInfoResult;
 		
+
 	}
 	
 	/**
@@ -163,5 +164,6 @@ public class SpdxFileInfoMerger{
 		retval.toArray(mergedArtifactOf);
 		retval.clear();
 		return mergedArtifactOf;
+
 	}
 }
