@@ -103,6 +103,9 @@ public class MergeSpdxDocs {
 			ArrayList<SPDXFile> fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs, licenseIdMap);
 	}			
 
+    /**
+     * 
+     */
     private static void usage(){
     		System.out.println("Usage: doc1 doc2 doc3...[output]");
     		System.out.println("where doc1, doc2, doc3... is a serial of vaild SPDX documents in RDF/XML format");
