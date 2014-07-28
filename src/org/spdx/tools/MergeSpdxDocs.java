@@ -92,7 +92,6 @@ public class MergeSpdxDocs {
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
 			}
 			
-
 			HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> licenseIdMap = 
 					new HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>>();
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
@@ -101,7 +100,7 @@ public class MergeSpdxDocs {
 			
 			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger();
 			//merge file information 
-			ArrayList<SPDXFile> FileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs, licenseIdMap);
+			ArrayList<SPDXFile> fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs, licenseIdMap);
 	}			
 
     
