@@ -45,7 +45,7 @@ public class SpdxFileInfoMerger{
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
 			ArrayList<SPDXFile> fileInfoResult = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
 			
-			SpdxLicenseMappingHelper mappingHelper = new SpdxLicenseMappingHelper();
+			SpdxLicenseMapper mappingHelper = new SpdxLicenseMapper();
 			
 			for(int q = 1; q < mergeDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
