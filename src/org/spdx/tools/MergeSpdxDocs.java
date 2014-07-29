@@ -18,8 +18,6 @@ package org.spdx.tools;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
 import org.spdx.merge.SpdxLicenseInfoMerger;
@@ -90,15 +88,13 @@ public class MergeSpdxDocs {
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
 			}
 
-			HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> licenseIdMap = 
-					new HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>>();
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
 			//merge non-standard license information
-			ArrayList<SPDXNonStandardLicense> licInfoResult = NonStandardLicMerger.mergeNonStandardLic(mergeDocs, licenseIdMap);
+			ArrayList<SPDXNonStandardLicense> licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
 				
 			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger();
 			//merge file information 
-			ArrayList<SPDXFile> fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs, licenseIdMap);
+			ArrayList<SPDXFile> fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
 	}			
 
     /**
