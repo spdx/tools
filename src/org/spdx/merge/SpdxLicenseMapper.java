@@ -29,7 +29,7 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  * @author Gang Ling
  *
  */
-public class SpdxLicenseMappingHelper {
+public class SpdxLicenseMapper {
 
 	private HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> NonStdLicIdMap = 
 			new HashMap<SPDXDocument, HashMap< SPDXNonStandardLicense, SPDXNonStandardLicense>>();
