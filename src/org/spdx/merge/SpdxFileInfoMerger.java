@@ -18,14 +18,10 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
 
 /**
  * Application to merge SPDX files information into one unique result. 
@@ -38,12 +34,10 @@ public class SpdxFileInfoMerger{
 	/**
 	 * 
 	 * @param mergeDocs
-	 * @param licIdMap
 	 * @return mergeFileInfo
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public ArrayList<SPDXFile> mergeFileInfo(SPDXDocument[] mergeDocs,
-		            HashMap<SPDXDocument,HashMap<SPDXNonStandardLicense,SPDXNonStandardLicense>> licIdMap)throws InvalidSPDXAnalysisException{
+	public ArrayList<SPDXFile> mergeFileInfo(SPDXDocument[] mergeDocs)throws InvalidSPDXAnalysisException{
 			
 	        //an array to store an deep copy of file information from master document.
 			SPDXFile[] masterFileInfo = mergeDocs[0].getSpdxPackage().getFiles();
@@ -51,29 +45,33 @@ public class SpdxFileInfoMerger{
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
 			ArrayList<SPDXFile> fileInfoResult = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
 			
+			SpdxLicenseMappingHelper mappingHelper = new SpdxLicenseMappingHelper();
+			
 			for(int q = 1; q < mergeDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
-				SPDXFile[] childFileInfo = cloneFiles(mergeDocs[q].getSpdxPackage().getFiles());
+				SPDXFile[] subFileInfo = cloneFiles(mergeDocs[q].getSpdxPackage().getFiles());
+				
 				for(int k = 0; k < fileInfoResult.size(); k++){
 					boolean foundNameMatch = false;
 					boolean foundSha1Match = false;
+					
 					//determine if any file name matched
-					for(int p = 0; p < childFileInfo.length; p++){
-						if(fileInfoResult.get(k).getName().equalsIgnoreCase(childFileInfo[p].getName())){
+					for(int p = 0; p < subFileInfo.length; p++){
+						if(fileInfoResult.get(k).getName().equalsIgnoreCase(subFileInfo[p].getName())){
 							foundNameMatch = true;
 						}
 						//determine if any checksum matched
-						if(fileInfoResult.get(k).getSha1().equals(childFileInfo[p].getSha1())){
+						if(fileInfoResult.get(k).getSha1().equals(subFileInfo[p].getSha1())){
 							foundSha1Match = true;
 						}
 						//if both name and checksum are not matched, then check the license Ids from child files 
 						if(!foundNameMatch && !foundSha1Match){
 							//check whether licIdMap has this particular child document  
-							if(licIdMap.containsKey(mergeDocs[q])){
-								checkNonStandardLicId(childFileInfo[p],licIdMap.get(mergeDocs[q]));
-								fileInfoResult.add(childFileInfo[p]);
+							if(mappingHelper.docInNonStdLicIdMap(mergeDocs[q])){
+								mappingHelper.checkNonStdLicId(mergeDocs[q], subFileInfo[p]);
+								fileInfoResult.add(subFileInfo[p]);
 							}else{
-								fileInfoResult.add(childFileInfo[p]);
+								fileInfoResult.add(subFileInfo[p]);
 							}
 						}else{
 							//if both name and checksum are matched, then merge the DOAPProject information 
@@ -82,19 +80,19 @@ public class SpdxFileInfoMerger{
 						    if(checkDOAPProject(fileInfoResult.get(k))){
 						    	foundMasterDOAP = true;
 						    }
-						    if(checkDOAPProject(childFileInfo[p])){
+						    if(checkDOAPProject(subFileInfo[p])){
 						    	foundChildDOAP = true;
 						    }
 						    if(foundMasterDOAP && foundChildDOAP){
 						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(fileInfoResult.get(k).getArtifactOf());
-						    	DOAPProject[] childArtifactOfA = cloneDOAPProject(childFileInfo[p].getArtifactOf());
-						    	DOAPProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, childArtifactOfA);
+						    	DOAPProject[] subArtifactOfA = cloneDOAPProject(subFileInfo[p].getArtifactOf());
+						    	DOAPProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, subArtifactOfA);
 						    	fileInfoResult.get(k).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
 						    	
 						    }
-						    //if master doesn't have DOAPProject information but child file has 
+						    //if master doesn't have DOAPProject information but sub file has 
 						    if(!foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(childFileInfo[p].getArtifactOf());
+						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(subFileInfo[p].getArtifactOf());
 						    	fileInfoResult.get(k).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
 						    }
 						}
@@ -103,36 +101,7 @@ public class SpdxFileInfoMerger{
 			}				
 		return fileInfoResult;
 	}
-	
-	/**
-	 * 
-	 * @param childFileInfo
-	 * @param licId
-	 * @return 
-	 */
-	public void checkNonStandardLicId(SPDXFile childFileInfo, HashMap<SPDXNonStandardLicense,SPDXNonStandardLicense> licId){
-			SPDXLicenseInfo[] childLicenseInfo = childFileInfo.getSeenLicenses();
-			SPDXNonStandardLicense[] orgLics = (SPDXNonStandardLicense[]) licId.keySet().toArray();
-			ArrayList <SPDXLicenseInfo> retval = new ArrayList<SPDXLicenseInfo>();
-			for(int i = 0; i < childLicenseInfo.length; i++){
-				boolean foundLicId = false;
-				for(int q = 0; q < orgLics.length; q++){
-					if(childLicenseInfo[i].equals(orgLics[q].getId())){
-						foundLicId = true;
-					}
-					if(!foundLicId){
-						retval.add(childLicenseInfo[i]);
-					}else{
-						retval.add(licId.get(orgLics[q]));
-					}
-				}
-			}
-			SPDXLicenseInfo[] mergedFileLics = new SPDXLicenseInfo[retval.size()];
-			retval.toArray(mergedFileLics);
-			childFileInfo.setSeenLicenses(mergedFileLics);
-			retval.clear();
-	}
-	
+		
 	/**
 	 * 
 	 * @param spdxFile
@@ -149,13 +118,13 @@ public class SpdxFileInfoMerger{
 	/**
 	 * 
 	 * @param MasterArtifactOf
-	 * @param childArtifactOfA
+	 * @param subArtifactOfA
 	 * @return mergedArtfactOf
 	 */
-	public DOAPProject[] mergeDOAPInfo(DOAPProject[] MasterArtifactOf, DOAPProject[] childArtifactOfA){
+	public DOAPProject[] mergeDOAPInfo(DOAPProject[] MasterArtifactOf, DOAPProject[] subArtifactOfA){
 		ArrayList<DOAPProject> retval = new ArrayList<DOAPProject>(Arrays.asList(MasterArtifactOf));
-		for(int l = 0; l < childArtifactOfA.length; l++){
-			retval.add(childArtifactOfA[l]);//assume add all DOAPProject include both artifactOf and Homepage
+		for(int l = 0; l < subArtifactOfA.length; l++){
+			retval.add(subArtifactOfA[l]);//assume add all DOAPProject include both artifactOf and Homepage
 		}
 		DOAPProject[] mergedArtifactOf = new DOAPProject[retval.size()];
 		retval.toArray(mergedArtifactOf);
