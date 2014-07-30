@@ -45,7 +45,7 @@ public class SpdxFileInfoMerger{
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
 			ArrayList<SPDXFile> fileInfoResult = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
 			
-			SpdxLicenseMapper mappingHelper = new SpdxLicenseMapper();
+			SpdxLicenseMapper mapper = new SpdxLicenseMapper(mergeDocs[0]);
 			
 			for(int q = 1; q < mergeDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
@@ -67,14 +67,15 @@ public class SpdxFileInfoMerger{
 						//if both name and checksum are not matched, then check the license Ids from child files 
 						if(!foundNameMatch && !foundSha1Match){
 							//check whether licIdMap has this particular child document  
-							if(mappingHelper.docInNonStdLicIdMap(mergeDocs[q])){
-								mappingHelper.checkNonStdLicId(mergeDocs[q], subFileInfo[p]);
+							if(mapper.docInNonStdLicIdMap(mergeDocs[q])){
+								mapper.checkNonStdLicId(mergeDocs[q], subFileInfo[p]);
 								fileInfoResult.add(subFileInfo[p]);
 							}else{
 								fileInfoResult.add(subFileInfo[p]);
 							}
 						}else{
-							//if both name and checksum are matched, then merge the DOAPProject information 
+							//if both name and checksum are matched, then merge the DOAPProject information
+							//still need to figure out how to solve the issue if license and other information is not exactly the same
 							boolean foundMasterDOAP = false;
 							boolean foundChildDOAP = false;
 						    if(checkDOAPProject(fileInfoResult.get(k))){
