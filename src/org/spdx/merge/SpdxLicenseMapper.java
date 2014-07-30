@@ -31,11 +31,18 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  */
 public class SpdxLicenseMapper {
 
-	private HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> NonStdLicIdMap = 
+	private HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> nonStdLicIdMap = 
 			new HashMap<SPDXDocument, HashMap< SPDXNonStandardLicense, SPDXNonStandardLicense>>();
 	
-	private HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> NonStdLicIds = 
-			new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
+	private SPDXDocument master = null;
+	
+	/**
+	 * 
+	 * @param masterDoc
+	 */
+	public SpdxLicenseMapper(SPDXDocument masterDoc){
+		this.master = masterDoc;
+	}
 	
 	/**
 	 * 
@@ -43,24 +50,20 @@ public class SpdxLicenseMapper {
 	 * @param subNonStdLicInfo
 	 * @return subNonStdLicInfo
 	 */
-	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument[] mergeDocs, SPDXNonStandardLicense subNonStdLicInfo){
-				
-		String NewNonStdLicId = mergeDocs[0].getNextLicenseRef();
+	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
+		
+	    HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> interMap = nonStdLicIdMap.get(subDoc);
+	    if(interMap.isEmpty()){
+	    	interMap = new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
+	    }
+	    
+		String NewNonStdLicId = master.getNextLicenseRef();
 		SPDXNonStandardLicense subCopy = (SPDXNonStandardLicense) subNonStdLicInfo.clone();
 		subNonStdLicInfo.setId(NewNonStdLicId);
-		NonStdLicIds.put(subCopy, subNonStdLicInfo);		
+		interMap.put(subCopy, subNonStdLicInfo);
+		nonStdLicIdMap.put(subDoc, interMap);
+
 		return subNonStdLicInfo;
-	}
-	
-	/**
-	 * 
-	 * @param spdxDoc
-	 */
-	public void updatedMainMap(SPDXDocument spdxDoc){
-		if(!NonStdLicIds.isEmpty()){
-			NonStdLicIdMap.put(spdxDoc, NonStdLicIds);
-		}
-		NonStdLicIds.clear();
 	}
 	
 	/**
@@ -77,13 +80,15 @@ public class SpdxLicenseMapper {
 			for(int i = 0; i < subLicInfo.length; i++){
 				boolean foundLicId = false;
 				for(int q = 0; q < orgNonStdLics.length; q++){
-					if(subLicInfo[i].equals(orgNonStdLics[q].getId())){
+					//if the subfile's orgNonStdLic is found in the subLicInfo, 
+					if(subLicInfo[i].toString().equals(orgNonStdLics[q].getId())){
 						foundLicId = true;
 					}
-					if(!foundLicId){
-						retval.add(subLicInfo[i]);
-					}else{
+					//then we replace the orgNonStdLic's id with new id from the internal map
+					if(foundLicId){
 						retval.add(idMap.get(orgNonStdLics[q]));
+					}else{
+						retval.add(subLicInfo[i]);//if not, add this license to retval array directly. this license must be not non-standard license.
 					}
 				}
 			}
@@ -101,7 +106,7 @@ public class SpdxLicenseMapper {
 	 */
 	public boolean docInNonStdLicIdMap(SPDXDocument spdxDoc){
 		boolean foundDocMatch = false;
-		if(NonStdLicIdMap.containsKey(spdxDoc)){
+		if(nonStdLicIdMap.containsKey(spdxDoc)){
 			foundDocMatch = true;
 		}
 		return foundDocMatch;
@@ -117,12 +122,24 @@ public class SpdxLicenseMapper {
 		HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> idMap = 
 				new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
 		
-		idMap = this.NonStdLicIdMap.get(spdxDoc);
+		idMap = this.nonStdLicIdMap.get(spdxDoc);
 		return idMap;
 		
 	}
 	
+	/**
+	 * 
+	 * @return emptyMap
+	 */
+	public boolean isNonStdLicIdMapEmpty(){
+		boolean emptyMap = false;
+		if(nonStdLicIdMap.isEmpty()){
+			emptyMap = true;
+		}
+		return emptyMap;
+	}
+	
 	public void clearNonStdLicIdMap(){
-		this.NonStdLicIdMap.clear();
+		this.nonStdLicIdMap.clear();
 	}
 }
