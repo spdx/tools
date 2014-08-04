@@ -1431,9 +1431,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 	/**
 	 * Creates an empty SPDX package
 	 * @param uri Unique URI representing the SPDX package
+	 * @return 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void createSpdxPackage(String uri) throws InvalidSPDXAnalysisException {
+	public SPDXPackage createSpdxPackage(String uri) throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must create the SPDX document before creating an SPDX Package"));
@@ -1446,7 +1447,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		Resource pkgType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_PACKAGE);
 		Resource spdxPkg = model.createResource(uri, pkgType);
 		s.addProperty(p, spdxPkg);
-		this.spdxPackage = new SPDXPackage(spdxPkg.asNode());
+		return this.spdxPackage = new SPDXPackage(spdxPkg.asNode());
 	}
 	
 	public void createSpdxPackage() throws InvalidSPDXAnalysisException {
