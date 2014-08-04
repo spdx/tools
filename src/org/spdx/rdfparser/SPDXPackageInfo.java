@@ -337,7 +337,7 @@ public class SPDXPackageInfo {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXPackage clone(SPDXDocument doc, String packageUri) throws InvalidSPDXAnalysisException{
+	public static SPDXPackage clone(SPDXDocument doc, String packageUri) throws InvalidSPDXAnalysisException{
 		SPDXPackage retval = doc.createSpdxPackage(packageUri);
 		SPDXPackage orginal = doc.getSpdxPackage();
 		retval.setConcludedLicenses(orginal.getConcludedLicenses());
