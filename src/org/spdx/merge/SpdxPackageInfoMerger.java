@@ -17,17 +17,21 @@
 package org.spdx.merge;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.VerificationCodeGenerator;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
+ * Application to merge package information from input SPDX documents and file information merging result.
  * @author Gang Ling
  *
  */
@@ -38,16 +42,101 @@ public class SpdxPackageInfoMerger {
 			this.master = masterDoc;
 		}
 		
-		public SPDXPackage mergePackageInfo(SPDXFile[] fileMergeResult) throws InvalidSPDXAnalysisException, NoSuchAlgorithmException{
-			SPDXPackage pkgMergeResult = SPDXPackageInfo.clone(master, master.getSpdxPackage().getHomePage());
+		/**
+		 * 
+		 * @param mergeDocs
+		 * @param fileMergeResult
+		 * @return
+		 * @throws InvalidSPDXAnalysisException
+		 * @throws NoSuchAlgorithmException
+		 * @throws InvalidLicenseStringException 
+		 */
+		public SPDXPackage mergePackageInfo(SPDXDocument[] mergeDocs,SPDXFile[] fileMergeResult) 
+				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
+			SPDXPackage packageMergeResult = master.getSpdxPackage();
 			
-			String[] skippedFiles = null;
+			String[] skippedFiles = collectSkippedFiles(mergeDocs);
 			VerificationCodeGenerator vg = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
 			SpdxPackageVerificationCode result = vg.generatePackageVerificationCode(fileMergeResult, skippedFiles);
-			pkgMergeResult.setVerificationCode(result);
-			return pkgMergeResult;			
+			packageMergeResult.setVerificationCode(result);
+			
+			SPDXLicenseInfo[] licsInFile = collectLicsInFiles(fileMergeResult);
+			packageMergeResult.setLicenseInfoFromFiles(licsInFile);
+			
+			SPDXLicenseInfo declaredLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NONASSERTION");
+			packageMergeResult.setDeclaredLicense(declaredLicense);		
+			
+			
+			
+			return packageMergeResult;			
 		}
 		
+		/**
+		 * method to collect all skipped files from input SPDX documents
+		 * @param spdxDoc
+		 * @return
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public String[] collectSkippedFiles(SPDXDocument[] mergeDocs) throws InvalidSPDXAnalysisException{
+			ArrayList<String> excludedFileNamesList = new ArrayList<String>();
+			for(int p = 0; p < mergeDocs.length; p++){
+				String[] retval = mergeDocs[p].getSpdxPackage().getVerificationCode().getExcludedFileNames();
+				
+				if(excludedFileNamesList.size() == 0){
+					for(int i = 0; i < retval.length; i++){
+						excludedFileNamesList.add(i, retval[i]);
+					}
+				}else{
+					for(int k = 0; k < retval.length; k++){
+						boolean foundNameMatch = false;
+						for(int q = 0; q < excludedFileNamesList.size(); q++){
+							if(retval[k].equalsIgnoreCase(excludedFileNamesList.get(q))){
+								foundNameMatch = true;
+							}
+						}
+						if(!foundNameMatch){
+							excludedFileNamesList.add(retval[k]);
+						}
+					}
+				}
+			}
+			String[] excludedFileNamesArray = new String[excludedFileNamesList.size()];
+			excludedFileNamesList.toArray(excludedFileNamesArray);
+			excludedFileNamesList.clear();
+			return excludedFileNamesArray;
+		}
 		
+		/**
+		 * method to collect all license information from file merging result
+		 * @param fileMergeResult
+		 * @return
+		 */
+		public SPDXLicenseInfo[] collectLicsInFiles(SPDXFile[] fileMergeResult){
+			ArrayList<SPDXLicenseInfo> licsList = new ArrayList<SPDXLicenseInfo>();
+			for(int a = 0; a < fileMergeResult.length; a++){
+				SPDXLicenseInfo[] retval = fileMergeResult[a].getSeenLicenses();
+				if(licsList.size() == 0){
+					for(int b = 0; b < retval.length; b++){
+						licsList.add(b, retval[b]);
+					}
+				}else{
+					for(int c = 0; c < retval.length; c++){
+						boolean foundLicMatch = false;
+						for(int d = 0; d < licsList.size(); d++){
+							if(retval[c].equals(licsList.get(d))){
+								foundLicMatch = true;
+							}
+						}
+						if(!foundLicMatch){
+							licsList.add(retval[c]);
+						}
+					}
+				}
+			}
+			SPDXLicenseInfo[] licsInFile = new SPDXLicenseInfo[licsList.size()];
+			licsList.toArray(licsInFile);
+			licsList.clear();
+			return licsInFile;	
+		}
 		
 }
