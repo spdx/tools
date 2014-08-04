@@ -31,6 +31,7 @@ import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.SPDXReview;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
@@ -53,7 +54,6 @@ public class MergeSpdxDocs {
 	 * @throws InvalidLicenseStringException 
 	 * @throws NoSuchAlgorithmException 
 	 */
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws InvalidSPDXAnalysisException, SpdxMergeException, NoSuchAlgorithmException, InvalidLicenseStringException {
 			if (args.length < MIN_ARGS){
 					System.out.println("Insufficient arguments");
@@ -87,9 +87,9 @@ public class MergeSpdxDocs {
 					System.exit(ERROR_STATUS);
 				}
 			}
-			SPDXDocument outDoc = null;
+			SPDXDocument mergedDoc = null;
 			try{
-				outDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
+				mergedDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
 			}
 			catch(Exception e){
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
@@ -105,8 +105,44 @@ public class MergeSpdxDocs {
 			
 			SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(mergeDocs[0]);
 			SPDXPackage packageInfoResult = packInfoMerger.mergePackageInfo(mergeDocs, fileInfoResult);
+			
+			SPDXReview[] reviewInfoResult = new SPDXReview[0];
+			mergedDoc.setReviewers(reviewInfoResult);
+			mergedDoc.setExtractedLicenseInfos(licInfoResult);
+			mergedDoc.createSpdxPackage(mergeDocs[0].getSpdxPackage().getHomePage());
+			mergedDoc = setPackageInfo(mergedDoc,packageInfoResult,fileInfoResult);
+			
+			
 	}			
 
+	/**
+	 * 
+	 * @param doc
+	 * @param packageInfoResult
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public static SPDXDocument setPackageInfo(SPDXDocument doc, SPDXPackage packageInfoResult, SPDXFile[] fileInfoResult) throws InvalidSPDXAnalysisException{
+		doc.getSpdxPackage().setConcludedLicenses(packageInfoResult.getConcludedLicenses());
+		doc.getSpdxPackage().setDeclaredCopyright(packageInfoResult.getDeclaredCopyright());
+		doc.getSpdxPackage().setDeclaredLicense(packageInfoResult.getDeclaredLicense());
+		doc.getSpdxPackage().setDeclaredName(packageInfoResult.getDeclaredName());
+		doc.getSpdxPackage().setDescription(packageInfoResult.getDescription());
+		doc.getSpdxPackage().setDownloadUrl(packageInfoResult.getDownloadUrl());
+		doc.getSpdxPackage().setFileName(packageInfoResult.getFileName());
+		doc.getSpdxPackage().setFiles(fileInfoResult);
+		doc.getSpdxPackage().setLicenseComment(packageInfoResult.getLicenseComment());
+		doc.getSpdxPackage().setLicenseInfoFromFiles(packageInfoResult.getLicenseInfoFromFiles());
+		doc.getSpdxPackage().setOriginator(packageInfoResult.getOriginator());
+		doc.getSpdxPackage().setSha1(packageInfoResult.getSha1());
+		doc.getSpdxPackage().setShortDescription(packageInfoResult.getShortDescription());
+		doc.getSpdxPackage().setSourceInfo(packageInfoResult.getSourceInfo());
+		doc.getSpdxPackage().setSupplier(packageInfoResult.getSupplier());
+		doc.getSpdxPackage().setVerificationCode(packageInfoResult.getVerificationCode());
+		doc.getSpdxPackage().setVersionInfo(packageInfoResult.getVersionInfo());
+		
+		return doc;
+	}
     /**
      * 
      */	
