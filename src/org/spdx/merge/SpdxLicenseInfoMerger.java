@@ -39,13 +39,13 @@ public class SpdxLicenseInfoMerger {
      * @return licInfoResut
      * @throws InvalidSPDXAnalysisException
      */
-	public ArrayList<SPDXNonStandardLicense> mergeNonStdLic(SPDXDocument[] mergeDocs) throws InvalidSPDXAnalysisException{
+	public SPDXNonStandardLicense[] mergeNonStdLic(SPDXDocument[] mergeDocs) throws InvalidSPDXAnalysisException{
 		
 		//an array to hold the non-standard license info from master SPDX document
 		SPDXNonStandardLicense[] masterNonStdLicInfo = cloneNonStdLic(mergeDocs[0].getExtractedLicenseInfos());
 		
 		//an arrayList to hold the final result 
-		ArrayList<SPDXNonStandardLicense> licInfoResult = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
+		ArrayList<SPDXNonStandardLicense> retval = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
 
 		//call constructor and pass master document as parameter 
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper(mergeDocs[0]);
@@ -57,19 +57,22 @@ public class SpdxLicenseInfoMerger {
 			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(mergeDocs[i].getExtractedLicenseInfos());
 									
 			//compare non-standard license info. Note: the method may run as over-comparison
-	        for(int k = 0; k < licInfoResult.size(); k++){
+	        for(int k = 0; k < retval.size(); k++){
 	        	boolean foundTextMatch = false;
 	        	for(int p = 0; p < subNonStdLicInfo.length; p++){
-	        		if(LicenseCompareHelper.isLicenseTextEquivalent(licInfoResult.get(k).getText(), subNonStdLicInfo[p].getText())){
+	        		if(LicenseCompareHelper.isLicenseTextEquivalent(retval.get(k).getText(), subNonStdLicInfo[p].getText())){
 	        			foundTextMatch = true;
 	           		}
 	        		if(!foundTextMatch){
-	        	        licInfoResult.add((mapper.mappingNonStdLic(mergeDocs[i], subNonStdLicInfo[p])));	        	             			
+	        	        retval.add((mapper.mappingNonStdLic(mergeDocs[i], subNonStdLicInfo[p])));	        	             			
 	        		}
 	        	}
 	        } 			
 		}
-		return licInfoResult;
+		SPDXNonStandardLicense[] nonStdLicMergeResult = new SPDXNonStandardLicense[retval.size()];
+		retval.toArray(nonStdLicMergeResult);
+		retval.clear();
+		return nonStdLicMergeResult;
 	}
 	
 	/**
