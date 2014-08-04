@@ -16,6 +16,11 @@
  */
 package org.spdx.rdfparser;
 
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+
 
 /**
  * @author Gary O'Neall
@@ -324,4 +329,35 @@ public class SPDXPackageInfo {
 	public void setHomePage(String homePage) {
 		this.homePage = homePage;
 	}
+	
+	/**
+	 * Clone the package information. Improve to deep copy in future.
+	 * @param doc
+	 * @param packageUri
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public SPDXPackage clone(SPDXDocument doc, String packageUri) throws InvalidSPDXAnalysisException{
+		SPDXPackage retval = doc.createSpdxPackage(packageUri);
+		SPDXPackage orginal = doc.getSpdxPackage();
+		retval.setConcludedLicenses(orginal.getConcludedLicenses());
+		retval.setDeclaredCopyright(orginal.getDeclaredCopyright());
+		retval.setDeclaredLicense(orginal.getDeclaredLicense());
+		retval.setDeclaredName(orginal.getDeclaredName());
+		retval.setDescription(orginal.getDescription());
+		retval.setDownloadUrl(orginal.getDownloadUrl());
+		retval.setFileName(orginal.getFileName());
+		retval.setFiles(orginal.getFiles());
+		retval.setLicenseComment(orginal.getLicenseComment());
+		retval.setLicenseInfoFromFiles(orginal.getLicenseInfoFromFiles());
+		retval.setOriginator(orginal.getOriginator());
+		retval.setSha1(orginal.getSha1());
+		retval.setShortDescription(orginal.getShortDescription());
+		retval.setSourceInfo(orginal.getSourceInfo());
+		retval.setSupplier(orginal.getSupplier());
+		retval.setVerificationCode(orginal.getVerificationCode());
+		retval.setVersionInfo(orginal.getVersionInfo());
+		return retval;		
+	}
 }
+
