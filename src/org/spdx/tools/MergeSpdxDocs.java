@@ -90,11 +90,11 @@ public class MergeSpdxDocs {
 
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
 			//merge non-standard license information
-			ArrayList<SPDXNonStandardLicense> licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
+			SPDXNonStandardLicense[] licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
 				
 			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger();
 			//merge file information 
-			ArrayList<SPDXFile> fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
+			SPDXFile[] fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
 	}			
 
     /**
