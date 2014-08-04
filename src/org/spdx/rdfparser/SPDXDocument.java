@@ -119,7 +119,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setDeclaredName(String declaredName) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DECLARED_NAME);
-			addProperty(node, PROP_PACKAGE_DECLARED_NAME, new String[] {declaredName});
+			if (declaredName != null) {
+				addProperty(node, PROP_PACKAGE_DECLARED_NAME, new String[] {declaredName});
+			}
 		}
 		/**
 		 * @return the fileName
@@ -141,7 +143,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setFileName(String fileName) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_FILE_NAME);
-			addProperty(node, PROP_PACKAGE_FILE_NAME, new String[] {fileName});
+			if (fileName != null) {
+				addProperty(node, PROP_PACKAGE_FILE_NAME, new String[] {fileName});
+			}
 		}
 		/**
 		 * @return the sha1
@@ -168,11 +172,13 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setSha1(String sha1) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_CHECKSUM);
-			SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
-			Resource cksumResource = cksum.createResource(model);
-			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_CHECKSUM);
-			s.addProperty(p, cksumResource);
+			if (sha1 != null) {
+				SPDXChecksum cksum = new SPDXChecksum(SpdxRdfConstants.ALGORITHM_SHA1, sha1);
+				Resource cksumResource = cksum.createResource(model);
+				Resource s = getResource(this.node);
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_CHECKSUM);
+				s.addProperty(p, cksumResource);
+			}
 		}
 		/**
 		 * @return the sourceInfo
@@ -194,7 +200,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setSourceInfo(String sourceInfo) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_SOURCE_INFO);
-			addProperty(node, PROP_PACKAGE_SOURCE_INFO, new String[] {sourceInfo});
+			if (sourceInfo != null) {
+				addProperty(node, PROP_PACKAGE_SOURCE_INFO, new String[] {sourceInfo});
+			}
 		}
 		
 		/**
@@ -219,7 +227,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setVersionInfo(String versionInfo) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_VERSION_INFO);
-			addProperty(node, PROP_PACKAGE_VERSION_INFO, new String[] {versionInfo});
+			if (versionInfo != null) {
+				addProperty(node, PROP_PACKAGE_VERSION_INFO, new String[] {versionInfo});
+			}
 		}
 		
 		/**
@@ -249,11 +259,13 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setDeclaredLicense(SPDXLicenseInfo declaredLicense) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
-			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
+			if (declaredLicense != null) {
+				Resource s = getResource(this.node);
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
 
-			Resource lic = declaredLicense.createResource(model);
-			s.addProperty(p, lic);
+				Resource lic = declaredLicense.createResource(model);
+				s.addProperty(p, lic);
+			}
 		}
 		
 		
@@ -284,10 +296,12 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setConcludedLicenses(SPDXLicenseInfo detectedLicenses) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_CONCLUDED_LICENSE);
-			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE);
-			Resource lic = detectedLicenses.createResource(model);
-			s.addProperty(p, lic);
+			if (detectedLicenses != null) {
+				Resource s = getResource(this.node);
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE);
+				Resource lic = detectedLicenses.createResource(model);
+				s.addProperty(p, lic);
+			}
 		}
 		/**
 		 * @return the licenseComment
@@ -309,7 +323,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setLicenseComment(String comments) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_LICENSE_COMMENT);
-			addProperty(node, PROP_PACKAGE_LICENSE_COMMENT, new String[] {comments});
+			if (comments != null) {
+				addProperty(node, PROP_PACKAGE_LICENSE_COMMENT, new String[] {comments});
+			}
 		}
 		/**
 		 * @return the declaredCopyright
@@ -331,7 +347,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setDeclaredCopyright(String declaredCopyright) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DECLARED_COPYRIGHT);
-			addProperty(node, PROP_PACKAGE_DECLARED_COPYRIGHT, new String[] {declaredCopyright});
+			if (declaredCopyright != null) {
+				addProperty(node, PROP_PACKAGE_DECLARED_COPYRIGHT, new String[] {declaredCopyright});
+			}
 		}
 		/**
 		 * @return the shortDescription
@@ -353,7 +371,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setShortDescription(String shortDescription) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_SHORT_DESC);
-			addProperty(node, PROP_PACKAGE_SHORT_DESC, new String[] {shortDescription});
+			if (shortDescription != null) {
+				addProperty(node, PROP_PACKAGE_SHORT_DESC, new String[] {shortDescription});
+			}
 		}
 		/**
 		 * @return the description
@@ -375,7 +395,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 */
 		public void setDescription(String description) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DESCRIPTION);
-			addProperty(node, PROP_PACKAGE_DESCRIPTION, new String[] {description});
+			if (description != null) {
+				addProperty(node, PROP_PACKAGE_DESCRIPTION, new String[] {description});
+			}
 		}
 		
 		/**
@@ -384,6 +406,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @throws InvalidSPDXAnalysisException
 		 */
 		public void setOriginator(String originator) throws InvalidSPDXAnalysisException {
+			if (originator == null) {
+				removeProperties(node, PROP_PACKAGE_ORIGINATOR);
+				return;
+			}
 			String error = SpdxVerificationHelper.verifyOriginator(originator);
 			if (error != null && !error.isEmpty()) {
 				throw(new InvalidSPDXAnalysisException(error));
@@ -398,6 +424,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @throws InvalidSPDXAnalysisException
 		 */
 		public void setSupplier(String supplier) throws InvalidSPDXAnalysisException {
+			if (supplier == null) {
+				removeProperties(node, PROP_PACKAGE_SUPPLIER);
+				return;
+			}
 			String error = SpdxVerificationHelper.verifySupplier(supplier);
 			if (error != null && !error.isEmpty()) {
 				throw(new InvalidSPDXAnalysisException(error));
@@ -453,14 +483,16 @@ public class SPDXDocument implements SpdxRdfConstants {
 			removeProperties(node, PROP_PACKAGE_FILE);
 			removeProperties(node, PROP_SPDX_FILE);	// NOTE: In version 2.0, we will need to remove just the files which were in the package
 			
-			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
-			Resource docResource = getResource(getSpdxDocNode());
-			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
-			for (int i = 0; i < files.length; i++) {				
-				Resource file = files[i].createResource(getDocument(), getDocumentNamespace() + getNextSpdxElementRef());
-				s.addProperty(p, file);
-				docResource.addProperty(docP, file);
+			if (files != null) {
+				Resource s = getResource(this.node);
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
+				Resource docResource = getResource(getSpdxDocNode());
+				Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
+				for (int i = 0; i < files.length; i++) {				
+					Resource file = files[i].createResource(getDocument(), getDocumentNamespace() + getNextSpdxElementRef());
+					s.addProperty(p, file);
+					docResource.addProperty(docP, file);
+				}
 			}
 		}
 		/**
@@ -526,7 +558,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		
 		public void setDownloadUrl(String url) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DOWNLOAD_URL);
-			addProperty(node, PROP_PACKAGE_DOWNLOAD_URL, new String[] {url});
+			if (url != null) {
+				addProperty(node, PROP_PACKAGE_DOWNLOAD_URL, new String[] {url});
+			}
 		}
 		
 		public String getHomePage() throws InvalidSPDXAnalysisException {
@@ -542,7 +576,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		
 		public void setHomePage(String url) throws InvalidSPDXAnalysisException {
 			removeProperties(node, DOAP_NAMESPACE, PROP_PROJECT_HOMEPAGE);
-			addProperty(node, DOAP_NAMESPACE, PROP_PROJECT_HOMEPAGE, new String[] {url});
+			if (url != null) {
+				addProperty(node, DOAP_NAMESPACE, PROP_PROJECT_HOMEPAGE, new String[] {url});
+			}
 		}
 		
 		public SpdxPackageVerificationCode getVerificationCode() throws InvalidSPDXAnalysisException {			
@@ -559,10 +595,12 @@ public class SPDXDocument implements SpdxRdfConstants {
 		
 		public void setVerificationCode(SpdxPackageVerificationCode verificationCode) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_VERIFICATION_CODE);
-			Resource verificationCodeResource = verificationCode.createResource(model);
-			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE);
-			s.addProperty(p, verificationCodeResource);
+			if (verificationCode != null) {
+				Resource verificationCodeResource = verificationCode.createResource(model);
+				Resource s = getResource(this.node);
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE);
+				s.addProperty(p, verificationCodeResource);
+			}
 		}
 		public SPDXPackageInfo getPackageInfo() throws InvalidSPDXAnalysisException {
 			return new SPDXPackageInfo(this.getDeclaredName(), this.getVersionInfo(), this.getFileName(), 
@@ -576,13 +614,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 		
 		public void setLicenseInfoFromFiles(SPDXLicenseInfo[] licenseInfo) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
-			Resource s = getResource(this.node);
-			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
-			for (int i = 0; i < licenseInfo.length; i++) {
-				Resource lic = licenseInfo[i].createResource(model);
-				s.addProperty(p, lic);
+			if (licenseInfo != null) {
+				Resource s = getResource(this.node);
+				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
+				for (int i = 0; i < licenseInfo.length; i++) {
+					Resource lic = licenseInfo[i].createResource(model);
+					s.addProperty(p, lic);
+				}
 			}
-
 		}
 		
 		public SPDXLicenseInfo[] getLicenseInfoFromFiles() throws InvalidSPDXAnalysisException {
@@ -596,6 +635,68 @@ public class SPDXDocument implements SpdxRdfConstants {
 			}
 			SPDXLicenseInfo[] retval = new SPDXLicenseInfo[alLic.size()];
 			retval = alLic.toArray(retval);
+			return retval;
+		}
+		
+		/**
+		 * Clones a deep copy of all fields to a new SPDXPackage contained in the docToCloneTo SPDXDocument.  
+		 * NOTE: This will overwrite any existing SPDXPackages contained within the SPDXDocument.
+		 * @param docToCloneTo SPDX Document to contain the result of the clone
+		 * @param packageUri URI for the SPDX Package being created
+		 * @return A deep copy of this SPDXPackage contained within docToCloneTo
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public SPDXPackage clone(SPDXDocument docToCloneTo, String packageUri) throws InvalidSPDXAnalysisException {
+			SPDXPackage retval = docToCloneTo.createSpdxPackage(packageUri);
+			// need to copy the non-standard licenses in case they are referenced
+			SPDXNonStandardLicense[] extractedLicenseInfos = getExtractedLicenseInfos();
+			if (extractedLicenseInfos != null) {
+				SPDXNonStandardLicense[] existingLicenseInfos = docToCloneTo.getExtractedLicenseInfos();
+				if (existingLicenseInfos == null) {
+					existingLicenseInfos = new SPDXNonStandardLicense[0];
+				}
+				SPDXNonStandardLicense[] clonedExtractedLicenseInfos = new SPDXNonStandardLicense[extractedLicenseInfos.length + existingLicenseInfos.length];
+				for (int i = 0; i < existingLicenseInfos.length; i++) {
+					clonedExtractedLicenseInfos[i] = existingLicenseInfos[i];
+				}
+				for (int i = 0; i < clonedExtractedLicenseInfos.length; i++) {
+					clonedExtractedLicenseInfos[i+existingLicenseInfos.length] = (SPDXNonStandardLicense)extractedLicenseInfos[i].clone();
+				}
+				docToCloneTo.setExtractedLicenseInfos(clonedExtractedLicenseInfos);
+			}
+			retval.setConcludedLicenses(this.getConcludedLicenses().clone());
+			retval.setDeclaredCopyright(this.getDeclaredCopyright());
+			retval.setDeclaredLicense(this.getDeclaredLicense().clone());
+			retval.setDeclaredName(this.getDeclaredName());
+			retval.setDescription(this.getDescription());
+			retval.setDownloadUrl(this.getDownloadUrl());
+			retval.setFileName(this.getFileName());
+			SPDXFile[] myFiles = this.getFiles();
+			// need to 
+			if (myFiles != null) {
+				SPDXFile[] clonedFiles = new SPDXFile[myFiles.length];
+				for (int i = 0; i < clonedFiles.length; i++) {
+					clonedFiles[i] = myFiles[i].clone(docToCloneTo, docToCloneTo.getDocumentNamespace() + docToCloneTo.getNextSpdxElementRef());
+				}
+				retval.setFiles(clonedFiles);
+			}
+			retval.setHomePage(this.getHomePage());
+			retval.setLicenseComment(this.getLicenseComment());
+			SPDXLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
+			if (licenseInfosFromFiles != null) {
+				SPDXLicenseInfo[] clonedLicenseInfosFromFiles = new SPDXLicenseInfo[licenseInfosFromFiles.length];
+				for (int i = 0; i < clonedLicenseInfosFromFiles.length; i++) {
+					clonedLicenseInfosFromFiles[i] = licenseInfosFromFiles[i].clone();
+				}
+				retval.setLicenseInfoFromFiles(clonedLicenseInfosFromFiles);
+			}
+			retval.setOriginator(this.getOriginator());
+			retval.setSha1(this.getSha1());
+			retval.setShortDescription(this.getShortDescription());
+			retval.setSourceInfo(this.getSourceInfo());
+			retval.setSupplier(this.getSupplier());
+			retval.setVerificationCode(this.getVerificationCode());
+			retval.setVersionInfo(this.getVersionInfo());
 			return retval;
 		}
 		

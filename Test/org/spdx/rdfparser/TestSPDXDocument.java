@@ -349,6 +349,302 @@ public class TestSPDXDocument {
 	}
 	
 	@Test
+	public void testPackageCloneRequiredFields() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
+		doc.createSpdxPackage(testPkgUri);
+
+		// test with just the required fields		
+		SPDXPackage pkg = doc.getSpdxPackage();
+		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		final String copyright = "Copyright";
+		pkg.setDeclaredCopyright(copyright);
+		SPDXLicenseInfo declaredLicense = new SpdxNoAssertionLicense();
+		pkg.setDeclaredLicense(declaredLicense);
+		final String name = "Name";
+		pkg.setDeclaredName(name);
+		final String description = "Description";
+		pkg.setDescription(description);
+		final String downloadUrl = "None";
+		pkg.setDownloadUrl(downloadUrl);
+		final String fileName = "a/b/filename.tar.gz";
+		pkg.setFileName(fileName);
+		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SpdxNoAssertionLicense()}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile.verify();
+		assertEquals(0, verify.size());
+		pkg.setFiles(new SPDXFile[]{testFile});
+		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		final String originator = "Person: somone";
+		pkg.setOriginator(originator);
+		final String supplier = "Organization: something";
+		pkg.setSupplier(supplier);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		
+		Model cloneModel = ModelFactory.createDefaultModel();
+		SPDXDocument cloneDoc = new SPDXDocument(cloneModel);
+		String cloneDocUri = "https://clone.somesite.com/documentname";
+		cloneDoc.createSpdxAnalysis(cloneDocUri);
+		String clonePkgUri = "https://clone.somesite.com/pagename";
+		SPDXPackage clonedPkg = doc.getSpdxPackage().clone(cloneDoc, clonePkgUri);
+		verify = clonedPkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(copyright, clonedPkg.getDeclaredCopyright());
+		assertEquals(declaredLicense, clonedPkg.getDeclaredLicense());
+		assertEquals(name, clonedPkg.getDeclaredName());
+		assertEquals(description, clonedPkg.getDescription());
+		assertEquals(downloadUrl, clonedPkg.getDownloadUrl());
+		assertEquals(fileName, clonedPkg.getFileName());
+		assertEquals(1, clonedPkg.getFiles().length);
+		SPDXFile clonedFile = clonedPkg.getFiles()[0];
+		assertEquals(testFile.getName(), clonedFile.getName());
+		assertEquals(testFile.getType(), clonedFile.getType());
+		assertEquals(testFile.getSha1(), clonedFile.getSha1());
+		assertEquals(testFile.getSeenLicenses().length, clonedFile.getSeenLicenses().length);
+		assertEquals(testFile.getSeenLicenses()[0], clonedFile.getSeenLicenses()[0]);
+		assertEquals(testFile.getConcludedLicenses(), clonedFile.getConcludedLicenses());
+		assertEquals(testFile.getLicenseComments(), clonedFile.getLicenseComments());
+		assertEquals(testFile.getCopyright(), clonedFile.getCopyright());
+		assertFalse(testFile.getResource().toString().equals(clonedFile.getResource().toString()));
+		assertEquals(originator, clonedPkg.getOriginator());
+		assertEquals(supplier, clonedPkg.getSupplier());
+		// check the package URI
+		StringWriter writer = new StringWriter();
+		cloneDoc.getModel().write(writer);
+		String clonedXml = writer.toString();
+		try {
+			assertTrue(clonedXml.contains(clonePkgUri));
+			assertFalse(clonedXml.contains(testPkgUri));
+		} finally {
+			writer.close();
+		}
+	}
+	
+	@Test
+	public void testPackageCloneAllFields() throws InvalidSPDXAnalysisException, IOException {
+		Model model = ModelFactory.createDefaultModel();
+		SPDXDocument doc = new SPDXDocument(model);
+		String testDocUri = "https://original.document.uri/docname";
+		doc.createSpdxAnalysis(testDocUri);
+		String testPkgUri = "https://original.document.uri/packagename";
+		doc.createSpdxPackage(testPkgUri);
+
+		SPDXPackage pkg = doc.getSpdxPackage();
+		SPDXNonStandardLicense nonStdLic1 = new SPDXNonStandardLicense(doc.getNextLicenseRef(), "LIcenseText1");
+		SPDXNonStandardLicense nonStdLic2 = new SPDXNonStandardLicense(doc.getNextLicenseRef(), "Second license text");
+		SPDXNonStandardLicense[] extractedLicenseInfos = new SPDXNonStandardLicense[] {nonStdLic1, nonStdLic2};
+		SPDXStandardLicense stdLic1 = SPDXLicenseInfoFactory.getStandardLicenseById("Apache-2.0");
+		SPDXLicenseInfo[] licenseInfosFromFile = new SPDXLicenseInfo[] {stdLic1, nonStdLic1, nonStdLic2};
+		
+		doc.setExtractedLicenseInfos(extractedLicenseInfos);
+		
+		pkg.setConcludedLicenses(stdLic1);
+		final String copyright = "Copyright";
+		pkg.setDeclaredCopyright(copyright);
+		SPDXLicenseInfo declaredLicense = new SpdxNoAssertionLicense();
+		pkg.setDeclaredLicense(declaredLicense);
+		final String name = "Name";
+		pkg.setDeclaredName(name);
+		final String description = "Description";
+		pkg.setDescription(description);
+		final String downloadUrl = "None";
+		pkg.setDownloadUrl(downloadUrl);
+		final String fileName = "a/b/filename.tar.gz";
+		pkg.setFileName(fileName);
+		SPDXFile testFile1 = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
+				stdLic1, new SPDXLicenseInfo[] {nonStdLic1}, "license comment",
+				"file copyright", new DOAPProject[0]);
+		ArrayList<String> verify = testFile1.verify();
+		assertEquals(0, verify.size());
+		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "1023456789abcdef0123456789abcdef01234567",
+				nonStdLic1, new SPDXLicenseInfo[] {nonStdLic1}, "license comment2",
+				"file copyright2", new DOAPProject[0]);
+		verify = testFile2.verify();
+		assertEquals(0, verify.size());
+		SPDXFile testFile3 = new SPDXFile("filename3", "OTHER", "3023456789abcdef0123456789abcdef01234567",
+				nonStdLic2, new SPDXLicenseInfo[] {nonStdLic2}, "3license comment3",
+				"file copyright3", new DOAPProject[0]);
+		testFile3.setFileDependencies(new SPDXFile[]{testFile1}, doc);
+		verify = testFile3.verify();
+		assertEquals(0, verify.size());
+		SPDXFile[] testFiles = new SPDXFile[] {testFile1, testFile2, testFile3};
+		pkg.setFiles(testFiles);
+		pkg.setLicenseInfoFromFiles(licenseInfosFromFile);
+		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
+		pkg.setShortDescription("Short description");
+		pkg.setSourceInfo("Source info");
+		String[] skippedFiles = new String[] {"skipped1", "skipped2"};
+		pkg.setVerificationCode(
+				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
+						skippedFiles));
+		final String originator = "Person: somone";
+		pkg.setOriginator(originator);
+		final String supplier = "Organization: something";
+		pkg.setSupplier(supplier);
+		final String licenseComment = "license comment";
+		pkg.setLicenseComment(licenseComment);
+		final String versionInfo = "Version X";
+		pkg.setVersionInfo(versionInfo);
+		verify = pkg.verify();
+		assertEquals(0, verify.size());
+		
+		Model cloneModel = ModelFactory.createDefaultModel();
+		SPDXDocument cloneDoc = new SPDXDocument(cloneModel);
+		String cloneDocUri = "https://clone.somesite.com/documentname";
+		cloneDoc.createSpdxAnalysis(cloneDocUri);
+		String clonePkgUri = "https://clone.somesite.com/pagename";
+		SPDXPackage clonedPkg = doc.getSpdxPackage().clone(cloneDoc, clonePkgUri);
+		verify = clonedPkg.verify();
+		assertEquals(0, verify.size());
+		assertEquals(copyright, clonedPkg.getDeclaredCopyright());
+		assertEquals(declaredLicense, clonedPkg.getDeclaredLicense());
+		assertEquals(name, clonedPkg.getDeclaredName());
+		assertEquals(description, clonedPkg.getDescription());
+		assertEquals(downloadUrl, clonedPkg.getDownloadUrl());
+		assertEquals(fileName, clonedPkg.getFileName());
+		SPDXFile[] clonedFiles = clonedPkg.getFiles();
+		assertEquals(testFiles.length, clonedFiles.length);
+		for (int i = 0; i < testFiles.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < clonedFiles.length; j++) {
+				if (testFiles[i].getName().equals(clonedFiles[j].getName())) {
+					if (found) {
+						fail("Duplicate file name found");
+					}
+					found = true;
+					assertFileEquals(testFiles[i], clonedFiles[j]);
+					assertFalse(testFiles[i].getResource().toString().equals(clonedFiles[j].getResource().toString()));
+				}
+			}
+			if (!found) {
+				fail("File "+testFiles[i].getName()+ " not found");
+			}
+		}
+		SPDXFile clonedFile = clonedPkg.getFiles()[0];
+		assertEquals(originator, clonedPkg.getOriginator());
+		assertEquals(supplier, clonedPkg.getSupplier());
+		assertEquals(licenseComment, clonedPkg.getLicenseComment());
+		assertEquals(versionInfo, clonedPkg.getVersionInfo());
+		// check the package URI
+		StringWriter writer = new StringWriter();
+		cloneDoc.getModel().write(writer);
+		String clonedXml = writer.toString();
+		try {
+			assertTrue(clonedXml.contains(clonePkgUri));
+			assertFalse(clonedXml.contains(testPkgUri));
+		} finally {
+			writer.close();
+		}
+	}
+	
+	/**
+	 * @param spdxFile
+	 * @param spdxFile2
+	 */
+	private void assertFileEquals(SPDXFile file1, SPDXFile file2) {
+		assertEquals(file1.getName(), file2.getName());
+		assertEquals(file1.getType(), file2.getType());
+		assertEquals(file1.getSha1(), file2.getSha1());
+		assertEquals(file1.getSeenLicenses().length, file2.getSeenLicenses().length);
+		assertEquals(file1.getSeenLicenses()[0], file2.getSeenLicenses()[0]);
+		assertEquals(file1.getConcludedLicenses(), file2.getConcludedLicenses());
+		assertEquals(file1.getLicenseComments(), file2.getLicenseComments());
+		assertEquals(file1.getCopyright(), file2.getCopyright());
+		assertFalse(file1.getResource().toString().equals(file2.getResource().toString()));
+		DOAPProject[] projects1 = file1.getArtifactOf();
+		DOAPProject[] projects2 = file2.getArtifactOf();
+		assertProjectsEqual(projects1, projects2);
+		SPDXFile[] referencesFiles1 = file1.getFileDependencies();
+		SPDXFile[] referencesFiles2 = file2.getFileDependencies();
+		assertFilesEquals(referencesFiles1, referencesFiles2);
+	}
+
+	/**
+	 * @param referencesFiles1
+	 * @param referencesFiles2
+	 */
+	private void assertFilesEquals(SPDXFile[] referencesFiles1,
+			SPDXFile[] referencesFiles2) {
+		if (referencesFiles1 == null) {
+			if (referencesFiles2 != null) {
+				fail("referencesFiles1 is null");
+			}
+			return;
+		}
+		if (referencesFiles2 == null) {
+			if (referencesFiles1 != null) {
+				fail("referencesFiles2 is null");
+			}
+			return;
+		}
+		assertEquals(referencesFiles1.length, referencesFiles2.length);
+		for (int i = 0; i < referencesFiles1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < referencesFiles2.length; j++) {
+				if (referencesFiles1[i].getName().equals(referencesFiles2[j].getName())) {
+					if (found) {
+						fail("Duplicate file "+referencesFiles1[i].getName());
+					}
+					found = true;
+					assertFileEquals(referencesFiles1[i], referencesFiles2[j]);
+				}
+			}
+			if (!found) {
+				fail("File not found: "+referencesFiles1[i].getName());
+			}
+		}
+	}
+
+	/**
+	 * @param projects1
+	 * @param projects2
+	 */
+	private void assertProjectsEqual(DOAPProject[] projects1,
+			DOAPProject[] projects2) {
+		if (projects1 == null) {
+			if (projects2 != null) {
+				fail("projects1 is null");
+			}
+			return;
+		}
+		if (projects2 == null) {
+			if (projects1 != null) {
+				fail("projects2 is null");
+			}
+			return;
+		}
+		assertEquals(projects1.length, projects2.length);
+		for (int i = 0; i < projects1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < projects2.length; j++) {
+				if (projects1[i].getName().equals(projects2[j].getName())) {
+					if (found) {
+						fail("Duplicate project name: "+projects2[j].getName());
+					}
+					found = true;
+					assertEquals(projects1[i].getHomePage(), projects2[j].getHomePage());
+					assertEquals(projects1[i].getProjectUri(), projects2[j].getHomePage());
+				}
+			}
+			if (!found) {
+				fail("Project not found: "+projects1[i].getName());
+			}
+		}
+	}
+
+	@Test
 	public void testSetOriginator() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);

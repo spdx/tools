@@ -210,5 +210,8 @@ public class TestSpdxLicenseTemplateHelper {
 		String tabbed = "paragraph1\n\n     tabbed paragraph\n\nnormal paragraph";
 		String tabbedTagged = "paragraph1\n<p style=\"margin-left: 20px;\">     tabbed paragraph</p>\n<p>normal paragraph</p>";
 		assertEquals(tabbedTagged, SpdxLicenseTemplateHelper.addHtmlFormatting(tabbed));
+		String quadTabbed = "paragraph1\n\n                    tabbed paragraph\n\nnormal paragraph";
+		String quadTabbedTagged = "paragraph1\n<p style=\"margin-left: 70px;\">                    tabbed paragraph</p>\n<p>normal paragraph</p>";
+		assertEquals(quadTabbedTagged, SpdxLicenseTemplateHelper.addHtmlFormatting(quadTabbed));
 	}
 }

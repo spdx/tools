@@ -34,7 +34,9 @@ public class SpdxLicenseTemplateHelper {
 	static final String START_RULE = "<<";
 	static final String END_RULE = ">>";
 	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*(.+?)\\s*"+END_RULE);
-	private static final String FIVE_SPACES = "     ";
+	private static final int SPACES_PER_TAB = 5;
+	private static final int MAX_TABS = 4;
+	private static final int[] PIXELS_PER_TAB = new int[] {20, 40, 60, 70};
 
 	/**
 	 * Parses the license template calling the templateOutputHandler for any text and rules found
@@ -140,11 +142,8 @@ public class SpdxLicenseTemplateHelper {
 
 				i++;
 				if (i < lines.length) {
-					if (lines[i].startsWith(FIVE_SPACES)) {
-						result.append("<p style=\"margin-left: 20px;\">");
-					} else {
-						result.append("<p>");
-					}
+					String paragraphTag = getParagraphTagConsideringTags(lines[i]);
+					result.append(paragraphTag);
 					result.append(lines[i++]);
 				} else {
 					result.append("<p>");
@@ -164,6 +163,44 @@ public class SpdxLicenseTemplateHelper {
 			result.append("<br/>\n");
 		}
 		return result.toString();
+	}
+
+	/**
+	 * Creating a paragraph tag and add the correct margin considering the number of spaces or tabs
+	 * @param string
+	 * @return
+	 */
+	private static String getParagraphTagConsideringTags(String line) {
+		int numSpaces = countLeadingSpaces(line);
+		StringBuilder result = new StringBuilder();
+		if (numSpaces >= SPACES_PER_TAB) {
+			int numTabs = numSpaces / SPACES_PER_TAB;
+			if (numTabs > MAX_TABS) {
+				numTabs = MAX_TABS;
+			}
+			
+			int pixels = PIXELS_PER_TAB[numTabs-1];
+			result.append("<p style=\"margin-left: ");
+			result.append(String.valueOf(pixels));
+			result.append("px;\">");
+		} else {
+			result.append("<p>");
+		}
+		return result.toString();
+	}
+
+	/**
+	 * Counts the number of leading spaces in a given line
+	 * @param string
+	 * @return
+	 */
+	private static int countLeadingSpaces(String string) {
+		char[] charArray = string.toCharArray();
+		int retval = 0;
+		while (retval < charArray.length && charArray[retval] == ' ') {
+			retval++;
+		}
+		return retval;
 	}
 
 	/**
