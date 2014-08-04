@@ -17,16 +17,21 @@
 package org.spdx.tools;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
 import org.spdx.merge.SpdxLicenseInfoMerger;
 import org.spdx.merge.SpdxMergeException;
+import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
  * Commend line application to merge multiple SPDX documents into one single documents
@@ -45,9 +50,11 @@ public class MergeSpdxDocs {
 	/**
 	 * @param args (input SPDX documents; the last item in the args will be the output file name)
 	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidLicenseStringException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	@SuppressWarnings("static-access")
-	public static void main(String[] args) throws InvalidSPDXAnalysisException, SpdxMergeException {
+	public static void main(String[] args) throws InvalidSPDXAnalysisException, SpdxMergeException, NoSuchAlgorithmException, InvalidLicenseStringException {
 			if (args.length < MIN_ARGS){
 					System.out.println("Insufficient arguments");
 					usage();
@@ -88,13 +95,16 @@ public class MergeSpdxDocs {
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
 			}
 
-			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger();
+			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(mergeDocs[0]);
 			//merge non-standard license information
 			SPDXNonStandardLicense[] licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
 				
-			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger();
+			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(mergeDocs[0]);
 			//merge file information 
 			SPDXFile[] fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
+			
+			SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(mergeDocs[0]);
+			SPDXPackage packageInfoResult = packInfoMerger.mergePackageInfo(mergeDocs, fileInfoResult);
 	}			
 
     /**
