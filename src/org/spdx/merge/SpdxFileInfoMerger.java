@@ -37,13 +37,13 @@ public class SpdxFileInfoMerger{
 	 * @return mergeFileInfo
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public ArrayList<SPDXFile> mergeFileInfo(SPDXDocument[] mergeDocs)throws InvalidSPDXAnalysisException{
+	public SPDXFile[] mergeFileInfo(SPDXDocument[] mergeDocs)throws InvalidSPDXAnalysisException{
 			
 	        //an array to store an deep copy of file information from master document.
 			SPDXFile[] masterFileInfo = mergeDocs[0].getSpdxPackage().getFiles();
 			
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
-			ArrayList<SPDXFile> fileInfoResult = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
+			ArrayList<SPDXFile> retval = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
 			
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper(mergeDocs[0]);
 			
@@ -51,17 +51,17 @@ public class SpdxFileInfoMerger{
 				//an array to store an deep copy of file information from current child document
 				SPDXFile[] subFileInfo = cloneFiles(mergeDocs[q].getSpdxPackage().getFiles());
 				
-				for(int k = 0; k < fileInfoResult.size(); k++){
+				for(int k = 0; k < retval.size(); k++){
 					boolean foundNameMatch = false;
 					boolean foundSha1Match = false;
 					
 					//determine if any file name matched
 					for(int p = 0; p < subFileInfo.length; p++){
-						if(fileInfoResult.get(k).getName().equalsIgnoreCase(subFileInfo[p].getName())){
+						if(retval.get(k).getName().equalsIgnoreCase(subFileInfo[p].getName())){
 							foundNameMatch = true;
 						}
 						//determine if any checksum matched
-						if(fileInfoResult.get(k).getSha1().equals(subFileInfo[p].getSha1())){
+						if(retval.get(k).getSha1().equals(subFileInfo[p].getSha1())){
 							foundSha1Match = true;
 						}
 						//if both name and checksum are not matched, then check the license Ids from child files 
@@ -69,38 +69,41 @@ public class SpdxFileInfoMerger{
 							//check whether licIdMap has this particular child document  
 							if(mapper.docInNonStdLicIdMap(mergeDocs[q])){
 								mapper.checkNonStdLicId(mergeDocs[q], subFileInfo[p]);
-								fileInfoResult.add(subFileInfo[p]);
+								retval.add(subFileInfo[p]);
 							}else{
-								fileInfoResult.add(subFileInfo[p]);
+								retval.add(subFileInfo[p]);
 							}
 						}else{
 							//if both name and checksum are matched, then merge the DOAPProject information
 							//still need to figure out how to solve the issue if license and other information is not exactly the same
 							boolean foundMasterDOAP = false;
 							boolean foundChildDOAP = false;
-						    if(checkDOAPProject(fileInfoResult.get(k))){
+						    if(checkDOAPProject(retval.get(k))){
 						    	foundMasterDOAP = true;
 						    }
 						    if(checkDOAPProject(subFileInfo[p])){
 						    	foundChildDOAP = true;
 						    }
 						    if(foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(fileInfoResult.get(k).getArtifactOf());
+						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(retval.get(k).getArtifactOf());
 						    	DOAPProject[] subArtifactOfA = cloneDOAPProject(subFileInfo[p].getArtifactOf());
 						    	DOAPProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, subArtifactOfA);
-						    	fileInfoResult.get(k).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
+						    	retval.get(k).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
 						    	
 						    }
 						    //if master doesn't have DOAPProject information but sub file has 
 						    if(!foundMasterDOAP && foundChildDOAP){
 						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(subFileInfo[p].getArtifactOf());
-						    	fileInfoResult.get(k).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
+						    	retval.get(k).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
 						    }
 						}
 					}
 				}
-			}				
-		return fileInfoResult;
+			}
+		SPDXFile[] fileMergeResult = new SPDXFile[retval.size()];
+		retval.toArray(fileMergeResult);
+		retval.clear();
+		return fileMergeResult;
 	}
 		
 	/**
