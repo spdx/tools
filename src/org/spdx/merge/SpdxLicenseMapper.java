@@ -25,14 +25,14 @@ import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 
 /**
- * Application to build HashMaps to help SPDX documents merging. Currently, it helps mapping SPDX non-standard licenses
+ * Application to build HashMaps to help SPDX documents merging. Currently, it helps mapping any SPDX licenses.
  * @author Gang Ling
  *
  */
 public class SpdxLicenseMapper {
 
-	private HashMap<SPDXDocument, HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>> nonStdLicIdMap = 
-			new HashMap<SPDXDocument, HashMap< SPDXNonStandardLicense, SPDXNonStandardLicense>>();
+	private HashMap<SPDXDocument, HashMap<SPDXLicenseInfo, SPDXLicenseInfo>> nonStdLicIdMap = 
+			new HashMap<SPDXDocument, HashMap< SPDXLicenseInfo, SPDXLicenseInfo>>();
 	
 	private SPDXDocument master = null;
 	
@@ -52,9 +52,9 @@ public class SpdxLicenseMapper {
 	 */
 	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
 		
-	    HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> interMap = nonStdLicIdMap.get(subDoc);
+	    HashMap<SPDXLicenseInfo, SPDXLicenseInfo> interMap = nonStdLicIdMap.get(subDoc);
 	    if(interMap.isEmpty()){
-	    	interMap = new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
+	    	interMap = new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
 	    }
 	    
 		String NewNonStdLicId = master.getNextLicenseRef();
@@ -74,7 +74,7 @@ public class SpdxLicenseMapper {
 	 */
 	public SPDXFile checkNonStdLicId(SPDXDocument spdxDoc, SPDXFile subFileInfo){
 			SPDXLicenseInfo[] subLicInfo = subFileInfo.getSeenLicenses();
-			HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> idMap = foundNonStdLicIds(spdxDoc);
+			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundNonStdLicIds(spdxDoc);
 			SPDXNonStandardLicense[] orgNonStdLics = (SPDXNonStandardLicense[]) idMap.keySet().toArray();
 			ArrayList <SPDXLicenseInfo> retval = new ArrayList<SPDXLicenseInfo>();
 			for(int i = 0; i < subLicInfo.length; i++){
@@ -117,10 +117,10 @@ public class SpdxLicenseMapper {
 	 * @param spdxDoc
 	 * @return idMap
 	 */
-	public HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> foundNonStdLicIds(SPDXDocument spdxDoc){
+	public HashMap<SPDXLicenseInfo, SPDXLicenseInfo> foundNonStdLicIds(SPDXDocument spdxDoc){
 
-		HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense> idMap = 
-				new HashMap<SPDXNonStandardLicense, SPDXNonStandardLicense>();
+		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = 
+				new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
 		
 		idMap = this.nonStdLicIdMap.get(spdxDoc);
 		return idMap;
