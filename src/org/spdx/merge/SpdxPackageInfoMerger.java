@@ -53,7 +53,7 @@ public class SpdxPackageInfoMerger {
 		 */
 		public SPDXPackage mergePackageInfo(SPDXDocument[] mergeDocs,SPDXFile[] fileMergeResult) 
 				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
-			SPDXPackage packageMergeResult = master.getSpdxPackage();
+			SPDXPackage packageMergeResult = master.getSpdxPackage().clone(master, master.getSpdxPackage().getDownloadUrl());
 			
 			String[] skippedFiles = collectSkippedFiles(mergeDocs);
 			VerificationCodeGenerator vg = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
@@ -63,10 +63,10 @@ public class SpdxPackageInfoMerger {
 			SPDXLicenseInfo[] licsInFile = collectLicsInFiles(fileMergeResult);
 			packageMergeResult.setLicenseInfoFromFiles(licsInFile);
 			
-			SPDXLicenseInfo declaredLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NONASSERTION");
+			SPDXLicenseInfo declaredLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NOASSERTION");
 			packageMergeResult.setDeclaredLicense(declaredLicense);		
 			
-			
+			//need to add license comments method here
 			
 			return packageMergeResult;			
 		}
@@ -139,4 +139,12 @@ public class SpdxPackageInfoMerger {
 			return licsInFile;	
 		}
 		
+		public SPDXLicenseInfo collectDeclaredLicsInSubPkg(SPDXDocument[] mergeDocs){
+			
+			for(int e = 1; e < mergeDocs.length; e++){
+				
+			}
+			
+			return null;		
+		}
 }
