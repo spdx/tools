@@ -87,14 +87,15 @@ public class MergeSpdxDocs {
 					System.exit(ERROR_STATUS);
 				}
 			}
-			SPDXDocument mergedDoc = null;
+			SPDXDocument outputDoc = null;
 			try{
-				mergedDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
+				outputDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
 			}
 			catch(Exception e){
 				System.out.println("Error to create new output SPDX Document "+e.getMessage());
 			}
-
+			
+			outputDoc.getModel();
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(mergeDocs[0]);
 			//merge non-standard license information
 			SPDXNonStandardLicense[] licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
@@ -106,43 +107,35 @@ public class MergeSpdxDocs {
 			SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(mergeDocs[0]);
 			SPDXPackage packageInfoResult = packInfoMerger.mergePackageInfo(mergeDocs, fileInfoResult);
 			
+			//clone the package information from master document
+			mergeDocs[0].getSpdxPackage().clone(outputDoc, mergeDocs[0].getSpdxDocUri()+"#package");
+			
+			//set document review information as empty array
 			SPDXReview[] reviewInfoResult = new SPDXReview[0];
-			mergedDoc.setReviewers(reviewInfoResult);
-			mergedDoc.setExtractedLicenseInfos(licInfoResult);
-			mergedDoc.createSpdxPackage(mergeDocs[0].getSpdxPackage().getHomePage());
-			mergedDoc = setPackageInfo(mergedDoc,packageInfoResult,fileInfoResult);
+			outputDoc.setReviewers(reviewInfoResult);
+			//set document SPDX version
+			outputDoc.setSpdxVersion(mergeDocs[0].getSpdxVersion());
+			//set document creator information
+			outputDoc.setCreationInfo(mergeDocs[0].getCreatorInfo());
+			//set document comment information 
+			outputDoc.setDocumentComment(mergeDocs[0].getDocumentComment());
+			//set document data license information
+			outputDoc.setDataLicense(mergeDocs[0].getDataLicense());
+			//set extracted license information
+			outputDoc.setExtractedLicenseInfos(licInfoResult);
+			//set package's declared license information
+			outputDoc.getSpdxPackage().setDeclaredLicense(packageInfoResult.getDeclaredLicense());
+			//set package's file information
+			outputDoc.getSpdxPackage().setFiles(fileInfoResult);
+			//set package's license comments information 
+			outputDoc.getSpdxPackage().setLicenseComment(packageInfoResult.getLicenseComment());
+			//set package's verification code
+			outputDoc.getSpdxPackage().setVerificationCode(packageInfoResult.getVerificationCode());
+
 			
 			
 	}			
 
-	/**
-	 * 
-	 * @param doc
-	 * @param packageInfoResult
-	 * @return
-	 * @throws InvalidSPDXAnalysisException
-	 */
-	public static SPDXDocument setPackageInfo(SPDXDocument doc, SPDXPackage packageInfoResult, SPDXFile[] fileInfoResult) throws InvalidSPDXAnalysisException{
-		doc.getSpdxPackage().setConcludedLicenses(packageInfoResult.getConcludedLicenses());
-		doc.getSpdxPackage().setDeclaredCopyright(packageInfoResult.getDeclaredCopyright());
-		doc.getSpdxPackage().setDeclaredLicense(packageInfoResult.getDeclaredLicense());
-		doc.getSpdxPackage().setDeclaredName(packageInfoResult.getDeclaredName());
-		doc.getSpdxPackage().setDescription(packageInfoResult.getDescription());
-		doc.getSpdxPackage().setDownloadUrl(packageInfoResult.getDownloadUrl());
-		doc.getSpdxPackage().setFileName(packageInfoResult.getFileName());
-		doc.getSpdxPackage().setFiles(fileInfoResult);
-		doc.getSpdxPackage().setLicenseComment(packageInfoResult.getLicenseComment());
-		doc.getSpdxPackage().setLicenseInfoFromFiles(packageInfoResult.getLicenseInfoFromFiles());
-		doc.getSpdxPackage().setOriginator(packageInfoResult.getOriginator());
-		doc.getSpdxPackage().setSha1(packageInfoResult.getSha1());
-		doc.getSpdxPackage().setShortDescription(packageInfoResult.getShortDescription());
-		doc.getSpdxPackage().setSourceInfo(packageInfoResult.getSourceInfo());
-		doc.getSpdxPackage().setSupplier(packageInfoResult.getSupplier());
-		doc.getSpdxPackage().setVerificationCode(packageInfoResult.getVerificationCode());
-		doc.getSpdxPackage().setVersionInfo(packageInfoResult.getVersionInfo());
-		
-		return doc;
-	}
     /**
      * 
      */	
