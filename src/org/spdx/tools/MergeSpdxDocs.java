@@ -17,6 +17,9 @@
 package org.spdx.tools;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
@@ -28,11 +31,13 @@ import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
-import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
  * Commend line application to merge multiple SPDX documents into one single documents
@@ -54,6 +59,7 @@ public class MergeSpdxDocs {
 	 * @throws InvalidLicenseStringException 
 	 * @throws NoSuchAlgorithmException 
 	 */
+
 	public static void main(String[] args) throws InvalidSPDXAnalysisException, SpdxMergeException, NoSuchAlgorithmException, InvalidLicenseStringException {
 			if (args.length < MIN_ARGS){
 					System.out.println("Insufficient arguments");
@@ -61,8 +67,8 @@ public class MergeSpdxDocs {
 					System.exit(ERROR_STATUS);
 			}
 			//check the output file name to avoid the miss input value
-			File outFile = new File(args[args.length-1]);
-			if(outFile.exists()){
+			File spdxRdfFile = new File(args[args.length-1]);
+			if(spdxRdfFile.exists()){
 				System.out.println("Output file "+args[args.length-1]+" already exist");
 				System.exit(ERROR_STATUS);
 			}
@@ -87,15 +93,31 @@ public class MergeSpdxDocs {
 					System.exit(ERROR_STATUS);
 				}
 			}
-			SPDXDocument outputDoc = null;
+			
+			//file output stream
+			FileOutputStream out;
 			try{
-				outputDoc = SPDXDocumentFactory.creatSpdxDocument(args[args.length-1]);
+				out = new FileOutputStream(spdxRdfFile);
+			}catch(FileNotFoundException e){
+				System.out.println("Could not write to the new SPDX RDF file "+args[args.length-1]);
+				System.out.println("due to error "+e.getMessage());
+				usage();
+				return;
 			}
-			catch(Exception e){
-				System.out.println("Error to create new output SPDX Document "+e.getMessage());
+			Model model = ModelFactory.createDefaultModel();			
+			SPDXDocument outputDoc = null;
+			try {
+				outputDoc = new SPDXDocument(model);
+			} catch (InvalidSPDXAnalysisException ex) {
+				System.out.print("Error creating merged SPDX Document: "+ex.getMessage());
+				try {
+					out.close();
+				} catch (IOException e) {
+					System.out.println("Warning - unable to close output file on error: "+e.getMessage());
+				}
+				return;
 			}
 			
-			outputDoc.getModel();
 			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(mergeDocs[0]);
 			//merge non-standard license information
 			SPDXNonStandardLicense[] licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
@@ -132,7 +154,14 @@ public class MergeSpdxDocs {
 			//set package's verification code
 			outputDoc.getSpdxPackage().setVerificationCode(packageInfoResult.getVerificationCode());
 
-			
+			model.write(out, "RDF/XML-ABBREV");
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					System.out.println("Error closing RDF file: "+e.getMessage());
+				}
+			}
 			
 	}			
 
