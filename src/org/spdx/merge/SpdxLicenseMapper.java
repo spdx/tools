@@ -18,8 +18,12 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
+import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
+import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
@@ -99,6 +103,28 @@ public class SpdxLicenseMapper {
 			return subFileInfo;
 	}
 	
+	public SPDXLicenseInfo mapLicenseInfo(SPDXDocument spdxDoc, SPDXLicenseInfo license){
+		HashSet<SPDXLicenseInfo> licenseInfoSet = new HashSet<SPDXLicenseInfo>();
+		SPDXLicenseInfo result = null;
+		if(license instanceof SPDXConjunctiveLicenseSet){
+			SPDXLicenseInfo[] members = ((SPDXConjunctiveLicenseSet) license).getSPDXLicenseInfos();
+			SPDXLicenseInfo[] mappedMembers = new SPDXLicenseInfo[members.length];
+			for(int i = 0; i < members.length; i++){
+				mappedMembers[i] = mapLicenseInfo(spdxDoc, members[i]);
+			}
+			return new SPDXConjunctiveLicenseSet(mappedMembers);
+		}
+		else if(license instanceof SPDXDisjunctiveLicenseSet){
+			SPDXLicenseInfo[] members = ((SPDXDisjunctiveLicenseSet) license).getSPDXLicenseInfos();
+			SPDXLicenseInfo[] mappedMembers = new SPDXLicenseInfo[members.length];
+			for(int q = 0; q < members.length; q++ ){
+				mappedMembers[q] = mapLicenseInfo(spdxDoc, members[q]);
+			}
+			return new SPDXDisjunctiveLicenseSet(mappedMembers);
+		}
+		
+		return result;	
+	}
 	/**
 	 * 
 	 * @param spdxDoc
