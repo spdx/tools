@@ -18,12 +18,9 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-
 import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
@@ -49,7 +46,9 @@ public class SpdxLicenseMapper {
 	}
 	
 	/**
-	 * 
+	 * a method gets a sub SPDX document and one of its non-standard licenses. 
+	 * This particular non-standard license is unique to the master document.
+	 * The return variable subNonStdLicInfo is cloned from input non-standard license, but replace the license id.
 	 * @param mergeDocs
 	 * @param subNonStdLicInfo
 	 * @return subNonStdLicInfo
@@ -71,28 +70,29 @@ public class SpdxLicenseMapper {
 	}
 	
 	/**
-	 * 
-	 * @param childFileInfo
-	 * @param licId
-	 * @return 
+	 * a method gets a sub SPDX document and its file information. 
+	 * Check the non-standard licenses in the file information. Replace the non-standard licenses if this particular license in the HashMap.
+	 * @param spdxDoc
+	 * @param subFileInfo
+	 * @return
 	 */
-	public SPDXFile checkNonStdLicId(SPDXDocument spdxDoc, SPDXFile subFileInfo){
-			SPDXLicenseInfo[] subLicInfo = subFileInfo.getSeenLicenses();
+	public SPDXFile replaceNonStdLicInFile(SPDXDocument spdxDoc, SPDXFile subFileInfo){
+			SPDXLicenseInfo[] subLicInfoInFile = subFileInfo.getSeenLicenses();
 			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundNonStdLicIds(spdxDoc);
 			SPDXNonStandardLicense[] orgNonStdLics = (SPDXNonStandardLicense[]) idMap.keySet().toArray();
 			ArrayList <SPDXLicenseInfo> retval = new ArrayList<SPDXLicenseInfo>();
-			for(int i = 0; i < subLicInfo.length; i++){
+			for(int i = 0; i < subLicInfoInFile.length; i++){
 				boolean foundLicId = false;
 				for(int q = 0; q < orgNonStdLics.length; q++){
 					//if the subfile's orgNonStdLic is found in the subLicInfo, 
-					if(subLicInfo[i].toString().equals(orgNonStdLics[q].getId())){
+					if(subLicInfoInFile[i].toString().equals(orgNonStdLics[q].getId())){
 						foundLicId = true;
 					}
 					//then we replace the orgNonStdLic's id with new id from the internal map
 					if(foundLicId){
 						retval.add(idMap.get(orgNonStdLics[q]));
 					}else{
-						retval.add(subLicInfo[i]);//if not, add this license to retval array directly. this license must be not non-standard license.
+						retval.add(subLicInfoInFile[i]);//if not, add this license to retval array directly. this license must be not non-standard license.
 					}
 				}
 			}
@@ -103,8 +103,41 @@ public class SpdxLicenseMapper {
 			return subFileInfo;
 	}
 	
+	/**
+	 * a method gets a sub SPDX document and one of its license (non-standard license). Replace the input license if it is found in the HashMap.
+	 * And return the mapped license. If the input license doesn't in the HashMap, return the original input license. 
+	 * @param spdxDoc
+	 * @param license
+	 * @return
+	 */
+	public SPDXLicenseInfo mapNonStdLicInMap(SPDXDocument spdxDoc, SPDXLicenseInfo license){
+		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundNonStdLicIds(spdxDoc);
+		SPDXNonStandardLicense[] orgNonStdLics = (SPDXNonStandardLicense[]) idMap.keySet().toArray();
+		SPDXLicenseInfo retval = null;
+		for(int i = 0; i < orgNonStdLics.length; i++ ){
+			boolean foundLicId = false;
+			if(license.equals(orgNonStdLics[i])){
+				foundLicId = true;
+			}
+			if(foundLicId){
+				retval = idMap.get(orgNonStdLics[i]);
+			}else{
+				retval = license;
+			}
+		}
+		return retval;
+		
+	}
+	
+	/**
+	 * a method gets a sub SPDX document and licenses from declared licenses in document package. 
+	 * Check the object type of input license. If the license is non-standard license, run the license through mapNonStdLicIndMap. 
+	 * Otherwise, return the original input license. 
+	 * @param spdxDoc
+	 * @param license
+	 * @return
+	 */
 	public SPDXLicenseInfo mapLicenseInfo(SPDXDocument spdxDoc, SPDXLicenseInfo license){
-		HashSet<SPDXLicenseInfo> licenseInfoSet = new HashSet<SPDXLicenseInfo>();
 		SPDXLicenseInfo result = null;
 		if(license instanceof SPDXConjunctiveLicenseSet){
 			SPDXLicenseInfo[] members = ((SPDXConjunctiveLicenseSet) license).getSPDXLicenseInfos();
@@ -121,8 +154,9 @@ public class SpdxLicenseMapper {
 				mappedMembers[q] = mapLicenseInfo(spdxDoc, members[q]);
 			}
 			return new SPDXDisjunctiveLicenseSet(mappedMembers);
+		}else if(license instanceof SPDXNonStandardLicense){
+			return mapNonStdLicInMap(spdxDoc,(SPDXNonStandardLicense)license);
 		}
-		
 		return result;	
 	}
 	/**
