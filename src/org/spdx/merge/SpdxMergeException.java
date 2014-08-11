@@ -24,19 +24,9 @@ public class SpdxMergeException extends Exception{
 
 	/**
 	 * @param message
-	 * @param cause
-	 */
-	public SpdxMergeException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param message
 	 */
 	public SpdxMergeException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -44,7 +34,14 @@ public class SpdxMergeException extends Exception{
 	 */
 	public SpdxMergeException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
+	}
+	
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public SpdxMergeException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }
