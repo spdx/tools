@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
 import org.spdx.merge.SpdxLicenseInfoMerger;
-import org.spdx.merge.SpdxMergeException;
 import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
@@ -54,13 +53,10 @@ public class MergeSpdxDocs {
 	static final int ERROR_STATUS =1;	
 	
 	/**
+	 * 
 	 * @param args (input SPDX documents; the last item in the args will be the output file name)
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws InvalidLicenseStringException 
-	 * @throws NoSuchAlgorithmException 
 	 */
-
-	public static void main(String[] args) throws InvalidSPDXAnalysisException, SpdxMergeException, NoSuchAlgorithmException, InvalidLicenseStringException {
+	public static void main(String[] args){
 			if (args.length < MIN_ARGS){
 					System.out.println("Insufficient arguments");
 					usage();
@@ -118,49 +114,83 @@ public class MergeSpdxDocs {
 				return;
 			}
 			
-			SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(mergeDocs[0]);
-			//merge non-standard license information
-			SPDXNonStandardLicense[] licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
+			SPDXNonStandardLicense[] licInfoResult = null;
+			try{
+				SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(mergeDocs[0]);
+				//merge non-standard license information
+				licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
+			}catch(InvalidSPDXAnalysisException e){
+				System.out.println("Error merging documents' SPDX Non-standard License Information: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			}
 				
-			SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(mergeDocs[0]);
-			//merge file information 
-			SPDXFile[] fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
+			SPDXFile[] fileInfoResult = null;
+			try{
+				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(mergeDocs[0]);
+				//merge file information 
+				fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
+			}catch(InvalidSPDXAnalysisException e){
+				System.out.println("Error merging SPDX files' Information: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			}
 			
-			SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(mergeDocs[0]);
-			SPDXPackage packageInfoResult = packInfoMerger.mergePackageInfo(mergeDocs, fileInfoResult);
+			SPDXPackage packageInfoResult = null;
+			try{
+				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(mergeDocs[0]);
+				try {
+					packageInfoResult = packInfoMerger.mergePackageInfo(mergeDocs, fileInfoResult);
+				} catch (NoSuchAlgorithmException e) {
+					System.out.println("Error merging packages' information: "+e.getMessage());
+				} catch (InvalidLicenseStringException e) {
+					System.out.println("Error on package's license string "+e.getMessage());
+				}
+			}catch(InvalidSPDXAnalysisException e){
+				System.out.println("Error merging SPDX Non-standard License Information: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			}
 			
-			//clone the package information from master document
-			mergeDocs[0].getSpdxPackage().clone(outputDoc, mergeDocs[0].getSpdxDocUri()+"#package");
+			try{
+				//clone the package information from master document
+				mergeDocs[0].getSpdxPackage().clone(outputDoc, mergeDocs[0].getSpdxDocUri()+"#package");
 			
-			//set document review information as empty array
-			SPDXReview[] reviewInfoResult = new SPDXReview[0];
-			outputDoc.setReviewers(reviewInfoResult);
-			//set document SPDX version
-			outputDoc.setSpdxVersion(mergeDocs[0].getSpdxVersion());
-			//set document creator information
-			outputDoc.setCreationInfo(mergeDocs[0].getCreatorInfo());
-			//set document comment information 
-			outputDoc.setDocumentComment(mergeDocs[0].getDocumentComment());
-			//set document data license information
-			outputDoc.setDataLicense(mergeDocs[0].getDataLicense());
-			//set extracted license information
-			outputDoc.setExtractedLicenseInfos(licInfoResult);
-			//set package's declared license information
-			outputDoc.getSpdxPackage().setDeclaredLicense(packageInfoResult.getDeclaredLicense());
-			//set package's file information
-			outputDoc.getSpdxPackage().setFiles(fileInfoResult);
-			//set package's license comments information 
-			outputDoc.getSpdxPackage().setLicenseComment(packageInfoResult.getLicenseComment());
-			//set package's verification code
-			outputDoc.getSpdxPackage().setVerificationCode(packageInfoResult.getVerificationCode());
+				//set document review information as empty array
+				SPDXReview[] reviewInfoResult = new SPDXReview[0];
+				outputDoc.setReviewers(reviewInfoResult);
+				//set document SPDX version
+				outputDoc.setSpdxVersion(mergeDocs[0].getSpdxVersion());
+				//set document creator information
+				outputDoc.setCreationInfo(mergeDocs[0].getCreatorInfo());
+				//set document comment information 
+				outputDoc.setDocumentComment(mergeDocs[0].getDocumentComment());
+				//set document data license information
+				outputDoc.setDataLicense(mergeDocs[0].getDataLicense());
+				//set extracted license information
+				outputDoc.setExtractedLicenseInfos(licInfoResult);
+				//set package's declared license information
+				outputDoc.getSpdxPackage().setDeclaredLicense(packageInfoResult.getDeclaredLicense());
+				//set package's file information
+				outputDoc.getSpdxPackage().setFiles(fileInfoResult);
+				//set package's license comments information 
+				outputDoc.getSpdxPackage().setLicenseComment(packageInfoResult.getLicenseComment());
+				//set package's verification code
+				outputDoc.getSpdxPackage().setVerificationCode(packageInfoResult.getVerificationCode());
+			}catch(InvalidSPDXAnalysisException e){
+				System.out.println("Error to set merged information into output document "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			}
 
-			model.write(out, "RDF/XML-ABBREV");
-			if (out != null) {
+			try{	
+				model.write(out, "RDF/XML-ABBREV");
+			}catch(Exception e){
+				System.out.println("Error writing to the output file "+e.getMessage());
+			}
+			finally{if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
 					System.out.println("Error closing RDF file: "+e.getMessage());
 				}
+			 }
 			}
 			
 	}			
