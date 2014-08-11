@@ -149,27 +149,42 @@ public class SpdxPackageInfoMerger {
 		 */
 		public String translateSubDelcaredLicsIntoComments(SPDXDocument[] mergeDocs){
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
-			StringBuilder buffer = new StringBuilder("This package merged several packages and the sub-package contain the following licenses:");
+			StringBuilder buffer = null;
+			try {
+				buffer = new StringBuilder(master.getSpdxPackage().getLicenseComment() 
+						+ " This package merged several packages and the sub-package contain the following licenses:");
+			} catch (InvalidSPDXAnalysisException e1) {
+				System.out.println("Error getting license comment from master document"+e1.getMessage());
+			}
 			for(int k = 1; k < mergeDocs.length; k++){
 				if(mapper.docInNonStdLicIdMap(mergeDocs[k])){
-					SPDXPackage subPackage = null;
 					SPDXLicenseInfo license = null;
 					SPDXLicenseInfo result = null;
 					try {
-						subPackage = mergeDocs[k].getSpdxPackage();
 						license = mergeDocs[k].getSpdxPackage().getDeclaredLicense();
-						result = mapper.mapLicenseInfo(subPackage, license);
+						result = mapper.mapLicenseInfo(mergeDocs[k], license);
 					} catch (InvalidSPDXAnalysisException e) {
 						System.out.println("Error mapping declared licenses from sub document "+ mergeDocs[k]+ e.getMessage());
 					}
 					try {
-						buffer.append(subPackage.getFileName());
+						buffer.append(mergeDocs[k].getSpdxPackage().getFileName());
 					} catch (InvalidSPDXAnalysisException e) {
 						System.out.println("Error getting package name from sub-document:" + mergeDocs[k]+ e.getMessage());
 					}
 					buffer.append(" (" + result.toString() + ") ");
+				}else{
+					try {
+						buffer.append(mergeDocs[k].getSpdxPackage().getFileName());
+					} catch (InvalidSPDXAnalysisException e) {
+						System.out.println("Error getting package name from sub-document:" + mergeDocs[k]+ e.getMessage());
+					}
+					try {
+						buffer.append(" (" + mergeDocs[k].getSpdxPackage().getDeclaredLicense().toString() + ") ");
+					} catch (InvalidSPDXAnalysisException e) {
+						System.out.println("Error getting declared licenses from sub-document:" + mergeDocs[k]+ e.getMessage());
+					}
 				}
 			}			
-			return buffer.toString();		
+			return buffer.toString();
 		}
 }
