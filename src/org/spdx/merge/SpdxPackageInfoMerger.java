@@ -66,7 +66,9 @@ public class SpdxPackageInfoMerger {
 			SPDXLicenseInfo declaredLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NOASSERTION");
 			packageMergeResult.setDeclaredLicense(declaredLicense);		
 			
-			//need to add license comments method here
+			String licComments = translateSubDelcaredLicsIntoComments(mergeDocs);
+			packageMergeResult.setLicenseComment(licComments);
+			
 			
 			return packageMergeResult;			
 		}
@@ -139,12 +141,35 @@ public class SpdxPackageInfoMerger {
 			return licsInFile;	
 		}
 		
-		public SPDXLicenseInfo collectDeclaredLicsInSubPkg(SPDXDocument[] mergeDocs){
-			
-			for(int e = 1; e < mergeDocs.length; e++){
-				
-			}
-			
-			return null;		
+		/**
+		 * method to collect all declared licenses from sub-packages 
+		 * and merge into string as license comments in merged package
+		 * @param mergeDocs
+		 * @return
+		 */
+		public String translateSubDelcaredLicsIntoComments(SPDXDocument[] mergeDocs){
+			SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
+			StringBuilder buffer = new StringBuilder("This package merged several packages and the sub-package contain the following licenses:");
+			for(int k = 1; k < mergeDocs.length; k++){
+				if(mapper.docInNonStdLicIdMap(mergeDocs[k])){
+					SPDXPackage subPackage = null;
+					SPDXLicenseInfo license = null;
+					SPDXLicenseInfo result = null;
+					try {
+						subPackage = mergeDocs[k].getSpdxPackage();
+						license = mergeDocs[k].getSpdxPackage().getDeclaredLicense();
+						result = mapper.mapLicenseInfo(subPackage, license);
+					} catch (InvalidSPDXAnalysisException e) {
+						System.out.println("Error mapping declared licenses from sub document "+ mergeDocs[k]+ e.getMessage());
+					}
+					try {
+						buffer.append(subPackage.getFileName());
+					} catch (InvalidSPDXAnalysisException e) {
+						System.out.println("Error getting package name from sub-document:" + mergeDocs[k]+ e.getMessage());
+					}
+					buffer.append(" (" + result.toString() + ") ");
+				}
+			}			
+			return buffer.toString();		
 		}
 }
