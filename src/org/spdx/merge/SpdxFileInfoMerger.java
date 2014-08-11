@@ -72,7 +72,7 @@ public class SpdxFileInfoMerger{
 						if(!foundNameMatch && !foundSha1Match){
 							//check whether licIdMap has this particular child document  
 							if(mapper.docInNonStdLicIdMap(mergeDocs[q])){
-								mapper.checkNonStdLicId(mergeDocs[q], subFileInfo[p]);
+								mapper.replaceNonStdLicInFile(mergeDocs[q], subFileInfo[p]);
 								retval.add(subFileInfo[p]);
 							}else{
 								retval.add(subFileInfo[p]);
