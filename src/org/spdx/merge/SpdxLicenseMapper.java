@@ -77,7 +77,7 @@ public class SpdxLicenseMapper {
 	 */
 	public SPDXFile replaceNonStdLicInFile(SPDXDocument spdxDoc, SPDXFile subFileInfo){
 			SPDXLicenseInfo[] subLicInfoInFile = subFileInfo.getSeenLicenses();
-			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundNonStdLicIds(spdxDoc);
+			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
 			SPDXLicenseInfo[] orgNonStdLics = (SPDXLicenseInfo[]) idMap.keySet().toArray();
 			ArrayList <SPDXLicenseInfo> retval = new ArrayList<SPDXLicenseInfo>();
 			for(int i = 0; i < subLicInfoInFile.length; i++){
@@ -112,7 +112,7 @@ public class SpdxLicenseMapper {
 	 * @return
 	 */
 	public SPDXLicenseInfo mapNonStdLicInMap(SPDXDocument spdxDoc, SPDXLicenseInfo license){
-		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundNonStdLicIds(spdxDoc);
+		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
 		SPDXNonStandardLicense[] orgNonStdLics = (SPDXNonStandardLicense[]) idMap.keySet().toArray();
 		SPDXLicenseInfo retval = null;
 		for(int i = 0; i < orgNonStdLics.length; i++ ){
@@ -177,7 +177,7 @@ public class SpdxLicenseMapper {
 	 * @param spdxDoc
 	 * @return idMap
 	 */
-	public HashMap<SPDXLicenseInfo, SPDXLicenseInfo> foundNonStdLicIds(SPDXDocument spdxDoc){
+	public HashMap<SPDXLicenseInfo, SPDXLicenseInfo> foundInterMap(SPDXDocument spdxDoc){
 
 		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = 
 				new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
