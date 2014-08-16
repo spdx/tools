@@ -659,7 +659,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 				for (int i = 0; i < existingLicenseInfos.length; i++) {
 					clonedExtractedLicenseInfos[i] = existingLicenseInfos[i];
 				}
-				for (int i = 0; i < clonedExtractedLicenseInfos.length; i++) {
+				for (int i = 0; i < extractedLicenseInfos.length; i++) {
 					clonedExtractedLicenseInfos[i+existingLicenseInfos.length] = (SPDXNonStandardLicense)extractedLicenseInfos[i].clone();
 				}
 				docToCloneTo.setExtractedLicenseInfos(clonedExtractedLicenseInfos);
