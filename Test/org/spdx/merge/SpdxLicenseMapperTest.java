@@ -20,12 +20,15 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
+import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 
 /**
@@ -118,10 +121,26 @@ public class SpdxLicenseMapperTest {
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#foundNonStdLicIds(org.spdx.rdfparser.SPDXDocument)}.
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws IOException 
 	 */
 	@Test
-	public void testFoundNonStdLicIds() {
+	public void testFoundNonStdLicIds() throws IOException, InvalidSPDXAnalysisException {
+		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
 		
+		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
+		mapper.mappingNonStdLic(doc2, clonedNonStdLic);
+		
+		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> interalMap = mapper.foundInterMap(doc2);
+		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> retval = new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
+		String NewNonStdLicId = doc1.getNextLicenseRef();
+		clonedNonStdLic.setId(NewNonStdLicId);
+		retval.put(subNonStdLics[0], clonedNonStdLic);
+		
+		assertEquals(interalMap,retval);	
 	}
 
 	/**
