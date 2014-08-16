@@ -49,6 +49,8 @@ public class Main {
 			LicenseRDFAGenerator.main(args);
 		} else if (spdxTool.equalsIgnoreCase("GenerateVerificationCode")) {
 			GenerateVerificationCode.main(args);
+		} else if (spdxTool.equalsIgnoreCase("MergeSpdxDocs")) {
+			MergeSpdxDocs.main(args);
 		} else {
 			usage();
 		}
@@ -73,6 +75,7 @@ public class Main {
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
 						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] \n"
-						+ "GenerateVerificationCode sourceDirectory");
+						+ "GenerateVerificationCode sourceDirectory"
+						+ "MergeSpdxDocs            masterDocument, mergedDoc1, MergedDoc2, ..., outputFile");
 	}
 }
