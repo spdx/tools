@@ -84,6 +84,7 @@ public class SpdxLicenseMapperTest {
 		if(clonedNonStdLic.equals(subNonStdLics[0]) ){
 			fail();
 		}
+		assertEquals(clonedNonStdLic.getId(),"LicenseRef-5");
 		assertFalse(mapper.isNonStdLicIdMapEmpty());
 	}
 
