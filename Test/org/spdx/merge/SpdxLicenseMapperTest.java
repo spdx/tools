@@ -129,10 +129,27 @@ public class SpdxLicenseMapperTest {
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mapNonStdLicInMap(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.SPDXLicenseInfo)}.
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws IOException 
 	 */
 	@Test
-	public void testMapNonStdLicInMap() {
-	
+	public void testMapNonStdLicInMap() throws IOException, InvalidSPDXAnalysisException {
+		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
+
+		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();//input non-standard lic
+		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
+
+		SPDXLicenseInfo license1 = subNonStdLics[1].clone();//license1 doesn't in map
+		license1 = mapper.mapNonStdLicInMap(doc2, license1);
+		assertEquals(subNonStdLics[1],license1);
+		
+		SPDXLicenseInfo license2 = subNonStdLics[0].clone();//license2 does in map
+		license2 = mapper.mapNonStdLicInMap(doc2, license2);
+		assertEquals(clonedNonStdLic, license2);
+		
 	}
 
 	/**
