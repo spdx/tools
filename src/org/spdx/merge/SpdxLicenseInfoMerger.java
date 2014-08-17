@@ -43,7 +43,7 @@ public class SpdxLicenseInfoMerger {
      * @return licInfoResut
      * @throws InvalidSPDXAnalysisException
      */
-	public SPDXNonStandardLicense[] mergeNonStdLic(SPDXDocument[] mergeDocs) throws InvalidSPDXAnalysisException{
+	public SPDXNonStandardLicense[] mergeNonStdLic(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
 		
 		//an array to hold the non-standard license info from master SPDX document
 		SPDXNonStandardLicense[] masterNonStdLicInfo = cloneNonStdLic(master.getExtractedLicenseInfos());
@@ -55,10 +55,10 @@ public class SpdxLicenseInfoMerger {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
 		
 		//read each child SPDX document
-		for(int i = 1; i < mergeDocs.length; i++){
+		for(int i = 0; i < subDocs.length; i++){
 			
 			//an array to hold non-standard license info from current child SPDX document and clone the data
-			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(mergeDocs[i].getExtractedLicenseInfos());
+			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(subDocs[i].getExtractedLicenseInfos());
 									
 			//compare non-standard license info. Note: the method may run as over-comparison
 	        for(int k = 0; k < retval.size(); k++){
@@ -68,7 +68,7 @@ public class SpdxLicenseInfoMerger {
 	        			foundTextMatch = true;
 	           		}
 	        		if(!foundTextMatch){
-	        	        retval.add((mapper.mappingNonStdLic(mergeDocs[i], subNonStdLicInfo[p])));	        	             			
+	        	        retval.add((mapper.mappingNonStdLic(subDocs[i], subNonStdLicInfo[p])));	        	             			
 	        		}
 	        	}
 	        } 			

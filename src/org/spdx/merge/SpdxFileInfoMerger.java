@@ -41,7 +41,7 @@ public class SpdxFileInfoMerger{
 	 * @return mergeFileInfo
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXFile[] mergeFileInfo(SPDXDocument[] mergeDocs)throws InvalidSPDXAnalysisException{
+	public SPDXFile[] mergeFileInfo(SPDXDocument[] subDocs)throws InvalidSPDXAnalysisException{
 			
 	        //an array to store an deep copy of file information from master document.
 			SPDXFile[] masterFileInfo = master.getSpdxPackage().getFiles();
@@ -51,9 +51,9 @@ public class SpdxFileInfoMerger{
 			
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
 			
-			for(int q = 1; q < mergeDocs.length; q++){
+			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
-				SPDXFile[] subFileInfo = cloneFiles(mergeDocs[q].getSpdxPackage().getFiles());
+				SPDXFile[] subFileInfo = cloneFiles(subDocs[q].getSpdxPackage().getFiles());
 				
 				for(int k = 0; k < retval.size(); k++){
 					boolean foundNameMatch = false;
@@ -71,8 +71,8 @@ public class SpdxFileInfoMerger{
 						//if both name and checksum are not matched, then check the license Ids from child files 
 						if(!foundNameMatch && !foundSha1Match){
 							//check whether licIdMap has this particular child document  
-							if(mapper.docInNonStdLicIdMap(mergeDocs[q])){
-								mapper.replaceNonStdLicInFile(mergeDocs[q], subFileInfo[p]);
+							if(mapper.docInNonStdLicIdMap(subDocs[q])){
+								mapper.replaceNonStdLicInFile(subDocs[q], subFileInfo[p]);
 								retval.add(subFileInfo[p]);
 							}else{
 								retval.add(subFileInfo[p]);
