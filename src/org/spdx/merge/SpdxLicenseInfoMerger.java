@@ -25,8 +25,8 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
 
 /**
  * Application to merge SPDX documents' non-standard license information and return the results to the merge main class
- * The non-standard license information from the master SPDX document will add to the result arraylist directly.
- * The non-standard license information from the child SPDX document will be compared with license information in the result arraylist.
+ * The non-standard license information from the output SPDX document will add to the result arraylist directly.
+ * The non-standard license information from the sub SPDX document will be compared with license information in the result arraylist.
  * Any new license information will add to the result arraylist with replacing the license ID. 
  *  
  * @author Gang Ling
@@ -34,19 +34,21 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  */
 public class SpdxLicenseInfoMerger {
 	
-	private SPDXDocument master = null;
-	public SpdxLicenseInfoMerger(SPDXDocument masterDoc){
-		this.master = masterDoc;
+	private SPDXDocument output = null;
+	public SpdxLicenseInfoMerger(SPDXDocument outputDoc){
+		this.output = outputDoc;
 	}
-    /**	
-     * @param mergeDocs
-     * @return licInfoResut
-     * @throws InvalidSPDXAnalysisException
-     */
+    
+	/**
+	 * 
+	 * @param subDocs
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	public SPDXNonStandardLicense[] mergeNonStdLic(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
 		
-		//an array to hold the non-standard license info from master SPDX document
-		SPDXNonStandardLicense[] masterNonStdLicInfo = cloneNonStdLic(master.getExtractedLicenseInfos());
+		//an array to hold the non-standard license info from outputDoc
+		SPDXNonStandardLicense[] masterNonStdLicInfo = output.getExtractedLicenseInfos();
 		
 		//an arrayList to hold the final result 
 		ArrayList<SPDXNonStandardLicense> retval = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
@@ -68,7 +70,7 @@ public class SpdxLicenseInfoMerger {
 	        			foundTextMatch = true;
 	           		}
 	        		if(!foundTextMatch){
-	        	        retval.add((mapper.mappingNonStdLic(master, subDocs[i], subNonStdLicInfo[p])));	        	             			
+	        	        retval.add((mapper.mappingNonStdLic(output, subDocs[i], subNonStdLicInfo[p])));	        	             			
 	        		}
 	        	}
 	        } 			
