@@ -141,20 +141,7 @@ public class MergeSpdxDocs {
 			} catch (InvalidSPDXAnalysisException e1) {
 				System.out.println("Error cloning master's package information: "+e1.getMessage());
 			}
-			
-			//clone extracted licenses into outputDoc
-			SPDXNonStandardLicense[] clonedNonStdLicInfo = null;
-			try {
-				clonedNonStdLicInfo = cloneExtractedLics(master.getExtractedLicenseInfos());
-			} catch (InvalidSPDXAnalysisException e1) {
-				System.out.println("Error cloning master's Extracted Licenses information: "+e1.getMessage());
-			}
-			try {
-				outputDoc.setExtractedLicenseInfos(clonedNonStdLicInfo);
-			} catch (InvalidSPDXAnalysisException e1) {
-				System.out.println("Error setting cloned Extracted Licenses information: "+e1.getMessage());
-			}
-			
+						
 			SPDXNonStandardLicense[] licInfoResult = null;
 			try{
 				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(outputDoc);
@@ -232,20 +219,6 @@ public class MergeSpdxDocs {
 			
 	}
 	
-	/**
-	 * 
-	 * @param orgNonStdLicArray
-	 * @return clonedNonStdLicArray
-	 */
-	public static SPDXNonStandardLicense[] cloneExtractedLics(SPDXNonStandardLicense[] orgNonStdLicArray){
-		SPDXNonStandardLicense[] clonedNonStdLicArray = new SPDXNonStandardLicense[orgNonStdLicArray.length];
-		for(int q = 0; q < orgNonStdLicArray.length; q++){
-			clonedNonStdLicArray[q] = (SPDXNonStandardLicense) orgNonStdLicArray[q].clone();
-		}
-		return clonedNonStdLicArray;
-	}
-
-
     /**
      * 
      */	
