@@ -122,31 +122,15 @@ public class MergeSpdxDocs {
 					}
 					return;
 			}
-			String outputDocURI = master.getDocumentNamespace()+"-merged";
+			String masterDocUri = master.getDocumentNamespace();
+			if(masterDocUri.endsWith("#")){
+				masterDocUri = masterDocUri.substring(0,masterDocUri.length()-1);
+			}
+			String outputDocURI = masterDocUri + "-merged";
 			try {
 				outputDoc.createSpdxAnalysis(outputDocURI);
 			} catch (InvalidSPDXAnalysisException e1) {
 				System.out.print("Error creating SPDX Analysis: "+e1.getMessage());
-			}
-			
-			SPDXNonStandardLicense[] licInfoResult = null;
-			try{
-				SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(master);
-				//merge non-standard license information
-				licInfoResult = NonStandardLicMerger.mergeNonStdLic(subDocs);
-			}catch(InvalidSPDXAnalysisException e){
-				System.out.println("Error merging documents' SPDX Non-standard License Information: "+e.getMessage());
-				System.exit(ERROR_STATUS);
-			}
-				
-			SPDXFile[] fileInfoResult = null;
-			try{
-				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(master);
-				//merge file information 
-				fileInfoResult = fileInfoMerger.mergeFileInfo(subDocs);
-			}catch(InvalidSPDXAnalysisException e){
-				System.out.println("Error merging SPDX files' Information: "+e.getMessage());
-				System.exit(ERROR_STATUS);
 			}
 			
 			SPDXPackage packageInfoResult = null;
@@ -155,10 +139,31 @@ public class MergeSpdxDocs {
 			} catch (InvalidSPDXAnalysisException e1) {
 				System.out.println("Error cloning master's package information: "+e1.getMessage());
 			}
+			
+			SPDXNonStandardLicense[] licInfoResult = null;
 			try{
-				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(master, mergeDocs);
+				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(master);
+				//merge non-standard license information
+				licInfoResult = nonStandardLicMerger.mergeNonStdLic(subDocs);
+			}catch(InvalidSPDXAnalysisException e){
+				System.out.println("Error merging documents' SPDX Non-standard License Information: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			}
+				
+			SPDXFile[] fileInfoResult = null;
+			try{
+				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(packageInfoResult);
+				//merge file information 
+				fileInfoResult = fileInfoMerger.mergeFileInfo(subDocs);
+			}catch(InvalidSPDXAnalysisException e){
+				System.out.println("Error merging SPDX files' Information: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			}
+	
+			try{
+				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(packageInfoResult, mergeDocs);
 				try {
-					packInfoMerger.mergePackageInfo(packageInfoResult, subDocs, fileInfoResult);
+					packInfoMerger.mergePackageInfo(subDocs, fileInfoResult);
 				} catch (NoSuchAlgorithmException e) {
 					System.out.println("Error merging packages' information: "+e.getMessage());
 				} catch (InvalidLicenseStringException e) {
