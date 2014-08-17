@@ -41,7 +41,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
  */
 public class SpdxLicenseMapperTest {
 
-	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample.rdf";
+	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v1.2.rdf";
 	File testFile;
 	
 	/**
@@ -105,19 +105,23 @@ public class SpdxLicenseMapperTest {
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
-		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[1].clone();//input non-standard lic id = 1
+		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
 		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
-		subNonStdLics[1] = clonedNonStdLic;//replace the lics 
+		subNonStdLics[0] = clonedNonStdLic;//replace the lics 
 		doc2.setExtractedLicenseInfos(subNonStdLics);
 
 		SPDXFile[] subFiles = doc2.getSpdxPackage().getFiles();
-		String fileName = "Jenna-2.6.3/jena-2.6.3-sources.jar";
+		String fileName = "lib-source/jena-2.6.3-sources.jar";
 		String sha1 = "3ab4e1c67a2d28fced849ee1bb76e7391b93f125";
 		SPDXLicenseInfo[] mappedLicsInFile = null;
+		SPDXLicenseInfo subConcludedLicInFile = null;
+		SPDXLicenseInfo concludedLicense = null;
 		for(int i = 0; i < subFiles.length; i++){
 			if(subFiles[i].getName().equalsIgnoreCase(fileName) && subFiles[i].getSha1().equals(sha1)){
 				mapper.replaceNonStdLicInFile(doc2, subFiles[i]);
 				mappedLicsInFile = subFiles[i].getSeenLicenses();
+				subConcludedLicInFile = subFiles[i].getConcludedLicenses();
+				concludedLicense = mapper.mapLicenseInfo(doc2,subConcludedLicInFile);
 			}			
 		}
 		boolean licMappered = false;
@@ -128,7 +132,9 @@ public class SpdxLicenseMapperTest {
 		if(!licMappered){
 			fail();
 		}
-		
+		SPDXLicenseInfo expectConcludedLicnse = setLicense(subConcludedLicInFile,subNonStdLics[0],clonedNonStdLic);
+		assertEquals(expectConcludedLicnse, concludedLicense);
+
 	}
 
 	/**
@@ -173,17 +179,17 @@ public class SpdxLicenseMapperTest {
 		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5		
 		
 		SPDXLicenseInfo mappedLicense = mapper.mapLicenseInfo(doc2, doc2.getSpdxPackage().getDeclaredLicense().clone());
-		SPDXLicenseInfo compareLicense = setDeclaredLicense(doc2.getSpdxPackage().getDeclaredLicense().clone(),subNonStdLics[0],clonedNonStdLic);
-		assertEquals(compareLicense, mappedLicense);
+		SPDXLicenseInfo expectedLicense = setLicense(doc2.getSpdxPackage().getDeclaredLicense().clone(),subNonStdLics[0],clonedNonStdLic);
+		assertEquals(expectedLicense, mappedLicense);
 
 	}
 	
-	public SPDXLicenseInfo setDeclaredLicense(SPDXLicenseInfo license, SPDXNonStandardLicense orignal, SPDXNonStandardLicense mapped){
+	public SPDXLicenseInfo setLicense(SPDXLicenseInfo license, SPDXNonStandardLicense orignal, SPDXNonStandardLicense mapped){
 		if(license instanceof SPDXConjunctiveLicenseSet){
 			SPDXLicenseInfo[] members = ((SPDXConjunctiveLicenseSet) license).getSPDXLicenseInfos();
 			SPDXLicenseInfo[] mappedMembers = new SPDXLicenseInfo[members.length];
 			for(int i = 0; i < members.length; i++){
-				mappedMembers[i] = setDeclaredLicense(members[i],orignal,mapped);
+				mappedMembers[i] = setLicense(members[i],orignal,mapped);
 			}
 			return new SPDXConjunctiveLicenseSet(mappedMembers);
 		}
@@ -191,7 +197,7 @@ public class SpdxLicenseMapperTest {
 			SPDXLicenseInfo[] members = ((SPDXDisjunctiveLicenseSet) license).getSPDXLicenseInfos();
 			SPDXLicenseInfo[] mappedMembers = new SPDXLicenseInfo[members.length];
 			for(int q = 0; q < members.length; q++ ){
-				mappedMembers[q] = setDeclaredLicense(members[q],orignal,mapped);
+				mappedMembers[q] = setLicense(members[q],orignal,mapped);
 			}
 			return new SPDXDisjunctiveLicenseSet(mappedMembers);
 		}else if(license instanceof SPDXNonStandardLicense){
@@ -237,12 +243,12 @@ public class SpdxLicenseMapperTest {
 		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> interalMap = mapper.foundInterMap(doc2);
-		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> retval = new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
+		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> expected = new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
 		String NewNonStdLicId = doc1.getNextLicenseRef();
 		clonedNonStdLic.setId(NewNonStdLicId);
-		retval.put(subNonStdLics[0], clonedNonStdLic);
+		expected.put(subNonStdLics[0], clonedNonStdLic);
 		
-		assertEquals(interalMap,retval);	
+		assertEquals(interalMap,expected);	
 	}
 
 	/**
