@@ -52,7 +52,7 @@ public class SpdxLicenseInfoMerger {
 		ArrayList<SPDXNonStandardLicense> retval = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
 
 		//call constructor and pass master document as parameter 
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
 		//read each child SPDX document
 		for(int i = 0; i < subDocs.length; i++){
@@ -68,7 +68,7 @@ public class SpdxLicenseInfoMerger {
 	        			foundTextMatch = true;
 	           		}
 	        		if(!foundTextMatch){
-	        	        retval.add((mapper.mappingNonStdLic(subDocs[i], subNonStdLicInfo[p])));	        	             			
+	        	        retval.add((mapper.mappingNonStdLic(master, subDocs[i], subNonStdLicInfo[p])));	        	             			
 	        		}
 	        	}
 	        } 			
