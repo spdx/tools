@@ -38,8 +38,10 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 public class SpdxPackageInfoMerger {
 
 		private SPDXDocument master = null;
-		public SpdxPackageInfoMerger(SPDXDocument masterDoc){
+		private SPDXDocument[] allDocs;
+		public SpdxPackageInfoMerger(SPDXDocument masterDoc, SPDXDocument[] mergeDocs){
 			this.master = masterDoc;
+			this.allDocs = mergeDocs;
 		}
 		
 		/**
@@ -51,26 +53,24 @@ public class SpdxPackageInfoMerger {
 		 * @throws NoSuchAlgorithmException
 		 * @throws InvalidLicenseStringException 
 		 */
-		public SPDXPackage mergePackageInfo(SPDXDocument[] mergeDocs,SPDXFile[] fileMergeResult) 
+		public SPDXPackage mergePackageInfo(SPDXPackage packageInfoResult, SPDXDocument[] subDocs, SPDXFile[] fileMergeResult) 
 				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
-			SPDXPackage packageMergeResult = master.getSpdxPackage().clone(master, master.getSpdxPackage().getDownloadUrl());
 			
-			String[] skippedFiles = collectSkippedFiles(mergeDocs);
+			String[] skippedFiles = collectSkippedFiles();
 			VerificationCodeGenerator vg = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
 			SpdxPackageVerificationCode result = vg.generatePackageVerificationCode(fileMergeResult, skippedFiles);
-			packageMergeResult.setVerificationCode(result);
+			packageInfoResult.setVerificationCode(result);
 			
 			SPDXLicenseInfo[] licsInFile = collectLicsInFiles(fileMergeResult);
-			packageMergeResult.setLicenseInfoFromFiles(licsInFile);
+			packageInfoResult.setLicenseInfoFromFiles(licsInFile);
 			
 			SPDXLicenseInfo declaredLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NOASSERTION");
-			packageMergeResult.setDeclaredLicense(declaredLicense);		
+			packageInfoResult.setDeclaredLicense(declaredLicense);		
 			
-			String licComments = translateSubDelcaredLicsIntoComments(mergeDocs);
-			packageMergeResult.setLicenseComment(licComments);
-			
-			
-			return packageMergeResult;			
+			String licComments = translateSubDelcaredLicsIntoComments(subDocs);
+			packageInfoResult.setLicenseComment(licComments);
+						
+			return packageInfoResult;			
 		}
 		
 		/**
@@ -79,10 +79,10 @@ public class SpdxPackageInfoMerger {
 		 * @return
 		 * @throws InvalidSPDXAnalysisException
 		 */
-		public String[] collectSkippedFiles(SPDXDocument[] mergeDocs) throws InvalidSPDXAnalysisException{
+		public String[] collectSkippedFiles() throws InvalidSPDXAnalysisException{
 			ArrayList<String> excludedFileNamesList = new ArrayList<String>();
-			for(int p = 0; p < mergeDocs.length; p++){
-				String[] retval = mergeDocs[p].getSpdxPackage().getVerificationCode().getExcludedFileNames();
+			for(int p = 0; p < allDocs.length; p++){
+				String[] retval = allDocs[p].getSpdxPackage().getVerificationCode().getExcludedFileNames();
 				
 				if(excludedFileNamesList.size() == 0){
 					for(int i = 0; i < retval.length; i++){
@@ -148,20 +148,20 @@ public class SpdxPackageInfoMerger {
 		 * @return
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public String translateSubDelcaredLicsIntoComments(SPDXDocument[] mergeDocs) throws InvalidSPDXAnalysisException{
+		public String translateSubDelcaredLicsIntoComments(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
 			StringBuilder buffer = new StringBuilder(master.getSpdxPackage().getLicenseComment() 
 					+ " This package merged several packages and the sub-package contain the following licenses:");
 			
-			for(int k = 1; k < mergeDocs.length; k++){
-				if(mapper.docInNonStdLicIdMap(mergeDocs[k])){
-					SPDXLicenseInfo license = mergeDocs[k].getSpdxPackage().getDeclaredLicense();
-					SPDXLicenseInfo result = mapper.mapLicenseInfo(mergeDocs[k], license); 
-						buffer.append(mergeDocs[k].getSpdxPackage().getFileName());
+			for(int k = 0; k < subDocs.length; k++){
+				if(mapper.docInNonStdLicIdMap(subDocs[k])){
+					SPDXLicenseInfo license = subDocs[k].getSpdxPackage().getDeclaredLicense();
+					SPDXLicenseInfo result = mapper.mapLicenseInfo(subDocs[k], license); 
+						buffer.append(subDocs[k].getSpdxPackage().getFileName());
 					buffer.append(" (" + result.toString() + ") ");
 				}else{				
-					buffer.append(mergeDocs[k].getSpdxPackage().getFileName());
-					buffer.append(" (" + mergeDocs[k].getSpdxPackage().getDeclaredLicense().toString() + ") ");
+					buffer.append(subDocs[k].getSpdxPackage().getFileName());
+					buffer.append(" (" + subDocs[k].getSpdxPackage().getDeclaredLicense().toString() + ") ");
 				}
 			}			
 			return buffer.toString();
