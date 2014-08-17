@@ -30,6 +30,7 @@ import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
@@ -50,7 +51,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class MergeSpdxDocs {
 
 	static final int MIN_ARGS = 2;
-	static final int ERROR_STATUS =1;	
+	static final int ERROR_STATUS =1;
 	
 	/**
 	 * 
@@ -90,6 +91,13 @@ public class MergeSpdxDocs {
 				}
 			}
 			
+			//separate master document and sub-documents
+			SPDXDocument master = mergeDocs[0];
+			SPDXDocument[] subDocs = new SPDXDocument[mergeDocs.length-1];
+			for(int k = 0; k < subDocs.length; k++){
+				subDocs[k] = mergeDocs[k+1];
+			}
+			
 			//file output stream
 			FileOutputStream out;
 			try{
@@ -103,22 +111,29 @@ public class MergeSpdxDocs {
 			Model model = ModelFactory.createDefaultModel();			
 			SPDXDocument outputDoc = null;
 			try {
-				outputDoc = new SPDXDocument(model);
-			} catch (InvalidSPDXAnalysisException ex) {
-				System.out.print("Error creating merged SPDX Document: "+ex.getMessage());
+				outputDoc = SPDXDocumentFactory.createSpdxDocument(model);
+				
+			} catch (InvalidSPDXAnalysisException e1) {
+				System.out.print("Error creating merged SPDX Document: "+e1.getMessage());
 				try {
 					out.close();
-				} catch (IOException e) {
-					System.out.println("Warning - unable to close output file on error: "+e.getMessage());
-				}
-				return;
+					} catch (IOException e) {
+						System.out.println("Warning - unable to close output file on error: "+e.getMessage());
+					}
+					return;
+			}
+			String outputDocURI = master.getDocumentNamespace()+"-merged";
+			try {
+				outputDoc.createSpdxAnalysis(outputDocURI);
+			} catch (InvalidSPDXAnalysisException e1) {
+				System.out.print("Error creating SPDX Analysis: "+e1.getMessage());
 			}
 			
 			SPDXNonStandardLicense[] licInfoResult = null;
 			try{
-				SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(mergeDocs[0]);
+				SpdxLicenseInfoMerger NonStandardLicMerger = new SpdxLicenseInfoMerger(master);
 				//merge non-standard license information
-				licInfoResult = NonStandardLicMerger.mergeNonStdLic(mergeDocs);
+				licInfoResult = NonStandardLicMerger.mergeNonStdLic(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
 				System.out.println("Error merging documents' SPDX Non-standard License Information: "+e.getMessage());
 				System.exit(ERROR_STATUS);
@@ -126,19 +141,24 @@ public class MergeSpdxDocs {
 				
 			SPDXFile[] fileInfoResult = null;
 			try{
-				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(mergeDocs[0]);
+				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(master);
 				//merge file information 
-				fileInfoResult = fileInfoMerger.mergeFileInfo(mergeDocs);
+				fileInfoResult = fileInfoMerger.mergeFileInfo(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
 				System.out.println("Error merging SPDX files' Information: "+e.getMessage());
 				System.exit(ERROR_STATUS);
 			}
 			
 			SPDXPackage packageInfoResult = null;
+			try {
+				packageInfoResult = master.getSpdxPackage().clone(outputDoc, outputDocURI+"#package");
+			} catch (InvalidSPDXAnalysisException e1) {
+				System.out.println("Error cloning master's package information: "+e1.getMessage());
+			}
 			try{
-				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(mergeDocs[0]);
+				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(master, mergeDocs);
 				try {
-					packageInfoResult = packInfoMerger.mergePackageInfo(mergeDocs, fileInfoResult);
+					packInfoMerger.mergePackageInfo(packageInfoResult, subDocs, fileInfoResult);
 				} catch (NoSuchAlgorithmException e) {
 					System.out.println("Error merging packages' information: "+e.getMessage());
 				} catch (InvalidLicenseStringException e) {
@@ -149,21 +169,18 @@ public class MergeSpdxDocs {
 				System.exit(ERROR_STATUS);
 			}
 			
-			try{
-				//clone the package information from master document
-				mergeDocs[0].getSpdxPackage().clone(outputDoc, mergeDocs[0].getSpdxDocUri()+"#package");
-			
+			try{			
 				//set document review information as empty array
 				SPDXReview[] reviewInfoResult = new SPDXReview[0];
 				outputDoc.setReviewers(reviewInfoResult);
 				//set document SPDX version
-				outputDoc.setSpdxVersion(mergeDocs[0].getSpdxVersion());
+				outputDoc.setSpdxVersion(master.getSpdxVersion());
 				//set document creator information
-				outputDoc.setCreationInfo(mergeDocs[0].getCreatorInfo());
+				outputDoc.setCreationInfo(master.getCreatorInfo());
 				//set document comment information 
-				outputDoc.setDocumentComment(mergeDocs[0].getDocumentComment());
+				outputDoc.setDocumentComment(master.getDocumentComment());
 				//set document data license information
-				outputDoc.setDataLicense(mergeDocs[0].getDataLicense());
+				outputDoc.setDataLicense(master.getDataLicense());
 				//set extracted license information
 				outputDoc.setExtractedLicenseInfos(licInfoResult);
 				//set package's declared license information
