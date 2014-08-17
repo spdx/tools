@@ -1,0 +1,92 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:doap="http://usefulinc.com/ns/doap#"
+    xmlns:spdx="http://spdx.org/rdf/terms#"
+    xmlns="http://git.spdx.org/?p=spdx-tools-mergetest.git;a=summary#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+  <spdx:SpdxDocument rdf:about="http://git.spdx.org/?p=spdx-tools-mergetest.git;a=summary#SPDXANALYSIS">
+    <spdx:referencesFile>
+      <spdx:File rdf:about="http://git.spdx.org/?p=spdx-tools-mergetest.git;a=summary#SPDXRef-2">
+        <spdx:licenseComments>This license is used by Jena</spdx:licenseComments>
+        <spdx:fileName>lib-source/mergetest2.jar</spdx:fileName>
+        <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
+        <spdx:licenseInfoInFile>
+          <spdx:ExtractedLicensingInfo rdf:nodeID="A0">
+            <spdx:extractedText>/*
+This is a test merge license extracted info which is unique
+ */</spdx:extractedText>
+            <spdx:licenseId>LicenseRef-1</spdx:licenseId>
+          </spdx:ExtractedLicensingInfo>
+        </spdx:licenseInfoInFile>
+        <spdx:fileContributor>Hewlett Packard Inc.</spdx:fileContributor>
+        <spdx:licenseConcluded rdf:nodeID="A0"/>
+        <spdx:copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</spdx:copyrightText>
+        <rdfs:comment>This is a unique file with a unique license</rdfs:comment>
+        <spdx:artifactOf>
+          <doap:Project>
+            <doap:homepage>http://www.openjena.org/</doap:homepage>
+            <doap:name>Jena</doap:name>
+          </doap:Project>
+        </spdx:artifactOf>
+        <spdx:fileContributor>Apache Software Foundation</spdx:fileContributor>
+        <spdx:checksum>
+          <spdx:Checksum>
+            <spdx:checksumValue>5ab4e1e67a2d28fced849ee1bb76e7391b93f125</spdx:checksumValue>
+            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </spdx:Checksum>
+        </spdx:checksum>
+      </spdx:File>
+    </spdx:referencesFile>
+    <spdx:hasExtractedLicensingInfo rdf:nodeID="A0"/>
+    <spdx:describesPackage>
+      <spdx:Package rdf:about="http://git.spdx.org/?p=spdx-tools-mergetest.git;a=summary#SPDXRef-1">
+        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <spdx:downloadLocation>http://git.spdx.org/?p=spdx-tools-mergetest.git;a=summary</spdx:downloadLocation>
+        <spdx:summary>Merge test 2</spdx:summary>
+        <doap:homepage>http://www.spdx.org/tools/mergeTest1</doap:homepage>
+        <spdx:packageFileName>mergetestr-1.2.zip</spdx:packageFileName>
+        <spdx:supplier>Organization:Linux Foundation</spdx:supplier>
+        <spdx:sourceInfo>Merge test source</spdx:sourceInfo>
+        <spdx:licenseComments>License comments for merge test 2</spdx:licenseComments>
+        <spdx:packageVerificationCode>
+          <spdx:PackageVerificationCode>
+            <spdx:packageVerificationCodeValue>2f3211c67a2d28fced849ee1bb76e7391b93feba</spdx:packageVerificationCodeValue>
+            <spdx:packageVerificationCodeExcludedFile>SpdxTranslatorSpdx.rdf</spdx:packageVerificationCodeExcludedFile>
+          </spdx:PackageVerificationCode>
+        </spdx:packageVerificationCode>
+        <spdx:description>Merge test  description</spdx:description>
+        <spdx:originator>Organization:SPDX</spdx:originator>
+        <spdx:hasFile rdf:resource="http://git.spdx.org/?p=spdx-tools-mergetest.git;a=summary#SPDXRef-2"/>
+        <spdx:licenseDeclared rdf:nodeID="A0"/>
+        <spdx:licenseConcluded>
+          <spdx:ConjunctiveLicenseSet>
+            <spdx:member rdf:nodeID="A0"/>
+            <spdx:member rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+          </spdx:ConjunctiveLicenseSet>
+        </spdx:licenseConcluded>
+        <spdx:name>Merge Package 1</spdx:name>
+        <spdx:checksum>
+          <spdx:Checksum>
+            <spdx:checksumValue>1ed4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </spdx:Checksum>
+        </spdx:checksum>
+        <spdx:licenseInfoFromFiles rdf:nodeID="A0"/>
+        <spdx:copyrightText> Copyright 2010, 2011, 2013, 2014 Source Auditor Inc.</spdx:copyrightText>
+        <spdx:versionInfo>Version1.2.0</spdx:versionInfo>
+      </spdx:Package>
+    </spdx:describesPackage>
+    <rdfs:comment>Merge test document 2</rdfs:comment>
+    <spdx:creationInfo>
+      <spdx:CreationInfo>
+        <spdx:licenseListVersion>1.19</spdx:licenseListVersion>
+        <spdx:created>2014-08-16T00:00:00Z</spdx:created>
+        <rdfs:comment>This is a test for the merge application</rdfs:comment>
+        <spdx:creator>Tool: Merge Test2</spdx:creator>
+        <spdx:creator>Person: Gary O'Neall</spdx:creator>
+      </spdx:CreationInfo>
+    </spdx:creationInfo>
+    <spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
+    <spdx:specVersion>SPDX-1.2</spdx:specVersion>
+  </spdx:SpdxDocument>
+</rdf:RDF>
