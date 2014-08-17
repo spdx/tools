@@ -37,23 +37,23 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
  */
 public class SpdxPackageInfoMerger {
 
-		private SPDXDocument master = null;
+		private SPDXPackage packageInfoResult = null;
 		private SPDXDocument[] allDocs;
-		public SpdxPackageInfoMerger(SPDXDocument masterDoc, SPDXDocument[] mergeDocs){
-			this.master = masterDoc;
+		public SpdxPackageInfoMerger(SPDXPackage packageInfo, SPDXDocument[] mergeDocs){
+			this.packageInfoResult = packageInfo;
 			this.allDocs = mergeDocs;
 		}
 		
 		/**
 		 * 
-		 * @param mergeDocs
+		 * @param subDocs
 		 * @param fileMergeResult
 		 * @return
 		 * @throws InvalidSPDXAnalysisException
 		 * @throws NoSuchAlgorithmException
-		 * @throws InvalidLicenseStringException 
+		 * @throws InvalidLicenseStringException
 		 */
-		public SPDXPackage mergePackageInfo(SPDXPackage packageInfoResult, SPDXDocument[] subDocs, SPDXFile[] fileMergeResult) 
+		public SPDXPackage mergePackageInfo(SPDXDocument[] subDocs, SPDXFile[] fileMergeResult) 
 				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
 			
 			String[] skippedFiles = collectSkippedFiles();
@@ -75,7 +75,6 @@ public class SpdxPackageInfoMerger {
 		
 		/**
 		 * method to collect all skipped files from input SPDX documents
-		 * @param spdxDoc
 		 * @return
 		 * @throws InvalidSPDXAnalysisException
 		 */
@@ -149,8 +148,8 @@ public class SpdxPackageInfoMerger {
 		 * @throws InvalidSPDXAnalysisException 
 		 */
 		public String translateSubDelcaredLicsIntoComments(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
-			SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
-			StringBuilder buffer = new StringBuilder(master.getSpdxPackage().getLicenseComment() 
+			SpdxLicenseMapper mapper = new SpdxLicenseMapper();
+			StringBuilder buffer = new StringBuilder(packageInfoResult.getLicenseComment() 
 					+ " This package merged several packages and the sub-package contain the following licenses:");
 			
 			for(int k = 0; k < subDocs.length; k++){
