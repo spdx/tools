@@ -52,13 +52,13 @@ public class SpdxLicenseMapper {
 	 * @param subNonStdLicInfo
 	 * @return subNonStdLicInfo
 	 */
-	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument master, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
+	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument outputDoc, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
 		
 		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> interMap = new HashMap<SPDXLicenseInfo,SPDXLicenseInfo>();
 		if(docInNonStdLicIdMap(subDoc)){
 			interMap = nonStdLicIdMap.get(subDoc);
 		}    
-		String NewNonStdLicId = master.getNextLicenseRef();
+		String NewNonStdLicId = outputDoc.getNextLicenseRef();
 		SPDXNonStandardLicense subCopy = (SPDXNonStandardLicense) subNonStdLicInfo.clone();
 		subNonStdLicInfo.setId(NewNonStdLicId);
 		interMap.put(subCopy, subNonStdLicInfo);
