@@ -639,7 +639,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 		}
 		
 		/**
-		 * Clones a deep copy of all fields to a new SPDXPackage contained in the docToCloneTo SPDXDocument.  
+		 * Clones a deep copy of all fields to a new SPDXPackage contained in the docToCloneTo SPDXDocument. 
+		 * Any extracted licenseInfo from the docToCloneTo will also be added to the document with a licenseID
+		 * generated from this package.
 		 * NOTE: This will overwrite any existing SPDXPackages contained within the SPDXDocument.
 		 * @param docToCloneTo SPDX Document to contain the result of the clone
 		 * @param packageUri URI for the SPDX Package being created
@@ -661,6 +663,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 				}
 				for (int i = 0; i < extractedLicenseInfos.length; i++) {
 					clonedExtractedLicenseInfos[i+existingLicenseInfos.length] = (SPDXNonStandardLicense)extractedLicenseInfos[i].clone();
+					clonedExtractedLicenseInfos[i+existingLicenseInfos.length].setId(getNextLicenseRef());
 				}
 				docToCloneTo.setExtractedLicenseInfos(clonedExtractedLicenseInfos);
 			}
