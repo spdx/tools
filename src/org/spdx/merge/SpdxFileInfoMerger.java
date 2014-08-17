@@ -18,9 +18,11 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXFile;
 
 /**
@@ -31,9 +33,9 @@ import org.spdx.rdfparser.SPDXFile;
 
 public class SpdxFileInfoMerger{
 	
-	private SPDXDocument master = null;
-	public SpdxFileInfoMerger(SPDXDocument masterDoc){
-		this.master = masterDoc;
+	private SPDXPackage packageInfo = null;
+	public SpdxFileInfoMerger(SPDXPackage packageInfoResult){
+		this.packageInfo = packageInfoResult;
 	}
 	/**
 	 * 
@@ -44,12 +46,12 @@ public class SpdxFileInfoMerger{
 	public SPDXFile[] mergeFileInfo(SPDXDocument[] subDocs)throws InvalidSPDXAnalysisException{
 			
 	        //an array to store an deep copy of file information from master document.
-			SPDXFile[] masterFileInfo = master.getSpdxPackage().getFiles();
+			SPDXFile[] masterFileInfo = packageInfo.getFiles();
 			
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
 			ArrayList<SPDXFile> retval = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
 			
-			SpdxLicenseMapper mapper = new SpdxLicenseMapper(master);
+			SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 			
 			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
