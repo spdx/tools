@@ -98,7 +98,6 @@ public class MergeSpdxDocs {
 				subDocs[k] = mergeDocs[k+1];
 			}
 			
-			//file output stream
 			FileOutputStream out;
 			try{
 				out = new FileOutputStream(spdxRdfFile);
@@ -108,6 +107,8 @@ public class MergeSpdxDocs {
 				usage();
 				return;
 			}
+			
+			//create outputDoc, then clone master into outputDoc
 			Model model = ModelFactory.createDefaultModel();			
 			SPDXDocument outputDoc = null;
 			try {
@@ -133,6 +134,7 @@ public class MergeSpdxDocs {
 				System.out.print("Error creating SPDX Analysis: "+e1.getMessage());
 			}
 			
+			//clone package into outputDoc
 			SPDXPackage packageInfoResult = null;
 			try {
 				packageInfoResult = master.getSpdxPackage().clone(outputDoc, outputDocURI+"#package");
@@ -140,9 +142,22 @@ public class MergeSpdxDocs {
 				System.out.println("Error cloning master's package information: "+e1.getMessage());
 			}
 			
+			//clone extracted licenses into outputDoc
+			SPDXNonStandardLicense[] clonedNonStdLicInfo = null;
+			try {
+				clonedNonStdLicInfo = cloneExtractedLics(master.getExtractedLicenseInfos());
+			} catch (InvalidSPDXAnalysisException e1) {
+				System.out.println("Error cloning master's Extracted Licenses information: "+e1.getMessage());
+			}
+			try {
+				outputDoc.setExtractedLicenseInfos(clonedNonStdLicInfo);
+			} catch (InvalidSPDXAnalysisException e1) {
+				System.out.println("Error setting cloned Extracted Licenses information: "+e1.getMessage());
+			}
+			
 			SPDXNonStandardLicense[] licInfoResult = null;
 			try{
-				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(master);
+				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(outputDoc);
 				//merge non-standard license information
 				licInfoResult = nonStandardLicMerger.mergeNonStdLic(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
@@ -215,7 +230,21 @@ public class MergeSpdxDocs {
 			 }
 			}
 			
-	}			
+	}
+	
+	/**
+	 * 
+	 * @param orgNonStdLicArray
+	 * @return clonedNonStdLicArray
+	 */
+	public static SPDXNonStandardLicense[] cloneExtractedLics(SPDXNonStandardLicense[] orgNonStdLicArray){
+		SPDXNonStandardLicense[] clonedNonStdLicArray = new SPDXNonStandardLicense[orgNonStdLicArray.length];
+		for(int q = 0; q < orgNonStdLicArray.length; q++){
+			clonedNonStdLicArray[q] = (SPDXNonStandardLicense) orgNonStdLicArray[q].clone();
+		}
+		return clonedNonStdLicArray;
+	}
+
 
     /**
      * 
