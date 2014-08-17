@@ -18,6 +18,8 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
 import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDocument;
@@ -60,6 +62,7 @@ public class SpdxLicenseMapper {
 		SPDXNonStandardLicense subCopy = (SPDXNonStandardLicense) subNonStdLicInfo.clone();
 		subNonStdLicInfo.setId(NewNonStdLicId);
 		interMap.put(subCopy, subNonStdLicInfo);
+
 		nonStdLicIdMap.put(subDoc, interMap);
 
 		return subNonStdLicInfo;
@@ -75,7 +78,8 @@ public class SpdxLicenseMapper {
 	public SPDXFile replaceNonStdLicInFile(SPDXDocument spdxDoc, SPDXFile subFileInfo){
 			SPDXLicenseInfo[] subLicInfoInFile = subFileInfo.getSeenLicenses();
 			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
-			SPDXLicenseInfo[] orgNonStdLics = (SPDXLicenseInfo[]) idMap.keySet().toArray();
+			Set <SPDXLicenseInfo> keys = idMap.keySet();
+			SPDXLicenseInfo[] orgNonStdLics = keys.toArray(new SPDXLicenseInfo[idMap.keySet().size()]);
 			ArrayList <SPDXLicenseInfo> retval = new ArrayList<SPDXLicenseInfo>();
 			for(int i = 0; i < subLicInfoInFile.length; i++){
 				boolean foundLicId = false;
@@ -110,7 +114,7 @@ public class SpdxLicenseMapper {
 	 */
 	public SPDXLicenseInfo mapNonStdLicInMap(SPDXDocument spdxDoc, SPDXLicenseInfo license){
 		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
-		SPDXNonStandardLicense[] orgNonStdLics = (SPDXNonStandardLicense[]) idMap.keySet().toArray();
+		SPDXNonStandardLicense[] orgNonStdLics = idMap.keySet().toArray(new SPDXNonStandardLicense[idMap.keySet().size()]);
 		SPDXLicenseInfo retval = null;
 		for(int i = 0; i < orgNonStdLics.length; i++ ){
 			boolean foundLicId = false;
