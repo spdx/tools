@@ -115,21 +115,18 @@ public class SpdxLicenseMapper {
 	public SPDXLicenseInfo mapNonStdLicInMap(SPDXDocument spdxDoc, SPDXLicenseInfo license){
 		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
 		SPDXNonStandardLicense[] orgNonStdLics = idMap.keySet().toArray(new SPDXNonStandardLicense[idMap.keySet().size()]);
-		SPDXLicenseInfo retval = null;
 		for(int i = 0; i < orgNonStdLics.length; i++ ){
-			boolean foundLicId = false;
+			boolean foundLic = false;
 			if(license.equals(orgNonStdLics[i])){
-				foundLicId = true;
+				foundLic = true;
 			}
-			if(foundLicId){
-				retval = idMap.get(orgNonStdLics[i]);
-			}else{
-				retval = license;
-			}
+			if(foundLic){
+				license = idMap.get(orgNonStdLics[i]);
+			}	
 		}
-		return retval;
-		
+		return license;
 	}
+
 	
 	/**
 	 * a method gets a sub SPDX document and licenses from declared licenses in document package. 
@@ -156,7 +153,7 @@ public class SpdxLicenseMapper {
 			}
 			return new SPDXDisjunctiveLicenseSet(mappedMembers);
 		}else if(license instanceof SPDXNonStandardLicense){
-			return mapNonStdLicInMap(spdxDoc,(SPDXNonStandardLicense)license);
+			return license = mapNonStdLicInMap(spdxDoc,(SPDXNonStandardLicense)license);
 		}
 		return license;	
 	}
