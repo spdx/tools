@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
+import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 
@@ -63,7 +64,7 @@ public class SpdxLicenseMapperTest {
 	@Test
 	public void testSpdxLicenseMapper() throws IOException, InvalidSPDXAnalysisException{
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		assertTrue(mapper.isNonStdLicIdMapEmpty());
 	}
 
@@ -77,10 +78,10 @@ public class SpdxLicenseMapperTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc2, clonedNonStdLic);
+		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
 		if(clonedNonStdLic.equals(subNonStdLics[0]) ){
 			fail();
 		}
@@ -90,9 +91,39 @@ public class SpdxLicenseMapperTest {
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#replaceNonStdLicInFile(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.SPDXFile)}.
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws IOException 
 	 */
 	@Test
-	public void testReplaceNonStdLicInFile() {
+	public void testReplaceNonStdLicInFile() throws IOException, InvalidSPDXAnalysisException {
+		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
+
+		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[1].clone();//input non-standard lic id = 1
+		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
+		subNonStdLics[1] = clonedNonStdLic;//replace the lics 
+		doc2.setExtractedLicenseInfos(subNonStdLics);
+
+		SPDXFile[] subFiles = doc2.getSpdxPackage().getFiles();
+		String fileName = "Jenna-2.6.3/jena-2.6.3-sources.jar";
+		String sha1 = "3ab4e1c67a2d28fced849ee1bb76e7391b93f125";
+		SPDXLicenseInfo[] mappedLicsInFile = null;
+		for(int i = 0; i < subFiles.length; i++){
+			if(subFiles[i].getName().equalsIgnoreCase(fileName) && subFiles[i].getSha1().equals(sha1)){
+				mapper.replaceNonStdLicInFile(doc2, subFiles[i]);
+				mappedLicsInFile = subFiles[i].getSeenLicenses();
+			}			
+		}
+		boolean licMappered = false;
+		for(int j = 0; j < mappedLicsInFile.length; j++){
+			if(mappedLicsInFile[j].equals(clonedNonStdLic));
+			licMappered = true;
+		}
+		if(!licMappered){
+			fail();
+		}
 		
 	}
 
@@ -122,10 +153,10 @@ public class SpdxLicenseMapperTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc2, clonedNonStdLic);
+		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		assertTrue(mapper.docInNonStdLicIdMap(doc2));
 	}
@@ -140,10 +171,10 @@ public class SpdxLicenseMapperTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc2, clonedNonStdLic);
+		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> interalMap = mapper.foundInterMap(doc2);
 		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> retval = new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
@@ -162,7 +193,7 @@ public class SpdxLicenseMapperTest {
 	@Test
 	public void testIsNonStdLicIdMapEmpty() throws IOException, InvalidSPDXAnalysisException {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		assertTrue(mapper.isNonStdLicIdMapEmpty());
 	}
 
@@ -176,9 +207,9 @@ public class SpdxLicenseMapperTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos().clone();
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper(doc1);
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
-		SPDXNonStandardLicense resultNonStdLic = mapper.mappingNonStdLic(doc2, subNonStdLics[0]);
+		SPDXNonStandardLicense resultNonStdLic = mapper.mappingNonStdLic(doc1, doc2, subNonStdLics[0]);
 		mapper.clearNonStdLicIdMap();
 		assertTrue(mapper.isNonStdLicIdMapEmpty());
 	}
