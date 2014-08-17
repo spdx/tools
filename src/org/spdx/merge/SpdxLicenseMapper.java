@@ -96,7 +96,7 @@ public class SpdxLicenseMapper {
 			retval.toArray(mergedFileLics);
 			subFileInfo.setSeenLicenses(mergedFileLics);
 			SPDXLicenseInfo subConcludedLicInFile = subFileInfo.getConcludedLicenses();
-			subFileInfo.setConcludedLicenses(mapNonStdLicInMap(spdxDoc,subConcludedLicInFile));
+			subFileInfo.setConcludedLicenses(mapLicenseInfo(spdxDoc,subConcludedLicInFile));
 			retval.clear();
 			return subFileInfo;
 	}
