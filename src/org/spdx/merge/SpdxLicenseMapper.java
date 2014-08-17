@@ -35,14 +35,11 @@ public class SpdxLicenseMapper {
 	private HashMap<SPDXDocument, HashMap<SPDXLicenseInfo, SPDXLicenseInfo>> nonStdLicIdMap = 
 			new HashMap<SPDXDocument, HashMap< SPDXLicenseInfo, SPDXLicenseInfo>>();
 	
-	private SPDXDocument master = null;
-	
 	/**
 	 * 
 	 * @param masterDoc
 	 */
-	public SpdxLicenseMapper(SPDXDocument masterDoc){
-		this.master = masterDoc;
+	public SpdxLicenseMapper(){
 	}
 	
 	/**
@@ -53,7 +50,7 @@ public class SpdxLicenseMapper {
 	 * @param subNonStdLicInfo
 	 * @return subNonStdLicInfo
 	 */
-	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
+	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument master, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
 		
 		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> interMap = new HashMap<SPDXLicenseInfo,SPDXLicenseInfo>();
 		if(docInNonStdLicIdMap(subDoc)){
