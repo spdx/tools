@@ -135,10 +135,20 @@ public class SpdxFileInfoMerger{
 	 * @param subArtifactOfA
 	 * @return mergedArtfactOf
 	 */
-	public DOAPProject[] mergeDOAPInfo(DOAPProject[] MasterArtifactOf, DOAPProject[] subArtifactOfA){
-		ArrayList<DOAPProject> retval = new ArrayList<DOAPProject>(Arrays.asList(MasterArtifactOf));
-		for(int l = 0; l < subArtifactOfA.length; l++){
-			retval.add(subArtifactOfA[l]);//assume add all DOAPProject include both artifactOf and Homepage
+	public DOAPProject[] mergeDOAPInfo(DOAPProject[] masterArtifactOf, DOAPProject[] subArtifactOf){
+		ArrayList<DOAPProject> retval = new ArrayList<DOAPProject>(Arrays.asList(masterArtifactOf));
+		
+		for(int l = 0; l < subArtifactOf.length; l++){
+			boolean foundMatch = false;
+			for(int u = 0; u < masterArtifactOf.length; u++){
+				if(subArtifactOf[l].equals(masterArtifactOf[u])){
+					foundMatch = true;
+					break;
+				}
+			}
+			if(!foundMatch){
+				retval.add(subArtifactOf[l]);//assume add all DOAPProject include both artifactOf and Homepage
+			}
 		}
 		DOAPProject[] mergedArtifactOf = new DOAPProject[retval.size()];
 		retval.toArray(mergedArtifactOf);
