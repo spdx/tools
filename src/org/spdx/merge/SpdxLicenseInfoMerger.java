@@ -62,15 +62,16 @@ public class SpdxLicenseInfoMerger {
 			//an array to hold non-standard license info from current child SPDX document and clone the data
 			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(subDocs[i].getExtractedLicenseInfos());
 									
-			//compare non-standard license info. Note: the method may run as over-comparison
-	        for(int k = 0; k < retval.size(); k++){
+			//compare non-standard license information
+	        for(int k = 0; k < subNonStdLicInfo.length; k++){
 	        	boolean foundTextMatch = false;
-	        	for(int p = 0; p < subNonStdLicInfo.length; p++){
-	        		if(LicenseCompareHelper.isLicenseTextEquivalent(retval.get(k).getText(), subNonStdLicInfo[p].getText())){
+	        	for(int p = 0; p < retval.size(); p++){
+	        		if(LicenseCompareHelper.isLicenseTextEquivalent(subNonStdLicInfo[k].getText(), retval.get(p).getText())){
 	        			foundTextMatch = true;
+	        			break;
 	           		}
 	        		if(!foundTextMatch){
-	        	        retval.add((mapper.mappingNonStdLic(output, subDocs[i], subNonStdLicInfo[p])));	        	             			
+	        	        retval.add((mapper.mappingNonStdLic(output, subDocs[i], subNonStdLicInfo[k])));	        	             			
 	        		}
 	        	}
 	        } 			
