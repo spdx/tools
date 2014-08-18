@@ -52,7 +52,7 @@ public class SpdxLicenseInfoMerger {
 		
 		//an arrayList to hold the final result 
 		ArrayList<SPDXNonStandardLicense> retval = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
-
+		
 		//call constructor and pass master document as parameter 
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
@@ -61,7 +61,7 @@ public class SpdxLicenseInfoMerger {
 			
 			//an array to hold non-standard license info from current child SPDX document and clone the data
 			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(subDocs[i].getExtractedLicenseInfos());
-									
+												
 			//compare non-standard license information
 	        for(int k = 0; k < subNonStdLicInfo.length; k++){
 	        	boolean foundTextMatch = false;
@@ -70,13 +70,15 @@ public class SpdxLicenseInfoMerger {
 	        			foundTextMatch = true;
 	        			break;
 	           		}
-	        		if(!foundTextMatch){
-	        	        retval.add((mapper.mappingNonStdLic(output, subDocs[i], subNonStdLicInfo[k])));	        	             			
-	        		}
 	        	}
-	        } 			
-		}
+	        	if(!foundTextMatch){
+	        		retval.add((mapper.mappingNonStdLic(output, subDocs[i], subNonStdLicInfo[k])));	    
+	        	}
+	        }
+
+	   }
 		SPDXNonStandardLicense[] nonStdLicMergeResult = new SPDXNonStandardLicense[retval.size()];
+		System.out.printf("retval size after merging %d\n", retval.size());
 		retval.toArray(nonStdLicMergeResult);
 		retval.clear();
 		return nonStdLicMergeResult;
