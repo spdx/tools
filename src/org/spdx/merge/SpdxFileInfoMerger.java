@@ -60,18 +60,20 @@ public class SpdxFileInfoMerger{
 				for(int k = 0; k < subFileInfo.length; k++){
 					boolean foundNameMatch = false;
 					boolean foundSha1Match = false;
+					SPDXFile temp = null;
 					
 					//determine if any file name matched
 					for(int p = 0; p < retval.size() ; p++){
+						temp = retval.get(p);
 						if(subFileInfo[k].getName().equalsIgnoreCase(retval.get(p).getName())){
 							foundNameMatch = true;
-							break;
 						}
 						//determine if any checksum matched
 						if(subFileInfo[k].getSha1().equals(retval.get(p).getSha1())){
 							foundSha1Match = true;
 							break;
 						}
+					}
 						//if both name and checksum are not matched, then check the license Ids from child files 
 						if(!foundNameMatch && !foundSha1Match){
 							//check whether licIdMap has this particular child document  
@@ -86,7 +88,7 @@ public class SpdxFileInfoMerger{
 							//still need to figure out how to solve the issue if license and other information is not exactly the same
 							boolean foundMasterDOAP = false;
 							boolean foundChildDOAP = false;
-						    if(checkDOAPProject(retval.get(p))){
+						    if(checkDOAPProject(temp)){
 						    	foundMasterDOAP = true;
 						    	break;
 						    }
@@ -95,20 +97,19 @@ public class SpdxFileInfoMerger{
 						    	break;
 						    }
 						    if(foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(retval.get(p).getArtifactOf());
+						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(temp.getArtifactOf());
 						    	DOAPProject[] subArtifactOfA = cloneDOAPProject(subFileInfo[k].getArtifactOf());
 						    	DOAPProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, subArtifactOfA);
-						    	retval.get(p).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
+						    	temp.setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
 						    	
 						    }
 						    //if master doesn't have DOAPProject information but sub file has 
 						    if(!foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(subFileInfo[p].getArtifactOf());
-						    	retval.get(p).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
+						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(subFileInfo[k].getArtifactOf());
+						    	temp.setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
 						    }
 						}
-					}
-				}
+					}			
 			}
 		SPDXFile[] fileMergeResult = new SPDXFile[retval.size()];
 		retval.toArray(fileMergeResult);
