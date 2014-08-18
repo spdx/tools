@@ -29,6 +29,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import java.util.regex.Matcher;
 
+import org.spdx.merge.SpdxLicenseMapper;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 
@@ -640,32 +641,26 @@ public class SPDXDocument implements SpdxRdfConstants {
 		
 		/**
 		 * Clones a deep copy of all fields to a new SPDXPackage contained in the docToCloneTo SPDXDocument. 
-		 * Any extracted licenseInfo from the docToCloneTo will also be added to the document with a licenseID
-		 * generated from this package.
-		 * NOTE: This will overwrite any existing SPDXPackages contained within the SPDXDocument.
+		 * NOTE: This will overwrite any existing SPDXPackages contained within the SPDXDocument and the SPDXDocument must not contain any extracted licenses
 		 * @param docToCloneTo SPDX Document to contain the result of the clone
 		 * @param packageUri URI for the SPDX Package being created
 		 * @return A deep copy of this SPDXPackage contained within docToCloneTo
 		 * @throws InvalidSPDXAnalysisException
 		 */
 		public SPDXPackage clone(SPDXDocument docToCloneTo, String packageUri) throws InvalidSPDXAnalysisException {
+			if (docToCloneTo.getExtractedLicenseInfos() != null && docToCloneTo.getExtractedLicenseInfos().length > 0) {
+				throw(new InvalidSPDXAnalysisException("Can not clone a package to an SPDX document with existing licenses"));
+			}
+			if (docToCloneTo.getFileReferences()!= null && docToCloneTo.getFileReferences().length > 0) {
+				throw(new InvalidSPDXAnalysisException("Can not clone a package to an SPDX document with existing files"));
+			}
+			//TODO: Allow cloning of existing licenses and files by merging the extracted license infos and mapping the licenses
 			SPDXPackage retval = docToCloneTo.createSpdxPackage(packageUri);
 			// need to copy the non-standard licenses in case they are referenced
 			SPDXNonStandardLicense[] extractedLicenseInfos = getExtractedLicenseInfos();
 			if (extractedLicenseInfos != null) {
-				SPDXNonStandardLicense[] existingLicenseInfos = docToCloneTo.getExtractedLicenseInfos();
-				if (existingLicenseInfos == null) {
-					existingLicenseInfos = new SPDXNonStandardLicense[0];
-				}
-				SPDXNonStandardLicense[] clonedExtractedLicenseInfos = new SPDXNonStandardLicense[extractedLicenseInfos.length + existingLicenseInfos.length];
-				for (int i = 0; i < existingLicenseInfos.length; i++) {
-					clonedExtractedLicenseInfos[i] = existingLicenseInfos[i];
-				}
-				for (int i = 0; i < extractedLicenseInfos.length; i++) {
-					clonedExtractedLicenseInfos[i+existingLicenseInfos.length] = (SPDXNonStandardLicense)extractedLicenseInfos[i].clone();
-					clonedExtractedLicenseInfos[i+existingLicenseInfos.length].setId(getNextLicenseRef());
-				}
-				docToCloneTo.setExtractedLicenseInfos(clonedExtractedLicenseInfos);
+				docToCloneTo.setExtractedLicenseInfos(extractedLicenseInfos);
+				docToCloneTo.initializeNextLicenseRef(extractedLicenseInfos);
 			}
 			retval.setConcludedLicenses(this.getConcludedLicenses().clone());
 			retval.setDeclaredCopyright(this.getDeclaredCopyright());
@@ -675,13 +670,12 @@ public class SPDXDocument implements SpdxRdfConstants {
 			retval.setDownloadUrl(this.getDownloadUrl());
 			retval.setFileName(this.getFileName());
 			SPDXFile[] myFiles = this.getFiles();
-			// need to 
 			if (myFiles != null) {
 				SPDXFile[] clonedFiles = new SPDXFile[myFiles.length];
 				for (int i = 0; i < clonedFiles.length; i++) {
 					clonedFiles[i] = myFiles[i].clone(docToCloneTo, docToCloneTo.getDocumentNamespace() + docToCloneTo.getNextSpdxElementRef());
 				}
-				retval.setFiles(clonedFiles);
+				retval.setFiles(clonedFiles);				
 			}
 			retval.setHomePage(this.getHomePage());
 			retval.setLicenseComment(this.getLicenseComment());
@@ -700,6 +694,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			retval.setSupplier(this.getSupplier());
 			retval.setVerificationCode(this.getVerificationCode());
 			retval.setVersionInfo(this.getVersionInfo());
+			// need to reset the next reference numbers in the toDocument
 			return retval;
 		}
 		
@@ -967,11 +962,11 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * Initialize the next license reference by scanning all of the existing non-standard licenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void initializeNextLicenseRef() throws InvalidSPDXAnalysisException {
+	protected void initializeNextLicenseRef() throws InvalidSPDXAnalysisException {
 		initializeNextLicenseRef(this.getExtractedLicenseInfos());
 	}
 	
-	private void initializeNextLicenseRef(SPDXNonStandardLicense[] existingLicenses) throws InvalidSPDXAnalysisException {
+	protected void initializeNextLicenseRef(SPDXNonStandardLicense[] existingLicenses) throws InvalidSPDXAnalysisException {
 		int highestNonStdLicense = 0;
 		for (int i = 0; i < existingLicenses.length; i++) {
 			try {
@@ -1833,6 +1828,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 	}
 	
 	protected SPDXDocument getDocument() {
+		return this;
+	}
+	
+	public SPDXDocument getSpdxDocument() {
 		return this;
 	}
 }
