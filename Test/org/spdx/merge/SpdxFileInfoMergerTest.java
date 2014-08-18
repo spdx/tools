@@ -69,10 +69,30 @@ public class SpdxFileInfoMergerTest {
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#mergeFileInfo(org.spdx.rdfparser.SPDXDocument[])}.
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws IOException 
 	 */
 	@Test
-	public void testMergeFileInfo() {
-
+	public void testMergeFileInfo() throws IOException, InvalidSPDXAnalysisException {
+		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SPDXPackage packageInfo = doc1.getSpdxPackage();
+		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
+		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
+		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
+		
+		SPDXFile[] expectedResult = packageInfo.getFiles();
+		int num = 0;
+		for(int i = 0; i < mergedResult.length; i++){
+			for(int j = 0; j < expectedResult.length; j++){
+				if(mergedResult[i].equivalent(expectedResult[j])){
+					num ++;
+					break;
+				}
+			}
+		}	
+		assertEquals(3,num);
+		assertEquals(expectedResult.length, mergedResult.length);
 	}
 
 	/**
