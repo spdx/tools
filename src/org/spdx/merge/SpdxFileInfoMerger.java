@@ -57,50 +57,54 @@ public class SpdxFileInfoMerger{
 				//an array to store an deep copy of file information from current child document
 				SPDXFile[] subFileInfo = cloneFiles(subDocs[q].getSpdxPackage().getFiles());
 				
-				for(int k = 0; k < retval.size(); k++){
+				for(int k = 0; k < subFileInfo.length; k++){
 					boolean foundNameMatch = false;
 					boolean foundSha1Match = false;
 					
 					//determine if any file name matched
-					for(int p = 0; p < subFileInfo.length; p++){
-						if(retval.get(k).getName().equalsIgnoreCase(subFileInfo[p].getName())){
+					for(int p = 0; p < retval.size() ; p++){
+						if(subFileInfo[k].getName().equalsIgnoreCase(retval.get(p).getName())){
 							foundNameMatch = true;
+							break;
 						}
 						//determine if any checksum matched
-						if(retval.get(k).getSha1().equals(subFileInfo[p].getSha1())){
+						if(subFileInfo[k].getSha1().equals(retval.get(p).getSha1())){
 							foundSha1Match = true;
+							break;
 						}
 						//if both name and checksum are not matched, then check the license Ids from child files 
 						if(!foundNameMatch && !foundSha1Match){
 							//check whether licIdMap has this particular child document  
 							if(mapper.docInNonStdLicIdMap(subDocs[q])){
-								mapper.replaceNonStdLicInFile(subDocs[q], subFileInfo[p]);
-								retval.add(subFileInfo[p]);
+								mapper.replaceNonStdLicInFile(subDocs[q], subFileInfo[k]);
+								retval.add(subFileInfo[k]);
 							}else{
-								retval.add(subFileInfo[p]);
+								retval.add(subFileInfo[k]);
 							}
 						}else{
 							//if both name and checksum are matched, then merge the DOAPProject information
 							//still need to figure out how to solve the issue if license and other information is not exactly the same
 							boolean foundMasterDOAP = false;
 							boolean foundChildDOAP = false;
-						    if(checkDOAPProject(retval.get(k))){
+						    if(checkDOAPProject(retval.get(p))){
 						    	foundMasterDOAP = true;
+						    	break;
 						    }
-						    if(checkDOAPProject(subFileInfo[p])){
+						    if(checkDOAPProject(subFileInfo[k])){
 						    	foundChildDOAP = true;
+						    	break;
 						    }
 						    if(foundMasterDOAP && foundChildDOAP){
-						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(retval.get(k).getArtifactOf());
-						    	DOAPProject[] subArtifactOfA = cloneDOAPProject(subFileInfo[p].getArtifactOf());
+						    	DOAPProject[] masterArtifactOf = cloneDOAPProject(retval.get(p).getArtifactOf());
+						    	DOAPProject[] subArtifactOfA = cloneDOAPProject(subFileInfo[k].getArtifactOf());
 						    	DOAPProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, subArtifactOfA);
-						    	retval.get(k).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
+						    	retval.get(p).setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
 						    	
 						    }
 						    //if master doesn't have DOAPProject information but sub file has 
 						    if(!foundMasterDOAP && foundChildDOAP){
 						    	DOAPProject[] childArtifactOfB = cloneDOAPProject(subFileInfo[p].getArtifactOf());
-						    	retval.get(k).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
+						    	retval.get(p).setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
 						    }
 						}
 					}
