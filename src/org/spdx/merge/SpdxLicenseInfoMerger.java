@@ -78,7 +78,6 @@ public class SpdxLicenseInfoMerger {
 
 	   }
 		SPDXNonStandardLicense[] nonStdLicMergeResult = new SPDXNonStandardLicense[retval.size()];
-		System.out.printf("retval size after merging %d\n", retval.size());
 		retval.toArray(nonStdLicMergeResult);
 		retval.clear();
 		return nonStdLicMergeResult;
