@@ -126,6 +126,7 @@ public class SpdxPackageInfoMerger {
 						for(int d = 0; d < licsList.size(); d++){
 							if(retval[c].equals(licsList.get(d))){
 								foundLicMatch = true;
+								break;
 							}
 						}
 						if(!foundLicMatch){
