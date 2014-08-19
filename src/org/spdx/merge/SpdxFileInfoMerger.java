@@ -34,13 +34,19 @@ import org.spdx.rdfparser.SPDXFile;
 public class SpdxFileInfoMerger{
 	
 	private SPDXPackage packageInfo = null;
+	
+	/**
+	 * 
+	 * @param packageInfoResult
+	 */
 	public SpdxFileInfoMerger(SPDXPackage packageInfoResult){
 		this.packageInfo = packageInfoResult;
 	}
+
 	/**
 	 * 
-	 * @param mergeDocs
-	 * @return mergeFileInfo
+	 * @param subDocs
+	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXFile[] mergeFileInfo(SPDXDocument[] subDocs)throws InvalidSPDXAnalysisException{
@@ -132,9 +138,9 @@ public class SpdxFileInfoMerger{
 	
 	/**
 	 * 
-	 * @param MasterArtifactOf
-	 * @param subArtifactOfA
-	 * @return mergedArtfactOf
+	 * @param masterArtifactOf
+	 * @param subArtifactOf
+	 * @return
 	 */
 	public DOAPProject[] mergeDOAPInfo(DOAPProject[] masterArtifactOf, DOAPProject[] subArtifactOf){
 		ArrayList<DOAPProject> retval = new ArrayList<DOAPProject>(Arrays.asList(masterArtifactOf));
