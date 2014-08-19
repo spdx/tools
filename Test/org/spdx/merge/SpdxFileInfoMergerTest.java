@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
@@ -77,6 +78,12 @@ public class SpdxFileInfoMergerTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXPackage packageInfo = doc1.getSpdxPackage();
+		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		
+		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
+		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
+		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
 		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
