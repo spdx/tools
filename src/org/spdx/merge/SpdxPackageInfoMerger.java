@@ -142,11 +142,10 @@ public class SpdxPackageInfoMerger {
 		}
 		
 		/**
-		 * method to collect all declared licenses from sub-packages 
-		 * and merge into string as license comments in merged package
-		 * @param mergeDocs
+		 * 
+		 * @param subDocs
 		 * @return
-		 * @throws InvalidSPDXAnalysisException 
+		 * @throws InvalidSPDXAnalysisException
 		 */
 		public String translateSubDelcaredLicsIntoComments(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper();

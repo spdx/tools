@@ -46,11 +46,12 @@ public class SpdxLicenseMapper {
 	
 	/**
 	 * a method gets a sub SPDX document and one of its non-standard licenses. 
-	 * This particular non-standard license is unique to the master document.
+	 * This particular non-standard license is unique to the outputDoc document.
 	 * The return variable subNonStdLicInfo is cloned from input non-standard license, but replace the license id.
-	 * @param mergeDocs
+	 * @param outputDoc
+	 * @param subDoc
 	 * @param subNonStdLicInfo
-	 * @return subNonStdLicInfo
+	 * @return
 	 */
 	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument outputDoc, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
 		
