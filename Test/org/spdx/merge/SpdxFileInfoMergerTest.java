@@ -82,7 +82,7 @@ public class SpdxFileInfoMergerTest {
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};

@@ -104,7 +104,7 @@ public class SpdxPackageInfoMergerTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
@@ -137,7 +137,7 @@ public class SpdxPackageInfoMergerTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
@@ -179,7 +179,7 @@ public class SpdxPackageInfoMergerTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
 		
