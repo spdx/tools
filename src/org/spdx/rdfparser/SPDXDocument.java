@@ -481,8 +481,21 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @throws InvalidSPDXAnalysisException 
 		 */
 		public void setFiles(SPDXFile[] files) throws InvalidSPDXAnalysisException {
+			// Delete all existing files
+			ArrayList<Node> alFileNodes = new ArrayList<Node>();
+			Node n = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE).asNode();
+			Triple m = Triple.createMatch(this.node, n, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				alFileNodes.add(t.getObject());
+			}
 			removeProperties(node, PROP_PACKAGE_FILE);
 			removeProperties(node, PROP_SPDX_FILE);	// NOTE: In version 2.0, we will need to remove just the files which were in the package
+
+			for (Node fileNode : alFileNodes) {
+				model.removeAll(getResource(fileNode), null, null);
+			}
 			
 			if (files != null) {
 				Resource s = getResource(this.node);
@@ -1615,7 +1628,6 @@ public class SPDXDocument implements SpdxRdfConstants {
 			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 			s.addProperty(p, nonStandardLicenses[i].createResource(model));
 		}
-		// need to re-update the max license ID
 	}
 	
 	/**

@@ -63,16 +63,21 @@ public class SpdxLicenseInfoMerger {
 			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(subDocs[i].getExtractedLicenseInfos());
 												
 			//compare non-standard license information
+			SPDXNonStandardLicense foundLicense = null;
 	        for(int k = 0; k < subNonStdLicInfo.length; k++){
 	        	boolean foundTextMatch = false;
 	        	for(int p = 0; p < retval.size(); p++){
 	        		if(LicenseCompareHelper.isLicenseTextEquivalent(subNonStdLicInfo[k].getText(), retval.get(p).getText())){
 	        			foundTextMatch = true;
+	        			foundLicense = retval.get(p);
 	        			break;
 	           		}
 	        	}
+	        	if (foundTextMatch) {
+	        		mapper.mappingExistingNonStdLic(output, foundLicense, subDocs[i], subNonStdLicInfo[k]);
+	        	}
 	        	if(!foundTextMatch){
-	        		retval.add((mapper.mappingNonStdLic(output, subDocs[i], subNonStdLicInfo[k])));	    
+	        		retval.add((mapper.mappingNewNonStdLic(output, subDocs[i], subNonStdLicInfo[k])));	    
 	        	}
 	        }
 

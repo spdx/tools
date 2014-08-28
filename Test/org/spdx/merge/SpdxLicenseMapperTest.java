@@ -85,7 +85,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		if(clonedNonStdLic.equals(subNonStdLics[0]) ){
 			fail();
 		}
@@ -106,7 +106,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
 		subNonStdLics[0] = clonedNonStdLic;//replace the lics 
 		doc2.setExtractedLicenseInfos(subNonStdLics);
 
@@ -150,7 +150,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();//input non-standard lic
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5
 
 		SPDXLicenseInfo license1 = subNonStdLics[1].clone();//license1 doesn't in map
 		license1 = mapper.mapNonStdLicInMap(doc2, license1);
@@ -176,7 +176,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();//input non-standard lic
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5		
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);//new clonedNonStdLic id = 5		
 		
 		SPDXLicenseInfo mappedLicense = mapper.mapLicenseInfo(doc2, doc2.getSpdxPackage().getDeclaredLicense().clone());
 		SPDXLicenseInfo expectedLicense = setLicense(doc2.getSpdxPackage().getDeclaredLicense().clone(),subNonStdLics[0],clonedNonStdLic);
@@ -222,7 +222,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		assertTrue(mapper.docInNonStdLicIdMap(doc2));
 	}
@@ -240,7 +240,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
-		mapper.mappingNonStdLic(doc1, doc2, clonedNonStdLic);
+		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> interalMap = mapper.foundInterMap(doc2);
 		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> expected = new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
@@ -277,7 +277,7 @@ public class SpdxLicenseMapperTest {
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
 		@SuppressWarnings("unused")
-		SPDXNonStandardLicense resultNonStdLic = mapper.mappingNonStdLic(doc1, doc2, subNonStdLics[0]);
+		SPDXNonStandardLicense resultNonStdLic = mapper.mappingNewNonStdLic(doc1, doc2, subNonStdLics[0]);
 		mapper.clearNonStdLicIdMap();
 		assertTrue(mapper.isNonStdLicIdMapEmpty());
 	}

@@ -32,6 +32,10 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  * @author Gang Ling
  *
  */
+/**
+ * @author Gary
+ *
+ */
 public class SpdxLicenseMapper {
 
 	private HashMap<SPDXDocument, HashMap<SPDXLicenseInfo, SPDXLicenseInfo>> nonStdLicIdMap = 
@@ -45,7 +49,8 @@ public class SpdxLicenseMapper {
 	}
 	
 	/**
-	 * a method gets a sub SPDX document and one of its non-standard licenses. 
+	 * Creates a new non-standard license in the outputDoc and creates a mapping
+	 * between the output document non-standard license and the subDoc non standard license
 	 * This particular non-standard license is unique to the outputDoc document.
 	 * The return variable subNonStdLicInfo is cloned from input non-standard license, but replace the license id.
 	 * @param outputDoc
@@ -53,7 +58,7 @@ public class SpdxLicenseMapper {
 	 * @param subNonStdLicInfo
 	 * @return
 	 */
-	public SPDXNonStandardLicense mappingNonStdLic(SPDXDocument outputDoc, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
+	public SPDXNonStandardLicense mappingNewNonStdLic(SPDXDocument outputDoc, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
 		
 		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> interMap = new HashMap<SPDXLicenseInfo,SPDXLicenseInfo>();
 		if(docInNonStdLicIdMap(subDoc)){
@@ -67,6 +72,24 @@ public class SpdxLicenseMapper {
 		nonStdLicIdMap.put(subDoc, interMap);
 
 		return subNonStdLicInfo;
+	}
+	
+	/**
+	 * Maps a subDoc nonstandard license to an existing output document nonstandard license
+	 * @param outputDoc
+	 * @param subDoc
+	 * @param subLicense
+	 * @param outputDocLicense
+	 */
+	public void mappingExistingNonStdLic(SPDXDocument outputDoc, SPDXNonStandardLicense outputDocLicense, SPDXDocument subDoc, SPDXNonStandardLicense subLicense) {
+		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> interMap;
+		if(docInNonStdLicIdMap(subDoc)){
+			interMap = nonStdLicIdMap.get(subDoc);
+		} else {
+			interMap = new HashMap<SPDXLicenseInfo,SPDXLicenseInfo>();
+		}
+		interMap.put(outputDocLicense, subLicense);
+		nonStdLicIdMap.put(subDoc, interMap);
 	}
 	
 	/**
