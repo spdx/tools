@@ -98,10 +98,12 @@ public class MergeToolTest {
 		// check for licenses and build a license map
 
 		SPDXLicenseInfo[] masterExtractedLicenses = masterDoc.getExtractedLicenseInfos();
-		SPDXLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();
+		SPDXLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();		
+
 		HashMap<String, String> masterDocLicMap = mapLicenseIds(masterExtractedLicenses, outputDocExtratedLicenses);
 		HashMap<String, String> firstMergeDoccLicMap = mapLicenseIds(firstMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
 		HashMap<String, String> secondMergeDocLicMap = mapLicenseIds(secondMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
+
 
 	}
 
