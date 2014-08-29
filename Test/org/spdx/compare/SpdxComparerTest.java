@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.spdx.compare.SpdxLicenseDifference;
 import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
 import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.DuplicateNonStandardLicenseIdException;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXCreatorInformation;
@@ -605,10 +606,13 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+3] = lic2_2;
 
 		doc1.setExtractedLicenseInfos(exLicenses1);
-		doc2.setExtractedLicenseInfos(exLicenses2);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isExtractedLicensingInfosEqual());
-		assertTrue(comparer.isDifferenceFound());
+		boolean caughtDupException = false;
+		try {
+			doc2.setExtractedLicenseInfos(exLicenses2);
+		} catch (DuplicateNonStandardLicenseIdException e) {
+			caughtDupException = true;
+		}
+		assertTrue(caughtDupException);		
 		
 		// license comments differ	
 		exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);

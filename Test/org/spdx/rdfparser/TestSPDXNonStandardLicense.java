@@ -191,7 +191,7 @@ public class TestSPDXNonStandardLicense {
 	}
 	
 	@Test
-	public void testClone() {
+	public void testClone() throws InvalidSPDXAnalysisException {
 		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1, 
 				LICENSENAME1, SOURCEURLS1, COMMENT1);
 		@SuppressWarnings("unused")

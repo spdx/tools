@@ -295,9 +295,10 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#getUniqueSeenLicensesB()}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testGetUniqueSeenLicensesB() throws SpdxCompareException, InvalidLicenseStringException {
+	public void testGetUniqueSeenLicensesB() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
 		String fileNameA = "a/b/c/name.txt";
 		String fileNameB = fileNameA;
 		String fileTypeA = SpdxRdfConstants.FILE_TYPE_SOURCE;
@@ -360,9 +361,10 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#getUniqueSeenLicensesA()}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testGetUniqueSeenLicensesA() throws SpdxCompareException, InvalidLicenseStringException {
+	public void testGetUniqueSeenLicensesA() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
 		String fileNameA = "a/b/c/name.txt";
 		String fileNameB = fileNameA;
 		String fileTypeA = SpdxRdfConstants.FILE_TYPE_SOURCE;

@@ -49,7 +49,7 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) {
+	protected Resource _createResource(Model model) throws InvalidSPDXAnalysisException {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET);
 		return super._createResource(model, type);
 	}

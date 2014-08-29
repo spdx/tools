@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDocument;
@@ -98,8 +99,9 @@ public class SpdxLicenseMapper {
 	 * @param spdxDoc
 	 * @param subFileInfo
 	 * @return
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXFile replaceNonStdLicInFile(SPDXDocument spdxDoc, SPDXFile subFileInfo){
+	public SPDXFile replaceNonStdLicInFile(SPDXDocument spdxDoc, SPDXFile subFileInfo) throws InvalidSPDXAnalysisException{
 			SPDXLicenseInfo[] subLicInfoInFile = subFileInfo.getSeenLicenses();
 			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
 			Set <SPDXLicenseInfo> keys = idMap.keySet();

@@ -79,8 +79,9 @@ public abstract class SPDXLicenseInfo implements Cloneable {
 	 * return the existing resource.
 	 * @param model
 	 * @return resource created from the model
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public Resource createResource(Model model) {	
+	public Resource createResource(Model model) throws InvalidSPDXAnalysisException {	
 		if (this.model != null &&
 				(this.model.equals(model) 
 						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the standard license 
@@ -101,8 +102,9 @@ public abstract class SPDXLicenseInfo implements Cloneable {
 	 * Internal implementation of create resource which is subclass specific
 	 * @param model
 	 * @return
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected abstract Resource _createResource(Model model);
+	protected abstract Resource _createResource(Model model) throws InvalidSPDXAnalysisException;
 	
 	// force subclasses to implement toString
 	public abstract String toString();

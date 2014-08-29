@@ -495,8 +495,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	}
 	/**
 	 * @param seenLicenses the seenLicenses to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setSeenLicenses(SPDXLicenseInfo[] seenLicenses) {
+	public void setSeenLicenses(SPDXLicenseInfo[] seenLicenses) throws InvalidSPDXAnalysisException {
 		this.seenLicenses = seenLicenses;
 		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE);
@@ -504,7 +505,13 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE);
 
 			for (int i = 0; i < seenLicenses.length; i++) {
-				Resource lic = seenLicenses[i].createResource(model);
+				Resource lic;
+				try {
+					lic = seenLicenses[i].createResource(model);
+				} catch (DuplicateNonStandardLicenseIdException e) {
+					throw(new InvalidSPDXAnalysisException("Seen licenses contains a non-standard license ID "+
+							" which already exists in the model with different license text:" + seenLicenses[i].toString()));
+				}
 				this.resource.addProperty(p, lic);
 			}
 		}
@@ -692,14 +699,21 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	}
 	/**
 	 * @param fileLicenses the fileLicenses to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setConcludedLicenses(SPDXLicenseInfo fileLicenses) {
+	public void setConcludedLicenses(SPDXLicenseInfo fileLicenses) throws InvalidSPDXAnalysisException {
 		this.concludedLicenses = fileLicenses;
 		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
 			model.removeAll(this.resource, p, null);
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
-			Resource lic = fileLicenses.createResource(model);
+			Resource lic = null;
+			try {
+				lic = fileLicenses.createResource(model);
+			} catch (DuplicateNonStandardLicenseIdException e) {
+				throw(new InvalidSPDXAnalysisException("Concluded licenses contains a non-standard license with inconsistent text with " +
+						"                                   an existing license: "+fileLicenses.toString()));
+			}
 			this.resource.addProperty(p, lic);
 		}
 	}
