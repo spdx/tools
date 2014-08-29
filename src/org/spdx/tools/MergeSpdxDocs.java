@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
 import org.spdx.merge.SpdxLicenseInfoMerger;
+import org.spdx.merge.SpdxLicenseMapper;
 import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
@@ -143,8 +144,10 @@ public class MergeSpdxDocs {
 			}
 						
 			SPDXNonStandardLicense[] licInfoResult = null;
+			SpdxLicenseMapper licenseMapper = new SpdxLicenseMapper();
+			
 			try{
-				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(outputDoc);
+				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(outputDoc, licenseMapper);
 				//merge non-standard license information
 				licInfoResult = nonStandardLicMerger.mergeNonStdLic(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
@@ -154,7 +157,7 @@ public class MergeSpdxDocs {
 				
 			SPDXFile[] fileInfoResult = null;
 			try{
-				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(packageInfoResult);
+				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(packageInfoResult, licenseMapper);
 				//merge file information 
 				fileInfoResult = fileInfoMerger.mergeFileInfo(subDocs);
 			}catch(InvalidSPDXAnalysisException e){

@@ -35,8 +35,11 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
 public class SpdxLicenseInfoMerger {
 	
 	private SPDXDocument output = null;
-	public SpdxLicenseInfoMerger(SPDXDocument outputDoc){
+	private SpdxLicenseMapper mapper = null;
+	
+	public SpdxLicenseInfoMerger(SPDXDocument outputDoc, SpdxLicenseMapper mapper){
 		this.output = outputDoc;
+		this.mapper = mapper;
 	}
     
 	/**
@@ -52,9 +55,6 @@ public class SpdxLicenseInfoMerger {
 		
 		//an arrayList to hold the final result 
 		ArrayList<SPDXNonStandardLicense> retval = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
-		
-		//call constructor and pass master document as parameter 
-		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
 		//read each child SPDX document
 		for(int i = 0; i < subDocs.length; i++){

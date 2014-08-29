@@ -34,13 +34,15 @@ import org.spdx.rdfparser.SPDXFile;
 public class SpdxFileInfoMerger{
 	
 	private SPDXPackage packageInfo = null;
+	private SpdxLicenseMapper mapper = null;
 	
 	/**
 	 * 
 	 * @param packageInfoResult
 	 */
-	public SpdxFileInfoMerger(SPDXPackage packageInfoResult){
+	public SpdxFileInfoMerger(SPDXPackage packageInfoResult, SpdxLicenseMapper mapper){
 		this.packageInfo = packageInfoResult;
+		this.mapper = mapper;
 	}
 
 	/**
@@ -56,8 +58,6 @@ public class SpdxFileInfoMerger{
 			
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
 			ArrayList<SPDXFile> retval = new ArrayList<SPDXFile>(Arrays.asList(cloneFiles(masterFileInfo)));
-			
-			SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 			
 			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document

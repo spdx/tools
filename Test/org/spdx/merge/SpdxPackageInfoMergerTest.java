@@ -106,7 +106,7 @@ public class SpdxPackageInfoMergerTest {
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
-		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
+		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, mapper);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
 		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
 		String[] skippedFiles = packageMerger.collectSkippedFiles();
@@ -139,7 +139,7 @@ public class SpdxPackageInfoMergerTest {
 		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
-		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo);
+		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, mapper);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
 		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
 		
