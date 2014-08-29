@@ -64,7 +64,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 	}
 
 
-	protected Resource _createResource(Model model, Resource type) {
+	protected Resource _createResource(Model model, Resource type) throws InvalidSPDXAnalysisException {
 		Resource r = model.createResource(type);
 		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
@@ -75,7 +75,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		return r;
 	}
 	
-	public void setSPDXLicenseInfos(SPDXLicenseInfo[] licenseInfos) {
+	public void setSPDXLicenseInfos(SPDXLicenseInfo[] licenseInfos) throws InvalidSPDXAnalysisException {
 		this.licenseInfos.clear();
 		if (licenseInfos != null) {
 			for (int i = 0; i < licenseInfos.length; i++) {

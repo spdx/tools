@@ -18,6 +18,8 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 
+import org.spdx.compare.LicenseCompareHelper;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -104,10 +106,17 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) {
+	protected Resource _createResource(Model model) throws InvalidSPDXAnalysisException {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
 		Resource r = super._createResource(model, type);
-		if (this.text != null) {
+		// check to make sure we are not overwriting an existing license with the same ID
+		String existingLicenseText = getLicenseTextFromModel(model, r.asNode());
+		if (existingLicenseText != null && this.text != null) {
+			if (!LicenseCompareHelper.isLicenseTextEquivalent(existingLicenseText, this.text)) {
+				throw(new DuplicateNonStandardLicenseIdException("Non-standard license ID "+this.id+" already exists.  Can not add a license with the same ID but different text."));
+			}
+		}
+		if (this.text != null) {			
 			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_EXTRACTED_TEXT);
 			model.removeAll(r, textProperty, null);
@@ -136,6 +145,23 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		return r;
 	}
 	
+	/**
+	 * Get the license text from the model, returning null if no license text is found
+	 * @param model
+	 * @param licenseResource
+	 * @return
+	 */
+	public static String getLicenseTextFromModel(Model model, Node licenseResourceNode) {
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT).asNode();
+		Triple m = Triple.createMatch(licenseResourceNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			return t.getObject().toString(false);
+		}
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#toString()
 	 */
