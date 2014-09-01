@@ -44,7 +44,6 @@ public class SpdxLicenseMapper {
 	
 	/**
 	 * 
-	 * @param masterDoc
 	 */
 	public SpdxLicenseMapper(){
 	}
