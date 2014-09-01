@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.After;
@@ -31,6 +32,7 @@ import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
+import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXLicense;
 import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
@@ -40,6 +42,7 @@ import com.google.common.io.Files;
 
 /**
  * @author Gary O'Neall
+ * @author Gang Ling
  *
  */
 public class MergeToolTest {
@@ -103,14 +106,27 @@ public class MergeToolTest {
 		HashMap<String, String> masterDocLicMap = mapLicenseIds(masterExtractedLicenses, outputDocExtratedLicenses);
 		HashMap<String, String> firstMergeDoccLicMap = mapLicenseIds(firstMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
 		HashMap<String, String> secondMergeDocLicMap = mapLicenseIds(secondMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
-
+		
+		SPDXFile[] expectedFiles = createExpectedFiles(masterDoc,firstMergeDoc,secondMergeDoc);
+		SPDXFile[] outputDocFiles = outputDoc.getSpdxPackage().getFiles();
+		
+		int num = 0;
+		for(SPDXFile outputFile:outputDocFiles){
+			for(SPDXFile expectedFile: expectedFiles){
+				if(outputFile.equivalent(expectedFile)){
+					num ++;
+					break;
+				}
+			}
+		}
+		assertEquals(5,num);
 
 	}
 
 	/**
 	 * Creates a map of license ID's from the fromLicenses to the toLicenses
 	 * @param fromLicenses
-	 * @param fromLicenses
+	 * @param toLicenses
 	 * @return
 	 */
 	private HashMap<String, String> mapLicenseIds(
@@ -137,6 +153,41 @@ public class MergeToolTest {
 			}
 		}
 		return retval;
+	}
+	
+	private SPDXFile[] createExpectedFiles(
+			SPDXDocument masterDoc, SPDXDocument firstMergeDoc, SPDXDocument secondMergeDoc) throws InvalidSPDXAnalysisException{
+		ArrayList<SPDXFile> retval = new ArrayList<SPDXFile>();
+		SPDXFile[] masterFiles = masterDoc.getSpdxPackage().getFiles();
+		SPDXFile[] firstDocFiles = firstMergeDoc.getSpdxPackage().getFiles();
+		SPDXFile[] secondDocFiles = secondMergeDoc.getSpdxPackage().getFiles();
+		//add master doc's files into list
+		for(SPDXFile masterFile: masterFiles){
+			retval.add(masterFile);
+		}
+		//add first doc's file into list
+		for(SPDXFile firstMergeFile: firstDocFiles){
+			String fileName = "lib-source/commons-somedepdendency-sources.jar";
+			String sha1 = "e2b4e1c67a2d28fced849ee1bb76e7391b93f125";
+			if(firstMergeFile.getName().equalsIgnoreCase(fileName) && firstMergeFile.getSha1().equals(sha1)){
+				retval.add(firstMergeFile);//only the above file is different from files in the master doc; file license is Apache 2.0
+			}
+		}
+		//prepare second doc's file into list; need to change concluded license and license info in file here
+		SPDXNonStandardLicense[] secondMergeDocLics = secondMergeDoc.getExtractedLicenseInfos();
+		SPDXNonStandardLicense clonedLic = (SPDXNonStandardLicense) secondMergeDocLics[0].clone();//only one extracted license in the second doc
+		String newId = masterDoc.getNextLicenseRef();//master doc and first doc have the same extracted licenses
+		clonedLic.setId(newId);
+		secondMergeDocLics[0] = clonedLic;
+		secondDocFiles[0].setSeenLicenses(secondMergeDocLics);
+		secondDocFiles[0].setConcludedLicenses(clonedLic);
+		retval.add(secondDocFiles[0]);
+		
+		SPDXFile[] result = new SPDXFile[retval.size()];
+		retval.toArray(result);
+		
+		return result;
+		
 	}
 
 }
