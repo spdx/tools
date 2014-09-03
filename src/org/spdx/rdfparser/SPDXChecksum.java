@@ -293,4 +293,11 @@ public class SPDXChecksum {
 	public Resource getResource() {
 		return this.checksumResource;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	public SPDXChecksum clone() {
+		return new SPDXChecksum(this.algorithm, this.value);
+	}
 }

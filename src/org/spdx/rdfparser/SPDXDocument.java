@@ -60,7 +60,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.2";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.7";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.9";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -491,7 +491,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 				alFileNodes.add(t.getObject());
 			}
 			removeProperties(node, PROP_PACKAGE_FILE);
-			removeProperties(node, PROP_SPDX_FILE);	// NOTE: In version 2.0, we will need to remove just the files which were in the package
+			removeProperties(getSpdxDocNode(), PROP_SPDX_FILE);	// NOTE: In version 2.0, we will need to remove just the files which were in the package
 
 			for (Node fileNode : alFileNodes) {
 				model.removeAll(getResource(fileNode), null, null);

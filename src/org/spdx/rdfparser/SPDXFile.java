@@ -393,7 +393,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			if (checksumMatchIterator.hasNext()) {
 				Triple checksumMatchTriple = checksumMatchIterator.next();
 				SPDXChecksum cksum = new SPDXChecksum(model, checksumMatchTriple.getObject());
-				if (cksum.getValue().compareToIgnoreCase(spdxFile.getSha1()) == 0) {
+				if (cksum.getValue().compareToIgnoreCase(spdxFile.sha1.getValue()) == 0) {
 					return convertToResource(model, fileNode);
 				}
 			}
@@ -1236,8 +1236,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
     			}
     		}
     	}
+    	SPDXChecksum clonedChecksum = sha1.clone();
     	return new SPDXFile(this.getName(), this.getType(), 
-    			this.getSha1(), clonedConcludedLicense, 
+    			clonedChecksum.getValue(), clonedConcludedLicense, 
     			clonedSeenLicenses, this.getLicenseComments(),
     			this.getCopyright(), cloneArtifactOfs, this.getComment(), 
     			cloneFileDependencies, this.getContributors(), this.getNoticeText());

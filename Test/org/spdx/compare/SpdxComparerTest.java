@@ -1766,7 +1766,11 @@ public class SpdxComparerTest {
 		comparer.compare(doc1, doc2);
 		SpdxFileDifference[] differences = comparer.getFileDifferences(0, 1);
 		assertEquals(0, differences.length);
-		SPDXFile[] files = doc1.getSpdxPackage().getFiles();
+		SPDXFile[] doc1files = doc1.getSpdxPackage().getFiles();
+		SPDXFile[] files = new SPDXFile[doc1files.length];
+		for (int i = 0; i < doc1files.length; i++) {
+			files[i] = doc1files[i].clone(doc2, doc2.getDocumentNamespace() + doc2.getNextSpdxElementRef());
+		}
 		String file0Name = files[0].getName();
 		files[0] = new SPDXFile(files[0].getName(), files[0].getType(), files[0].getSha1(),files[0].getConcludedLicenses(),
 				files[0].getSeenLicenses(), files[0].getLicenseComments(), files[0].getCopyright(), files[0].getArtifactOf());
@@ -1776,6 +1780,7 @@ public class SpdxComparerTest {
 				files[1].getSeenLicenses(), files[1].getLicenseComments(), files[1].getCopyright(), files[1].getArtifactOf());
 		files[1].setConcludedLicenses(SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
 		doc2.getSpdxPackage().setFiles(files);
+		SPDXFile[] addedFiles = doc2.getSpdxPackage().getFiles();
 		comparer.compare(doc1, doc2);
 		differences = comparer.getFileDifferences(0, 1);
 		assertEquals(2, differences.length);
@@ -1832,7 +1837,10 @@ public class SpdxComparerTest {
 		SpdxFileDifference[] differences = comparer.getFileDifferences(0, 1);
 		assertEquals(0, differences.length);
 		SPDXFile[] files = doc1.getSpdxPackage().getFiles();
-		SPDXFile[] newFiles = Arrays.copyOf(files, files.length+1);
+		SPDXFile[] newFiles = new SPDXFile[files.length + 1];
+		for (int i = 0; i < files.length; i++) {
+			newFiles[i] = files[i].clone(doc2, doc2.getDocumentNamespace() + doc2.getNextSpdxElementRef());
+		}
 		newFiles[files.length] = new SPDXFile("NewName", SpdxRdfConstants.FILE_TYPE_ARCHIVE, files[0].getSha1(), 
 				files[1].getConcludedLicenses(), files[0].getSeenLicenses(), "", "", 
 				new DOAPProject[] {});

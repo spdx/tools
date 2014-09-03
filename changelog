@@ -1,3 +1,5 @@
+Implementation version 1.2.9
+- Add merge utility contributed by Gang Ling
 Implementation version 1.2.8
 - No longer require excluded file names in package sheet for spreadsheet
 - Added clone() interfaces for SPDXFile, DOAPProject and SPDXLicenseInfo
