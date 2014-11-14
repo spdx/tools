@@ -26,11 +26,15 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	
 	public static final String REPLACEABLE_LICENSE_TEXT_CLASS = "replacable-license-text";
 	public static final String OPTIONAL_LICENSE_TEXT_CLASS = "optional-license-text";
+	static final String END_PARAGRAPH_TAG = "</p>";
 	
 	private static final String STARTS_WITH_LETTER_REGEX = "[A-Za-z].*";
-
 	
 	StringBuilder htmlString = new StringBuilder();
+	
+	boolean inOptional = false;
+	boolean movingParagraph = false;	// true if we need to move the end of a
+										// paragraph tag
 
 	/* (non-Javadoc)
 	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#optionalText(java.lang.String)
@@ -45,7 +49,8 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void normalText(String text) {
-		htmlString.append(SpdxLicenseTemplateHelper.escapeHTML(text));
+		htmlString.append(SpdxLicenseTemplateHelper.escapeHTML(text, this.movingParagraph));
+		this.movingParagraph = false;
 	}
 
 	/* (non-Javadoc)
@@ -53,7 +58,40 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void variableRule(LicenseTemplateRule rule) {
+		removeEndParagraphTag();
 		htmlString.append(formatReplaceabledHTML(rule.getOriginal(), rule.getName()));
+	}
+	
+	/**
+	 * Adds back an end paragraph tag if it was removed
+	 */
+	private void addRemovedEndParagraphTag() {
+		// this is a bit of a hack to deal with the formatting of HTML
+		// in normal text inserting end paragraphs at the end of the string
+		// which then creates line breaks.  We need to move the end paragraph
+		// tags to after the rule generated text.
+		if (this.movingParagraph) {
+			if (endsInEndParagraph()) {
+				this.htmlString.append(END_PARAGRAPH_TAG);
+			}
+			this.movingParagraph = false;
+		}
+	}
+
+	private boolean endsInEndParagraph() {
+		int lastEndParagraph = this.htmlString.lastIndexOf(END_PARAGRAPH_TAG);
+		return (lastEndParagraph == this.htmlString.length()-END_PARAGRAPH_TAG.length()) ;
+	}
+	/**
+	 * If the current htmlString ends with an HTML end paragraph tag, remove it
+	 * and set the flag so that it can be put back when addRemovedEndParagraphTag
+	 * is called.
+	 */
+	private void removeEndParagraphTag() {
+		if (endsInEndParagraph()) {
+			this.movingParagraph = true;
+			this.htmlString.delete(this.htmlString.length()-END_PARAGRAPH_TAG.length(), this.htmlString.length());
+		}
 	}
 	
 	/**
@@ -64,7 +102,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	public static String formatReplaceabledHTML(String text, String id) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n<div ");
+		sb.append("\n<span ");
 		if (id != null && !id.trim().isEmpty()) {
 			sb.append("id=\"");
 			sb.append(escapeIdString(id));
@@ -74,7 +112,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		sb.append(REPLACEABLE_LICENSE_TEXT_CLASS);
 		sb.append("\">");
 		sb.append(SpdxLicenseTemplateHelper.escapeHTML(text));
-		sb.append("</div>\n");
+		sb.append("</span>\n");
 		return sb.toString();
 	}
 	
@@ -124,7 +162,9 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void beginOptional(LicenseTemplateRule rule) {
+		removeEndParagraphTag();
 		this.htmlString.append(formatStartOptionalHTML(rule.getName()));
+		inOptional = true;
 	}
 	
 	/**
@@ -157,6 +197,6 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	@Override
 	public void endOptional(LicenseTemplateRule rule) {
 		this.htmlString.append(formatEndOptionalHTML());
+		inOptional = false;
 	}
-
 }

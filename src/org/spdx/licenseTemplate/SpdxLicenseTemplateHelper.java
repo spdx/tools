@@ -33,7 +33,7 @@ public class SpdxLicenseTemplateHelper {
 	
 	static final String START_RULE = "<<";
 	static final String END_RULE = ">>";
-	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*(.+?)\\s*"+END_RULE);
+	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*((.|\\s)+?)\\s*"+END_RULE);
 	private static final int SPACES_PER_TAB = 5;
 	private static final int MAX_TABS = 4;
 	private static final int[] PIXELS_PER_TAB = new int[] {20, 40, 60, 70};
@@ -116,21 +116,45 @@ public class SpdxLicenseTemplateHelper {
 		return textOutput.getText();
 	}
 	
+	/**
+	 * Escapes and formats text
+	 * @param text unformatted text
+	 * @return
+	 */
 	public static String escapeHTML(String text) {
-		String retval = StringEscapeUtils.escapeXml(text);
-		return addHtmlFormatting(retval);
+		return escapeHTML(text, false);
 	}
-
+	
+	/**
+	 * Escapes and formats text
+	 * @param text unformatted text
+	 * @param inParagraph true if inside a paragraph tag
+	 * @return
+	 */
+	public static String escapeHTML(String text, boolean inParagraph) {
+		String retval = StringEscapeUtils.escapeXml(text);
+		return addHtmlFormatting(retval, inParagraph);
+	}
+	
 	/**
 	 * Adds HTML formatting <br> and <p>
-	 * @param text
+	 * @param text unformatted text
 	 * @return
 	 */
 	public static String addHtmlFormatting(String text) {
+		return addHtmlFormatting(text, false);
+	}
+	
+	/**
+	 * Adds HTML formatting <br> and <p>
+	 * @param text unformatted text
+	 * @param inParagraph true if inside a paragraph tag
+	 * @return
+	 */
+	public static String addHtmlFormatting(String text, boolean inParagraph) {
 		String[] lines = text.split("\n");
 		StringBuilder result = new StringBuilder();
 		result.append(lines[0]);
-		boolean inParagraph = false;
 		int i = 1;
 		while (i < lines.length) {
 			if (lines[i].trim().isEmpty()) {
@@ -139,7 +163,6 @@ public class SpdxLicenseTemplateHelper {
 					result.append("</p>");
 				}
 				result.append("\n");
-
 				i++;
 				if (i < lines.length) {
 					String paragraphTag = getParagraphTagConsideringTags(lines[i]);
@@ -155,7 +178,6 @@ public class SpdxLicenseTemplateHelper {
 				result.append("\n");
 				result.append(lines[i++]);
 			}
-
 		}
 		if (inParagraph) {
 			result.append("</p>");
@@ -163,6 +185,16 @@ public class SpdxLicenseTemplateHelper {
 			result.append("<br/>\n");
 		}
 		return result.toString();
+	}
+
+	/**
+	 * Returns true if the line contains formatting hints requiring a custom paragraph tag
+	 * @param line
+	 * @return
+	 */
+	private static boolean needsFormatting(String line) {
+		int numSpaces = countLeadingSpaces(line);
+		return numSpaces >= SPACES_PER_TAB;
 	}
 
 	/**
