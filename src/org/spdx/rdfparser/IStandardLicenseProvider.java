@@ -18,6 +18,8 @@ package org.spdx.rdfparser;
 
 import java.util.Iterator;
 
+import org.spdx.spdxspreadsheet.SpreadsheetException;
+
 /**
  * Interface to provide SPDX standard licenses
  * @author Gary O'Neall
@@ -25,6 +27,7 @@ import java.util.Iterator;
  */
 public interface IStandardLicenseProvider {
 	
-	public Iterator<SPDXStandardLicense> getIterator() throws SpdxStdLicenseException;
+	public Iterator<SPDXStandardLicense> getLicenseIterator() throws SpdxStdLicenseException;
+	public Iterator<SpdxLicenseRestriction> getExceptionIterator() throws SPDXLicenseRestrictionException, SpreadsheetException;
 
 }

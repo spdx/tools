@@ -1,0 +1,58 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x6d44a1ac, pid=3516, tid=9704
+#
+# JRE version: 6.0_45-b06
+# Java VM: Java HotSpot(TM) Client VM (20.45-b01 mixed mode windows-x86 )
+# Problematic frame:
+# C  [jdwp.dll+0x1a1ac]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x01cc5800):  JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=9704, stack(0x18500000,0x18550000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x00000000
+
+Registers:
+EAX=0x00000028, EBX=0x6d2b33e4, ECX=0x00000000, EDX=0x7f57ff6b
+ESP=0x1854fbf4, EBP=0x1854fbf8, ESI=0x6d2b30fc, EDI=0x0000000c
+EIP=0x6d44a1ac, EFLAGS=0x00010206
+
+Top of Stack: (sp=0x1854fbf4)
+0x1854fbf4:   6d2b30fc 1854fd18 6d2b1074 00000028
+0x1854fc04:   1854fc18 6d2b33e4 6d2b30fc 1854fd58
+0x1854fc14:   000000ca 65746e49 70757272 20646574
+0x1854fc24:   636e7566 6e6f6974 6c616320 0059006c
+0x1854fc34:   000002e4 1854fcc4 00000001 00000000
+0x1854fc44:   00000020 c0000120 00000000 00000000
+0x1854fc54:   00000344 00591fb0 00591fb0 00000000
+0x1854fc64:   00000000 1854fc48 00000000 00002714 
+
+Instructions: (pc=0x6d44a1ac)
+0x6d44a18c:   1b c0 f7 d0 23 45 fc 5f 5e c9 c3 55 8b ec 8b 45
+0x6d44a19c:   08 85 c0 75 02 5d c3 8b 0d c4 47 45 6d 8b 09 56
+0x6d44a1ac:   8b 31 57 8d 55 08 52 99 52 50 51 ff 96 b4 00 00
+0x6d44a1bc:   00 8b f8 85 ff 74 40 68 f3 06 00 00 68 f8 2e 45 
+
+
+Register to memory mapping:
+
+EAX=0x00000028 is an unknown value
+EBX=0x6d2b33e4 is an unknown value
+ECX=0x00000000 is an unknown value
+EDX=0x7f57ff6b is an unknown value
+ESP=0x1854fbf4 is pointing into the stack for thread: 0x01cc5800
+EBP=0x1854fbf8 is pointing into the stack for thread: 0x01cc5800
+ESI=0x6d2b30fc is an unknown value
+EDI=0x0000000c is an unknown value
+
+
+Stack: [0x18500000,0x18550000],  sp=0x1854fbf4,  free space=318k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)

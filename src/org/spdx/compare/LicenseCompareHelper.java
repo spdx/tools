@@ -17,6 +17,7 @@
 */
 package org.spdx.compare;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
@@ -25,9 +26,11 @@ import java.util.regex.Pattern;
 import org.spdx.licenseTemplate.ILicenseTemplateOutputHandler;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SPDXLicenseSet;
 import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXStandardLicense;
@@ -310,6 +313,13 @@ public class LicenseCompareHelper {
 		return true;
 	}
 	
+	/**
+	 * Compares license text to the license text of an SPDX Standard License
+	 * @param license SPDX Standard License to compare
+	 * @param compareText Text to compare to the standard license
+	 * @return True if the license text is the same per the license matching guidelines
+	 * @throws SpdxCompareException
+	 */
 	public static boolean isTextStandardLicense(SPDXStandardLicense license, String compareText) throws SpdxCompareException {
 		String licenseTemplate = license.getTemplate();
 		if (licenseTemplate == null || licenseTemplate.trim().isEmpty()) {
@@ -322,5 +332,25 @@ public class LicenseCompareHelper {
 			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
 		}
 		return compareTemplateOutputHandler.matches();
+	}
+	
+	/**
+	 * Returns a list of SPDX Standard License ID's that match the text provided using
+	 * the SPDX matching guidelines.
+	 * @param licenseText Text to compare to the standard license texts
+	 * @return Array of SPDX standard license IDs that match
+	 * @throws InvalidSPDXAnalysisException If an error occurs accessing the standard licenses
+	 * @throws SpdxCompareException If an error occurs in the comparison
+	 */
+	public static String[] matchingStandardLicenseIds(String licenseText) throws InvalidSPDXAnalysisException, SpdxCompareException {
+		String[] stdLicenseIds = SPDXLicenseInfoFactory.getStandardLicenseIds();
+		ArrayList<String> matchingIds  = new ArrayList<String>();
+		for (String stdLicId : stdLicenseIds) {
+			SPDXStandardLicense license = SPDXLicenseInfoFactory.getStandardLicenseById(stdLicId);
+			if (isTextStandardLicense(license, licenseText)) {
+				matchingIds.add(license.getId());
+			}
+		}
+		return matchingIds.toArray(new String[matchingIds.size()]);
 	}
 }

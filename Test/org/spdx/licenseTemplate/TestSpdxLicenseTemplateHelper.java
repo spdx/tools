@@ -96,7 +96,7 @@ public class TestSpdxLicenseTemplateHelper {
 	static final String LINE3="\nLast line of the license";
 	static final String TEMPLATE_TEXT = LINE1+REQUIRED_RULE+LINE2+OPTIONAL_RULE+LINE3;
 	
-	static final String HTML_COPYRIGHT="\n<div id=\"copyright\" class=\"replacable-license-text\">Copyright (c) &lt;year&gt; &lt;owner&gt;<br/>\nAll rights reserved.</div>\n";
+	static final String HTML_COPYRIGHT="\n<span id=\"copyright\" class=\"replacable-license-text\">Copyright (c) &lt;year&gt; &lt;owner&gt;<br/>\nAll rights reserved.</span>\n";
 	static final String HTML_OPTIONAL_RULE="\n<div id=\"optional\" class=\"optional-license-text\">\nOriginal Text</div>\n";
 	static final String HTML_LICENSE = LINE1.replace("\n", "<br/>\n")+
 			HTML_COPYRIGHT+

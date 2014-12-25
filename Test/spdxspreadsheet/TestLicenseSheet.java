@@ -41,6 +41,8 @@ public class TestLicenseSheet {
 	String LICENSE_SPREADSHEET_PATH_13 = "TestFiles" + File.separator + "spdx_licenselist_v1.13.xls";
 	String LICENSE_SPREADSHEET_PATH_14 = "TestFiles" + File.separator + "spdx_licenselist_v1.14.xls";
 	String LICENSE_SPREADSHEET_PATH_19 = "TestFiles" + File.separator + "spdx_licenselist_v1.19.xls";
+	String LICENSE_SPREADSHEET_PATH_20 = "TestFiles" + File.separator + "spdx_licenselist_v2.0.xls";
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -72,9 +74,9 @@ public class TestLicenseSheet {
 		try {
 			// create a copy of the spreadsheet then compare
 			ArrayList<SPDXStandardLicense> licenses = new ArrayList<SPDXStandardLicense>();
-			File version14File = new File(LICENSE_SPREADSHEET_PATH_19);
-			SPDXLicenseSpreadsheet version13ss = new SPDXLicenseSpreadsheet(version14File, false, true);
-			Iterator<SPDXStandardLicense> iter = version13ss.getIterator();
+			File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
+			SPDXLicenseSpreadsheet version13ss = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
+			Iterator<SPDXStandardLicense> iter = version13ss.getLicenseIterator();
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");
 			SPDXLicenseSpreadsheet copy = new SPDXLicenseSpreadsheet(spreadsheetCopy, true, false);
 			while (iter.hasNext()) {
@@ -87,7 +89,7 @@ public class TestLicenseSheet {
 			// compare
 			SPDXLicenseSpreadsheet compare = new SPDXLicenseSpreadsheet(spreadsheetCopy, false, true);
 			try {
-				iter = compare.getIterator();
+				iter = compare.getLicenseIterator();
 				int i = 0;
 				while (iter.hasNext()) {
 					if (i > licenses.size()) {
@@ -127,7 +129,7 @@ public class TestLicenseSheet {
 	 * @return
 	 * @throws IOException 
 	 */
-	private boolean compareText(String textA,
+	public static boolean compareText(String textA,
 			String textB) throws IOException {
 		BufferedReader readerA = new BufferedReader(new StringReader(textA));
 		BufferedReader readerB = new BufferedReader(new StringReader(textB));
@@ -159,7 +161,6 @@ public class TestLicenseSheet {
 			readerA.close();
 			readerB.close();
 		}
-		
 	}
 
 	/**
@@ -178,36 +179,35 @@ public class TestLicenseSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXLicenseSpreadSheet#getIterator()}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXLicenseSpreadSheet#getLicenseIterator()}.
 	 * @throws SpreadsheetException 
 	 */
 	@Test
 	public void testLicenseIterator() throws SpreadsheetException {
-		File version14File = new File(LICENSE_SPREADSHEET_PATH_19);
-		SPDXLicenseSpreadsheet version13ss = new SPDXLicenseSpreadsheet(version14File, false, true);
-		Iterator<SPDXStandardLicense> iter = version13ss.getIterator();
+		File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
+		SPDXLicenseSpreadsheet ss = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
+		Iterator<SPDXStandardLicense> iter = ss.getLicenseIterator();
 		// we'll look at the first one in detail
 		SPDXStandardLicense firstLic = iter.next();
-		assertEquals("AFL-1.1", firstLic.getId());
-		assertEquals("Academic Free License v1.1", firstLic.getName());
-		assertEquals("This license has been superseded by later versions.\n", firstLic.getComment());
+		assertEquals("Glide", firstLic.getId());
+		assertEquals("3dfx Glide License", firstLic.getName());
+		assertEquals("", firstLic.getComment());
 		assertEquals(1, firstLic.getSourceUrl().length);
-		assertEquals("http://opensource.linux-mirror.org/licenses/afl-1.1.txt", 
+		assertEquals("http://www.users.on.net/~triforce/glidexp/COPYING.txt", 
 				firstLic.getSourceUrl()[0]);
-		assertEquals("Licensed under the Academic Free License version 1.1.",
+		assertEquals("",
 				firstLic.getStandardLicenseHeader());
-//		assertEquals("", firstLic.getTemplate());
-		assertTrue(firstLic.getText().startsWith("Academic Free License"));
-//		assertTrue(firstLic.isOsiApproved());
+		String licText = firstLic.getText();
+		assertTrue(licText.startsWith("3DFX GLIDE Source Code General Public License"));
+		assertTrue(!firstLic.isOsiApproved());
 		int numLicenses = 1;
 		SPDXStandardLicense lastLic = null;
 		while (iter.hasNext()) {
 			numLicenses++;
 			lastLic = iter.next();
 		}
-//		assertEquals(161, numLicenses);
-		assertEquals("The Unlicense", lastLic.getName());
-		version13ss.close();
+		assertEquals("Zope Public License 2.1", lastLic.getName());
+		ss.close();
 	}
 
 }

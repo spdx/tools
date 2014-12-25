@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
  */
-package org.spdx.rdfparser;
+package org.spdx.html;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+import org.spdx.rdfparser.SPDXStandardLicense;
 
 /**
  * This class contains a formatted HTML file for a given license.  Specific

@@ -24,8 +24,10 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXLicenseRestrictionException;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.IStandardLicenseProvider;
+import org.spdx.rdfparser.SpdxLicenseRestriction;
 
 /**
  * A spreadhseet containing license information
@@ -69,14 +71,45 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		}
 		
 	}
+	
+	public class LicenseExceptionIterator implements Iterator<SpdxLicenseRestriction> {
+
+		private int currentRowNum;
+		SpdxLicenseRestriction currentException;
+		public LicenseExceptionIterator() throws SpreadsheetException {
+			this.currentRowNum = exceptionSheet.getFirstDataRow();	// skip past header row
+            currentException = exceptionSheet.getException(currentRowNum);
+		}
+		@Override
+		public boolean hasNext() {
+			return currentException != null;
+		}
+
+		@Override
+		public SpdxLicenseRestriction next() {
+			SpdxLicenseRestriction retval = currentException;
+			currentRowNum++;
+			currentException = exceptionSheet.getException(currentRowNum);
+			return retval;
+		}
+
+		@Override
+		public void remove() {
+			// not implementd
+		}		
+	}
+	
 	static final String LICENSE_SHEET_NAME = "Licenses";
+	static final String EXCEPTION_SHEET_NAME = "exceptions";
 	
 	private LicenseSheet licenseSheet;
+	private LicenseExceptionSheet exceptionSheet;
 
 	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create, boolean readonly)
 			throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
 		this.licenseSheet = new LicenseSheet(this.workbook, LICENSE_SHEET_NAME, spreadsheetFile);
+		this.exceptionSheet = new LicenseExceptionSheet(this.workbook, EXCEPTION_SHEET_NAME);
 		String verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
 			logger.error(verifyMsg);
@@ -104,6 +137,7 @@ try {
 	excelOut = new FileOutputStream(spreadsheetFile);
 	Workbook wb = new HSSFWorkbook();
 	LicenseSheet.create(wb, LICENSE_SHEET_NAME, version, releaseDate);
+	LicenseExceptionSheet.create(wb, EXCEPTION_SHEET_NAME);
 	wb.write(excelOut);
 } finally {
 	excelOut.close();
@@ -123,6 +157,10 @@ try {
 	 */
 	@Override
 	public String verifyWorkbook() {
+		String retval = this.exceptionSheet.verify();
+		if (retval != null && !retval.isEmpty()) {
+			return retval;
+		}
 		return this.licenseSheet.verify();
 	}
 
@@ -133,11 +171,24 @@ try {
 		return licenseSheet;
 	}
 
-	public Iterator<SPDXStandardLicense> getIterator() {
+	public Iterator<SPDXStandardLicense> getLicenseIterator() {
 		try {
             return new LicenseIterator();
         } catch (SpreadsheetException e) {
             throw new RuntimeException(e);
         }
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
+	 */
+	@Override
+	public Iterator<SpdxLicenseRestriction> getExceptionIterator()
+			throws SPDXLicenseRestrictionException, SpreadsheetException {
+		return new LicenseExceptionIterator();
+	}
+	
+	public LicenseExceptionSheet getLicenseExceptionSheet() {
+		return this.exceptionSheet;
 	}
 }
