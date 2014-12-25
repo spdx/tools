@@ -29,7 +29,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
- * @author Source Auditor
+ * Listed license for SPDX
+ * @author Gary O'Neall
  *
  */
 public class SPDXStandardLicense extends SPDXLicense {

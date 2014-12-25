@@ -193,7 +193,7 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getIterator()
 	 */
 	@Override
-	public Iterator<SPDXStandardLicense> getIterator() throws LicenseCsvException  {
+	public Iterator<SPDXStandardLicense> getLicenseIterator() throws LicenseCsvException  {
 		CsvLicenseIterator retval;
 		try {
 			retval = new CsvLicenseIterator(this.csvFile);
@@ -221,6 +221,15 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 			reader.close();
 			reader = null;
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
+	 */
+	@Override
+	public Iterator<SpdxLicenseRestriction> getExceptionIterator()
+			throws SPDXLicenseRestrictionException {
+		throw(new UnsupportedOperationException());
 	}
 
 }
