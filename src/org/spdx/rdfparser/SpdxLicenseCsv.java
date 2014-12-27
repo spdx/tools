@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -31,9 +32,12 @@ import au.com.bytecode.opencsv.CSVReader;
  * 
  * The CSV file must be tab delimited, use " for text delimiters, contain a header row with the following text (exactly):
  * "Full name of License"	"License Identifier"	"Source/url"	"Notes"	"OSI Approved"	"Standard License Header"	"Text"	"Template"
+ * 
+ * This class is no long supports all functions of the IStandardLicenseProvider.
  * @author Gary O'Neall
  *
  */
+@Deprecated
 public class SpdxLicenseCsv implements IStandardLicenseProvider {
 	
 	static final Logger logger = Logger.getLogger(SpdxLicenseCsv.class.getName());
@@ -229,6 +233,14 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 	@Override
 	public Iterator<SpdxLicenseRestriction> getExceptionIterator()
 			throws SPDXLicenseRestrictionException {
+		throw(new UnsupportedOperationException());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getDeprecatedLicenseIterator()
+	 */
+	@Override
+	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator() {
 		throw(new UnsupportedOperationException());
 	}
 

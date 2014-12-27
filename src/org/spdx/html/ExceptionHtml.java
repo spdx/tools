@@ -23,8 +23,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.SpdxLicenseRestriction;
 
 import com.sampullara.mustache.Mustache;
@@ -54,11 +52,16 @@ public class ExceptionHtml {
 				alSourceUrls.add(sourceUrl);
 			}
 		}
-		mustacheMap.put("name", StringEscapeUtils.escapeHtml4(exception.getName()));
-		mustacheMap.put("id", StringEscapeUtils.escapeHtml4(exception.getId()));
-		mustacheMap.put("text", SpdxLicenseTemplateHelper.escapeHTML(exception.getText()));
+		mustacheMap.put("name", exception.getName());
+		mustacheMap.put("id", exception.getId());
+		mustacheMap.put("text", exception.getText());
 		mustacheMap.put("getSourceUrl", alSourceUrls);
-		mustacheMap.put("notes", StringEscapeUtils.escapeHtml4(exception.getNotes()));
+		mustacheMap.put("notes", exception.getNotes());
+		String example = exception.getExample();
+		if (example != null && example.trim().isEmpty()) {
+			example = null;
+		}
+		mustacheMap.put("example", example);
 	}
 
 	/**

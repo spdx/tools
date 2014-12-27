@@ -28,18 +28,18 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXLicenseRestrictionException;
-import org.spdx.rdfparser.SpdxLicenseRestriction;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
+import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 /**
- * @author Gary O'Neall
+ * @author Gary
  *
  */
-public class TestLicenseExceptionSheet {
-
+public class TestDeprecatedLicenseSheet {
+	
 	String LICENSE_SPREADSHEET_PATH_20 = "TestFiles" + File.separator + "spdx_licenselist_v2.0.xls";
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -68,8 +68,13 @@ public class TestLicenseExceptionSheet {
 	public void tearDown() throws Exception {
 	}
 
+	/**
+	 * Test method for {@link org.spdx.spdxspreadsheet.DeprecatedLicenseSheet#add(org.spdx.rdfparser.SPDXStandardLicense)}.
+	 * @throws IOException 
+	 * @throws SpreadsheetException 
+	 */
 	@Test
-	public void testAdd() throws IOException, SpreadsheetException, SPDXLicenseRestrictionException {
+	public void testAdd() throws IOException, SpreadsheetException {
 		File tempFile = File.createTempFile("TestLic", "test");
 		String tempDirPath = tempFile.getPath() + "-DIR";
 		File tempDir = new File(tempDirPath);
@@ -79,41 +84,52 @@ public class TestLicenseExceptionSheet {
 		}
 		try {
 			// create a copy of the spreadsheet then compare
-			ArrayList<SpdxLicenseRestriction> exceptions = new ArrayList<SpdxLicenseRestriction>();
-			File origSpreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
-			SPDXLicenseSpreadsheet origSpreadsheet = new SPDXLicenseSpreadsheet(origSpreadsheetFile, false, true);
-			Iterator<SpdxLicenseRestriction> iter = origSpreadsheet.getExceptionIterator();
+			ArrayList<DeprecatedLicenseInfo> licenses = new ArrayList<DeprecatedLicenseInfo>();
+			File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
+			SPDXLicenseSpreadsheet spreadsheet = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");
 			SPDXLicenseSpreadsheet copy = new SPDXLicenseSpreadsheet(spreadsheetCopy, true, false);
+			Iterator<DeprecatedLicenseInfo> iter = spreadsheet.getDeprecatedLicenseIterator();
 			while (iter.hasNext()) {
-				SpdxLicenseRestriction nextRestriction = iter.next();
-				exceptions.add(nextRestriction);
-				copy.getLicenseExceptionSheet().add(nextRestriction);
+				DeprecatedLicenseInfo nextLic = iter.next();
+				licenses.add(nextLic);
+				copy.getDeprecatedLicenseSheet().add(nextLic.getLicense(), nextLic.getDeprecatedVersion());
 			}
 			copy.close();
-			origSpreadsheet.close();
+			spreadsheet.close();
 			// compare
 			SPDXLicenseSpreadsheet compare = new SPDXLicenseSpreadsheet(spreadsheetCopy, false, true);
 			try {
-				iter = compare.getExceptionIterator();
+				iter = compare.getDeprecatedLicenseIterator();
 				int i = 0;
 				while (iter.hasNext()) {
-					if (i > exceptions.size()) {
-						fail("to many exceptions in copy");
+					if (i > licenses.size()) {
+						fail("to many licenses in copy");
 					}
-					SpdxLicenseRestriction nextException = iter.next();
-					assertEquals(exceptions.get(i).getId(), nextException.getId());
-					assertEquals(exceptions.get(i).getName(), nextException.getName());
-					assertEquals(exceptions.get(i).getNotes(), nextException.getNotes());
-					assertEquals(exceptions.get(i).getExample(), nextException.getExample());
-					if (!TestLicenseSheet.compareText(exceptions.get(i).getText(), nextException.getText())) {
-						fail("license text does not match for "+exceptions.get(i).getId());
+					DeprecatedLicenseInfo nextLic = iter.next();
+					assertEquals(licenses.get(i).getLicense().getId(),
+							nextLic.getLicense().getId());
+					assertEquals(licenses.get(i).getLicense().getName(),
+							nextLic.getLicense().getName());
+					assertEquals(licenses.get(i).getLicense().getComment(),
+							nextLic.getLicense().getComment());
+					assertEquals(licenses.get(i).getLicense().getSourceUrl(),
+							nextLic.getLicense().getSourceUrl());
+					assertEquals(licenses.get(i).getLicense().getStandardLicenseHeader(),
+							nextLic.getLicense().getStandardLicenseHeader());
+					assertEquals(licenses.get(i).getLicense().getTemplate(),
+							nextLic.getLicense().getTemplate());
+					if (!TestLicenseSheet.compareText(licenses.get(i).getLicense().getText(),
+							nextLic.getLicense().getText())) {
+						fail("license text does not match for "+licenses.get(i).getLicense().getId());
 					}
-					assertStringArraysEquals(exceptions.get(i).getSourceUrl(),
-							nextException.getSourceUrl());
+					assertEquals(licenses.get(i).getLicense().isOsiApproved(), 
+							nextLic.getLicense().isOsiApproved());
+					assertEquals(licenses.get(i).getDeprecatedVersion(), 
+							nextLic.getDeprecatedVersion());
 					i = i + 1;
 				}
-				assertEquals(exceptions.size(), i);
+				assertEquals(licenses.size(), i);
 			} finally {
 				compare.close();
 			}
@@ -136,34 +152,4 @@ public class TestLicenseExceptionSheet {
 		}
 		tempDir.delete();
 	}
-	/**
-	 * @param s1
-	 * @param s2
-	 */
-	private void assertStringArraysEquals(String[] s1,
-			String[] s2) {
-		if (s1 == null) {
-			if (s2 != null) {
-				fail("Second array is not null");
-			}
-		}
-		if (s2 == null) {
-			
-			fail ("first array is not null");
-		}
-		assertEquals(s1.length, s2.length);
-		for (int i = 0; i < s1.length; i++) {
-			boolean found = false;
-			for (int j = 0; j < s2.length; j++) {
-				if (s1[i].equals(s2[j])) {
-					found = true;
-					break;
-				}
-			}
-			assertTrue(found);
-		}
-	}
-	
-	
-
 }

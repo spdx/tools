@@ -8,7 +8,7 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-    <title>[TITLE]</title>
+    <title>{{title}}</title>
     
     <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
@@ -61,34 +61,45 @@
 
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<h1 property="dc:title">[TITLE]</h1>
-
+<h1 property="dc:title">{{title}}</h1>
+{{#deprecated}}
+<h1 style="color:red">Deprecated</h1>
+<div style="color:red">This license has been deprecated since {{deprecatedVersion}}.</div>
+{{/deprecated}}
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">[NAME]</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">{{licenseName}}</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
-    <p style="margin-left: 20px;"><code property="spdx:licenseId">[LICENSEID]</code></p>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">{{licenseId}}</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">[OTHERWEBPAGE]</p>
+    <p style="margin-left: 20px;">
+       {{#otherWebPages}}
+       <li><a href="{{&url}}" rel="rdfs:seeAlso">{{site}}</a></li>
+       {{/otherWebPages}}
+       {{^otherWebPages}}
+       None
+       {{/otherWebPages}}
+    </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">[OSI_APPROVED]</div>
+<div property="spdx:isOsiApproved" style="display: none;">{{osiAPproved}}</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">[NOTES]</p>
+    <p style="margin-left: 20px;">{{notes}}</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-[LICENSE_TEXT]
+{{&licenseText}}
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text">[LICENSE_HEADER]</div>
+<div property="spdx:standardLicenseHeader" class="license-text">{{licenseHeader}}</div>
 
-<!--
+{{#licenseTemplate}}
 <h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">[LICENSE_TEMPLATE]</div> -->
+<div property="spdx:licenseTemplate" class="license-template">{{&licenseTemplate}}</div>
+{{/licenseTemplate}}
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

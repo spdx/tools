@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
 import com.sampullara.mustache.Mustache;
 import com.sampullara.mustache.MustacheBuilder;
@@ -41,6 +42,93 @@ public class LicenseTOCHTMLFile {
 	static final String TEMPLATE_ROOT_PATH = "resources" + File.separator + "htmlTemplate";
 	static final String HTML_TEMPLATE = "TocHTMLTemplate.html";
 
+	public class DeprecatedLicense {
+		private String reference;
+		private String refNumber;
+		private String licenseId;
+		private String licenseName;
+		private String deprecatedVersion;
+		
+		public DeprecatedLicense(String reference, String refNumber, 
+				String licenseId, String licenseName, String deprecatedVersion) {
+			this.reference = reference;
+			this.refNumber = refNumber;
+			this.licenseId = licenseId;
+			this.licenseName = licenseName;
+			this.deprecatedVersion = deprecatedVersion;
+		}
+
+		/**
+		 * @return the reference
+		 */
+		public String getReference() {
+			return reference;
+		}
+
+		/**
+		 * @param reference the reference to set
+		 */
+		public void setReference(String reference) {
+			this.reference = reference;
+		}
+
+		/**
+		 * @return the refNumber
+		 */
+		public String getRefNumber() {
+			return refNumber;
+		}
+
+		/**
+		 * @param refNumber the refNumber to set
+		 */
+		public void setRefNumber(String refNumber) {
+			this.refNumber = refNumber;
+		}
+
+		/**
+		 * @return the licenseId
+		 */
+		public String getLicenseId() {
+			return licenseId;
+		}
+
+		/**
+		 * @param licenseId the licenseId to set
+		 */
+		public void setLicenseId(String licenseId) {
+			this.licenseId = licenseId;
+		}
+
+		/**
+		 * @return the licenseName
+		 */
+		public String getLicenseName() {
+			return licenseName;
+		}
+
+		/**
+		 * @param licenseName the licenseName to set
+		 */
+		public void setLicenseName(String licenseName) {
+			this.licenseName = licenseName;
+		}
+
+		/**
+		 * @return the deprecatedVersion
+		 */
+		public String getDeprecatedVersion() {
+			return deprecatedVersion;
+		}
+
+		/**
+		 * @param deprecatedVersion the deprecatedVersion to set
+		 */
+		public void setDeprecatedVersion(String deprecatedVersion) {
+			this.deprecatedVersion = deprecatedVersion;
+		}
+	}
+	
 	public class ListedLicense {
 		private String reference;
 		private String refNumber;
@@ -66,7 +154,7 @@ public class LicenseTOCHTMLFile {
 			} else {
 				this.osiApproved = "";
 			}
-			this.licenseId = licenseName;
+			this.licenseName = licenseName;
 		}
 
 		/**
@@ -141,7 +229,8 @@ public class LicenseTOCHTMLFile {
 	}
 	
 	ArrayList<ListedLicense> listedLicenses = new ArrayList<ListedLicense>();
-
+	ArrayList<DeprecatedLicense> deprecatedLicenses = new ArrayList<DeprecatedLicense>();
+	
       private int currentRefNumber = 1;
       
       String version;
@@ -210,7 +299,20 @@ public class LicenseTOCHTMLFile {
 		HashMap<String, Object> retval = new HashMap<String, Object>();
 		retval.put("version", generateVersionString(version, releaseDate));
 		retval.put("listedLicenses", this.listedLicenses);
+		retval.put("deprecatedLicenses", this.deprecatedLicenses);
 		return retval;
+	}
+	/**
+	 * @param deprecatedLicense
+	 * @param licHTMLReference
+	 */
+	public void addDeprecatedLicense(DeprecatedLicenseInfo deprecatedLicense,
+			String licHTMLReference) {
+		deprecatedLicenses.add(new DeprecatedLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
+				escapeHTML(deprecatedLicense.getLicense().getId()), 
+				escapeHTML(deprecatedLicense.getLicense().getName()),
+				deprecatedLicense.getDeprecatedVersion()));
+		currentRefNumber++;
 	}
 	
 
