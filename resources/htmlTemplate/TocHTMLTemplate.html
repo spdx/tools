@@ -62,7 +62,7 @@
 <p>Other information relevant to the SPDX License List:</p>
 <ul style="list-style-type: square; padding: 5px;">
       <li style="margin:0px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/license-list-overview">Overview</a>: For general information about the SPDX License List, including principles for inclusion of a license and an explanation of the field contained on the list.</li>
-      <li style="margin:0px 0 5px 10px;"><a href="./license-list-exceptions.html">Exceptions</a>: List of standard license exceptions that can be used in a License Expression.</li>
+      <li style="margin:0px 0 5px 10px;"><a href="./exceptions/index.html">Exceptions</a>: List of standard license exceptions that can be used in a License Expression.</li>
       <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/request-new-license">Request New License</a>: For instructions on how to propose additional licenses be added to the SPDX License List.</li>
       <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/matching-guidelines">Matching Guidelines</a>:  Guidelines for what constitutes a license match to the SPDX License List when generating an SPDX file.</li>
       <li style="margin:5px 0 5px 10px;"><a href="http://git.spdx.org/?p=license-list.git;a=summary">Master Files</a>:  The HTML pages you see here are generated from the master files for the SPDX License List.  The master files include both a spreadsheet listing all the licenses and fields; and the text for each license in a .txt file.  These files are available in a Git repository.</li>
@@ -79,18 +79,51 @@
   <tbody>
     {{#listedLicenses}}
     <tr>
-      <td><a href="{{reference}}" rel="rdf:_{{refNumber}}">{{licenseName}}</a></td>
-      <td about="{{reference}}" typeof="spdx:License">
+      <td><a href="{{&reference}}" rel="rdf:_{{refNumber}}">{{licenseName}}</a></td>
+      <td about="{{&reference}}" typeof="spdx:License">
       <code property="spdx:licenseId">{{licenseId}}</code></td>
       <td align="center">{{osiApproved}}</td>
-      <td><a href="{{reference}}#licenseText">License Text</a></td>
+      <td><a href="{{&reference}}#licenseText">License Text</a></td>
     </tr>
     {{/listedLicenses}}
   </tbody>
 </table>
 
+<hr>
+<h2>Deprecated Licenses</h2>
+<p>
+Release 2.0 of the SPDX Specification introduces License Expression Syntax that 
+supports the ability to identify common variations on SPDX-identified licenses 
+without the need to define each potential variation as a distinct license on the 
+SPDX License List. This new syntax supports the ability to use a simple “+” 
+operator after a license short identifier to indicate “or later version” 
+(e.g. GPL-2.0+), and it also supports the ability to declare an SPDX-identified 
+license exception using the “WITH” operator (e.g. GPL-2.0+ WITH 
+Autoconf-exception-2.0). SPDX has defined a list of License Exceptions to 
+use after the “WITH” operator. A number of the License Exceptions were formerly 
+included in the SPDX License List, but they have been deprecated as licenses, 
+and correct usage employs the new license expression syntax. Note that for 
+compatibility, the URL to each deprecated license still exists, but links to 
+those deprecated licenses have been removed from the SPDX License List in order 
+to clarify the currently recommended syntax.  Other licenses may have been 
+deprecated for reasons noted.
+</p>
+<table>
+  <thead><tr>
+    <th>Full name</th><th>Identifier</th><th>Deprecated as of:</th>
+  </tr></thead>
 
-
+  <tbody>
+    {{#deprecatedLicenses}}
+    <tr>
+      <td><a href="{{&reference}}" rel="rdf:_{{refNumber}}">{{licenseName}}</a></td>
+      <td about="{{&reference}}" typeof="spdx:License">
+      <code property="spdx:licenseId">{{licenseId}}</code></td>
+      <td>{{deprecatedVersion}}</td>
+    </tr>
+    {{/deprecatedLicenses}}
+  </tbody>
+</table>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

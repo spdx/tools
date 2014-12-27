@@ -158,7 +158,7 @@ public class LicenseSheet extends AbstractSheet {
 		if (templateText == null || templateText.trim().isEmpty()) {
 			templateText = license.getText();
 		}
-		setTemplateText(templateCell, license.getTemplate(), license.getId());
+		setTemplateText(templateCell, license.getTemplate(), license.getId(), workbookPath);
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
@@ -180,9 +180,9 @@ public class LicenseSheet extends AbstractSheet {
 	 * @param textCell
 	 * @param text
 	 */
-	private void setTemplateText(Cell textCell, String text, String licenseId) {
+	public static void setTemplateText(Cell textCell, String text, String licenseId, String textFilePath) {
 		String licenseFileName = licenseId + TEXT_EXTENSION;
-		File licenseTextFile = new File(this.workbookPath + File.separator + licenseFileName);
+		File licenseTextFile = new File(textFilePath + File.separator + licenseFileName);
 		try {
 			if (!licenseTextFile.createNewFile()) {
 				logger.warn("Unable to create license text file "+licenseTextFile.getName());
@@ -225,13 +225,13 @@ public class LicenseSheet extends AbstractSheet {
 	 * @param textCell
 	 * @return
 	 */
-	private String getLicenseTemplateText(Cell textCell) {
+	public static String getLicenseTemplateText(Cell textCell, String textFilePath) {
 		String localFileName = null;
 		File licenseTemplateTextFile = null;
 		Hyperlink cellHyperlink = textCell.getHyperlink();
 		if (cellHyperlink != null && cellHyperlink.getAddress() != null) {
 			localFileName = cellHyperlink.getAddress();
-			licenseTemplateTextFile = new File(this.workbookPath + File.separator + localFileName);
+			licenseTemplateTextFile = new File(textFilePath + File.separator + localFileName);
 			if (!licenseTemplateTextFile.exists()) {
 				// try without the workbook path
 				licenseTemplateTextFile = new File(localFileName);
@@ -242,7 +242,7 @@ public class LicenseSheet extends AbstractSheet {
 		} 
 		if (licenseTemplateTextFile == null && textCell.getStringCellValue() != null && textCell.getStringCellValue().toUpperCase().endsWith(".TXT")) {
 			localFileName = textCell.getStringCellValue();
-			licenseTemplateTextFile = new File(this.workbookPath + File.separator + localFileName);
+			licenseTemplateTextFile = new File(textFilePath + File.separator + localFileName);
 		}
 		if (localFileName != null) {
 			if (!licenseTemplateTextFile.exists()) {
@@ -329,7 +329,7 @@ public class LicenseSheet extends AbstractSheet {
 		String text = null;
 		Cell templateCell = row.getCell(COL_TEMPLATE);
 		if (templateCell != null) {
-			template = getLicenseTemplateText(templateCell);
+			template = getLicenseTemplateText(templateCell, this.workbookPath);
 			try {
 				text = convertTemplateToText(template);
 			} catch (LicenseTemplateRuleException e) {

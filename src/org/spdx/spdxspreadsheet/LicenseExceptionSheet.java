@@ -31,17 +31,18 @@ import org.spdx.rdfparser.SpdxLicenseRestriction;
 public class LicenseExceptionSheet extends AbstractSheet {
 
 	static final Logger logger = Logger.getLogger(LicenseSheet.class.getName());
-	static final int NUM_COLS = 5;
+	static final int NUM_COLS = 6;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
 	static final int COL_NOTES = COL_SOURCE_URL + 1;
 	static final int COL_TEXT = COL_NOTES + 1;
+	static final int COL_EXAMPLES = COL_TEXT + 1;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
-		true};
+		true, true};
 	static final String[] HEADER_TITLES = new String[] {"Full name of Exception", 
-		"Exception Identifier", "Source/url", "Notes", "Exception Text"};
+		"Exception Identifier", "Source/url", "Notes", "Exception Text", "Example of use"};
 
 	/**
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name
@@ -88,6 +89,14 @@ public class LicenseExceptionSheet extends AbstractSheet {
 		if (text != null) {
 			textCell.setCellValue(text);
 		}
+		String notes = exception.getNotes();
+		Cell notesCell = row.createCell(COL_NOTES);
+		if (notes != null) {
+			notesCell.setCellValue(notes);
+		}
+		String examples = exception.getExample();
+		Cell examplesCell = row.createCell(COL_EXAMPLES);
+		examplesCell.setCellValue(examples);
 	}
 
 	/* (non-Javadoc)
@@ -183,7 +192,12 @@ public class LicenseExceptionSheet extends AbstractSheet {
 		if (textCell != null) {
 			text = textCell.getStringCellValue();
 		}
-		return new SpdxLicenseRestriction(id, name, text, sourceURL, notes);
+		String examples = null;
+		Cell examplesCell = row.getCell(COL_EXAMPLES);
+		if (examplesCell != null) {
+			examples = examplesCell.getStringCellValue();
+		}
+		return new SpdxLicenseRestriction(id, name, text, sourceURL, notes, examples);
 	}
 
 }

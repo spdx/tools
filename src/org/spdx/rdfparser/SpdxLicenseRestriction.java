@@ -32,21 +32,24 @@ public class SpdxLicenseRestriction {
 	private String text;
 	private String[] sourceUrl;
 	private String notes;
+	private String example;
 	
 	/**
 	 * @param id Exception ID - short form ID
 	 * @param name Full name of the Exception
 	 * @param text Text for the Exception
 	 * @param notes Comments on the restriction
+	 * @param example Example of use
 	 * @param sourceUrl URL references to external sources for the exception
 	 */
 	public SpdxLicenseRestriction(String id, String name, String text,
-			String[] sourceUrl, String notes) {
+			String[] sourceUrl, String notes, String example) {
 		this.id = id;
 		this.name = name;
 		this.text = text;
 		this.sourceUrl = sourceUrl;
 		this.notes = notes;
+		this.example = example;
 	}
 	
 	/**
@@ -55,7 +58,7 @@ public class SpdxLicenseRestriction {
 	 * @param text Text for the Exception
 	 */
 	public SpdxLicenseRestriction(String id, String name, String text) {
-		this(id, name, text, new String[0], "");
+		this(id, name, text, new String[0], "", "");
 	}
 	
 	public SpdxLicenseRestriction() {
@@ -123,6 +126,17 @@ public class SpdxLicenseRestriction {
 	 */
 	public String getNotes() {
 		return this.notes;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getExample() {
+		return example;
+	}
+	
+	public void setExample(String examples) {
+		this.example = examples;
 	}
 
 }

@@ -99,16 +99,92 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		}		
 	}
 	
+	public class DeprecatedLicenseInfo {
+		private SPDXStandardLicense license;
+		private String deprecatedVersion;
+		public DeprecatedLicenseInfo(SPDXStandardLicense license, String deprecatedVersion) {
+			this.license = license;
+			this.deprecatedVersion = deprecatedVersion;
+		}
+		/**
+		 * @return the license
+		 */
+		public SPDXStandardLicense getLicense() {
+			return license;
+		}
+		/**
+		 * @param license the license to set
+		 */
+		public void setLicense(SPDXStandardLicense license) {
+			this.license = license;
+		}
+		/**
+		 * @return the deprecatedVersion
+		 */
+		public String getDeprecatedVersion() {
+			return deprecatedVersion;
+		}
+		/**
+		 * @param deprecatedVersion the deprecatedVersion to set
+		 */
+		public void setDeprecatedVersion(String deprecatedVersion) {
+			this.deprecatedVersion = deprecatedVersion;
+		}
+	}
+	
+	public class DeprecatedLicenseIterator implements Iterator<DeprecatedLicenseInfo> {
+
+		private int currentRowNum;
+		DeprecatedLicenseInfo currentDeprecatedLicense;
+		public DeprecatedLicenseIterator() throws SpreadsheetException, InvalidSPDXAnalysisException {
+			this.currentRowNum = deprecatedLicenseSheet.getFirstDataRow();	// skip past header row
+			updateCurrentDeprecatedLicense();
+		}
+		
+		private void updateCurrentDeprecatedLicense() throws InvalidSPDXAnalysisException {
+			SPDXStandardLicense license = deprecatedLicenseSheet.getLicense(currentRowNum);
+			if (license == null) {
+				currentDeprecatedLicense = null;
+			} else {
+				currentDeprecatedLicense = new DeprecatedLicenseInfo(
+						license, deprecatedLicenseSheet.getDeprecatedVersion(currentRowNum));
+			}	
+		}
+		@Override
+		public boolean hasNext() {
+			return currentDeprecatedLicense != null;
+		}
+
+		@Override
+		public DeprecatedLicenseInfo next() {
+			DeprecatedLicenseInfo retval = currentDeprecatedLicense;
+			currentRowNum++;
+			try {
+				updateCurrentDeprecatedLicense();
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new RuntimeException(e));
+			}
+			return retval;
+		}
+
+		@Override
+		public void remove() {
+			// not implementd
+		}		
+	}
+	
 	static final String LICENSE_SHEET_NAME = "Licenses";
 	static final String EXCEPTION_SHEET_NAME = "exceptions";
-	
+	static final String DEPRECATED_SHEET_NAME = "deprecated";
 	private LicenseSheet licenseSheet;
 	private LicenseExceptionSheet exceptionSheet;
+	private DeprecatedLicenseSheet deprecatedLicenseSheet;
 
 	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create, boolean readonly)
 			throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
 		this.licenseSheet = new LicenseSheet(this.workbook, LICENSE_SHEET_NAME, spreadsheetFile);
+		this.deprecatedLicenseSheet = new DeprecatedLicenseSheet(this.workbook, DEPRECATED_SHEET_NAME, spreadsheetFile);
 		this.exceptionSheet = new LicenseExceptionSheet(this.workbook, EXCEPTION_SHEET_NAME);
 		String verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
@@ -128,21 +204,22 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 	
 	public void create(File spreadsheetFile, String version, String releaseDate) throws IOException,
 	SpreadsheetException {
-if (!spreadsheetFile.createNewFile()) {
-	logger.error("Unable to create "+spreadsheetFile.getName());
-	throw(new SpreadsheetException("Unable to create "+spreadsheetFile.getName()));
-}
-FileOutputStream excelOut = null;
-try {
-	excelOut = new FileOutputStream(spreadsheetFile);
-	Workbook wb = new HSSFWorkbook();
-	LicenseSheet.create(wb, LICENSE_SHEET_NAME, version, releaseDate);
-	LicenseExceptionSheet.create(wb, EXCEPTION_SHEET_NAME);
-	wb.write(excelOut);
-} finally {
-	excelOut.close();
-}
-}
+		if (!spreadsheetFile.createNewFile()) {
+			logger.error("Unable to create "+spreadsheetFile.getName());
+			throw(new SpreadsheetException("Unable to create "+spreadsheetFile.getName()));
+		}
+		FileOutputStream excelOut = null;
+		try {
+			excelOut = new FileOutputStream(spreadsheetFile);
+			Workbook wb = new HSSFWorkbook();
+			LicenseSheet.create(wb, LICENSE_SHEET_NAME, version, releaseDate);
+			LicenseExceptionSheet.create(wb, EXCEPTION_SHEET_NAME);
+			DeprecatedLicenseSheet.create(wb, DEPRECATED_SHEET_NAME);
+			wb.write(excelOut);
+		} finally {
+			excelOut.close();
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.AbstractSpreadsheet#clear()
@@ -150,6 +227,8 @@ try {
 	@Override
 	public void clear() {
 		this.licenseSheet.clear();
+		this.exceptionSheet.clear();
+		this.deprecatedLicenseSheet.clear();
 	}
 
 	/* (non-Javadoc)
@@ -158,6 +237,10 @@ try {
 	@Override
 	public String verifyWorkbook() {
 		String retval = this.exceptionSheet.verify();
+		if (retval != null && !retval.isEmpty()) {
+			return retval;
+		}
+		retval = this.deprecatedLicenseSheet.verify();
 		if (retval != null && !retval.isEmpty()) {
 			return retval;
 		}
@@ -178,6 +261,16 @@ try {
             throw new RuntimeException(e);
         }
 	}
+	
+	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator() {
+		try {
+            return new DeprecatedLicenseIterator();
+        } catch (SpreadsheetException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidSPDXAnalysisException e) {
+            throw new RuntimeException(e);
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
@@ -190,5 +283,12 @@ try {
 	
 	public LicenseExceptionSheet getLicenseExceptionSheet() {
 		return this.exceptionSheet;
+	}
+
+	/**
+	 * 
+	 */
+	public DeprecatedLicenseSheet getDeprecatedLicenseSheet() {
+		return this.deprecatedLicenseSheet;
 	}
 }

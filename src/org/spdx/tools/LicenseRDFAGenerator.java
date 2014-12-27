@@ -16,11 +16,8 @@
  */
 package org.spdx.tools;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,10 +35,10 @@ import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.IStandardLicenseProvider;
 import org.spdx.rdfparser.SPDXLicenseRestrictionException;
 import org.spdx.rdfparser.SPDXStandardLicense;
-import org.spdx.rdfparser.SpdxLicenseCsv;
 import org.spdx.rdfparser.SpdxLicenseRestriction;
 import org.spdx.rdfparser.SpdxStdLicenseException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
+import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.google.common.io.Files;
@@ -74,12 +71,12 @@ public class LicenseRDFAGenerator {
 	static final int ERROR_STATUS = 1;
 	static final String CSS_TEMPLATE_FILE = "resources/screen.css";
 	static final String CSS_FILE_NAME = "screen.css";
-	static final String LICENSE_HTML_TEMPLATE_FILENAME = "resources/LicenseHTMLTemplate.txt";
 	static final String TEXT_FOLDER_NAME = "text";
 	static final String TEMPLATE_FOLDER_NAME = "template";
 	static final String HTML_FOLDER_NAME = "html";
 	static final String LICENSE_TOC_FILE_NAME = "index.html";
-	static final String EXCEPTION_TOC_FILE_NAME = "license-list-exceptions.html";
+	static final String EXCEPTION_FOLDER_NAME = "exceptions";
+	static final String EXCEPTION_TOC_FILE_NAME = "index.html";
 	
 	/**
 	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
@@ -130,8 +127,12 @@ public class LicenseRDFAGenerator {
 					releaseDate = licenseSpreadsheet.getLicenseSheet().getReleaseDate();
 				}
 			} else {
-				// we assume it is a csv file
-				licenseProvider = new SpdxLicenseCsv(ssFile);
+				System.out.println("Unsupported file format.  Must be a .xls file");
+				System.exit(ERROR_STATUS);
+			}
+			File exceptionsFolder = new File(dir.getPath() + File.separator + EXCEPTION_FOLDER_NAME);
+			if (!exceptionsFolder.exists()) {
+				exceptionsFolder.mkdir();
 			}
 			File textFolder = new File(dir.getPath() + File.separator +  TEXT_FOLDER_NAME);
 			if (!textFolder.exists()) {
@@ -163,7 +164,7 @@ public class LicenseRDFAGenerator {
 			System.out.println();
 			System.out.print("Processing Exceptions");
 			writeExceptionList(version, licenseProvider, warnings,
-					dir, textFolder, htmlFolder, templateFolder);
+					exceptionsFolder, textFolder, htmlFolder, templateFolder);
 			writeCssFile(dir);
 			System.out.println();
 			if (warnings.size() > 0) {
@@ -187,13 +188,6 @@ public class LicenseRDFAGenerator {
 					spreadsheet.close();
 				} catch (SpreadsheetException e) {
 					System.out.println("Error closing spreadsheet file: "+e.getMessage());
-				}
-			} else if (licenseProvider != null && (licenseProvider instanceof SpdxLicenseCsv)) {
-				SpdxLicenseCsv licenseCsv = (SpdxLicenseCsv)licenseProvider;
-				try {
-					licenseCsv.close();
-				} catch (IOException e) {
-					System.out.println("Error closing CSV file: "+e.getMessage());
 				}
 			}
 		}
@@ -267,22 +261,8 @@ public class LicenseRDFAGenerator {
 	private static void writeLicenseList(String version, String releaseDate,
 			IStandardLicenseProvider licenseProvider, ArrayList<String> warnings,
 			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxStdLicenseException, IOException, LicenseTemplateRuleException, MustacheException {
-		File htmlTemplateFile = new File(LICENSE_HTML_TEMPLATE_FILENAME);
-		if (!htmlTemplateFile.exists()) {
-			System.out.println("Missing HTML template file "+htmlTemplateFile.getPath()+".  Check installation");
-			System.exit(ERROR_STATUS);
-		}
-		if (!htmlTemplateFile.canRead()) {
-			System.out.println("Can not read HTML template file "+htmlTemplateFile.getPath()+".  Make sure program is installed in a directory with read permissions.");
-			System.exit(ERROR_STATUS);
-		}
-		String htmlTemplate = textFileToString(htmlTemplateFile);
-		if (htmlTemplate == null) {
-			System.out.println("Error: empty HTML template");
-			System.exit(ERROR_STATUS);
-		}
 		Charset utf8 = Charset.forName("UTF-8");
-		LicenseHTMLFile licHtml = new LicenseHTMLFile(htmlTemplate);
+		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(version, releaseDate);
 		// Main page - License list
 		Iterator<SPDXStandardLicense> licenseIter = licenseProvider.getLicenseIterator();
@@ -301,6 +281,7 @@ public class LicenseRDFAGenerator {
 				}
 				addedLicIdTextMap.put(license.getId(), license.getText());
 				licHtml.setLicense(license);
+				licHtml.setDeprecated(false);
 				String licHtmlFileName = formLicenseHTMLFileName(license.getId());
 				String licHTMLReference = "./"+licHtmlFileName;
 				String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
@@ -317,59 +298,32 @@ public class LicenseRDFAGenerator {
 				Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getText()), htmlTextFile, utf8);
 			}
 		}
-		//TODO Deprecated licenses
+		Iterator<DeprecatedLicenseInfo> depIter = licenseProvider.getDeprecatedLicenseIterator();
+		while (depIter.hasNext()) {
+			DeprecatedLicenseInfo deprecatedLicense = depIter.next();
+			licHtml.setLicense(deprecatedLicense.getLicense());
+			licHtml.setDeprecated(true);
+			licHtml.setDeprecatedVersion(deprecatedLicense.getDeprecatedVersion());
+			String licHtmlFileName = formLicenseHTMLFileName(deprecatedLicense.getLicense().getId());
+			String licHTMLReference = "./"+licHtmlFileName;
+			String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
+			File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
+			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
+			tableOfContents.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
+			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
+			Files.write(deprecatedLicense.getLicense().getText(), textFile, utf8);
+			if (deprecatedLicense.getLicense().getTemplate() != null && !deprecatedLicense.getLicense().getTemplate().trim().isEmpty()) {
+				File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
+				Files.write(deprecatedLicense.getLicense().getTemplate(), templateFile, utf8);
+			}
+			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
+			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getText()), htmlTextFile, utf8);
+
+		}
 		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_FILE_NAME);
 		tableOfContents.writeToFile(tocHtmlFile);
 	}
-	/**
-	 * @param htmlTemplateFile
-	 * @return
-	 */
-	private static String textFileToString(File htmlTemplateFile) {
-		FileInputStream fis = null;
-		InputStreamReader reader = null;
-		BufferedReader in = null;
-		String retval = null;
-		try {
-			fis = new FileInputStream(htmlTemplateFile);
-			reader = new InputStreamReader(fis, "UTF-8");
-			in = new BufferedReader(reader);
-			StringBuilder sb = new StringBuilder();
-			String line = in.readLine();
-			while (line != null) {
-				sb.append(line);
-				sb.append('\n');
-				line = in.readLine();
-			}
-			retval = sb.toString();
-		} catch (IOException e) {
-			System.out.println("IO Error copying HTML template files: "+e.getMessage());
-			return null;
-		} finally {
-			if (fis != null) {
-				try {
-					fis.close();
-				} catch (IOException e) {
-					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
-				}
-			}
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
-				}
-			} 
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
-				}
-			}
-		}
-		return retval;
-	}
+
 	private static void writeCssFile(File dir) throws IOException {
 		File cssFile = new File(dir.getPath()+ File.separator + CSS_FILE_NAME);
 		if (cssFile.exists()) {
