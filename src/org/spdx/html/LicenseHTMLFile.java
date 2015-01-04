@@ -197,7 +197,11 @@ public class LicenseHTMLFile {
 				}
 				retval.put("otherWebPages", otherWebPages);
 				retval.put("title", license.getName());
-				retval.put("licenseHeader", license.getStandardLicenseHeader());
+				String header = license.getStandardLicenseHeader();
+				if (header != null && header.trim().isEmpty()) {
+					header = null;	// so the template will appropriately skip the header text
+				}
+				retval.put("licenseHeader", header);
 			}
 		}
 		retval.put("deprecated", this.isDeprecated());
