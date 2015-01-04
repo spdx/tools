@@ -240,8 +240,7 @@ public class LicenseTOCHTMLFile {
     	  if (version == null || version.trim().isEmpty()) {
     		  return "";
     	  }
-    	  String retval = "<code property=\"spdx:licenseListVersion\">" + 
-    	  					version.trim() + "</code>";
+    	  String retval = version.trim();
     	  if (releaseDate != null && !releaseDate.trim().isEmpty()) {
     		  retval = retval + " "+ releaseDate.trim();
     	  }
@@ -254,12 +253,8 @@ public class LicenseTOCHTMLFile {
       
 	public void addLicense(SPDXStandardLicense license, String licHTMLReference) {
 		listedLicenses.add(new ListedLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				escapeHTML(license.getId()), license.isOsiApproved(), escapeHTML(license.getName())));
+				license.getId(), license.isOsiApproved(), license.getName()));
 		currentRefNumber++;
-	}
-	
-	private String escapeHTML(String s) {
-		return StringEscapeUtils.escapeHtml4(s);
 	}
 
 	public void writeToFile(File htmlFile) throws IOException, MustacheException {
@@ -309,8 +304,8 @@ public class LicenseTOCHTMLFile {
 	public void addDeprecatedLicense(DeprecatedLicenseInfo deprecatedLicense,
 			String licHTMLReference) {
 		deprecatedLicenses.add(new DeprecatedLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				escapeHTML(deprecatedLicense.getLicense().getId()), 
-				escapeHTML(deprecatedLicense.getLicense().getName()),
+				deprecatedLicense.getLicense().getId(), 
+				deprecatedLicense.getLicense().getName(),
 				deprecatedLicense.getDeprecatedVersion()));
 		currentRefNumber++;
 	}

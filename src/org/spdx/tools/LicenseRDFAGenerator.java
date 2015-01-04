@@ -75,8 +75,7 @@ public class LicenseRDFAGenerator {
 	static final String TEMPLATE_FOLDER_NAME = "template";
 	static final String HTML_FOLDER_NAME = "html";
 	static final String LICENSE_TOC_FILE_NAME = "index.html";
-	static final String EXCEPTION_FOLDER_NAME = "exceptions";
-	static final String EXCEPTION_TOC_FILE_NAME = "index.html";
+	static final String EXCEPTION_TOC_FILE_NAME = "exceptions-index.html";
 	
 	/**
 	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
@@ -130,10 +129,6 @@ public class LicenseRDFAGenerator {
 				System.out.println("Unsupported file format.  Must be a .xls file");
 				System.exit(ERROR_STATUS);
 			}
-			File exceptionsFolder = new File(dir.getPath() + File.separator + EXCEPTION_FOLDER_NAME);
-			if (!exceptionsFolder.exists()) {
-				exceptionsFolder.mkdir();
-			}
 			File textFolder = new File(dir.getPath() + File.separator +  TEXT_FOLDER_NAME);
 			if (!textFolder.exists()) {
 				textFolder.mkdir();
@@ -164,7 +159,7 @@ public class LicenseRDFAGenerator {
 			System.out.println();
 			System.out.print("Processing Exceptions");
 			writeExceptionList(version, licenseProvider, warnings,
-					exceptionsFolder, textFolder, htmlFolder, templateFolder);
+					dir, textFolder, htmlFolder, templateFolder);
 			writeCssFile(dir);
 			System.out.println();
 			if (warnings.size() > 0) {
@@ -210,6 +205,16 @@ public class LicenseRDFAGenerator {
 			ArrayList<String> warnings, File dir, File textFolder,
 			File htmlFolder, File templateFolder) throws IOException, SPDXLicenseRestrictionException, SpreadsheetException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
+		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
+		HashSet<String> licenseIds = new HashSet<String>();
+		try {
+			Iterator<SPDXStandardLicense> licIter = licenseProvider.getLicenseIterator();
+			while (licIter.hasNext()) {
+				licenseIds.add(licIter.next().getId());
+			}	
+		} catch (SpdxStdLicenseException e) {
+			System.out.println("Warning - Not able to check for duplicate license and exception ID's");
+		}
 		String exceptionHtmlTocReference = "./" + EXCEPTION_TOC_FILE_NAME;
 		ExceptionHtmlToc exceptionToc = new ExceptionHtmlToc();
 		Iterator<SpdxLicenseRestriction> exceptionIter = licenseProvider.getExceptionIterator();
@@ -225,6 +230,10 @@ public class LicenseRDFAGenerator {
 					if (entry.getValue().trim().equals(nextException.getText().trim())) {
 						warnings.add("Duplicates exceptions: "+nextException.getId()+", "+entry.getKey());
 					}
+				}
+				// check for a license ID with the same ID as the exception
+				if (licenseIds.contains(nextException.getId())) {
+					warnings.add("A license ID exists with the same ID as an exception ID: "+nextException.getId());
 				}
 				addedExceptionsMap.put(nextException.getId(), nextException.getText());
 				ExceptionHtml exceptionHtml = new ExceptionHtml(nextException);
