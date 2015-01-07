@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 /**
  * Represents an SPDX license exception as defined in the License Expression Language
@@ -23,7 +23,7 @@ package org.spdx.rdfparser;
  * @author Gary O'Neall
  *
  */
-public class SpdxLicenseRestriction {
+public class LicenseRestriction {
 	
 	//TODO: Implement RDF parsing
 	
@@ -42,7 +42,7 @@ public class SpdxLicenseRestriction {
 	 * @param example Example of use
 	 * @param sourceUrl URL references to external sources for the exception
 	 */
-	public SpdxLicenseRestriction(String id, String name, String text,
+	public LicenseRestriction(String id, String name, String text,
 			String[] sourceUrl, String notes, String example) {
 		this.id = id;
 		this.name = name;
@@ -57,11 +57,11 @@ public class SpdxLicenseRestriction {
 	 * @param name Full name of the Exception
 	 * @param text Text for the Exception
 	 */
-	public SpdxLicenseRestriction(String id, String name, String text) {
+	public LicenseRestriction(String id, String name, String text) {
 		this(id, name, text, new String[0], "", "");
 	}
 	
-	public SpdxLicenseRestriction() {
+	public LicenseRestriction() {
 		this(null, null, null);
 	}
 

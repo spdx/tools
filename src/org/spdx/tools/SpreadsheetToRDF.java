@@ -30,11 +30,11 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
@@ -200,9 +200,9 @@ public class SpreadsheetToRDF {
 			NonStandardLicensesSheet nonStandardLicensesSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
 		int numNonStdLicenses = nonStandardLicensesSheet.getNumDataRows();
 		int firstRow = nonStandardLicensesSheet.getFirstDataRow();
-		SPDXNonStandardLicense[] nonStdLicenses = new SPDXNonStandardLicense[numNonStdLicenses];
+		ExtractedLicenseInfo[] nonStdLicenses = new ExtractedLicenseInfo[numNonStdLicenses];
 		for (int i = 0; i < nonStdLicenses.length; i++) {
-			nonStdLicenses[i] = new SPDXNonStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
+			nonStdLicenses[i] = new ExtractedLicenseInfo(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
 					nonStandardLicensesSheet.getExtractedText(firstRow+i),
 					nonStandardLicensesSheet.getLicenseName(firstRow+i), 
 					nonStandardLicensesSheet.getCrossRefUrls(firstRow+i),
@@ -261,13 +261,13 @@ public class SpreadsheetToRDF {
 				dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID;
 			}
 		}
-		SPDXStandardLicense dataLicense = null;
+		SpdxListedLicense dataLicense = null;
 		try {
-			dataLicense = (SPDXStandardLicense)SPDXLicenseInfoFactory.parseSPDXLicenseString(dataLicenseId);
+			dataLicense = (SpdxListedLicense)LicenseInfoFactory.parseSPDXLicenseString(dataLicenseId);
 		} catch (Exception ex) {
 			logger.warn("Unable to parse the provided standard license ID.  Using "+SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
 			try {
-				dataLicense = (SPDXStandardLicense)SPDXLicenseInfoFactory.parseSPDXLicenseString(SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
+				dataLicense = (SpdxListedLicense)LicenseInfoFactory.parseSPDXLicenseString(SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
 			} catch (InvalidLicenseStringException e) {
 				throw(new InvalidSPDXAnalysisException("Unable to get document license"));
 			}

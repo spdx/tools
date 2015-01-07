@@ -14,14 +14,16 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 
 /**
- * A duplicate non standard license ID
+ * A duplicate license ID for an extracted license
  * @author Gary O'Neall
  *
  */
-public class DuplicateNonStandardLicenseIdException extends
+public class DuplicateExtractedLicenseIdException extends
 		InvalidSPDXAnalysisException {
 
 	/**
@@ -32,7 +34,7 @@ public class DuplicateNonStandardLicenseIdException extends
 	/**
 	 * @param msg
 	 */
-	public DuplicateNonStandardLicenseIdException(String msg) {
+	public DuplicateExtractedLicenseIdException(String msg) {
 		super(msg);
 	}
 
@@ -40,7 +42,7 @@ public class DuplicateNonStandardLicenseIdException extends
 	 * @param msg
 	 * @param inner
 	 */
-	public DuplicateNonStandardLicenseIdException(String msg, Throwable inner) {
+	public DuplicateExtractedLicenseIdException(String msg, Throwable inner) {
 		super(msg, inner);
 	}
 

@@ -21,9 +21,9 @@ import java.util.HashMap;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 
 /**
  * Provides a hashmap which maps the Mustache template strings to SPDX Document
@@ -53,7 +53,7 @@ public class MustacheMap {
 	private static ArrayList<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SPDXDocument doc) {
 		ArrayList<ExtractedLicensingInfoContext> retval = new ArrayList<ExtractedLicensingInfoContext>();
 		try {
-			SPDXNonStandardLicense[] extractedLicenseInfos = doc.getExtractedLicenseInfos();
+			ExtractedLicenseInfo[] extractedLicenseInfos = doc.getExtractedLicenseInfos();
 			for (int i = 0;i < extractedLicenseInfos.length; i++) {
 				retval.add(new ExtractedLicensingInfoContext(extractedLicenseInfos[i]));
 			}
@@ -90,7 +90,7 @@ public class MustacheMap {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private static Object getDataLicenseName(SPDXDocument doc) throws InvalidSPDXAnalysisException {
-		SPDXStandardLicense dataLicense = doc.getDataLicense();
+		SpdxListedLicense dataLicense = doc.getDataLicense();
 		if (dataLicense != null) {
 			return dataLicense.getName();
 		} else {

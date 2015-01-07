@@ -38,10 +38,10 @@ import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 /**
  * Command line application to compare two SPDX documents
@@ -445,14 +445,14 @@ public class CompareSpdxDocs {
 	private static void printExtractedLicenseCompareResults(
 			SpdxComparer comparer, String doc1Name, String doc2Name, PrintStream output) throws SpdxCompareException {
 		if (!comparer.isExtractedLicensingInfosEqual()) {
-			SPDXNonStandardLicense[] inDoc1notInDoc2 = comparer.getUniqueExtractedLicenses(0, 1);
+			ExtractedLicenseInfo[] inDoc1notInDoc2 = comparer.getUniqueExtractedLicenses(0, 1);
 			if (inDoc1notInDoc2 != null && inDoc1notInDoc2.length > 0) {
 				output.println("The following extracted licensing infos were only found in "+doc1Name);
 				for (int i = 0; i < inDoc1notInDoc2.length; i++) {
 					printSpdxLicenseInfo(inDoc1notInDoc2[i], output);
 				}
 			}
-			SPDXNonStandardLicense[] inDoc2notInDoc1 = comparer.getUniqueExtractedLicenses(1, 0);
+			ExtractedLicenseInfo[] inDoc2notInDoc1 = comparer.getUniqueExtractedLicenses(1, 0);
 			if (inDoc2notInDoc1 != null && inDoc2notInDoc1.length > 0) {
 				output.println("The following extracted licensing infos were only found in "+doc2Name);
 				for (int i = 0; i < inDoc2notInDoc1.length; i++) {
@@ -523,21 +523,21 @@ public class CompareSpdxDocs {
 	 * @param nonStdLicense
 	 */
 	private static void printSpdxLicenseInfo(
-			SPDXNonStandardLicense nonStdLicense, PrintStream output) {
-		output.println("\tID: "+nonStdLicense.getId());
+			ExtractedLicenseInfo nonStdLicense, PrintStream output) {
+		output.println("\tID: "+nonStdLicense.getLicenseId());
 		if (nonStdLicense.getComment() != null && !nonStdLicense.getComment().trim().isEmpty()) {
 			output.println("\tComment: "+nonStdLicense.getComment());
 		}
-		if (nonStdLicense.getLicenseName() != null && !nonStdLicense.getLicenseName().trim().isEmpty()) {
-			output.println("\tLicense Name: "+nonStdLicense.getLicenseName());
+		if (nonStdLicense.getName() != null && !nonStdLicense.getName().trim().isEmpty()) {
+			output.println("\tLicense Name: "+nonStdLicense.getName());
 		}
-		if (nonStdLicense.getSourceUrls() != null && nonStdLicense.getSourceUrls().length > 0) {
+		if (nonStdLicense.getSeeAlso() != null && nonStdLicense.getSeeAlso().length > 0) {
 			output.println("\tSource URLs:");
-			for (int i = 0; i < nonStdLicense.getSourceUrls().length; i++) {
-				output.println("\t\t"+nonStdLicense.getSourceUrls()[i]);
+			for (int i = 0; i < nonStdLicense.getSeeAlso().length; i++) {
+				output.println("\t\t"+nonStdLicense.getSeeAlso()[i]);
 			}
 		}
-		output.println("\tText: \""+nonStdLicense.getText()+"\"");
+		output.println("\tText: \""+nonStdLicense.getExtractedText()+"\"");
 	}
 
 	/**
@@ -683,7 +683,7 @@ public class CompareSpdxDocs {
 			// all license information from files
 			if (!comparer.isPackageLicenseInfoFromFilesEqual()) {
 				output.println("License information from files differ.");
-				SPDXLicenseInfo[] fromFiles1 = comparer.getSpdxDoc(0).getSpdxPackage().getLicenseInfoFromFiles();
+				AnyLicenseInfo[] fromFiles1 = comparer.getSpdxDoc(0).getSpdxPackage().getLicenseInfoFromFiles();
 				StringBuilder sb = new StringBuilder();
 				if (fromFiles1 != null && fromFiles1.length > 0) {
 					sb.append(fromFiles1[0]);
@@ -694,7 +694,7 @@ public class CompareSpdxDocs {
 				}
 				output.println("\t"+doc1Name+": "+sb.toString());
 				sb = new StringBuilder();
-				SPDXLicenseInfo[] fromFiles2 = comparer.getSpdxDoc(1).getSpdxPackage().getLicenseInfoFromFiles();
+				AnyLicenseInfo[] fromFiles2 = comparer.getSpdxDoc(1).getSpdxPackage().getLicenseInfoFromFiles();
 				if (fromFiles2 != null && fromFiles2.length > 0) {
 					sb.append(fromFiles2[0]);
 				}

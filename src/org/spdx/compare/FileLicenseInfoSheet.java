@@ -19,7 +19,7 @@ package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 /**
  * Sheet of the comparison results for the file seen licenses
@@ -62,8 +62,8 @@ public class FileLicenseInfoSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA, SPDXFile fileB,
 			int docIndexB) throws SpdxCompareException {
-		SPDXLicenseInfo[] licenseInfosA = fileA.getSeenLicenses();
-		SPDXLicenseInfo[] licenseInfosB = fileB.getSeenLicenses();
+		AnyLicenseInfo[] licenseInfosA = fileA.getSeenLicenses();
+		AnyLicenseInfo[] licenseInfosB = fileB.getSeenLicenses();
 		if (licenseInfosA.length != licenseInfosB.length) {
 			return false;
 		}

@@ -20,7 +20,7 @@ package org.spdx.compare;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 /**
  * Contains the results of a comparison between two SPDX files with the same name
@@ -122,14 +122,14 @@ public class SpdxFileDifference {
 	/**
 	 * @return the uniqueSeenLicensesA
 	 */
-	public SPDXLicenseInfo[] getUniqueSeenLicensesA() {
+	public AnyLicenseInfo[] getUniqueSeenLicensesA() {
 		return uniqueSeenLicensesA;
 	}
 
 	/**
 	 * @return the uniqueSeenLicensesB
 	 */
-	public SPDXLicenseInfo[] getUniqueSeenLicensesB() {
+	public AnyLicenseInfo[] getUniqueSeenLicensesB() {
 		return uniqueSeenLicensesB;
 	}
 
@@ -195,8 +195,8 @@ public class SpdxFileDifference {
 	private String licenseCommentsA;
 	private String licenseCommentsB;
 	private boolean seenLicensesEqual;
-	private SPDXLicenseInfo[] uniqueSeenLicensesA;
-	private SPDXLicenseInfo[] uniqueSeenLicensesB;
+	private AnyLicenseInfo[] uniqueSeenLicensesA;
+	private AnyLicenseInfo[] uniqueSeenLicensesB;
 	private boolean artifactOfsEquals;
 	private DOAPProject[] uniqueArtifactOfA;
 	private DOAPProject[] uniqueArtifactOfB;
@@ -213,8 +213,8 @@ public class SpdxFileDifference {
 
 	public SpdxFileDifference(SPDXFile fileA, SPDXFile fileB, 
 			boolean concludedLicensesEqual, boolean seenLicensesEqual,
-			SPDXLicenseInfo[] uniqueSeenLicensesA,
-			SPDXLicenseInfo[] uniqueSeenLicensesB,
+			AnyLicenseInfo[] uniqueSeenLicensesA,
+			AnyLicenseInfo[] uniqueSeenLicensesB,
 			boolean artifactOfsEquals,
 			DOAPProject[] uniqueArtifactOfA,
 			DOAPProject[] uniqueArtifactOfB) throws InvalidSPDXAnalysisException {

@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -39,10 +42,10 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	private Model model = null;
 	private Resource resource = null;
 	private String name;
-	private SPDXLicenseInfo concludedLicenses;
+	private AnyLicenseInfo concludedLicenses;
 	private SPDXChecksum sha1;
 	private String type;
-	private SPDXLicenseInfo[] seenLicenses;
+	private AnyLicenseInfo[] seenLicenses;
 	private String licenseComments;
 	private String copyright;
 	private DOAPProject[] artifactOf;
@@ -133,13 +136,13 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			}			
 		}
 		// concluded License
-		ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
+		ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 		}
 		if (alLic.size() > 1) {
 			throw(new InvalidSPDXAnalysisException("Too many concluded licenses for file"));
@@ -155,9 +158,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 		}
-		this.seenLicenses = alLic.toArray(new SPDXLicenseInfo[alLic.size()]);
+		this.seenLicenses = alLic.toArray(new AnyLicenseInfo[alLic.size()]);
 
 		// fileDependencies
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY).asNode();
@@ -402,8 +405,8 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		return null;
 	}
 	public SPDXFile(String name, String type, String sha1,
-			SPDXLicenseInfo concludedLicenses,
-			SPDXLicenseInfo[] seenLicenses, String licenseComments,
+			AnyLicenseInfo concludedLicenses,
+			AnyLicenseInfo[] seenLicenses, String licenseComments,
 			String copyright, DOAPProject[] artifactOf, String comment,
 			SPDXFile[] fileDependencies, String[] contributors, 
 			String noticeText) {
@@ -430,16 +433,16 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	}
 	
 	public SPDXFile(String name, String type, String sha1,
-			SPDXLicenseInfo concludedLicenses,
-			SPDXLicenseInfo[] seenLicenses, String licenseComments,
+			AnyLicenseInfo concludedLicenses,
+			AnyLicenseInfo[] seenLicenses, String licenseComments,
 			String copyright, DOAPProject[] artifactOf) {
 		this(name, type, sha1, concludedLicenses, seenLicenses,
 				licenseComments, copyright, artifactOf, null, null, null, null);
 	}
 	
 	public SPDXFile(String name, String type, String sha1,
-			SPDXLicenseInfo concludedLicenses,
-			SPDXLicenseInfo[] seenLicenses, String licenseComments,
+			AnyLicenseInfo concludedLicenses,
+			AnyLicenseInfo[] seenLicenses, String licenseComments,
 			String copyright, DOAPProject[] artifactOf, String comment) {
 		this(name, type, sha1, concludedLicenses, seenLicenses,
 				licenseComments, copyright, artifactOf, comment, null, null, null);
@@ -450,7 +453,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 * @return the seenLicenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXLicenseInfo[] getSeenLicenses() {
+	public AnyLicenseInfo[] getSeenLicenses() {
 		if (this.model != null && this.resource != null) {
 			try {
 				ArrayList<Node> alLicNode = new ArrayList<Node>();		
@@ -481,9 +484,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 					}
 				}
 				if (!seenLicensesMatch) {
-					this.seenLicenses = new SPDXLicenseInfo[alLicNode.size()];
+					this.seenLicenses = new AnyLicenseInfo[alLicNode.size()];
 					for (int k = 0; i < this.seenLicenses.length; k++) {
-						this.seenLicenses[k] = SPDXLicenseInfoFactory.getLicenseInfoFromModel(
+						this.seenLicenses[k] = LicenseInfoFactory.getLicenseInfoFromModel(
 								model,alLicNode.get(k));
 					}
 				}
@@ -497,7 +500,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 * @param seenLicenses the seenLicenses to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setSeenLicenses(SPDXLicenseInfo[] seenLicenses) throws InvalidSPDXAnalysisException {
+	public void setSeenLicenses(AnyLicenseInfo[] seenLicenses) throws InvalidSPDXAnalysisException {
 		this.seenLicenses = seenLicenses;
 		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE);
@@ -508,7 +511,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 				Resource lic;
 				try {
 					lic = seenLicenses[i].createResource(model);
-				} catch (DuplicateNonStandardLicenseIdException e) {
+				} catch (DuplicateExtractedLicenseIdException e) {
 					throw(new InvalidSPDXAnalysisException("Seen licenses contains a non-standard license ID "+
 							" which already exists in the model with different license text:" + seenLicenses[i].toString()));
 				}
@@ -673,7 +676,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 * @return the fileLicenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXLicenseInfo getConcludedLicenses() {
+	public AnyLicenseInfo getConcludedLicenses() {
 		if (this.model != null && this.resource != null) {
 			try {
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE).asNode();
@@ -689,7 +692,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 				}
 				if (this.concludedLicenses == null ||
 						!t.getObject().equals(this.concludedLicenses.getResource().asNode())) {
-					this.concludedLicenses = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject());
+					this.concludedLicenses = LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject());
 				}
 			}	catch(InvalidSPDXAnalysisException e) {
 				// just use the original property
@@ -701,7 +704,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 * @param fileLicenses the fileLicenses to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setConcludedLicenses(SPDXLicenseInfo fileLicenses) throws InvalidSPDXAnalysisException {
+	public void setConcludedLicenses(AnyLicenseInfo fileLicenses) throws InvalidSPDXAnalysisException {
 		this.concludedLicenses = fileLicenses;
 		if (this.model != null && this.resource != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
@@ -710,7 +713,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			Resource lic = null;
 			try {
 				lic = fileLicenses.createResource(model);
-			} catch (DuplicateNonStandardLicenseIdException e) {
+			} catch (DuplicateExtractedLicenseIdException e) {
 				throw(new InvalidSPDXAnalysisException("Concluded licenses contains a non-standard license with inconsistent text with " +
 						"                                   an existing license: "+fileLicenses.toString()));
 			}
@@ -938,14 +941,14 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		@SuppressWarnings("unused")
 		String comments = this.getLicenseComments();
 		// license concluded
-		SPDXLicenseInfo concludedLicense = this.getConcludedLicenses();
+		AnyLicenseInfo concludedLicense = this.getConcludedLicenses();
 		if (concludedLicense == null) {
 			retval.add("Missing required concluded license for file "+fileName);
 		} else {
 			retval.addAll(concludedLicense.verify());
 		}
 		// license info in files
-		SPDXLicenseInfo[] licenseInfosInFile = this.getSeenLicenses();
+		AnyLicenseInfo[] licenseInfosInFile = this.getSeenLicenses();
 		if (licenseInfosInFile == null || licenseInfosInFile.length == 0) {
 			retval.add("Missing required license information in file for file "+fileName);
 		} else {
@@ -1224,12 +1227,12 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
     			cloneArtifactOfs[i] = this.artifactOf[i].clone();
     		}
     	}
-    	SPDXLicenseInfo clonedConcludedLicense = concludedLicenses.clone();
-    	SPDXLicenseInfo[] clonedSeenLicenses;
+    	AnyLicenseInfo clonedConcludedLicense = concludedLicenses.clone();
+    	AnyLicenseInfo[] clonedSeenLicenses;
     	if (this.seenLicenses == null) {
-    		clonedSeenLicenses = new SPDXLicenseInfo[0];
+    		clonedSeenLicenses = new AnyLicenseInfo[0];
     	} else {
-    		clonedSeenLicenses = new SPDXLicenseInfo[seenLicenses.length];
+    		clonedSeenLicenses = new AnyLicenseInfo[seenLicenses.length];
     		for (int i = 0; i < clonedSeenLicenses.length; i++) {
     			if (seenLicenses[i] != null) {
     				clonedSeenLicenses[i] = seenLicenses[i].clone();

@@ -24,8 +24,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 
 /**
  * Sheet describing the per file information in an SPDX Document
@@ -119,20 +119,20 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 		} else {
 			sha1 = "";
 		}
-		SPDXLicenseInfo fileLicenses;
+		AnyLicenseInfo fileLicenses;
 		Cell assertedLicenseCell = row.getCell(CONCLUDED_LIC_COL);
 		if (assertedLicenseCell != null && !assertedLicenseCell.getStringCellValue().isEmpty()) {
-			fileLicenses = SPDXLicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue());
+			fileLicenses = LicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue());
 		} else {
 			fileLicenses = null;
 		}
-		SPDXLicenseInfo[] seenLicenses;
+		AnyLicenseInfo[] seenLicenses;
 		Cell seenLicenseCell = row.getCell(LIC_INFO_IN_FILE_COL);
 		if (seenLicenseCell != null && !seenLicenseCell.getStringCellValue().isEmpty()) {
 			String[] licenseStrings = seenLicenseCell.getStringCellValue().split(",");
-			seenLicenses = new SPDXLicenseInfo[licenseStrings.length];
+			seenLicenses = new AnyLicenseInfo[licenseStrings.length];
 			for (int i = 0; i < licenseStrings.length; i++) {
-				seenLicenses[i] = SPDXLicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
+				seenLicenses[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
 			}
 		} else {
 			seenLicenses = null;
@@ -238,7 +238,7 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 //				}
 				if (i == CONCLUDED_LIC_COL || i == LIC_INFO_IN_FILE_COL) {
 					try {
-						SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
+						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
 					} catch (SpreadsheetException ex) {
 						if (i == CONCLUDED_LIC_COL) {
 							return "Invalid asserted license string in row "+String.valueOf(row.getRowNum()) +

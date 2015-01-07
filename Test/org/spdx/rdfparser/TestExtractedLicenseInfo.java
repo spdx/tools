@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -32,7 +33,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Source Auditor
  *
  */
-public class TestSPDXNonStandardLicense {
+public class TestExtractedLicenseInfo {
 	static final String ID1 = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + "1";
 	static final String TEXT1 = "Text1";
 	static final String TEXT2 = "Text2";
@@ -59,12 +60,12 @@ public class TestSPDXNonStandardLicense {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXNonStandardLicense#equals(java.lang.Object)}.
+	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(ID1, TEXT1);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(ID1, TEXT2);
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(ID1, TEXT1);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(ID1, TEXT2);
 		if (!lic1.equals(lic2)) {
 			fail("Should equal when ID's equal");
 		}
@@ -74,93 +75,93 @@ public class TestSPDXNonStandardLicense {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXNonStandardLicense#SPDXNonStandardLicense(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#SPDXNonStandardLicense(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
 	public void testSPDXNonStandardLicenseModelNode() throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1);
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setComment(COMMENT1);
 		Resource licResource = lic.createResource(model);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(model, licResource.asNode());
-		assertEquals(ID1, lic2.getId());
-		assertEquals(TEXT1, lic2.getText());
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		assertEquals(ID1, lic2.getLicenseId());
+		assertEquals(TEXT1, lic2.getExtractedText());
 		assertEquals(COMMENT1, lic2.getComment());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXNonStandardLicense#SPDXNonStandardLicense(java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#SPDXNonStandardLicense(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testSPDXNonStandardLicenseStringString() {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1);
-		assertEquals(ID1, lic.getId());
-		assertEquals(TEXT1, lic.getText());
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
+		assertEquals(ID1, lic.getLicenseId());
+		assertEquals(TEXT1, lic.getExtractedText());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXNonStandardLicense#setText(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#setExtractedText(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
 	public void testSetText() throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1);
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setComment(COMMENT1);
 		Resource licResource = lic.createResource(model);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(model, licResource.asNode());
-		lic2.setText(TEXT2);
-		assertEquals(ID1, lic2.getId());
-		assertEquals(TEXT2, lic2.getText());
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		lic2.setExtractedText(TEXT2);
+		assertEquals(ID1, lic2.getLicenseId());
+		assertEquals(TEXT2, lic2.getExtractedText());
 		assertEquals(COMMENT1, lic2.getComment());
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(model, licResource.asNode());
-		assertEquals(TEXT2, lic3.getText());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		assertEquals(TEXT2, lic3.getExtractedText());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXNonStandardLicense#setComment(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#setComment(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1);
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setComment(COMMENT1);
 		Resource licResource = lic.createResource(model);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(model, licResource.asNode());
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
 		lic2.setComment(COMMENT2);
-		assertEquals(ID1, lic2.getId());
-		assertEquals(TEXT1, lic2.getText());
+		assertEquals(ID1, lic2.getLicenseId());
+		assertEquals(TEXT1, lic2.getExtractedText());
 		assertEquals(COMMENT2, lic2.getComment());
 		StringWriter writer = new StringWriter();
 		model.write(writer);
 		@SuppressWarnings("unused")
 		String rdfstring = writer.toString();
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(model, licResource.asNode());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
 		assertEquals(COMMENT2, lic3.getComment());	
 	}
 	@Test
 	public void testSetLicenseName() throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1);
-		lic.setLicenseName(LICENSENAME1);
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
+		lic.setName(LICENSENAME1);
 		Resource licResource = lic.createResource(model);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(model, licResource.asNode());
-		lic2.setLicenseName(LICENSENAME2);
-		assertEquals(LICENSENAME2, lic2.getLicenseName());
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(model, licResource.asNode());
-		assertEquals(LICENSENAME2, lic3.getLicenseName());
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		lic2.setName(LICENSENAME2);
+		assertEquals(LICENSENAME2, lic2.getName());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		assertEquals(LICENSENAME2, lic3.getName());
 	}
 	
 	@Test
 	public void testSetSourceUrls() throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1);
-		lic.setSourceUrls(SOURCEURLS1);
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
+		lic.setSeeAlso(SOURCEURLS1);
 		Resource licResource = lic.createResource(model);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(model, licResource.asNode());
-		lic2.setSourceUrls(SOURCEURLS2);
-		if (!compareArrayContent(SOURCEURLS2, lic2.getSourceUrls())) {
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		lic2.setSeeAlso(SOURCEURLS2);
+		if (!compareArrayContent(SOURCEURLS2, lic2.getSeeAlso())) {
 			fail("Source URLS not the same");
 		}
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(model, licResource.asNode());
-		if (!compareArrayContent(SOURCEURLS2, lic3.getSourceUrls())) {
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		if (!compareArrayContent(SOURCEURLS2, lic3.getSeeAlso())) {
 			fail("Source URLS not the same");
 		}
 	}
@@ -192,18 +193,18 @@ public class TestSPDXNonStandardLicense {
 	
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense lic = new SPDXNonStandardLicense(ID1, TEXT1, 
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1, 
 				LICENSENAME1, SOURCEURLS1, COMMENT1);
 		@SuppressWarnings("unused")
 		Resource licResource = lic.createResource(model);
 		
-		SPDXNonStandardLicense lic2 = (SPDXNonStandardLicense)lic.clone();
+		ExtractedLicenseInfo lic2 = (ExtractedLicenseInfo)lic.clone();
 
-		assertEquals(ID1, lic2.getId());
-		assertEquals(TEXT1, lic2.getText());
+		assertEquals(ID1, lic2.getLicenseId());
+		assertEquals(TEXT1, lic2.getExtractedText());
 		assertEquals(COMMENT1, lic2.getComment());
-		assertEquals(LICENSENAME1, lic2.getLicenseName());
-		assertTrue(compareArrayContent(SOURCEURLS1, lic2.getSourceUrls()));
+		assertEquals(LICENSENAME1, lic2.getName());
+		assertTrue(compareArrayContent(SOURCEURLS1, lic2.getSeeAlso()));
 		assertTrue(lic2.getResource() == null);
 	}
 }

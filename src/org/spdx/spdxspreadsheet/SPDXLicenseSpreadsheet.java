@@ -24,22 +24,22 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXLicenseRestrictionException;
-import org.spdx.rdfparser.SPDXStandardLicense;
-import org.spdx.rdfparser.IStandardLicenseProvider;
-import org.spdx.rdfparser.SpdxLicenseRestriction;
+import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
+import org.spdx.rdfparser.license.LicenseRestrictionException;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.LicenseRestriction;
 
 /**
  * A spreadhseet containing license information
  * @author Source Auditor
  *
  */
-public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStandardLicenseProvider  {
+public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdxListedLicenseProvider  {
 	
-	public class LicenseIterator implements Iterator<SPDXStandardLicense> {
+	public class LicenseIterator implements Iterator<SpdxListedLicense> {
 
 		private int currentRowNum;
-		SPDXStandardLicense currentLicense;
+		SpdxListedLicense currentLicense;
 		public LicenseIterator() throws SpreadsheetException {
 			this.currentRowNum = licenseSheet.getFirstDataRow();	// skip past header row
 			try {
@@ -54,8 +54,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		}
 
 		@Override
-		public SPDXStandardLicense next() {
-			SPDXStandardLicense retval = currentLicense;
+		public SpdxListedLicense next() {
+			SpdxListedLicense retval = currentLicense;
 			currentRowNum++;
 			try {
                 currentLicense = licenseSheet.getLicense(currentRowNum);
@@ -72,10 +72,10 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		
 	}
 	
-	public class LicenseExceptionIterator implements Iterator<SpdxLicenseRestriction> {
+	public class LicenseExceptionIterator implements Iterator<LicenseRestriction> {
 
 		private int currentRowNum;
-		SpdxLicenseRestriction currentException;
+		LicenseRestriction currentException;
 		public LicenseExceptionIterator() throws SpreadsheetException {
 			this.currentRowNum = exceptionSheet.getFirstDataRow();	// skip past header row
             currentException = exceptionSheet.getException(currentRowNum);
@@ -86,8 +86,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		}
 
 		@Override
-		public SpdxLicenseRestriction next() {
-			SpdxLicenseRestriction retval = currentException;
+		public LicenseRestriction next() {
+			LicenseRestriction retval = currentException;
 			currentRowNum++;
 			currentException = exceptionSheet.getException(currentRowNum);
 			return retval;
@@ -100,22 +100,22 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 	}
 	
 	public class DeprecatedLicenseInfo {
-		private SPDXStandardLicense license;
+		private SpdxListedLicense license;
 		private String deprecatedVersion;
-		public DeprecatedLicenseInfo(SPDXStandardLicense license, String deprecatedVersion) {
+		public DeprecatedLicenseInfo(SpdxListedLicense license, String deprecatedVersion) {
 			this.license = license;
 			this.deprecatedVersion = deprecatedVersion;
 		}
 		/**
 		 * @return the license
 		 */
-		public SPDXStandardLicense getLicense() {
+		public SpdxListedLicense getLicense() {
 			return license;
 		}
 		/**
 		 * @param license the license to set
 		 */
-		public void setLicense(SPDXStandardLicense license) {
+		public void setLicense(SpdxListedLicense license) {
 			this.license = license;
 		}
 		/**
@@ -142,7 +142,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		}
 		
 		private void updateCurrentDeprecatedLicense() throws InvalidSPDXAnalysisException {
-			SPDXStandardLicense license = deprecatedLicenseSheet.getLicense(currentRowNum);
+			SpdxListedLicense license = deprecatedLicenseSheet.getLicense(currentRowNum);
 			if (license == null) {
 				currentDeprecatedLicense = null;
 			} else {
@@ -254,7 +254,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 		return licenseSheet;
 	}
 
-	public Iterator<SPDXStandardLicense> getLicenseIterator() {
+	public Iterator<SpdxListedLicense> getLicenseIterator() {
 		try {
             return new LicenseIterator();
         } catch (SpreadsheetException e) {
@@ -276,8 +276,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements IStan
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
 	 */
 	@Override
-	public Iterator<SpdxLicenseRestriction> getExceptionIterator()
-			throws SPDXLicenseRestrictionException, SpreadsheetException {
+	public Iterator<LicenseRestriction> getExceptionIterator()
+			throws LicenseRestrictionException, SpreadsheetException {
 		return new LicenseExceptionIterator();
 	}
 	

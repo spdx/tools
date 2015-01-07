@@ -29,12 +29,12 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.VerificationCodeGenerator;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
@@ -102,8 +102,8 @@ public class SpdxPackageInfoMergerTest {
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
-		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
-		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
+		ExtractedLicenseInfo[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo clonedNonStdLic = (ExtractedLicenseInfo) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, mapper);
@@ -135,19 +135,19 @@ public class SpdxPackageInfoMergerTest {
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
-		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
-		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
+		ExtractedLicenseInfo[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo clonedNonStdLic = (ExtractedLicenseInfo) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, mapper);
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
 		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
 		
-		SPDXLicenseInfo[] result = packageMerger.collectLicsInFiles(mergedResult);
+		AnyLicenseInfo[] result = packageMerger.collectLicsInFiles(mergedResult);
 		
-		SPDXStandardLicense lic1 = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_Apache);
-		SPDXLicenseInfo lic2 = SPDXLicenseInfoFactory.parseSPDXLicenseString(NonSTD_LIC_ID);
-		SPDXLicenseInfo[] expectedResult = new SPDXLicenseInfo[]{lic1,lic2};
+		SpdxListedLicense lic1 = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_Apache);
+		AnyLicenseInfo lic2 = LicenseInfoFactory.parseSPDXLicenseString(NonSTD_LIC_ID);
+		AnyLicenseInfo[] expectedResult = new AnyLicenseInfo[]{lic1,lic2};
 		
 		int num = 0;
 		for(int i = 0; i < result.length; i++){
@@ -177,8 +177,8 @@ public class SpdxPackageInfoMergerTest {
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
-		SPDXNonStandardLicense[] subNonStdLics = doc2.getExtractedLicenseInfos();
-		SPDXNonStandardLicense clonedNonStdLic = (SPDXNonStandardLicense) subNonStdLics[0].clone();
+		ExtractedLicenseInfo[] subNonStdLics = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo clonedNonStdLic = (ExtractedLicenseInfo) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};

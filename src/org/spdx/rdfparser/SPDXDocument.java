@@ -29,7 +29,10 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import java.util.regex.Matcher;
 
-import org.spdx.merge.SpdxLicenseMapper;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 
@@ -58,9 +61,10 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
-	public static final String CURRENT_SPDX_VERSION = "SPDX-1.2";
+	public static final String ONE_DOT_TWO_SPDX_VERSION = "SPDX-1.2";
+	public static final String CURRENT_SPDX_VERSION = "SPDX-2.0";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "1.2.10";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.0";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -237,14 +241,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @return the declaredLicenses
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public SPDXLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
-			ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
+		public AnyLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
+			ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 			}
 			if (alLic.size() > 1) {
 				throw(new InvalidSPDXAnalysisException("Too many declared licenses"));
@@ -258,7 +262,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @param declaredLicenses the declaredLicenses to set
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public void setDeclaredLicense(SPDXLicenseInfo declaredLicense) throws InvalidSPDXAnalysisException {
+		public void setDeclaredLicense(AnyLicenseInfo declaredLicense) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_DECLARED_LICENSE);
 			if (declaredLicense != null) {
 				Resource s = getResource(this.node);
@@ -274,14 +278,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @return the detectedLicenses
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public SPDXLicenseInfo getConcludedLicenses() throws InvalidSPDXAnalysisException {
-			ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
+		public AnyLicenseInfo getConcludedLicenses() throws InvalidSPDXAnalysisException {
+			ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 			}
 			if (alLic.size() > 1) {
 				throw(new InvalidSPDXAnalysisException("Too many concluded licenses"));
@@ -295,7 +299,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		 * @param detectedLicenses the detectedLicenses to set
 		 * @throws InvalidSPDXAnalysisException 
 		 */
-		public void setConcludedLicenses(SPDXLicenseInfo detectedLicenses) throws InvalidSPDXAnalysisException {
+		public void setConcludedLicenses(AnyLicenseInfo detectedLicenses) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_CONCLUDED_LICENSE);
 			if (detectedLicenses != null) {
 				Resource s = getResource(this.node);
@@ -626,7 +630,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 					this.getHomePage());
 		}
 		
-		public void setLicenseInfoFromFiles(SPDXLicenseInfo[] licenseInfo) throws InvalidSPDXAnalysisException {
+		public void setLicenseInfoFromFiles(AnyLicenseInfo[] licenseInfo) throws InvalidSPDXAnalysisException {
 			removeProperties(node, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
 			if (licenseInfo != null) {
 				Resource s = getResource(this.node);
@@ -638,16 +642,16 @@ public class SPDXDocument implements SpdxRdfConstants {
 			}
 		}
 		
-		public SPDXLicenseInfo[] getLicenseInfoFromFiles() throws InvalidSPDXAnalysisException {
-			ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
+		public AnyLicenseInfo[] getLicenseInfoFromFiles() throws InvalidSPDXAnalysisException {
+			ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 			}
-			SPDXLicenseInfo[] retval = new SPDXLicenseInfo[alLic.size()];
+			AnyLicenseInfo[] retval = new AnyLicenseInfo[alLic.size()];
 			retval = alLic.toArray(retval);
 			return retval;
 		}
@@ -670,7 +674,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			//TODO: Allow cloning of existing licenses and files by merging the extracted license infos and mapping the licenses
 			SPDXPackage retval = docToCloneTo.createSpdxPackage(packageUri);
 			// need to copy the non-standard licenses in case they are referenced
-			SPDXNonStandardLicense[] extractedLicenseInfos = getExtractedLicenseInfos();
+			ExtractedLicenseInfo[] extractedLicenseInfos = getExtractedLicenseInfos();
 			if (extractedLicenseInfos != null) {
 				docToCloneTo.setExtractedLicenseInfos(extractedLicenseInfos);
 				docToCloneTo.initializeNextLicenseRef(extractedLicenseInfos);
@@ -692,9 +696,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 			}
 			retval.setHomePage(this.getHomePage());
 			retval.setLicenseComment(this.getLicenseComment());
-			SPDXLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
+			AnyLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
 			if (licenseInfosFromFiles != null) {
-				SPDXLicenseInfo[] clonedLicenseInfosFromFiles = new SPDXLicenseInfo[licenseInfosFromFiles.length];
+				AnyLicenseInfo[] clonedLicenseInfosFromFiles = new AnyLicenseInfo[licenseInfosFromFiles.length];
 				for (int i = 0; i < clonedLicenseInfosFromFiles.length; i++) {
 					clonedLicenseInfosFromFiles[i] = licenseInfosFromFiles[i].clone();
 				}
@@ -788,7 +792,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			
 			// license declared - mandatory - 1 (need to change return values)
 			try {
-				SPDXLicenseInfo declaredLicense = this.getDeclaredLicense();
+				AnyLicenseInfo declaredLicense = this.getDeclaredLicense();
 				if (declaredLicense == null) {
 					retval.add("Missing required declared license");
 				} else {
@@ -800,7 +804,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			
 			// license concluded - mandatory - 1 (need to change return values)
 			try {
-				SPDXLicenseInfo concludedLicense = this.getConcludedLicenses();
+				AnyLicenseInfo concludedLicense = this.getConcludedLicenses();
 				if (concludedLicense == null) {
 					retval.add("Missing required concluded license");
 				} else {
@@ -812,7 +816,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			
 			// license infos from files - mandatory - 1 or more
 			try {
-				SPDXLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
+				AnyLicenseInfo[] licenseInfosFromFiles = this.getLicenseInfoFromFiles();
 				if (licenseInfosFromFiles == null || licenseInfosFromFiles.length == 0) {
 					retval.add("Missing required license information from files");
 				} else {
@@ -979,11 +983,11 @@ public class SPDXDocument implements SpdxRdfConstants {
 		initializeNextLicenseRef(this.getExtractedLicenseInfos());
 	}
 	
-	protected void initializeNextLicenseRef(SPDXNonStandardLicense[] existingLicenses) throws InvalidSPDXAnalysisException {
+	protected void initializeNextLicenseRef(ExtractedLicenseInfo[] existingLicenses) throws InvalidSPDXAnalysisException {
 		int highestNonStdLicense = 0;
 		for (int i = 0; i < existingLicenses.length; i++) {
 			try {
-			int idNum = getLicenseRefNum(existingLicenses[i].getId());
+			int idNum = getLicenseRefNum(existingLicenses[i].getLicenseId());
 			if (idNum > highestNonStdLicense) {
 				highestNonStdLicense = idNum;
 			}
@@ -1098,7 +1102,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		}
 		// Non standard licenses
 		try {
-			SPDXNonStandardLicense[] extractedLicInfos = this.getExtractedLicenseInfos();
+			ExtractedLicenseInfo[] extractedLicInfos = this.getExtractedLicenseInfos();
 			if (extractedLicInfos != null) {
 				for (int i = 0; i < extractedLicInfos.length; i++) {
 					ArrayList<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
@@ -1111,18 +1115,18 @@ public class SPDXDocument implements SpdxRdfConstants {
 		// data license
 		if (!docSpecVersion.equals(POINT_EIGHT_SPDX_VERSION) && !docSpecVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
 			try {
-				SPDXStandardLicense dataLicense = this.getDataLicense();
+				SpdxListedLicense dataLicense = this.getDataLicense();
 				if (dataLicense == null) {
 					retval.add("Missing required data license");
 				}
 				if (docSpecVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
 					{ 
-					if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
-						retval.add("Incorrect data license for SPDX version 1.0 document - found "+dataLicense.getId()+", expected "+SPDX_DATA_LICENSE_ID_VERSION_1_0);
+					if (!dataLicense.getLicenseId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
+						retval.add("Incorrect data license for SPDX version 1.0 document - found "+dataLicense.getLicenseId()+", expected "+SPDX_DATA_LICENSE_ID_VERSION_1_0);
 					}
 				} else {
-					if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
-						retval.add("Incorrect data license for SPDX document - found "+dataLicense.getId()+", expected "+SPDX_DATA_LICENSE_ID);
+					if (!dataLicense.getLicenseId().equals(SPDX_DATA_LICENSE_ID)) {
+						retval.add("Incorrect data license for SPDX document - found "+dataLicense.getLicenseId()+", expected "+SPDX_DATA_LICENSE_ID);
 					}					
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -1316,14 +1320,14 @@ public class SPDXDocument implements SpdxRdfConstants {
 		addProperty(spdxDocNode, PROP_SPDX_VERSION, new String[] {spdxVersion});
 	}
 	
-	public SPDXStandardLicense getDataLicense() throws InvalidSPDXAnalysisException {
-		ArrayList<SPDXLicenseInfo> alLic = new ArrayList<SPDXLicenseInfo>();
+	public SpdxListedLicense getDataLicense() throws InvalidSPDXAnalysisException {
+		ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_DATA_LICENSE).asNode();
 		Triple m = Triple.createMatch(getSpdxDocNode(), p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 		}
 		if (alLic.size() > 1) {
 			throw(new InvalidSPDXAnalysisException("Too many data licenses"));
@@ -1331,23 +1335,23 @@ public class SPDXDocument implements SpdxRdfConstants {
 		if (alLic.size() == 0) {
 			return null;
 		}
-		if (!(alLic.get(0) instanceof SPDXStandardLicense)) {
+		if (!(alLic.get(0) instanceof SpdxListedLicense)) {
 			throw(new InvalidSPDXAnalysisException("Incorrect license for datalicense - must be a standard SPDX license type"));
 		}
-		return (SPDXStandardLicense)(alLic.get(0));
+		return (SpdxListedLicense)(alLic.get(0));
 	}
 	
-	public void setDataLicense(SPDXStandardLicense dataLicense) throws InvalidSPDXAnalysisException {
+	public void setDataLicense(SpdxListedLicense dataLicense) throws InvalidSPDXAnalysisException {
 		String spdxVersion = this.getSpdxVersion();
 		if (spdxVersion == null) {
 			throw(new InvalidSPDXAnalysisException("Can not set a data license - document does not contain a version.  Set the SPDX version property before setting the data license."));
 		}
 		if (spdxVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) {
-			if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
+			if (!dataLicense.getLicenseId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
 				throw(new InvalidSPDXAnalysisException("Invalid data license for version 1 SPDX document - license must have ID "+SPDX_DATA_LICENSE_ID_VERSION_1_0));
 			}
 		} else {
-			if (!dataLicense.getId().equals(SPDX_DATA_LICENSE_ID)) {
+			if (!dataLicense.getLicenseId().equals(SPDX_DATA_LICENSE_ID)) {
 				throw(new InvalidSPDXAnalysisException("Invalid data license for SPDX document - license must have ID "+SPDX_DATA_LICENSE_ID));
 			}
 		}
@@ -1575,21 +1579,21 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @return the nonStandardLicenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXNonStandardLicense[] getExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
+	public ExtractedLicenseInfo[] getExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
 		// nonStandardLicenses
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("No SPDX Document - can not get the Non Standard Licenses"));
 		}
-		ArrayList<SPDXNonStandardLicense> alLic = new ArrayList<SPDXNonStandardLicense>();
+		ArrayList<ExtractedLicenseInfo> alLic = new ArrayList<ExtractedLicenseInfo>();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(new SPDXNonStandardLicense(model, t.getObject()));
+			alLic.add(new ExtractedLicenseInfo(model, t.getObject()));
 		}
-		SPDXNonStandardLicense[] nonStandardLicenses = new SPDXNonStandardLicense[alLic.size()];
+		ExtractedLicenseInfo[] nonStandardLicenses = new ExtractedLicenseInfo[alLic.size()];
 		nonStandardLicenses = alLic.toArray(nonStandardLicenses);
 		return nonStandardLicenses;
 	}
@@ -1600,7 +1604,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @param nonStandardLicenses the nonStandardLicenses to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setExtractedLicenseInfos(SPDXNonStandardLicense[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
+	public void setExtractedLicenseInfos(ExtractedLicenseInfo[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
 		ArrayList<String> errors = new ArrayList<String>();
 		// verify the licenses
 		for (int i = 0;i < nonStandardLicenses.length; i++) {
@@ -1637,9 +1641,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @return the newly created NonStandardLicense
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXNonStandardLicense addNewExtractedLicenseInfo(String licenseText) throws InvalidSPDXAnalysisException {
+	public ExtractedLicenseInfo addNewExtractedLicenseInfo(String licenseText) throws InvalidSPDXAnalysisException {
 		String licenseID = getNextLicenseRef();
-		SPDXNonStandardLicense retval = new SPDXNonStandardLicense(licenseID, licenseText);
+		ExtractedLicenseInfo retval = new ExtractedLicenseInfo(licenseID, licenseText);
 		addNewExtractedLicenseInfo(retval);
 		return retval;
 	}
@@ -1649,9 +1653,9 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 * @param license
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public void addNewExtractedLicenseInfo(SPDXNonStandardLicense license) throws InvalidSPDXAnalysisException {
-		if (extractedLicenseExists(license.getId())) {
-			throw(new InvalidSPDXAnalysisException("Can not add license - ID "+license.getId()+" already exists."));
+	public void addNewExtractedLicenseInfo(ExtractedLicenseInfo license) throws InvalidSPDXAnalysisException {
+		if (extractedLicenseExists(license.getLicenseId())) {
+			throw(new InvalidSPDXAnalysisException("Can not add license - ID "+license.getLicenseId()+" already exists."));
 		}
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
@@ -1787,12 +1791,12 @@ public class SPDXDocument implements SpdxRdfConstants {
 		// add the default data license
 		if (!spdxVersion.equals(POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
 			try {
-				SPDXStandardLicense dataLicense;
+				SpdxListedLicense dataLicense;
 				if (spdxVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
 					{ 
-					dataLicense = (SPDXStandardLicense)(SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0));
+					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0));
 				} else {
-					dataLicense = (SPDXStandardLicense)(SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID));				
+					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID));				
 				}
 				this.setDataLicense(dataLicense);
 			} catch (InvalidLicenseStringException e) {

@@ -23,9 +23,9 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.VerificationCodeGenerator;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
@@ -61,10 +61,10 @@ public class SpdxPackageInfoMerger {
 			SpdxPackageVerificationCode result = vg.generatePackageVerificationCode(fileMergeResult, skippedFiles);
 			packageInfoResult.setVerificationCode(result);
 			
-			SPDXLicenseInfo[] licsInFile = collectLicsInFiles(fileMergeResult);
+			AnyLicenseInfo[] licsInFile = collectLicsInFiles(fileMergeResult);
 			packageInfoResult.setLicenseInfoFromFiles(licsInFile);
 			
-			SPDXLicenseInfo declaredLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NOASSERTION");
+			AnyLicenseInfo declaredLicense = LicenseInfoFactory.parseSPDXLicenseString("NOASSERTION");
 			packageInfoResult.setDeclaredLicense(declaredLicense);		
 			
 			String licComments = translateSubDelcaredLicsIntoComments(subDocs);
@@ -112,10 +112,10 @@ public class SpdxPackageInfoMerger {
 		 * @param fileMergeResult
 		 * @return
 		 */
-		public SPDXLicenseInfo[] collectLicsInFiles(SPDXFile[] fileMergeResult){
-			ArrayList<SPDXLicenseInfo> licsList = new ArrayList<SPDXLicenseInfo>();
+		public AnyLicenseInfo[] collectLicsInFiles(SPDXFile[] fileMergeResult){
+			ArrayList<AnyLicenseInfo> licsList = new ArrayList<AnyLicenseInfo>();
 			for(int a = 0; a < fileMergeResult.length; a++){
-				SPDXLicenseInfo[] retval = fileMergeResult[a].getSeenLicenses();
+				AnyLicenseInfo[] retval = fileMergeResult[a].getSeenLicenses();
 				if(licsList.size() == 0){
 					for(int b = 0; b < retval.length; b++){
 						licsList.add(b, retval[b]);
@@ -135,7 +135,7 @@ public class SpdxPackageInfoMerger {
 					}
 				}
 			}
-			SPDXLicenseInfo[] licsInFile = new SPDXLicenseInfo[licsList.size()];
+			AnyLicenseInfo[] licsInFile = new AnyLicenseInfo[licsList.size()];
 			licsList.toArray(licsInFile);
 			licsList.clear();
 			return licsInFile;	
@@ -155,8 +155,8 @@ public class SpdxPackageInfoMerger {
 			
 					for(int k = 0; k < subDocs.length; k++){
 						if(mapper.docInNonStdLicIdMap(subDocs[k])){
-							SPDXLicenseInfo license = subDocs[k].getSpdxPackage().getDeclaredLicense();
-							SPDXLicenseInfo result = mapper.mapLicenseInfo(subDocs[k], license); 
+							AnyLicenseInfo license = subDocs[k].getSpdxPackage().getDeclaredLicense();
+							AnyLicenseInfo result = mapper.mapLicenseInfo(subDocs[k], license); 
 							buffer.append(subDocs[k].getSpdxPackage().getFileName());
 							buffer.append(" (" + result.toString() + ") ");
 						}else{				

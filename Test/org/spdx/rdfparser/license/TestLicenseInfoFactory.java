@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import static org.junit.Assert.*;
 
@@ -29,7 +29,15 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import sun.nio.cs.StandardCharsets;
 
@@ -44,7 +52,7 @@ import com.hp.hpl.jena.util.FileManager;
  * @author Source Auditor
  *
  */
-public class TestSPDXLicenseInfoFactory {
+public class TestLicenseInfoFactory {
 	static final String[] NONSTD_IDS = new String[] {SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"1",
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"2", SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"3",
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"4"};
@@ -53,12 +61,12 @@ public class TestSPDXLicenseInfoFactory {
 	static final String[] STD_TEXTS = new String[] {"Academic Free License (", "CONTRAT DE LICENCE DE LOGICIEL LIBRE CeCILL-B",
 		"European Union Public Licence"};
 
-	SPDXNonStandardLicense[] NON_STD_LICENSES;
-	SPDXStandardLicense[] STANDARD_LICENSES;
-	SPDXDisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
-	SPDXConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
+	ExtractedLicenseInfo[] NON_STD_LICENSES;
+	SpdxListedLicense[] STANDARD_LICENSES;
+	DisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
+	ConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
 	
-	SPDXConjunctiveLicenseSet COMPLEX_LICENSE;
+	ConjunctiveLicenseSet COMPLEX_LICENSE;
 	
 	Resource[] NON_STD_LICENSES_RESOURCES;
 	Resource[] STANDARD_LICENSES_RESOURCES;
@@ -73,37 +81,37 @@ public class TestSPDXLicenseInfoFactory {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		NON_STD_LICENSES = new SPDXNonStandardLicense[NONSTD_IDS.length];
+		NON_STD_LICENSES = new ExtractedLicenseInfo[NONSTD_IDS.length];
 		for (int i = 0; i < NONSTD_IDS.length; i++) {
-			NON_STD_LICENSES[i] = new SPDXNonStandardLicense(NONSTD_IDS[i], NONSTD_TEXTS[i]);
+			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(NONSTD_IDS[i], NONSTD_TEXTS[i]);
 		}
 		
-		STANDARD_LICENSES = new SPDXStandardLicense[STD_IDS.length];
+		STANDARD_LICENSES = new SpdxListedLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
-			STANDARD_LICENSES[i] = new SPDXStandardLicense("Name "+String.valueOf(i), 
+			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i), 
 					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
 		
-		DISJUNCTIVE_LICENSES = new SPDXDisjunctiveLicenseSet[3];
-		CONJUNCTIVE_LICENSES = new SPDXConjunctiveLicenseSet[2];
+		DISJUNCTIVE_LICENSES = new DisjunctiveLicenseSet[3];
+		CONJUNCTIVE_LICENSES = new ConjunctiveLicenseSet[2];
 		
-		DISJUNCTIVE_LICENSES[0] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		DISJUNCTIVE_LICENSES[0] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
 		});
-		CONJUNCTIVE_LICENSES[0] = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		CONJUNCTIVE_LICENSES[0] = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				STANDARD_LICENSES[0], NON_STD_LICENSES[0], STANDARD_LICENSES[1]
 		});
-		CONJUNCTIVE_LICENSES[1] = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		CONJUNCTIVE_LICENSES[1] = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[0], NON_STD_LICENSES[2]
 		});
-		DISJUNCTIVE_LICENSES[1] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		DISJUNCTIVE_LICENSES[1] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				CONJUNCTIVE_LICENSES[1], NON_STD_LICENSES[0], STANDARD_LICENSES[0]
 		});
-		DISJUNCTIVE_LICENSES[2] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		DISJUNCTIVE_LICENSES[2] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[1], CONJUNCTIVE_LICENSES[0], STANDARD_LICENSES[2]
 		});
-		COMPLEX_LICENSE = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		COMPLEX_LICENSE = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
 		});
 		model = ModelFactory.createDefaultModel();
@@ -142,7 +150,7 @@ public class TestSPDXLicenseInfoFactory {
 			// do nothing
 		}  
 		String id = "AFL-1.2";
-		String stdLicUri = SPDXLicenseInfoFactory.STANDARD_LICENSE_URI_PREFIX + id;
+		String stdLicUri = LicenseInfoFactory.LISTED_LICENSE_URI_PREFIX + id;
 		Model model = ModelFactory.createDefaultModel();
 		InputStream in = null;
 		try {
@@ -212,22 +220,22 @@ public class TestSPDXLicenseInfoFactory {
 		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
 		
 		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
-		SPDXStandardLicense lic = SPDXLicenseInfoFactory.getLicenseFromStdLicModel(stdLicUri);
+		SpdxListedLicense lic = LicenseInfoFactory.getLicenseFromStdLicModel(stdLicUri);
 		if (lic == null) {
 			fail("license is null");
 		}
 		String header = "Test BSD Standard License Header";
 		String note = "BSD 3 clause notes";
 		String url = "http://www.opensource.org/licenses/BSD-3-Clause";
-		assertEquals(id, lic.getId());
+		assertEquals(id, lic.getLicenseId());
 		assertEquals(header, lic.getStandardLicenseHeader());
 		String template = readTextFile("TestFiles"+File.separator+"BSD-3-Clause-Template.txt");
-		String licenseTemplate = lic.getTemplate();
+		String licenseTemplate = lic.getStandardLicenseTemplate();
 		int result = compareStringsIgnoreSpaces(template, licenseTemplate);
 		assertEquals(0, result);
 		assertEquals(note, lic.getComment());
-		assertEquals(1, lic.getSourceUrl().length);
-		assertEquals(url, lic.getSourceUrl()[0]);
+		assertEquals(1, lic.getSeeAlso().length);
+		assertEquals(url, lic.getSeeAlso()[0]);
 		assertTrue(lic.isOsiApproved());
 	}
 
@@ -295,65 +303,65 @@ public class TestSPDXLicenseInfoFactory {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXLicenseInfoFactory#getLicenseInfoFromModel(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.license.LicenseInfoFactory#getLicenseInfoFromModel(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
 	public void testGetLicenseInfoFromModel() throws InvalidSPDXAnalysisException {
 		// standard license
-		SPDXLicenseInfo li = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, STANDARD_LICENSES_RESOURCES[0].asNode());
-		if (!(li instanceof SPDXStandardLicense)) {
+		AnyLicenseInfo li = LicenseInfoFactory.getLicenseInfoFromModel(model, STANDARD_LICENSES_RESOURCES[0].asNode());
+		if (!(li instanceof SpdxListedLicense)) {
 			fail ("Wrong type for standard license");
 		}
 		ArrayList<String> verify = li.verify();
 		assertEquals(0, verify.size());
-		SPDXStandardLicense sli = (SPDXStandardLicense)li;
-		assertEquals(STD_IDS[0], sli.getId());
-		String licenseText = sli.getText().trim();
+		SpdxListedLicense sli = (SpdxListedLicense)li;
+		assertEquals(STD_IDS[0], sli.getLicenseId());
+		String licenseText = sli.getLicenseText().trim();
 		if (!licenseText.startsWith(STD_TEXTS[0])) {
 			fail("Incorrect license text");
 		}
 		// non-standard license
-		SPDXLicenseInfo li2 = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, NON_STD_LICENSES_RESOURCES[0].asNode());
-		if (!(li2 instanceof SPDXNonStandardLicense)) {
+		AnyLicenseInfo li2 = LicenseInfoFactory.getLicenseInfoFromModel(model, NON_STD_LICENSES_RESOURCES[0].asNode());
+		if (!(li2 instanceof ExtractedLicenseInfo)) {
 			fail ("Wrong type for non-standard license");
 		}
-		SPDXNonStandardLicense nsli2 = (SPDXNonStandardLicense)li2;
-		assertEquals(NONSTD_IDS[0], nsli2.getId());
-		assertEquals(NONSTD_TEXTS[0], nsli2.getText());
+		ExtractedLicenseInfo nsli2 = (ExtractedLicenseInfo)li2;
+		assertEquals(NONSTD_IDS[0], nsli2.getLicenseId());
+		assertEquals(NONSTD_TEXTS[0], nsli2.getExtractedText());
 		verify = li2.verify();
 		assertEquals(0, verify.size());
 		// conjunctive license
-		SPDXLicenseInfo cli = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, CONJUNCTIVE_LICENSES_RESOURCES[0].asNode());
-		if (!(cli instanceof SPDXConjunctiveLicenseSet)) {
+		AnyLicenseInfo cli = LicenseInfoFactory.getLicenseInfoFromModel(model, CONJUNCTIVE_LICENSES_RESOURCES[0].asNode());
+		if (!(cli instanceof ConjunctiveLicenseSet)) {
 			fail ("Wrong type for conjuctive licenses license");
 		}
 		assertEquals(CONJUNCTIVE_LICENSES[0], cli);
 		verify = cli.verify();
 		assertEquals(0, verify.size());
 		// disjunctive license
-		SPDXLicenseInfo dli = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, DISJUNCTIVE_LICENSES_RESOURCES[0].asNode());
-		if (!(dli instanceof SPDXDisjunctiveLicenseSet)) {
+		AnyLicenseInfo dli = LicenseInfoFactory.getLicenseInfoFromModel(model, DISJUNCTIVE_LICENSES_RESOURCES[0].asNode());
+		if (!(dli instanceof DisjunctiveLicenseSet)) {
 			fail ("Wrong type for disjuncdtive licenses license");
 		}
 		assertEquals(DISJUNCTIVE_LICENSES[0], dli);
 		verify = dli.verify();
 		assertEquals(0, verify.size());
 		// complex license
-		SPDXLicenseInfo complex = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, COMPLEX_LICENSE_RESOURCE.asNode());
+		AnyLicenseInfo complex = LicenseInfoFactory.getLicenseInfoFromModel(model, COMPLEX_LICENSE_RESOURCE.asNode());
 		assertEquals(COMPLEX_LICENSE, complex);
 		verify = complex.verify();
 		assertEquals(0, verify.size());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXLicenseInfoFactory#parseSPDXLicenseString(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.license.LicenseInfoFactory#parseSPDXLicenseString(java.lang.String)}.
 	 * @throws InvalidLicenseStringException 
 	 */
 	@Test
 	public void testParseSPDXLicenseString() throws InvalidLicenseStringException {
 		String parseString = COMPLEX_LICENSE.toString();
-		SPDXLicenseInfo li = SPDXLicenseInfoFactory.parseSPDXLicenseString(parseString);
+		AnyLicenseInfo li = LicenseInfoFactory.parseSPDXLicenseString(parseString);
 		if (!li.equals(COMPLEX_LICENSE)) {
 			fail("Parsed license does not equal");
 		}
@@ -362,16 +370,16 @@ public class TestSPDXLicenseInfoFactory {
 	@Test
 	public void testSpecialLicenses() throws InvalidLicenseStringException, InvalidSPDXAnalysisException {
 		// NONE
-		SPDXLicenseInfo none = SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDXLicenseInfoFactory.NONE_LICENSE_NAME);
+		AnyLicenseInfo none = LicenseInfoFactory.parseSPDXLicenseString(LicenseInfoFactory.NONE_LICENSE_NAME);
 		Resource r = none.createResource(model);
-		SPDXLicenseInfo comp = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
+		AnyLicenseInfo comp = LicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
 		assertEquals(none, comp);
 		ArrayList<String> verify = comp.verify();
 		assertEquals(0, verify.size());
 		// NOASSERTION_NAME
-		SPDXLicenseInfo noAssertion = SPDXLicenseInfoFactory.parseSPDXLicenseString(SPDXLicenseInfoFactory.NOASSERTION_LICENSE_NAME);
+		AnyLicenseInfo noAssertion = LicenseInfoFactory.parseSPDXLicenseString(LicenseInfoFactory.NOASSERTION_LICENSE_NAME);
 		r = noAssertion.createResource(model);
-		comp = SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
+		comp = LicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
 		assertEquals(noAssertion, comp);
 		verify = comp.verify();
 		assertEquals(0, verify.size());

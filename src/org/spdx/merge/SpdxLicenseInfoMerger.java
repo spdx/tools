@@ -21,7 +21,7 @@ import java.util.Arrays;
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 /**
  * Application to merge SPDX documents' non-standard license information and return the results to the merge main class
@@ -48,26 +48,26 @@ public class SpdxLicenseInfoMerger {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXNonStandardLicense[] mergeNonStdLic(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
+	public ExtractedLicenseInfo[] mergeNonStdLic(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
 		
 		//an array to hold the non-standard license info from outputDoc
-		SPDXNonStandardLicense[] masterNonStdLicInfo = output.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] masterNonStdLicInfo = output.getExtractedLicenseInfos();
 		
 		//an arrayList to hold the final result 
-		ArrayList<SPDXNonStandardLicense> retval = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(masterNonStdLicInfo));
+		ArrayList<ExtractedLicenseInfo> retval = new ArrayList<ExtractedLicenseInfo>(Arrays.asList(masterNonStdLicInfo));
 		
 		//read each child SPDX document
 		for(int i = 0; i < subDocs.length; i++){
 			
 			//an array to hold non-standard license info from current child SPDX document and clone the data
-			SPDXNonStandardLicense[] subNonStdLicInfo = cloneNonStdLic(subDocs[i].getExtractedLicenseInfos());
+			ExtractedLicenseInfo[] subNonStdLicInfo = cloneNonStdLic(subDocs[i].getExtractedLicenseInfos());
 												
 			//compare non-standard license information
-			SPDXNonStandardLicense foundLicense = null;
+			ExtractedLicenseInfo foundLicense = null;
 	        for(int k = 0; k < subNonStdLicInfo.length; k++){
 	        	boolean foundTextMatch = false;
 	        	for(int p = 0; p < retval.size(); p++){
-	        		if(LicenseCompareHelper.isLicenseTextEquivalent(subNonStdLicInfo[k].getText(), retval.get(p).getText())){
+	        		if(LicenseCompareHelper.isLicenseTextEquivalent(subNonStdLicInfo[k].getExtractedText(), retval.get(p).getExtractedText())){
 	        			foundTextMatch = true;
 	        			foundLicense = retval.get(p);
 	        			break;
@@ -82,7 +82,7 @@ public class SpdxLicenseInfoMerger {
 	        }
 
 	   }
-		SPDXNonStandardLicense[] nonStdLicMergeResult = new SPDXNonStandardLicense[retval.size()];
+		ExtractedLicenseInfo[] nonStdLicMergeResult = new ExtractedLicenseInfo[retval.size()];
 		retval.toArray(nonStdLicMergeResult);
 		retval.clear();
 		return nonStdLicMergeResult;
@@ -93,10 +93,10 @@ public class SpdxLicenseInfoMerger {
 	 * @param orgNonStdLicArray
 	 * @return clonedNonStdLicArray
 	 */
-	public SPDXNonStandardLicense[] cloneNonStdLic(SPDXNonStandardLicense[] orgNonStdLicArray){
-		SPDXNonStandardLicense[] clonedNonStdLicArray = new SPDXNonStandardLicense[orgNonStdLicArray.length];
+	public ExtractedLicenseInfo[] cloneNonStdLic(ExtractedLicenseInfo[] orgNonStdLicArray){
+		ExtractedLicenseInfo[] clonedNonStdLicArray = new ExtractedLicenseInfo[orgNonStdLicArray.length];
 		for(int q = 0; q < orgNonStdLicArray.length; q++){
-			clonedNonStdLicArray[q] = (SPDXNonStandardLicense) orgNonStdLicArray[q].clone();
+			clonedNonStdLicArray[q] = (ExtractedLicenseInfo) orgNonStdLicArray[q].clone();
 		}
 		return clonedNonStdLicArray;
 	}

@@ -34,11 +34,11 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -63,7 +63,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	//When we retrieve a list from the SPDXDocument the order changes, therefore keep track of 
 	//the last object that we are looking at so that we can fill in all of it's information
 	private SPDXReview lastReviewer = null;
-	private SPDXNonStandardLicense lastExtractedLicense = null;
+	private ExtractedLicenseInfo lastExtractedLicense = null;
 	private SPDXFile lastFile = null;
 	private DOAPProject lastProject = null;
 	// Keep track of all file dependencies since these need to be added after all of the files
@@ -141,21 +141,21 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			lastReviewer.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_ID"))) {
-			lastExtractedLicense = new SPDXNonStandardLicense(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
-			SPDXNonStandardLicense[] currentNonStdLicenses = analysis.getExtractedLicenseInfos();
-			List<SPDXNonStandardLicense> licenses = new ArrayList<SPDXNonStandardLicense>(Arrays.asList(currentNonStdLicenses));
+			lastExtractedLicense = new ExtractedLicenseInfo(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
+			ExtractedLicenseInfo[] currentNonStdLicenses = analysis.getExtractedLicenseInfos();
+			List<ExtractedLicenseInfo> licenses = new ArrayList<ExtractedLicenseInfo>(Arrays.asList(currentNonStdLicenses));
 			licenses.add(lastExtractedLicense);
-			analysis.setExtractedLicenseInfos(licenses.toArray(new SPDXNonStandardLicense[0]));
+			analysis.setExtractedLicenseInfos(licenses.toArray(new ExtractedLicenseInfo[0]));
 		} else if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text"));
 			}
-			lastExtractedLicense.setText(value);
+			lastExtractedLicense.setExtractedText(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_NAME"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license name"));
 			}
-			lastExtractedLicense.setLicenseName(value);
+			lastExtractedLicense.setName(value);
 		} else if (tag.equals(constants.getProperty("PROP_SOURCE_URLS"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license URL"));
@@ -164,7 +164,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			for (int i = 0; i < values.length; i++) {
 				values[i] = values[i].trim();
 			}
-			lastExtractedLicense.setSourceUrls(values);
+			lastExtractedLicense.setSeeAlso(values);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
@@ -220,19 +220,19 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DECLARED_COPYRIGHT"))) {
 			pkg.setDeclaredCopyright(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DECLARED_LICENSE"))) {
-			SPDXLicenseInfo licenseSet = SPDXLicenseInfoFactory.parseSPDXLicenseString(value);
+			AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value);
 			//TODO in the case of all licenses do we need to worry about the text? I'm only setting text in the package non-standard licenses
 			pkg.setDeclaredLicense(licenseSet);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_CONCLUDED_LICENSE"))) {
-			SPDXLicenseInfo licenseSet = SPDXLicenseInfoFactory.parseSPDXLicenseString(value);
+			AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value);
 			pkg.setConcludedLicenses(licenseSet);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_COMMENT"))) {
 			pkg.setLicenseComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_INFO_FROM_FILES"))) {
-			SPDXLicenseInfo license = SPDXLicenseInfoFactory.parseSPDXLicenseString(value);
-			List<SPDXLicenseInfo> licenses = new ArrayList<SPDXLicenseInfo>(Arrays.asList(pkg.getLicenseInfoFromFiles()));
+			AnyLicenseInfo license = LicenseInfoFactory.parseSPDXLicenseString(value);
+			List<AnyLicenseInfo> licenses = new ArrayList<AnyLicenseInfo>(Arrays.asList(pkg.getLicenseInfoFromFiles()));
 			licenses.add(license);
-			pkg.setLicenseInfoFromFiles(licenses.toArray(new SPDXLicenseInfo[0]));
+			pkg.setLicenseInfoFromFiles(licenses.toArray(new AnyLicenseInfo[0]));
 		} else {
 			buildFile(pkg, tag, value);
 		}
@@ -244,8 +244,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private void buildFile(SPDXPackage pkg, String tag, String value)
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
-			lastFile = new SPDXFile(value, SpdxRdfConstants.FILE_TYPE_OTHER, DEFAULT_SHA1, new SPDXNoneLicense(),
-					new SPDXLicenseInfo[0], "", "", new DOAPProject[0]);
+			lastFile = new SPDXFile(value, SpdxRdfConstants.FILE_TYPE_OTHER, DEFAULT_SHA1, new SpdxNoneLicense(),
+					new AnyLicenseInfo[0], "", "", new DOAPProject[0]);
 			pkg.addFile(lastFile);
 		} else {
 			if (lastFile == null) {
@@ -262,13 +262,13 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			} else if (constants.getProperty("PROP_FILE_CHECKSUM").startsWith(tag)) {
 				lastFile.setSha1(value);
 			} else if (tag.equals(constants.getProperty("PROP_FILE_LICENSE"))) {
-				SPDXLicenseInfo licenseSet = SPDXLicenseInfoFactory.parseSPDXLicenseString(value);
+				AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value);
 				lastFile.setConcludedLicenses(licenseSet);
 			} else if (tag.equals(constants.getProperty("PROP_FILE_SEEN_LICENSE"))) {
-				SPDXLicenseInfo fileLicense = (SPDXLicenseInfoFactory.parseSPDXLicenseString(value));
-				List<SPDXLicenseInfo> seenLicenses = new ArrayList<SPDXLicenseInfo>(Arrays.asList(lastFile.getSeenLicenses()));
+				AnyLicenseInfo fileLicense = (LicenseInfoFactory.parseSPDXLicenseString(value));
+				List<AnyLicenseInfo> seenLicenses = new ArrayList<AnyLicenseInfo>(Arrays.asList(lastFile.getSeenLicenses()));
 				seenLicenses.add(fileLicense);
-				lastFile.setSeenLicenses(seenLicenses.toArray(new SPDXLicenseInfo[0]));
+				lastFile.setSeenLicenses(seenLicenses.toArray(new AnyLicenseInfo[0]));
 			} else if (tag.equals(constants.getProperty("PROP_FILE_LIC_COMMENTS"))) {
 				lastFile.setLicenseComments(value);
 			} else if (tag.equals(constants.getProperty("PROP_FILE_COPYRIGHT"))) {

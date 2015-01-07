@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
-import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.sampullara.mustache.Mustache;
 import com.sampullara.mustache.MustacheBuilder;
@@ -71,14 +71,14 @@ public class LicenseHTMLFile {
 			return getSiteFromUrl(url);
 		}
 	}
-	private SPDXStandardLicense license;
+	private SpdxListedLicense license;
 	/**
 	 * @param templateFileName File name for the Mustache template file
 	 * @param license Listed license to be used
 	 * @param isDeprecated True if the license has been deprecated
 	 * @param deprecatedVersion Version since the license has been deprecated (null if not deprecated)
 	 */
-	public LicenseHTMLFile(SPDXStandardLicense license,
+	public LicenseHTMLFile(SpdxListedLicense license,
 			boolean isDeprecated, String deprecatedVersion) {
 		this.license = license;
 		this.deprecated = isDeprecated;
@@ -91,14 +91,14 @@ public class LicenseHTMLFile {
 	/**
 	 * @return the license
 	 */
-	public SPDXStandardLicense getLicense() {
+	public SpdxListedLicense getLicense() {
 		return license;
 	}
 
 	/**
 	 * @param license the license to set
 	 */
-	public void setLicense(SPDXStandardLicense license) {
+	public void setLicense(SpdxListedLicense license) {
 		this.license = license;
 	}
 
@@ -163,15 +163,15 @@ public class LicenseHTMLFile {
 	private HashMap<String, Object> buildMustachMap() throws LicenseTemplateRuleException {
 			HashMap<String, Object> retval = new HashMap<String, Object>();
 			if (license != null) {
-				retval.put("licenseId", license.getId());
+				retval.put("licenseId", license.getLicenseId());
 				String licenseTextHtml = null;
 				String licenseTemplateHtml = null;
-				String templateText = license.getTemplate();
+				String templateText = license.getStandardLicenseTemplate();
 				if (templateText != null && !templateText.trim().isEmpty()) {
 					licenseTextHtml = formatTemplateText(templateText);
 					licenseTemplateHtml = SpdxLicenseTemplateHelper.escapeHTML(templateText);
 				} else {
-					licenseTextHtml = SpdxLicenseTemplateHelper.escapeHTML(license.getText());
+					licenseTextHtml = SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText());
 				}
 				retval.put("licenseText", licenseTextHtml);
 				retval.put("licenseTemplate", licenseTemplateHtml);
@@ -185,8 +185,8 @@ public class LicenseHTMLFile {
 				retval.put("notes", notes);
 				retval.put("osiApproved", license.isOsiApproved());
 				ArrayList<FormattedUrl> otherWebPages = new ArrayList<FormattedUrl>();
-				if (license.getSourceUrl() != null && license.getSourceUrl().length > 0) {
-					for (String sourceUrl : license.getSourceUrl()) {
+				if (license.getSeeAlso() != null && license.getSeeAlso().length > 0) {
+					for (String sourceUrl : license.getSeeAlso()) {
 						if (sourceUrl != null && !sourceUrl.isEmpty()) {
 							FormattedUrl formattedUrl = new FormattedUrl(sourceUrl);
 							otherWebPages.add(formattedUrl);

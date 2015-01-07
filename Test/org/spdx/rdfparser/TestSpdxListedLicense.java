@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -34,7 +35,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public class TestSPDXStandardLicense {
+public class TestSpdxListedLicense {
 
 	/**
 	 * @throws java.lang.Exception
@@ -60,12 +61,12 @@ public class TestSPDXStandardLicense {
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
-		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
 		Resource licResource = stdl.createResource(model);
-		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
-		assertEquals(id, compLic.getId());
-		assertEquals(text, compLic.getText());
+		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
+		assertEquals(id, compLic.getLicenseId());
+		assertEquals(text, compLic.getLicenseText());
 		ArrayList<String> verify = stdl.verify();
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
@@ -89,15 +90,15 @@ public class TestSPDXStandardLicense {
 		String comments2 = "comments2";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
-		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, comments, standardLicenseHeader, template, true);
 		Resource licResource = stdl.createResource(model);
-		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
+		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
 		assertEquals(comments, compLic.getComment());
 		
 		compLic.setComment(comments2);
 		assertEquals(comments2, compLic.getComment());
-		SPDXStandardLicense compLic2 = new SPDXStandardLicense(model, licResource.asNode());
+		SpdxListedLicense compLic2 = new SpdxListedLicense(model, licResource.asNode());
 		assertEquals(comments2, compLic2.getComment());
 		StringWriter writer = new StringWriter();
 		model.write(writer);
@@ -120,26 +121,26 @@ public class TestSPDXStandardLicense {
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
-		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
 		Resource licResource = stdl.createResource(model);
-		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
-		assertEquals(id, compLic.getId());
-		assertEquals(text, compLic.getText());
+		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
+		assertEquals(id, compLic.getLicenseId());
+		assertEquals(text, compLic.getLicenseText());
 		
 		String newID = "newID";
 		String newText = "new Text";
-		compLic.setId(newID);
-		compLic.setText(newText);
-		assertEquals(newID, compLic.getId());
-		assertEquals(newText, compLic.getText());
-		SPDXStandardLicense compLic2 = new SPDXStandardLicense(model, licResource.asNode());
-		assertEquals(newID, compLic2.getId());
-		assertEquals(newText, compLic2.getText());
+		compLic.setLicenseId(newID);
+		compLic.setLicenseText(newText);
+		assertEquals(newID, compLic.getLicenseId());
+		assertEquals(newText, compLic.getLicenseText());
+		SpdxListedLicense compLic2 = new SpdxListedLicense(model, licResource.asNode());
+		assertEquals(newID, compLic2.getLicenseId());
+		assertEquals(newText, compLic2.getLicenseText());
 		ArrayList<String> verify = stdl.verify();
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
-		assertEquals(0, verify.size());
+		assertEquals(1, verify.size());	// verify will fail since this is not a valid listed license ID
 	}
 	
 	@Test
@@ -159,16 +160,16 @@ public class TestSPDXStandardLicense {
 		String name2 = "name2";
 		
 		try {
-    		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+    		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
     				sourceUrls1, notes, standardLicenseHeader, template, true);
     		Resource licResource = stdl.createResource(model);
     		
-    		SPDXStandardLicense stdl3 = new SPDXStandardLicense(name2, id2, text,
+    		SpdxListedLicense stdl3 = new SpdxListedLicense(name2, id2, text,
     				sourceUrls2, notes, standardLicenseHeader, template, true);
     		@SuppressWarnings("unused")
     		Resource compResource3 = stdl3.createResource(model);
     		
-    		SPDXStandardLicense stdl2 = new SPDXStandardLicense(name2, id, text,
+    		SpdxListedLicense stdl2 = new SpdxListedLicense(name2, id, text,
     				sourceUrls2, notes, standardLicenseHeader, template, true);
             
     		Resource compResource = stdl2.createResource(model);
@@ -189,21 +190,21 @@ public class TestSPDXStandardLicense {
 		String notes = "notes";
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
-		SPDXStandardLicense stdl = new SPDXStandardLicense(name, id, text,
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
 		Resource licResource = stdl.createResource(model);
-		SPDXStandardLicense compLic = new SPDXStandardLicense(model, licResource.asNode());
+		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
 
 		
-		SPDXStandardLicense lic2 = (SPDXStandardLicense)compLic.clone();
+		SpdxListedLicense lic2 = (SpdxListedLicense)compLic.clone();
 
-		assertEquals(id, lic2.getId());
-		assertEquals(text, lic2.getText());
+		assertEquals(id, lic2.getLicenseId());
+		assertEquals(text, lic2.getLicenseText());
 		assertEquals(notes, lic2.getComment());
 		assertEquals(name, lic2.getName());
-		assertTrue(compareArrayContent(sourceUrls, lic2.getSourceUrl()));
+		assertTrue(compareArrayContent(sourceUrls, lic2.getSeeAlso()));
 		assertEquals(standardLicenseHeader, lic2.getStandardLicenseHeader());
-		assertEquals(template, lic2.getTemplate());
+		assertEquals(template, lic2.getStandardLicenseTemplate());
 		assertTrue(lic2.getResource() == null);
 	}
 

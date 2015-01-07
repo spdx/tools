@@ -1,0 +1,55 @@
+/**
+ * Copyright (c) 2011 Source Auditor Inc.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+package org.spdx.rdfparser.license;
+
+import java.util.ArrayList;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.rdf.model.Model;
+
+/**
+ * Listed license for SPDX as listed at spdx.org/licenses
+ * @author Gary O'Neall
+ *
+ */
+public class SpdxListedLicense extends License {
+	
+
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
+		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved);
+	}
+	/**
+	 * Constructs an SPDX License from the licenseNode
+	 * @param licenseNode RDF graph node representing the SPDX License
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public SpdxListedLicense(Model spdxModel, Node licenseNode) throws InvalidSPDXAnalysisException {
+		super(spdxModel, licenseNode);
+	}
+	
+	@Override public ArrayList<String> verify() {
+		ArrayList<String> retval = super.verify();
+		if (!LicenseInfoFactory.isSpdxListedLicenseID(this.getLicenseId())) {
+			retval.add("License "+this.getLicenseId()+" is not a listed license at spdx.org/licenses");
+		}
+		return retval;
+	}
+
+}

@@ -32,12 +32,12 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
 import org.spdx.spdxspreadsheet.OriginsSheet;
@@ -165,12 +165,12 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyNonStdLicenses(SPDXNonStandardLicense[] nonStandardLicenses,
+	private static void copyNonStdLicenses(ExtractedLicenseInfo[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
-			nonStandardLicensesSheet.add(nonStandardLicenses[i].getId(), nonStandardLicenses[i].getText(), 
-					nonStandardLicenses[i].getLicenseName(),
-					nonStandardLicenses[i].getSourceUrls(),
+			nonStandardLicensesSheet.add(nonStandardLicenses[i].getLicenseId(), nonStandardLicenses[i].getExtractedText(), 
+					nonStandardLicenses[i].getName(),
+					nonStandardLicenses[i].getSeeAlso(),
 					nonStandardLicenses[i].getComment());
 		}
 	}
@@ -189,9 +189,9 @@ public class RdfToSpreadsheet {
 		String[] createdBys = creator.getCreators();
 		originsSheet.setCreatedBy(createdBys);
 		// Data license
-		SPDXStandardLicense dataLicense = doc.getDataLicense();
+		SpdxListedLicense dataLicense = doc.getDataLicense();
 		if (dataLicense != null) {
-			originsSheet.setDataLicense(dataLicense.getId());
+			originsSheet.setDataLicense(dataLicense.getLicenseId());
 		}
 		// Author Comments
 		String comments = creator.getComment();

@@ -14,9 +14,11 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -26,12 +28,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * This abstract class represents several ways of describing licensing information.
  * License info can be described as a set of conjunctive licenses (where all licenses
  * terms must apply), a set of disjunctive licenses (where there is a choice of one
- * license among the set described) or a specific license.  The specific license can
- * be an SPDX standard license or a non-standard license.
+ * license among the set described) or a specific license.  The specific licenses
+ * are of a SimpleLicensingInfoType
  * @author Gary O'Neall
  *
  */
-public abstract class SPDXLicenseInfo implements Cloneable {
+public abstract class AnyLicenseInfo implements Cloneable {
 	
 	Model model = null;
 	Node licenseInfoNode = null;
@@ -43,7 +45,7 @@ public abstract class SPDXLicenseInfo implements Cloneable {
 	 * @param licenseInfoNode
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	SPDXLicenseInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+	AnyLicenseInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
 		this.licenseInfoNode = licenseInfoNode;
 		resource = convertToResource(model, licenseInfoNode);
@@ -67,7 +69,7 @@ public abstract class SPDXLicenseInfo implements Cloneable {
 	}
 
 
-	SPDXLicenseInfo() {
+	AnyLicenseInfo() {
 		this.model = null;
 		this.licenseInfoNode = null;
 		this.resource = null;
@@ -84,7 +86,7 @@ public abstract class SPDXLicenseInfo implements Cloneable {
 	public Resource createResource(Model model) throws InvalidSPDXAnalysisException {	
 		if (this.model != null &&
 				(this.model.equals(model) 
-						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the standard license 
+						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the spdx listed license 
 				&&											// references to reference the URL rather than copy all of the properties into this model
 				this.licenseInfoNode != null &&
 				this.resource != null) {
@@ -127,5 +129,5 @@ public abstract class SPDXLicenseInfo implements Cloneable {
 		return this.resource;
 	}
 	
-	public abstract SPDXLicenseInfo clone();
+	public abstract AnyLicenseInfo clone();
 }

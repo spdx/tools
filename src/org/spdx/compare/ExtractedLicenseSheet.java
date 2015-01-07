@@ -26,8 +26,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
 /**
@@ -39,18 +39,18 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class ExtractedLicenseSheet extends AbstractSheet {
 	
-	class ExtractedLicenseComparator implements Comparator<SPDXLicenseInfo> {
+	class ExtractedLicenseComparator implements Comparator<AnyLicenseInfo> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public int compare(SPDXLicenseInfo o1, SPDXLicenseInfo o2) {
-			if (o1 instanceof SPDXNonStandardLicense) {
-				if (o2 instanceof SPDXNonStandardLicense) {
-					SPDXNonStandardLicense l1 = (SPDXNonStandardLicense)o1;
-					SPDXNonStandardLicense l2 = (SPDXNonStandardLicense)o2;
-					return l1.getText().compareTo(l2.getText());
+		public int compare(AnyLicenseInfo o1, AnyLicenseInfo o2) {
+			if (o1 instanceof ExtractedLicenseInfo) {
+				if (o2 instanceof ExtractedLicenseInfo) {
+					ExtractedLicenseInfo l1 = (ExtractedLicenseInfo)o1;
+					ExtractedLicenseInfo l2 = (ExtractedLicenseInfo)o2;
+					return l1.getExtractedText().compareTo(l2.getExtractedText());
 				} else {
 					return 1;
 				}
@@ -123,11 +123,11 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 		this.clear();
 		Row header = sheet.getRow(0);
 		int[] licenseIndexes = new int[comparer.getNumSpdxDocs()];
-		SPDXLicenseInfo[][] extractedLicenses = new SPDXLicenseInfo[comparer.getNumSpdxDocs()][];
+		AnyLicenseInfo[][] extractedLicenses = new AnyLicenseInfo[comparer.getNumSpdxDocs()][];
 		for (int i = 0; i < extractedLicenses.length; i++) {
 			Cell headerCell = header.getCell(FIRST_LIC_ID_COL+i);
 			headerCell.setCellValue(docNames[i]);
-			SPDXLicenseInfo[] docExtractedLicenses = comparer.getSpdxDoc(i).getExtractedLicenseInfos();
+			AnyLicenseInfo[] docExtractedLicenses = comparer.getSpdxDoc(i).getExtractedLicenseInfos();
 			Arrays.sort(docExtractedLicenses, extractedLicenseComparator);
 			extractedLicenses[i] = docExtractedLicenses;
 			licenseIndexes[i] = 0;
@@ -139,12 +139,12 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 			licenseTextCell.setCellValue(extractedLicenseText);
 			for (int i = 0; i < extractedLicenses.length; i++) {
 				if (extractedLicenses[i].length > licenseIndexes[i]) {
-					if  (extractedLicenses[i][licenseIndexes[i]] instanceof SPDXNonStandardLicense) {
-					String compareExtractedText = ((SPDXNonStandardLicense)extractedLicenses[i][licenseIndexes[i]]).getText();
+					if  (extractedLicenses[i][licenseIndexes[i]] instanceof ExtractedLicenseInfo) {
+					String compareExtractedText = ((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]).getExtractedText();
 					if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicenseText, 
 							compareExtractedText)) {
 						Cell licenseIdCell = currentRow.createCell(FIRST_LIC_ID_COL+i);
-						licenseIdCell.setCellValue(formatLicenseInfo((SPDXNonStandardLicense)extractedLicenses[i][licenseIndexes[i]]));
+						licenseIdCell.setCellValue(formatLicenseInfo((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]));
 						licenseIndexes[i]++;
 					}
 					} else {
@@ -160,19 +160,19 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 	 * @param license
 	 * @return
 	 */
-	private String formatLicenseInfo(SPDXNonStandardLicense license) {
-		StringBuilder sb = new StringBuilder(license.getId());
-		if (license.getLicenseName() != null && !license.getLicenseName().isEmpty()) {
+	private String formatLicenseInfo(ExtractedLicenseInfo license) {
+		StringBuilder sb = new StringBuilder(license.getLicenseId());
+		if (license.getName() != null && !license.getName().isEmpty()) {
 			sb.append("[");
-			sb.append(license.getLicenseName());
+			sb.append(license.getName());
 			sb.append("]");
 		}
-		if (license.getSourceUrls() != null && license.getSourceUrls().length > 0) {
+		if (license.getSeeAlso() != null && license.getSeeAlso().length > 0) {
 			sb.append("{");
-			sb.append(license.getSourceUrls()[0]);
-			for (int i = 1; i < license.getSourceUrls().length; i++) {
+			sb.append(license.getSeeAlso()[0]);
+			for (int i = 1; i < license.getSeeAlso().length; i++) {
 				sb.append(", ");
-				sb.append(license.getSourceUrls()[i]);
+				sb.append(license.getSeeAlso()[i]);
 			}
 			sb.append("}");
 		}
@@ -190,14 +190,14 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 	 * @param licenseIndexes
 	 * @return
 	 */
-	private String getNextExtractedLicenseText(SPDXLicenseInfo[][] licenseInfos, int[] licenseIndexes) {
+	private String getNextExtractedLicenseText(AnyLicenseInfo[][] licenseInfos, int[] licenseIndexes) {
 		String retval = null;
 		for (int i = 0; i < licenseInfos.length; i++) {
 			if (licenseInfos[i].length > licenseIndexes[i]) {
-				SPDXLicenseInfo licenseInfo = licenseInfos[i][licenseIndexes[i]];
+				AnyLicenseInfo licenseInfo = licenseInfos[i][licenseIndexes[i]];
 				String extractedText = "";
-				if (licenseInfo instanceof SPDXNonStandardLicense) {
-					extractedText = ((SPDXNonStandardLicense)licenseInfo).getText();
+				if (licenseInfo instanceof ExtractedLicenseInfo) {
+					extractedText = ((ExtractedLicenseInfo)licenseInfo).getExtractedText();
 				}
 				if (retval == null || retval.compareTo(extractedText) > 0) {
 					retval = extractedText;
@@ -213,7 +213,7 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 	 * @param licenseIndexes
 	 * @return
 	 */
-	private boolean allLicensesExhausted(SPDXLicenseInfo[][] licenseInfos, int[] licenseIndexes) {
+	private boolean allLicensesExhausted(AnyLicenseInfo[][] licenseInfos, int[] licenseIndexes) {
 		for (int i = 0; i < licenseInfos.length; i++) {
 			if (licenseIndexes[i] < licenseInfos[i].length) {
 				return false;

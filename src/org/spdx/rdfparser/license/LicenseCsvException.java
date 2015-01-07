@@ -14,22 +14,24 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
-
-import java.util.Iterator;
-
-import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
-import org.spdx.spdxspreadsheet.SpreadsheetException;
+package org.spdx.rdfparser.license;
 
 /**
- * Interface to provide SPDX standard licenses
  * @author Gary O'Neall
  *
  */
-public interface IStandardLicenseProvider {
-	
-	public Iterator<SPDXStandardLicense> getLicenseIterator() throws SpdxStdLicenseException;
-	public Iterator<SpdxLicenseRestriction> getExceptionIterator() throws SPDXLicenseRestrictionException, SpreadsheetException;
-	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator();
+public class LicenseCsvException extends SpdxListedLicenseException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6979572232573954539L;
+
+	public LicenseCsvException(String msg) {
+		super(msg);
+	}
+	
+	public LicenseCsvException(String msg, Throwable inner) {
+		super(msg, inner);
+	}
 }

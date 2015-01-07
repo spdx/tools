@@ -62,7 +62,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_CONJUNCTIVE_LICENSE_SET = "ConjunctiveLicenseSet";
 	public static final String CLASS_SPDX_DISJUNCTIVE_LICENSE_SET = "DisjunctiveLicenseSet";
 	public static final String CLASS_SPDX_EXTRACTED_LICENSING_INFO = "ExtractedLicensingInfo";
-	public static final String CLASS_SPDX_STANDARD_LICENSE = "License";
+	public static final String CLASS_SPDX_LISTED_LICENSE = "License";
 	public static final String CLASS_SPDX_FILE = "File";
 	public static final String CLASS_SPDX_REVIEW = "Review";
 	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";

@@ -33,9 +33,9 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicense;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.License;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.tools.MergeSpdxDocs;
 
 import com.google.common.io.Files;
@@ -100,8 +100,8 @@ public class MergeToolTest {
 		assertEquals(outputDoc.getSpdxPackage().getDeclaredName(), masterDoc.getSpdxPackage().getDeclaredName());
 		// check for licenses and build a license map
 
-		SPDXLicenseInfo[] masterExtractedLicenses = masterDoc.getExtractedLicenseInfos();
-		SPDXLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();		
+		AnyLicenseInfo[] masterExtractedLicenses = masterDoc.getExtractedLicenseInfos();
+		AnyLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();		
 
 		HashMap<String, String> masterDocLicMap = mapLicenseIds(masterExtractedLicenses, outputDocExtratedLicenses);
 		HashMap<String, String> firstMergeDoccLicMap = mapLicenseIds(firstMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
@@ -130,25 +130,25 @@ public class MergeToolTest {
 	 * @return
 	 */
 	private HashMap<String, String> mapLicenseIds(
-			SPDXLicenseInfo[] fromLicenses,
-			SPDXLicenseInfo[] toLicenses) {
+			AnyLicenseInfo[] fromLicenses,
+			AnyLicenseInfo[] toLicenses) {
 		HashMap<String, String> retval = new HashMap<String, String>();
-		for (SPDXLicenseInfo fromLicense : fromLicenses) {
-			if (fromLicense instanceof SPDXNonStandardLicense) {
-				SPDXNonStandardLicense fromNonStdLicense = (SPDXNonStandardLicense)fromLicense;
-				for (SPDXLicenseInfo toLicense : toLicenses) {
-					if (toLicense instanceof SPDXNonStandardLicense && 
-							LicenseCompareHelper.isLicenseTextEquivalent(fromNonStdLicense.getText(), 
-							((SPDXNonStandardLicense)toLicense).getText())) {
-						if (retval.containsKey(fromNonStdLicense.getId())) {
-							fail("Duplicate license text values for "+fromNonStdLicense.getText());
+		for (AnyLicenseInfo fromLicense : fromLicenses) {
+			if (fromLicense instanceof ExtractedLicenseInfo) {
+				ExtractedLicenseInfo fromNonStdLicense = (ExtractedLicenseInfo)fromLicense;
+				for (AnyLicenseInfo toLicense : toLicenses) {
+					if (toLicense instanceof ExtractedLicenseInfo && 
+							LicenseCompareHelper.isLicenseTextEquivalent(fromNonStdLicense.getExtractedText(), 
+							((ExtractedLicenseInfo)toLicense).getExtractedText())) {
+						if (retval.containsKey(fromNonStdLicense.getLicenseId())) {
+							fail("Duplicate license text values for "+fromNonStdLicense.getExtractedText());
 						} else {
-							retval.put(fromNonStdLicense.getId(), ((SPDXNonStandardLicense)toLicense).getId());
+							retval.put(fromNonStdLicense.getLicenseId(), ((ExtractedLicenseInfo)toLicense).getLicenseId());
 						}
 					}
 				}
-				if (!retval.containsKey(fromNonStdLicense.getId())) {
-					fail("No matching license found for "+fromNonStdLicense.getText());
+				if (!retval.containsKey(fromNonStdLicense.getLicenseId())) {
+					fail("No matching license found for "+fromNonStdLicense.getExtractedText());
 				}
 			}
 		}
@@ -174,10 +174,10 @@ public class MergeToolTest {
 			}
 		}
 		//prepare second doc's file into list; need to change concluded license and license info in file here
-		SPDXNonStandardLicense[] secondMergeDocLics = secondMergeDoc.getExtractedLicenseInfos();
-		SPDXNonStandardLicense clonedLic = (SPDXNonStandardLicense) secondMergeDocLics[0].clone();//only one extracted license in the second doc
+		ExtractedLicenseInfo[] secondMergeDocLics = secondMergeDoc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo clonedLic = (ExtractedLicenseInfo) secondMergeDocLics[0].clone();//only one extracted license in the second doc
 		String newId = masterDoc.getNextLicenseRef();//master doc and first doc have the same extracted licenses
-		clonedLic.setId(newId);
+		clonedLic.setLicenseId(newId);
 		secondMergeDocLics[0] = clonedLic;
 		secondDocFiles[0].setSeenLicenses(secondMergeDocLics);
 		secondDocFiles[0].setConcludedLicenses(clonedLic);

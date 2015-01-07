@@ -31,24 +31,24 @@ import org.junit.Test;
 import org.spdx.compare.SpdxLicenseDifference;
 import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
 import org.spdx.rdfparser.DOAPProject;
-import org.spdx.rdfparser.DuplicateNonStandardLicenseIdException;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXCreatorInformation;
-import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicense;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
-import org.spdx.rdfparser.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
+import org.spdx.rdfparser.license.License;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
@@ -101,7 +101,7 @@ public class SpdxComparerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#compareLicense(int, org.spdx.rdfparser.SPDXLicenseInfo, int, org.spdx.rdfparser.SPDXLicenseInfo)}.
+	 * Test method for {@link org.spdx.compare.SpdxComparer#compareLicense(int, org.spdx.rdfparser.license.AnyLicenseInfo, int, org.spdx.rdfparser.license.AnyLicenseInfo)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 * @throws SpdxCompareException 
@@ -115,15 +115,15 @@ public class SpdxComparerTest {
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
-		SPDXNonStandardLicense[] extractedInfos1 = doc1.getExtractedLicenseInfos();
-		SPDXNonStandardLicense[] extractedInfos2 = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] extractedInfos1 = doc1.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] extractedInfos2 = doc2.getExtractedLicenseInfos();
 		
 		HashMap<Integer, Integer> xlateDoc1ToDoc2LicId = createLicIdXlation(extractedInfos1, extractedInfos2);
 		
 		//Standard License
-		SPDXStandardLicense lic1 = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_CC0);
-		SPDXStandardLicense lic1_1 = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_CC0);
-		SPDXStandardLicense lic2 = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_MPL11);
+		SpdxListedLicense lic1 = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
+		SpdxListedLicense lic1_1 = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
+		SpdxListedLicense lic2 = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_MPL11);
 		assertTrue(comparer.compareLicense(0, lic1, 1, lic1_1));
 		assertFalse(comparer.compareLicense(0, lic1, 1, lic2));
 		//Extracted License
@@ -142,33 +142,33 @@ public class SpdxComparerTest {
 		StringBuilder sb = new StringBuilder("(");
 		sb.append(STD_LIC_ID_CC0);
 		sb.append(" AND ");
-		sb.append(extractedInfos1[0].getId());
+		sb.append(extractedInfos1[0].getLicenseId());
 		sb.append(" AND ");
 		sb.append(STD_LIC_ID_MPL11);
 		sb.append(" AND ");
-		sb.append(extractedInfos1[1].getId());
+		sb.append(extractedInfos1[1].getLicenseId());
 		sb.append(")");
-		SPDXLicenseInfo conj1 = SPDXLicenseInfoFactory.parseSPDXLicenseString(sb.toString());
+		AnyLicenseInfo conj1 = LicenseInfoFactory.parseSPDXLicenseString(sb.toString());
 
 		sb = new StringBuilder("(");
 		sb.append(STD_LIC_ID_MPL11);
 		sb.append(" AND ");
-		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getId());
+		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getLicenseId());
 		sb.append(" AND ");
 		sb.append(STD_LIC_ID_CC0);
 		sb.append(" AND ");
-		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(0)].getId());
+		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(0)].getLicenseId());
 		sb.append(")");
-		SPDXLicenseInfo conj2 = SPDXLicenseInfoFactory.parseSPDXLicenseString(sb.toString());
+		AnyLicenseInfo conj2 = LicenseInfoFactory.parseSPDXLicenseString(sb.toString());
 		
 		sb = new StringBuilder("(");
 		sb.append(STD_LIC_ID_MPL11);
 		sb.append(" AND ");
-		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getId());
+		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getLicenseId());
 		sb.append(" AND ");
 		sb.append(STD_LIC_ID_CC0);
 		sb.append(")");
-		SPDXLicenseInfo conj3 = SPDXLicenseInfoFactory.parseSPDXLicenseString(sb.toString());
+		AnyLicenseInfo conj3 = LicenseInfoFactory.parseSPDXLicenseString(sb.toString());
 		
 		assertTrue(comparer.compareLicense(0, conj1, 1, conj2));
 		assertFalse(comparer.compareLicense(0, conj1, 1, conj3));
@@ -181,33 +181,33 @@ public class SpdxComparerTest {
 		sb = new StringBuilder("(");
 		sb.append(STD_LIC_ID_CC0);
 		sb.append(" OR ");
-		sb.append(extractedInfos1[0].getId());
+		sb.append(extractedInfos1[0].getLicenseId());
 		sb.append(" OR ");
 		sb.append(STD_LIC_ID_MPL11);
 		sb.append(" OR ");
-		sb.append(extractedInfos1[1].getId());
+		sb.append(extractedInfos1[1].getLicenseId());
 		sb.append(")");
-		SPDXLicenseInfo dis1 = SPDXLicenseInfoFactory.parseSPDXLicenseString(sb.toString());
+		AnyLicenseInfo dis1 = LicenseInfoFactory.parseSPDXLicenseString(sb.toString());
 
 		sb = new StringBuilder("(");
 		sb.append(STD_LIC_ID_MPL11);
 		sb.append(" OR ");
-		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getId());
+		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getLicenseId());
 		sb.append(" OR ");
-		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(0)].getId());
+		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(0)].getLicenseId());
 		sb.append(" OR ");
 		sb.append(STD_LIC_ID_CC0);
 		sb.append(")");
-		SPDXLicenseInfo dis2 = SPDXLicenseInfoFactory.parseSPDXLicenseString(sb.toString());
+		AnyLicenseInfo dis2 = LicenseInfoFactory.parseSPDXLicenseString(sb.toString());
 		
 		sb = new StringBuilder("(");
 		sb.append(STD_LIC_ID_MPL11);
 		sb.append(" OR ");
-		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getId());
+		sb.append(extractedInfos2[xlateDoc1ToDoc2LicId.get(1)].getLicenseId());
 		sb.append(" OR ");
 		sb.append(STD_LIC_ID_CC0);
 		sb.append(")");
-		SPDXLicenseInfo dis3 = SPDXLicenseInfoFactory.parseSPDXLicenseString(sb.toString());
+		AnyLicenseInfo dis3 = LicenseInfoFactory.parseSPDXLicenseString(sb.toString());
 		
 		assertTrue(comparer.compareLicense(0, dis1, 1, dis2));
 		assertFalse(comparer.compareLicense(0, dis1, 1, dis3));
@@ -217,24 +217,24 @@ public class SpdxComparerTest {
 			// we expect a mappint exception
 		}
 		//Complex License
-		SPDXDisjunctiveLicenseSet subcomplex1 = new SPDXDisjunctiveLicenseSet(
-					new SPDXLicenseInfo[] {lic1, conj1});
-		SPDXConjunctiveLicenseSet complex1 = new SPDXConjunctiveLicenseSet(
-				new SPDXLicenseInfo[] {subcomplex1, dis1, extractedInfos1[0]});
-		SPDXDisjunctiveLicenseSet subcomplex2 = new SPDXDisjunctiveLicenseSet(
-				new SPDXLicenseInfo[] {conj2, lic1_1});
-		SPDXConjunctiveLicenseSet complex2 = new SPDXConjunctiveLicenseSet(
-			new SPDXLicenseInfo[] {dis2, subcomplex2, extractedInfos2[xlateDoc1ToDoc2LicId.get(0)]});
+		DisjunctiveLicenseSet subcomplex1 = new DisjunctiveLicenseSet(
+					new AnyLicenseInfo[] {lic1, conj1});
+		ConjunctiveLicenseSet complex1 = new ConjunctiveLicenseSet(
+				new AnyLicenseInfo[] {subcomplex1, dis1, extractedInfos1[0]});
+		DisjunctiveLicenseSet subcomplex2 = new DisjunctiveLicenseSet(
+				new AnyLicenseInfo[] {conj2, lic1_1});
+		ConjunctiveLicenseSet complex2 = new ConjunctiveLicenseSet(
+			new AnyLicenseInfo[] {dis2, subcomplex2, extractedInfos2[xlateDoc1ToDoc2LicId.get(0)]});
 		
-		SPDXDisjunctiveLicenseSet subcomplex3 = new SPDXDisjunctiveLicenseSet(
-				new SPDXLicenseInfo[] {conj3, lic1_1});
-		SPDXConjunctiveLicenseSet complex3 = new SPDXConjunctiveLicenseSet(
-			new SPDXLicenseInfo[] {dis2, subcomplex3, extractedInfos2[xlateDoc1ToDoc2LicId.get(0)]});
+		DisjunctiveLicenseSet subcomplex3 = new DisjunctiveLicenseSet(
+				new AnyLicenseInfo[] {conj3, lic1_1});
+		ConjunctiveLicenseSet complex3 = new ConjunctiveLicenseSet(
+			new AnyLicenseInfo[] {dis2, subcomplex3, extractedInfos2[xlateDoc1ToDoc2LicId.get(0)]});
 		assertTrue(comparer.compareLicense(0, complex1, 1, complex2));
 		assertFalse(comparer.compareLicense(0, complex1, 1, complex3));
 		//NONE
-		SPDXNoneLicense noneLic1 = new SPDXNoneLicense();
-		SPDXNoneLicense noneLic2 = new SPDXNoneLicense();
+		SpdxNoneLicense noneLic1 = new SpdxNoneLicense();
+		SpdxNoneLicense noneLic2 = new SpdxNoneLicense();
 		SpdxNoAssertionLicense noAssertLic1 = new SpdxNoAssertionLicense();
 		SpdxNoAssertionLicense noAssertLic2 = new SpdxNoAssertionLicense();
 		assertTrue (comparer.compareLicense(0, noneLic1, 1, noneLic2));
@@ -252,15 +252,15 @@ public class SpdxComparerTest {
 	 * @return
 	 */
 	private HashMap<Integer, Integer> createLicIdXlation(
-			SPDXNonStandardLicense[] licInfos1,
-			SPDXNonStandardLicense[] licInfos2) {
+			ExtractedLicenseInfo[] licInfos1,
+			ExtractedLicenseInfo[] licInfos2) {
 		HashMap<Integer, Integer> retval = new HashMap<Integer, Integer>();
 		for (int i = 0;i < licInfos1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < licInfos2.length; j++) {
-				if (licInfos1[i].getText().equals(licInfos2[j].getText())) {
+				if (licInfos1[i].getExtractedText().equals(licInfos2[j].getExtractedText())) {
 					if (found) {
-						fail("Two licenses found with the same text: "+licInfos1[i].getText());
+						fail("Two licenses found with the same text: "+licInfos1[i].getExtractedText());
 					}
 					retval.put(i, j);
 				}
@@ -276,11 +276,11 @@ public class SpdxComparerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void alterExtractedLicenseInfoIds(SPDXDocument doc, int digit) throws InvalidSPDXAnalysisException {
-		SPDXNonStandardLicense[] extracted = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] extracted = doc.getExtractedLicenseInfos();
 		for (int i = 0; i < extracted.length; i++) {
-			String oldId = extracted[i].getId();
+			String oldId = extracted[i].getLicenseId();
 			String newId = oldId + String.valueOf(digit);
-			extracted[i].setId(newId);
+			extracted[i].setLicenseId(newId);
 			assertEquals(0, extracted[i].verify().size());
 		}
 		
@@ -369,7 +369,7 @@ public class SpdxComparerTest {
 		assertFalse(comparer.isDifferenceFound());
 		assertTrue(comparer.isDataLicenseEqual());
 		doc2.setSpdxVersion("SPDX-1.0");
-		doc2.setDataLicense(SPDXLicenseInfoFactory.getStandardLicenseById(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0));
+		doc2.setDataLicense(LicenseInfoFactory.getListedLicenseById(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0));
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isDataLicenseEqual());
@@ -491,8 +491,8 @@ public class SpdxComparerTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
-		SPDXNonStandardLicense[] orig1 = doc1.getExtractedLicenseInfos();
-		SPDXNonStandardLicense[] orig2 = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] orig1 = doc1.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] orig2 = doc2.getExtractedLicenseInfos();
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isExtractedLicensingInfosEqual());
 		assertFalse(comparer.isDifferenceFound());
@@ -504,10 +504,10 @@ public class SpdxComparerTest {
 		String name1 = "licname1";
 		String[] crossReff1 = new String[] {"http://cross.ref.one"};
 		String comment1 = "comment1";
-		SPDXNonStandardLicense lic1_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_1 = new ExtractedLicenseInfo(
 				id1_1, text1, name1, crossReff1, comment1);
 		String id1_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic1_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2 = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, comment1);
 		
 		String id2_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -515,10 +515,10 @@ public class SpdxComparerTest {
 		String name2 = "licname2";
 		String[] crossReff2 = new String[] {"http://cross.ref.one", "http://cross.ref.two"};
 		String comment2 = "comment2";
-		SPDXNonStandardLicense lic2_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_1 = new ExtractedLicenseInfo(
 				id2_1, text2, name2, crossReff2, comment2);
 		String id2_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic2_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_2 = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, comment2);
 		
 		String id3_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -526,10 +526,10 @@ public class SpdxComparerTest {
 		String name3 = "";
 		String[] crossReff3 = new String[] {};
 		String comment3 = "comment3";
-		SPDXNonStandardLicense lic3_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_1 = new ExtractedLicenseInfo(
 				id3_1, text3, name3, crossReff3, comment3);
 		String id3_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic3_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_2 = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff3, comment3);
 
 		String id4_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -537,19 +537,19 @@ public class SpdxComparerTest {
 		String name4 = "";
 		String[] crossReff4 = new String[] {};
 		String comment4 = "";
-		SPDXNonStandardLicense lic4_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic4_1 = new ExtractedLicenseInfo(
 				id4_1, text4, name4, crossReff4, comment4);
 		String id4_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic4_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic4_2 = new ExtractedLicenseInfo(
 				id4_2, text4, name4, crossReff4, comment4);
 
 		// same licenses, different order
-		SPDXNonStandardLicense[] exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);
+		ExtractedLicenseInfo[] exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);
 		exLicenses1[orig1.length+0] = lic1_1;
 		exLicenses1[orig1.length+1] = lic2_1;
 		exLicenses1[orig1.length+2] = lic3_1;
 		exLicenses1[orig1.length+3] = lic4_1;
-		SPDXNonStandardLicense[] exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
+		ExtractedLicenseInfo[] exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
 		exLicenses2[orig2.length+2] = lic4_2;
@@ -570,6 +570,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
 
+		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -584,6 +586,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+1] = lic1_2;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
+		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -598,7 +602,7 @@ public class SpdxComparerTest {
 		exLicenses1[orig1.length+3] = lic4_1;
 		exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		
-		SPDXNonStandardLicense lic1_2_diff_Text = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2_diff_Text = new ExtractedLicenseInfo(
 				id1_2, "Different Text", name1, crossReff1, comment1);
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2_diff_Text;
@@ -609,7 +613,7 @@ public class SpdxComparerTest {
 		boolean caughtDupException = false;
 		try {
 			doc2.setExtractedLicenseInfos(exLicenses2);
-		} catch (DuplicateNonStandardLicenseIdException e) {
+		} catch (DuplicateExtractedLicenseIdException e) {
 			caughtDupException = true;
 		}
 		assertTrue(caughtDupException);		
@@ -622,13 +626,15 @@ public class SpdxComparerTest {
 		exLicenses1[orig1.length+3] = lic4_1;
 		exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		
-		SPDXNonStandardLicense lic1_2_diff_Comment = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2_diff_Comment = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, "different comment");
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2_diff_Comment;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
 
+		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -644,13 +650,14 @@ public class SpdxComparerTest {
 		exLicenses1[orig1.length+3] = lic4_1;
 		exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		
-		SPDXNonStandardLicense lic1_2_diff_licenref = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2_diff_licenref = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff2, comment1);
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2_diff_licenref;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
-
+		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -867,8 +874,8 @@ public class SpdxComparerTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
-		SPDXNonStandardLicense[] orig1 = doc1.getExtractedLicenseInfos();
-		SPDXNonStandardLicense[] orig2 = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] orig1 = doc1.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] orig2 = doc2.getExtractedLicenseInfos();
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isExtractedLicensingInfosEqual());
 		assertFalse(comparer.isDifferenceFound());
@@ -880,10 +887,10 @@ public class SpdxComparerTest {
 		String name1 = "licname1";
 		String[] crossReff1 = new String[] {"http://cross.ref.one"};
 		String comment1 = "comment1";
-		SPDXNonStandardLicense lic1_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_1 = new ExtractedLicenseInfo(
 				id1_1, text1, name1, crossReff1, comment1);
 		String id1_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic1_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2 = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, comment1);
 		
 		String id2_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -891,10 +898,10 @@ public class SpdxComparerTest {
 		String name2 = "licname2";
 		String[] crossReff2 = new String[] {"http://cross.ref.one", "http://cross.ref.two"};
 		String comment2 = "comment2";
-		SPDXNonStandardLicense lic2_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_1 = new ExtractedLicenseInfo(
 				id2_1, text2, name2, crossReff2, comment2);
 		String id2_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic2_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_2 = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, comment2);
 		
 		String id3_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -902,10 +909,10 @@ public class SpdxComparerTest {
 		String name3 = "";
 		String[] crossReff3 = new String[] {};
 		String comment3 = "comment3";
-		SPDXNonStandardLicense lic3_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_1 = new ExtractedLicenseInfo(
 				id3_1, text3, name3, crossReff3, comment3);
 		String id3_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic3_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_2 = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff3, comment3);
 
 		String id4_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -913,19 +920,19 @@ public class SpdxComparerTest {
 		String name4 = "";
 		String[] crossReff4 = new String[] {};
 		String comment4 = "";
-		SPDXNonStandardLicense lic4_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic4_1 = new ExtractedLicenseInfo(
 				id4_1, text4, name4, crossReff4, comment4);
 		String id4_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic4_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic4_2 = new ExtractedLicenseInfo(
 				id4_2, text4, name4, crossReff4, comment4);
 
 		// same licenses, different order
-		SPDXNonStandardLicense[] exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);
+		ExtractedLicenseInfo[] exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);
 		exLicenses1[orig1.length+0] = lic1_1;
 		exLicenses1[orig1.length+1] = lic2_1;
 		exLicenses1[orig1.length+2] = lic3_1;
 		exLicenses1[orig1.length+3] = lic4_1;
-		SPDXNonStandardLicense[] exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
+		ExtractedLicenseInfo[] exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
 		exLicenses2[orig2.length+2] = lic4_2;
@@ -933,7 +940,7 @@ public class SpdxComparerTest {
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
-		SPDXNonStandardLicense[] result = comparer.getUniqueExtractedLicenses(0, 1);
+		ExtractedLicenseInfo[] result = comparer.getUniqueExtractedLicenses(0, 1);
 		assertEquals(0, result.length);
 		result = comparer.getUniqueExtractedLicenses(1, 0);
 		assertEquals(0, result.length);
@@ -948,16 +955,16 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
 		HashSet<String> uniqueLicIds = new HashSet<String>();
-		uniqueLicIds.add(lic2_1.getId());
-		uniqueLicIds.add(lic4_1.getId());
+		uniqueLicIds.add(lic2_1.getLicenseId());
+		uniqueLicIds.add(lic4_1.getLicenseId());
 
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
 		result = comparer.getUniqueExtractedLicenses(0, 1);
 		assertEquals(2, result.length);
-		assertTrue(uniqueLicIds.contains(result[0].getId()));
-		assertTrue(uniqueLicIds.contains(result[1].getId()));
+		assertTrue(uniqueLicIds.contains(result[0].getLicenseId()));
+		assertTrue(uniqueLicIds.contains(result[1].getLicenseId()));
 		result = comparer.getUniqueExtractedLicenses(1, 0);
 		assertEquals(0, result.length);
 		
@@ -970,10 +977,10 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
 		uniqueLicIds.clear();
-		uniqueLicIds.add(lic3_2.getId());
-		uniqueLicIds.add(lic1_2.getId());		
-		uniqueLicIds.add(lic4_2.getId());
-		uniqueLicIds.add(lic2_2.getId());
+		uniqueLicIds.add(lic3_2.getLicenseId());
+		uniqueLicIds.add(lic1_2.getLicenseId());		
+		uniqueLicIds.add(lic4_2.getLicenseId());
+		uniqueLicIds.add(lic2_2.getLicenseId());
 		
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
@@ -982,10 +989,10 @@ public class SpdxComparerTest {
 		assertEquals(0, result.length);
 		result = comparer.getUniqueExtractedLicenses(1, 0);
 		assertEquals(4, result.length);
-		assertTrue(uniqueLicIds.contains(result[0].getId()));
-		assertTrue(uniqueLicIds.contains(result[1].getId()));
-		assertTrue(uniqueLicIds.contains(result[2].getId()));
-		assertTrue(uniqueLicIds.contains(result[3].getId()));
+		assertTrue(uniqueLicIds.contains(result[0].getLicenseId()));
+		assertTrue(uniqueLicIds.contains(result[1].getLicenseId()));
+		assertTrue(uniqueLicIds.contains(result[2].getLicenseId()));
+		assertTrue(uniqueLicIds.contains(result[3].getLicenseId()));
 	}
 
 	/**
@@ -997,8 +1004,8 @@ public class SpdxComparerTest {
 		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
-		SPDXNonStandardLicense[] orig1 = doc1.getExtractedLicenseInfos();
-		SPDXNonStandardLicense[] orig2 = doc2.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] orig1 = doc1.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] orig2 = doc2.getExtractedLicenseInfos();
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isExtractedLicensingInfosEqual());
 		assertFalse(comparer.isDifferenceFound());
@@ -1010,10 +1017,10 @@ public class SpdxComparerTest {
 		String name1 = "licname1";
 		String[] crossReff1 = new String[] {"http://cross.ref.one"};
 		String comment1 = "comment1";
-		SPDXNonStandardLicense lic1_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_1 = new ExtractedLicenseInfo(
 				id1_1, text1, name1, crossReff1, comment1);
 		String id1_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic1_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2 = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, comment1);
 		
 		String id2_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -1021,10 +1028,10 @@ public class SpdxComparerTest {
 		String name2 = "licname2";
 		String[] crossReff2 = new String[] {"http://cross.ref.one", "http://cross.ref.two"};
 		String comment2 = "comment2";
-		SPDXNonStandardLicense lic2_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_1 = new ExtractedLicenseInfo(
 				id2_1, text2, name2, crossReff2, comment2);
 		String id2_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic2_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_2 = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, comment2);
 		
 		String id3_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -1032,10 +1039,10 @@ public class SpdxComparerTest {
 		String name3 = "name3";
 		String[] crossReff3 = new String[] {"http://crossref3.org"};
 		String comment3 = "comment3";
-		SPDXNonStandardLicense lic3_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_1 = new ExtractedLicenseInfo(
 				id3_1, text3, name3, crossReff3, comment3);
 		String id3_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic3_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_2 = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff3, comment3);
 
 		String id4_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
@@ -1043,28 +1050,30 @@ public class SpdxComparerTest {
 		String name4 = "";
 		String[] crossReff4 = new String[] {};
 		String comment4 = "";
-		SPDXNonStandardLicense lic4_1 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic4_1 = new ExtractedLicenseInfo(
 				id4_1, text4, name4, crossReff4, comment4);
 		String id4_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
-		SPDXNonStandardLicense lic4_2 = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic4_2 = new ExtractedLicenseInfo(
 				id4_2, text4, name4, crossReff4, comment4);
 
 		// same licenses, different order
-		SPDXNonStandardLicense[] exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);
+		ExtractedLicenseInfo[] exLicenses1 = Arrays.copyOf(orig1, orig1.length+4);
 		exLicenses1[orig1.length+0] = lic1_1;
 		exLicenses1[orig1.length+1] = lic2_1;
 		exLicenses1[orig1.length+2] = lic3_1;
 		exLicenses1[orig1.length+3] = lic4_1;
-		SPDXNonStandardLicense[] exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
+		ExtractedLicenseInfo[] exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
+		
+		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isExtractedLicensingInfosEqual());
-		assertFalse(comparer.isDifferenceFound());
 		SpdxLicenseDifference[] result = comparer.getExtractedLicenseDifferences(0, 1);
 		assertEquals(0, result.length);
 		result = comparer.getExtractedLicenseDifferences(1, 0);
@@ -1079,18 +1088,20 @@ public class SpdxComparerTest {
 		exLicenses2 = Arrays.copyOf(orig2, orig2.length+4);
 		
 		String differentName = "differentLicenseName";
-		SPDXNonStandardLicense lic1_2_diff_name = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic1_2_diff_name = new ExtractedLicenseInfo(
 				id1_2, text1, differentName, crossReff1, comment1);
 		String differentComment = "different comment";
-		SPDXNonStandardLicense lic2_2_diff_Comment = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic2_2_diff_Comment = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, differentComment);
-		SPDXNonStandardLicense lic3_2_diff_licenref = new SPDXNonStandardLicense(
+		ExtractedLicenseInfo lic3_2_diff_licenref = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff2, comment3);
 		exLicenses2[orig2.length+0] = lic3_2_diff_licenref;
 		exLicenses2[orig2.length+1] = lic1_2_diff_name;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2_diff_Comment;
 
+		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -1101,9 +1112,9 @@ public class SpdxComparerTest {
 		boolean lic2Found = false;
 		boolean lic3Found = false;
 		for (int i = 0; i < result.length; i++) {
-			if (result[i].getIdA().equals(lic2_1.getId())) {
+			if (result[i].getIdA().equals(lic2_1.getLicenseId())) {
 				lic2Found = true;
-				assertEquals(lic2_2.getId(), result[i].getIdB());
+				assertEquals(lic2_2.getLicenseId(), result[i].getIdB());
 				assertEquals(comment2, result[i].getCommentA());
 				assertEquals(differentComment, result[i].getCommentB());
 				assertEquals(name2, result[i].getLicenseNameA());
@@ -1111,9 +1122,9 @@ public class SpdxComparerTest {
 				assertEquals(text2, result[i].getLicenseText());
 				assertTrue(stringsSame(crossReff2, result[i].getSourceUrlsA()));
 				assertTrue(stringsSame(crossReff2, result[i].getSourceUrlsB()));
-			} else if (result[i].getIdA().equals(lic1_1.getId())) {
+			} else if (result[i].getIdA().equals(lic1_1.getLicenseId())) {
 				lic1Found = true;
-				assertEquals(lic1_2.getId(), result[i].getIdB());
+				assertEquals(lic1_2.getLicenseId(), result[i].getIdB());
 				assertEquals(comment1, result[i].getCommentA());
 				assertEquals(comment1, result[i].getCommentB());
 				assertEquals(name1, result[i].getLicenseNameA());
@@ -1121,9 +1132,9 @@ public class SpdxComparerTest {
 				assertEquals(text1, result[i].getLicenseText());
 				assertTrue(stringsSame(crossReff1, result[i].getSourceUrlsA()));
 				assertTrue(stringsSame(crossReff1, result[i].getSourceUrlsB()));
-			}else if (result[i].getIdA().equals(lic3_1.getId())) {
+			}else if (result[i].getIdA().equals(lic3_1.getLicenseId())) {
 				lic3Found = true;
-				assertEquals(lic3_2.getId(), result[i].getIdB());
+				assertEquals(lic3_2.getLicenseId(), result[i].getIdB());
 				assertEquals(comment3, result[i].getCommentA());
 				assertEquals(comment3, result[i].getCommentB());
 				assertEquals(name3, result[i].getLicenseNameA());
@@ -1140,9 +1151,9 @@ public class SpdxComparerTest {
 		result = comparer.getExtractedLicenseDifferences(1, 0);
 		assertEquals(3, result.length);
 		for (int i = 0; i < result.length; i++) {
-			if (result[i].getIdB().equals(lic2_2.getId())) {
+			if (result[i].getIdB().equals(lic2_2.getLicenseId())) {
 				lic2Found = true;
-				assertEquals(lic2_1.getId(), result[i].getIdB());
+				assertEquals(lic2_1.getLicenseId(), result[i].getIdB());
 				assertEquals(differentComment, result[i].getCommentA());
 				assertEquals(comment2, result[i].getCommentB());
 				assertEquals(name2, result[i].getLicenseNameA());
@@ -1150,9 +1161,9 @@ public class SpdxComparerTest {
 				assertEquals(text2, result[i].getLicenseText());
 				assertTrue(stringsSame(crossReff2, result[i].getSourceUrlsA()));
 				assertTrue(stringsSame(crossReff2, result[i].getSourceUrlsB()));
-			} else if (result[i].getIdA().equals(lic1_2.getId())) {
+			} else if (result[i].getIdA().equals(lic1_2.getLicenseId())) {
 				lic1Found = true;
-				assertEquals(lic1_1.getId(), result[i].getIdB());
+				assertEquals(lic1_1.getLicenseId(), result[i].getIdB());
 				assertEquals(comment1, result[i].getCommentA());
 				assertEquals(comment1, result[i].getCommentB());
 				assertEquals(differentName, result[i].getLicenseNameA());
@@ -1160,9 +1171,9 @@ public class SpdxComparerTest {
 				assertEquals(text1, result[i].getLicenseText());
 				assertTrue(stringsSame(crossReff1, result[i].getSourceUrlsA()));
 				assertTrue(stringsSame(crossReff1, result[i].getSourceUrlsB()));
-			}else if (result[i].getIdA().equals(lic3_2.getId())) {
+			}else if (result[i].getIdA().equals(lic3_2.getLicenseId())) {
 				lic3Found = true;
-				assertEquals(lic3_1.getId(), result[i].getIdB());
+				assertEquals(lic3_1.getLicenseId(), result[i].getIdB());
 				assertEquals(comment3, result[i].getCommentA());
 				assertEquals(comment3, result[i].getCommentB());
 				assertEquals(name3, result[i].getLicenseNameA());
@@ -1282,20 +1293,20 @@ public class SpdxComparerTest {
 		assertFalse(comparer.isDifferenceFound());
 		
 		// one additional license
-		SPDXLicenseInfo[] orig = doc1.getSpdxPackage().getLicenseInfoFromFiles();
-		SPDXLicenseInfo[] addOne = Arrays.copyOf(orig, orig.length+1);
-		addOne[orig.length] = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_CC0);
+		AnyLicenseInfo[] orig = doc1.getSpdxPackage().getLicenseInfoFromFiles();
+		AnyLicenseInfo[] addOne = Arrays.copyOf(orig, orig.length+1);
+		addOne[orig.length] = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
 		doc1.getSpdxPackage().setLicenseInfoFromFiles(addOne);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isPackageLicenseInfoFromFilesEqual());
 		assertFalse(comparer.isPackageEqual());
 		assertTrue(comparer.isDifferenceFound());
 		
-		if (orig[0] instanceof SPDXStandardLicense &&
-				((SPDXStandardLicense)orig[0]).getId() == STD_LIC_ID_CC0) {
-			orig[0] = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_MPL11);
+		if (orig[0] instanceof SpdxListedLicense &&
+				((SpdxListedLicense)orig[0]).getLicenseId() == STD_LIC_ID_CC0) {
+			orig[0] = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_MPL11);
 		} else {
-			orig[0] = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_CC0);
+			orig[0] = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
 		}
 		doc1.getSpdxPackage().setLicenseInfoFromFiles(orig);
 		comparer.compare(doc1, doc2);
@@ -1498,7 +1509,7 @@ public class SpdxComparerTest {
 		assertTrue(comparer.isPackageDeclaredLicensesEqual());
 		assertFalse(comparer.isDifferenceFound());
 		
-		SPDXStandardLicense lic = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_CC0);
+		SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
 		doc2.getSpdxPackage().setDeclaredLicense(lic);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isPackageDeclaredLicensesEqual());
@@ -1520,7 +1531,7 @@ public class SpdxComparerTest {
 		assertTrue(comparer.isPackageConcludedLicensesEqual());
 		assertFalse(comparer.isDifferenceFound());
 		
-		SPDXStandardLicense lic = SPDXLicenseInfoFactory.getStandardLicenseById(STD_LIC_ID_CC0);
+		SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
 		doc2.getSpdxPackage().setConcludedLicenses(lic);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isPackageConcludedLicensesEqual());
@@ -1778,7 +1789,7 @@ public class SpdxComparerTest {
 		String file1Name = files[1].getName();
 		files[1] = new SPDXFile(files[1].getName(), files[1].getType(), files[1].getSha1(),files[1].getConcludedLicenses(),
 				files[1].getSeenLicenses(), files[1].getLicenseComments(), files[1].getCopyright(), files[1].getArtifactOf());
-		files[1].setConcludedLicenses(SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
+		files[1].setConcludedLicenses(LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
 		doc2.getSpdxPackage().setFiles(files);
 		SPDXFile[] addedFiles = doc2.getSpdxPackage().getFiles();
 		comparer.compare(doc1, doc2);
@@ -1789,7 +1800,7 @@ public class SpdxComparerTest {
 			assertEquals(differences[0].getCommentB(),files[0].getComment());
 		} else if (differences[0].getFileName().equals(file1Name)) {
 			assertFalse(differences[0].isCommentsEqual());
-			assertEquals(((SPDXLicense)(files[1].getConcludedLicenses())).getId(), 
+			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), 
 					(differences[0].getConcludedLicenseB()));
 		} else {
 			fail("invalid file name");
@@ -1799,7 +1810,7 @@ public class SpdxComparerTest {
 			assertEquals(differences[1].getCommentB(),files[0].getComment());
 		} else if (differences[1].getFileName().equals(file1Name)) {
 			assertFalse(differences[1].isConcludedLicenseEquals());
-			assertEquals(((SPDXLicense)(files[1].getConcludedLicenses())).getId(), differences[1].getConcludedLicenseB());
+			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), differences[1].getConcludedLicenseB());
 		} else {
 			fail ("Invalid file name");
 		}
@@ -1812,7 +1823,7 @@ public class SpdxComparerTest {
 			assertEquals(differences[0].getCommentA(),files[0].getComment());
 		} else if (differences[0].getFileName().equals(file1Name)) {
 			assertFalse(differences[0].isConcludedLicenseEquals());
-			assertEquals(((SPDXLicense)(files[1].getConcludedLicenses())).getId(), differences[0].getConcludedLicenseA());
+			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), differences[0].getConcludedLicenseA());
 		} else {
 			fail("invalid file name");
 		}
@@ -1821,7 +1832,7 @@ public class SpdxComparerTest {
 			assertEquals(differences[1].getCommentA(),files[0].getComment());
 		} else if (differences[1].getFileName().equals(file1Name)) {
 			assertFalse(differences[1].isConcludedLicenseEquals());
-			assertEquals(((SPDXLicense)(files[1].getConcludedLicenses())).getId(), differences[1].getConcludedLicenseA());
+			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), differences[1].getConcludedLicenseA());
 		} else {
 			fail ("Invalid file name");
 		}

@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 /**
  * Application to build HashMaps to help SPDX documents merging. Currently, it helps mapping any SPDX licenses.
@@ -39,8 +39,8 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
  */
 public class SpdxLicenseMapper {
 
-	private HashMap<SPDXDocument, HashMap<SPDXLicenseInfo, SPDXLicenseInfo>> nonStdLicIdMap = 
-			new HashMap<SPDXDocument, HashMap< SPDXLicenseInfo, SPDXLicenseInfo>>();
+	private HashMap<SPDXDocument, HashMap<AnyLicenseInfo, AnyLicenseInfo>> nonStdLicIdMap = 
+			new HashMap<SPDXDocument, HashMap< AnyLicenseInfo, AnyLicenseInfo>>();
 	
 	/**
 	 * 
@@ -58,15 +58,15 @@ public class SpdxLicenseMapper {
 	 * @param subNonStdLicInfo
 	 * @return
 	 */
-	public SPDXNonStandardLicense mappingNewNonStdLic(SPDXDocument outputDoc, SPDXDocument subDoc, SPDXNonStandardLicense subNonStdLicInfo){
+	public ExtractedLicenseInfo mappingNewNonStdLic(SPDXDocument outputDoc, SPDXDocument subDoc, ExtractedLicenseInfo subNonStdLicInfo){
 		
-		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> interMap = new HashMap<SPDXLicenseInfo,SPDXLicenseInfo>();
+		HashMap<AnyLicenseInfo,AnyLicenseInfo> interMap = new HashMap<AnyLicenseInfo,AnyLicenseInfo>();
 		if(docInNonStdLicIdMap(subDoc)){
 			interMap = nonStdLicIdMap.get(subDoc);
 		}    
 		String NewNonStdLicId = outputDoc.getNextLicenseRef();
-		SPDXNonStandardLicense subCopy = (SPDXNonStandardLicense) subNonStdLicInfo.clone();
-		subNonStdLicInfo.setId(NewNonStdLicId);
+		ExtractedLicenseInfo subCopy = (ExtractedLicenseInfo) subNonStdLicInfo.clone();
+		subNonStdLicInfo.setLicenseId(NewNonStdLicId);
 		interMap.put(subCopy, subNonStdLicInfo);
 
 		nonStdLicIdMap.put(subDoc, interMap);
@@ -81,12 +81,12 @@ public class SpdxLicenseMapper {
 	 * @param subLicense
 	 * @param outputDocLicense
 	 */
-	public void mappingExistingNonStdLic(SPDXDocument outputDoc, SPDXNonStandardLicense outputDocLicense, SPDXDocument subDoc, SPDXNonStandardLicense subLicense) {
-		HashMap<SPDXLicenseInfo,SPDXLicenseInfo> interMap;
+	public void mappingExistingNonStdLic(SPDXDocument outputDoc, ExtractedLicenseInfo outputDocLicense, SPDXDocument subDoc, ExtractedLicenseInfo subLicense) {
+		HashMap<AnyLicenseInfo,AnyLicenseInfo> interMap;
 		if(docInNonStdLicIdMap(subDoc)){
 			interMap = nonStdLicIdMap.get(subDoc);
 		} else {
-			interMap = new HashMap<SPDXLicenseInfo,SPDXLicenseInfo>();
+			interMap = new HashMap<AnyLicenseInfo,AnyLicenseInfo>();
 		}
 		interMap.put(outputDocLicense, subLicense);
 		nonStdLicIdMap.put(subDoc, interMap);
@@ -101,11 +101,11 @@ public class SpdxLicenseMapper {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SPDXFile replaceNonStdLicInFile(SPDXDocument spdxDoc, SPDXFile subFileInfo) throws InvalidSPDXAnalysisException{
-			SPDXLicenseInfo[] subLicInfoInFile = subFileInfo.getSeenLicenses();
-			HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
-			Set <SPDXLicenseInfo> keys = idMap.keySet();
-			SPDXLicenseInfo[] orgNonStdLics = keys.toArray(new SPDXLicenseInfo[idMap.keySet().size()]);
-			ArrayList <SPDXLicenseInfo> retval = new ArrayList<SPDXLicenseInfo>();
+			AnyLicenseInfo[] subLicInfoInFile = subFileInfo.getSeenLicenses();
+			HashMap<AnyLicenseInfo, AnyLicenseInfo> idMap = foundInterMap(spdxDoc);
+			Set <AnyLicenseInfo> keys = idMap.keySet();
+			AnyLicenseInfo[] orgNonStdLics = keys.toArray(new AnyLicenseInfo[idMap.keySet().size()]);
+			ArrayList <AnyLicenseInfo> retval = new ArrayList<AnyLicenseInfo>();
 			for(int i = 0; i < subLicInfoInFile.length; i++){
 				boolean foundLicId = false;
 				for(int q = 0; q < orgNonStdLics.length; q++){
@@ -121,10 +121,10 @@ public class SpdxLicenseMapper {
 					}
 				}
 			}
-			SPDXLicenseInfo[] mergedFileLics = new SPDXLicenseInfo[retval.size()];
+			AnyLicenseInfo[] mergedFileLics = new AnyLicenseInfo[retval.size()];
 			retval.toArray(mergedFileLics);
 			subFileInfo.setSeenLicenses(mergedFileLics);
-			SPDXLicenseInfo subConcludedLicInFile = subFileInfo.getConcludedLicenses();
+			AnyLicenseInfo subConcludedLicInFile = subFileInfo.getConcludedLicenses();
 			subFileInfo.setConcludedLicenses(mapLicenseInfo(spdxDoc,subConcludedLicInFile));
 			retval.clear();
 			return subFileInfo;
@@ -137,9 +137,9 @@ public class SpdxLicenseMapper {
 	 * @param license
 	 * @return
 	 */
-	public SPDXLicenseInfo mapNonStdLicInMap(SPDXDocument spdxDoc, SPDXLicenseInfo license){
-		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = foundInterMap(spdxDoc);
-		SPDXNonStandardLicense[] orgNonStdLics = idMap.keySet().toArray(new SPDXNonStandardLicense[idMap.keySet().size()]);
+	public AnyLicenseInfo mapNonStdLicInMap(SPDXDocument spdxDoc, AnyLicenseInfo license){
+		HashMap<AnyLicenseInfo, AnyLicenseInfo> idMap = foundInterMap(spdxDoc);
+		ExtractedLicenseInfo[] orgNonStdLics = idMap.keySet().toArray(new ExtractedLicenseInfo[idMap.keySet().size()]);
 		for(int i = 0; i < orgNonStdLics.length; i++ ){
 			boolean foundLic = false;
 			if(license.equals(orgNonStdLics[i])){
@@ -161,24 +161,24 @@ public class SpdxLicenseMapper {
 	 * @param license
 	 * @return
 	 */
-	public SPDXLicenseInfo mapLicenseInfo(SPDXDocument spdxDoc, SPDXLicenseInfo license){
-		if(license instanceof SPDXConjunctiveLicenseSet){
-			SPDXLicenseInfo[] members = ((SPDXConjunctiveLicenseSet) license).getSPDXLicenseInfos();
-			SPDXLicenseInfo[] mappedMembers = new SPDXLicenseInfo[members.length];
+	public AnyLicenseInfo mapLicenseInfo(SPDXDocument spdxDoc, AnyLicenseInfo license){
+		if(license instanceof ConjunctiveLicenseSet){
+			AnyLicenseInfo[] members = ((ConjunctiveLicenseSet) license).getMembers();
+			AnyLicenseInfo[] mappedMembers = new AnyLicenseInfo[members.length];
 			for(int i = 0; i < members.length; i++){
 				mappedMembers[i] = mapLicenseInfo(spdxDoc, members[i]);
 			}
-			return new SPDXConjunctiveLicenseSet(mappedMembers);
+			return new ConjunctiveLicenseSet(mappedMembers);
 		}
-		else if(license instanceof SPDXDisjunctiveLicenseSet){
-			SPDXLicenseInfo[] members = ((SPDXDisjunctiveLicenseSet) license).getSPDXLicenseInfos();
-			SPDXLicenseInfo[] mappedMembers = new SPDXLicenseInfo[members.length];
+		else if(license instanceof DisjunctiveLicenseSet){
+			AnyLicenseInfo[] members = ((DisjunctiveLicenseSet) license).getMembers();
+			AnyLicenseInfo[] mappedMembers = new AnyLicenseInfo[members.length];
 			for(int q = 0; q < members.length; q++ ){
 				mappedMembers[q] = mapLicenseInfo(spdxDoc, members[q]);
 			}
-			return new SPDXDisjunctiveLicenseSet(mappedMembers);
-		}else if(license instanceof SPDXNonStandardLicense){
-			return license = mapNonStdLicInMap(spdxDoc,(SPDXNonStandardLicense)license);
+			return new DisjunctiveLicenseSet(mappedMembers);
+		}else if(license instanceof ExtractedLicenseInfo){
+			return license = mapNonStdLicInMap(spdxDoc,(ExtractedLicenseInfo)license);
 		}
 		return license;	
 	}
@@ -200,10 +200,10 @@ public class SpdxLicenseMapper {
 	 * @param spdxDoc
 	 * @return idMap
 	 */
-	public HashMap<SPDXLicenseInfo, SPDXLicenseInfo> foundInterMap(SPDXDocument spdxDoc){
+	public HashMap<AnyLicenseInfo, AnyLicenseInfo> foundInterMap(SPDXDocument spdxDoc){
 
-		HashMap<SPDXLicenseInfo, SPDXLicenseInfo> idMap = 
-				new HashMap<SPDXLicenseInfo, SPDXLicenseInfo>();
+		HashMap<AnyLicenseInfo, AnyLicenseInfo> idMap = 
+				new HashMap<AnyLicenseInfo, AnyLicenseInfo>();
 		
 		idMap = this.nonStdLicIdMap.get(spdxDoc);
 		return idMap;

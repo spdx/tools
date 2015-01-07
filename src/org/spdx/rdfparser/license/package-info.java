@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011 Source Auditor Inc.
+ * Copyright (c) 2015 Source Auditor Inc.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -13,35 +13,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
-*/
-package org.spdx.rdfparser;
-
+ */
 /**
+ * Classes implementing the license model for the SPDX Parser
  * @author Gary O'Neall
  *
  */
-public class NoStandardLicenseRdfModel extends InvalidSPDXAnalysisException {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4045777176566797553L;
-
-	/**
-	 * @param msg
-	 */
-	public NoStandardLicenseRdfModel(String msg) {
-		super(msg);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param msg
-	 * @param inner
-	 */
-	public NoStandardLicenseRdfModel(String msg, Throwable inner) {
-		super(msg, inner);
-		// TODO Auto-generated constructor stub
-	}
-
-}
+package org.spdx.rdfparser.license;

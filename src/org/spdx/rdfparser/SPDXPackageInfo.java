@@ -17,6 +17,7 @@
 package org.spdx.rdfparser;
 
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 
 
@@ -29,9 +30,9 @@ public class SPDXPackageInfo {
 	private String fileName;
 	private String sha1;
 	private String sourceInfo;
-	private SPDXLicenseInfo declaredLicenses;
-	private SPDXLicenseInfo concludedLicense;
-	private SPDXLicenseInfo[] licensesFromFiles;
+	private AnyLicenseInfo declaredLicenses;
+	private AnyLicenseInfo concludedLicense;
+	private AnyLicenseInfo[] licensesFromFiles;
 	private String declaredCopyright;
 	private String shortDescription;
 	private String description;
@@ -74,13 +75,13 @@ public class SPDXPackageInfo {
 	/**
 	 * @param concludedLicense the concludedLicense to set
 	 */
-	public void setConcludedLicense(SPDXLicenseInfo concludedLicense) {
+	public void setConcludedLicense(AnyLicenseInfo concludedLicense) {
 		this.concludedLicense = concludedLicense;
 	}
 
 	public SPDXPackageInfo(String declaredName, String versionInfo, String machineName,
-			String sha1, String sourceInfo, SPDXLicenseInfo declaredLicense, 
-			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
+			String sha1, String sourceInfo, AnyLicenseInfo declaredLicense, 
+			AnyLicenseInfo concludedLicense, AnyLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
 			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode, 
 			String supplier, String originator, String homePage) {
@@ -134,14 +135,14 @@ public class SPDXPackageInfo {
 	/**
 	 * @return the licensesFromFiles
 	 */
-	public SPDXLicenseInfo[] getLicensesFromFiles() {
+	public AnyLicenseInfo[] getLicensesFromFiles() {
 		return licensesFromFiles;
 	}
 
 	/**
 	 * @param licensesFromFiles the licensesFromFiles to set
 	 */
-	public void setLicensesFromFiles(SPDXLicenseInfo[] licensesFromFiles) {
+	public void setLicensesFromFiles(AnyLicenseInfo[] licensesFromFiles) {
 		this.licensesFromFiles = licensesFromFiles;
 	}
 
@@ -246,28 +247,28 @@ public class SPDXPackageInfo {
 	/**
 	 * @return the declaredLicenses
 	 */
-	public SPDXLicenseInfo getDeclaredLicenses() {
+	public AnyLicenseInfo getDeclaredLicenses() {
 		return declaredLicenses;
 	}
 
 	/**
 	 * @param declaredLicenses the declaredLicenses to set
 	 */
-	public void setDeclaredLicenses(SPDXLicenseInfo declaredLicenses) {
+	public void setDeclaredLicenses(AnyLicenseInfo declaredLicenses) {
 		this.declaredLicenses = declaredLicenses;
 	}
 
 	/**
 	 * @return the detectedLicenses
 	 */
-	public SPDXLicenseInfo getConcludedLicense() {
+	public AnyLicenseInfo getConcludedLicense() {
 		return concludedLicense;
 	}
 
 	/**
 	 * @param concludedLicense the detectedLicenses to set
 	 */
-	public void setDConcludedLicense(SPDXLicenseInfo concludedLicense) {
+	public void setDConcludedLicense(AnyLicenseInfo concludedLicense) {
 		this.concludedLicense = concludedLicense;
 	}
 

@@ -23,7 +23,7 @@ import java.util.List;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 /**
  * Context for describing SPDX Files
@@ -111,7 +111,7 @@ public class FileContext {
 			retval.add("Error getting SPDX file information: "+error.getMessage());
 		}
 		if (spdxFile != null) {
-			SPDXLicenseInfo[] licenseInfos = spdxFile.getSeenLicenses();
+			AnyLicenseInfo[] licenseInfos = spdxFile.getSeenLicenses();
 			for (int i = 0; i < licenseInfos.length; i++) {
 				retval.add(licenseInfos[i].toString());
 			}

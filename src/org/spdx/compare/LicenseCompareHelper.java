@@ -27,13 +27,13 @@ import org.spdx.licenseTemplate.ILicenseTemplateOutputHandler;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXLicenseSet;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.LicenseSet;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 
 /**
  * Primarily a static class of helper functions for comparing two SPDX licenses
@@ -245,28 +245,28 @@ public class LicenseCompareHelper {
 	 * @return
 	 * @throws SpdxCompareException 
 	 */
-	public static boolean isLicenseEqual(SPDXLicenseInfo license1,
-			SPDXLicenseInfo license2, HashMap<String, String> xlationMap) throws SpdxCompareException {
-		if (license1 instanceof SPDXConjunctiveLicenseSet) {
-			if (!(license2 instanceof SPDXConjunctiveLicenseSet)) {
+	public static boolean isLicenseEqual(AnyLicenseInfo license1,
+			AnyLicenseInfo license2, HashMap<String, String> xlationMap) throws SpdxCompareException {
+		if (license1 instanceof ConjunctiveLicenseSet) {
+			if (!(license2 instanceof ConjunctiveLicenseSet)) {
 				return false;
 			} else {
-				return isLicenseSetsEqual((SPDXConjunctiveLicenseSet)license1,
-						(SPDXConjunctiveLicenseSet)license2, xlationMap);
+				return isLicenseSetsEqual((ConjunctiveLicenseSet)license1,
+						(ConjunctiveLicenseSet)license2, xlationMap);
 			}
-		} else if (license1 instanceof SPDXDisjunctiveLicenseSet) {
-			if (!(license2 instanceof SPDXDisjunctiveLicenseSet)) {
+		} else if (license1 instanceof DisjunctiveLicenseSet) {
+			if (!(license2 instanceof DisjunctiveLicenseSet)) {
 				return false;
 			} else {
-				return isLicenseSetsEqual((SPDXDisjunctiveLicenseSet)license1,
-						(SPDXDisjunctiveLicenseSet)license2, xlationMap);
+				return isLicenseSetsEqual((DisjunctiveLicenseSet)license1,
+						(DisjunctiveLicenseSet)license2, xlationMap);
 			}
-		} else if (license1 instanceof SPDXNonStandardLicense) {
-			if (!(license2 instanceof SPDXNonStandardLicense)) {
+		} else if (license1 instanceof ExtractedLicenseInfo) {
+			if (!(license2 instanceof ExtractedLicenseInfo)) {
 				return false;
 			} else {
-				String licenseid1 = ((SPDXNonStandardLicense)license1).getId();
-				String licenseid2 = ((SPDXNonStandardLicense)license2).getId();
+				String licenseid1 = ((ExtractedLicenseInfo)license1).getLicenseId();
+				String licenseid2 = ((ExtractedLicenseInfo)license2).getLicenseId();
 				String xlatedLicenseId = xlationMap.get(licenseid1);
 				if (xlatedLicenseId == null) {
 					return false;	// no equivalent license was found
@@ -284,11 +284,11 @@ public class LicenseCompareHelper {
 	 * @throws SpdxCompareException 
 	 */
 	private static boolean isLicenseSetsEqual(
-			SPDXLicenseSet license1,
-			SPDXLicenseSet license2, HashMap<String, String> xlationMap) throws SpdxCompareException {
+			LicenseSet license1,
+			LicenseSet license2, HashMap<String, String> xlationMap) throws SpdxCompareException {
 		// note - order does not matter
-		SPDXLicenseInfo[] licenseInfos1 = license1.getSPDXLicenseInfos();
-		SPDXLicenseInfo[] licenseInfos2 = license2.getSPDXLicenseInfos();
+		AnyLicenseInfo[] licenseInfos1 = license1.getMembers();
+		AnyLicenseInfo[] licenseInfos2 = license2.getMembers();
 		if (licenseInfos1 == null) {
 			return licenseInfos2 == null;
 		}
@@ -320,10 +320,10 @@ public class LicenseCompareHelper {
 	 * @return True if the license text is the same per the license matching guidelines
 	 * @throws SpdxCompareException
 	 */
-	public static boolean isTextStandardLicense(SPDXStandardLicense license, String compareText) throws SpdxCompareException {
-		String licenseTemplate = license.getTemplate();
+	public static boolean isTextStandardLicense(SpdxListedLicense license, String compareText) throws SpdxCompareException {
+		String licenseTemplate = license.getStandardLicenseTemplate();
 		if (licenseTemplate == null || licenseTemplate.trim().isEmpty()) {
-			return isLicenseTextEquivalent(license.getText(), compareText);
+			return isLicenseTextEquivalent(license.getLicenseText(), compareText);
 		}
 		CompareTemplateOutputHandler compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		try {
@@ -343,12 +343,12 @@ public class LicenseCompareHelper {
 	 * @throws SpdxCompareException If an error occurs in the comparison
 	 */
 	public static String[] matchingStandardLicenseIds(String licenseText) throws InvalidSPDXAnalysisException, SpdxCompareException {
-		String[] stdLicenseIds = SPDXLicenseInfoFactory.getStandardLicenseIds();
+		String[] stdLicenseIds = LicenseInfoFactory.getSpdxListedLicenseIds();
 		ArrayList<String> matchingIds  = new ArrayList<String>();
 		for (String stdLicId : stdLicenseIds) {
-			SPDXStandardLicense license = SPDXLicenseInfoFactory.getStandardLicenseById(stdLicId);
+			SpdxListedLicense license = LicenseInfoFactory.getListedLicenseById(stdLicId);
 			if (isTextStandardLicense(license, licenseText)) {
-				matchingIds.add(license.getId());
+				matchingIds.add(license.getLicenseId());
 			}
 		}
 		return matchingIds.toArray(new String[matchingIds.size()]);

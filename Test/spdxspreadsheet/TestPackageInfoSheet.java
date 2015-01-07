@@ -24,13 +24,13 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheetV09d3;
@@ -69,26 +69,26 @@ public class TestPackageInfoSheet {
 
 	@Test
 	public void testAddAndGet() throws SpreadsheetException {
-		SPDXLicenseInfo[] testLicenses1 = new SPDXLicenseInfo[3];
-		testLicenses1[0] = new SPDXNonStandardLicense("License1", "License1Text");
-		SPDXLicenseInfo[] disjunctiveLicenses = new SPDXLicenseInfo[3];
-		disjunctiveLicenses[0] = new SPDXNonStandardLicense("disj1", "disj1 Text");
-		disjunctiveLicenses[1] = new SPDXNonStandardLicense("disj2", "disj2 Text");
-		disjunctiveLicenses[2] = new SPDXNonStandardLicense("disj3", "disj3 Text");
-		testLicenses1[1] = new SPDXDisjunctiveLicenseSet(disjunctiveLicenses);
-		SPDXLicenseInfo[] conjunctiveLicenses = new SPDXLicenseInfo[] {
-				new SPDXNonStandardLicense("conj1", "conj1 Text"),
-				new SPDXNonStandardLicense("conj2", "conj2 Text")
+		AnyLicenseInfo[] testLicenses1 = new AnyLicenseInfo[3];
+		testLicenses1[0] = new ExtractedLicenseInfo("License1", "License1Text");
+		AnyLicenseInfo[] disjunctiveLicenses = new AnyLicenseInfo[3];
+		disjunctiveLicenses[0] = new ExtractedLicenseInfo("disj1", "disj1 Text");
+		disjunctiveLicenses[1] = new ExtractedLicenseInfo("disj2", "disj2 Text");
+		disjunctiveLicenses[2] = new ExtractedLicenseInfo("disj3", "disj3 Text");
+		testLicenses1[1] = new DisjunctiveLicenseSet(disjunctiveLicenses);
+		AnyLicenseInfo[] conjunctiveLicenses = new AnyLicenseInfo[] {
+				new ExtractedLicenseInfo("conj1", "conj1 Text"),
+				new ExtractedLicenseInfo("conj2", "conj2 Text")
 		};
-		testLicenses1[2] = new SPDXConjunctiveLicenseSet(conjunctiveLicenses);
-		SPDXLicenseInfo testLicense1 = new SPDXDisjunctiveLicenseSet(testLicenses1);
+		testLicenses1[2] = new ConjunctiveLicenseSet(conjunctiveLicenses);
+		AnyLicenseInfo testLicense1 = new DisjunctiveLicenseSet(testLicenses1);
 		
 //		String lic1String = PackageInfoSheet.licensesToString(testLicenses1);
-		SPDXLicenseInfo[] testLicenses2 = new SPDXLicenseInfo[2];
-		testLicenses2[0] = new SPDXNonStandardLicense("License3", "License 3 text");
-		testLicenses2[1] = new SPDXNonStandardLicense("License4", "License 4 text");
-		SPDXLicenseInfo testLicense2 = new SPDXConjunctiveLicenseSet(testLicenses2);
-		SPDXLicenseInfo[] testLicenseInfos = new SPDXLicenseInfo[] {new SPDXNoneLicense()};
+		AnyLicenseInfo[] testLicenses2 = new AnyLicenseInfo[2];
+		testLicenses2[0] = new ExtractedLicenseInfo("License3", "License 3 text");
+		testLicenses2[1] = new ExtractedLicenseInfo("License4", "License 4 text");
+		AnyLicenseInfo testLicense2 = new ConjunctiveLicenseSet(testLicenses2);
+		AnyLicenseInfo[] testLicenseInfos = new AnyLicenseInfo[] {new SpdxNoneLicense()};
 		SpdxPackageVerificationCode testVerification = new SpdxPackageVerificationCode("value",
 				new String[] {"skippedfil1", "skippedfile2"});
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
@@ -151,8 +151,8 @@ public class TestPackageInfoSheet {
 	 * @param license1
 	 * @param licenses2
 	 */
-	private boolean compareLicenses(SPDXLicenseInfo[] licenses1,
-			SPDXLicenseInfo[] licenses2) {
+	private boolean compareLicenses(AnyLicenseInfo[] licenses1,
+			AnyLicenseInfo[] licenses2) {
 		if (licenses1.length != licenses2.length) {
 			return false;
 		}
@@ -172,8 +172,8 @@ public class TestPackageInfoSheet {
 	}
 
 	static public void compareLicenseDeclarations(
-			SPDXLicenseInfo[] testLicenses,
-			SPDXLicenseInfo[] result) {
+			AnyLicenseInfo[] testLicenses,
+			AnyLicenseInfo[] result) {
 		assertEquals(testLicenses.length, result.length);
 		for (int i = 0;i < testLicenses.length; i++) {
 			boolean found = false;

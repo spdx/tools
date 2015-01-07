@@ -37,6 +37,12 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
@@ -267,7 +273,7 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -275,12 +281,12 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -321,7 +327,7 @@ public class TestSPDXDocument {
 		}
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -329,12 +335,12 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -359,10 +365,10 @@ public class TestSPDXDocument {
 
 		// test with just the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		final String copyright = "Copyright";
 		pkg.setDeclaredCopyright(copyright);
-		SPDXLicenseInfo declaredLicense = new SpdxNoAssertionLicense();
+		AnyLicenseInfo declaredLicense = new SpdxNoAssertionLicense();
 		pkg.setDeclaredLicense(declaredLicense);
 		final String name = "Name";
 		pkg.setDeclaredName(name);
@@ -373,12 +379,12 @@ public class TestSPDXDocument {
 		final String fileName = "a/b/filename.tar.gz";
 		pkg.setFileName(fileName);
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SpdxNoAssertionLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoAssertionLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -442,18 +448,18 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 
 		SPDXPackage pkg = doc.getSpdxPackage();
-		SPDXNonStandardLicense nonStdLic1 = new SPDXNonStandardLicense(doc.getNextLicenseRef(), "LIcenseText1");
-		SPDXNonStandardLicense nonStdLic2 = new SPDXNonStandardLicense(doc.getNextLicenseRef(), "Second license text");
-		SPDXNonStandardLicense[] extractedLicenseInfos = new SPDXNonStandardLicense[] {nonStdLic1, nonStdLic2};
-		SPDXStandardLicense stdLic1 = SPDXLicenseInfoFactory.getStandardLicenseById("Apache-2.0");
-		SPDXLicenseInfo[] licenseInfosFromFile = new SPDXLicenseInfo[] {stdLic1, nonStdLic1, nonStdLic2};
+		ExtractedLicenseInfo nonStdLic1 = new ExtractedLicenseInfo(doc.getNextLicenseRef(), "LIcenseText1");
+		ExtractedLicenseInfo nonStdLic2 = new ExtractedLicenseInfo(doc.getNextLicenseRef(), "Second license text");
+		ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {nonStdLic1, nonStdLic2};
+		SpdxListedLicense stdLic1 = LicenseInfoFactory.getListedLicenseById("Apache-2.0");
+		AnyLicenseInfo[] licenseInfosFromFile = new AnyLicenseInfo[] {stdLic1, nonStdLic1, nonStdLic2};
 		
 		doc.setExtractedLicenseInfos(extractedLicenseInfos);
 		
 		pkg.setConcludedLicenses(stdLic1);
 		final String copyright = "Copyright";
 		pkg.setDeclaredCopyright(copyright);
-		SPDXLicenseInfo declaredLicense = new SpdxNoAssertionLicense();
+		AnyLicenseInfo declaredLicense = new SpdxNoAssertionLicense();
 		pkg.setDeclaredLicense(declaredLicense);
 		final String name = "Name";
 		pkg.setDeclaredName(name);
@@ -464,17 +470,17 @@ public class TestSPDXDocument {
 		final String fileName = "a/b/filename.tar.gz";
 		pkg.setFileName(fileName);
 		SPDXFile testFile1 = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				stdLic1, new SPDXLicenseInfo[] {nonStdLic1}, "license comment",
+				stdLic1, new AnyLicenseInfo[] {nonStdLic1}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile1.verify();
 		assertEquals(0, verify.size());
 		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "1023456789abcdef0123456789abcdef01234567",
-				nonStdLic1, new SPDXLicenseInfo[] {nonStdLic1}, "license comment2",
+				nonStdLic1, new AnyLicenseInfo[] {nonStdLic1}, "license comment2",
 				"file copyright2", new DOAPProject[0]);
 		verify = testFile2.verify();
 		assertEquals(0, verify.size());
 		SPDXFile testFile3 = new SPDXFile("filename3", "OTHER", "3023456789abcdef0123456789abcdef01234567",
-				nonStdLic2, new SPDXLicenseInfo[] {nonStdLic2}, "3license comment3",
+				nonStdLic2, new AnyLicenseInfo[] {nonStdLic2}, "3license comment3",
 				"file copyright3", new DOAPProject[0]);
 		testFile3.setFileDependencies(new SPDXFile[]{testFile1}, doc);
 		verify = testFile3.verify();
@@ -654,7 +660,7 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -662,12 +668,12 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -713,7 +719,7 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -721,12 +727,12 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -763,7 +769,7 @@ public class TestSPDXDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setExtractedLicenseInfos(org.spdx.rdfparser.SPDXStandardLicense[])}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setExtractedLicenseInfos(org.spdx.rdfparser.license.SpdxListedLicense[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
@@ -777,34 +783,34 @@ public class TestSPDXDocument {
 		String beforeCreate = writer.toString();
 		writer.close();
 		doc.createSpdxAnalysis(testUri);
-		SPDXNonStandardLicense[] noNonStdLic = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] noNonStdLic = doc.getExtractedLicenseInfos();
 		assertEquals(0, noNonStdLic.length);
-		SPDXNonStandardLicense[] testNonStdLic = new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(
+		ExtractedLicenseInfo[] testNonStdLic = new ExtractedLicenseInfo[] {new ExtractedLicenseInfo(
 				SPDXDocument.formNonStandardLicenseID(1), "Licnese Text 1")};
 		doc.setExtractedLicenseInfos(testNonStdLic);
-		SPDXNonStandardLicense[] resultNonStdLic = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] resultNonStdLic = doc.getExtractedLicenseInfos();
 		assertEquals(1, resultNonStdLic.length);
-		assertEquals(testNonStdLic[0].getId(), resultNonStdLic[0].getId());
-		assertEquals(testNonStdLic[0].getText(), resultNonStdLic[0].getText());
+		assertEquals(testNonStdLic[0].getLicenseId(), resultNonStdLic[0].getLicenseId());
+		assertEquals(testNonStdLic[0].getExtractedText(), resultNonStdLic[0].getExtractedText());
 
-		SPDXNonStandardLicense[] testNonStdLic2 = new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(
+		ExtractedLicenseInfo[] testNonStdLic2 = new ExtractedLicenseInfo[] {new ExtractedLicenseInfo(
 				SPDXDocument.formNonStandardLicenseID(2), "Licnese Text 2"),
-				new SPDXNonStandardLicense(
+				new ExtractedLicenseInfo(
 						SPDXDocument.formNonStandardLicenseID(3), "Licnese Text 3"),
-				new SPDXNonStandardLicense(
+				new ExtractedLicenseInfo(
 						SPDXDocument.formNonStandardLicenseID(4), "Licnese Text 4")};
 		doc.setExtractedLicenseInfos(testNonStdLic2);
-		SPDXNonStandardLicense[] resultNonStdLic2 = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] resultNonStdLic2 = doc.getExtractedLicenseInfos();
 		assertEquals(testNonStdLic2.length, resultNonStdLic2.length);
 		String[] testLicIds = new String[testNonStdLic2.length];
 		String[] testLicTexts = new String[testNonStdLic2.length];
 		String[] resultLicIds = new String[testNonStdLic2.length];
 		String[] resultLicTexts = new String[testNonStdLic2.length];
 		for (int i = 0; i < testLicIds.length; i++) {
-			testLicIds[i] = testNonStdLic2[i].getId();
-			testLicTexts[i] = testNonStdLic2[i].getText();
-			resultLicIds[i] = resultNonStdLic2[i].getId();
-			resultLicTexts[i] = resultNonStdLic2[i].getText();
+			testLicIds[i] = testNonStdLic2[i].getLicenseId();
+			testLicTexts[i] = testNonStdLic2[i].getExtractedText();
+			resultLicIds[i] = resultNonStdLic2[i].getLicenseId();
+			resultLicTexts[i] = resultNonStdLic2[i].getExtractedText();
 		}
 		compareArrays(testLicIds, resultLicIds);
 		compareArrays(testLicTexts, resultLicTexts);
@@ -847,11 +853,11 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testUri);
 		doc.createSpdxPackage();
 		String TEST_LICENSE_ID = SPDXDocument.formNonStandardLicenseID(15);
-		SPDXNonStandardLicense declaredLicenses = new SPDXNonStandardLicense(TEST_LICENSE_ID, "text");
+		ExtractedLicenseInfo declaredLicenses = new ExtractedLicenseInfo(TEST_LICENSE_ID, "text");
 		doc.getSpdxPackage().setDeclaredLicense(declaredLicenses);
-		SPDXLicenseInfo result = doc.getSpdxPackage().getDeclaredLicense();
+		AnyLicenseInfo result = doc.getSpdxPackage().getDeclaredLicense();
 		assertEquals(declaredLicenses, result);
-		assertEquals(TEST_LICENSE_ID, ((SPDXNonStandardLicense)result).getId());
+		assertEquals(TEST_LICENSE_ID, ((ExtractedLicenseInfo)result).getLicenseId());
 	}
 	
 	@Test
@@ -876,23 +882,23 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage();
 		String NON_STD_LIC_TEXT1 = "licenseText1";
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
-		SPDXNonStandardLicense[] emptyLic = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] emptyLic = doc.getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
-		SPDXNonStandardLicense lic1 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT1);
+		ExtractedLicenseInfo lic1 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT1);
 		String licID1 = SPDXDocument.formNonStandardLicenseID(1);
-		assertEquals(licID1, lic1.getId());
-		assertEquals(NON_STD_LIC_TEXT1, lic1.getText());
-		SPDXNonStandardLicense[] licresult1 = doc.getExtractedLicenseInfos();
+		assertEquals(licID1, lic1.getLicenseId());
+		assertEquals(NON_STD_LIC_TEXT1, lic1.getExtractedText());
+		ExtractedLicenseInfo[] licresult1 = doc.getExtractedLicenseInfos();
 		assertEquals(1, licresult1.length);
-		assertEquals(licID1, licresult1[0].getId());
-		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getText());
-		SPDXNonStandardLicense lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
+		assertEquals(licID1, licresult1[0].getLicenseId());
+		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getExtractedText());
+		ExtractedLicenseInfo lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
 		String licID2 = SPDXDocument.formNonStandardLicenseID(2);
-		assertEquals(licID2, lic2.getId());
-		assertEquals(NON_STD_LIC_TEXT2, lic2.getText());
-		SPDXNonStandardLicense[] licresult2 = doc.getExtractedLicenseInfos();
+		assertEquals(licID2, lic2.getLicenseId());
+		assertEquals(NON_STD_LIC_TEXT2, lic2.getExtractedText());
+		ExtractedLicenseInfo[] licresult2 = doc.getExtractedLicenseInfos();
 		assertEquals(2, licresult2.length);
-		if (!licresult2[0].getId().equals(licID2) && !licresult2[1].getId().equals(licID2)) {
+		if (!licresult2[0].getLicenseId().equals(licID2) && !licresult2[1].getLicenseId().equals(licID2)) {
 			fail("second license not found");
 		}
 	}
@@ -917,7 +923,7 @@ public class TestSPDXDocument {
 		}
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -927,12 +933,12 @@ public class TestSPDXDocument {
 		String homePage = "http://www.home.page";
 		pkg.setHomePage(homePage);
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -949,7 +955,7 @@ public class TestSPDXDocument {
 		verify = creator.verify();
 		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator);
-		doc.setExtractedLicenseInfos(new SPDXNonStandardLicense[] {new SPDXNonStandardLicense(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"11", "Text")});
+		doc.setExtractedLicenseInfos(new ExtractedLicenseInfo[] {new ExtractedLicenseInfo(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"11", "Text")});
 		doc.setSpdxVersion(SPDXDocument.CURRENT_SPDX_VERSION);
 		verify = doc.verify();
 		assertEquals(0, verify.size());		
@@ -1024,17 +1030,17 @@ public class TestSPDXDocument {
 		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		doc.createSpdxAnalysis(testDocUri);
 		// check default
-		SPDXStandardLicense dataLicense = doc.getDataLicense();
-		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getId());
+		SpdxListedLicense dataLicense = doc.getDataLicense();
+		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getLicenseId());
 		// check set correct license
-		SPDXLicenseInfo cc0License = SPDXLicenseInfoFactory.parseSPDXLicenseString(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
-		doc.setDataLicense((SPDXStandardLicense)cc0License);
+		AnyLicenseInfo cc0License = LicenseInfoFactory.parseSPDXLicenseString(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID);
+		doc.setDataLicense((SpdxListedLicense)cc0License);
 		dataLicense = doc.getDataLicense();
-		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getId());
+		assertEquals(org.spdx.rdfparser.SpdxRdfConstants.SPDX_DATA_LICENSE_ID, dataLicense.getLicenseId());
 		// check error when setting wrong license
-		SPDXLicenseInfo ngplLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString("NGPL");
+		AnyLicenseInfo ngplLicense = LicenseInfoFactory.parseSPDXLicenseString("NGPL");
 		try {
-			doc.setDataLicense((SPDXStandardLicense)ngplLicense);
+			doc.setDataLicense((SpdxListedLicense)ngplLicense);
 			fail("Incorrect license allowed to be set for data license");
 		} catch(InvalidSPDXAnalysisException e) {
 			// expected - do nothing
@@ -1051,7 +1057,7 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -1059,16 +1065,16 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(testFiles);
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -1106,7 +1112,7 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -1114,17 +1120,17 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.addFile(testFiles[0]);
 		pkg.addFile(testFiles[1]);
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -1161,7 +1167,7 @@ public class TestSPDXDocument {
 		doc.createSpdxPackage(testPkgUri);
 		// add the required fields		
 		SPDXPackage pkg = doc.getSpdxPackage();
-		pkg.setConcludedLicenses(new SPDXNoneLicense());
+		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
 		pkg.setDeclaredLicense(new SpdxNoAssertionLicense());
 		pkg.setDeclaredName("Name");
@@ -1169,16 +1175,16 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl("None");
 		pkg.setFileName("a/b/filename.tar.gz");
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
 		ArrayList<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(testFiles);
-		pkg.setLicenseInfoFromFiles(new SPDXLicenseInfo[] {new SPDXNoneLicense()});
+		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
 		pkg.setSha1("0123456789abcdef0123456789abcdef01234567");
 		pkg.setShortDescription("Short description");
 		pkg.setSourceInfo("Source info");
@@ -1250,14 +1256,14 @@ public class TestSPDXDocument {
 		doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis(testDocUri, SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION);
 		assertEquals(SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION, doc.getSpdxVersion());
-		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0, doc.getDataLicense().getId());
+		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0, doc.getDataLicense().getLicenseId());
 		
 		// current version
 		model = ModelFactory.createDefaultModel();
 		doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis(testDocUri);
 		assertEquals(SPDXDocument.CURRENT_SPDX_VERSION, doc.getSpdxVersion());
-		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, doc.getDataLicense().getId());
+		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, doc.getDataLicense().getLicenseId());
 	}
 	
 	@Test
@@ -1272,21 +1278,21 @@ public class TestSPDXDocument {
 		String NON_STD_LIC_NAME1 = "licenseName1";
 		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
 		String NON_STD_LIC_COMMENT1 = "License 1 comment";
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
 				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
 		
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 
-		SPDXNonStandardLicense[] emptyLic = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] emptyLic = doc.getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
 		assertTrue(!doc.extractedLicenseExists(NON_STD_LIC_ID1));
 		
 		doc.addNewExtractedLicenseInfo(lic1);
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
 		
-		SPDXNonStandardLicense lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
+		ExtractedLicenseInfo lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
-		assertTrue(doc.extractedLicenseExists(lic2.getId()));
+		assertTrue(doc.extractedLicenseExists(lic2.getLicenseId()));
 	}
 	
 	@Test
@@ -1301,30 +1307,30 @@ public class TestSPDXDocument {
 		String NON_STD_LIC_NAME1 = "licenseName1";
 		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
 		String NON_STD_LIC_COMMENT1 = "License 1 comment";
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
 				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
 		String NON_STD_LIC_ID2 = "LicenseRef-623";
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 		String NON_STD_LIC_NAME2 = "licenseName2";
 		String[] NON_STD_LIC_REFERENCES2 = new String[] {"ref2"};
 		String NON_STD_LIC_COMMENT2 = "License 2 comment";
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(NON_STD_LIC_ID2, NON_STD_LIC_TEXT2, 
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(NON_STD_LIC_ID2, NON_STD_LIC_TEXT2, 
 				NON_STD_LIC_NAME2, NON_STD_LIC_REFERENCES2, NON_STD_LIC_COMMENT2);
-		SPDXNonStandardLicense[] emptyLic = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] emptyLic = doc.getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
 		doc.addNewExtractedLicenseInfo(lic1);
-		SPDXNonStandardLicense[] licresult1 = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] licresult1 = doc.getExtractedLicenseInfos();
 		assertEquals(1, licresult1.length);
-		assertEquals(NON_STD_LIC_ID1, licresult1[0].getId());
-		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getText());
-		assertEquals(NON_STD_LIC_NAME1, licresult1[0].getLicenseName());
+		assertEquals(NON_STD_LIC_ID1, licresult1[0].getLicenseId());
+		assertEquals(NON_STD_LIC_TEXT1, licresult1[0].getExtractedText());
+		assertEquals(NON_STD_LIC_NAME1, licresult1[0].getName());
 		assertEquals(NON_STD_LIC_COMMENT1, licresult1[0].getComment());
-		assertEquals(1, licresult1[0].getSourceUrls().length);
-		assertEquals(NON_STD_LIC_REFERENCES1[0], licresult1[0].getSourceUrls()[0]);
+		assertEquals(1, licresult1[0].getSeeAlso().length);
+		assertEquals(NON_STD_LIC_REFERENCES1[0], licresult1[0].getSeeAlso()[0]);
 		doc.addNewExtractedLicenseInfo(lic2);
-		SPDXNonStandardLicense[] licresult2 = doc.getExtractedLicenseInfos();
+		ExtractedLicenseInfo[] licresult2 = doc.getExtractedLicenseInfos();
 		assertEquals(2, licresult2.length);
-		if (!licresult2[0].getId().equals(NON_STD_LIC_ID2) && !licresult2[1].getId().equals(NON_STD_LIC_ID2)) {
+		if (!licresult2[0].getLicenseId().equals(NON_STD_LIC_ID2) && !licresult2[1].getLicenseId().equals(NON_STD_LIC_ID2)) {
 			fail("second license not found");
 		}
 	}
@@ -1391,7 +1397,7 @@ public class TestSPDXDocument {
 		docA.createSpdxAnalysis(docUri);
 		docA.createSpdxPackage(docA.getDocumentNamespace() + docA.getNextSpdxElementRef());
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		
 		String fileUri = docA.getDocumentNamespace()+docA.getNextSpdxElementRef();
@@ -1413,7 +1419,7 @@ public class TestSPDXDocument {
 		docA.createSpdxPackage(docA.getDocumentNamespace() + docA.getNextSpdxElementRef());
 		
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
-				new SPDXNoneLicense(), new SPDXLicenseInfo[] {new SPDXNoneLicense()}, "license comment",
+				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		
 		SPDXFile clonedFile = testFile.clone();

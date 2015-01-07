@@ -32,11 +32,11 @@ import org.spdx.html.LicenseHTMLFile;
 import org.spdx.html.LicenseTOCHTMLFile;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
-import org.spdx.rdfparser.IStandardLicenseProvider;
-import org.spdx.rdfparser.SPDXLicenseRestrictionException;
-import org.spdx.rdfparser.SPDXStandardLicense;
-import org.spdx.rdfparser.SpdxLicenseRestriction;
-import org.spdx.rdfparser.SpdxStdLicenseException;
+import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
+import org.spdx.rdfparser.license.LicenseRestrictionException;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.SpdxListedLicenseException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
@@ -114,7 +114,7 @@ public class LicenseRDFAGenerator {
 
 
 		ArrayList<String> warnings = new ArrayList<String>();
-		IStandardLicenseProvider licenseProvider = null;
+		ISpdxListedLicenseProvider licenseProvider = null;
 		try {
 			if (ssFile.getName().toLowerCase().endsWith(".xls")) {
 				SPDXLicenseSpreadsheet licenseSpreadsheet = new SPDXLicenseSpreadsheet(ssFile, false, true);
@@ -171,7 +171,7 @@ public class LicenseRDFAGenerator {
 			System.out.println("Completed processing licenses");
 		} catch (SpreadsheetException e) {
 			System.out.println("Invalid spreadsheet: "+e.getMessage());
-		} catch (SpdxStdLicenseException e) {
+		} catch (SpdxListedLicenseException e) {
 			System.out.println("Error reading standard licenses: "+e.getMessage());
 		} catch (Exception e) {
 			System.out.println("Unhandled exception generating html:");
@@ -197,31 +197,31 @@ public class LicenseRDFAGenerator {
 	 * @param templateFolder Directory holding the template representation of the license text
 	 * @throws IOException 
 	 * @throws SpreadsheetException 
-	 * @throws SPDXLicenseRestrictionException 
+	 * @throws LicenseRestrictionException 
 	 * @throws MustacheException 
 	*/
 	private static void writeExceptionList(String version,
-			IStandardLicenseProvider licenseProvider,
+			ISpdxListedLicenseProvider licenseProvider,
 			ArrayList<String> warnings, File dir, File textFolder,
-			File htmlFolder, File templateFolder) throws IOException, SPDXLicenseRestrictionException, SpreadsheetException, MustacheException {
+			File htmlFolder, File templateFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		HashSet<String> licenseIds = new HashSet<String>();
 		try {
-			Iterator<SPDXStandardLicense> licIter = licenseProvider.getLicenseIterator();
+			Iterator<SpdxListedLicense> licIter = licenseProvider.getLicenseIterator();
 			while (licIter.hasNext()) {
-				licenseIds.add(licIter.next().getId());
+				licenseIds.add(licIter.next().getLicenseId());
 			}	
-		} catch (SpdxStdLicenseException e) {
+		} catch (SpdxListedLicenseException e) {
 			System.out.println("Warning - Not able to check for duplicate license and exception ID's");
 		}
 		String exceptionHtmlTocReference = "./" + EXCEPTION_TOC_FILE_NAME;
 		ExceptionHtmlToc exceptionToc = new ExceptionHtmlToc();
-		Iterator<SpdxLicenseRestriction> exceptionIter = licenseProvider.getExceptionIterator();
+		Iterator<LicenseRestriction> exceptionIter = licenseProvider.getExceptionIterator();
 		HashMap<String, String> addedExceptionsMap = new HashMap<String, String>();
 		while (exceptionIter.hasNext()) {
 			System.out.print(".");
-			SpdxLicenseRestriction nextException = exceptionIter.next();
+			LicenseRestriction nextException = exceptionIter.next();
 			if (nextException.getId() != null && !nextException.getId().isEmpty()) {
 				// check for duplicate exceptions
 				Iterator<Entry<String, String>> addedExceptionIter = addedExceptionsMap.entrySet().iterator();
@@ -261,50 +261,50 @@ public class LicenseRDFAGenerator {
 	 * @param textFolder Directory holding the text only representation of the files
 	 * @param htmlFolder Directory holding the HTML formated license text
 	 * @param templateFolder Directory holding the template representation of the license text
-	 * @throws SpdxStdLicenseException 
+	 * @throws SpdxListedLicenseException 
 	 * @throws IOException 
 	 * @throws LicenseTemplateRuleException 
 	 * @throws MustacheException 
 	 * 
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
-			IStandardLicenseProvider licenseProvider, ArrayList<String> warnings,
-			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxStdLicenseException, IOException, LicenseTemplateRuleException, MustacheException {
+			ISpdxListedLicenseProvider licenseProvider, ArrayList<String> warnings,
+			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, LicenseTemplateRuleException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(version, releaseDate);
 		// Main page - License list
-		Iterator<SPDXStandardLicense> licenseIter = licenseProvider.getLicenseIterator();
+		Iterator<SpdxListedLicense> licenseIter = licenseProvider.getLicenseIterator();
 		HashMap<String, String> addedLicIdTextMap = new HashMap<String, String>();
 		while (licenseIter.hasNext()) {
 			System.out.print(".");
-			SPDXStandardLicense license = licenseIter.next();
-			if (license.getId() != null && !license.getId().isEmpty()) {
+			SpdxListedLicense license = licenseIter.next();
+			if (license.getLicenseId() != null && !license.getLicenseId().isEmpty()) {
 				// Check for duplicate licenses
 				Iterator<Entry<String, String>> addedLicenseTextIter = addedLicIdTextMap.entrySet().iterator();
 				while (addedLicenseTextIter.hasNext()) {
 					Entry<String, String> entry = addedLicenseTextIter.next();
-					if (LicenseCompareHelper.isLicenseTextEquivalent(entry.getValue(), license.getText())) {
-						warnings.add("Duplicates licenses: "+license.getId()+", "+entry.getKey());
+					if (LicenseCompareHelper.isLicenseTextEquivalent(entry.getValue(), license.getLicenseText())) {
+						warnings.add("Duplicates licenses: "+license.getLicenseId()+", "+entry.getKey());
 					}
 				}
-				addedLicIdTextMap.put(license.getId(), license.getText());
+				addedLicIdTextMap.put(license.getLicenseId(), license.getLicenseText());
 				licHtml.setLicense(license);
 				licHtml.setDeprecated(false);
-				String licHtmlFileName = formLicenseHTMLFileName(license.getId());
+				String licHtmlFileName = formLicenseHTMLFileName(license.getLicenseId());
 				String licHTMLReference = "./"+licHtmlFileName;
 				String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
 				File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 				licHtml.writeToFile(licHtmlFile, tocHTMLReference);
 				tableOfContents.addLicense(license, licHTMLReference);
 				File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
-				Files.write(license.getText(), textFile, utf8);
-				if (license.getTemplate() != null && !license.getTemplate().trim().isEmpty()) {
+				Files.write(license.getLicenseText(), textFile, utf8);
+				if (license.getStandardLicenseTemplate() != null && !license.getStandardLicenseTemplate().trim().isEmpty()) {
 					File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
-					Files.write(license.getTemplate(), templateFile, utf8);
+					Files.write(license.getStandardLicenseTemplate(), templateFile, utf8);
 				}
 				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
-				Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getText()), htmlTextFile, utf8);
+				Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText()), htmlTextFile, utf8);
 			}
 		}
 		Iterator<DeprecatedLicenseInfo> depIter = licenseProvider.getDeprecatedLicenseIterator();
@@ -313,20 +313,20 @@ public class LicenseRDFAGenerator {
 			licHtml.setLicense(deprecatedLicense.getLicense());
 			licHtml.setDeprecated(true);
 			licHtml.setDeprecatedVersion(deprecatedLicense.getDeprecatedVersion());
-			String licHtmlFileName = formLicenseHTMLFileName(deprecatedLicense.getLicense().getId());
+			String licHtmlFileName = formLicenseHTMLFileName(deprecatedLicense.getLicense().getLicenseId());
 			String licHTMLReference = "./"+licHtmlFileName;
 			String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
 			File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
 			tableOfContents.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
 			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
-			Files.write(deprecatedLicense.getLicense().getText(), textFile, utf8);
-			if (deprecatedLicense.getLicense().getTemplate() != null && !deprecatedLicense.getLicense().getTemplate().trim().isEmpty()) {
+			Files.write(deprecatedLicense.getLicense().getLicenseText(), textFile, utf8);
+			if (deprecatedLicense.getLicense().getStandardLicenseTemplate() != null && !deprecatedLicense.getLicense().getStandardLicenseTemplate().trim().isEmpty()) {
 				File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
-				Files.write(deprecatedLicense.getLicense().getTemplate(), templateFile, utf8);
+				Files.write(deprecatedLicense.getLicense().getStandardLicenseTemplate(), templateFile, utf8);
 			}
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
-			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getText()), htmlTextFile, utf8);
+			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
 
 		}
 		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_FILE_NAME);
