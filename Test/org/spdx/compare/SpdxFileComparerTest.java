@@ -28,10 +28,10 @@ import org.junit.Test;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicense;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.License;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
@@ -83,12 +83,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -129,12 +129,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11);
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11);
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -176,14 +176,14 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11),
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0)
+		AnyLicenseInfo[] seenLicenseB = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11),
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0)
 		};
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
@@ -226,12 +226,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -305,14 +305,14 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11),
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0)
+		AnyLicenseInfo[] seenLicenseB = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11),
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0)
 		};
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
@@ -340,14 +340,14 @@ public class SpdxFileComparerTest {
 		fc.compare(fileA, fileB, licenseXlationMap);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		SPDXLicenseInfo[] unique = fc.getUniqueSeenLicensesB();
+		AnyLicenseInfo[] unique = fc.getUniqueSeenLicensesB();
 		assertEquals(1, unique.length);
-		assertEquals(STD_LIC_ID_CC0, ((SPDXLicense)unique[0]).getId());
+		assertEquals(STD_LIC_ID_CC0, ((License)unique[0]).getLicenseId());
 		SpdxFileDifference diff = fc.getFileDifference();
 		assertFalse(diff.isSeenLicensesEqual());
-		SPDXLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesB();
+		AnyLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesB();
 		assertEquals(1, diffUnique.length);
-		assertEquals(STD_LIC_ID_CC0, ((SPDXLicense)diffUnique[0]).getId());
+		assertEquals(STD_LIC_ID_CC0, ((License)diffUnique[0]).getLicenseId());
 
 		
 		fileA.setSeenLicenses(seenLicenseB);
@@ -371,14 +371,14 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11),
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11),
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0)
 				};
-		SPDXLicenseInfo[] seenLicenseB = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo[] seenLicenseB = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 		};
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
@@ -406,14 +406,14 @@ public class SpdxFileComparerTest {
 		fc.compare(fileA, fileB, licenseXlationMap);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		SPDXLicenseInfo[] unique = fc.getUniqueSeenLicensesA();
+		AnyLicenseInfo[] unique = fc.getUniqueSeenLicensesA();
 		assertEquals(1, unique.length);
-		assertEquals(STD_LIC_ID_CC0, ((SPDXLicense)unique[0]).getId());
+		assertEquals(STD_LIC_ID_CC0, ((License)unique[0]).getLicenseId());
 		SpdxFileDifference diff = fc.getFileDifference();
 		assertFalse(diff.isSeenLicensesEqual());
-		SPDXLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesA();
+		AnyLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesA();
 		assertEquals(1, diffUnique.length);
-		assertEquals(STD_LIC_ID_CC0, ((SPDXLicense)diffUnique[0]).getId());
+		assertEquals(STD_LIC_ID_CC0, ((License)diffUnique[0]).getLicenseId());
 		
 		fileA.setSeenLicenses(seenLicenseB);
 		fileB.setSeenLicenses(seenLicenseA);
@@ -435,12 +435,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -538,12 +538,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = "B license comments";
 		String copyrightA = "Copyright";
@@ -590,12 +590,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -642,12 +642,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -694,12 +694,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -744,12 +744,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = "cccbf72bf99b7e471f1a27989667a903658652bb";
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -797,12 +797,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = SpdxRdfConstants.FILE_TYPE_BINARY;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -849,12 +849,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -907,12 +907,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -965,12 +965,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -1023,12 +1023,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = fileTypeA;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";
@@ -1071,12 +1071,12 @@ public class SpdxFileComparerTest {
 		String fileTypeB = SpdxRdfConstants.FILE_TYPE_BINARY;
 		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
 		String sha1B = sha1A;
-		SPDXLicenseInfo concludedLicenseA = SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		SPDXLicenseInfo concludedLicenseB = concludedLicenseA;
-		SPDXLicenseInfo[] seenLicenseA = new SPDXLicenseInfo[] {
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
+		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
+		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
+		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
+				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
 				};
-		SPDXLicenseInfo[] seenLicenseB = seenLicenseA;
+		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
 		String licenseCommentsA = "License Comments";
 		String licenseCommentsB = licenseCommentsA;
 		String copyrightA = "Copyright";

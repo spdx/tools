@@ -21,7 +21,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SpdxLicenseRestriction;
+import org.spdx.rdfparser.license.LicenseRestriction;
 
 /**
  * Sheet containing the License Exceptions
@@ -67,7 +67,7 @@ public class LicenseExceptionSheet extends AbstractSheet {
 		super(workbook, sheetName);
 	}
 	
-	public void add(SpdxLicenseRestriction exception) {
+	public void add(LicenseRestriction exception) {
 		Row row = addRow();
 		Cell nameCell = row.createCell(COL_NAME);
 		nameCell.setCellValue(exception.getName());
@@ -154,7 +154,7 @@ public class LicenseExceptionSheet extends AbstractSheet {
 	 * @param rowNum
 	 * @return
 	 */
-	public SpdxLicenseRestriction getException(int rowNum) {
+	public LicenseRestriction getException(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -197,7 +197,7 @@ public class LicenseExceptionSheet extends AbstractSheet {
 		if (examplesCell != null) {
 			examples = examplesCell.getStringCellValue();
 		}
-		return new SpdxLicenseRestriction(id, name, text, sourceURL, notes, examples);
+		return new LicenseRestriction(id, name, text, sourceURL, notes, examples);
 	}
 
 }

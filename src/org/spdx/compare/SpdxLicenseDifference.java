@@ -16,7 +16,7 @@
 */
 package org.spdx.compare;
 
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 /**
  * Contains the results of a comparison between two SPDX non-standard licenses
@@ -129,19 +129,19 @@ public class SpdxLicenseDifference {
 	 * @param licenseB
 	 */
 	public SpdxLicenseDifference(
-			SPDXNonStandardLicense licenseA,
-			SPDXNonStandardLicense licenseB) {
-		this.licenseText = licenseA.getText();
-		this.licenseNameA = licenseA.getLicenseName();
-		this.licenseNameB = licenseB.getLicenseName();
+			ExtractedLicenseInfo licenseA,
+			ExtractedLicenseInfo licenseB) {
+		this.licenseText = licenseA.getExtractedText();
+		this.licenseNameA = licenseA.getName();
+		this.licenseNameB = licenseB.getName();
 		this.licenseNamesEqual = SpdxComparer.stringsEqual(licenseNameA, licenseNameB);
-		this.IdA = licenseA.getId();
-		this.IdB = licenseB.getId();
+		this.IdA = licenseA.getLicenseId();
+		this.IdB = licenseB.getLicenseId();
 		this.commentA = licenseA.getComment();
 		this.commentB = licenseB.getComment();
 		this.commentsEqual = SpdxComparer.stringsEqual(commentA, commentB);
-		this.sourceUrlsA = licenseA.getSourceUrls();
-		this.sourceUrlsB = licenseB.getSourceUrls();
+		this.sourceUrlsA = licenseA.getSeeAlso();
+		this.sourceUrlsB = licenseB.getSeeAlso();
 		this.sourceUrlsEqual = SpdxComparer.stringArraysEqual(sourceUrlsA, sourceUrlsB);			
 	}
 	

@@ -28,8 +28,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXLicenseRestrictionException;
-import org.spdx.rdfparser.SpdxLicenseRestriction;
+import org.spdx.rdfparser.license.LicenseRestrictionException;
+import org.spdx.rdfparser.license.LicenseRestriction;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -69,7 +69,7 @@ public class TestLicenseExceptionSheet {
 	}
 
 	@Test
-	public void testAdd() throws IOException, SpreadsheetException, SPDXLicenseRestrictionException {
+	public void testAdd() throws IOException, SpreadsheetException, LicenseRestrictionException {
 		File tempFile = File.createTempFile("TestLic", "test");
 		String tempDirPath = tempFile.getPath() + "-DIR";
 		File tempDir = new File(tempDirPath);
@@ -79,14 +79,14 @@ public class TestLicenseExceptionSheet {
 		}
 		try {
 			// create a copy of the spreadsheet then compare
-			ArrayList<SpdxLicenseRestriction> exceptions = new ArrayList<SpdxLicenseRestriction>();
+			ArrayList<LicenseRestriction> exceptions = new ArrayList<LicenseRestriction>();
 			File origSpreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
 			SPDXLicenseSpreadsheet origSpreadsheet = new SPDXLicenseSpreadsheet(origSpreadsheetFile, false, true);
-			Iterator<SpdxLicenseRestriction> iter = origSpreadsheet.getExceptionIterator();
+			Iterator<LicenseRestriction> iter = origSpreadsheet.getExceptionIterator();
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");
 			SPDXLicenseSpreadsheet copy = new SPDXLicenseSpreadsheet(spreadsheetCopy, true, false);
 			while (iter.hasNext()) {
-				SpdxLicenseRestriction nextRestriction = iter.next();
+				LicenseRestriction nextRestriction = iter.next();
 				exceptions.add(nextRestriction);
 				copy.getLicenseExceptionSheet().add(nextRestriction);
 			}
@@ -101,7 +101,7 @@ public class TestLicenseExceptionSheet {
 					if (i > exceptions.size()) {
 						fail("to many exceptions in copy");
 					}
-					SpdxLicenseRestriction nextException = iter.next();
+					LicenseRestriction nextException = iter.next();
 					assertEquals(exceptions.get(i).getId(), nextException.getId());
 					assertEquals(exceptions.get(i).getName(), nextException.getName());
 					assertEquals(exceptions.get(i).getNotes(), nextException.getNotes());

@@ -1,5 +1,8 @@
+Implementation version 2.0.0
+- Refactored license classes to match the SPDX 2.0 model
+- Added verification for license name as a required field
 Implementation version 1.2.10
-
+- Updated RDFAParser
 Implementation version 1.2.9
 - Add merge utility contributed by Gang Ling
 Implementation version 1.2.8

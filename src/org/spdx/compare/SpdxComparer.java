@@ -28,11 +28,11 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 
 /**
@@ -182,8 +182,8 @@ public class SpdxComparer {
 	 * the comparison which do not contain some of the reviewers in the key document.  See the
 	 * implementation of compareReviewers for details
 	 */
-	private HashMap<SPDXDocument, HashMap<SPDXDocument, SPDXNonStandardLicense[]>> uniqueExtractedLicenses = 
-		new HashMap<SPDXDocument, HashMap<SPDXDocument, SPDXNonStandardLicense[]>>();
+	private HashMap<SPDXDocument, HashMap<SPDXDocument, ExtractedLicenseInfo[]>> uniqueExtractedLicenses = 
+		new HashMap<SPDXDocument, HashMap<SPDXDocument, ExtractedLicenseInfo[]>>();
 	/**
 	 * Map of any SPDX documents that have extraced license infos with equivalent text but different comments, id's or other fields
 	 */
@@ -736,8 +736,8 @@ public class SpdxComparer {
 	 * @throws SpdxCompareException 
 	 */
 	private boolean compareLicenseInfoFromFiles(int doc1,
-			SPDXLicenseInfo[] licenseInfoFromFiles, int doc2,
-			SPDXLicenseInfo[] licenseInfoFromFiles2) throws SpdxCompareException {
+			AnyLicenseInfo[] licenseInfoFromFiles, int doc2,
+			AnyLicenseInfo[] licenseInfoFromFiles2) throws SpdxCompareException {
 		//Note that the license order need not be the same
 		this.checkDocsIndex(doc1);
 		this.checkDocsIndex(doc2);
@@ -780,8 +780,8 @@ public class SpdxComparer {
 	 * @throws SpdxCompareException 
 	 */
 	public boolean compareLicense(int doc1,
-			SPDXLicenseInfo license1, int doc2,
-			SPDXLicenseInfo license2) throws SpdxCompareException {
+			AnyLicenseInfo license1, int doc2,
+			AnyLicenseInfo license2) throws SpdxCompareException {
 		this.checkDocsIndex(doc1);
 		this.checkDocsIndex(doc2);
 		HashMap<SPDXDocument, HashMap<String, String>> hm = this.extractedLicenseIdMap.get(this.spdxDocs[doc1]);
@@ -876,7 +876,7 @@ public class SpdxComparer {
 	 */
 	private void compareDataLicense() throws SpdxCompareException {
 		try {
-			SPDXStandardLicense lic1 = this.spdxDocs[0].getDataLicense();
+			SpdxListedLicense lic1 = this.spdxDocs[0].getDataLicense();
 			this.dataLicenseEqual = true;
 			for (int i = 1; i < spdxDocs.length; i++) {
 				if (!lic1.equals(spdxDocs[i].getDataLicense())) {
@@ -898,9 +898,9 @@ public class SpdxComparer {
 	 */
 	private void compareExtractedLicenseInfos() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		for (int i = 0; i < spdxDocs.length; i++) {
-			SPDXNonStandardLicense[] extractedLicensesA = spdxDocs[i].getExtractedLicenseInfos();
-			HashMap<SPDXDocument, SPDXNonStandardLicense[]> uniqueMap = 
-				new HashMap<SPDXDocument, SPDXNonStandardLicense[]>();
+			ExtractedLicenseInfo[] extractedLicensesA = spdxDocs[i].getExtractedLicenseInfos();
+			HashMap<SPDXDocument, ExtractedLicenseInfo[]> uniqueMap = 
+				new HashMap<SPDXDocument, ExtractedLicenseInfo[]>();
 			HashMap<SPDXDocument, SpdxLicenseDifference[]> differenceMap = 
 				new HashMap<SPDXDocument, SpdxLicenseDifference[]>();
 			HashMap<SPDXDocument, HashMap<String, String>> licenseIdMap = 
@@ -912,14 +912,14 @@ public class SpdxComparer {
 				}
 				HashMap<String, String> idMap = new HashMap<String, String>();
 				ArrayList<SpdxLicenseDifference> alDifferences = new ArrayList<SpdxLicenseDifference>();
-				SPDXNonStandardLicense[] extractedLicensesB = spdxDocs[j].getExtractedLicenseInfos();
-				ArrayList<SPDXNonStandardLicense> uniqueLicenses = new ArrayList<SPDXNonStandardLicense>();
+				ExtractedLicenseInfo[] extractedLicensesB = spdxDocs[j].getExtractedLicenseInfos();
+				ArrayList<ExtractedLicenseInfo> uniqueLicenses = new ArrayList<ExtractedLicenseInfo>();
 				compareLicenses(extractedLicensesA, extractedLicensesB,
 						idMap, alDifferences, uniqueLicenses);
 				// unique
 				if (uniqueLicenses.size() > 0) {
 					uniqueMap.put(spdxDocs[j], uniqueLicenses.toArray(
-							new SPDXNonStandardLicense[uniqueLicenses.size()]));
+							new ExtractedLicenseInfo[uniqueLicenses.size()]));
 				}
 				// differences
 				if (alDifferences.size() > 0) {
@@ -950,11 +950,11 @@ public class SpdxComparer {
 	 * @param alDifferences Array list of license differences found where the license text is equivalent but other properties are different
 	 * @param uniqueLicenses ArrayList if licenses found in the A but not found in B
 	 */
-	private void compareLicenses(SPDXNonStandardLicense[] extractedLicensesA,
-			SPDXNonStandardLicense[] extractedLicensesB,
+	private void compareLicenses(ExtractedLicenseInfo[] extractedLicensesA,
+			ExtractedLicenseInfo[] extractedLicensesB,
 			HashMap<String, String> idMap,
 			ArrayList<SpdxLicenseDifference> alDifferences,
-			ArrayList<SPDXNonStandardLicense> uniqueLicenses) {
+			ArrayList<ExtractedLicenseInfo> uniqueLicenses) {
 		idMap.clear();
 		alDifferences.clear();
 		uniqueLicenses.clear();
@@ -962,11 +962,11 @@ public class SpdxComparer {
 			boolean foundMatch = false;
 			boolean foundTextMatch = false;
 			for (int q = 0; q < extractedLicensesB.length; q++) {
-				if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicensesA[k].getText(), 
-						extractedLicensesB[q].getText())) {
+				if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicensesA[k].getExtractedText(), 
+						extractedLicensesB[q].getExtractedText())) {
 					foundTextMatch = true;
 					if (!foundMatch) {
-						idMap.put(extractedLicensesA[k].getId(), extractedLicensesB[q].getId());
+						idMap.put(extractedLicensesA[k].getLicenseId(), extractedLicensesB[q].getLicenseId());
 						// always add to the map any matching licenses.  If more than one, add
 						// the license matches where the entire license match.  This condition checks
 						// to make sure we are not over-writing an exact match
@@ -992,12 +992,12 @@ public class SpdxComparer {
 	 * @return
 	 */
 	private boolean nonTextLicenseFieldsEqual(
-			SPDXNonStandardLicense spdxNonStandardLicenseA,
-			SPDXNonStandardLicense spdxNonStandardLicenseB) {
+			ExtractedLicenseInfo spdxNonStandardLicenseA,
+			ExtractedLicenseInfo spdxNonStandardLicenseB) {
 		
 		// license name
-		if (!stringsEqual(spdxNonStandardLicenseA.getLicenseName(),
-				spdxNonStandardLicenseB.getLicenseName())) {
+		if (!stringsEqual(spdxNonStandardLicenseA.getName(),
+				spdxNonStandardLicenseB.getName())) {
 			return false;
 		}
 
@@ -1007,7 +1007,7 @@ public class SpdxComparer {
 			return false;
 		}
 		// Source URL's
-		if (!stringArraysEqual(spdxNonStandardLicenseA.getSourceUrls(), spdxNonStandardLicenseB.getSourceUrls())) {
+		if (!stringArraysEqual(spdxNonStandardLicenseA.getSeeAlso(), spdxNonStandardLicenseB.getSeeAlso())) {
 			return false;
 		}
 		// if we made it here, everything is equal
@@ -1361,13 +1361,13 @@ public class SpdxComparer {
 	 */
 	private boolean _isExtractedLicensingInfoEqualsNoCheck() {
 		// check for unique extraced license infos
-		Iterator<Entry<SPDXDocument, HashMap<SPDXDocument, SPDXNonStandardLicense[]>>> uniqueIter = 
+		Iterator<Entry<SPDXDocument, HashMap<SPDXDocument, ExtractedLicenseInfo[]>>> uniqueIter = 
 			this.uniqueExtractedLicenses.entrySet().iterator();
 		while (uniqueIter.hasNext()) {
-			Entry<SPDXDocument, HashMap<SPDXDocument, SPDXNonStandardLicense[]>> entry = uniqueIter.next();
-			Iterator<Entry<SPDXDocument, SPDXNonStandardLicense[]>> entryIter = entry.getValue().entrySet().iterator();
+			Entry<SPDXDocument, HashMap<SPDXDocument, ExtractedLicenseInfo[]>> entry = uniqueIter.next();
+			Iterator<Entry<SPDXDocument, ExtractedLicenseInfo[]>> entryIter = entry.getValue().entrySet().iterator();
 			while(entryIter.hasNext()) {
-				SPDXNonStandardLicense[] licenses = entryIter.next().getValue();
+				ExtractedLicenseInfo[] licenses = entryIter.next().getValue();
 				if (licenses != null && licenses.length > 0) {
 					return false;
 				}
@@ -1447,21 +1447,21 @@ public class SpdxComparer {
 	 * @return
 	 * @throws SpdxCompareException 
 	 */
-	public SPDXNonStandardLicense[] getUniqueExtractedLicenses(int docIndexA, int docIndexB) throws SpdxCompareException {
+	public ExtractedLicenseInfo[] getUniqueExtractedLicenses(int docIndexA, int docIndexB) throws SpdxCompareException {
 		this.checkDocsField();
 		this.checkInProgress();
 		checkDocsIndex(docIndexA);
 		checkDocsIndex(docIndexB);
-		HashMap<SPDXDocument, SPDXNonStandardLicense[]> uniques = this.uniqueExtractedLicenses.get(spdxDocs[docIndexA]);
+		HashMap<SPDXDocument, ExtractedLicenseInfo[]> uniques = this.uniqueExtractedLicenses.get(spdxDocs[docIndexA]);
 		if (uniques != null) {
-			SPDXNonStandardLicense[] retval = uniques.get(spdxDocs[docIndexB]);
+			ExtractedLicenseInfo[] retval = uniques.get(spdxDocs[docIndexB]);
 			if (retval != null) {
 				return retval;
 			} else {
-				return new SPDXNonStandardLicense[0];
+				return new ExtractedLicenseInfo[0];
 			}
 		} else {
-			return new SPDXNonStandardLicense[0];
+			return new ExtractedLicenseInfo[0];
 		}
 	}
 

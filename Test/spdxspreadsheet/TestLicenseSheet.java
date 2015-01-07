@@ -28,7 +28,7 @@ import java.util.Iterator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -58,7 +58,7 @@ public class TestLicenseSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.LicenseSheet#add(org.spdx.rdfparser.SPDXStandardLicense)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.LicenseSheet#add(org.spdx.rdfparser.license.SpdxListedLicense)}.
 	 * @throws IOException 
 	 * @throws SpreadsheetException 
 	 */
@@ -73,14 +73,14 @@ public class TestLicenseSheet {
 		}
 		try {
 			// create a copy of the spreadsheet then compare
-			ArrayList<SPDXStandardLicense> licenses = new ArrayList<SPDXStandardLicense>();
+			ArrayList<SpdxListedLicense> licenses = new ArrayList<SpdxListedLicense>();
 			File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
 			SPDXLicenseSpreadsheet version13ss = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
-			Iterator<SPDXStandardLicense> iter = version13ss.getLicenseIterator();
+			Iterator<SpdxListedLicense> iter = version13ss.getLicenseIterator();
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");
 			SPDXLicenseSpreadsheet copy = new SPDXLicenseSpreadsheet(spreadsheetCopy, true, false);
 			while (iter.hasNext()) {
-				SPDXStandardLicense nextLic = iter.next();
+				SpdxListedLicense nextLic = iter.next();
 				licenses.add(nextLic);
 				copy.getLicenseSheet().add(nextLic);
 			}
@@ -95,19 +95,19 @@ public class TestLicenseSheet {
 					if (i > licenses.size()) {
 						fail("to many licenses in copy");
 					}
-					SPDXStandardLicense nextLic = iter.next();
+					SpdxListedLicense nextLic = iter.next();
 					if (!nextLic.equals(licenses.get(i))) {
-						fail("Licenses "+nextLic.getId()+" does not equal "+licenses.get(i).getId());
+						fail("Licenses "+nextLic.getLicenseId()+" does not equal "+licenses.get(i).getLicenseId());
 					}
-					assertEquals(licenses.get(i).getId(), nextLic.getId());
+					assertEquals(licenses.get(i).getLicenseId(), nextLic.getLicenseId());
 					assertEquals(licenses.get(i).getName(), nextLic.getName());
 					assertEquals(licenses.get(i).getComment(), nextLic.getComment());
-					assertEquals(licenses.get(i).getSourceUrl(),nextLic.getSourceUrl());
+					assertEquals(licenses.get(i).getSeeAlso(),nextLic.getSeeAlso());
 					assertEquals(licenses.get(i).getStandardLicenseHeader(),
 							nextLic.getStandardLicenseHeader());
-					assertEquals(licenses.get(i).getTemplate(), nextLic.getTemplate());
-					if (!compareText(licenses.get(i).getText(), nextLic.getText())) {
-						fail("license text does not match for "+licenses.get(i).getId());
+					assertEquals(licenses.get(i).getStandardLicenseTemplate(), nextLic.getStandardLicenseTemplate());
+					if (!compareText(licenses.get(i).getLicenseText(), nextLic.getLicenseText())) {
+						fail("license text does not match for "+licenses.get(i).getLicenseId());
 					}
 					assertEquals(licenses.get(i).isOsiApproved(), nextLic.isOsiApproved());
 					i = i + 1;
@@ -186,22 +186,22 @@ public class TestLicenseSheet {
 	public void testLicenseIterator() throws SpreadsheetException {
 		File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
 		SPDXLicenseSpreadsheet ss = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
-		Iterator<SPDXStandardLicense> iter = ss.getLicenseIterator();
+		Iterator<SpdxListedLicense> iter = ss.getLicenseIterator();
 		// we'll look at the first one in detail
-		SPDXStandardLicense firstLic = iter.next();
-		assertEquals("Glide", firstLic.getId());
+		SpdxListedLicense firstLic = iter.next();
+		assertEquals("Glide", firstLic.getLicenseId());
 		assertEquals("3dfx Glide License", firstLic.getName());
 		assertEquals("", firstLic.getComment());
-		assertEquals(1, firstLic.getSourceUrl().length);
+		assertEquals(1, firstLic.getSeeAlso().length);
 		assertEquals("http://www.users.on.net/~triforce/glidexp/COPYING.txt", 
-				firstLic.getSourceUrl()[0]);
+				firstLic.getSeeAlso()[0]);
 		assertEquals("",
 				firstLic.getStandardLicenseHeader());
-		String licText = firstLic.getText();
+		String licText = firstLic.getLicenseText();
 		assertTrue(licText.startsWith("3DFX GLIDE Source Code General Public License"));
 		assertTrue(!firstLic.isOsiApproved());
 		int numLicenses = 1;
-		SPDXStandardLicense lastLic = null;
+		SpdxListedLicense lastLic = null;
 		while (iter.hasNext()) {
 			numLicenses++;
 			lastLic = iter.next();

@@ -25,14 +25,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXConjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXDisjunctiveLicenseSet;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
-import org.spdx.rdfparser.SPDXNoneLicense;
-import org.spdx.rdfparser.SPDXStandardLicense;
-import org.spdx.rdfparser.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 
 /**
  * @author Gary O'Neall
@@ -179,24 +179,24 @@ public class LicenseCompareHelperTest {
 		String stdLicNotice = "Notice";
 		String template = "Template";
 		boolean osiApproved = false;
-		SPDXStandardLicense lic1 = 
-			new SPDXStandardLicense(licName, licId, licText, 
+		SpdxListedLicense lic1 = 
+			new SpdxListedLicense(licName, licId, licText, 
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
-		SPDXStandardLicense lic2 = 
-			new SPDXStandardLicense(licName, licId, licText, 
+		SpdxListedLicense lic2 = 
+			new SpdxListedLicense(licName, licId, licText, 
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 		
 		// try just changing the text - should still equal since the ID's are equal
 		String text2 = "text2";
-		SPDXStandardLicense lic3 = 
-			new SPDXStandardLicense(licName, licId, text2, 
+		SpdxListedLicense lic3 = 
+			new SpdxListedLicense(licName, licId, text2, 
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic3, xlation));
 		// now try a different ID
 		String licId2 = "ID2";
-		SPDXStandardLicense lic4 = 
-			new SPDXStandardLicense(licName, licId2, licText, 
+		SpdxListedLicense lic4 = 
+			new SpdxListedLicense(licName, licId2, licText, 
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic4, xlation));
 	}
@@ -209,23 +209,23 @@ public class LicenseCompareHelperTest {
 		String licText = "Text";
 
 		// same license ID's
-		SPDXNonStandardLicense lic1 = 
-			new SPDXNonStandardLicense(licId, licText);
-		SPDXNonStandardLicense lic2 = 
-			new SPDXNonStandardLicense(licId, licText);
+		ExtractedLicenseInfo lic1 = 
+			new ExtractedLicenseInfo(licId, licText);
+		ExtractedLicenseInfo lic2 = 
+			new ExtractedLicenseInfo(licId, licText);
 		xlation.put(licId, licId);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 		// different license ID, same license
 		xlation.clear();
 		String licId2 = "id2";
 		lic2 = 
-			new SPDXNonStandardLicense(licId2, licText);
+			new ExtractedLicenseInfo(licId2, licText);
 		xlation.put(licId, licId2);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 		// different license ID, different license
 		String licId3 = "id3";
 		lic2 = 
-			new SPDXNonStandardLicense(licId3, licId2);
+			new ExtractedLicenseInfo(licId3, licId2);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 	}
 	
@@ -239,38 +239,38 @@ public class LicenseCompareHelperTest {
 		String licId5 = "id5";
 		String licId6 = "id6";
 		HashMap<String, String> xlation = new HashMap<String, String>();
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(licId1, licText);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(licId2, licText);
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(licId3, licText);
-		SPDXNonStandardLicense lic4 = new SPDXNonStandardLicense(licId4, licText);
-		SPDXNonStandardLicense lic5 = new SPDXNonStandardLicense(licId5, licText);
-		SPDXNonStandardLicense lic6 = new SPDXNonStandardLicense(licId6, licText);
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
+		ExtractedLicenseInfo lic4 = new ExtractedLicenseInfo(licId4, licText);
+		ExtractedLicenseInfo lic5 = new ExtractedLicenseInfo(licId5, licText);
+		ExtractedLicenseInfo lic6 = new ExtractedLicenseInfo(licId6, licText);
 		xlation.put(licId1, licId4);
 		xlation.put(licId2, licId5);
 		xlation.put(licId3, licId6);
-		SPDXLicenseInfo[] set1 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set1 = new AnyLicenseInfo[] {
 				lic1, lic2, lic3
 		};
-		SPDXLicenseInfo[] set2 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set2 = new AnyLicenseInfo[] {
 				lic4, lic5, lic6
 		};
-		SPDXConjunctiveLicenseSet conj1 = new SPDXConjunctiveLicenseSet(set1);
-		SPDXConjunctiveLicenseSet conj2 = new SPDXConjunctiveLicenseSet(set2);
+		ConjunctiveLicenseSet conj1 = new ConjunctiveLicenseSet(set1);
+		ConjunctiveLicenseSet conj2 = new ConjunctiveLicenseSet(set2);
 		
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
 		// different order
-		set2 = new SPDXLicenseInfo[] {
+		set2 = new AnyLicenseInfo[] {
 				lic5, lic6, lic4
 		};
-		conj2 = new SPDXConjunctiveLicenseSet(set2);
+		conj2 = new ConjunctiveLicenseSet(set2);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
 
 		String licId7 = "id7";
-		SPDXNonStandardLicense lic7 = new SPDXNonStandardLicense(licId7, licText);
-		SPDXLicenseInfo[] set3 = new SPDXLicenseInfo[] {
+		ExtractedLicenseInfo lic7 = new ExtractedLicenseInfo(licId7, licText);
+		AnyLicenseInfo[] set3 = new AnyLicenseInfo[] {
 				lic4, lic5, lic7
 		};
-		SPDXConjunctiveLicenseSet conj3 = new SPDXConjunctiveLicenseSet(set3);
+		ConjunctiveLicenseSet conj3 = new ConjunctiveLicenseSet(set3);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(conj1, conj3, xlation));		
 	}		
 	
@@ -284,110 +284,110 @@ public class LicenseCompareHelperTest {
 		String licId5 = "id5";
 		String licId6 = "id6";
 		HashMap<String, String> xlation = new HashMap<String, String>();
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(licId1, licText);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(licId2, licText);
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(licId3, licText);
-		SPDXNonStandardLicense lic4 = new SPDXNonStandardLicense(licId4, licText);
-		SPDXNonStandardLicense lic5 = new SPDXNonStandardLicense(licId5, licText);
-		SPDXNonStandardLicense lic6 = new SPDXNonStandardLicense(licId6, licText);
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
+		ExtractedLicenseInfo lic4 = new ExtractedLicenseInfo(licId4, licText);
+		ExtractedLicenseInfo lic5 = new ExtractedLicenseInfo(licId5, licText);
+		ExtractedLicenseInfo lic6 = new ExtractedLicenseInfo(licId6, licText);
 		xlation.put(licId1, licId4);
 		xlation.put(licId2, licId5);
 		xlation.put(licId3, licId6);
-		SPDXLicenseInfo[] set1 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set1 = new AnyLicenseInfo[] {
 				lic1, lic2, lic3
 		};
-		SPDXLicenseInfo[] set2 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set2 = new AnyLicenseInfo[] {
 				lic4, lic6, lic5
 		};
-		SPDXConjunctiveLicenseSet conj1 = new SPDXConjunctiveLicenseSet(set1);
-		SPDXConjunctiveLicenseSet conj2 = new SPDXConjunctiveLicenseSet(set2);
+		ConjunctiveLicenseSet conj1 = new ConjunctiveLicenseSet(set1);
+		ConjunctiveLicenseSet conj2 = new ConjunctiveLicenseSet(set2);
 		
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
 	
 		// busybox-1.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-3 AND LicenseRef-12 AND LicenseRef-4 AND LicenseRef-13 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND LicenseRef-7 AND LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND GPL-2.0+ AND GPL-2.0 AND LicenseRef-17 AND LicenseRef-16 AND BSD-2-Clause-Clear)
 		xlation.clear();
 		String licIdRef14 = "LicenseRef-14";
-		SPDXNonStandardLicense licref14 = new SPDXNonStandardLicense(licIdRef14, licText);
+		ExtractedLicenseInfo licref14 = new ExtractedLicenseInfo(licIdRef14, licText);
 		xlation.put(licIdRef14, licIdRef14);
 		String licIdRef5 = "LicenseRef-5";
-		SPDXNonStandardLicense licref5 = new SPDXNonStandardLicense(licIdRef5, licText);
+		ExtractedLicenseInfo licref5 = new ExtractedLicenseInfo(licIdRef5, licText);
 		xlation.put(licIdRef5, licIdRef5);
 		String licIdref6 = "LicenseRef-6";
-		SPDXNonStandardLicense licref6 = new SPDXNonStandardLicense(licIdref6, licText);
+		ExtractedLicenseInfo licref6 = new ExtractedLicenseInfo(licIdref6, licText);
 		xlation.put(licIdref6, licIdref6);
 		String licIdRef15 = "LicenseRef-15";
-		SPDXNonStandardLicense licref15 = new SPDXNonStandardLicense(licIdRef15, licText);
+		ExtractedLicenseInfo licref15 = new ExtractedLicenseInfo(licIdRef15, licText);
 		xlation.put(licIdRef15, licIdRef15);
 		String licIdRef3 = "LicenseRef-3";
-		SPDXNonStandardLicense licref3 = new SPDXNonStandardLicense(licIdRef3, licText);
+		ExtractedLicenseInfo licref3 = new ExtractedLicenseInfo(licIdRef3, licText);
 		xlation.put(licIdRef3, licIdRef3);
 		String licIdRef12 = "LicenseRef-12";
-		SPDXNonStandardLicense licref12 = new SPDXNonStandardLicense(licIdRef12, licText);
+		ExtractedLicenseInfo licref12 = new ExtractedLicenseInfo(licIdRef12, licText);
 		xlation.put(licIdRef12, licIdRef12);
 		String licIdRef4 = "LicenseRef-4";
-		SPDXNonStandardLicense licref4 = new SPDXNonStandardLicense(licIdRef4, licText);
+		ExtractedLicenseInfo licref4 = new ExtractedLicenseInfo(licIdRef4, licText);
 		xlation.put(licIdRef4, licIdRef4);
 		String licIdRef13 = "LicenseRef-13";
-		SPDXNonStandardLicense licref13 = new SPDXNonStandardLicense(licIdRef13, licText);
+		ExtractedLicenseInfo licref13 = new ExtractedLicenseInfo(licIdRef13, licText);
 		xlation.put(licIdRef13, licIdRef13);
 		String licIdref10 = "LicenseRef-10";
-		SPDXNonStandardLicense licref10 = new SPDXNonStandardLicense(licIdref10, licText);
+		ExtractedLicenseInfo licref10 = new ExtractedLicenseInfo(licIdref10, licText);
 		xlation.put(licIdref10, licIdref10);
 		String licIdRef9 = "LicenseRef-9";
-		SPDXNonStandardLicense licref9 = new SPDXNonStandardLicense(licIdRef9, licText);
+		ExtractedLicenseInfo licref9 = new ExtractedLicenseInfo(licIdRef9, licText);
 		xlation.put(licIdRef9, licIdRef9);
 		String licIdRef11 = "LicenseRef-11";
-		SPDXNonStandardLicense licref11 = new SPDXNonStandardLicense(licIdRef11, licText);
+		ExtractedLicenseInfo licref11 = new ExtractedLicenseInfo(licIdRef11, licText);
 		xlation.put(licIdRef11, licIdRef11);
 		String licIdRef7 = "LicenseRef-7";
-		SPDXNonStandardLicense licref7 = new SPDXNonStandardLicense(licIdRef7, licText);
+		ExtractedLicenseInfo licref7 = new ExtractedLicenseInfo(licIdRef7, licText);
 		xlation.put(licIdRef7, licIdRef7);
 		String licIdRef8 = "LicenseRef-8";
-		SPDXNonStandardLicense licref8 = new SPDXNonStandardLicense(licIdRef8, licText);
+		ExtractedLicenseInfo licref8 = new ExtractedLicenseInfo(licIdRef8, licText);
 		xlation.put(licIdRef8, licIdRef8);
 		String licLGPLPlusId = "LGPL-2.1+";
-		SPDXStandardLicense licLGPLPlus = SPDXLicenseInfoFactory.getStandardLicenseById(licLGPLPlusId);
+		SpdxListedLicense licLGPLPlus = LicenseInfoFactory.getListedLicenseById(licLGPLPlusId);
 		String licRef1 = "LicenseRef-1";
-		SPDXNonStandardLicense licref1 = new SPDXNonStandardLicense(licRef1, licText);
+		ExtractedLicenseInfo licref1 = new ExtractedLicenseInfo(licRef1, licText);
 		xlation.put(licRef1, licRef1);
 		String licRef2 = "LicenseRef-2";
-		SPDXNonStandardLicense licref2 = new SPDXNonStandardLicense(licRef2, licText);
+		ExtractedLicenseInfo licref2 = new ExtractedLicenseInfo(licRef2, licText);
 		xlation.put(licRef2, licRef2);
 		String licRef0 = "LicenseRef-0";
-		SPDXNonStandardLicense licref0 = new SPDXNonStandardLicense(licRef0, licText);
+		ExtractedLicenseInfo licref0 = new ExtractedLicenseInfo(licRef0, licText);
 		xlation.put(licRef0, licRef0);
 		String licGPL20PlusId = "GPL-2.0+";
-		SPDXStandardLicense licGPL20Plus = SPDXLicenseInfoFactory.getStandardLicenseById(licGPL20PlusId);
+		SpdxListedLicense licGPL20Plus = LicenseInfoFactory.getListedLicenseById(licGPL20PlusId);
 		String licGPL20id = "GPL-2.0";
-		SPDXStandardLicense licGPL20 = SPDXLicenseInfoFactory.getStandardLicenseById(licGPL20id);
+		SpdxListedLicense licGPL20 = LicenseInfoFactory.getListedLicenseById(licGPL20id);
 		String licRef17 = "LicenseRef-17";
-		SPDXNonStandardLicense licref17 = new SPDXNonStandardLicense(licRef17, licText);
+		ExtractedLicenseInfo licref17 = new ExtractedLicenseInfo(licRef17, licText);
 		xlation.put(licRef17, licRef17);
 		String licRef16 = "LicenseRef-16";
-		SPDXNonStandardLicense licref16 = new SPDXNonStandardLicense(licRef16, licText);
+		ExtractedLicenseInfo licref16 = new ExtractedLicenseInfo(licRef16, licText);
 		xlation.put(licRef16, licRef16);
 		String licRefBSD2Clearid = "BSD-2-Clause";
-		SPDXStandardLicense licRefBSD2Clear = SPDXLicenseInfoFactory.getStandardLicenseById(licRefBSD2Clearid);
+		SpdxListedLicense licRefBSD2Clear = LicenseInfoFactory.getListedLicenseById(licRefBSD2Clearid);
 		// busybox-1.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-3 AND 
 		//LicenseRef-12 AND LicenseRef-4 AND LicenseRef-13 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND 
 		//LicenseRef-7 AND LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND 
 		//GPL-2.0+ AND GPL-2.0 AND LicenseRef-17 AND LicenseRef-16 AND BSD-2-Clause-Clear)
 
-		SPDXLicenseInfo[] bbset1 = new SPDXLicenseInfo[] {licref14, licref5, licref6, licref15, licref3, licref12, licref4, 
+		AnyLicenseInfo[] bbset1 = new AnyLicenseInfo[] {licref14, licref5, licref6, licref15, licref3, licref12, licref4, 
 				licref13,licref10, licref9, licref11, licref7, licref8, licLGPLPlus, licref1, licref2, licref0, licGPL20Plus,
 				licGPL20, licref17, licref16, licRefBSD2Clear
 		};
-		SPDXConjunctiveLicenseSet bbconj1 = new SPDXConjunctiveLicenseSet(bbset1);
+		ConjunctiveLicenseSet bbconj1 = new ConjunctiveLicenseSet(bbset1);
 		// busybox-2.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-12 AND LicenseRef-3
 		//AND LicenseRef-13 AND LicenseRef-4 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND LicenseRef-7 AND 
 		//LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND GPL-2.0+ AND GPL-2.0 AND 
 		//LicenseRef-17 AND BSD-2-Clause-Clear AND LicenseRef-16)
 
-		SPDXLicenseInfo[] bbset2 = new SPDXLicenseInfo[] {licref14, licref5, licref6, licref15, licref12, licref3, licref13,
+		AnyLicenseInfo[] bbset2 = new AnyLicenseInfo[] {licref14, licref5, licref6, licref15, licref12, licref3, licref13,
 				licref4, licref10, licref9, licref11, licref7, licref8, licLGPLPlus, licref1, licref2, licref0, licGPL20Plus,
 				licGPL20, licref17, licRefBSD2Clear, licref16
 		};
-		SPDXConjunctiveLicenseSet bbconj2 = new SPDXConjunctiveLicenseSet(bbset2);
+		ConjunctiveLicenseSet bbconj2 = new ConjunctiveLicenseSet(bbset2);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(bbconj1, bbconj2, xlation));
 		assertTrue(LicenseCompareHelper.isLicenseEqual(bbconj2, bbconj1, xlation));
 	}	
@@ -402,32 +402,32 @@ public class LicenseCompareHelperTest {
 		String licId5 = "id5";
 		String licId6 = "id6";
 		HashMap<String, String> xlation = new HashMap<String, String>();
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(licId1, licText);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(licId2, licText);
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(licId3, licText);
-		SPDXNonStandardLicense lic4 = new SPDXNonStandardLicense(licId4, licText);
-		SPDXNonStandardLicense lic5 = new SPDXNonStandardLicense(licId5, licText);
-		SPDXNonStandardLicense lic6 = new SPDXNonStandardLicense(licId6, licText);
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
+		ExtractedLicenseInfo lic4 = new ExtractedLicenseInfo(licId4, licText);
+		ExtractedLicenseInfo lic5 = new ExtractedLicenseInfo(licId5, licText);
+		ExtractedLicenseInfo lic6 = new ExtractedLicenseInfo(licId6, licText);
 		xlation.put(licId1, licId4);
 		xlation.put(licId2, licId5);
 		xlation.put(licId3, licId6);
-		SPDXLicenseInfo[] set1 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set1 = new AnyLicenseInfo[] {
 				lic1, lic2, lic3
 		};
-		SPDXLicenseInfo[] set2 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set2 = new AnyLicenseInfo[] {
 				lic4, lic5, lic6
 		};
-		SPDXDisjunctiveLicenseSet conj1 = new SPDXDisjunctiveLicenseSet(set1);
-		SPDXDisjunctiveLicenseSet conj2 = new SPDXDisjunctiveLicenseSet(set2);
+		DisjunctiveLicenseSet conj1 = new DisjunctiveLicenseSet(set1);
+		DisjunctiveLicenseSet conj2 = new DisjunctiveLicenseSet(set2);
 		
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
 		
 		String licId7 = "id7";
-		SPDXNonStandardLicense lic7 = new SPDXNonStandardLicense(licId7, licText);
-		SPDXLicenseInfo[] set3 = new SPDXLicenseInfo[] {
+		ExtractedLicenseInfo lic7 = new ExtractedLicenseInfo(licId7, licText);
+		AnyLicenseInfo[] set3 = new AnyLicenseInfo[] {
 				lic4, lic5, lic7
 		};
-		SPDXDisjunctiveLicenseSet conj3 = new SPDXDisjunctiveLicenseSet(set3);
+		DisjunctiveLicenseSet conj3 = new DisjunctiveLicenseSet(set3);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(conj1, conj3, xlation));
 	}	
 	
@@ -441,32 +441,32 @@ public class LicenseCompareHelperTest {
 		String licId5 = "id5";
 		String licId6 = "id6";
 		HashMap<String, String> xlation = new HashMap<String, String>();
-		SPDXNonStandardLicense lic1 = new SPDXNonStandardLicense(licId1, licText);
-		SPDXNonStandardLicense lic2 = new SPDXNonStandardLicense(licId2, licText);
-		SPDXNonStandardLicense lic3 = new SPDXNonStandardLicense(licId3, licText);
-		SPDXNonStandardLicense lic4 = new SPDXNonStandardLicense(licId4, licText);
-		SPDXNonStandardLicense lic5 = new SPDXNonStandardLicense(licId5, licText);
-		SPDXNonStandardLicense lic6 = new SPDXNonStandardLicense(licId6, licText);
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
+		ExtractedLicenseInfo lic4 = new ExtractedLicenseInfo(licId4, licText);
+		ExtractedLicenseInfo lic5 = new ExtractedLicenseInfo(licId5, licText);
+		ExtractedLicenseInfo lic6 = new ExtractedLicenseInfo(licId6, licText);
 		xlation.put(licId1, licId4);
 		xlation.put(licId2, licId5);
 		xlation.put(licId3, licId6);
-		SPDXLicenseInfo[] set1 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set1 = new AnyLicenseInfo[] {
 				lic1, lic2
 		};
-		SPDXLicenseInfo[] set2 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set2 = new AnyLicenseInfo[] {
 				lic4, lic5
 		};
-		SPDXDisjunctiveLicenseSet conj1 = new SPDXDisjunctiveLicenseSet(set1);
-		SPDXDisjunctiveLicenseSet conj2 = new SPDXDisjunctiveLicenseSet(set2);
+		DisjunctiveLicenseSet conj1 = new DisjunctiveLicenseSet(set1);
+		DisjunctiveLicenseSet conj2 = new DisjunctiveLicenseSet(set2);
 		
-		SPDXLicenseInfo[] set3 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set3 = new AnyLicenseInfo[] {
 				conj1, lic3
 		};
-		SPDXLicenseInfo[] set4 = new SPDXLicenseInfo[] {
+		AnyLicenseInfo[] set4 = new AnyLicenseInfo[] {
 				lic6, conj2
 		};
-		SPDXConjunctiveLicenseSet conj3 = new SPDXConjunctiveLicenseSet(set3);
-		SPDXConjunctiveLicenseSet conj4 = new SPDXConjunctiveLicenseSet(set4);
+		ConjunctiveLicenseSet conj3 = new ConjunctiveLicenseSet(set3);
+		ConjunctiveLicenseSet conj4 = new ConjunctiveLicenseSet(set4);
 		
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj3, conj4, xlation));
 	}	
@@ -475,8 +475,8 @@ public class LicenseCompareHelperTest {
 	public void testLicenseEqualsNoAsserLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxNoAssertionLicense lic1 = new SpdxNoAssertionLicense();
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
-		SPDXNoneLicense lic3 = new SPDXNoneLicense();
-		SPDXNoneLicense lic4 = new SPDXNoneLicense();
+		SpdxNoneLicense lic3 = new SpdxNoneLicense();
+		SpdxNoneLicense lic4 = new SpdxNoneLicense();
 		HashMap<String, String> xlationMap = new HashMap<String, String>();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic3, xlationMap));
@@ -486,8 +486,8 @@ public class LicenseCompareHelperTest {
 	public void testLicenseEqualsNoneLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxNoAssertionLicense lic1 = new SpdxNoAssertionLicense();
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
-		SPDXNoneLicense lic3 = new SPDXNoneLicense();
-		SPDXNoneLicense lic4 = new SPDXNoneLicense();
+		SpdxNoneLicense lic3 = new SpdxNoneLicense();
+		SpdxNoneLicense lic4 = new SpdxNoneLicense();
 		HashMap<String, String> xlationMap = new HashMap<String, String>();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic3, lic4, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic4, lic2, xlationMap));

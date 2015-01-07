@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 Source Auditor Inc.
+ * Copyright (c) 2011 Source Auditor Inc.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,46 +14,36 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 
 /**
- * Java Exception while processing or handling SPDXLicenseExceptions
  * @author Gary O'Neall
  *
  */
-public class SPDXLicenseRestrictionException extends Exception {
+public class NoListedLicenseRdfModel extends InvalidSPDXAnalysisException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4045777176566797553L;
 
 	/**
-	 * 
+	 * @param msg
 	 */
-	public SPDXLicenseRestrictionException() {
-
+	public NoListedLicenseRdfModel(String msg) {
+		super(msg);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param message
+	 * @param msg
+	 * @param inner
 	 */
-	public SPDXLicenseRestrictionException(String message) {
-		super(message);
+	public NoListedLicenseRdfModel(String msg, Throwable inner) {
+		super(msg, inner);
+		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param cause
-	 */
-	public SPDXLicenseRestrictionException(Throwable cause) {
-		super(cause);
-	}
-
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public SPDXLicenseRestrictionException(String message, Throwable cause) {
-		super(message, cause);
-	}
 }

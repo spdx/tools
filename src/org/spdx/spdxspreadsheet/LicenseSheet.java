@@ -37,7 +37,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 
 /**
  * Spreadsheet holding SPDX Licenses
@@ -129,19 +129,19 @@ public class LicenseSheet extends AbstractSheet {
 	public String getReleaseDate() {
 		return releaseDate;
 	}
-	public void add(SPDXStandardLicense license) {
+	public void add(SpdxListedLicense license) {
 		Row row = addRow();
 		Cell nameCell = row.createCell(COL_NAME);
 		nameCell.setCellValue(license.getName());
 		Cell idCell = row.createCell(COL_ID);
-		idCell.setCellValue(license.getId());
-		if (license.getSourceUrl() != null && license.getSourceUrl().length > 0) {
+		idCell.setCellValue(license.getLicenseId());
+		if (license.getSeeAlso() != null && license.getSeeAlso().length > 0) {
 			Cell sourceUrlCell = row.createCell(COL_SOURCE_URL);
 			StringBuilder sb = new StringBuilder();
-			sb.append(license.getSourceUrl()[0]);
-			for (int i = 1; i < license.getSourceUrl().length; i++) {
+			sb.append(license.getSeeAlso()[0]);
+			for (int i = 1; i < license.getSeeAlso().length; i++) {
 				sb.append(' ');
-				sb.append(license.getSourceUrl()[i]);
+				sb.append(license.getSeeAlso()[i]);
 			}
 			sourceUrlCell.setCellValue(sb.toString());
 		}
@@ -154,11 +154,11 @@ public class LicenseSheet extends AbstractSheet {
 			standardLicenseHeaderCell.setCellValue(license.getStandardLicenseHeader());
 		}
 		Cell templateCell = row.createCell(COL_TEMPLATE);
-		String templateText = license.getTemplate();
+		String templateText = license.getStandardLicenseTemplate();
 		if (templateText == null || templateText.trim().isEmpty()) {
-			templateText = license.getText();
+			templateText = license.getLicenseText();
 		}
-		setTemplateText(templateCell, license.getTemplate(), license.getId(), workbookPath);
+		setTemplateText(templateCell, license.getStandardLicenseTemplate(), license.getLicenseId(), workbookPath);
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
@@ -287,7 +287,7 @@ public class LicenseSheet extends AbstractSheet {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SPDXStandardLicense getLicense(int rowNum) throws InvalidSPDXAnalysisException {
+	public SpdxListedLicense getLicense(int rowNum) throws InvalidSPDXAnalysisException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -344,7 +344,7 @@ public class LicenseSheet extends AbstractSheet {
 				osiApproved = true;
 			}
 		}
-		return new SPDXStandardLicense(name, id, text, sourceURL, notes, stdLicHeader, template, osiApproved);
+		return new SpdxListedLicense(name, id, text, sourceURL, notes, stdLicHeader, template, osiApproved);
 	}
 
 	/**

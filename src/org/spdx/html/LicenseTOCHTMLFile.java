@@ -23,8 +23,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.spdx.rdfparser.SPDXStandardLicense;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
 import com.sampullara.mustache.Mustache;
@@ -129,14 +128,14 @@ public class LicenseTOCHTMLFile {
 		}
 	}
 	
-	public class ListedLicense {
+	public class ListedSpdxLicense {
 		private String reference;
 		private String refNumber;
 		private String licenseId;
 		private String osiApproved;
 		private String licenseName;
 		
-		public ListedLicense() {
+		public ListedSpdxLicense() {
 			reference = null;
 			refNumber = null;
 			licenseId = null;
@@ -144,7 +143,7 @@ public class LicenseTOCHTMLFile {
 			licenseName = null;
 		}
 		
-		public ListedLicense(String reference, String refNumber, 
+		public ListedSpdxLicense(String reference, String refNumber, 
 				String licenseId, boolean isOsiApproved, String licenseName) {
 			this.reference = reference;
 			this.refNumber = refNumber;
@@ -228,7 +227,7 @@ public class LicenseTOCHTMLFile {
 		}
 	}
 	
-	ArrayList<ListedLicense> listedLicenses = new ArrayList<ListedLicense>();
+	ArrayList<ListedSpdxLicense> listedLicenses = new ArrayList<ListedSpdxLicense>();
 	ArrayList<DeprecatedLicense> deprecatedLicenses = new ArrayList<DeprecatedLicense>();
 	
       private int currentRefNumber = 1;
@@ -251,9 +250,9 @@ public class LicenseTOCHTMLFile {
     	  this.releaseDate = releaseDate;
       }
       
-	public void addLicense(SPDXStandardLicense license, String licHTMLReference) {
-		listedLicenses.add(new ListedLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				license.getId(), license.isOsiApproved(), license.getName()));
+	public void addLicense(SpdxListedLicense license, String licHTMLReference) {
+		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
+				license.getLicenseId(), license.isOsiApproved(), license.getName()));
 		currentRefNumber++;
 	}
 
@@ -304,7 +303,7 @@ public class LicenseTOCHTMLFile {
 	public void addDeprecatedLicense(DeprecatedLicenseInfo deprecatedLicense,
 			String licHTMLReference) {
 		deprecatedLicenses.add(new DeprecatedLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				deprecatedLicense.getLicense().getId(), 
+				deprecatedLicense.getLicense().getLicenseId(), 
 				deprecatedLicense.getLicense().getName(),
 				deprecatedLicense.getDeprecatedVersion()));
 		currentRefNumber++;

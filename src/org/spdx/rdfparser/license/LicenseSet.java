@@ -14,11 +14,14 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -33,28 +36,28 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
+public abstract class LicenseSet extends AnyLicenseInfo {
 	
-	protected HashSet<SPDXLicenseInfo> licenseInfos = new HashSet<SPDXLicenseInfo>();
+	protected HashSet<AnyLicenseInfo> licenseInfos = new HashSet<AnyLicenseInfo>();
 
 	/**
 	 * @param model
 	 * @param licenseInfoNode
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXLicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+	public LicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			this.licenseInfos.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			this.licenseInfos.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
 		}
 	}
 
 
-	public SPDXLicenseSet(SPDXLicenseInfo[] licenseInfos) {
+	public LicenseSet(AnyLicenseInfo[] licenseInfos) {
 		super();
 		if (licenseInfos != null) {
 			for (int i = 0; i < licenseInfos.length; i++) {
@@ -67,7 +70,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 	protected Resource _createResource(Model model, Resource type) throws InvalidSPDXAnalysisException {
 		Resource r = model.createResource(type);
 		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
-		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
 			Resource licResource = iter.next().createResource(model);
 			r.addProperty(licProperty, licResource);
@@ -75,7 +78,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		return r;
 	}
 	
-	public void setSPDXLicenseInfos(SPDXLicenseInfo[] licenseInfos) throws InvalidSPDXAnalysisException {
+	public void setMembers(AnyLicenseInfo[] licenseInfos) throws InvalidSPDXAnalysisException {
 		this.licenseInfos.clear();
 		if (licenseInfos != null) {
 			for (int i = 0; i < licenseInfos.length; i++) {
@@ -95,19 +98,19 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		}
 	}
 	
-	public SPDXLicenseInfo[] getSPDXLicenseInfos() {
-		SPDXLicenseInfo[] retval = new SPDXLicenseInfo[this.licenseInfos.size()];
+	public AnyLicenseInfo[] getMembers() {
+		AnyLicenseInfo[] retval = new AnyLicenseInfo[this.licenseInfos.size()];
 		retval = this.licenseInfos.toArray(retval);
 		return retval;
 	}	
 	
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#verify()
 	 */
 	@Override
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
-		Iterator<SPDXLicenseInfo> iter = licenseInfos.iterator();
+		Iterator<AnyLicenseInfo> iter = licenseInfos.iterator();
 		while (iter.hasNext()) {
 			retval.addAll(iter.next().verify());
 		}

@@ -25,6 +25,8 @@ import java.security.NoSuchAlgorithmException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 
 /**
  * @author Source Auditor
@@ -62,7 +64,7 @@ public class VerificationCodeGeneratorTest {
 		for (int i = 0; i < SPDX_FILES.length; i++) {
 			SPDX_FILES[i] = new SPDXFile(SPDX_FILE_NAMES[i], "SOURCE", 
 					SPDX_FILE_SHA1S[i], new SpdxNoAssertionLicense(), 
-					new SPDXLicenseInfo[] {new SpdxNoAssertionLicense()},
+					new AnyLicenseInfo[] {new SpdxNoAssertionLicense()},
 					"", "", new DOAPProject[0]);
 		}
 		

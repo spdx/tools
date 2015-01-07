@@ -17,8 +17,8 @@
 package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 /**
  * Abstract PackageInfoSheet to manage cross-version implementations
@@ -37,7 +37,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	public abstract void add(SPDXPackageInfo pkgInfo);
 	public abstract SPDXPackageInfo getPackageInfo(int rowNum) throws SpreadsheetException;
 	
-	public static String licensesToString(SPDXLicenseInfo[] licenses) {
+	public static String licensesToString(AnyLicenseInfo[] licenses) {
 		if (licenses == null || licenses.length == 0) {
 			return "";
 		} else if (licenses.length == 1) {

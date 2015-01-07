@@ -14,74 +14,73 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * Special class of license to represent no asserted license license in the file or packages
+ * A special license meaning that no license was found
  * @author Gary O'Neall
  *
  */
-public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
+public class SpdxNoneLicense extends AnyLicenseInfo {
 	
-	static final int NO_ASSERTION_HASHCODE = 89;	// prime number - all NoAssertion licenses should have the same hashcode
+	static final int NONE_LICENSE_HASHCODE = 147; // prime number - all none licenses should have the same hashcde
 
 	/**
 	 * @param model
-	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException
+	 * @param node
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SpdxNoAssertionLicense(Model model, Node licenseInfoNode)
-			throws InvalidSPDXAnalysisException {
-		super(model, licenseInfoNode);
+	public SpdxNoneLicense(Model model, Node node) throws InvalidSPDXAnalysisException {
+		super(model, node);
 	}
-
-	/**
-	 * 
-	 */
-	public SpdxNoAssertionLicense() {
+	
+	public SpdxNoneLicense() {
 		super();
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
 	protected Resource _createResource(Model model) {
-		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION);
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#toString()
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#toString()
 	 */
 	@Override
 	public String toString() {
-		return SPDXLicenseInfoFactory.NOASSERTION_LICENSE_NAME;
+		return LicenseInfoFactory.NONE_LICENSE_NAME;
 	}
 	
 	@Override
 	public int hashCode() {
-		return NO_ASSERTION_HASHCODE;
+		return NONE_LICENSE_HASHCODE;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
 			return true;
 		}
-		return (o instanceof SpdxNoAssertionLicense);		// All instances of this type are considered equal
+		return (o instanceof SpdxNoneLicense);		// All Instances of this type are considered equal
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#verify()
 	 */
 	@Override
 	public ArrayList<String> verify() {
@@ -89,11 +88,11 @@ public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#clone()
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#clone()
 	 */
 	@Override
-	public SPDXLicenseInfo clone() {
-		return new SpdxNoAssertionLicense();
+	public AnyLicenseInfo clone() {
+		return new SpdxNoneLicense();
 	}
 
 }

@@ -107,21 +107,21 @@ public class TestDeprecatedLicenseSheet {
 						fail("to many licenses in copy");
 					}
 					DeprecatedLicenseInfo nextLic = iter.next();
-					assertEquals(licenses.get(i).getLicense().getId(),
-							nextLic.getLicense().getId());
+					assertEquals(licenses.get(i).getLicense().getLicenseId(),
+							nextLic.getLicense().getLicenseId());
 					assertEquals(licenses.get(i).getLicense().getName(),
 							nextLic.getLicense().getName());
 					assertEquals(licenses.get(i).getLicense().getComment(),
 							nextLic.getLicense().getComment());
-					assertEquals(licenses.get(i).getLicense().getSourceUrl(),
-							nextLic.getLicense().getSourceUrl());
+					assertEquals(licenses.get(i).getLicense().getSeeAlso(),
+							nextLic.getLicense().getSeeAlso());
 					assertEquals(licenses.get(i).getLicense().getStandardLicenseHeader(),
 							nextLic.getLicense().getStandardLicenseHeader());
-					assertEquals(licenses.get(i).getLicense().getTemplate(),
-							nextLic.getLicense().getTemplate());
-					if (!TestLicenseSheet.compareText(licenses.get(i).getLicense().getText(),
-							nextLic.getLicense().getText())) {
-						fail("license text does not match for "+licenses.get(i).getLicense().getId());
+					assertEquals(licenses.get(i).getLicense().getStandardLicenseTemplate(),
+							nextLic.getLicense().getStandardLicenseTemplate());
+					if (!TestLicenseSheet.compareText(licenses.get(i).getLicense().getLicenseText(),
+							nextLic.getLicense().getLicenseText())) {
+						fail("license text does not match for "+licenses.get(i).getLicense().getLicenseId());
 					}
 					assertEquals(licenses.get(i).getLicense().isOsiApproved(), 
 							nextLic.getLicense().isOsiApproved());

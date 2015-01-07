@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 /**
  * @author Source Auditor
@@ -29,7 +29,7 @@ import org.spdx.rdfparser.SPDXNonStandardLicense;
 public class ExtractedLicensingInfoContext {
 
 	private Exception error = null;
-	private SPDXNonStandardLicense license = null;
+	private ExtractedLicenseInfo license = null;
 	
 	/**
 	 * @param e
@@ -42,7 +42,7 @@ public class ExtractedLicensingInfoContext {
 	 * @param spdxNonStandardLicense
 	 */
 	public ExtractedLicensingInfoContext(
-			SPDXNonStandardLicense spdxNonStandardLicense) {
+			ExtractedLicenseInfo spdxNonStandardLicense) {
 		this.license = spdxNonStandardLicense;
 	}
 	
@@ -51,7 +51,7 @@ public class ExtractedLicensingInfoContext {
 			return "Error getting non-standard license: "+error.getMessage();
 		}
 		if (this.license != null) {
-			return this.license.getId();
+			return this.license.getLicenseId();
 		} else {
 			return null;
 		}
@@ -62,7 +62,7 @@ public class ExtractedLicensingInfoContext {
 			return "Error getting non-standard license: "+error.getMessage();
 		}
 		if (this.license != null) {
-			return this.license.getText();
+			return this.license.getExtractedText();
 		} else {
 			return null;
 		}
@@ -84,7 +84,7 @@ public class ExtractedLicensingInfoContext {
 			return "Error getting non-standard license: "+error.getMessage();
 		}
 		if (this.license != null) {
-			return this.license.getLicenseName();
+			return this.license.getName();
 		} else {
 			return null;
 		}
@@ -93,7 +93,7 @@ public class ExtractedLicensingInfoContext {
 	public List<String> crossReferenceUrls() {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (this.license != null) {
-			String[] crossRefUrls = this.license.getSourceUrls();
+			String[] crossRefUrls = this.license.getSeeAlso();
 			if (crossRefUrls != null) {
 				for (int i = 0; i < crossRefUrls.length; i++) {
 					retval.add(crossRefUrls[i]);

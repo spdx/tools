@@ -25,7 +25,7 @@ import java.util.HashMap;
 import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 
 /**
@@ -71,11 +71,11 @@ public class SpdxFileComparer {
 	/**
 	 * Seen licenses found in fileB but not in fileA
 	 */
-	private SPDXLicenseInfo[] uniqueSeenLicensesB;
+	private AnyLicenseInfo[] uniqueSeenLicensesB;
 	/**
 	 * Seen licenses found in fileA but not in fileB
 	 */
-	private SPDXLicenseInfo[] uniqueSeenLicensesA;
+	private AnyLicenseInfo[] uniqueSeenLicensesA;
 	/**
 	 * artifactOf projects found in fileA but not fileB
 	 */
@@ -252,10 +252,10 @@ public class SpdxFileComparer {
 	 * @param licensesB
 	 * @throws SpdxCompareException 
 	 */
-	private void compareSeenLicenses(SPDXLicenseInfo[] licensesA,
-			SPDXLicenseInfo[] licensesB, HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
-		ArrayList<SPDXLicenseInfo> alUniqueA = new ArrayList<SPDXLicenseInfo>();
-		ArrayList<SPDXLicenseInfo> alUniqueB = new ArrayList<SPDXLicenseInfo>();		
+	private void compareSeenLicenses(AnyLicenseInfo[] licensesA,
+			AnyLicenseInfo[] licensesB, HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
+		ArrayList<AnyLicenseInfo> alUniqueA = new ArrayList<AnyLicenseInfo>();
+		ArrayList<AnyLicenseInfo> alUniqueB = new ArrayList<AnyLicenseInfo>();		
 		// a bit brute force, but sorting licenses is a bit complex
 		// an N x M comparison of the licenses to determine which ones are unique
 		for (int i = 0; i < licensesA.length; i++) {
@@ -286,8 +286,8 @@ public class SpdxFileComparer {
 				alUniqueB.add(licensesB[i]);
 			}
 		}
-		this.uniqueSeenLicensesA = alUniqueA.toArray(new SPDXLicenseInfo[alUniqueA.size()]);
-		this.uniqueSeenLicensesB = alUniqueB.toArray(new SPDXLicenseInfo[alUniqueB.size()]);
+		this.uniqueSeenLicensesA = alUniqueA.toArray(new AnyLicenseInfo[alUniqueA.size()]);
+		this.uniqueSeenLicensesB = alUniqueB.toArray(new AnyLicenseInfo[alUniqueB.size()]);
 		if (this.uniqueSeenLicensesA.length == 0 && this.uniqueSeenLicensesB.length == 0) {
 			this.seenLicenseEquals = true;
 		} else {
@@ -334,14 +334,14 @@ public class SpdxFileComparer {
 	/**
 	 * @return the uniqueSeenLicensesB
 	 */
-	public SPDXLicenseInfo[] getUniqueSeenLicensesB() {
+	public AnyLicenseInfo[] getUniqueSeenLicensesB() {
 		return uniqueSeenLicensesB;
 	}
 
 	/**
 	 * @return the uniqueSeenLicensesA
 	 */
-	public SPDXLicenseInfo[] getUniqueSeenLicensesA() {
+	public AnyLicenseInfo[] getUniqueSeenLicensesA() {
 		return uniqueSeenLicensesA;
 	}
 

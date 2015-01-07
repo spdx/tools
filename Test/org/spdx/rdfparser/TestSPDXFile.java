@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import spdxspreadsheet.TestPackageInfoSheet;
 
@@ -49,12 +54,12 @@ public class TestSPDXFile {
 	static final String[] STD_IDS = new String[] {"AFL-3.0", "CECILL-B", "EUPL-1.0"};
 	static final String[] STD_TEXTS = new String[] {"std text1", "std text2", "std text3"};
 
-	SPDXNonStandardLicense[] NON_STD_LICENSES;
-	SPDXStandardLicense[] STANDARD_LICENSES;
-	SPDXDisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
-	SPDXConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
+	ExtractedLicenseInfo[] NON_STD_LICENSES;
+	SpdxListedLicense[] STANDARD_LICENSES;
+	DisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
+	ConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
 	
-	SPDXConjunctiveLicenseSet COMPLEX_LICENSE;
+	ConjunctiveLicenseSet COMPLEX_LICENSE;
 	
 	Resource[] NON_STD_LICENSES_RESOURCES;
 	Resource[] STANDARD_LICENSES_RESOURCES;
@@ -69,37 +74,37 @@ public class TestSPDXFile {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		NON_STD_LICENSES = new SPDXNonStandardLicense[NONSTD_IDS.length];
+		NON_STD_LICENSES = new ExtractedLicenseInfo[NONSTD_IDS.length];
 		for (int i = 0; i < NONSTD_IDS.length; i++) {
-			NON_STD_LICENSES[i] = new SPDXNonStandardLicense(NONSTD_IDS[i], NONSTD_TEXTS[i]);
+			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(NONSTD_IDS[i], NONSTD_TEXTS[i]);
 		}
 		
-		STANDARD_LICENSES = new SPDXStandardLicense[STD_IDS.length];
+		STANDARD_LICENSES = new SpdxListedLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
-			STANDARD_LICENSES[i] = new SPDXStandardLicense("Name "+String.valueOf(i), 
+			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i), 
 					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
 		
-		DISJUNCTIVE_LICENSES = new SPDXDisjunctiveLicenseSet[3];
-		CONJUNCTIVE_LICENSES = new SPDXConjunctiveLicenseSet[2];
+		DISJUNCTIVE_LICENSES = new DisjunctiveLicenseSet[3];
+		CONJUNCTIVE_LICENSES = new ConjunctiveLicenseSet[2];
 		
-		DISJUNCTIVE_LICENSES[0] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		DISJUNCTIVE_LICENSES[0] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
 		});
-		CONJUNCTIVE_LICENSES[0] = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		CONJUNCTIVE_LICENSES[0] = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				STANDARD_LICENSES[0], NON_STD_LICENSES[0], STANDARD_LICENSES[1]
 		});
-		CONJUNCTIVE_LICENSES[1] = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		CONJUNCTIVE_LICENSES[1] = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[0], NON_STD_LICENSES[2]
 		});
-		DISJUNCTIVE_LICENSES[1] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		DISJUNCTIVE_LICENSES[1] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				CONJUNCTIVE_LICENSES[1], NON_STD_LICENSES[0], STANDARD_LICENSES[0]
 		});
-		DISJUNCTIVE_LICENSES[2] = new SPDXDisjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		DISJUNCTIVE_LICENSES[2] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[1], CONJUNCTIVE_LICENSES[0], STANDARD_LICENSES[2]
 		});
-		COMPLEX_LICENSE = new SPDXConjunctiveLicenseSet(new SPDXLicenseInfo[] {
+		COMPLEX_LICENSE = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
 		});
 		model = ModelFactory.createDefaultModel();
@@ -150,8 +155,8 @@ public class TestSPDXFile {
 		Resource pkgResource = model.getResource(pkgUri);
 		Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_FILE);
 		
-		SPDXLicenseInfo[] declaredLic = new SPDXLicenseInfo[] {COMPLEX_LICENSE};
-		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};
+		AnyLicenseInfo[] declaredLic = new AnyLicenseInfo[] {COMPLEX_LICENSE};
+		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
 		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
@@ -404,7 +409,7 @@ public class TestSPDXFile {
 	@Test
 	public void testCloneSimple() throws InvalidSPDXAnalysisException, IOException {
 	
-		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};
+		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
 		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
@@ -451,7 +456,7 @@ public class TestSPDXFile {
 	@Test
 	public void testCloneModelSimple() throws InvalidSPDXAnalysisException, IOException {
 	
-		SPDXLicenseInfo[] seenLic = new SPDXLicenseInfo[] {STANDARD_LICENSES[0]};
+		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
 		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 

@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -38,7 +39,7 @@ import au.com.bytecode.opencsv.CSVReader;
  *
  */
 @Deprecated
-public class SpdxLicenseCsv implements IStandardLicenseProvider {
+public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 	
 	static final Logger logger = Logger.getLogger(SpdxLicenseCsv.class.getName());
 	public static final int LICENSE_NAME_COL = 0;
@@ -57,10 +58,10 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 	private static final int NUM_COLS = HEADER_ROW.length;
 
 	
-	class CsvLicenseIterator implements Iterator<SPDXStandardLicense> {
+	class CsvLicenseIterator implements Iterator<SpdxListedLicense> {
 		
 		private CSVReader iterReader = null;
-		SPDXStandardLicense nextStandardLicense = null;
+		SpdxListedLicense nextStandardLicense = null;
 		
 		/**
 		 * @param csvFile
@@ -96,7 +97,7 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 				for (int i = 0; i < licenseUrls.length; i++) {
 					licenseUrls[i] = licenseUrls[i].trim();
 				}
-				nextStandardLicense = new SPDXStandardLicense(nextRow[LICENSE_NAME_COL], 
+				nextStandardLicense = new SpdxListedLicense(nextRow[LICENSE_NAME_COL], 
 						nextRow[LICENSE_ID_COL], nextRow[LICENSE_TEXT_COL],
 						licenseUrls, nextRow[LICENSE_NOTES_COL],
 						nextRow[LICENSE_HEADER_COL], nextRow[LICENSE_TEMPLATE_COL],
@@ -130,8 +131,8 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 		 * @see java.util.Iterator#next()
 		 */
 		@Override
-		public SPDXStandardLicense next() {
-			SPDXStandardLicense retval = this.nextStandardLicense;
+		public SpdxListedLicense next() {
+			SpdxListedLicense retval = this.nextStandardLicense;
 			if (retval != null) {
 				try {
 					readNextStandardLicense();
@@ -197,7 +198,7 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getIterator()
 	 */
 	@Override
-	public Iterator<SPDXStandardLicense> getLicenseIterator() throws LicenseCsvException  {
+	public Iterator<SpdxListedLicense> getLicenseIterator() throws LicenseCsvException  {
 		CsvLicenseIterator retval;
 		try {
 			retval = new CsvLicenseIterator(this.csvFile);
@@ -231,8 +232,8 @@ public class SpdxLicenseCsv implements IStandardLicenseProvider {
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
 	 */
 	@Override
-	public Iterator<SpdxLicenseRestriction> getExceptionIterator()
-			throws SPDXLicenseRestrictionException {
+	public Iterator<LicenseRestriction> getExceptionIterator()
+			throws LicenseRestrictionException {
 		throw(new UnsupportedOperationException());
 	}
 

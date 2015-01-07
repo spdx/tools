@@ -24,8 +24,8 @@ import java.util.List;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXLicenseInfo;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 
 /**
@@ -197,7 +197,7 @@ public class PackageContext {
 	public String licenseDeclared() {
 		if (pkg != null) {
 			try {
-				SPDXLicenseInfo info = pkg.getDeclaredLicense();
+				AnyLicenseInfo info = pkg.getDeclaredLicense();
 				if (info != null) {
 					return info.toString();
 				} else {
@@ -214,7 +214,7 @@ public class PackageContext {
 	public String licenseConcluded() {
 		if (pkg != null) {
 			try {
-				SPDXLicenseInfo info = pkg.getConcludedLicenses();
+				AnyLicenseInfo info = pkg.getConcludedLicenses();
 				if (info != null) {
 					return info.toString();
 				} else {
@@ -255,7 +255,7 @@ public class PackageContext {
 	public List<String> licenseInfoFromFiles() {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (pkg != null) {
-			SPDXLicenseInfo[] licenseInfos = null;
+			AnyLicenseInfo[] licenseInfos = null;
 			try {
 				licenseInfos = pkg.getLicenseInfoFromFiles();
 			} catch (InvalidSPDXAnalysisException e) {

@@ -24,7 +24,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
-import org.spdx.rdfparser.SPDXLicenseInfo;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
 /**
@@ -281,7 +281,7 @@ public class PackageSheet extends AbstractSheet {
 	 * @param licenseInfoFromFiles
 	 * @return
 	 */
-	protected String licenseInfosToString(SPDXLicenseInfo[] licenseInfoFromFiles) {
+	protected String licenseInfosToString(AnyLicenseInfo[] licenseInfoFromFiles) {
 		if (licenseInfoFromFiles == null || licenseInfoFromFiles.length == 0) {
 			return "";
 		}

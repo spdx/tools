@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
+import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -37,7 +40,7 @@ public class TestConjunctiveLicenseSet {
 	
 	String[] IDS = new String[] {"LicenseRef-id1", "LicenseRef-id2", "LicenseRef-id3", "LicenseRef-id4"};
 	String[] TEXTS = new String[] {"text1", "text2", "text3", "text4"};
-	SPDXNonStandardLicense[] NON_STD_LICENSES;
+	ExtractedLicenseInfo[] NON_STD_LICENSES;
 	Model model;
 
 	/**
@@ -45,9 +48,9 @@ public class TestConjunctiveLicenseSet {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		NON_STD_LICENSES = new SPDXNonStandardLicense[IDS.length];
+		NON_STD_LICENSES = new ExtractedLicenseInfo[IDS.length];
 		for (int i = 0; i < IDS.length; i++) {
-			NON_STD_LICENSES[i] = new SPDXNonStandardLicense(IDS[i], TEXTS[i]);
+			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(IDS[i], TEXTS[i]);
 		}
 		model = ModelFactory.createDefaultModel();
 	}
@@ -60,9 +63,9 @@ public class TestConjunctiveLicenseSet {
 	}
 	@Test
 	public void testCreateConjunctive() throws InvalidSPDXAnalysisException {
-		SPDXConjunctiveLicenseSet cls = new SPDXConjunctiveLicenseSet(NON_STD_LICENSES);
+		ConjunctiveLicenseSet cls = new ConjunctiveLicenseSet(NON_STD_LICENSES);
 		Resource clsResource = cls.createResource(model);
-		SPDXConjunctiveLicenseSet cls2 = new SPDXConjunctiveLicenseSet(model, clsResource.asNode());
+		ConjunctiveLicenseSet cls2 = new ConjunctiveLicenseSet(model, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
@@ -72,9 +75,9 @@ public class TestConjunctiveLicenseSet {
 	
 	@Test
 	public void testCreateDisjunctive() throws InvalidSPDXAnalysisException {
-		SPDXDisjunctiveLicenseSet cls = new SPDXDisjunctiveLicenseSet(NON_STD_LICENSES);
+		DisjunctiveLicenseSet cls = new DisjunctiveLicenseSet(NON_STD_LICENSES);
 		Resource clsResource = cls.createResource(model);
-		SPDXDisjunctiveLicenseSet cls2 = new SPDXDisjunctiveLicenseSet(model, clsResource.asNode());
+		DisjunctiveLicenseSet cls2 = new DisjunctiveLicenseSet(model, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
@@ -84,10 +87,10 @@ public class TestConjunctiveLicenseSet {
 	
 	@Test
 	public void testCloneConjunctive() throws InvalidSPDXAnalysisException {
-		SPDXConjunctiveLicenseSet cls = new SPDXConjunctiveLicenseSet(NON_STD_LICENSES);
+		ConjunctiveLicenseSet cls = new ConjunctiveLicenseSet(NON_STD_LICENSES);
 		@SuppressWarnings("unused")
 		Resource clsResource = cls.createResource(model);
-		SPDXConjunctiveLicenseSet cls2 = (SPDXConjunctiveLicenseSet)cls.clone();
+		ConjunctiveLicenseSet cls2 = (ConjunctiveLicenseSet)cls.clone();
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
@@ -98,10 +101,10 @@ public class TestConjunctiveLicenseSet {
 	
 	@Test
 	public void testCloneDisjunctive() throws InvalidSPDXAnalysisException {
-		SPDXDisjunctiveLicenseSet cls = new SPDXDisjunctiveLicenseSet(NON_STD_LICENSES);
+		DisjunctiveLicenseSet cls = new DisjunctiveLicenseSet(NON_STD_LICENSES);
 		@SuppressWarnings("unused")
 		Resource clsResource = cls.createResource(model);
-		SPDXDisjunctiveLicenseSet cls2 = (SPDXDisjunctiveLicenseSet)cls.clone();
+		DisjunctiveLicenseSet cls2 = (DisjunctiveLicenseSet)cls.clone();
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
 		assertEquals(0, verify.size());

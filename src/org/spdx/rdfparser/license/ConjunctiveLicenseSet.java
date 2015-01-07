@@ -14,57 +14,60 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import java.util.Iterator;
+
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * A set of licenses where there is a choice of one of the licenses in the set
+ * A set of licenses where all of the licenses apply
  * @author Gary O'Neall
  *
  */
-public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
+public class ConjunctiveLicenseSet extends LicenseSet {
 
 	/**
 	 * @param model
-	 * @param licenseInfoNode
+	 * @param node
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXDisjunctiveLicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
-		super(model, licenseInfoNode);
+	public ConjunctiveLicenseSet(Model model, Node node) throws InvalidSPDXAnalysisException {
+		super(model, node);
 	}
 
 	/**
-	 * @param disjunctiveLicenses
+	 * @param conjunctiveLicenses
 	 */
-	public SPDXDisjunctiveLicenseSet(SPDXLicenseInfo[] disjunctiveLicenses) {
-		super(disjunctiveLicenses);
+	public ConjunctiveLicenseSet(AnyLicenseInfo[] conjunctiveLicenses) {
+		super(conjunctiveLicenses);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
 	protected Resource _createResource(Model model) throws InvalidSPDXAnalysisException {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET);
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_CONJUNCTIVE_LICENSE_SET);
 		return super._createResource(model, type);
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#toString()
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#toString()
 	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("(");
 		boolean moreThanOne = false;
-		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
 			if (moreThanOne) {
-				sb.append(" OR ");
+				sb.append(" AND ");
 			}
 			moreThanOne = true;
 			sb.append(iter.next().toString());
@@ -75,35 +78,36 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 	
 	@Override
 	public int hashCode() {
-		int retval = 41;	// Prime number
-		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+		// Calculate a hashcode by XOR'ing all of the hashcodes of the license set
+		int retval = 41;	// a prime number
+		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
-			SPDXLicenseInfo li = iter.next();
+			AnyLicenseInfo li = iter.next();
 			retval = retval ^ li.hashCode();
 		}
 		return retval;
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
 			return true;
 		}
-		if (!(o instanceof SPDXDisjunctiveLicenseSet)) {
+		if (!(o instanceof ConjunctiveLicenseSet)) {
 			// covers o == null, as null is not an instance of anything
 			return false;
 		}
-		SPDXDisjunctiveLicenseSet comp = (SPDXDisjunctiveLicenseSet)o;
-		SPDXLicenseInfo[] compInfos = comp.getSPDXLicenseInfos();
+		ConjunctiveLicenseSet comp = (ConjunctiveLicenseSet)o;
+		AnyLicenseInfo[] compInfos = comp.getMembers();
 		if (compInfos.length != this.licenseInfos.size()) {
 			return false;
 		}
-		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
-			SPDXLicenseInfo li = iter.next();
+			AnyLicenseInfo li = iter.next();
 			boolean found = false;
 			for (int i = 0; i < compInfos.length; i++) {
 				if (li.equals(compInfos[i])) {
@@ -117,18 +121,18 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 		}
 		return true;
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#clone()
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#clone()
 	 */
 	@Override
-	public SPDXLicenseInfo clone() {
-		SPDXLicenseInfo[] clonedSet = new SPDXLicenseInfo[this.licenseInfos.size()];
-		Iterator<SPDXLicenseInfo> iter = this.licenseInfos.iterator();
+	public AnyLicenseInfo clone() {
+		AnyLicenseInfo[] clonedSet = new AnyLicenseInfo[this.licenseInfos.size()];
+		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		int i = 0;
 		while (iter.hasNext()) {
 			clonedSet[i++] = iter.next().clone();
 		}
-		return new SPDXDisjunctiveLicenseSet(clonedSet);
+		return new ConjunctiveLicenseSet(clonedSet);
 	}
 }

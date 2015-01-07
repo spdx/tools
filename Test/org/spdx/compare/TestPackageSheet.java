@@ -32,8 +32,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 
 /**
  * @author Source Auditor
@@ -174,7 +174,7 @@ public class TestPackageSheet {
 	
 	@Test
 	public void testDeclaredLicenseCol() throws Exception {
-		SPDXLicenseInfo diffLicense = new SpdxNoAssertionLicense();
+		AnyLicenseInfo diffLicense = new SpdxNoAssertionLicense();
 		String different = diffLicense.toString();
 		doc3.getSpdxPackage().setDeclaredLicense(diffLicense);
 		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
@@ -192,7 +192,7 @@ public class TestPackageSheet {
 	
 	@Test
 	public void testSeenLicensesCol() throws Exception {
-		SPDXLicenseInfo[] diffLicense = new SPDXLicenseInfo[] {new SpdxNoAssertionLicense()};
+		AnyLicenseInfo[] diffLicense = new AnyLicenseInfo[] {new SpdxNoAssertionLicense()};
 		String different = pkgSheet.licenseInfosToString(diffLicense);
 		doc3.getSpdxPackage().setLicenseInfoFromFiles(diffLicense);
 		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
@@ -210,7 +210,7 @@ public class TestPackageSheet {
 	
 	@Test
 	public void tesConcludedLicensetCol() throws Exception {
-		SPDXLicenseInfo diffLicense = new SpdxNoAssertionLicense();
+		AnyLicenseInfo diffLicense = new SpdxNoAssertionLicense();
 		String different = diffLicense.toString();
 		doc3.getSpdxPackage().setConcludedLicenses(diffLicense);
 		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});

@@ -21,12 +21,12 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXLicenseInfo;
-import org.spdx.rdfparser.SPDXLicenseInfoFactory;
-import org.spdx.rdfparser.SPDXNoneLicense;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxVerificationHelper;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 /**
  * @author Source Auditor
@@ -125,7 +125,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 			} else {
 				if (i == DECLARED_LICENSE_COL || i == CONCLUDED_LICENSE_COL) {
 					try {
-						SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
+						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
 					} catch(SpreadsheetException ex) {
 						if (i == DECLARED_LICENSE_COL) {
 							return "Invalid declared license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
@@ -140,7 +140,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 					}
 					for (int j = 0; j < licenses.length; j++) {
 						try {
-							SPDXLicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim());
+							LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim());
 						} catch(SpreadsheetException ex) {
 							return "Invalid license information in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						}
@@ -231,7 +231,7 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 			pkgSha1.setCellValue(pkgInfo.getSha1());
 		}
 		// add the license infos in files in multiple rows
-		SPDXLicenseInfo[] licenseInfosInFiles = pkgInfo.getLicensesFromFiles();
+		AnyLicenseInfo[] licenseInfosInFiles = pkgInfo.getLicensesFromFiles();
 		if (licenseInfosInFiles != null && licenseInfosInFiles.length > 0) {
 			StringBuilder sb = new StringBuilder(licenseInfosInFiles[0].toString());
 			for (int i = 1; i < licenseInfosInFiles.length; i++) {
@@ -290,19 +290,19 @@ public class PackageInfoSheetV09d3 extends PackageInfoSheet {
 		} else {
 			sourceInfo = "";
 		}
-		SPDXLicenseInfo declaredLicenses = 
-				SPDXLicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
-		SPDXLicenseInfo concludedLicense;
+		AnyLicenseInfo declaredLicenses = 
+				LicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
+		AnyLicenseInfo concludedLicense;
 		Cell concludedLicensesCell = row.getCell(CONCLUDED_LICENSE_COL);
 		if (concludedLicensesCell != null && !concludedLicensesCell.getStringCellValue().isEmpty()) {
-			concludedLicense = SPDXLicenseInfoFactory.parseSPDXLicenseString(concludedLicensesCell.getStringCellValue());
+			concludedLicense = LicenseInfoFactory.parseSPDXLicenseString(concludedLicensesCell.getStringCellValue());
 		} else {
-			concludedLicense = new SPDXNoneLicense();
+			concludedLicense = new SpdxNoneLicense();
 		}
 		String[] licenseStrings = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
-		SPDXLicenseInfo[] licenseInfosFromFiles = new SPDXLicenseInfo[licenseStrings.length];
+		AnyLicenseInfo[] licenseInfosFromFiles = new AnyLicenseInfo[licenseStrings.length];
 		for (int i = 0; i < licenseStrings.length; i++) {
-			licenseInfosFromFiles[i] = SPDXLicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
+			licenseInfosFromFiles[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
 		}
 		Cell licenseCommentCell = row.getCell(LICENSE_COMMENT_COL);
 		String licenseComment;

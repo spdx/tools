@@ -31,9 +31,9 @@ import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXNonStandardLicense;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
@@ -143,7 +143,7 @@ public class MergeSpdxDocs {
 				System.out.println("Error cloning master's package information: "+e1.getMessage());
 			}
 						
-			SPDXNonStandardLicense[] licInfoResult = null;
+			ExtractedLicenseInfo[] licInfoResult = null;
 			SpdxLicenseMapper licenseMapper = new SpdxLicenseMapper();
 			
 			try{

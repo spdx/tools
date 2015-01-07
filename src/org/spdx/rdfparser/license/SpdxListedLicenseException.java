@@ -14,24 +14,45 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 /**
  * @author Gary O'Neall
  *
  */
-public class LicenseCsvException extends SpdxStdLicenseException {
+public class SpdxListedLicenseException extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6979572232573954539L;
+	private static final long serialVersionUID = 6475983225526150116L;
 
-	public LicenseCsvException(String msg) {
-		super(msg);
+	/**
+	 * 
+	 */
+	public SpdxListedLicenseException() {
 	}
-	
-	public LicenseCsvException(String msg, Throwable inner) {
-		super(msg, inner);
+
+	/**
+	 * @param arg0
+	 */
+	public SpdxListedLicenseException(String arg0) {
+		super(arg0);
 	}
+
+	/**
+	 * @param arg0
+	 */
+	public SpdxListedLicenseException(Throwable arg0) {
+		super(arg0);
+	}
+
+	/**
+	 * @param arg0
+	 * @param arg1
+	 */
+	public SpdxListedLicenseException(String arg0, Throwable arg1) {
+		super(arg0, arg1);
+	}
+
 }
