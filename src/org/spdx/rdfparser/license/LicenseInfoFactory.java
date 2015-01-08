@@ -406,7 +406,7 @@ public class LicenseInfoFactory {
 				return new DisjunctiveLicenseSet(model, node);
 			}else if (type.equals(SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO)) {
 				return new ExtractedLicenseInfo(model, node);
-			}else if (type.equals(SpdxRdfConstants.CLASS_SPDX_LISTED_LICENSE)) {
+			}else if (type.equals(SpdxRdfConstants.CLASS_SPDX_LICENSE)) {
 				return new SpdxListedLicense(model, node);
 			} else {
 				throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo '"+type+"'"));

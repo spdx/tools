@@ -29,7 +29,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
 public interface ISpdxListedLicenseProvider {
 	
 	public Iterator<SpdxListedLicense> getLicenseIterator() throws SpdxListedLicenseException;
-	public Iterator<LicenseRestriction> getExceptionIterator() throws LicenseRestrictionException, SpreadsheetException;
+	public Iterator<LicenseException> getExceptionIterator() throws LicenseRestrictionException, SpreadsheetException;
 	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator();
 
 }

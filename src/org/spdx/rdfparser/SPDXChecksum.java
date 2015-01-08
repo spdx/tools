@@ -49,23 +49,6 @@ public class SPDXChecksum {
 	private Node checksumNode;
 	private Resource checksumResource;
 	
-	/**
-	 * Convert a node to a resource
-	 * @param cmodel
-	 * @param cnode
-	 * @return
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	protected static Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
-		if (cnode.isBlank()) {
-			return cmodel.createResource(cnode.getBlankNodeId());
-		} else if (cnode.isURI()) {
-			return cmodel.createResource(cnode.getURI());
-		} else {
-			throw(new InvalidSPDXAnalysisException("Can not create a checksum from a literal"));
-		}
-	}
-	
 	protected static Resource findSpdxChecksum(Model model, SPDXChecksum checksum) throws InvalidSPDXAnalysisException {
 		// find any matching checksum values
 		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
@@ -92,7 +75,7 @@ public class SPDXChecksum {
 					}
 				}
 				if (algorithm.equals(checksum.getAlgorithm())) {
-					return convertToResource(model, checksumNode);
+					return RdfParserHelper.convertToResource(model, checksumNode);
 				}
 			}
 		}

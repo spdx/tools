@@ -35,7 +35,7 @@ import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.SpdxListedLicenseException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
@@ -217,35 +217,35 @@ public class LicenseRDFAGenerator {
 		}
 		String exceptionHtmlTocReference = "./" + EXCEPTION_TOC_FILE_NAME;
 		ExceptionHtmlToc exceptionToc = new ExceptionHtmlToc();
-		Iterator<LicenseRestriction> exceptionIter = licenseProvider.getExceptionIterator();
+		Iterator<LicenseException> exceptionIter = licenseProvider.getExceptionIterator();
 		HashMap<String, String> addedExceptionsMap = new HashMap<String, String>();
 		while (exceptionIter.hasNext()) {
 			System.out.print(".");
-			LicenseRestriction nextException = exceptionIter.next();
-			if (nextException.getId() != null && !nextException.getId().isEmpty()) {
+			LicenseException nextException = exceptionIter.next();
+			if (nextException.getLicenseExceptionId() != null && !nextException.getLicenseExceptionId().isEmpty()) {
 				// check for duplicate exceptions
 				Iterator<Entry<String, String>> addedExceptionIter = addedExceptionsMap.entrySet().iterator();
 				while (addedExceptionIter.hasNext()) {
 					Entry<String, String> entry = addedExceptionIter.next();
-					if (entry.getValue().trim().equals(nextException.getText().trim())) {
-						warnings.add("Duplicates exceptions: "+nextException.getId()+", "+entry.getKey());
+					if (entry.getValue().trim().equals(nextException.getLicenseExceptionText().trim())) {
+						warnings.add("Duplicates exceptions: "+nextException.getLicenseExceptionId()+", "+entry.getKey());
 					}
 				}
 				// check for a license ID with the same ID as the exception
-				if (licenseIds.contains(nextException.getId())) {
-					warnings.add("A license ID exists with the same ID as an exception ID: "+nextException.getId());
+				if (licenseIds.contains(nextException.getLicenseExceptionId())) {
+					warnings.add("A license ID exists with the same ID as an exception ID: "+nextException.getLicenseExceptionId());
 				}
-				addedExceptionsMap.put(nextException.getId(), nextException.getText());
+				addedExceptionsMap.put(nextException.getLicenseExceptionId(), nextException.getLicenseExceptionText());
 				ExceptionHtml exceptionHtml = new ExceptionHtml(nextException);
-				String exceptionHtmlFileName = formLicenseHTMLFileName(nextException.getId());
+				String exceptionHtmlFileName = formLicenseHTMLFileName(nextException.getLicenseExceptionId());
 				String exceptionHTMLReference = "./"+exceptionHtmlFileName;
 				File exceptionHtmlFile = new File(dir.getPath()+File.separator+exceptionHtmlFileName);
 				exceptionHtml.writeToFile(exceptionHtmlFile, exceptionHtmlTocReference);
 				exceptionToc.addException(nextException, exceptionHTMLReference);
 				File textFile = new File(textFolder.getPath() + File.separator + exceptionHtmlFileName + ".txt");
-				Files.write(nextException.getText(), textFile, utf8);
+				Files.write(nextException.getLicenseExceptionText(), textFile, utf8);
 				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + exceptionHtmlFileName + ".html");
-				Files.write(SpdxLicenseTemplateHelper.escapeHTML(nextException.getText()), htmlTextFile, utf8);
+				Files.write(SpdxLicenseTemplateHelper.escapeHTML(nextException.getLicenseExceptionText()), htmlTextFile, utf8);
 			}
 		}
 		File exceptionTocFile = new File(dir.getPath()+File.separator+EXCEPTION_TOC_FILE_NAME);

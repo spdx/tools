@@ -23,7 +23,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.LicenseException;
 
 import com.sampullara.mustache.Mustache;
 import com.sampullara.mustache.MustacheBuilder;
@@ -44,19 +44,19 @@ public class ExceptionHtml {
 	/**
 	 * @param exception
 	 */
-	public ExceptionHtml(LicenseRestriction exception) {
+	public ExceptionHtml(LicenseException exception) {
 		ArrayList<String> alSourceUrls = new ArrayList<String>();
-		String[] sourceUrls = exception.getSourceUrl();
+		String[] sourceUrls = exception.getSeeAlso();
 		if (sourceUrls != null) {
 			for (String sourceUrl: sourceUrls) {
 				alSourceUrls.add(sourceUrl);
 			}
 		}
 		mustacheMap.put("name", exception.getName());
-		mustacheMap.put("id", exception.getId());
-		mustacheMap.put("text", exception.getText());
+		mustacheMap.put("id", exception.getLicenseExceptionId());
+		mustacheMap.put("text", exception.getLicenseExceptionText());
 		mustacheMap.put("getSourceUrl", alSourceUrls);
-		mustacheMap.put("notes", exception.getNotes());
+		mustacheMap.put("notes", exception.getComment());
 		String example = exception.getExample();
 		if (example != null && example.trim().isEmpty()) {
 			example = null;

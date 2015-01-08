@@ -232,7 +232,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
 	 */
 	@Override
-	public Iterator<LicenseRestriction> getExceptionIterator()
+	public Iterator<LicenseException> getExceptionIterator()
 			throws LicenseRestrictionException {
 		throw(new UnsupportedOperationException());
 	}

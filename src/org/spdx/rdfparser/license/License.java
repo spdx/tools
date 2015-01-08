@@ -53,10 +53,10 @@ public abstract class License extends SimpleLicensingInfo {
 	 * be converted on import from the model.
 	 */
 	private boolean templateInHtml = true;
-	private String standardLicenseHeader;
-	private String standardLicenseTemplate;
-	private String licenseText;
-	private boolean osiApproved;
+	protected String standardLicenseHeader;
+	protected String standardLicenseTemplate;
+	protected String licenseText;
+	protected boolean osiApproved;
 		
 	public License(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
@@ -266,9 +266,8 @@ public abstract class License extends SimpleLicensingInfo {
 	 */
 	@Override
 	protected Resource _createResource(Model model) {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LISTED_LICENSE);
-		String uri = this.createStdLicenseUri(this.licenseId);
-		Resource r = super._createResource(model, type, uri);
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
+		Resource r = super._createResource(model, type);
 		//text
 		if (this.licenseText != null) {
 			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
@@ -295,15 +294,6 @@ public abstract class License extends SimpleLicensingInfo {
 			r.addProperty(osiApprovedPropery, String.valueOf(this.osiApproved));
 		}
 		return r;
-	}
-	
-	/**
-	 * Creates a standard license URI by appending the standard license ID to the URL hosting the SPDX licenses
-	 * @param id Standard License ID
-	 * @return
-	 */
-	private String createStdLicenseUri(String id) {
-		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
 	}
 	
 	@Override
