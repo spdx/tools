@@ -62,7 +62,8 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_CONJUNCTIVE_LICENSE_SET = "ConjunctiveLicenseSet";
 	public static final String CLASS_SPDX_DISJUNCTIVE_LICENSE_SET = "DisjunctiveLicenseSet";
 	public static final String CLASS_SPDX_EXTRACTED_LICENSING_INFO = "ExtractedLicensingInfo";
-	public static final String CLASS_SPDX_LISTED_LICENSE = "License";
+	public static final String CLASS_SPDX_LICENSE = "License";
+	public static final String CLASS_SPDX_LICENSE_EXCEPTION = "LicenseException";
 	public static final String CLASS_SPDX_FILE = "File";
 	public static final String CLASS_SPDX_REVIEW = "Review";
 	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";
@@ -143,6 +144,12 @@ public interface SpdxRdfConstants {
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
 	public static final String TERM_LICENSE_NOASSERTION = PROP_VALUE_NOASSERTION;
 	public static final String TERM_LICENSE_NONE = PROP_VALUE_NONE;
+	public static final String PROP_LICENSE_EXCEPTION_ID = "licenseExceptionId";
+	public static final String PROP_EXAMPLE = "example";
+	public static final String PROP_EXCEPTION_TEXT = "licenseExceptionText";
+	
+	// SpdxElement Properties
+	public static final String PROP_NAME = "name";
 	
 	// SPDX File Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace

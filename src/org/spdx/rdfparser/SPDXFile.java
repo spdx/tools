@@ -77,30 +77,13 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	};
 	
 	/**
-	 * Convert a node to a resource
-	 * @param cmodel
-	 * @param cnode
-	 * @return
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	protected static Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
-		if (cnode.isBlank()) {
-			return cmodel.createResource(cnode.getBlankNodeId());
-		} else if (cnode.isURI()) {
-			return cmodel.createResource(cnode.getURI());
-		} else {
-			throw(new InvalidSPDXAnalysisException("Can not create a file from a literal"));
-		}
-	}
-	
-	/**
 	 * Construct an SPDX File form the fileNode
 	 * @param fileNode RDF Graph node representing the SPDX File
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SPDXFile(Model model, Node fileNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
-		this.resource = convertToResource(model, fileNode);
+		this.resource = RdfParserHelper.convertToResource(model, fileNode);
 		// name
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME).asNode();
 		Triple m = Triple.createMatch(fileNode, p, null);
@@ -397,7 +380,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 				Triple checksumMatchTriple = checksumMatchIterator.next();
 				SPDXChecksum cksum = new SPDXChecksum(model, checksumMatchTriple.getObject());
 				if (cksum.getValue().compareToIgnoreCase(spdxFile.sha1.getValue()) == 0) {
-					return convertToResource(model, fileNode);
+					return RdfParserHelper.convertToResource(model, fileNode);
 				}
 			}
 		}

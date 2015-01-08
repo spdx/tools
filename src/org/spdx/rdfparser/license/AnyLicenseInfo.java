@@ -19,6 +19,7 @@ package org.spdx.rdfparser.license;
 import java.util.ArrayList;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfParserHelper;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -48,24 +49,7 @@ public abstract class AnyLicenseInfo implements Cloneable {
 	AnyLicenseInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
 		this.licenseInfoNode = licenseInfoNode;
-		resource = convertToResource(model, licenseInfoNode);
-	}
-
-	/**
-	 * Convert a node to a resource
-	 * @param cmodel
-	 * @param cnode
-	 * @return
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	private Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
-		if (cnode.isBlank()) {
-			return cmodel.createResource(cnode.getBlankNodeId());
-		} else if (cnode.isURI()) {
-			return cmodel.createResource(cnode.getURI());
-		} else {
-			throw(new InvalidSPDXAnalysisException("Can not create a license from a literal"));
-		}
+		resource = RdfParserHelper.convertToResource(model, licenseInfoNode);
 	}
 
 

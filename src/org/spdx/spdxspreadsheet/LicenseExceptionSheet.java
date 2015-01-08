@@ -21,7 +21,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.LicenseException;
 
 /**
  * Sheet containing the License Exceptions
@@ -67,29 +67,29 @@ public class LicenseExceptionSheet extends AbstractSheet {
 		super(workbook, sheetName);
 	}
 	
-	public void add(LicenseRestriction exception) {
+	public void add(LicenseException exception) {
 		Row row = addRow();
 		Cell nameCell = row.createCell(COL_NAME);
 		nameCell.setCellValue(exception.getName());
 		Cell idCell = row.createCell(COL_ID);
-		idCell.setCellValue(exception.getId());
-		if (exception.getSourceUrl() != null && exception.getSourceUrl().length > 0) {
+		idCell.setCellValue(exception.getLicenseExceptionId());
+		if (exception.getSeeAlso() != null && exception.getSeeAlso().length > 0) {
 			Cell sourceUrlCell = row.createCell(COL_SOURCE_URL);
 			StringBuilder sb = new StringBuilder();
-			sb.append(exception.getSourceUrl()[0]);
-			for (int i = 1; i < exception.getSourceUrl().length; i++) {
+			sb.append(exception.getSeeAlso()[0]);
+			for (int i = 1; i < exception.getSeeAlso().length; i++) {
 				sb.append(' ');
-				sb.append(exception.getSourceUrl()[i]);
+				sb.append(exception.getSeeAlso()[i]);
 			}
 			sourceUrlCell.setCellValue(sb.toString());
 		}
 
 		Cell textCell = row.createCell(COL_TEXT);
-		String text = exception.getText();
+		String text = exception.getLicenseExceptionText();
 		if (text != null) {
 			textCell.setCellValue(text);
 		}
-		String notes = exception.getNotes();
+		String notes = exception.getComment();
 		Cell notesCell = row.createCell(COL_NOTES);
 		if (notes != null) {
 			notesCell.setCellValue(notes);
@@ -154,7 +154,7 @@ public class LicenseExceptionSheet extends AbstractSheet {
 	 * @param rowNum
 	 * @return
 	 */
-	public LicenseRestriction getException(int rowNum) {
+	public LicenseException getException(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -197,7 +197,7 @@ public class LicenseExceptionSheet extends AbstractSheet {
 		if (examplesCell != null) {
 			examples = examplesCell.getStringCellValue();
 		}
-		return new LicenseRestriction(id, name, text, sourceURL, notes, examples);
+		return new LicenseException(id, name, text, sourceURL, notes, examples);
 	}
 
 }

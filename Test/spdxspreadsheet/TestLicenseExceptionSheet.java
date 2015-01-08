@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
-import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -79,14 +79,14 @@ public class TestLicenseExceptionSheet {
 		}
 		try {
 			// create a copy of the spreadsheet then compare
-			ArrayList<LicenseRestriction> exceptions = new ArrayList<LicenseRestriction>();
+			ArrayList<LicenseException> exceptions = new ArrayList<LicenseException>();
 			File origSpreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
 			SPDXLicenseSpreadsheet origSpreadsheet = new SPDXLicenseSpreadsheet(origSpreadsheetFile, false, true);
-			Iterator<LicenseRestriction> iter = origSpreadsheet.getExceptionIterator();
+			Iterator<LicenseException> iter = origSpreadsheet.getExceptionIterator();
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");
 			SPDXLicenseSpreadsheet copy = new SPDXLicenseSpreadsheet(spreadsheetCopy, true, false);
 			while (iter.hasNext()) {
-				LicenseRestriction nextRestriction = iter.next();
+				LicenseException nextRestriction = iter.next();
 				exceptions.add(nextRestriction);
 				copy.getLicenseExceptionSheet().add(nextRestriction);
 			}
@@ -101,16 +101,16 @@ public class TestLicenseExceptionSheet {
 					if (i > exceptions.size()) {
 						fail("to many exceptions in copy");
 					}
-					LicenseRestriction nextException = iter.next();
-					assertEquals(exceptions.get(i).getId(), nextException.getId());
+					LicenseException nextException = iter.next();
+					assertEquals(exceptions.get(i).getLicenseExceptionId(), nextException.getLicenseExceptionId());
 					assertEquals(exceptions.get(i).getName(), nextException.getName());
-					assertEquals(exceptions.get(i).getNotes(), nextException.getNotes());
+					assertEquals(exceptions.get(i).getComment(), nextException.getComment());
 					assertEquals(exceptions.get(i).getExample(), nextException.getExample());
-					if (!TestLicenseSheet.compareText(exceptions.get(i).getText(), nextException.getText())) {
-						fail("license text does not match for "+exceptions.get(i).getId());
+					if (!TestLicenseSheet.compareText(exceptions.get(i).getLicenseExceptionText(), nextException.getLicenseExceptionText())) {
+						fail("license text does not match for "+exceptions.get(i).getLicenseExceptionId());
 					}
-					assertStringArraysEquals(exceptions.get(i).getSourceUrl(),
-							nextException.getSourceUrl());
+					assertStringArraysEquals(exceptions.get(i).getSeeAlso(),
+							nextException.getSeeAlso());
 					i = i + 1;
 				}
 				assertEquals(exceptions.size(), i);

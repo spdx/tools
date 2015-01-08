@@ -27,7 +27,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.LicenseException;
 
 /**
  * A spreadhseet containing license information
@@ -72,10 +72,10 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 		
 	}
 	
-	public class LicenseExceptionIterator implements Iterator<LicenseRestriction> {
+	public class LicenseExceptionIterator implements Iterator<LicenseException> {
 
 		private int currentRowNum;
-		LicenseRestriction currentException;
+		LicenseException currentException;
 		public LicenseExceptionIterator() throws SpreadsheetException {
 			this.currentRowNum = exceptionSheet.getFirstDataRow();	// skip past header row
             currentException = exceptionSheet.getException(currentRowNum);
@@ -86,8 +86,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 		}
 
 		@Override
-		public LicenseRestriction next() {
-			LicenseRestriction retval = currentException;
+		public LicenseException next() {
+			LicenseException retval = currentException;
 			currentRowNum++;
 			currentException = exceptionSheet.getException(currentRowNum);
 			return retval;
@@ -276,7 +276,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 	 * @see org.spdx.rdfparser.IStandardLicenseProvider#getExceptionIterator()
 	 */
 	@Override
-	public Iterator<LicenseRestriction> getExceptionIterator()
+	public Iterator<LicenseException> getExceptionIterator()
 			throws LicenseRestrictionException, SpreadsheetException {
 		return new LicenseExceptionIterator();
 	}

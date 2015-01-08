@@ -1,5 +1,9 @@
 Implementation version 2.0.0
 - Refactored license classes to match the SPDX 2.0 model
+  Created a new package org.spdx.rdfparser.license
+    Renamed SPDXLicenseInfo -> AnyLicenseInfo
+    Renamed several license classes removing the SPDX prefix
+    Renamed several license classes changing StandardLicense to SpdxListedLicense
 - Added verification for license name as a required field
 Implementation version 1.2.10
 - Updated RDFAParser

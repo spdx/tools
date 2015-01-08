@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.spdx.rdfparser.license.LicenseRestriction;
+import org.spdx.rdfparser.license.LicenseException;
 
 import com.sampullara.mustache.Mustache;
 import com.sampullara.mustache.MustacheBuilder;
@@ -123,10 +123,10 @@ public class ExceptionHtmlToc {
 	 * @param exception
 	 * @param exceptionHTMLReference
 	 */
-	public void addException(LicenseRestriction exception,
+	public void addException(LicenseException exception,
 			String exceptionHTMLReference) {
 		exceptions.add(new ExceptionRow(
-				StringEscapeUtils.escapeHtml4(exception.getId()), 
+				StringEscapeUtils.escapeHtml4(exception.getLicenseExceptionId()), 
 				StringEscapeUtils.escapeHtml4(exception.getName()),			
 				exceptions.size()+1, exceptionHTMLReference));
 	}

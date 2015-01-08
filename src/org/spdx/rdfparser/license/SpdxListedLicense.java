@@ -19,9 +19,12 @@ package org.spdx.rdfparser.license;
 import java.util.ArrayList;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Listed license for SPDX as listed at spdx.org/licenses
@@ -50,6 +53,52 @@ public class SpdxListedLicense extends License {
 			retval.add("License "+this.getLicenseId()+" is not a listed license at spdx.org/licenses");
 		}
 		return retval;
+	}
+	
+	
+	/**
+	 * Creates a standard license URI by appending the standard license ID to the URL hosting the SPDX licenses
+	 * @param id Standard License ID
+	 * @return
+	 */
+	private String createStdLicenseUri(String id) {
+		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 */
+	@Override
+	protected Resource _createResource(Model model) {
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
+		String uri = this.createStdLicenseUri(this.licenseId);
+		Resource r = super._createResource(model, type, uri);
+		//text
+		if (licenseText != null) {
+			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_LICENSE_TEXT);
+			model.removeAll(r, textProperty, null);
+			r.addProperty(textProperty, this.licenseText);
+		}
+		//standard license header
+		if (this.standardLicenseHeader != null) {
+			Property standardLicenseHeaderPropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
+			r.addProperty(standardLicenseHeaderPropery, this.standardLicenseHeader);
+		}
+		//template
+		if (this.standardLicenseTemplate != null) {
+			Property templatePropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
+			r.addProperty(templatePropery, this.standardLicenseTemplate);
+		}
+		//Osi Approved
+		if (this.osiApproved) {
+			Property osiApprovedPropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
+			r.addProperty(osiApprovedPropery, String.valueOf(this.osiApproved));
+		}
+		return r;
 	}
 
 }
