@@ -64,6 +64,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_EXTRACTED_LICENSING_INFO = "ExtractedLicensingInfo";
 	public static final String CLASS_SPDX_LICENSE = "License";
 	public static final String CLASS_SPDX_LICENSE_EXCEPTION = "LicenseException";
+	public static final String CLASS_OR_LATER_OPERATOR = "OrLaterOperator";
 	public static final String CLASS_WITH_EXCEPTION_OPERATOR = "WithExceptionOperator";
 	public static final String CLASS_SPDX_FILE = "File";
 	public static final String CLASS_SPDX_REVIEW = "Review";
