@@ -182,10 +182,12 @@ public class LicenseException  {
 				}
 			}
 			// check to make sure we are not overwriting an existing exception with the same ID
+			if (this.exceptionNode != null) {
 			String existingExceptionText = getExceptionTextFromModel(model, this.exceptionNode);
-			if (existingExceptionText != null && this.licenseExceptionText != null) {
-				if (!LicenseCompareHelper.isLicenseTextEquivalent(existingExceptionText, this.licenseExceptionText)) {
-					throw(new DuplicateExtractedLicenseIdException("License exception ID "+this.licenseExceptionId+" already exists.  Can not add a license restriciton with the same ID but different text."));
+				if (existingExceptionText != null && this.licenseExceptionText != null) {
+					if (!LicenseCompareHelper.isLicenseTextEquivalent(existingExceptionText, this.licenseExceptionText)) {
+						throw(new DuplicateExtractedLicenseIdException("License exception ID "+this.licenseExceptionId+" already exists.  Can not add a license restriciton with the same ID but different text."));
+					}
 				}
 			}
 			// add the properties
