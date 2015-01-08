@@ -64,6 +64,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_EXTRACTED_LICENSING_INFO = "ExtractedLicensingInfo";
 	public static final String CLASS_SPDX_LICENSE = "License";
 	public static final String CLASS_SPDX_LICENSE_EXCEPTION = "LicenseException";
+	public static final String CLASS_WITH_EXCEPTION_OPERATOR = "WithExceptionOperator";
 	public static final String CLASS_SPDX_FILE = "File";
 	public static final String CLASS_SPDX_REVIEW = "Review";
 	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";
@@ -147,6 +148,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_LICENSE_EXCEPTION_ID = "licenseExceptionId";
 	public static final String PROP_EXAMPLE = "example";
 	public static final String PROP_EXCEPTION_TEXT = "licenseExceptionText";
+	public static final String PROP_LICENSE_EXCEPTION = "licenseException";
 	
 	// SpdxElement Properties
 	public static final String PROP_NAME = "name";
