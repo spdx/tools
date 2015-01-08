@@ -803,11 +803,11 @@
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-    <checksumValue>a1899475e17a33e4ab1fe6d626712524e1149ac0</checksumValue>
+    <checksumValue>872f9c757cb47f4e8c071c283850113ed62bc9e8</checksumValue>
   </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-    <checksumValue>872f9c757cb47f4e8c071c283850113ed62bc9e8</checksumValue>
+    <checksumValue>a1899475e17a33e4ab1fe6d626712524e1149ac0</checksumValue>
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>c25f17dd088f556395c08d12977c23e2d2dbb1f8</packageVerificationCodeValue>
@@ -844,13 +844,13 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>c868cd3690249c8b6726af2736301165455983c2</packageVerificationCodeValue>
   </PackageVerificationCode>
-  <PackageVerificationCode>
-    <packageVerificationCodeValue>b8a77cd020c9f0fc0ed78b79a769ab64490b618a</packageVerificationCodeValue>
-  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>dcbc4779321430b40f0c3a3614acc301072b079f</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>b8a77cd020c9f0fc0ed78b79a769ab64490b618a</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>9f81080587213f240b7cfa46c93b79a8d09bd455</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -1412,10 +1412,10 @@
     <checksumValue>b2dd9dbc4b10a3ba14d52613707cfb7ce7f90d7f</checksumValue>
   </Checksum>
   <PackageVerificationCode>
-    <packageVerificationCodeValue>5804f84068aa1763e43aecc9a51c022765c53310</packageVerificationCodeValue>
+    <packageVerificationCodeValue>8223445f432805b1454f988fbc1e0fea9dbd1c99</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
-    <packageVerificationCodeValue>8223445f432805b1454f988fbc1e0fea9dbd1c99</packageVerificationCodeValue>
+    <packageVerificationCodeValue>5804f84068aa1763e43aecc9a51c022765c53310</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -3842,6 +3842,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>a72304fa3f110e5c8f75a14654950eab90c50a3e</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>77a5e9f925a8c45d6dc3cb7a0f7bb8979ad01ed0</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <checksumValue>f24137d644c072935d5f93e2bdd1a382d66da600</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -3873,6 +3876,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>f5a5e7dd3e9d51fe3b2f6bf077e8959aaa6e0726</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>0fe2126c1281fdb7756afa626b8d63a5cb3073ab</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>173dd18825488bd530e0003b0f26634312af366b</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -3908,6 +3915,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>070e7fcc8b006540c5433ba0ba12596e8cfe4e27</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>5b81636e782b5f8f786f8b9469698cbf5d0e4686</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <checksumValue>a7b512dabf027d9d5aad65ffcafa491dc5f80804</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -3942,6 +3952,10 @@
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>79a86301fffb7baebfe7493baae9dba4fd7847b2</checksumValue>
+  </Checksum>
+  <Checksum>
+    <checksumValue>f929341e7d059076683e711146cf285bde800d76</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>93764f91714ce5085efff0b52a78424267b0f4a3</packageVerificationCodeValue>
@@ -4010,6 +4024,9 @@
   </File>
   <PackageVerificationCode>
     <packageVerificationCodeValue>bfd08ba2b7b1c66e4694822db45d01b2ec83cba1</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>3db097852a09d2dbeef8f22ba7b42348f3bdc7bd</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <checksumValue>1e31acfdc58f71b3784f51f577656a6582fa7787</checksumValue>
@@ -4453,6 +4470,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>619bc494ea552700c9b8367b391fbb350f577102</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>5242872ddcfcf0eaade72607bda6d577c945a1c1</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <checksumValue>79e1b7e857623fb7f47f86c715b2ec4ea44c38a9</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -5405,6 +5426,9 @@
     <checksumValue>817c8fafec97ab344271c49359c44f81ac0d5d56</checksumValue>
   </Checksum>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>3610ecfc983ade216fa132235c457fb25550b6e4</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>98f198224a79bda92216f5548bb3ab1d31c26c40</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -5515,6 +5539,10 @@
     <checksumValue>ebab083352b3d1974c52abfdd8166ea5822f9dd9</checksumValue>
   </Checksum>
   <Checksum>
+    <checksumValue>ff769d1d8c8e60bb822fd93888b3c0cd2142ec82</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
     <checksumValue>cad7b09980fb019929d29a3f2172237732fab5cb</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
@@ -5525,13 +5553,13 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>383ced12b9f8f441284332af96dadf3a2aa6f16c</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>700f6df53ee0bcd7763c10ff7c2fbdc4126f4e88</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <checksumValue>2f10d9d39c6b3e9dfd5cab8ec79694e35c33a4a9</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
-  <PackageVerificationCode>
-    <packageVerificationCodeValue>700f6df53ee0bcd7763c10ff7c2fbdc4126f4e88</packageVerificationCodeValue>
-  </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>9b9e6b0bc2335bbed650d151373092fd9bd485db</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -5788,13 +5816,13 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>6507f99e409e50a30e599fa325b94d8bec2f4a60</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>7c326de82755b6ea077513d4b69c2d7cce21fe67</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>bf74067c245365287066a7c04fbd9d53bf2efbac</checksumValue>
   </Checksum>
-  <PackageVerificationCode>
-    <packageVerificationCodeValue>7c326de82755b6ea077513d4b69c2d7cce21fe67</packageVerificationCodeValue>
-  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>edfd0d1221889a97c149500bead6b3ca8322c1e7</checksumValue>
@@ -6023,6 +6051,9 @@
     <packageVerificationCodeValue>8883077aec670a1b697bd94b2ec104251b929ea2</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>8bc4884c2ba6799c44d613ab1864138c3d820d83</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>34c4735e105ffeff7bb261d8a8f6cb4b00624435</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -6063,6 +6094,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>3b5566186f7f77c1d266fbf064dd88d2a797a082</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>fccea0020049f0cc6e72c429ffd4a7ff56631609</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>176a0bb6eb9ae5289641284e2e4d045ab416881b</checksumValue>
@@ -6117,6 +6152,9 @@
     <checksumValue>de457673fffa18f0f4c9383c37d4f2cfcf0d32b0</checksumValue>
   </Checksum>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>631f382aa033772f207be7374c88b28adb8df526</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>e717106d2dd7430b88da8f122c914aae21e9d43f</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
@@ -6154,6 +6192,10 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>edb848c9cfcb0348799e8a75d8eb3d57fd6efc0e</checksumValue>
   </Checksum>
+  <Checksum>
+    <checksumValue>8c2e0b9b20a8909675d7e8e854c20d8e0391f951</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>a6ff78d7bd1bdd7e5b3339157361c84c727e1e71</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -6176,6 +6218,10 @@
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>fac9dca403ee17e666264ae0045836a7ffb9649e</checksumValue>
+  </Checksum>
+  <Checksum>
+    <checksumValue>87fa69fdb41c3d87c5e4cc932e4713235eae3d9e</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -6201,6 +6247,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>03c9f22d3792a5347000df2c750c926c0360a7af</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>a155505ce3d00134df36f2728ecc186ba38f4d00</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>d07500fa9ae9578e67a5aec517594d4b0e93850b</checksumValue>
@@ -6237,6 +6286,10 @@
   </Checksum>
   <Checksum>
     <checksumValue>71c432e7e798484e05497d419ae8f3aede1ff8ac</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <checksumValue>99d84a4ca48bb00ef8ea49d9b44da837e8e91489</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
   <PackageVerificationCode>
@@ -6287,6 +6340,9 @@
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>62f25acc7eebecc67fb6871658d04c3838290b53</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>d67e5aaefc3ba0f6d13913e08cbcb956f07c0141</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>122603ebb46d894ec4dbd9d811720afcdded6613</packageVerificationCodeValue>
@@ -6745,6 +6801,9 @@
     <checksumValue>52452bbda7d1f340306a5dde730a4890caec304d</checksumValue>
   </Checksum>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>a19cf1c1647da21b44fbd100294d0a60f0fda099</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>8e301e3d1eb40a23990f56fe2dfebde0022176b7</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -6814,6 +6873,10 @@
   </Checksum>
   <Checksum>
     <checksumValue>23625fb8cf5d01f0b273555071aed876f0717c1e</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <checksumValue>286f380761a8ff43205117d2464fa2bccb1803b3</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
   <Checksum>
@@ -6968,6 +7031,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>4c467f57a591f5c92530ac90384f8c5cb34b94e0</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>e288a68783d53acb70eb0a65b192fc2eea38d7e9</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>7d8bc163f629017a25f8f9a3c8e9c7daa1eef219</checksumValue>
@@ -7015,6 +7081,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>91316fb34287b1858fc39c3cb47671a005135ef8</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>ed174095e29560bb584b939cac98c32f90b4e64b</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>db89a254c681e5d8d4423b3247ba90f66a529f0d</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -7074,6 +7144,9 @@
   </File>
   <PackageVerificationCode>
     <packageVerificationCodeValue>cc1a289485efaa8dc80f685b00c2ac07c4b5410b</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>79c713ce26b135938107c239530aee11f3ba28a5</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>ea4ea571edfd160f087df062b5d1ca6b35cc1232</packageVerificationCodeValue>
@@ -7146,6 +7219,10 @@
     <packageVerificationCodeValue>80bdbddb101cd7f5936255ddb4a12e77e3a4cf80</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
+    <checksumValue>ae2f4e8ae314073d015c07fcab451f7637f9f246</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>742065dda7ef550f72a0be3a7a8d238fea3d3ab8</checksumValue>
   </Checksum>
@@ -7196,6 +7273,9 @@
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>5e43606a53472871790e308df1fda4f5ec34a884</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>c22e22dfb9d709eb3df3e9b0003a13399980167c</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -7308,6 +7388,13 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>539d1ee070cd23b6e0f9efc64329dea3a651b3b2</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>ebfd77678f01ca6b3df8b501be3115117f8ba90c</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>13447bc52e83746abed89c22fef708633d46f99a</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>b786826a8c119a54f0e14335adf2a3075d4ecd7b</checksumValue>
@@ -7340,6 +7427,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>737d34b35e002f8c454036160ecf7b59846bf5b7</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>fc4b8c93f938d0e50fc134601e926a6677d2a636</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <checksumValue>d51eb1d61ea84495252ae9f86b90d515bffb85fb</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -7390,6 +7481,9 @@
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>e3a3e644ee67aa5210bc5fb06b677590471c7572</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>63012f548dd5fc2b34276a4a043c1b068a94f55e</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>6cf17a4654c39e1836e4859672334fdceb0245b8</packageVerificationCodeValue>
@@ -7511,6 +7605,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>733a4fcfe938d7a992c9ea4e04f91f63634eb62e</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>f6d6b337bde3a4b99eafe08954d698d72d343693</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>ae0bb3d7ec8d8f9b948f26067c972b0c28e3c8c3</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -7545,6 +7643,9 @@
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>175f90bd069ebe797c4900538eb2406e6581d092</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>3aacfbefa0caccd4db40e60c7817de48119fe4aa</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -7581,6 +7682,10 @@
     <checksumValue>9b9d80de2c7c4b78e53e325183d325d8e01ca4c9</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
+  <Checksum>
+    <checksumValue>673b603af6b3e3249d55f508a75aaa6fd3d0f431</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>b9e4b29b22a32295a0c250310040b69206a28249</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -7600,6 +7705,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>7f2753e891ec578012764e056ee91df4ea69a6db</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>56a0e926bd5cf75b392a5a31025804227bf873c0</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>9615540b0d4c8892d02085507db82bc841c6d2d2</checksumValue>
@@ -10929,16 +11037,16 @@
       <File rdf:nodeID="A100">
         <licenseComments></licenseComments>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+        <checksum>
+          <Checksum>
+            <checksumValue>f1f4b8947cef5d71c70f4d1f7eead743034bf256</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileName>src/org/spdx/rdfparser/license/WithExceptionOperator.java</fileName>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
-        <checksum>
-          <Checksum>
-            <checksumValue>ff769d1d8c8e60bb822fd93888b3c0cd2142ec82</checksumValue>
-            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-          </Checksum>
-        </checksum>
         <rdfs:comment></rdfs:comment>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -12009,6 +12117,12 @@
     <referencesFile>
       <File rdf:nodeID="A136">
         <rdfs:comment></rdfs:comment>
+        <checksum>
+          <Checksum>
+            <checksumValue>246e9ed6f8affca817b1e1acc938667ab84972e9</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -12027,12 +12141,6 @@
         <licenseComments></licenseComments>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-        <checksum>
-          <Checksum>
-            <checksumValue>384aacc7dfa4ea3195d6d1568d24b9ba1d91326e</checksumValue>
-            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-          </Checksum>
-        </checksum>
         <fileName>src/org/spdx/rdfparser/SpdxRdfConstants.java</fileName>
       </File>
     </referencesFile>
@@ -15998,6 +16106,36 @@
     </referencesFile>
     <referencesFile>
       <File rdf:nodeID="A269">
+        <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
+        <licenseComments></licenseComments>
+        <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <checksum>
+          <Checksum>
+            <checksumValue>0a32d5d5f6eb128bff4d9cf8b4e8e4eb9a592e6e</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
+        <fileName>Test/org/spdx/rdfparser/license/TestOrLaterOperator.java</fileName>
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <rdfs:comment></rdfs:comment>
+        <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
+ *&#xD;
+ *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
+ *   you may not use this file except in compliance with the License.&#xD;
+ *   You may obtain a copy of the License at&#xD;
+ *&#xD;
+ *       http://www.apache.org/licenses/LICENSE-2.0&#xD;
+ *&#xD;
+ *   Unless required by applicable law or agreed to in writing, software&#xD;
+ *   distributed under the License is distributed on an "AS IS" BASIS,&#xD;
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;
+ *   See the License for the specific language governing permissions and&#xD;
+ *   limitations under the License.</noticeText>
+      </File>
+    </referencesFile>
+    <referencesFile>
+      <File rdf:nodeID="A270">
         <fileName>resources/stdlicenses/OLDAP-1.4</fileName>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <rdfs:comment></rdfs:comment>
@@ -16027,7 +16165,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A270">
+      <File rdf:nodeID="A271">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <rdfs:comment></rdfs:comment>
@@ -16057,7 +16195,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A271">
+      <File rdf:nodeID="A272">
         <rdfs:comment></rdfs:comment>
         <fileName>resources/stdlicenses/WTFPL</fileName>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -16087,7 +16225,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A272">
+      <File rdf:nodeID="A273">
         <licenseComments></licenseComments>
         <rdfs:comment></rdfs:comment>
         <fileName>resources/stdlicenses/NBPL-1.0</fileName>
@@ -16117,7 +16255,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A273">
+      <File rdf:nodeID="A274">
         <licenseComments></licenseComments>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -16147,7 +16285,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A274">
+      <File rdf:nodeID="A275">
         <checksum>
           <Checksum>
             <checksumValue>9d9dfebc79706fe5a637b19c62c4a10f171de0eb</checksumValue>
@@ -16177,7 +16315,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A275">
+      <File rdf:nodeID="A276">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <rdfs:comment></rdfs:comment>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -16207,7 +16345,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A276">
+      <File rdf:nodeID="A277">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -16237,7 +16375,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A277">
+      <File rdf:nodeID="A278">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <rdfs:comment></rdfs:comment>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -16267,7 +16405,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A278">
+      <File rdf:nodeID="A279">
         <fileName>src/org/spdx/tools/LicenseRDFAGenerator.java</fileName>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
@@ -16297,7 +16435,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A279">
+      <File rdf:nodeID="A280">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -16327,7 +16465,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A280">
+      <File rdf:nodeID="A281">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
@@ -16357,7 +16495,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A281">
+      <File rdf:nodeID="A282">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -16387,7 +16525,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A282">
+      <File rdf:nodeID="A283">
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <fileName>src/org/spdx/rdfparser/InvalidSPDXAnalysisException.java</fileName>
         <rdfs:comment></rdfs:comment>
@@ -16417,7 +16555,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A283">
+      <File rdf:nodeID="A284">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <licenseComments></licenseComments>
@@ -16447,7 +16585,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A284">
+      <File rdf:nodeID="A285">
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <licenseComments></licenseComments>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -16477,7 +16615,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A285">
+      <File rdf:nodeID="A286">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -16507,7 +16645,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A286">
+      <File rdf:nodeID="A287">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -16537,7 +16675,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A287">
+      <File rdf:nodeID="A288">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -16567,7 +16705,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A288">
+      <File rdf:nodeID="A289">
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <checksum>
           <Checksum>
@@ -16597,7 +16735,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A289">
+      <File rdf:nodeID="A290">
         <fileName>src/org/spdx/html/MustacheMap.java</fileName>
         <rdfs:comment></rdfs:comment>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -16627,7 +16765,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A290">
+      <File rdf:nodeID="A291">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -16657,7 +16795,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A291">
+      <File rdf:nodeID="A292">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
         <checksum>
@@ -16687,7 +16825,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A292">
+      <File rdf:nodeID="A293">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -16717,7 +16855,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A293">
+      <File rdf:nodeID="A294">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -16747,7 +16885,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A294">
+      <File rdf:nodeID="A295">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <checksum>
           <Checksum>
@@ -16777,7 +16915,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A295">
+      <File rdf:nodeID="A296">
         <fileName>src/org/spdx/tools/MatchingStandardLicenses.java</fileName>
         <rdfs:comment></rdfs:comment>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -16807,7 +16945,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A296">
+      <File rdf:nodeID="A297">
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -16837,7 +16975,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A297">
+      <File rdf:nodeID="A298">
         <checksum>
           <Checksum>
             <checksumValue>e68d7380648524a3a1642f444bb8a531cd8c618d</checksumValue>
@@ -16867,7 +17005,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A298">
+      <File rdf:nodeID="A299">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -16897,7 +17035,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A299">
+      <File rdf:nodeID="A300">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -16927,7 +17065,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A300">
+      <File rdf:nodeID="A301">
         <rdfs:comment></rdfs:comment>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileName>Test/org/spdx/compare/TestNormalizedFileNameComparator.java</fileName>
@@ -16957,7 +17095,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A301">
+      <File rdf:nodeID="A302">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -16987,7 +17125,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A302">
+      <File rdf:nodeID="A303">
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <checksum>
@@ -17017,7 +17155,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A303">
+      <File rdf:nodeID="A304">
         <licenseComments></licenseComments>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -17047,7 +17185,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A304">
+      <File rdf:nodeID="A305">
         <licenseComments></licenseComments>
         <fileName>resources/stdlicenses/RPSL-1.0</fileName>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
@@ -17077,7 +17215,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A305">
+      <File rdf:nodeID="A306">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -17107,7 +17245,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A306">
+      <File rdf:nodeID="A307">
         <licenseComments></licenseComments>
         <rdfs:comment></rdfs:comment>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -17137,7 +17275,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A307">
+      <File rdf:nodeID="A308">
         <licenseComments></licenseComments>
         <checksum>
           <Checksum>
@@ -17167,7 +17305,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A308">
+      <File rdf:nodeID="A309">
         <licenseComments></licenseComments>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <rdfs:comment></rdfs:comment>
@@ -17197,7 +17335,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A309">
+      <File rdf:nodeID="A310">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -17227,7 +17365,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A310">
+      <File rdf:nodeID="A311">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -17257,7 +17395,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A311">
+      <File rdf:nodeID="A312">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -17287,7 +17425,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A312">
+      <File rdf:nodeID="A313">
         <checksum>
           <Checksum>
             <checksumValue>d9ab9cbe7486b66a208b2b077f89ee5e38d55991</checksumValue>
@@ -17317,7 +17455,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A313">
+      <File rdf:nodeID="A314">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <fileName>resources/stdlicenses/SGI-B-2.0</fileName>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -17347,7 +17485,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A314">
+      <File rdf:nodeID="A315">
         <checksum>
           <Checksum>
             <checksumValue>7b0f35bca4700ec0e1db5dc0af4c6cd8614d9c70</checksumValue>
@@ -17377,7 +17515,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A315">
+      <File rdf:nodeID="A316">
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
@@ -17407,7 +17545,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A316">
+      <File rdf:nodeID="A317">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <checksum>
           <Checksum>
@@ -17437,7 +17575,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A317">
+      <File rdf:nodeID="A318">
         <checksum>
           <Checksum>
             <checksumValue>905555f5626fbf40bc1f3fdcb7b6d8ab0bd84da0</checksumValue>
@@ -17476,7 +17614,7 @@
       </CreationInfo>
     </creationInfo>
     <referencesFile>
-      <File rdf:nodeID="A318">
+      <File rdf:nodeID="A319">
         <checksum>
           <Checksum>
             <checksumValue>f4e9bd3c431f892090342522acbf0330f7c4d970</checksumValue>
@@ -17506,7 +17644,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A319">
+      <File rdf:nodeID="A320">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <rdfs:comment></rdfs:comment>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -17536,7 +17674,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A320">
+      <File rdf:nodeID="A321">
         <checksum>
           <Checksum>
             <checksumValue>7d436f647f5956abf4cd45997df3f6ed6d900adb</checksumValue>
@@ -17566,7 +17704,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A321">
+      <File rdf:nodeID="A322">
         <rdfs:comment></rdfs:comment>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -17596,7 +17734,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A322">
+      <File rdf:nodeID="A323">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileName>resources/stdlicenses/Unlicense</fileName>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
@@ -17626,7 +17764,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A323">
+      <File rdf:nodeID="A324">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -17656,7 +17794,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A324">
+      <File rdf:nodeID="A325">
         <licenseComments></licenseComments>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -17686,7 +17824,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A325">
+      <File rdf:nodeID="A326">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <checksum>
           <Checksum>
@@ -17716,7 +17854,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A326">
+      <File rdf:nodeID="A327">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -17746,7 +17884,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A327">
+      <File rdf:nodeID="A328">
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <licenseComments></licenseComments>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -17776,7 +17914,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A328">
+      <File rdf:nodeID="A329">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -17806,7 +17944,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A329">
+      <File rdf:nodeID="A330">
         <checksum>
           <Checksum>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -17836,7 +17974,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A330">
+      <File rdf:nodeID="A331">
         <checksum>
           <Checksum>
             <checksumValue>bf22790af12bb400d8ce184111a59e262c9094ca</checksumValue>
@@ -17866,7 +18004,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A331">
+      <File rdf:nodeID="A332">
         <rdfs:comment></rdfs:comment>
         <licenseComments></licenseComments>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -17896,7 +18034,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A332">
+      <File rdf:nodeID="A333">
         <fileName>resources/stdlicenses/GPL-3.0+</fileName>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -17926,7 +18064,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A333">
+      <File rdf:nodeID="A334">
         <rdfs:comment></rdfs:comment>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -17956,7 +18094,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A334">
+      <File rdf:nodeID="A335">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
@@ -17986,7 +18124,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A335">
+      <File rdf:nodeID="A336">
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileName>src/org/spdx/rdfparser/VerificationCodeGenerator.java</fileName>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -18016,7 +18154,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A336">
+      <File rdf:nodeID="A337">
         <rdfs:comment></rdfs:comment>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -18046,7 +18184,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A337">
+      <File rdf:nodeID="A338">
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileName>src/org/spdx/spdxspreadsheet/DeprecatedLicenseSheet.java</fileName>
         <licenseComments></licenseComments>
@@ -18076,7 +18214,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A338">
+      <File rdf:nodeID="A339">
         <rdfs:comment></rdfs:comment>
         <checksum>
           <Checksum>
@@ -18106,7 +18244,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A339">
+      <File rdf:nodeID="A340">
         <checksum>
           <Checksum>
             <checksumValue>81754a2a3d3340ef97f2091435f901227c6e3524</checksumValue>
@@ -18136,7 +18274,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A340">
+      <File rdf:nodeID="A341">
         <fileName>Test/org/spdx/rdfparser/TestConjunctiveLicenseSet.java</fileName>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -18166,7 +18304,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A341">
+      <File rdf:nodeID="A342">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -18196,7 +18334,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A342">
+      <File rdf:nodeID="A343">
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
@@ -18226,7 +18364,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A343">
+      <File rdf:nodeID="A344">
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -18256,7 +18394,7 @@
       </File>
     </referencesFile>
     <referencesFile>
-      <File rdf:nodeID="A344">
+      <File rdf:nodeID="A345">
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -18289,24 +18427,24 @@
       <Package rdf:about="http://www.spdx.org/spdxdocs/SPDXParser?package">
         <hasFile rdf:nodeID="A163"/>
         <hasFile rdf:nodeID="A64"/>
-        <hasFile rdf:nodeID="A306"/>
-        <hasFile rdf:nodeID="A282"/>
+        <hasFile rdf:nodeID="A307"/>
+        <hasFile rdf:nodeID="A283"/>
         <hasFile rdf:nodeID="A73"/>
         <hasFile rdf:nodeID="A174"/>
         <hasFile rdf:nodeID="A167"/>
-        <hasFile rdf:nodeID="A336"/>
+        <hasFile rdf:nodeID="A337"/>
         <hasFile rdf:nodeID="A41"/>
         <hasFile rdf:nodeID="A91"/>
         <hasFile rdf:nodeID="A83"/>
-        <hasFile rdf:nodeID="A330"/>
-        <hasFile rdf:nodeID="A314"/>
+        <hasFile rdf:nodeID="A331"/>
+        <hasFile rdf:nodeID="A315"/>
         <hasFile rdf:nodeID="A113"/>
         <hasFile rdf:nodeID="A17"/>
         <hasFile rdf:nodeID="A12"/>
         <hasFile rdf:nodeID="A112"/>
         <hasFile rdf:nodeID="A115"/>
         <hasFile>
-          <File rdf:nodeID="A345">
+          <File rdf:nodeID="A346">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -18336,10 +18474,10 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A100"/>
-        <hasFile rdf:nodeID="A343"/>
+        <hasFile rdf:nodeID="A344"/>
         <hasFile rdf:nodeID="A132"/>
         <hasFile>
-          <File rdf:nodeID="A346">
+          <File rdf:nodeID="A347">
             <checksum>
               <Checksum>
                 <checksumValue>b5b89c2d5da7155fbce7651ae0463820220605e2</checksumValue>
@@ -18369,20 +18507,15 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A195"/>
-        <packageVerificationCode>
-          <PackageVerificationCode>
-            <packageVerificationCodeValue>3610ecfc983ade216fa132235c457fb25550b6e4</packageVerificationCodeValue>
-          </PackageVerificationCode>
-        </packageVerificationCode>
         <hasFile rdf:nodeID="A214"/>
         <hasFile rdf:nodeID="A45"/>
-        <hasFile rdf:nodeID="A301"/>
+        <hasFile rdf:nodeID="A302"/>
         <hasFile rdf:nodeID="A139"/>
         <hasFile rdf:nodeID="A183"/>
         <hasFile rdf:nodeID="A96"/>
         <hasFile rdf:nodeID="A66"/>
         <hasFile>
-          <File rdf:nodeID="A347">
+          <File rdf:nodeID="A348">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -18421,9 +18554,9 @@
         <hasFile rdf:nodeID="A171"/>
         <hasFile rdf:nodeID="A239"/>
         <hasFile rdf:nodeID="A228"/>
-        <hasFile rdf:nodeID="A295"/>
+        <hasFile rdf:nodeID="A296"/>
         <hasFile>
-          <File rdf:nodeID="A348">
+          <File rdf:nodeID="A349">
             <licenseComments></licenseComments>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -18454,7 +18587,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A155"/>
         <hasFile>
-          <File rdf:nodeID="A349">
+          <File rdf:nodeID="A350">
             <rdfs:comment></rdfs:comment>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -18484,11 +18617,11 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A20"/>
-        <hasFile rdf:nodeID="A271"/>
-        <hasFile rdf:nodeID="A269"/>
+        <hasFile rdf:nodeID="A272"/>
+        <hasFile rdf:nodeID="A270"/>
         <originator>Organization:Source Auditor Inc.</originator>
         <hasFile>
-          <File rdf:nodeID="A350">
+          <File rdf:nodeID="A351">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
             <rdfs:comment></rdfs:comment>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -18520,7 +18653,7 @@
         <hasFile rdf:nodeID="A26"/>
         <hasFile rdf:nodeID="A267"/>
         <hasFile>
-          <File rdf:nodeID="A351">
+          <File rdf:nodeID="A352">
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <rdfs:comment></rdfs:comment>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
@@ -18550,10 +18683,10 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A192"/>
+        <hasFile rdf:nodeID="A281"/>
         <hasFile rdf:nodeID="A280"/>
-        <hasFile rdf:nodeID="A279"/>
         <hasFile rdf:nodeID="A13"/>
-        <hasFile rdf:nodeID="A275"/>
+        <hasFile rdf:nodeID="A276"/>
         <hasFile rdf:nodeID="A233"/>
         <hasFile rdf:nodeID="A67"/>
         <hasFile rdf:nodeID="A63"/>
@@ -18563,7 +18696,7 @@
         <hasFile rdf:nodeID="A194"/>
         <hasFile rdf:nodeID="A109"/>
         <hasFile>
-          <File rdf:nodeID="A352">
+          <File rdf:nodeID="A353">
             <fileName>src/org/spdx/rdfparser/license/LicenseSet.java</fileName>
             <rdfs:comment></rdfs:comment>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -18599,7 +18732,7 @@
         <hasFile rdf:nodeID="A10"/>
         <hasFile rdf:nodeID="A104"/>
         <hasFile>
-          <File rdf:nodeID="A353">
+          <File rdf:nodeID="A354">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -18629,7 +18762,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A354">
+          <File rdf:nodeID="A355">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -18661,11 +18794,11 @@
         <hasFile rdf:nodeID="A166"/>
         <hasFile rdf:nodeID="A37"/>
         <hasFile rdf:nodeID="A213"/>
-        <hasFile rdf:nodeID="A300"/>
+        <hasFile rdf:nodeID="A301"/>
         <hasFile rdf:nodeID="A47"/>
         <hasFile rdf:nodeID="A172"/>
         <hasFile>
-          <File rdf:nodeID="A355">
+          <File rdf:nodeID="A356">
             <checksum>
               <Checksum>
                 <checksumValue>d3b3d21147f6798154db6aefc069d729ad4993d3</checksumValue>
@@ -18696,7 +18829,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A127"/>
         <hasFile>
-          <File rdf:nodeID="A356">
+          <File rdf:nodeID="A357">
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -18726,12 +18859,12 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A197"/>
-        <hasFile rdf:nodeID="A297"/>
+        <hasFile rdf:nodeID="A298"/>
         <hasFile rdf:nodeID="A226"/>
         <hasFile rdf:nodeID="A175"/>
         <hasFile rdf:nodeID="A105"/>
         <hasFile>
-          <File rdf:nodeID="A357">
+          <File rdf:nodeID="A358">
             <checksum>
               <Checksum>
                 <checksumValue>6d0ab00a24ef85fbd93b4f6166ab3e3b442be148</checksumValue>
@@ -18763,7 +18896,7 @@
         <hasFile rdf:nodeID="A65"/>
         <hasFile rdf:nodeID="A257"/>
         <hasFile>
-          <File rdf:nodeID="A358">
+          <File rdf:nodeID="A359">
             <licenseComments></licenseComments>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileName>resources/stdlicenses/GPL-3.0-with-autoconf-exception</fileName>
@@ -18793,7 +18926,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A359">
+          <File rdf:nodeID="A360">
             <checksum>
               <Checksum>
                 <checksumValue>a08f5a0def12b8076631aaee7dc738034b9bafa4</checksumValue>
@@ -18823,7 +18956,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A360">
+          <File rdf:nodeID="A361">
             <licenseComments></licenseComments>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -18855,10 +18988,10 @@
         <hasFile rdf:nodeID="A186"/>
         <hasFile rdf:nodeID="A75"/>
         <hasFile rdf:nodeID="A232"/>
-        <hasFile rdf:nodeID="A318"/>
+        <hasFile rdf:nodeID="A319"/>
         <hasFile rdf:nodeID="A149"/>
         <hasFile>
-          <File rdf:nodeID="A361">
+          <File rdf:nodeID="A362">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <checksum>
               <Checksum>
@@ -18888,7 +19021,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A362">
+          <File rdf:nodeID="A363">
             <rdfs:comment></rdfs:comment>
             <checksum>
               <Checksum>
@@ -18918,7 +19051,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A363">
+          <File rdf:nodeID="A364">
             <licenseComments></licenseComments>
             <rdfs:comment></rdfs:comment>
             <checksum>
@@ -18950,7 +19083,7 @@
         <hasFile rdf:nodeID="A255"/>
         <hasFile rdf:nodeID="A84"/>
         <hasFile>
-          <File rdf:nodeID="A364">
+          <File rdf:nodeID="A365">
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <fileName>resources/stdlicenses/EUDatagrid</fileName>
             <licenseComments></licenseComments>
@@ -18980,7 +19113,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A365">
+          <File rdf:nodeID="A366">
             <licenseComments></licenseComments>
             <fileName>resources/stdlicenses/ClArtistic</fileName>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -19009,19 +19142,19 @@
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A298"/>
+        <hasFile rdf:nodeID="A299"/>
         <hasFile rdf:nodeID="A152"/>
         <hasFile rdf:nodeID="A31"/>
         <hasFile rdf:nodeID="A184"/>
-        <hasFile rdf:nodeID="A286"/>
+        <hasFile rdf:nodeID="A287"/>
         <hasFile rdf:nodeID="A111"/>
-        <hasFile rdf:nodeID="A284"/>
+        <hasFile rdf:nodeID="A285"/>
         <hasFile rdf:nodeID="A256"/>
         <hasFile rdf:nodeID="A202"/>
         <hasFile rdf:nodeID="A88"/>
-        <hasFile rdf:nodeID="A327"/>
+        <hasFile rdf:nodeID="A328"/>
         <hasFile>
-          <File rdf:nodeID="A366">
+          <File rdf:nodeID="A367">
             <licenseComments></licenseComments>
             <fileName>resources/stdlicenses/PostgreSQL</fileName>
             <rdfs:comment></rdfs:comment>
@@ -19050,10 +19183,10 @@
  *   limitations under the License.</noticeText>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A293"/>
+        <hasFile rdf:nodeID="A294"/>
         <hasFile rdf:nodeID="A49"/>
         <hasFile>
-          <File rdf:nodeID="A367">
+          <File rdf:nodeID="A368">
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -19082,7 +19215,37 @@
             </checksum>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A292"/>
+        <hasFile rdf:nodeID="A293"/>
+        <hasFile>
+          <File rdf:nodeID="A369">
+            <licenseComments></licenseComments>
+            <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
+            <rdfs:comment></rdfs:comment>
+            <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+            <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+            <fileName>src/org/spdx/rdfparser/license/OrLaterOperator.java</fileName>
+            <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
+ *&#xD;
+ *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
+ *   you may not use this file except in compliance with the License.&#xD;
+ *   You may obtain a copy of the License at&#xD;
+ *&#xD;
+ *       http://www.apache.org/licenses/LICENSE-2.0&#xD;
+ *&#xD;
+ *   Unless required by applicable law or agreed to in writing, software&#xD;
+ *   distributed under the License is distributed on an "AS IS" BASIS,&#xD;
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;
+ *   See the License for the specific language governing permissions and&#xD;
+ *   limitations under the License.</noticeText>
+            <checksum>
+              <Checksum>
+                <checksumValue>223f38ba5a190da45cb0f301c7c9a036473b1e9b</checksumValue>
+                <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+              </Checksum>
+            </checksum>
+            <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+          </File>
+        </hasFile>
         <hasFile rdf:nodeID="A123"/>
         <hasFile rdf:nodeID="A198"/>
         <hasFile rdf:nodeID="A201"/>
@@ -19090,7 +19253,7 @@
         <hasFile rdf:nodeID="A39"/>
         <hasFile rdf:nodeID="A143"/>
         <hasFile>
-          <File rdf:nodeID="A368">
+          <File rdf:nodeID="A370">
             <checksum>
               <Checksum>
                 <checksumValue>fc56a7c1023f66e7e55c95d5ad3409259c38e312</checksumValue>
@@ -19121,12 +19284,12 @@
         </hasFile>
         <hasFile rdf:nodeID="A157"/>
         <hasFile rdf:nodeID="A80"/>
-        <hasFile rdf:nodeID="A316"/>
+        <hasFile rdf:nodeID="A317"/>
         <hasFile rdf:nodeID="A222"/>
         <hasFile rdf:nodeID="A153"/>
         <hasFile rdf:nodeID="A58"/>
         <hasFile>
-          <File rdf:nodeID="A369">
+          <File rdf:nodeID="A371">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -19160,7 +19323,7 @@
         <hasFile rdf:nodeID="A69"/>
         <versionInfo>1.2.3</versionInfo>
         <hasFile>
-          <File rdf:nodeID="A370">
+          <File rdf:nodeID="A372">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <checksum>
               <Checksum>
@@ -19189,12 +19352,12 @@
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A319"/>
-        <hasFile rdf:nodeID="A342"/>
+        <hasFile rdf:nodeID="A320"/>
+        <hasFile rdf:nodeID="A343"/>
         <hasFile rdf:nodeID="A11"/>
         <hasFile rdf:nodeID="A265"/>
         <hasFile>
-          <File rdf:nodeID="A371">
+          <File rdf:nodeID="A373">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <checksum>
               <Checksum>
@@ -19224,7 +19387,7 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A247"/>
-        <hasFile rdf:nodeID="A273"/>
+        <hasFile rdf:nodeID="A274"/>
         <hasFile rdf:nodeID="A16"/>
         <hasFile rdf:nodeID="A189"/>
         <hasFile rdf:nodeID="A2"/>
@@ -19232,7 +19395,7 @@
         <hasFile rdf:nodeID="A97"/>
         <hasFile rdf:nodeID="A264"/>
         <hasFile>
-          <File rdf:nodeID="A372">
+          <File rdf:nodeID="A374">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
             <rdfs:comment></rdfs:comment>
@@ -19264,11 +19427,11 @@
         <hasFile rdf:nodeID="A68"/>
         <hasFile rdf:nodeID="A137"/>
         <hasFile rdf:nodeID="A203"/>
-        <hasFile rdf:nodeID="A277"/>
+        <hasFile rdf:nodeID="A278"/>
         <hasFile rdf:nodeID="A6"/>
         <hasFile rdf:nodeID="A40"/>
         <hasFile>
-          <File rdf:nodeID="A373">
+          <File rdf:nodeID="A375">
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -19302,7 +19465,7 @@
         <hasFile rdf:nodeID="A89"/>
         <hasFile rdf:nodeID="A129"/>
         <hasFile>
-          <File rdf:nodeID="A374">
+          <File rdf:nodeID="A376">
             <fileName>src/org/spdx/rdfparser/SPDXLicenseInfoFactory.java</fileName>
             <rdfs:comment></rdfs:comment>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
@@ -19335,15 +19498,20 @@
         <hasFile rdf:nodeID="A74"/>
         <hasFile rdf:nodeID="A242"/>
         <hasFile rdf:nodeID="A238"/>
-        <hasFile rdf:nodeID="A312"/>
+        <hasFile rdf:nodeID="A313"/>
+        <packageVerificationCode>
+          <PackageVerificationCode>
+            <packageVerificationCodeValue>a7b8711944fa994fa0ed8c20e5c323a017c36b2f</packageVerificationCodeValue>
+          </PackageVerificationCode>
+        </packageVerificationCode>
         <hasFile rdf:nodeID="A59"/>
-        <hasFile rdf:nodeID="A331"/>
+        <hasFile rdf:nodeID="A332"/>
         <hasFile rdf:nodeID="A156"/>
         <hasFile rdf:nodeID="A141"/>
         <hasFile rdf:nodeID="A159"/>
-        <hasFile rdf:nodeID="A287"/>
+        <hasFile rdf:nodeID="A288"/>
         <hasFile>
-          <File rdf:nodeID="A375">
+          <File rdf:nodeID="A377">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileName>src/org/spdx/compare/FileDependenciesSheet.java</fileName>
             <rdfs:comment></rdfs:comment>
@@ -19373,7 +19541,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A376">
+          <File rdf:nodeID="A378">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <checksum>
               <Checksum>
@@ -19412,7 +19580,7 @@
         <hasFile rdf:nodeID="A120"/>
         <hasFile rdf:nodeID="A14"/>
         <hasFile>
-          <File rdf:nodeID="A377">
+          <File rdf:nodeID="A379">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -19443,7 +19611,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A150"/>
         <hasFile>
-          <File rdf:nodeID="A378">
+          <File rdf:nodeID="A380">
             <checksum>
               <Checksum>
                 <checksumValue>50fd45de3f330b9678a016eac2f7818fb2443cef</checksumValue>
@@ -19476,7 +19644,7 @@
         <hasFile rdf:nodeID="A44"/>
         <hasFile rdf:nodeID="A133"/>
         <hasFile>
-          <File rdf:nodeID="A379">
+          <File rdf:nodeID="A381">
             <checksum>
               <Checksum>
                 <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -19506,13 +19674,13 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A135"/>
-        <hasFile rdf:nodeID="A309"/>
-        <hasFile rdf:nodeID="A315"/>
+        <hasFile rdf:nodeID="A310"/>
+        <hasFile rdf:nodeID="A316"/>
         <hasFile rdf:nodeID="A140"/>
         <hasFile rdf:nodeID="A208"/>
         <hasFile rdf:nodeID="A212"/>
         <hasFile>
-          <File rdf:nodeID="A380">
+          <File rdf:nodeID="A382">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileName>resources/stdlicenses/MS-RL</fileName>
             <rdfs:comment></rdfs:comment>
@@ -19543,7 +19711,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A225"/>
         <hasFile>
-          <File rdf:nodeID="A381">
+          <File rdf:nodeID="A383">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <licenseComments></licenseComments>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -19572,18 +19740,18 @@
             <fileName>resources/stdlicenses/Ruby</fileName>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A290"/>
+        <hasFile rdf:nodeID="A291"/>
         <hasFile rdf:nodeID="A223"/>
         <hasFile rdf:nodeID="A244"/>
         <hasFile rdf:nodeID="A28"/>
-        <hasFile rdf:nodeID="A334"/>
-        <hasFile rdf:nodeID="A296"/>
+        <hasFile rdf:nodeID="A335"/>
+        <hasFile rdf:nodeID="A297"/>
         <hasFile rdf:nodeID="A230"/>
         <hasFile rdf:nodeID="A177"/>
         <hasFile rdf:nodeID="A168"/>
         <hasFile rdf:nodeID="A241"/>
         <hasFile>
-          <File rdf:nodeID="A382">
+          <File rdf:nodeID="A384">
             <checksum>
               <Checksum>
                 <checksumValue>baa9ecd1c46895f4f35825776ecdf6991d0f3c38</checksumValue>
@@ -19613,7 +19781,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A383">
+          <File rdf:nodeID="A385">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -19644,7 +19812,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A237"/>
         <hasFile rdf:nodeID="A78"/>
-        <hasFile rdf:nodeID="A272"/>
+        <hasFile rdf:nodeID="A273"/>
         <hasFile rdf:nodeID="A82"/>
         <hasFile rdf:nodeID="A179"/>
         <hasFile rdf:nodeID="A117"/>
@@ -19652,10 +19820,10 @@
         <licenseDeclared rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <hasFile rdf:nodeID="A199"/>
         <hasFile rdf:nodeID="A25"/>
-        <hasFile rdf:nodeID="A270"/>
+        <hasFile rdf:nodeID="A271"/>
         <hasFile rdf:nodeID="A165"/>
         <hasFile>
-          <File rdf:nodeID="A384">
+          <File rdf:nodeID="A386">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -19686,7 +19854,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A22"/>
         <hasFile>
-          <File rdf:nodeID="A385">
+          <File rdf:nodeID="A387">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <rdfs:comment></rdfs:comment>
             <licenseComments></licenseComments>
@@ -19720,7 +19888,7 @@
         <hasFile rdf:nodeID="A259"/>
         <hasFile rdf:nodeID="A161"/>
         <hasFile>
-          <File rdf:nodeID="A386">
+          <File rdf:nodeID="A388">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileName>src/org/spdx/tools/CompareMultpleSpdxDocs.java</fileName>
             <checksum>
@@ -19749,9 +19917,9 @@
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A335"/>
+        <hasFile rdf:nodeID="A336"/>
         <hasFile>
-          <File rdf:nodeID="A387">
+          <File rdf:nodeID="A389">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -19780,15 +19948,15 @@
  *   limitations under the License.</noticeText>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A344"/>
-        <hasFile rdf:nodeID="A274"/>
+        <hasFile rdf:nodeID="A345"/>
+        <hasFile rdf:nodeID="A275"/>
         <hasFile rdf:nodeID="A56"/>
         <hasFile rdf:nodeID="A51"/>
         <hasFile rdf:nodeID="A35"/>
         <hasFile rdf:nodeID="A205"/>
-        <hasFile rdf:nodeID="A303"/>
+        <hasFile rdf:nodeID="A304"/>
         <hasFile>
-          <File rdf:nodeID="A388">
+          <File rdf:nodeID="A390">
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -19821,7 +19989,7 @@
         <hasFile rdf:nodeID="A29"/>
         <hasFile rdf:nodeID="A108"/>
         <hasFile>
-          <File rdf:nodeID="A389">
+          <File rdf:nodeID="A391">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -19850,28 +20018,29 @@
             <rdfs:comment></rdfs:comment>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A299"/>
+        <hasFile rdf:nodeID="A300"/>
         <hasFile rdf:nodeID="A258"/>
-        <hasFile rdf:nodeID="A307"/>
+        <hasFile rdf:nodeID="A308"/>
         <hasFile rdf:nodeID="A131"/>
-        <hasFile rdf:nodeID="A304"/>
+        <hasFile rdf:nodeID="A305"/>
         <hasFile rdf:nodeID="A130"/>
         <hasFile rdf:nodeID="A1"/>
         <hasFile rdf:nodeID="A95"/>
         <hasFile rdf:nodeID="A251"/>
-        <hasFile rdf:nodeID="A325"/>
+        <hasFile rdf:nodeID="A326"/>
         <hasFile rdf:nodeID="A138"/>
-        <hasFile rdf:nodeID="A341"/>
+        <hasFile rdf:nodeID="A342"/>
         <hasFile rdf:nodeID="A103"/>
-        <hasFile rdf:nodeID="A338"/>
-        <hasFile rdf:nodeID="A329"/>
-        <hasFile rdf:nodeID="A313"/>
+        <hasFile rdf:nodeID="A339"/>
+        <hasFile rdf:nodeID="A330"/>
+        <hasFile rdf:nodeID="A314"/>
         <hasFile rdf:nodeID="A200"/>
-        <hasFile rdf:nodeID="A283"/>
+        <hasFile rdf:nodeID="A284"/>
         <hasFile rdf:nodeID="A148"/>
         <hasFile rdf:nodeID="A48"/>
+        <hasFile rdf:nodeID="A269"/>
         <hasFile>
-          <File rdf:nodeID="A390">
+          <File rdf:nodeID="A392">
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -19902,7 +20071,7 @@
         </hasFile>
         <summary>Tools from the SPDX Workgroup</summary>
         <hasFile>
-          <File rdf:nodeID="A391">
+          <File rdf:nodeID="A393">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <checksum>
               <Checksum>
@@ -19932,7 +20101,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A392">
+          <File rdf:nodeID="A394">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <rdfs:comment></rdfs:comment>
@@ -19961,9 +20130,9 @@
             <licenseComments></licenseComments>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A322"/>
+        <hasFile rdf:nodeID="A323"/>
         <hasFile>
-          <File rdf:nodeID="A393">
+          <File rdf:nodeID="A395">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
             <licenseComments></licenseComments>
@@ -19994,7 +20163,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A32"/>
         <hasFile>
-          <File rdf:nodeID="A394">
+          <File rdf:nodeID="A396">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <licenseComments></licenseComments>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -20026,13 +20195,13 @@
         <hasFile rdf:nodeID="A260"/>
         <hasFile rdf:nodeID="A158"/>
         <hasFile rdf:nodeID="A94"/>
-        <hasFile rdf:nodeID="A324"/>
+        <hasFile rdf:nodeID="A325"/>
         <hasFile rdf:nodeID="A46"/>
         <hasFile rdf:nodeID="A116"/>
         <hasFile rdf:nodeID="A187"/>
         <hasFile rdf:nodeID="A42"/>
         <hasFile>
-          <File rdf:nodeID="A395">
+          <File rdf:nodeID="A397">
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <rdfs:comment></rdfs:comment>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
@@ -20061,14 +20230,14 @@
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A320"/>
+        <hasFile rdf:nodeID="A321"/>
         <hasFile rdf:nodeID="A181"/>
         <hasFile rdf:nodeID="A24"/>
         <hasFile rdf:nodeID="A57"/>
         <hasFile rdf:nodeID="A151"/>
         <hasFile rdf:nodeID="A220"/>
         <hasFile>
-          <File rdf:nodeID="A396">
+          <File rdf:nodeID="A398">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <rdfs:comment></rdfs:comment>
             <licenseComments></licenseComments>
@@ -20099,7 +20268,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A3"/>
         <hasFile>
-          <File rdf:nodeID="A397">
+          <File rdf:nodeID="A399">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileName>resources/stdlicenses/BitTorrent-1.0</fileName>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -20131,10 +20300,10 @@
         <hasFile rdf:nodeID="A252"/>
         <hasFile rdf:nodeID="A86"/>
         <hasFile rdf:nodeID="A164"/>
-        <hasFile rdf:nodeID="A326"/>
-        <hasFile rdf:nodeID="A340"/>
+        <hasFile rdf:nodeID="A327"/>
+        <hasFile rdf:nodeID="A341"/>
         <hasFile rdf:nodeID="A71"/>
-        <hasFile rdf:nodeID="A332"/>
+        <hasFile rdf:nodeID="A333"/>
         <hasFile rdf:nodeID="A38"/>
         <hasFile rdf:nodeID="A209"/>
         <hasFile rdf:nodeID="A33"/>
@@ -20142,9 +20311,9 @@
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <hasFile rdf:nodeID="A7"/>
         <hasFile rdf:nodeID="A196"/>
-        <hasFile rdf:nodeID="A281"/>
+        <hasFile rdf:nodeID="A282"/>
         <hasFile>
-          <File rdf:nodeID="A398">
+          <File rdf:nodeID="A400">
             <checksum>
               <Checksum>
                 <checksumValue>963ed3e8e1121d000b0a8d32eea5d747040e977a</checksumValue>
@@ -20173,15 +20342,15 @@
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A308"/>
-        <hasFile rdf:nodeID="A337"/>
+        <hasFile rdf:nodeID="A309"/>
+        <hasFile rdf:nodeID="A338"/>
         <hasFile rdf:nodeID="A204"/>
         <hasFile rdf:nodeID="A231"/>
         <hasFile rdf:nodeID="A217"/>
-        <hasFile rdf:nodeID="A302"/>
+        <hasFile rdf:nodeID="A303"/>
         <hasFile rdf:nodeID="A229"/>
         <hasFile>
-          <File rdf:nodeID="A399">
+          <File rdf:nodeID="A401">
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <rdfs:comment></rdfs:comment>
             <checksum>
@@ -20213,12 +20382,12 @@
         <hasFile rdf:nodeID="A77"/>
         <hasFile rdf:nodeID="A224"/>
         <hasFile rdf:nodeID="A154"/>
-        <hasFile rdf:nodeID="A317"/>
-        <hasFile rdf:nodeID="A311"/>
+        <hasFile rdf:nodeID="A318"/>
+        <hasFile rdf:nodeID="A312"/>
         <hasFile rdf:nodeID="A54"/>
         <hasFile rdf:nodeID="A146"/>
         <hasFile>
-          <File rdf:nodeID="A400">
+          <File rdf:nodeID="A402">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -20248,7 +20417,7 @@
           </File>
         </hasFile>
         <hasFile>
-          <File rdf:nodeID="A401">
+          <File rdf:nodeID="A403">
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <fileName>resources/stdlicenses/Condor-1.1</fileName>
@@ -20278,12 +20447,12 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A107"/>
-        <hasFile rdf:nodeID="A276"/>
+        <hasFile rdf:nodeID="A277"/>
         <hasFile rdf:nodeID="A250"/>
         <hasFile rdf:nodeID="A191"/>
         <hasFile rdf:nodeID="A5"/>
         <hasFile>
-          <File rdf:nodeID="A402">
+          <File rdf:nodeID="A404">
             <licenseComments></licenseComments>
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileName>src/org/spdx/spdxspreadsheet/PerFileSheetV1d2.java</fileName>
@@ -20319,7 +20488,7 @@
         <hasFile rdf:nodeID="A36"/>
         <hasFile rdf:nodeID="A128"/>
         <hasFile>
-          <File rdf:nodeID="A403">
+          <File rdf:nodeID="A405">
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -20357,20 +20526,20 @@
         <hasFile rdf:nodeID="A114"/>
         <hasFile rdf:nodeID="A169"/>
         <hasFile rdf:nodeID="A85"/>
-        <hasFile rdf:nodeID="A294"/>
+        <hasFile rdf:nodeID="A295"/>
         <hasFile rdf:nodeID="A118"/>
         <hasFile rdf:nodeID="A81"/>
         <hasFile rdf:nodeID="A60"/>
         <downloadLocation>http://spdx.org/spdx-tools/tools-from-the-spdx-workgroup</downloadLocation>
-        <hasFile rdf:nodeID="A291"/>
+        <hasFile rdf:nodeID="A292"/>
         <hasFile rdf:nodeID="A72"/>
         <hasFile rdf:nodeID="A87"/>
         <hasFile rdf:nodeID="A173"/>
         <hasFile rdf:nodeID="A110"/>
-        <hasFile rdf:nodeID="A288"/>
+        <hasFile rdf:nodeID="A289"/>
         <hasFile rdf:nodeID="A253"/>
         <hasFile>
-          <File rdf:nodeID="A404">
+          <File rdf:nodeID="A406">
             <licenseComments></licenseComments>
             <rdfs:comment></rdfs:comment>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -20399,16 +20568,16 @@
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A323"/>
+        <hasFile rdf:nodeID="A324"/>
         <hasFile rdf:nodeID="A207"/>
         <hasFile rdf:nodeID="A182"/>
         <hasFile rdf:nodeID="A248"/>
         <hasFile rdf:nodeID="A147"/>
-        <hasFile rdf:nodeID="A285"/>
+        <hasFile rdf:nodeID="A286"/>
         <hasFile rdf:nodeID="A243"/>
         <hasFile rdf:nodeID="A93"/>
         <hasFile>
-          <File rdf:nodeID="A405">
+          <File rdf:nodeID="A407">
             <licenseComments></licenseComments>
             <fileName>resources/stdlicenses/CC-BY-ND-2.0</fileName>
             <checksum>
@@ -20440,7 +20609,7 @@
         <hasFile rdf:nodeID="A106"/>
         <hasFile rdf:nodeID="A121"/>
         <hasFile>
-          <File rdf:nodeID="A406">
+          <File rdf:nodeID="A408">
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -20469,15 +20638,15 @@
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
           </File>
         </hasFile>
-        <hasFile rdf:nodeID="A310"/>
+        <hasFile rdf:nodeID="A311"/>
         <hasFile rdf:nodeID="A142"/>
         <hasFile rdf:nodeID="A236"/>
         <hasFile rdf:nodeID="A218"/>
         <hasFile rdf:nodeID="A245"/>
         <hasFile rdf:nodeID="A30"/>
-        <hasFile rdf:nodeID="A321"/>
+        <hasFile rdf:nodeID="A322"/>
         <hasFile>
-          <File rdf:nodeID="A407">
+          <File rdf:nodeID="A409">
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -20507,13 +20676,13 @@
           </File>
         </hasFile>
         <hasFile rdf:nodeID="A246"/>
-        <hasFile rdf:nodeID="A333"/>
+        <hasFile rdf:nodeID="A334"/>
         <hasFile rdf:nodeID="A27"/>
-        <hasFile rdf:nodeID="A339"/>
+        <hasFile rdf:nodeID="A340"/>
         <hasFile rdf:nodeID="A240"/>
-        <hasFile rdf:nodeID="A328"/>
+        <hasFile rdf:nodeID="A329"/>
         <hasFile>
-          <File rdf:nodeID="A408">
+          <File rdf:nodeID="A410">
             <licenseComments></licenseComments>
             <fileName>src/org/spdx/compare/SpdxCompareException.java</fileName>
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -20544,7 +20713,7 @@
         </hasFile>
         <hasFile rdf:nodeID="A125"/>
         <hasFile>
-          <File rdf:nodeID="A409">
+          <File rdf:nodeID="A411">
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -20576,10 +20745,10 @@
         <hasFile rdf:nodeID="A119"/>
         <licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <hasFile rdf:nodeID="A261"/>
-        <hasFile rdf:nodeID="A278"/>
+        <hasFile rdf:nodeID="A279"/>
         <hasFile rdf:nodeID="A0"/>
         <hasFile>
-          <File rdf:nodeID="A410">
+          <File rdf:nodeID="A412">
             <rdfs:comment></rdfs:comment>
             <licenseComments></licenseComments>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -20619,7 +20788,7 @@
         <hasFile rdf:nodeID="A235"/>
         <hasFile rdf:nodeID="A98"/>
         <hasFile>
-          <File rdf:nodeID="A411">
+          <File rdf:nodeID="A413">
             <fileName>src/org/spdx/compare/CreatorSheet.java</fileName>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
             <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -20652,14 +20821,14 @@
         <hasFile rdf:nodeID="A221"/>
         <hasFile rdf:nodeID="A52"/>
         <hasFile rdf:nodeID="A249"/>
-        <hasFile rdf:nodeID="A289"/>
+        <hasFile rdf:nodeID="A290"/>
         <hasFile rdf:nodeID="A50"/>
-        <hasFile rdf:nodeID="A305"/>
+        <hasFile rdf:nodeID="A306"/>
         <hasFile rdf:nodeID="A134"/>
         <hasFile rdf:nodeID="A211"/>
         <hasFile rdf:nodeID="A62"/>
         <hasFile>
-          <File rdf:nodeID="A412">
+          <File rdf:nodeID="A414">
             <fileName>resources/stdlicenses/CUA-OPL-1.0</fileName>
             <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
@@ -20690,74 +20859,75 @@
         </hasFile>
       </Package>
     </describesPackage>
-    <referencesFile rdf:nodeID="A372"/>
-    <referencesFile rdf:nodeID="A396"/>
-    <referencesFile rdf:nodeID="A383"/>
-    <referencesFile rdf:nodeID="A378"/>
-    <referencesFile rdf:nodeID="A347"/>
-    <referencesFile rdf:nodeID="A371"/>
-    <referencesFile rdf:nodeID="A358"/>
-    <referencesFile rdf:nodeID="A395"/>
-    <referencesFile rdf:nodeID="A348"/>
-    <referencesFile rdf:nodeID="A382"/>
-    <referencesFile rdf:nodeID="A410"/>
-    <referencesFile rdf:nodeID="A376"/>
-    <referencesFile rdf:nodeID="A392"/>
-    <referencesFile rdf:nodeID="A379"/>
-    <referencesFile rdf:nodeID="A353"/>
-    <referencesFile rdf:nodeID="A349"/>
-    <referencesFile rdf:nodeID="A375"/>
-    <referencesFile rdf:nodeID="A370"/>
-    <referencesFile rdf:nodeID="A366"/>
-    <referencesFile rdf:nodeID="A401"/>
-    <referencesFile rdf:nodeID="A355"/>
-    <referencesFile rdf:nodeID="A393"/>
-    <referencesFile rdf:nodeID="A409"/>
-    <referencesFile rdf:nodeID="A387"/>
-    <referencesFile rdf:nodeID="A369"/>
-    <referencesFile rdf:nodeID="A368"/>
-    <referencesFile rdf:nodeID="A356"/>
-    <referencesFile rdf:nodeID="A390"/>
-    <referencesFile rdf:nodeID="A408"/>
-    <referencesFile rdf:nodeID="A385"/>
-    <referencesFile rdf:nodeID="A351"/>
-    <referencesFile rdf:nodeID="A405"/>
-    <referencesFile rdf:nodeID="A352"/>
-    <referencesFile rdf:nodeID="A391"/>
-    <referencesFile rdf:nodeID="A403"/>
-    <referencesFile rdf:nodeID="A406"/>
-    <referencesFile rdf:nodeID="A402"/>
-    <referencesFile rdf:nodeID="A354"/>
-    <referencesFile rdf:nodeID="A346"/>
-    <referencesFile rdf:nodeID="A381"/>
-    <referencesFile rdf:nodeID="A357"/>
-    <referencesFile rdf:nodeID="A397"/>
-    <referencesFile rdf:nodeID="A394"/>
-    <referencesFile rdf:nodeID="A345"/>
-    <referencesFile rdf:nodeID="A377"/>
-    <referencesFile rdf:nodeID="A389"/>
-    <referencesFile rdf:nodeID="A361"/>
-    <referencesFile rdf:nodeID="A388"/>
-    <referencesFile rdf:nodeID="A365"/>
-    <referencesFile rdf:nodeID="A412"/>
-    <referencesFile rdf:nodeID="A404"/>
-    <referencesFile rdf:nodeID="A364"/>
-    <referencesFile rdf:nodeID="A398"/>
-    <referencesFile rdf:nodeID="A362"/>
-    <referencesFile rdf:nodeID="A359"/>
-    <referencesFile rdf:nodeID="A367"/>
-    <referencesFile rdf:nodeID="A386"/>
-    <referencesFile rdf:nodeID="A411"/>
-    <referencesFile rdf:nodeID="A363"/>
-    <referencesFile rdf:nodeID="A384"/>
-    <referencesFile rdf:nodeID="A360"/>
-    <referencesFile rdf:nodeID="A350"/>
-    <referencesFile rdf:nodeID="A399"/>
-    <referencesFile rdf:nodeID="A380"/>
-    <referencesFile rdf:nodeID="A407"/>
     <referencesFile rdf:nodeID="A374"/>
-    <referencesFile rdf:nodeID="A400"/>
+    <referencesFile rdf:nodeID="A398"/>
+    <referencesFile rdf:nodeID="A385"/>
+    <referencesFile rdf:nodeID="A380"/>
+    <referencesFile rdf:nodeID="A348"/>
     <referencesFile rdf:nodeID="A373"/>
+    <referencesFile rdf:nodeID="A359"/>
+    <referencesFile rdf:nodeID="A397"/>
+    <referencesFile rdf:nodeID="A349"/>
+    <referencesFile rdf:nodeID="A384"/>
+    <referencesFile rdf:nodeID="A412"/>
+    <referencesFile rdf:nodeID="A378"/>
+    <referencesFile rdf:nodeID="A394"/>
+    <referencesFile rdf:nodeID="A381"/>
+    <referencesFile rdf:nodeID="A354"/>
+    <referencesFile rdf:nodeID="A350"/>
+    <referencesFile rdf:nodeID="A377"/>
+    <referencesFile rdf:nodeID="A372"/>
+    <referencesFile rdf:nodeID="A367"/>
+    <referencesFile rdf:nodeID="A403"/>
+    <referencesFile rdf:nodeID="A356"/>
+    <referencesFile rdf:nodeID="A395"/>
+    <referencesFile rdf:nodeID="A411"/>
+    <referencesFile rdf:nodeID="A389"/>
+    <referencesFile rdf:nodeID="A371"/>
+    <referencesFile rdf:nodeID="A370"/>
+    <referencesFile rdf:nodeID="A357"/>
+    <referencesFile rdf:nodeID="A392"/>
+    <referencesFile rdf:nodeID="A410"/>
+    <referencesFile rdf:nodeID="A387"/>
+    <referencesFile rdf:nodeID="A352"/>
+    <referencesFile rdf:nodeID="A407"/>
+    <referencesFile rdf:nodeID="A353"/>
+    <referencesFile rdf:nodeID="A393"/>
+    <referencesFile rdf:nodeID="A405"/>
+    <referencesFile rdf:nodeID="A408"/>
+    <referencesFile rdf:nodeID="A404"/>
+    <referencesFile rdf:nodeID="A355"/>
+    <referencesFile rdf:nodeID="A347"/>
+    <referencesFile rdf:nodeID="A383"/>
+    <referencesFile rdf:nodeID="A358"/>
+    <referencesFile rdf:nodeID="A399"/>
+    <referencesFile rdf:nodeID="A369"/>
+    <referencesFile rdf:nodeID="A396"/>
+    <referencesFile rdf:nodeID="A346"/>
+    <referencesFile rdf:nodeID="A379"/>
+    <referencesFile rdf:nodeID="A391"/>
+    <referencesFile rdf:nodeID="A362"/>
+    <referencesFile rdf:nodeID="A390"/>
+    <referencesFile rdf:nodeID="A366"/>
+    <referencesFile rdf:nodeID="A414"/>
+    <referencesFile rdf:nodeID="A406"/>
+    <referencesFile rdf:nodeID="A365"/>
+    <referencesFile rdf:nodeID="A400"/>
+    <referencesFile rdf:nodeID="A363"/>
+    <referencesFile rdf:nodeID="A360"/>
+    <referencesFile rdf:nodeID="A368"/>
+    <referencesFile rdf:nodeID="A388"/>
+    <referencesFile rdf:nodeID="A413"/>
+    <referencesFile rdf:nodeID="A364"/>
+    <referencesFile rdf:nodeID="A386"/>
+    <referencesFile rdf:nodeID="A361"/>
+    <referencesFile rdf:nodeID="A351"/>
+    <referencesFile rdf:nodeID="A401"/>
+    <referencesFile rdf:nodeID="A382"/>
+    <referencesFile rdf:nodeID="A409"/>
+    <referencesFile rdf:nodeID="A376"/>
+    <referencesFile rdf:nodeID="A402"/>
+    <referencesFile rdf:nodeID="A375"/>
   </SpdxDocument>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -20941,10 +21111,6 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>9467a3b3a95ddeba8eabddd23acc35dcd2aeca69</checksumValue>
   </Checksum>
-  <Checksum>
-    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-    <checksumValue>92f1a23f076ae2fe6054e02495c128507d6b93ce</checksumValue>
-  </Checksum>
   <File>
     <checksum>
       <Checksum>
@@ -20973,6 +21139,10 @@
  *   See the License for the specific language governing permissions and&#xD;
  *   limitations under the License.</noticeText>
   </File>
+  <Checksum>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+    <checksumValue>92f1a23f076ae2fe6054e02495c128507d6b93ce</checksumValue>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>3b5d21cda5d4c2952aaa023d88fd8f438f530d02</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -21012,13 +21182,13 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>7bb1c61385151afece6d2352bf27b6edc5732fc3</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>4c137f3290f585b2912cff719575c5600fb3a58a</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>1a4e31d681de8275e4f822141c9425a18e304f9b</checksumValue>
   </Checksum>
-  <PackageVerificationCode>
-    <packageVerificationCodeValue>4c137f3290f585b2912cff719575c5600fb3a58a</packageVerificationCodeValue>
-  </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>cb5ea5f7ed6c1459fbe5375f5bb75cf8d1876224</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -21123,6 +21293,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>53026025ad68490516d828cb8a7d6564b5ab50ec</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>6deaa2ad758f5fff65bf2626dfa9d02917707674</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <File>
     <rdfs:comment></rdfs:comment>
     <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
@@ -21253,6 +21426,9 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>0a46971a6aa296d816ffeea03a0a2611e0452a12</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>4f29261799ce1c31f9120eb10452417375e0687a</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>a5da0f9ade2bfc3a6aca8b90993ea3cc6ed5e288</checksumValue>
@@ -21363,6 +21539,9 @@
     <packageVerificationCodeValue>a6039acac90e581de2b3a51788bc34f4fef72f23</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>453d3c792e02e1acda7d375af4065aa2e003f8d0</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>9f6d4ecff4be64a84f27ba3a4a7c77090555d4a6</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
@@ -21400,6 +21579,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>e18ef827fe07164e4b2d18da85b96e7037e84e34</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>fcc5836c9cc8354a42be683eab0517e9c87d5456</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>6d8c27fe07410b5a7293e5b137fd3d05742b9544</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -22191,6 +22374,10 @@
     <checksumValue>2024958f27a0c38a7f13a7fa6bb594d8ae31fa33</checksumValue>
   </Checksum>
   <Checksum>
+    <checksumValue>384aacc7dfa4ea3195d6d1568d24b9ba1d91326e</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>2617272d4af8750800ebc49f5ded40dafdddd857</checksumValue>
   </Checksum>
@@ -22533,11 +22720,11 @@
   </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-    <checksumValue>a13717faa6acfa617cd7ba8d3c168298833cd9db</checksumValue>
+    <checksumValue>dbe8962794a732d181a5a630e7b6d6d798c0f604</checksumValue>
   </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-    <checksumValue>dbe8962794a732d181a5a630e7b6d6d798c0f604</checksumValue>
+    <checksumValue>a13717faa6acfa617cd7ba8d3c168298833cd9db</checksumValue>
   </Checksum>
   <Checksum>
     <checksumValue>5a4b439d74c193da99717f860ea30fc39c90802f</checksumValue>

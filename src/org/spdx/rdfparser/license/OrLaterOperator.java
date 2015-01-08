@@ -29,22 +29,20 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
- * A license that has a With exception operator (e.g. GPL-2.0 WITH Autoconf-exception-2.0)
+ * A license that has an or later operator (e.g. GPL-2.0+)
  * @author Gary O'Neall
  *
  */
-public class WithExceptionOperator extends AnyLicenseInfo {
-	
+public class OrLaterOperator extends AnyLicenseInfo {
+
 	private SimpleLicensingInfo license;
-	private LicenseException exception;
-	
 	/**
-	 * Create a WithExceptionOperator from a node in an existing RDF model
+	 * Create an OrLaterOperator from a node in an existing RDF model
 	 * @param model
 	 * @param licenseInfoNode
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public WithExceptionOperator(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+	public OrLaterOperator(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
@@ -60,34 +58,18 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			}
 			this.license = (SimpleLicensingInfo)anyLicense;
 		}
-		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION).asNode();
-		m = Triple.createMatch(licenseInfoNode, p, null);
-		tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			if (this.exception != null) {
-				throw (new InvalidSPDXAnalysisException("More than one exception license WITH expression"));
-			}
-			this.exception = new LicenseException(model, t.getObject());
-		}
 	}
-
-
-	public WithExceptionOperator(SimpleLicensingInfo license, LicenseException exception) {
+	
+	public OrLaterOperator(SimpleLicensingInfo license) {
 		super();
 		this.license = license;
-		this.exception = exception;
 	}
-
-
+	
 	protected Resource _createResource(Model model, Resource type) throws InvalidSPDXAnalysisException {
 		Resource r = model.createResource(type);
 		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 		Resource licResource = this.license.createResource(model);
 		r.addProperty(licProperty, licResource);
-		Property exceptionProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION);
-		Resource exceptionResource = this.exception.createResource(model, null);
-		r.addProperty(exceptionProperty, exceptionResource);
 		return r;
 	}
 
@@ -97,11 +79,10 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	@Override
 	protected Resource _createResource(Model model)
 			throws InvalidSPDXAnalysisException {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_WITH_EXCEPTION_OPERATOR);
+		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_OR_LATER_OPERATOR);
 		return _createResource(model, type);
 	}
 	
-
 	/**
 	 * @return the license
 	 */
@@ -126,43 +107,16 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			resource.addProperty(licProperty, licResource);
 		}
 	}
-
-
-	/**
-	 * @return the exception
-	 */
-	public LicenseException getException() {
-		return exception;
-	}
-
-
-	/**
-	 * @param exception the exception to set
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	public void setException(LicenseException exception) throws InvalidSPDXAnalysisException {
-		this.exception = exception;
-		if (model != null && licenseInfoNode != null) {
-			// delete any previous created
-			Property exceptionProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION);
-			model.removeAll(resource, exceptionProperty, null);
-
-			exceptionProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION);
-			Resource exceptionResource = exception.createResource(model, null);
-			resource.addProperty(exceptionProperty, exceptionResource);
-		}
-	}
-
-
+	
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#toString()
 	 */
 	@Override
 	public String toString() {
-		if (license == null || exception == null) {
-			return "UNDEFINED WITH EXCEPTION";
+		if (license == null) {
+			return "UNDEFINED OR EXCEPTION";
 		}
-		return license.toString() + " WITH " + exception.toString();
+		return license.toString() + "+";
 	}
 
 	/* (non-Javadoc)
@@ -170,22 +124,15 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof WithExceptionOperator)) {
+		if (!(o instanceof OrLaterOperator)) {
 			return false;
 		}
-		WithExceptionOperator comp = (WithExceptionOperator)o;
+		OrLaterOperator comp = (OrLaterOperator)o;
 		if (comp.getLicense() == null) {
 			if (this.getLicense() != null) {
 				return false;
 			}
 		} else if (!comp.getLicense().equals(this.getLicense())) {
-			return false;
-		}
-		if (comp.getException() == null) {
-			if (this.getException() != null) {
-				return false;
-			}
-		} else if (!comp.getException().equals(this.getException())) {
 			return false;
 		}
 		return true;
@@ -197,14 +144,10 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	@Override
 	public int hashCode() {
 		int licHashCode = 0;
-		int exceptionHashCode = 0;
 		if (this.license != null) {
 			licHashCode = this.license.hashCode();
 		}
-		if (this.exception != null) {
-			exceptionHashCode = this.exception.hashCode();
-		}
-		return licHashCode ^ exceptionHashCode;
+		return licHashCode;
 	}
 
 	/* (non-Javadoc)
@@ -214,14 +157,9 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (this.license == null) {
-			retval.add("Missing required license for a License WITH Exception");
+			retval.add("Missing required license for a License Or Later operator");
 		} else {
 			retval.addAll(this.license.verify());
-		}
-		if (this.exception == null) {
-			retval.add("Missing required exception for a License WITH Exception");
-		} else {
-			retval.addAll(this.exception.verify());
 		}
 		return retval;
 	}
@@ -235,11 +173,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		if (this.license != null) {
 			clonedLicense = (SimpleLicensingInfo)this.license.clone();
 		}
-		LicenseException clonedException = null;
-		if (this.exception != null) {
-			clonedException = this.exception.clone();
-		}
-		return new WithExceptionOperator(clonedLicense, clonedException);
+		return new OrLaterOperator(clonedLicense);
 	}
-
+	
 }
