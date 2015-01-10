@@ -146,9 +146,16 @@ public class LicenseException  {
 	}
 	
 	public LicenseException() {
-		this(null, null, null);
+		this(null);
 	}
 	
+	/**
+	 * @param token
+	 */
+	public LicenseException(String exceptionId) {
+		this(exceptionId, null, null);
+	}
+
 	/**
 	 * If a resource does not already exist in this model for this object,
 	 * create a new resource and populate it.  If the resource does exist,
