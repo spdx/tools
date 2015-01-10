@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Imlib2 License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Imlib2 License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Imlib2 License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Imlib2</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://trac.enlightenment.org/e/browser/trunk/imlib2/COPYING" rel="owl:sameAs">http://trac.enlightenment.org/e/browser/trunk/imlib2/COPYING</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://trac.enlightenment.org/e/browser/trunk/imlib2/COPYING" rel="rdfs:seeAlso">http://trac.enlightenment.org/e/browser/trunk/imlib2/COPYING</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    false
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -81,70 +84,17 @@
 
 <div property="spdx:licenseText" class="license-text">
 Imlib2 License
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy<br/>
-of this software and associated documentation files (the &quot;Software&quot;), to<br/>
-deal in the Software without restriction, including without limitation the<br/>
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or<br/>
-sell copies of the Software, and to permit persons to whom the Software is<br/>
-furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in<br/>
-all copies of the Software and its Copyright notices. In addition publicly<br/>
-documented acknowledgment must be given that this software has been used if no<br/>
-source code of this software is made available publicly. Making the source<br/>
-available publicly means including the source for this software with the<br/>
-distribution, or a method to get this software via some reasonable mechanism<br/>
-(electronic transfer via a network or media) as well as making an offer to<br/>
-supply the source on request. This Copyright notice serves as an offer to<br/>
-supply the source on on request as well. Instead of this, supplying<br/>
-acknowledgments of use of this software in either Copyright notices, Manuals,<br/>
-Publicity and Marketing documents or any documentation provided with any<br/>
-product containing this software. This License does not apply to any software<br/>
-that links to the libraries provided by this software (statically or<br/>
-dynamically), but only to the software provided.</p>
-<p>Please see the COPYING-PLAIN for a plain-english explanation of this notice<br/>
-and its intent.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br/>
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br/>
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL<br/>
-THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER<br/>
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN<br/>
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies of the Software and its Copyright notices. In addition publicly documented acknowledgment must be given that this software has been used if no source code of this software is made available publicly. Making the source available publicly means including the source for this software with the distribution, or a method to get this software via some reasonable mechanism (electronic transfer via a network or media) as well as making an offer to supply the source on request. This Copyright notice serves as an offer to supply the source on on request as well. Instead of this, supplying acknowledgments of use of this software in either Copyright notices, Manuals, Publicity and Marketing documents or any documentation provided with any product containing this software. This License does not apply to any software that links to the libraries provided by this software (statically or dynamically), but only to the software provided.</p>
+<p>Please see the COPYING-PLAIN for a plain-english explanation of this notice and its intent.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Imlib2 License
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy<br/>
-of this software and associated documentation files (the &quot;Software&quot;), to<br/>
-deal in the Software without restriction, including without limitation the<br/>
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or<br/>
-sell copies of the Software, and to permit persons to whom the Software is<br/>
-furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in<br/>
-all copies of the Software and its Copyright notices. In addition publicly<br/>
-documented acknowledgment must be given that this software has been used if no<br/>
-source code of this software is made available publicly. Making the source<br/>
-available publicly means including the source for this software with the<br/>
-distribution, or a method to get this software via some reasonable mechanism<br/>
-(electronic transfer via a network or media) as well as making an offer to<br/>
-supply the source on request. This Copyright notice serves as an offer to<br/>
-supply the source on on request as well. Instead of this, supplying<br/>
-acknowledgments of use of this software in either Copyright notices, Manuals,<br/>
-Publicity and Marketing documents or any documentation provided with any<br/>
-product containing this software. This License does not apply to any software<br/>
-that links to the libraries provided by this software (statically or<br/>
-dynamically), but only to the software provided.</p>
-<p>Please see the COPYING-PLAIN for a plain-english explanation of this notice<br/>
-and its intent.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br/>
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br/>
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL<br/>
-THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER<br/>
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN<br/>
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

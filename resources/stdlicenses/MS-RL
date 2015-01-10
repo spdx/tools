@@ -62,19 +62,21 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Microsoft Reciprocal License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Microsoft Reciprocal License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Microsoft Reciprocal License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">MS-RL</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.microsoft.com/opensource/licenses.mspx" rel="owl:sameAs">http://www.microsoft.com/opensource/licenses.mspx</a></li>
-
-				<li><a href="http://www.opensource.org/licenses/MS-RL" rel="owl:sameAs">http://www.opensource.org/licenses/MS-RL</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.microsoft.com/opensource/licenses.mspx" rel="rdfs:seeAlso">http://www.microsoft.com/opensource/licenses.mspx</a></li>
+       <li><a href="http://www.opensource.org/licenses/MS-RL" rel="rdfs:seeAlso">http://www.opensource.org/licenses/MS-RL</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -85,44 +87,27 @@
 Microsoft Reciprocal License (Ms-RL)
 <p>This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.</p>
 <p>1.  Definitions<br/>
-The terms &quot;reproduce,&quot; &quot;reproduction,&quot; &quot;derivative works,&quot; and &quot;distribution&quot; have the same meaning here as under U.S. copyright law.<br/>
-A &quot;contribution&quot; is the original software, or any additions or changes to the software. <br/>
-A &quot;contributor&quot; is any person that distributes its contribution under this license. <br/>
-&quot;Licensed patents&quot; are a contributor&apos;s patent claims that read directly on its contribution.</p>
+The terms &quot;reproduce,&quot; &quot;reproduction,&quot; &quot;derivative works,&quot; and &quot;distribution&quot; have the same meaning here as under U.S. copyright law.</p>
+<p>A &quot;contribution&quot; is the original software, or any additions or changes to the software. </p>
+<p>A &quot;contributor&quot; is any person that distributes its contribution under this license. </p>
+<p>&quot;Licensed patents&quot; are a contributor&apos;s patent claims that read directly on its contribution.</p>
 <p>2.  Grant of Rights<br/>
-(A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.<br/>
-(B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.</p>
+     (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.</p>
+<p style="margin-left: 20px;">     (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.</p>
 <p>3.  Conditions and Limitations<br/>
-(A) Reciprocal Grants- For any file you distribute that contains code from the software (in source code or binary format), you must provide recipients the source code to that file along with a copy of this license, which license will govern that file. You may license other files that are entirely your own work and do not contain code from the software under any terms you choose. <br/>
-(B) No Trademark License- This license does not grant you rights to use any contributors&apos; name, logo, or trademarks. <br/>
-(C) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically. <br/>
-(D) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software. <br/>
-(E) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license. <br/>
-(F) The software is licensed &quot;as-is.&quot; You bear the risk of using it. The contributors give no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.</p>
+     (A) Reciprocal Grants- For any file you distribute that contains code from the software (in source code or binary format), you must provide recipients the source code to that file along with a copy of this license, which license will govern that file. You may license other files that are entirely your own work and do not contain code from the software under any terms you choose. </p>
+<p style="margin-left: 20px;">     (B) No Trademark License- This license does not grant you rights to use any contributors&apos; name, logo, or trademarks. </p>
+<p style="margin-left: 20px;">     (C) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically. </p>
+<p style="margin-left: 20px;">     (D) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software. </p>
+<p style="margin-left: 20px;">     (E) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license. </p>
+<p style="margin-left: 20px;">     (F) The software is licensed &quot;as-is.&quot; You bear the risk of using it. The contributors give no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Microsoft Reciprocal License (Ms-RL)
-<p>This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.</p>
-<p>1.  Definitions<br/>
-The terms &quot;reproduce,&quot; &quot;reproduction,&quot; &quot;derivative works,&quot; and &quot;distribution&quot; have the same meaning here as under U.S. copyright law.<br/>
-A &quot;contribution&quot; is the original software, or any additions or changes to the software. <br/>
-A &quot;contributor&quot; is any person that distributes its contribution under this license. <br/>
-&quot;Licensed patents&quot; are a contributor&apos;s patent claims that read directly on its contribution.</p>
-<p>2.  Grant of Rights<br/>
-(A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.<br/>
-(B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.</p>
-<p>3.  Conditions and Limitations<br/>
-(A) Reciprocal Grants- For any file you distribute that contains code from the software (in source code or binary format), you must provide recipients the source code to that file along with a copy of this license, which license will govern that file. You may license other files that are entirely your own work and do not contain code from the software under any terms you choose. <br/>
-(B) No Trademark License- This license does not grant you rights to use any contributors&apos; name, logo, or trademarks. <br/>
-(C) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically. <br/>
-(D) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software. <br/>
-(E) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license. <br/>
-(F) The software is licensed &quot;as-is.&quot; You bear the risk of using it. The contributors give no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

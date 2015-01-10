@@ -62,19 +62,21 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Apache License 1.1</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Apache License 1.1</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Apache License 1.1</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Apache-1.1</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://apache.org/licenses/LICENSE-1.1" rel="owl:sameAs">http://apache.org/licenses/LICENSE-1.1</a></li>
-
-				<li><a href="http://opensource.org/licenses/Apache-1.1" rel="owl:sameAs">http://opensource.org/licenses/Apache-1.1</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://apache.org/licenses/LICENSE-1.1" rel="rdfs:seeAlso">http://apache.org/licenses/LICENSE-1.1</a></li>
+       <li><a href="http://opensource.org/licenses/Apache-1.1" rel="rdfs:seeAlso">http://opensource.org/licenses/Apache-1.1</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license has been superseded by Apache License 2.0</p>
@@ -82,37 +84,50 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-The Apache Software License, Version 1.1
-<p>Copyright (c) 2000 The Apache Software Foundation.  All rights reserved.</p>
+
+<div id="title" class="optional-license-text">
+ Apache License 1.1 
+
+Copyright (c) 
+<span id="copyright" class="replacable-license-text">2000 The Apache Software Foundation</span>
+ All rights reserved. </div>
+
 <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
 <p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
 <p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p>3. The end-user documentation included with the redistribution, if any, must include the following acknowledgment:<br/>
- &quot;This product includes software developed by the Apache Software Foundation (http://www.apache.org/).&quot;<br/>
- Alternately, this acknowledgment may appear in the software itself, if and wherever such third-party acknowledgments normally appear.</p>
-<p>4. The names &quot;Apache&quot; and &quot;Apache Software Foundation&quot; must not be used to endorse or promote products derived from this software without prior written permission. For written permission, please contact apache@apache.org.</p>
-<p>5. Products derived from this software may not be called &quot;Apache&quot;, nor may &quot;Apache&quot; appear in their name, without prior written permission of the Apache Software Foundation.</p>
-<p>THIS SOFTWARE IS PROVIDED ``AS IS&apos;&apos; AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p>This software consists of voluntary contributions made by many individuals on behalf of the Apache Software Foundation.  For more information on the Apache Software Foundation, please see http://www.apache.org/. Portions of this software are based upon public domain software originally written at the National Center for Supercomputing Applications, University of Illinois, Urbana-Champaign.</p>
+<p>3. The end-user documentation included with the redistribution, if any, must include the following acknowledgment: <br/>
+&quot;This product includes software developed by 
+<span id="organizationClause3" class="replacable-license-text">the Apache Software Foundation (http://www.apache.org/)</span>
+.&quot; <br/>
+Alternately, this acknowledgment may appear in the software itself, if and wherever such third-party acknowledgments normally appear.</p>
+<p>4. The 
+<span id="namePrefix" class="replacable-license-text">names</span>
+ 
+<span id="organizationClause4" class="replacable-license-text">&quot;Apache&quot; and &quot;Apache Software Foundation&quot;</span>
+ must not be used to endorse or promote products derived from this software without prior written permission. For written permission, please contact 
+<span id="contactClause4" class="replacable-license-text">apache@apache.org</span>
+</p>
+<p>5. Products derived from this software may not be called 
+<span id="nameClause5" class="replacable-license-text">&quot;Apache&quot; [ex. &quot;Jakarta,&quot; &quot;Apache,&quot; or &quot;Apache Commons,&quot;]</span>
+ nor may 
+<span id="name2clause5" class="replacable-license-text">&quot;Apache&quot; [ex. the names]</span>
+ appear in their name, without prior written permission of 
+<span id="name3clause5" class="replacable-license-text">the Apache Software Foundation</span>
+.</p>
+<p>THIS SOFTWARE IS PROVIDED &apos;&apos;AS IS&apos;&apos; AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
+<span id="copyrightHolderLiability" class="replacable-license-text">THE APACHE SOFTWARE FOUNDATION OR ITS CONTRIBUTORS</span>
+ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>
+<div id="apacheOptionalAppendix" class="optional-license-text">
+ This software consists of voluntary contributions made by many individuals on behalf of the Apache Software Foundation. For more information on the Apache Software Foundation, please see http://www.apache.org/. Portions of this software are based upon public domain software originally written at the National Center for Supercomputing Applications, University of Illinois, Urbana-Champaign. </div>
+
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">The Apache Software License, Version 1.1
-<p>Copyright (c) 2000 The Apache Software Foundation.  All rights reserved.</p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
-<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p>3. The end-user documentation included with the redistribution, if any, must include the following acknowledgment:<br/>
- &quot;This product includes software developed by the Apache Software Foundation (http://www.apache.org/).&quot;<br/>
- Alternately, this acknowledgment may appear in the software itself, if and wherever such third-party acknowledgments normally appear.</p>
-<p>4. The names &quot;Apache&quot; and &quot;Apache Software Foundation&quot; must not be used to endorse or promote products derived from this software without prior written permission. For written permission, please contact apache@apache.org.</p>
-<p>5. Products derived from this software may not be called &quot;Apache&quot;, nor may &quot;Apache&quot; appear in their name, without prior written permission of the Apache Software Foundation.</p>
-<p>THIS SOFTWARE IS PROVIDED ``AS IS&apos;&apos; AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p>This software consists of voluntary contributions made by many individuals on behalf of the Apache Software Foundation.  For more information on the Apache Software Foundation, please see http://www.apache.org/. Portions of this software are based upon public domain software originally written at the National Center for Supercomputing Applications, University of Illinois, Urbana-Champaign.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">The Unlicense</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">The Unlicense</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">The Unlicense</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Unlicense</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://unlicense.org/" rel="owl:sameAs">http://unlicense.org/</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://unlicense.org/" rel="rdfs:seeAlso">http://unlicense.org/</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    false
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This is a public domain dedication</p>
@@ -81,52 +84,18 @@
 
 <div property="spdx:licenseText" class="license-text">
 This is free and unencumbered software released into the public domain.
-<p>Anyone is free to copy, modify, publish, use, compile, sell, or<br/>
-distribute this software, either in source code form or as a compiled<br/>
-binary, for any purpose, commercial or non-commercial, and by any<br/>
-means.</p>
-<p>In jurisdictions that recognize copyright laws, the author or authors<br/>
-of this software dedicate any and all copyright interest in the<br/>
-software to the public domain. We make this dedication for the benefit<br/>
-of the public at large and to the detriment of our heirs and<br/>
-successors. We intend this dedication to be an overt act of<br/>
-relinquishment in perpetuity of all present and future rights to this<br/>
-software under copyright law.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,<br/>
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<br/>
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.<br/>
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR<br/>
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,<br/>
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR<br/>
-OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.</p>
+<p>In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and<br/>
+successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 <p>For more information, please refer to &lt;http://unlicense.org/&gt;</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">This is free and unencumbered software released into the public domain.
-<p>Anyone is free to copy, modify, publish, use, compile, sell, or<br/>
-distribute this software, either in source code form or as a compiled<br/>
-binary, for any purpose, commercial or non-commercial, and by any<br/>
-means.</p>
-<p>In jurisdictions that recognize copyright laws, the author or authors<br/>
-of this software dedicate any and all copyright interest in the<br/>
-software to the public domain. We make this dedication for the benefit<br/>
-of the public at large and to the detriment of our heirs and<br/>
-successors. We intend this dedication to be an overt act of<br/>
-relinquishment in perpetuity of all present and future rights to this<br/>
-software under copyright law.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,<br/>
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<br/>
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.<br/>
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR<br/>
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,<br/>
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR<br/>
-OTHER DEALINGS IN THE SOFTWARE.</p>
-<p>For more information, please refer to &lt;http://unlicense.org/&gt;</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

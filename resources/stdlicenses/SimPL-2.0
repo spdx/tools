@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Simple Public License 2.0</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Simple Public License 2.0</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Simple Public License 2.0</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">SimPL-2.0</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.opensource.org/licenses/SimPL-2.0" rel="owl:sameAs">http://www.opensource.org/licenses/SimPL-2.0</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.opensource.org/licenses/SimPL-2.0" rel="rdfs:seeAlso">http://www.opensource.org/licenses/SimPL-2.0</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -81,58 +84,35 @@
 
 <div property="spdx:licenseText" class="license-text">
 Simple Public License (SimPL)
-<p>Preamble<br/>
-This Simple Public License 2.0 (SimPL 2.0 for short) is a plain language implementation of GPL 2.0.  The words are different, but the goal is the same - to guarantee for all users the freedom to share and change software.  If anyone wonders about the meaning of the SimPL, they should interpret it as consistent with GPL 2.0.<br/>
-Simple Public License (SimPL) 2.0<br/>
-The SimPL applies to the software&apos;s source and object code and comes with any rights that I have in it (other than trademarks). You agree to the SimPL by copying, distributing, or making a derivative work of the software.</p>
-<p>You get the royalty free right to:<br/>
-Use the software for any purpose;<br/>
-Make derivative works of it (this is called a &quot;Derived Work&quot;);<br/>
-Copy and distribute it and any Derived Work.<br/>
-If you distribute the software or a Derived Work, you must give back to the community by:<br/>
-Prominently noting the date of any changes you make;<br/>
-Leaving other people&apos;s copyright notices, warranty disclaimers, and license terms  in place;<br/>
-Providing the source code, build scripts, installation scripts, and interface definitions in a form that is easy to get and best to modify;<br/>
-Licensing it to everyone under SimPL, or substantially similar terms (such as GPL 2.0), without adding further restrictions to the rights provided;<br/>
-Conspicuously announcing that it is available under that license.<br/>
-There are some things that you must shoulder:<br/>
-You get NO WARRANTIES. None of any kind;<br/>
-If the software damages you in any way, you may only recover direct damages up to the amount you paid for it (that is zero if you did not pay anything). You may not recover any other damages, including those called &quot;consequential damages.&quot; (The state or country where you live may not allow you to limit your liability in this way, so this may not apply to you);<br/>
-The SimPL continues perpetually, except that your license rights end automatically if:<br/>
-You do not abide by the &quot;give back to the community&quot; terms (your licensees get to keep their rights if they abide);<br/>
-Anyone prevents you from distributing the software under the terms of the SimPL.<br/>
-License for the License<br/>
-You may do anything that you want with the SimPL text; it&apos;s a license form to use in any way that you find helpful.  To avoid confusion, however, if you change the terms in any way then you may not call your license the Simple Public License or the SimPL (but feel free to acknowledge that your license is &quot;based on the Simple Public License&quot;).</p>
+<p>Preamble</p>
+<p>This Simple Public License 2.0 (SimPL 2.0 for short) is a plain language implementation of GPL 2.0.  The words are different, but the goal is the same - to guarantee for all users the freedom to share and change software.  If anyone wonders about the meaning of the SimPL, they should interpret it as consistent with GPL 2.0.</p>
+<p>Simple Public License (SimPL) 2.0</p>
+<p>The SimPL applies to the software&apos;s source and object code and comes with any rights that I have in it (other than trademarks). You agree to the SimPL by copying, distributing, or making a derivative work of the software.</p>
+<p>You get the royalty free right to:</p>
+<p>- Use the software for any purpose;<br/>
+- Make derivative works of it (this is called a &quot;Derived Work&quot;);<br/>
+- Copy and distribute it and any Derived Work.</p>
+<p>If you distribute the software or a Derived Work, you must give back to the community by:</p>
+<p>- Prominently noting the date of any changes you make;<br/>
+- Leaving other people&apos;s copyright notices, warranty disclaimers, and license terms  in place;<br/>
+- Providing the source code, build scripts, installation scripts, and interface definitions in a form that is easy to get and best to modify;<br/>
+- Licensing it to everyone under SimPL, or substantially similar terms (such as GPL 2.0), without adding further restrictions to the rights provided;<br/>
+- Conspicuously announcing that it is available under that license.</p>
+<p>There are some things that you must shoulder:</p>
+<p>- You get NO WARRANTIES. None of any kind;<br/>
+- If the software damages you in any way, you may only recover direct damages up to the amount you paid for it (that is zero if you did not pay anything). You may not recover any other damages, including those called &quot;consequential damages.&quot; (The state or country where you live may not allow you to limit your liability in this way, so this may not apply to you);</p>
+<p>The SimPL continues perpetually, except that your license rights end automatically if:</p>
+<p>- You do not abide by the &quot;give back to the community&quot; terms (your licensees get to keep their rights if they abide);<br/>
+- Anyone prevents you from distributing the software under the terms of the SimPL.</p>
+<p>License for the License</p>
+<p>You may do anything that you want with the SimPL text; it&apos;s a license form to use in any way that you find helpful.  To avoid confusion, however, if you change the terms in any way then you may not call your license the Simple Public License or the SimPL (but feel free to acknowledge that your license is &quot;based on the Simple Public License&quot;).</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Simple Public License (SimPL)
-<p>Preamble<br/>
-This Simple Public License 2.0 (SimPL 2.0 for short) is a plain language implementation of GPL 2.0.  The words are different, but the goal is the same - to guarantee for all users the freedom to share and change software.  If anyone wonders about the meaning of the SimPL, they should interpret it as consistent with GPL 2.0.<br/>
-Simple Public License (SimPL) 2.0<br/>
-The SimPL applies to the software&apos;s source and object code and comes with any rights that I have in it (other than trademarks). You agree to the SimPL by copying, distributing, or making a derivative work of the software.</p>
-<p>You get the royalty free right to:<br/>
-Use the software for any purpose;<br/>
-Make derivative works of it (this is called a &quot;Derived Work&quot;);<br/>
-Copy and distribute it and any Derived Work.<br/>
-If you distribute the software or a Derived Work, you must give back to the community by:<br/>
-Prominently noting the date of any changes you make;<br/>
-Leaving other people&apos;s copyright notices, warranty disclaimers, and license terms  in place;<br/>
-Providing the source code, build scripts, installation scripts, and interface definitions in a form that is easy to get and best to modify;<br/>
-Licensing it to everyone under SimPL, or substantially similar terms (such as GPL 2.0), without adding further restrictions to the rights provided;<br/>
-Conspicuously announcing that it is available under that license.<br/>
-There are some things that you must shoulder:<br/>
-You get NO WARRANTIES. None of any kind;<br/>
-If the software damages you in any way, you may only recover direct damages up to the amount you paid for it (that is zero if you did not pay anything). You may not recover any other damages, including those called &quot;consequential damages.&quot; (The state or country where you live may not allow you to limit your liability in this way, so this may not apply to you);<br/>
-The SimPL continues perpetually, except that your license rights end automatically if:<br/>
-You do not abide by the &quot;give back to the community&quot; terms (your licensees get to keep their rights if they abide);<br/>
-Anyone prevents you from distributing the software under the terms of the SimPL.<br/>
-License for the License<br/>
-You may do anything that you want with the SimPL text; it&apos;s a license form to use in any way that you find helpful.  To avoid confusion, however, if you change the terms in any way then you may not call your license the Simple Public License or the SimPL (but feel free to acknowledge that your license is &quot;based on the Simple Public License&quot;).</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

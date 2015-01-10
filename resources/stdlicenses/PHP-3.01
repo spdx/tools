@@ -62,140 +62,48 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">PHP License v3.01</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">PHP License v3.01</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">PHP License v3.01</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">PHP-3.01</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.php.net/license/3_01.txt" rel="owl:sameAs">http://www.php.net/license/3_01.txt</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.php.net/license/3_01.txt" rel="rdfs:seeAlso">http://www.php.net/license/3_01.txt</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    false
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">The PHP License v3.01 is essentially the same as v3.0, with the exceoption of a couple word differences and updated url in section 6.
-<p>v3.01 came into use with PHP version 4 and onward.</p></p>
+    <p style="margin-left: 20px;">The PHP License v3.01 is essentially the same as v3.0, with the exception of a couple word differences and updated url in section 6.</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
 The PHP License, version 3.01
-<p>Copyright (c) 1999 - 2012 The PHP Group. All rights reserved.</p>
-<p><br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, is permitted provided that the following conditions<br/>
-are met:</p>
-<p>  1. Redistributions of source code must retain the above copyright<br/>
-     notice, this list of conditions and the following disclaimer.</p>
-<p>  2. Redistributions in binary form must reproduce the above copyright<br/>
-     notice, this list of conditions and the following disclaimer in<br/>
-     the documentation and/or other materials provided with the<br/>
-     distribution.</p>
-<p>  3. The name &quot;PHP&quot; must not be used to endorse or promote products<br/>
-     derived from this software without prior written permission. For<br/>
-     written permission, please contact group@php.net.</p>
-<p>  4. Products derived from this software may not be called &quot;PHP&quot;, nor<br/>
-     may &quot;PHP&quot; appear in their name, without prior written permission<br/>
-     from group@php.net.  You may indicate that your software works in<br/>
-     conjunction with PHP by saying &quot;Foo for PHP&quot; instead of calling<br/>
-     it &quot;PHP Foo&quot; or &quot;phpfoo&quot;</p>
-<p>  5. The PHP Group may publish revised and/or new versions of the<br/>
-     license from time to time. Each version will be given a<br/>
-     distinguishing version number.<br/>
-     Once covered code has been published under a particular version<br/>
-     of the license, you may always continue to use it under the terms<br/>
-     of that version. You may also choose to use such covered code<br/>
-     under the terms of any subsequent version of the license<br/>
-     published by the PHP Group. No one other than the PHP Group has<br/>
-     the right to modify the terms applicable to covered code created<br/>
-     under this License.</p>
-<p>  6. Redistributions of any form whatsoever must retain the following<br/>
-     acknowledgment:<br/>
-     &quot;This product includes PHP software, freely available from<br/>
-     &lt;http://www.php.net/software/&gt;&quot;.</p>
-<p>THIS SOFTWARE IS PROVIDED BY THE PHP DEVELOPMENT TEAM ``AS IS&apos;&apos; AND <br/>
-ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,<br/>
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A <br/>
-PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE PHP<br/>
-DEVELOPMENT TEAM OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, <br/>
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES <br/>
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR <br/>
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,<br/>
-STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED<br/>
-OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p>-------------------------------------------------------------------- </p>
-<p>This software consists of voluntary contributions made by many<br/>
-individuals on behalf of the PHP Group.</p>
+<p>Copyright (c) 1999 - 2012 The PHP Group. All rights reserved. </p>
+<p>Redistribution and use in source and binary forms, with or without modification, is permitted provided that the following conditions are met:</p>
+<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. </p>
+<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. </p>
+<p>3. The name &quot;PHP&quot; must not be used to endorse or promote products derived from this software without prior written permission. For written permission, please contact group@php.net. </p>
+<p>4. Products derived from this software may not be called &quot;PHP&quot;, nor may &quot;PHP&quot; appear in their name, without prior written permission from group@php.net. You may indicate that your software works in conjunction with PHP by saying &quot;Foo for PHP&quot; instead of calling it &quot;PHP Foo&quot; or &quot;phpfoo&quot; </p>
+<p>5. The PHP Group may publish revised and/or new versions of the license from time to time. Each version will be given a distinguishing version number. Once covered code has been published under a particular version of the license, you may always continue to use it under the terms of that version. You may also choose to use such covered code under the terms of any subsequent version of the license published by the PHP Group. No one other than the PHP Group has the right to modify the terms applicable to covered code created under this License.</p>
+<p>6. Redistributions of any form whatsoever must retain the following acknowledgment: &quot;This product includes PHP software, freely available from &lt;http://www.php.net/software/&gt;&quot;.</p>
+<p>THIS SOFTWARE IS PROVIDED BY THE PHP DEVELOPMENT TEAM ``AS IS&apos;&apos; AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE PHP DEVELOPMENT TEAM OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>This software consists of voluntary contributions made by many individuals on behalf of the PHP Group.</p>
 <p>The PHP Group can be contacted via Email at group@php.net.</p>
-<p>For more information on the PHP Group and the PHP project, <br/>
-please see &lt;http://www.php.net&gt;.</p>
-<p>PHP includes the Zend Engine, freely available at<br/>
-&lt;http://www.zend.com&gt;.</p>
+<p>For more information on the PHP Group and the PHP project, please see &lt;http://www.php.net&gt;.</p>
+<p>PHP includes the Zend Engine, freely available at &lt;http://www.zend.com&gt;. </p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">The PHP License, version 3.01
-<p>Copyright (c) 1999 - 2012 The PHP Group. All rights reserved.</p>
-<p><br/>
-Redistribution and use in source and binary forms, with or without<br/>
-modification, is permitted provided that the following conditions<br/>
-are met:</p>
-<p>  1. Redistributions of source code must retain the above copyright<br/>
-     notice, this list of conditions and the following disclaimer.</p>
-<p>  2. Redistributions in binary form must reproduce the above copyright<br/>
-     notice, this list of conditions and the following disclaimer in<br/>
-     the documentation and/or other materials provided with the<br/>
-     distribution.</p>
-<p>  3. The name &quot;PHP&quot; must not be used to endorse or promote products<br/>
-     derived from this software without prior written permission. For<br/>
-     written permission, please contact group@php.net.</p>
-<p>  4. Products derived from this software may not be called &quot;PHP&quot;, nor<br/>
-     may &quot;PHP&quot; appear in their name, without prior written permission<br/>
-     from group@php.net.  You may indicate that your software works in<br/>
-     conjunction with PHP by saying &quot;Foo for PHP&quot; instead of calling<br/>
-     it &quot;PHP Foo&quot; or &quot;phpfoo&quot;</p>
-<p>  5. The PHP Group may publish revised and/or new versions of the<br/>
-     license from time to time. Each version will be given a<br/>
-     distinguishing version number.<br/>
-     Once covered code has been published under a particular version<br/>
-     of the license, you may always continue to use it under the terms<br/>
-     of that version. You may also choose to use such covered code<br/>
-     under the terms of any subsequent version of the license<br/>
-     published by the PHP Group. No one other than the PHP Group has<br/>
-     the right to modify the terms applicable to covered code created<br/>
-     under this License.</p>
-<p>  6. Redistributions of any form whatsoever must retain the following<br/>
-     acknowledgment:<br/>
-     &quot;This product includes PHP software, freely available from<br/>
-     &lt;http://www.php.net/software/&gt;&quot;.</p>
-<p>THIS SOFTWARE IS PROVIDED BY THE PHP DEVELOPMENT TEAM ``AS IS&apos;&apos; AND <br/>
-ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,<br/>
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A <br/>
-PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE PHP<br/>
-DEVELOPMENT TEAM OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, <br/>
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES <br/>
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR <br/>
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)<br/>
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,<br/>
-STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<br/>
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED<br/>
-OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p>-------------------------------------------------------------------- </p>
-<p>This software consists of voluntary contributions made by many<br/>
-individuals on behalf of the PHP Group.</p>
-<p>The PHP Group can be contacted via Email at group@php.net.</p>
-<p>For more information on the PHP Group and the PHP project, <br/>
-please see &lt;http://www.php.net&gt;.</p>
-<p>PHP includes the Zend Engine, freely available at<br/>
-&lt;http://www.zend.com&gt;.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

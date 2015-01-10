@@ -153,7 +153,7 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			String osiTextValue = t.getObject().toString(false);
+			String osiTextValue = t.getObject().toString(false).trim();
 			if (osiTextValue.equals("true") || osiTextValue.equals("1")) {
 				this.osiApproved = true;
 			} else if (osiTextValue.equals("false") || osiTextValue.equals("0")){

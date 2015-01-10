@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Independent JPEG Group License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Independent JPEG Group License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Independent JPEG Group License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">IJG</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://dev.w3.org/cvsweb/Amaya/libjpeg/Attic/README?rev=1.2" rel="owl:sameAs">http://dev.w3.org/cvsweb/Amaya/libjpeg/Attic/README?rev=1.2</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://dev.w3.org/cvsweb/Amaya/libjpeg/Attic/README?rev=1.2" rel="rdfs:seeAlso">http://dev.w3.org/cvsweb/Amaya/libjpeg/Attic/README?rev=1.2</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    false
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -80,159 +83,35 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-Independent JPEG Group License
-<p><br/>
-LEGAL ISSUES<br/>
-============</p>
+Independent JPEG Group License 
+<p>LEGAL ISSUES </p>
 <p>In plain English:</p>
-<p>1. We don&apos;t promise that this software works.  (But if you find any bugs,<br/>
-   please let us know!)<br/>
-2. You can use this software for whatever you want.  You don&apos;t have to pay us.<br/>
-3. You may not pretend that you wrote this software.  If you use it in a<br/>
-   program, you must acknowledge somewhere in your documentation that<br/>
-   you&apos;ve used the IJG code.</p>
+<p>1. We don&apos;t promise that this software works. (But if you find any bugs, please let us know!) <br/>
+2. You can use this software for whatever you want. You don&apos;t have to pay us. <br/>
+3. You may not pretend that you wrote this software. If you use it in a program, you must acknowledge somewhere in your documentation that you&apos;ve used the IJG code.</p>
 <p>In legalese:</p>
-<p>The authors make NO WARRANTY or representation, either express or implied,<br/>
-with respect to this software, its quality, accuracy, merchantability, or<br/>
-fitness for a particular purpose.  This software is provided &quot;AS IS&quot;, and you,<br/>
-its user, assume the entire risk as to its quality and accuracy.</p>
-<p>This software is copyright (C) 1991-1998, Thomas G. Lane.<br/>
-All Rights Reserved except as specified below.</p>
-<p>Permission is hereby granted to use, copy, modify, and distribute this<br/>
-software (or portions thereof) for any purpose, without fee, subject to these<br/>
-conditions:<br/>
-(1) If any part of the source code for this software is distributed, then this<br/>
-README file must be included, with this copyright and no-warranty notice<br/>
-unaltered; and any additions, deletions, or changes to the original files<br/>
-must be clearly indicated in accompanying documentation.<br/>
-(2) If only executable code is distributed, then the accompanying<br/>
-documentation must state that &quot;this software is based in part on the work of<br/>
-the Independent JPEG Group&quot;.<br/>
-(3) Permission for use of this software is granted only if the user accepts<br/>
-full responsibility for any undesirable consequences; the authors accept<br/>
-NO LIABILITY for damages of any kind.</p>
-<p>These conditions apply to any software derived from or based on the IJG code,<br/>
-not just to the unmodified library.  If you use our work, you ought to<br/>
-acknowledge us.</p>
-<p>Permission is NOT granted for the use of any IJG author&apos;s name or company name<br/>
-in advertising or publicity relating to this software or products derived from<br/>
-it.  This software may be referred to only as &quot;the Independent JPEG Group&apos;s<br/>
-software&quot;.</p>
-<p>We specifically permit and encourage the use of this software as the basis of<br/>
-commercial products, provided that all warranty or liability claims are<br/>
-assumed by the product vendor.</p>
-<p><br/>
-ansi2knr.c is included in this distribution by permission of L. Peter Deutsch,<br/>
-sole proprietor of its copyright holder, Aladdin Enterprises of Menlo Park, CA.<br/>
-ansi2knr.c is NOT covered by the above copyright and conditions, but instead<br/>
-by the usual distribution terms of the Free Software Foundation; principally,<br/>
-that you must include source code if you redistribute it.  (See the file<br/>
-ansi2knr.c for full details.)  However, since ansi2knr.c is not needed as part<br/>
-of any program generated from the IJG code, this does not limit you more than<br/>
-the foregoing paragraphs do.</p>
-<p>The Unix configuration script &quot;configure&quot; was produced with GNU Autoconf.<br/>
-It is copyright by the Free Software Foundation but is freely distributable.<br/>
-The same holds for its supporting scripts (config.guess, config.sub,<br/>
-ltconfig, ltmain.sh).  Another support script, install-sh, is copyright<br/>
-by M.I.T. but is also freely distributable.</p>
-<p>It appears that the arithmetic coding option of the JPEG spec is covered by<br/>
-patents owned by IBM, AT&amp;T, and Mitsubishi.  Hence arithmetic coding cannot<br/>
-legally be used without obtaining one or more licenses.  For this reason,<br/>
-support for arithmetic coding has been removed from the free JPEG software.<br/>
-(Since arithmetic coding provides only a marginal gain over the unpatented<br/>
-Huffman mode, it is unlikely that very many implementations will support it.)<br/>
-So far as we are aware, there are no patent restrictions on the remaining<br/>
-code.</p>
-<p>The IJG distribution formerly included code to read and write GIF files.<br/>
-To avoid entanglement with the Unisys LZW patent, GIF reading support has<br/>
-been removed altogether, and the GIF writer has been simplified to produce<br/>
-&quot;uncompressed GIFs&quot;.  This technique does not use the LZW algorithm; the<br/>
-resulting GIF files are larger than usual, but are readable by all standard<br/>
-GIF decoders.</p>
-<p>We are required to state that<br/>
-    &quot;The Graphics Interchange Format(c) is the Copyright property of<br/>
-    CompuServe Incorporated.  GIF(sm) is a Service Mark property of<br/>
-    CompuServe Incorporated.&quot;</p>
+<p>The authors make NO WARRANTY or representation, either express or implied, with respect to this software, its quality, accuracy, merchantability, or fitness for a particular purpose. This software is provided &quot;AS IS&quot;, and you, its user, assume the entire risk as to its quality and accuracy.</p>
+<p>This software is copyright (C) 1991-1998, Thomas G. Lane. All Rights Reserved except as specified below.</p>
+<p>Permission is hereby granted to use, copy, modify, and distribute this software (or portions thereof) for any purpose, without fee, subject to these conditions:    </p>
+<p style="margin-left: 20px;">     (1) If any part of the source code for this software is distributed, then this README file must be included, with this copyright and no-warranty notice unaltered; and any additions, deletions, or changes to the original files must be clearly indicated in accompanying documentation. <br/>
+     (2) If only executable code is distributed, then the accompanying documentation must state that &quot;this software is based in part on the work of the Independent JPEG Group&quot;. <br/>
+     (3) Permission for use of this software is granted only if the user accepts full responsibility for any undesirable consequences; the authors accept NO LIABILITY for damages of any kind.</p>
+<p>These conditions apply to any software derived from or based on the IJG code, not just to the unmodified library. If you use our work, you ought to acknowledge us.</p>
+<p>Permission is NOT granted for the use of any IJG author&apos;s name or company name in advertising or publicity relating to this software or products derived from it. This software may be referred to only as &quot;the Independent JPEG Group&apos;s software&quot;.</p>
+<p>We specifically permit and encourage the use of this software as the basis of commercial products, provided that all warranty or liability claims are assumed by the product vendor. </p>
+<p>ansi2knr.c is included in this distribution by permission of L. Peter Deutsch, sole proprietor of its copyright holder, Aladdin Enterprises of Menlo Park, CA. ansi2knr.c is NOT covered by the above copyright and conditions, but instead by the usual distribution terms of the Free Software Foundation; principally, that you must include source code if you redistribute it. (See the file ansi2knr.c for full details.) However, since ansi2knr.c is not needed as part of any program generated from the IJG code, this does not limit you more than the foregoing paragraphs do.</p>
+<p>The Unix configuration script &quot;configure&quot; was produced with GNU Autoconf. It is copyright by the Free Software Foundation but is freely distributable. The same holds for its supporting scripts (config.guess, config.sub, ltconfig, ltmain.sh). Another support script, install-sh, is copyright by M.I.T. but is also freely distributable.</p>
+<p>It appears that the arithmetic coding option of the JPEG spec is covered by patents owned by IBM, AT&amp;T, and Mitsubishi. Hence arithmetic coding cannot legally be used without obtaining one or more licenses. For this reason, support for arithmetic coding has been removed from the free JPEG software. (Since arithmetic coding provides only a marginal gain over the unpatented Huffman mode, it is unlikely that very many implementations will support it.) So far as we are aware, there are no patent restrictions on the remaining code.</p>
+<p>The IJG distribution formerly included code to read and write GIF files. To avoid entanglement with the Unisys LZW patent, GIF reading support has been removed altogether, and the GIF writer has been simplified to produce &quot;uncompressed GIFs&quot;. This technique does not use the LZW algorithm; the resulting GIF files are larger than usual, but are readable by all standard GIF decoders.</p>
+<p>We are required to state that <br/>
+     &quot;The Graphics Interchange Format(c) is the Copyright property of CompuServe Incorporated. GIF(sm) is a Service Mark property of CompuServe Incorporated.&quot; </p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Independent JPEG Group License
-<p><br/>
-LEGAL ISSUES<br/>
-============</p>
-<p>In plain English:</p>
-<p>1. We don&apos;t promise that this software works.  (But if you find any bugs,<br/>
-   please let us know!)<br/>
-2. You can use this software for whatever you want.  You don&apos;t have to pay us.<br/>
-3. You may not pretend that you wrote this software.  If you use it in a<br/>
-   program, you must acknowledge somewhere in your documentation that<br/>
-   you&apos;ve used the IJG code.</p>
-<p>In legalese:</p>
-<p>The authors make NO WARRANTY or representation, either express or implied,<br/>
-with respect to this software, its quality, accuracy, merchantability, or<br/>
-fitness for a particular purpose.  This software is provided &quot;AS IS&quot;, and you,<br/>
-its user, assume the entire risk as to its quality and accuracy.</p>
-<p>This software is copyright (C) 1991-1998, Thomas G. Lane.<br/>
-All Rights Reserved except as specified below.</p>
-<p>Permission is hereby granted to use, copy, modify, and distribute this<br/>
-software (or portions thereof) for any purpose, without fee, subject to these<br/>
-conditions:<br/>
-(1) If any part of the source code for this software is distributed, then this<br/>
-README file must be included, with this copyright and no-warranty notice<br/>
-unaltered; and any additions, deletions, or changes to the original files<br/>
-must be clearly indicated in accompanying documentation.<br/>
-(2) If only executable code is distributed, then the accompanying<br/>
-documentation must state that &quot;this software is based in part on the work of<br/>
-the Independent JPEG Group&quot;.<br/>
-(3) Permission for use of this software is granted only if the user accepts<br/>
-full responsibility for any undesirable consequences; the authors accept<br/>
-NO LIABILITY for damages of any kind.</p>
-<p>These conditions apply to any software derived from or based on the IJG code,<br/>
-not just to the unmodified library.  If you use our work, you ought to<br/>
-acknowledge us.</p>
-<p>Permission is NOT granted for the use of any IJG author&apos;s name or company name<br/>
-in advertising or publicity relating to this software or products derived from<br/>
-it.  This software may be referred to only as &quot;the Independent JPEG Group&apos;s<br/>
-software&quot;.</p>
-<p>We specifically permit and encourage the use of this software as the basis of<br/>
-commercial products, provided that all warranty or liability claims are<br/>
-assumed by the product vendor.</p>
-<p><br/>
-ansi2knr.c is included in this distribution by permission of L. Peter Deutsch,<br/>
-sole proprietor of its copyright holder, Aladdin Enterprises of Menlo Park, CA.<br/>
-ansi2knr.c is NOT covered by the above copyright and conditions, but instead<br/>
-by the usual distribution terms of the Free Software Foundation; principally,<br/>
-that you must include source code if you redistribute it.  (See the file<br/>
-ansi2knr.c for full details.)  However, since ansi2knr.c is not needed as part<br/>
-of any program generated from the IJG code, this does not limit you more than<br/>
-the foregoing paragraphs do.</p>
-<p>The Unix configuration script &quot;configure&quot; was produced with GNU Autoconf.<br/>
-It is copyright by the Free Software Foundation but is freely distributable.<br/>
-The same holds for its supporting scripts (config.guess, config.sub,<br/>
-ltconfig, ltmain.sh).  Another support script, install-sh, is copyright<br/>
-by M.I.T. but is also freely distributable.</p>
-<p>It appears that the arithmetic coding option of the JPEG spec is covered by<br/>
-patents owned by IBM, AT&amp;T, and Mitsubishi.  Hence arithmetic coding cannot<br/>
-legally be used without obtaining one or more licenses.  For this reason,<br/>
-support for arithmetic coding has been removed from the free JPEG software.<br/>
-(Since arithmetic coding provides only a marginal gain over the unpatented<br/>
-Huffman mode, it is unlikely that very many implementations will support it.)<br/>
-So far as we are aware, there are no patent restrictions on the remaining<br/>
-code.</p>
-<p>The IJG distribution formerly included code to read and write GIF files.<br/>
-To avoid entanglement with the Unisys LZW patent, GIF reading support has<br/>
-been removed altogether, and the GIF writer has been simplified to produce<br/>
-&quot;uncompressed GIFs&quot;.  This technique does not use the LZW algorithm; the<br/>
-resulting GIF files are larger than usual, but are readable by all standard<br/>
-GIF decoders.</p>
-<p>We are required to state that<br/>
-    &quot;The Graphics Interchange Format(c) is the Copyright property of<br/>
-    CompuServe Incorporated.  GIF(sm) is a Service Mark property of<br/>
-    CompuServe Incorporated.&quot;</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
