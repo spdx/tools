@@ -62,113 +62,49 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">wxWindows Library License</h1>
-
+<h1 style="color:red">Deprecated</h1>
+<div style="color:red">This license has been deprecated since 2.0rc1.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">wxWindows Library License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">wxWindows Library License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">WXwindows</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.wxwidgets.org/about/licence3.txt" rel="owl:sameAs">http://www.wxwidgets.org/about/licence3.txt</a></li>
-
-				<li><a href="http://www.opensource.org/licenses/WXwindows" rel="owl:sameAs">http://www.opensource.org/licenses/WXwindows</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.opensource.org/licenses/WXwindows" rel="rdfs:seeAlso">http://www.opensource.org/licenses/WXwindows</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">None</p>
+    <p style="margin-left: 20px;">DEPRECATED: use License Expression Syntax and Exceptions list to create equivalent license</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-                wxWindows Library Licence, Version 3.1<br/>
-                ======================================
-<p>  Copyright (C) 1998-2005 Julian Smart, Robert Roebling et al</p>
-<p>  Everyone is permitted to copy and distribute verbatim copies<br/>
-  of this licence document, but changing it is not allowed.</p>
-<p style="margin-left: 20px;">                       WXWINDOWS LIBRARY LICENCE<br/>
-     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</p>
-<p>  This library is free software; you can redistribute it and/or modify it<br/>
-  under the terms of the GNU Library General Public Licence as published by<br/>
-  the Free Software Foundation; either version 2 of the Licence, or (at<br/>
-  your option) any later version.</p>
-<p>  This library is distributed in the hope that it will be useful, but<br/>
-  WITHOUT ANY WARRANTY; without even the implied warranty of<br/>
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library<br/>
-  General Public Licence for more details.</p>
-<p>  You should have received a copy of the GNU Library General Public Licence<br/>
-  along with this software, usually in a file named COPYING.LIB.  If not,<br/>
-  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,<br/>
-  Boston, MA 02111-1307 USA.</p>
-<p>  EXCEPTION NOTICE</p>
-<p>  1. As a special exception, the copyright holders of this library give<br/>
-  permission for additional uses of the text contained in this release of<br/>
-  the library as licenced under the wxWindows Library Licence, applying<br/>
-  either version 3.1 of the Licence, or (at your option) any later version of<br/>
-  the Licence as published by the copyright holders of version<br/>
-  3.1 of the Licence document.</p>
-<p>  2. The exception is that you may use, copy, link, modify and distribute<br/>
-  under your own terms, binary object code versions of works based<br/>
-  on the Library.</p>
-<p>  3. If you copy code from files distributed under the terms of the GNU<br/>
-  General Public Licence or the GNU Library General Public Licence into a<br/>
-  copy of this library, as this licence permits, the exception does not<br/>
-  apply to the code that you add in this way.  To avoid misleading anyone as<br/>
-  to the status of such modified files, you must delete this exception<br/>
-  notice from such code and/or adjust the licensing conditions notice<br/>
-  accordingly.</p>
-<p>  4. If you write modifications of your own for this library, it is your<br/>
-  choice whether to permit this exception to apply to your modifications. <br/>
-  If you do not wish that, you must delete the exception notice from such<br/>
-  code and/or adjust the licensing conditions notice accordingly.</p>
+wxWindows Library Licence, Version 3.1 
+<p>Copyright (C) 1998-2005 Julian Smart, Robert Roebling et al</p>
+<p>Everyone is permitted to copy and distribute verbatim copies of this licence document, but changing it is not allowed.</p>
+<p>WXWINDOWS LIBRARY LICENCE </p>
+<p>TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION </p>
+<p>This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public Licence as published by the Free Software Foundation; either version 2 of the Licence, or (at your option) any later version. </p>
+<p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library General Public Licence for more details.</p>
+<p>You should have received a copy of the GNU Library General Public Licence along with this software, usually in a file named COPYING.LIB. If not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.</p>
+<p>EXCEPTION NOTICE</p>
+<p>1. As a special exception, the copyright holders of this library give permission for additional uses of the text contained in this release of the library as licenced under the wxWindows Library Licence, applying either version 3.1 of the Licence, or (at your option) any later version of the Licence as published by the copyright holders of version 3.1 of the Licence document.</p>
+<p>2. The exception is that you may use, copy, link, modify and distribute under your own terms, binary object code versions of works based on the Library.</p>
+<p>3. If you copy code from files distributed under the terms of the GNU General Public Licence or the GNU Library General Public Licence into a copy of this library, as this licence permits, the exception does not apply to the code that you add in this way. To avoid misleading anyone as to the status of such modified files, you must delete this exception notice from such code and/or adjust the licensing conditions notice accordingly.</p>
+<p>4. If you write modifications of your own for this library, it is your choice whether to permit this exception to apply to your modifications. If you do not wish that, you must delete the exception notice from such code and/or adjust the licensing conditions notice accordingly. </p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">                wxWindows Library Licence, Version 3.1<br/>
-                ======================================
-<p>  Copyright (C) 1998-2005 Julian Smart, Robert Roebling et al</p>
-<p>  Everyone is permitted to copy and distribute verbatim copies<br/>
-  of this licence document, but changing it is not allowed.</p>
-<p style="margin-left: 20px;">                       WXWINDOWS LIBRARY LICENCE<br/>
-     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</p>
-<p>  This library is free software; you can redistribute it and/or modify it<br/>
-  under the terms of the GNU Library General Public Licence as published by<br/>
-  the Free Software Foundation; either version 2 of the Licence, or (at<br/>
-  your option) any later version.</p>
-<p>  This library is distributed in the hope that it will be useful, but<br/>
-  WITHOUT ANY WARRANTY; without even the implied warranty of<br/>
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library<br/>
-  General Public Licence for more details.</p>
-<p>  You should have received a copy of the GNU Library General Public Licence<br/>
-  along with this software, usually in a file named COPYING.LIB.  If not,<br/>
-  write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,<br/>
-  Boston, MA 02111-1307 USA.</p>
-<p>  EXCEPTION NOTICE</p>
-<p>  1. As a special exception, the copyright holders of this library give<br/>
-  permission for additional uses of the text contained in this release of<br/>
-  the library as licenced under the wxWindows Library Licence, applying<br/>
-  either version 3.1 of the Licence, or (at your option) any later version of<br/>
-  the Licence as published by the copyright holders of version<br/>
-  3.1 of the Licence document.</p>
-<p>  2. The exception is that you may use, copy, link, modify and distribute<br/>
-  under your own terms, binary object code versions of works based<br/>
-  on the Library.</p>
-<p>  3. If you copy code from files distributed under the terms of the GNU<br/>
-  General Public Licence or the GNU Library General Public Licence into a<br/>
-  copy of this library, as this licence permits, the exception does not<br/>
-  apply to the code that you add in this way.  To avoid misleading anyone as<br/>
-  to the status of such modified files, you must delete this exception<br/>
-  notice from such code and/or adjust the licensing conditions notice<br/>
-  accordingly.</p>
-<p>  4. If you write modifications of your own for this library, it is your<br/>
-  choice whether to permit this exception to apply to your modifications. <br/>
-  If you do not wish that, you must delete the exception notice from such<br/>
-  code and/or adjust the licensing conditions notice accordingly.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

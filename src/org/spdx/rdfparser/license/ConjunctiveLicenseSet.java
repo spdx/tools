@@ -80,11 +80,10 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 	@Override
 	public int hashCode() {
 		// Calculate a hashcode by XOR'ing all of the hashcodes of the license set
-		int retval = 41;	// a prime number
-		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
-		while (iter.hasNext()) {
-			AnyLicenseInfo li = iter.next();
-			retval = retval ^ li.hashCode();
+		int retval = 41;	// Prime number
+		AnyLicenseInfo[] allMembers = this.getFlattenedMembers();
+		for (int i = 0; i < allMembers.length; i++) {
+			retval = retval ^ allMembers[i].hashCode();
 		}
 		return retval;
 	}

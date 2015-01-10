@@ -62,20 +62,25 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">GNU General Public License v3.0 w/Autoconf exception</h1>
-
+<h1 style="color:red">Deprecated</h1>
+<div style="color:red">This license has been deprecated since 2.0rc1.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">GNU General Public License v3.0 w/Autoconf exception</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">GNU General Public License v3.0 w/Autoconf exception</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">GPL-3.0-with-autoconf-exception</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.gnu.org/licenses/autoconf-exception-3.0.html" rel="owl:sameAs">http://www.gnu.org/licenses/autoconf-exception-3.0.html</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.gnu.org/licenses/autoconf-exception-3.0.html" rel="rdfs:seeAlso">http://www.gnu.org/licenses/autoconf-exception-3.0.html</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">None</p>
+    <p style="margin-left: 20px;">DEPRECATED: use License Expression Syntax and Exceptions list to create equivalent license</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
@@ -98,25 +103,10 @@ The availability of this Exception does not imply any general presumption that t
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">insert GPL v3 text here
-<p>AUTOCONF CONFIGURE SCRIPT EXCEPTION</p>
-<p>Version 3.0, 18 August 2009</p>
-<p>Copyright © 2009 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</p>
-<p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
-<p>This Exception is an additional permission under section 7 of the GNU General Public License, version 3 (&quot;GPLv3&quot;). It applies to a given file that bears a notice placed by the copyright holder of the file stating that the file is governed by GPLv3 along with this Exception.</p>
-<p>The purpose of this Exception is to allow distribution of Autoconf&apos;s typical output under terms of the recipient&apos;s choice (including proprietary).</p>
-<p>0. Definitions.<br/>
-&quot;Covered Code&quot; is the source or object code of a version of Autoconf that is a covered work under this License.</p>
-<p>&quot;Normally Copied Code&quot; for a version of Autoconf means all parts of its Covered Code which that version can copy from its code (i.e., not from its input file) into its minimally verbose, non-debugging and non-tracing output.</p>
-<p>&quot;Ineligible Code&quot; is Covered Code that is not Normally Copied Code.</p>
-<p>1. Grant of Additional Permission.<br/>
-You have permission to propagate output of Autoconf, even if such propagation would otherwise violate the terms of GPLv3. However, if by modifying Autoconf you cause any Ineligible Code of the version you received to become Normally Copied Code of your modified version, then you void this Exception for the resulting covered work. If you convey that resulting covered work, you must remove this Exception in accordance with the second paragraph of Section 7 of GPLv3.</p>
-<p>2. No Weakening of Autoconf Copyleft.<br/>
-The availability of this Exception does not imply any general presumption that third-party software is unaffected by the copyleft requirements of the license of Autoconf.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

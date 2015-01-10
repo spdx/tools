@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">BSD 2-clause NetBSD License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">BSD 2-clause NetBSD License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">BSD 2-clause NetBSD License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-2-Clause-NetBSD</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.netbsd.org/about/redistribution.html#default" rel="owl:sameAs">http://www.netbsd.org/about/redistribution.html#default</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.netbsd.org/about/redistribution.html#default" rel="rdfs:seeAlso">http://www.netbsd.org/about/redistribution.html#default</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    false
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">NetBSD adopted this 2-clause license in 2008 for code contributed to NetBSD Foundation.</p>
@@ -80,31 +83,30 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-NetBSD License
-<p>Copyright (c) 2008 The NetBSD Foundation, Inc.<br/>
-All rights reserved.</p>
-<p>This code is derived from software contributed to The NetBSD Foundation by </p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
+
+<div id="copyrightSection" class="optional-license-text">
+ Copyright (c) 
+<span id="copyright" class="replacable-license-text">2008 The NetBSD Foundation, Inc.</span>
+ All rights reserved. </div>
+
+<p>This code is derived from software contributed to The NetBSD Foundation by 
+<span id="contributors" class="replacable-license-text"></span>
+ </p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: </p>
+<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. </p>
 <p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p>THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p></p>
+<p>THIS SOFTWARE IS PROVIDED BY 
+<span id="copyrightHolderAsIs" class="replacable-license-text">THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS</span>
+ ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
+<span id="copyrightHolderLiability" class="replacable-license-text">THE FOUNDATION OR CONTRIBUTORS</span>
+ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">NetBSD License
-<p>Copyright (c) 2008 The NetBSD Foundation, Inc.<br/>
-All rights reserved.</p>
-<p>This code is derived from software contributed to The NetBSD Foundation by </p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
-<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p>THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p></p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

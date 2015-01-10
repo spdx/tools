@@ -62,23 +62,24 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">W3C Software Notice and License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">W3C Software Notice and License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">W3C Software Notice and License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">W3C</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231.html" rel="owl:sameAs">http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231.html</a></li>
-
-				<li><a href="http://www.opensource.org/licenses/W3C" rel="owl:sameAs">http://www.opensource.org/licenses/W3C</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231.html" rel="rdfs:seeAlso">http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231.html</a></li>
+       <li><a href="http://www.opensource.org/licenses/W3C" rel="rdfs:seeAlso">http://www.opensource.org/licenses/W3C</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">This license was released: 13 December 2002.<br/>
-</p>
+    <p style="margin-left: 20px;">This license was released: 13 December 2002.</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
@@ -95,31 +96,16 @@ Notice of any changes or modifications to the files, including the date changes 
 <p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED &quot;AS IS,&quot; AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</p>
 <p>COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF ANY USE OF THE SOFTWARE OR DOCUMENTATION.</p>
 <p>The name and trademarks of copyright holders may NOT be used in advertising or publicity pertaining to the software without specific, written prior permission. Title to copyright in this software and any associated documentation will at all times remain with copyright holders.</p>
-<p>Notes<br/>
-This version: http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</p>
+<p>Notes</p>
+<p>This version: http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</p>
 <p>This formulation of W3C&apos;s notice and license became active on December 31 2002. This version removes the copyright ownership notice such that this license can be used with materials other than those owned by the W3C, reflects that ERCIM is now a host of the W3C, includes references to this specific dated version of the license, and removes the ambiguous grant of &quot;use&quot;. Otherwise, this version is the same as the previous version and is written so as to preserve the Free Software Foundation&apos;s assessment of GPL compatibility and OSI&apos;s certification under the Open Source Definition.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text">Copyright (C) {{---}} World Wide Web Consortium, (Massachusetts Institute of Technology, European Research Consortium for Informatics and Mathematics, Keio University). All Rights Reserved. This work is distributed under the W3C® Software License in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">W3C SOFTWARE NOTICE AND LICENSE
-<p>This work (and included software, documentation such as READMEs, or other related items) is being provided by the copyright holders under the following license.</p>
-<p>License</p>
-<p>By obtaining, using and/or copying this work, you (the licensee) agree that you have read, understood, and will comply with the following terms and conditions.</p>
-<p>Permission to copy, modify, and distribute this software and its documentation, with or without modification, for any purpose and without fee or royalty is hereby granted, provided that you include the following on ALL copies of the software and documentation or portions thereof, including modifications:<br/>
-The full text of this NOTICE in a location viewable to users of the redistributed or derivative work.<br/>
-Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, the W3C Software Short Notice should be included (hypertext is preferred, text is permitted) within the body of any redistributed or derivative code.<br/>
-Notice of any changes or modifications to the files, including the date changes were made. (We recommend you provide URIs to the location from which the code is derived.)</p>
-<p>Disclaimers</p>
-<p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED &quot;AS IS,&quot; AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.</p>
-<p>COPYRIGHT HOLDERS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF ANY USE OF THE SOFTWARE OR DOCUMENTATION.</p>
-<p>The name and trademarks of copyright holders may NOT be used in advertising or publicity pertaining to the software without specific, written prior permission. Title to copyright in this software and any associated documentation will at all times remain with copyright holders.</p>
-<p>Notes<br/>
-This version: http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</p>
-<p>This formulation of W3C&apos;s notice and license became active on December 31 2002. This version removes the copyright ownership notice such that this license can be used with materials other than those owned by the W3C, reflects that ERCIM is now a host of the W3C, includes references to this specific dated version of the license, and removes the ambiguous grant of &quot;use&quot;. Otherwise, this version is the same as the previous version and is written so as to preserve the Free Software Foundation&apos;s assessment of GPL compatibility and OSI&apos;s certification under the Open Source Definition.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  
+  Copyright (C) {{---}} World Wide Web Consortium, (Massachusetts Institute of Technology, European Research Consortium for Informatics and Mathematics, Keio University). All Rights Reserved. This work is distributed under the W3C® Software License in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

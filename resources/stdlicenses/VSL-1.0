@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Vovida Software License v1.0</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Vovida Software License v1.0</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Vovida Software License v1.0</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">VSL-1.0</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.opensource.org/licenses/VSL-1.0" rel="owl:sameAs">http://www.opensource.org/licenses/VSL-1.0</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.opensource.org/licenses/VSL-1.0" rel="rdfs:seeAlso">http://www.opensource.org/licenses/VSL-1.0</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -80,87 +83,23 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-Vovida Software License v. 1.0
-<p>This license applies to all software incorporated in the &quot;Vovida<br/>
-Open Communication Application Library&quot; except for those portions<br/>
-incorporating third party software specifically identified as being<br/>
-licensed under separate license.</p>
-<p>The Vovida Software License, Version 1.0<br/>
-Copyright (c) 2000 Vovida Networks, Inc. All rights reserved.</p>
-<p>Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the following conditions<br/>
-are met:</p>
-<p>1. Redistributions of source code must retain the above copyright<br/>
-notice, this list of conditions and the following disclaimer.</p>
-<p>2. Redistributions in binary form must reproduce the above copyright<br/>
-notice, this list of conditions and the following disclaimer in<br/>
-the documentation and/or other materials provided with the<br/>
-distribution.</p>
-<p>3. The names &quot;VOCAL&quot;, &quot;Vovida Open Communication Application Library&quot;,<br/>
-and &quot;Vovida Open Communication Application Library (VOCAL)&quot; must<br/>
-not be used to endorse or promote products derived from this<br/>
-software without prior written permission. For written<br/>
-permission, please contact vocal@vovida.org.</p>
-<p>4. Products derived from this software may not be called &quot;VOCAL&quot;, nor<br/>
-may &quot;VOCAL&quot; appear in their name, without prior written<br/>
-permission.</p>
-<p>THIS SOFTWARE IS PROVIDED &quot;AS IS&quot; AND ANY EXPRESSED OR IMPLIED<br/>
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES<br/>
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND<br/>
-NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL VOVIDA<br/>
-NETWORKS, INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY DAMAGES<br/>
-IN EXCESS OF $1,000, NOR FOR ANY INDIRECT, INCIDENTAL, SPECIAL,<br/>
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,<br/>
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR<br/>
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY<br/>
-OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT<br/>
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE<br/>
-USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH<br/>
-DAMAGE.</p>
+Vovida Software License v. 1.0 
+<p>This license applies to all software incorporated in the &quot;Vovida Open Communication Application Library&quot; except for those portions incorporating third party software specifically identified as being licensed under separate license. </p>
+<p>The Vovida Software License, Version 1.0 <br/>
+Copyright (c) 2000 Vovida Networks, Inc. All rights reserved. </p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: </p>
+<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. </p>
+<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. </p>
+<p>3. The names &quot;VOCAL&quot;, &quot;Vovida Open Communication Application Library&quot;, and &quot;Vovida Open Communication Application Library (VOCAL)&quot; must not be used to endorse or promote products derived from this software without prior written permission. For written permission, please contact vocal@vovida.org. </p>
+<p>4. Products derived from this software may not be called &quot;VOCAL&quot;, nor may &quot;VOCAL&quot; appear in their name, without prior written permission. </p>
+<p>THIS SOFTWARE IS PROVIDED &quot;AS IS&quot; AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL VOVIDA NETWORKS, INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY DAMAGES IN EXCESS OF $1,000, NOR FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Vovida Software License v. 1.0
-<p>This license applies to all software incorporated in the &quot;Vovida<br/>
-Open Communication Application Library&quot; except for those portions<br/>
-incorporating third party software specifically identified as being<br/>
-licensed under separate license.</p>
-<p>The Vovida Software License, Version 1.0<br/>
-Copyright (c) 2000 Vovida Networks, Inc. All rights reserved.</p>
-<p>Redistribution and use in source and binary forms, with or without<br/>
-modification, are permitted provided that the following conditions<br/>
-are met:</p>
-<p>1. Redistributions of source code must retain the above copyright<br/>
-notice, this list of conditions and the following disclaimer.</p>
-<p>2. Redistributions in binary form must reproduce the above copyright<br/>
-notice, this list of conditions and the following disclaimer in<br/>
-the documentation and/or other materials provided with the<br/>
-distribution.</p>
-<p>3. The names &quot;VOCAL&quot;, &quot;Vovida Open Communication Application Library&quot;,<br/>
-and &quot;Vovida Open Communication Application Library (VOCAL)&quot; must<br/>
-not be used to endorse or promote products derived from this<br/>
-software without prior written permission. For written<br/>
-permission, please contact vocal@vovida.org.</p>
-<p>4. Products derived from this software may not be called &quot;VOCAL&quot;, nor<br/>
-may &quot;VOCAL&quot; appear in their name, without prior written<br/>
-permission.</p>
-<p>THIS SOFTWARE IS PROVIDED &quot;AS IS&quot; AND ANY EXPRESSED OR IMPLIED<br/>
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES<br/>
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND<br/>
-NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL VOVIDA<br/>
-NETWORKS, INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY DAMAGES<br/>
-IN EXCESS OF $1,000, NOR FOR ANY INDIRECT, INCIDENTAL, SPECIAL,<br/>
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,<br/>
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR<br/>
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY<br/>
-OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT<br/>
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE<br/>
-USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH<br/>
-DAMAGE.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

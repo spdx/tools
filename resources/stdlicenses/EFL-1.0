@@ -62,19 +62,21 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Eiffel Forum License v1.0</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Eiffel Forum License v1.0</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Eiffel Forum License v1.0</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">EFL-1.0</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.eiffel-nice.org/license/forum.txt" rel="owl:sameAs">http://www.eiffel-nice.org/license/forum.txt</a></li>
-
-				<li><a href="http://opensource.org/licenses/EFL-1.0" rel="owl:sameAs">http://opensource.org/licenses/EFL-1.0</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.eiffel-nice.org/license/forum.txt" rel="rdfs:seeAlso">http://www.eiffel-nice.org/license/forum.txt</a></li>
+       <li><a href="http://opensource.org/licenses/EFL-1.0" rel="rdfs:seeAlso">http://opensource.org/licenses/EFL-1.0</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license has been superseded by v2.0</p>
@@ -83,46 +85,19 @@
 
 <div property="spdx:licenseText" class="license-text">
 Eiffel Forum License, version 1
-<p>Permission is hereby granted to use, copy, modify and/or distribute<br/>
-this package, provided that:</p>
-<p>  - copyright notices are retained unchanged</p>
-<p>  - any distribution of this package, whether modified or not,<br/>
-    includes this file</p>
-<p>Permission is hereby also granted to distribute binary programs which<br/>
-depend on this package, provided that:</p>
-<p>  - if the binary program depends on a modified version of this<br/>
-    package, you must publicly release the modified version of this<br/>
-    package</p>
-<p>THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT WARRANTY. ANY EXPRESS OR<br/>
-IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED<br/>
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE<br/>
-DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR<br/>
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<br/>
-DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.</p>
+<p>Permission is hereby granted to use, copy, modify and/or distribute this package, provided that:</p>
+<p style="margin-left: 20px;">     - copyright notices are retained unchanged</p>
+<p style="margin-left: 20px;">     - any distribution of this package, whether modified or not, includes this file</p>
+<p>Permission is hereby also granted to distribute binary programs which depend on this package, provided that:</p>
+<p style="margin-left: 20px;">     - if the binary program depends on a modified version of this package, you must publicly release the modified version of this package</p>
+<p>THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT WARRANTY. ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Eiffel Forum License, version 1
-<p>Permission is hereby granted to use, copy, modify and/or distribute<br/>
-this package, provided that:</p>
-<p>  - copyright notices are retained unchanged</p>
-<p>  - any distribution of this package, whether modified or not,<br/>
-    includes this file</p>
-<p>Permission is hereby also granted to distribute binary programs which<br/>
-depend on this package, provided that:</p>
-<p>  - if the binary program depends on a modified version of this<br/>
-    package, you must publicly release the modified version of this<br/>
-    package</p>
-<p>THIS PACKAGE IS PROVIDED &quot;AS IS&quot; AND WITHOUT WARRANTY. ANY EXPRESS OR<br/>
-IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED<br/>
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE<br/>
-DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR<br/>
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL<br/>
-DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

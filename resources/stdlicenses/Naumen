@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Naumen Public License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Naumen Public License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Naumen Public License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Naumen</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.opensource.org/licenses/Naumen" rel="owl:sameAs">http://www.opensource.org/licenses/Naumen</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.opensource.org/licenses/Naumen" rel="rdfs:seeAlso">http://www.opensource.org/licenses/Naumen</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -80,91 +83,24 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-NAUMEN Public License<br/>
-This software is Copyright (c) NAUMEN (tm) and Contributors.<br/>
-All rights reserved.
-<p>Redistribution and use in source and binary forms, with or<br/>
-without modification, are permitted provided that the following<br/>
-conditions are met:</p>
-<p>1. Redistributions in source code must retain the above<br/>
-copyright notice, this list of conditions, and the following<br/>
-disclaimer.</p>
-<p>2. Redistributions in binary form must reproduce the above<br/>
-copyright notice, this list of conditions, and the following<br/>
-disclaimer in the documentation and/or other materials<br/>
-provided with the distribution.</p>
-<p>3. The name NAUMEN (tm) must not be used to<br/>
-endorse or promote products derived from this software without prior<br/>
-written permission from NAUMEN.</p>
-<p>4. The right to distribute this software or to use it for any<br/>
-purpose does not give you the right to use Servicemarks (sm)<br/>
-or Trademarks (tm) of NAUMEN.</p>
-<p>5. If any files originating from NAUMEN or Contributors are modified, you must<br/>
-cause the modified files to carry prominent notices stating<br/>
-that you changed the files and the date of any change.</p>
+NAUMEN Public License 
+<p>This software is Copyright (c) NAUMEN (tm) and Contributors. All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<p>1. Redistributions in source code must retain the above copyright notice, this list of conditions, and the following disclaimer.</p>
+<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
+<p>3. The name NAUMEN (tm) must not be used to endorse or promote products derived from this software without prior written permission from NAUMEN.</p>
+<p>4. The right to distribute this software or to use it for any purpose does not give you the right to use Servicemarks (sm) or Trademarks (tm) of NAUMEN.</p>
+<p>5. If any files originating from NAUMEN or Contributors are modified, you must cause the modified files to carry prominent notices stating that you changed the files and the date of any change.</p>
 <p>Disclaimer:</p>
-<p>THIS SOFTWARE IS PROVIDED BY NAUMEN &quot;AS IS&quot; AND ANY EXPRESSED<br/>
-OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br/>
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A<br/>
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL NAUMEN<br/>
-OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,<br/>
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES<br/>
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE<br/>
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS<br/>
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,<br/>
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING<br/>
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF<br/>
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH<br/>
-DAMAGE.</p>
-<p>This software consists of contributions made by NAUMEN<br/>
-and Contributors. Specific attributions are listed in the<br/>
-accompanying credits file.</p>
+<p>THIS SOFTWARE IS PROVIDED BY NAUMEN &quot;AS IS&quot; AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL NAUMEN OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>This software consists of contributions made by NAUMEN and Contributors. Specific attributions are listed in the accompanying credits file.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">NAUMEN Public License<br/>
-This software is Copyright (c) NAUMEN (tm) and Contributors.<br/>
-All rights reserved.
-<p>Redistribution and use in source and binary forms, with or<br/>
-without modification, are permitted provided that the following<br/>
-conditions are met:</p>
-<p>1. Redistributions in source code must retain the above<br/>
-copyright notice, this list of conditions, and the following<br/>
-disclaimer.</p>
-<p>2. Redistributions in binary form must reproduce the above<br/>
-copyright notice, this list of conditions, and the following<br/>
-disclaimer in the documentation and/or other materials<br/>
-provided with the distribution.</p>
-<p>3. The name NAUMEN (tm) must not be used to<br/>
-endorse or promote products derived from this software without prior<br/>
-written permission from NAUMEN.</p>
-<p>4. The right to distribute this software or to use it for any<br/>
-purpose does not give you the right to use Servicemarks (sm)<br/>
-or Trademarks (tm) of NAUMEN.</p>
-<p>5. If any files originating from NAUMEN or Contributors are modified, you must<br/>
-cause the modified files to carry prominent notices stating<br/>
-that you changed the files and the date of any change.</p>
-<p>Disclaimer:</p>
-<p>THIS SOFTWARE IS PROVIDED BY NAUMEN &quot;AS IS&quot; AND ANY EXPRESSED<br/>
-OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<br/>
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A<br/>
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL NAUMEN<br/>
-OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,<br/>
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES<br/>
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE<br/>
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS<br/>
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,<br/>
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING<br/>
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF<br/>
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH<br/>
-DAMAGE.</p>
-<p>This software consists of contributions made by NAUMEN<br/>
-and Contributors. Specific attributions are listed in the<br/>
-accompanying credits file.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

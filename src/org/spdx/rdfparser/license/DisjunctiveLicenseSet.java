@@ -80,10 +80,9 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 	@Override
 	public int hashCode() {
 		int retval = 41;	// Prime number
-		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
-		while (iter.hasNext()) {
-			AnyLicenseInfo li = iter.next();
-			retval = retval ^ li.hashCode();
+		AnyLicenseInfo[] allMembers = this.getFlattenedMembers();
+		for (int i = 0; i < allMembers.length; i++) {
+			retval = retval ^ allMembers[i].hashCode();
 		}
 		return retval;
 	}
@@ -142,7 +141,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 	 * meaning.
 	 * @return all members "flattening out" disjunctive license sets which are members of this set
 	 */
-	private AnyLicenseInfo[] getFlattenedMembers() {
+	protected AnyLicenseInfo[] getFlattenedMembers() {
 		ArrayList<AnyLicenseInfo> retval = new ArrayList<AnyLicenseInfo>();
 		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {

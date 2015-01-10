@@ -62,19 +62,21 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">zlib License</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">zlib License</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">zlib License</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Zlib</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.zlib.net/zlib_license.html" rel="owl:sameAs">http://www.zlib.net/zlib_license.html</a></li>
-
-				<li><a href="http://www.opensource.org/licenses/Zlib" rel="owl:sameAs">http://www.opensource.org/licenses/Zlib</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.zlib.net/zlib_license.html" rel="rdfs:seeAlso">http://www.zlib.net/zlib_license.html</a></li>
+       <li><a href="http://www.opensource.org/licenses/Zlib" rel="rdfs:seeAlso">http://www.opensource.org/licenses/Zlib</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -83,42 +85,18 @@
 
 <div property="spdx:licenseText" class="license-text">
 zlib License
-<p><br/>
-  This software is provided &apos;as-is&apos;, without any express or implied<br/>
-  warranty.  In no event will the authors be held liable for any damages<br/>
-  arising from the use of this software.</p>
-<p>  Permission is granted to anyone to use this software for any purpose,<br/>
-  including commercial applications, and to alter it and redistribute it<br/>
-  freely, subject to the following restrictions:</p>
-<p>  1. The origin of this software must not be misrepresented; you must not<br/>
-     claim that you wrote the original software. If you use this software<br/>
-     in a product, an acknowledgment in the product documentation would be<br/>
-     appreciated but is not required.<br/>
-  2. Altered source versions must be plainly marked as such, and must not be<br/>
-     misrepresented as being the original software.<br/>
-  3. This notice may not be removed or altered from any source distribution.</p>
+<p>This software is provided &apos;as-is&apos;, without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.</p>
+<p>Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:</p>
+<p style="margin-left: 20px;">     1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.</p>
+<p style="margin-left: 20px;">     2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.</p>
+<p style="margin-left: 20px;">     3. This notice may not be removed or altered from any source distribution.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">zlib License
-<p><br/>
-  This software is provided &apos;as-is&apos;, without any express or implied<br/>
-  warranty.  In no event will the authors be held liable for any damages<br/>
-  arising from the use of this software.</p>
-<p>  Permission is granted to anyone to use this software for any purpose,<br/>
-  including commercial applications, and to alter it and redistribute it<br/>
-  freely, subject to the following restrictions:</p>
-<p>  1. The origin of this software must not be misrepresented; you must not<br/>
-     claim that you wrote the original software. If you use this software<br/>
-     in a product, an acknowledgment in the product documentation would be<br/>
-     appreciated but is not required.<br/>
-  2. Altered source versions must be plainly marked as such, and must not be<br/>
-     misrepresented as being the original software.<br/>
-  3. This notice may not be removed or altered from any source distribution.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

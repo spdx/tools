@@ -62,41 +62,40 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">GNU General Public License v2.0 w/Bison exception</h1>
-
+<h1 style="color:red">Deprecated</h1>
+<div style="color:red">This license has been deprecated since 2.0rc1.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">GNU General Public License v2.0 w/Bison exception</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">GNU General Public License v2.0 w/Bison exception</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">GPL-2.0-with-bison-exception</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="none" rel="owl:sameAs">none</a></li>
-
-				<li><a href="found" rel="owl:sameAs">found</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="none" rel="rdfs:seeAlso">none</a></li>
+       <li><a href="found" rel="rdfs:seeAlso">found</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">None</p>
+    <p style="margin-left: 20px;">DEPRECATED: use License Expression Syntax and Exceptions list to create equivalent license</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-﻿insert GPL v2 text here
-<p>Bison Exception</p>
+Bison Exception
 <p>As a special exception, you may create a larger work that contains part or all of the Bison parser skeleton and distribute that work under terms of your choice, so long as that work isn&apos;t itself a parser generator using the skeleton or a modified version thereof as a parser skeleton. Alternatively, if you modify or redistribute the parser skeleton itself, you may (at your option) remove this special exception, which will cause the skeleton and the resulting Bison output files to be licensed under the GNU General Public License without this special exception.</p>
 <p>This special exception was added by the Free Software Foundation in version 2.2 of Bison.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">﻿insert GPL v2 text here
-<p>Bison Exception</p>
-<p>As a special exception, you may create a larger work that contains part or all of the Bison parser skeleton and distribute that work under terms of your choice, so long as that work isn&apos;t itself a parser generator using the skeleton or a modified version thereof as a parser skeleton. Alternatively, if you modify or redistribute the parser skeleton itself, you may (at your option) remove this special exception, which will cause the skeleton and the resulting Bison output files to be licensed under the GNU General Public License without this special exception.</p>
-<p>This special exception was added by the Free Software Foundation in version 2.2 of Bison.</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

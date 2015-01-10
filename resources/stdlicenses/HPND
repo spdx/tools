@@ -62,17 +62,20 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">Historic Permission Notice and Disclaimer</h1>
-
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">Historic Permission Notice and Disclaimer</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">Historic Permission Notice and Disclaimer</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">HPND</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.opensource.org/licenses/HPND" rel="owl:sameAs">http://www.opensource.org/licenses/HPND</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.opensource.org/licenses/HPND" rel="rdfs:seeAlso">http://www.opensource.org/licenses/HPND</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license has been voluntarily deprecated by its author.</p>
@@ -87,14 +90,10 @@ Historical Permission Notice and Disclaimer
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">Historical Permission Notice and Disclaimer
-<p>&lt;copyright notice&gt;</p>
-<p>Permission to use, copy, modify and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies[,] [and] that both [that] [the] copyright notice and this permission notice appear in supporting documentation[, and that the name [of] &lt;copyright holder&gt; [or &lt;related entities&gt;] not be used in advertising or publicity pertaining to distribution of the software without specific, written prior permission]. [&lt;copyright holder&gt; makes no representations about the suitability of this software for any purpose. It is provided &quot;as is&quot; without express or implied warranty.]</p>
-<p>[&lt;copyright holder&gt; DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS[,][.] IN NO EVENT SHALL &lt;copyright holder&gt; BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

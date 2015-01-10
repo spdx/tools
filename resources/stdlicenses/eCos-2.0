@@ -62,20 +62,25 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">eCos license version 2.0</h1>
-
+<h1 style="color:red">Deprecated</h1>
+<div style="color:red">This license has been deprecated since 2.0rc1.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">eCos license version 2.0</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">eCos license version 2.0</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">eCos-2.0</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="http://www.gnu.org/licenses/ecos-license.html" rel="owl:sameAs">http://www.gnu.org/licenses/ecos-license.html</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="http://www.gnu.org/licenses/ecos-license.html" rel="rdfs:seeAlso">http://www.gnu.org/licenses/ecos-license.html</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    false
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">This is really GPL v2 or later + an exception</p>
+    <p style="margin-left: 20px;">DEPRECATED:  his is really GPL v2 or later + an exception. Use License Expression Syntax and Exceptions list to create equivalent licenseT</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
@@ -92,19 +97,10 @@ The eCos license version 2.0
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">The eCos license version 2.0
-<p>This file is part of eCos, the Embedded Configurable Operating System. Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.</p>
-<p>eCos is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 or (at your option) any later version.</p>
-<p>eCos is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-<p>You should have received a copy of the GNU General Public License along with eCos; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.</p>
-<p>As a special exception, if other files instantiate templates or use macros or inline functions from this file, or you compile this file and link it with other works to produce a work based on this file, this file does not by itself cause the resulting work to be covered by the GNU General Public License. However the source code for this file must still be made available in accordance with section (3) of the GNU General Public License.</p>
-<p>This exception does not invalidate any other reasons why a work based on this file might be covered by the GNU General Public License.</p>
-<p>Alternative licenses for eCos may be arranged by contacting Red Hat, Inc. at http://sources.redhat.com/ecos/ecos-license/ -------------------------------------------</p>
-<p>####ECOSGPLCOPYRIGHTEND####</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

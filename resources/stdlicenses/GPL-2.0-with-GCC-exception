@@ -62,22 +62,26 @@
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
 <h1 property="dc:title">GNU General Public License v2.0 w/GCC Runtime Library exception</h1>
-
+<h1 style="color:red">Deprecated</h1>
+<div style="color:red">This license has been deprecated since 2.0rc1.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="rdfs:label"><p style="margin-left: 20px;">GNU General Public License v2.0 w/GCC Runtime Library exception</p></div>
+    <div property="spdx:name"><p style="margin-left: 20px;">GNU General Public License v2.0 w/GCC Runtime Library exception</p></div>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">GPL-2.0-with-GCC-exception</code></p>
 
 <h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">				<li><a href="none" rel="owl:sameAs">none</a></li>
-
-				<li><a href="found" rel="owl:sameAs">found</a></li>
-
-</p>
+    <p style="margin-left: 20px;">
+       <li><a href="none" rel="rdfs:seeAlso">none</a></li>
+       <li><a href="found" rel="rdfs:seeAlso">found</a></li>
+    </p>
+    
+<div property="spdx:isOsiApproved" style="display: none;">
+    true
+</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">None</p>
+    <p style="margin-left: 20px;">DEPRECATED: use License Expression Syntax and Exceptions list to create equivalent license</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
@@ -88,13 +92,10 @@ In addition to the permissions in the GNU General Public License, the Free Softw
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text"></div>
-
-<!--
-<h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">insert GPL v2 text here
-<p>GCC Linking Exception<br/>
-In addition to the permissions in the GNU General Public License, the Free Software Foundation gives you unlimited permission to link the compiled version of this file into combinations with other programs, and to distribute those combinations without any restriction coming from the use of this file. (The General Public License restrictions do apply in other respects; for example, they cover modification of the file, and distribution when not linked into a combine executable.)</p></div> -->
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
