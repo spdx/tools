@@ -35,7 +35,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public class WithExceptionOperator extends AnyLicenseInfo {
 	
-	private SimpleLicensingInfo license;
+	private AnyLicenseInfo license;
 	private LicenseException exception;
 	
 	/**
@@ -55,10 +55,10 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 				throw (new InvalidSPDXAnalysisException("More than one license for a license WITH expression"));
 			}
 			AnyLicenseInfo anyLicense = LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject());
-			if (!(anyLicense instanceof SimpleLicensingInfo)) {
-				throw (new InvalidSPDXAnalysisException("The license for a WITH expression must be of type SimpleLicensingInfo"));
+			if (!(anyLicense instanceof SimpleLicensingInfo) && !(anyLicense instanceof OrLaterOperator)) {
+				throw (new InvalidSPDXAnalysisException("The license for a WITH expression must be of type SimpleLicensingInfo or an OrLaterOperator"));
 			}
-			this.license = (SimpleLicensingInfo)anyLicense;
+			this.license = anyLicense;
 		}
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION).asNode();
 		m = Triple.createMatch(licenseInfoNode, p, null);
@@ -73,7 +73,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	}
 
 
-	public WithExceptionOperator(SimpleLicensingInfo license, LicenseException exception) {
+	public WithExceptionOperator(AnyLicenseInfo license, LicenseException exception) {
 		super();
 		this.license = license;
 		this.exception = exception;
@@ -105,7 +105,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	/**
 	 * @return the license
 	 */
-	public SimpleLicensingInfo getLicense() {
+	public AnyLicenseInfo getLicense() {
 		return license;
 	}
 
@@ -114,7 +114,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	 * @param license the license to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setLicense(SimpleLicensingInfo license) throws InvalidSPDXAnalysisException {
+	public void setLicense(AnyLicenseInfo license) throws InvalidSPDXAnalysisException {
 		this.license = license;
 		if (model != null && licenseInfoNode != null) {
 			// delete any previous created
@@ -231,9 +231,9 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	 */
 	@Override
 	public AnyLicenseInfo clone() {
-		SimpleLicensingInfo clonedLicense = null;
+		AnyLicenseInfo clonedLicense = null;
 		if (this.license != null) {
-			clonedLicense = (SimpleLicensingInfo)this.license.clone();
+			clonedLicense = this.license.clone();
 		}
 		LicenseException clonedException = null;
 		if (this.exception != null) {

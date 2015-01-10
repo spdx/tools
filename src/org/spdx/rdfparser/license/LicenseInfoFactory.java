@@ -433,36 +433,12 @@ public class LicenseInfoFactory {
 	 * @throws InvalidLicenseStringException 
 	 */
 	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
-		String parseString = licenseString.trim();
-		if (parseString.isEmpty()) {
-			throw(new InvalidLicenseStringException("Empty license string"));
-		}
-		if (parseString.charAt(0) == '(') {
-			if (!parseString.endsWith(")")) {
-				throw(new InvalidLicenseStringException("Missing end ')'"));
-			}
-			// this will be treated some form of License Set
-			parseString = parseString.substring(1, parseString.length()-1).trim();
-			return parseLicenseSet(parseString);
-		} else {
-			// this is either an SPDX listed license or an extracted license
-			int startOfIDPos = skipWhiteSpace(parseString, 0);
-			int endOfIDPos = skipNonWhiteSpace(parseString, startOfIDPos);
-			String licenseID = parseString.substring(startOfIDPos, endOfIDPos);
-			if (licenseID.equals(NONE_LICENSE_NAME)) {
-				return new SpdxNoneLicense();
-			} else if (licenseID.equals(NOASSERTION_LICENSE_NAME)) {
-				return new SpdxNoAssertionLicense();
-			} 
-			if (isSpdxListedLicenseID(licenseID)) {
-				try {
-					return getListedLicenseById(licenseID);
-                } catch (InvalidSPDXAnalysisException e) {
-                    throw new InvalidLicenseStringException(e.getMessage());
-                }
-			} else {
-				return new ExtractedLicenseInfo(licenseID, null);
-			}
+		try {
+			return LicenseExpressionParser.parseLicenseExpression(licenseString);
+		} catch (LicenseParserException e) {
+			throw new InvalidLicenseStringException(e.getMessage(),e);
+		} catch (InvalidSPDXAnalysisException e) {
+			throw new InvalidLicenseStringException("Unexpected SPDX error parsing license string");
 		}
 	}
 

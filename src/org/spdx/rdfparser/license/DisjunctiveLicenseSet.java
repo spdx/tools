@@ -16,6 +16,7 @@
 */
 package org.spdx.rdfparser.license;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -100,19 +101,19 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 			return false;
 		}
 		DisjunctiveLicenseSet comp = (DisjunctiveLicenseSet)o;
-		AnyLicenseInfo[] compInfos = comp.getMembers();
-		if (compInfos.length != this.licenseInfos.size()) {
+		AnyLicenseInfo[] compInfos = comp.getFlattenedMembers();
+		AnyLicenseInfo[] myInfos = this.getFlattenedMembers();
+		if (compInfos.length != myInfos.length) {
 			return false;
 		}
-		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
-		while (iter.hasNext()) {
-			AnyLicenseInfo li = iter.next();
+		for (int j = 0; j < myInfos.length; j++) {
+			AnyLicenseInfo li = myInfos[j];
 			boolean found = false;
 			for (int i = 0; i < compInfos.length; i++) {
 				if (li.equals(compInfos[i])) {
 					found = true;
 					break;
-				}
+				} 
 			}
 			if (!found) {
 				return false;
@@ -133,5 +134,29 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 			clonedSet[i++] = iter.next().clone();
 		}
 		return new DisjunctiveLicenseSet(clonedSet);
+	}
+	
+	/**
+	 * Disjunctive license sets can contain other conjunctive license sets as members.  Logically,
+	 * the members of these "sub-disjunctive license sets" could be direct members and have the same
+	 * meaning.
+	 * @return all members "flattening out" disjunctive license sets which are members of this set
+	 */
+	private AnyLicenseInfo[] getFlattenedMembers() {
+		ArrayList<AnyLicenseInfo> retval = new ArrayList<AnyLicenseInfo>();
+		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
+		while (iter.hasNext()) {
+			AnyLicenseInfo li = iter.next();
+			if (li instanceof DisjunctiveLicenseSet) {
+				// we need to flatten this out
+				AnyLicenseInfo[] members = ((DisjunctiveLicenseSet)li).getFlattenedMembers();
+				for (int i = 0; i < members.length; i++) {
+					retval.add(members[i]);
+				}
+			} else {
+				retval.add(li);
+			}
+		}
+		return retval.toArray(new AnyLicenseInfo[retval.size()]);
 	}
 }
