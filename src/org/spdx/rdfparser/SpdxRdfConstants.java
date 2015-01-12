@@ -69,6 +69,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_FILE = "File";
 	public static final String CLASS_SPDX_REVIEW = "Review";
 	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";
+	public static final String CLASS_ANNOTATION = "Annotation";
 	
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
@@ -179,9 +180,17 @@ public interface SpdxRdfConstants {
 	public static final String FILE_TYPE_BINARY = "BINARY";
 	public static final String FILE_TYPE_OTHER = "OTHER";
 	
+	// SPDX Annotation Properties
+	public static final String PROP_ANNOTATOR = "annotator";
+	public static final String PROP_DATE = "date";
+	public static final String ANNOTATION_TYPE = "annotationType";
+	
 	// SPDX Review Properties
+	// NOTE: These have all been deprecated as of SPDX 2.0
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
+	@Deprecated
 	public static final String PROP_REVIEW_REVIEWER = "reviewer";
+	@Deprecated
 	public static final String PROP_REVIEW_DATE = "reviewDate";
 	
 	// Date format

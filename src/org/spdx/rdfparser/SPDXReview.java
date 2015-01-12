@@ -46,7 +46,7 @@ public class SPDXReview {
 		} else if (reviewerNode.isURI()) {
 			reviewerResource = model.createResource(reviewerNode.getURI());
 		} else {
-			throw(new InvalidSPDXAnalysisException("Can no have a Review node as a literal"));
+			throw(new InvalidSPDXAnalysisException("Can not have a Review node as a literal"));
 		}
 		
 		//reviewer
