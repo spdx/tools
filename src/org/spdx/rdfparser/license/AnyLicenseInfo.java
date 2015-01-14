@@ -18,6 +18,7 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfParserHelper;
 
@@ -39,15 +40,18 @@ public abstract class AnyLicenseInfo implements Cloneable {
 	Model model = null;
 	Node licenseInfoNode = null;
 	Resource resource = null;
+	IModelContainer modelContainer = null;
+	
 	/**
 	 * Create a new LicenseInfo object where the information is copied from
 	 * the model at the LicenseInfo node
-	 * @param model
+	 * @param modelContainer container which includes the license
 	 * @param licenseInfoNode
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	AnyLicenseInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
-		this.model = model;
+	AnyLicenseInfo(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+		this.modelContainer = modelContainer;
+		this.model = modelContainer.getModel();
 		this.licenseInfoNode = licenseInfoNode;
 		resource = RdfParserHelper.convertToResource(model, licenseInfoNode);
 	}
@@ -63,21 +67,23 @@ public abstract class AnyLicenseInfo implements Cloneable {
 	 * If a resource does not already exist in this model for this object,
 	 * create a new resource and populate it.  If the resource does exist,
 	 * return the existing resource.
-	 * @param model
+	 * @param modelContainer container which includes the license
+	 * @param enclosingSpdxDoc The SPDX Document where this license will be contained
 	 * @return resource created from the model
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public Resource createResource(Model model) throws InvalidSPDXAnalysisException {	
+	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		if (this.model != null &&
-				(this.model.equals(model) 
-						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the spdx listed license 
+				(this.modelContainer.equals(modelContainer)) 
+//						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the spdx listed license 
 				&&											// references to reference the URL rather than copy all of the properties into this model
 				this.licenseInfoNode != null &&
 				this.resource != null) {
 			return resource;
 		} else {
-			this.model = model;
-			Resource retval = _createResource(model);
+			this.modelContainer = modelContainer;
+			this.model = modelContainer.getModel();
+			Resource retval = _createResource();
 			this.licenseInfoNode = retval.asNode();
 			this.resource = retval;
 			return retval;
@@ -86,11 +92,10 @@ public abstract class AnyLicenseInfo implements Cloneable {
 	
 	/**
 	 * Internal implementation of create resource which is subclass specific
-	 * @param model
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected abstract Resource _createResource(Model model) throws InvalidSPDXAnalysisException;
+	protected abstract Resource _createResource() throws InvalidSPDXAnalysisException;
 	
 	// force subclasses to implement toString
 	public abstract String toString();

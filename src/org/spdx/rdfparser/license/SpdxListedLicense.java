@@ -18,11 +18,11 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -40,11 +40,12 @@ public class SpdxListedLicense extends License {
 	}
 	/**
 	 * Constructs an SPDX License from the licenseNode
+	 * @param modelContainer container which includes the license
 	 * @param licenseNode RDF graph node representing the SPDX License
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SpdxListedLicense(Model spdxModel, Node licenseNode) throws InvalidSPDXAnalysisException {
-		super(spdxModel, licenseNode);
+	public SpdxListedLicense(IModelContainer modelContainer, Node licenseNode) throws InvalidSPDXAnalysisException {
+		super(modelContainer, licenseNode);
 	}
 	
 	@Override public ArrayList<String> verify() {
@@ -69,10 +70,10 @@ public class SpdxListedLicense extends License {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) {
+	protected Resource _createResource() {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
 		String uri = this.createStdLicenseUri(this.licenseId);
-		Resource r = super._createResource(model, type, uri);
+		Resource r = super._createResource(type, uri);
 		//text
 		if (licenseText != null) {
 			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 

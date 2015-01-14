@@ -55,7 +55,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
  * @author Gary O'Neall
  *
  */
-public class SPDXDocument implements SpdxRdfConstants {
+public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
 	public static final String POINT_NINE_SPDX_VERSION = "SPDX-0.9";
@@ -95,13 +95,15 @@ public class SPDXDocument implements SpdxRdfConstants {
 	 *
 	 */
 	public class SPDXPackage {
+		private SPDXDocument enclosingSpdxDocument;
 		private Node node = null;
 		/**
 		 * Construct a new SPDX package and populate the properties from the node
 		 * @param pkgNode Node in the RDF graph representing the SPDX package
 		 */
-		public SPDXPackage(Node pkgNode) {
+		public SPDXPackage(Node pkgNode, SPDXDocument enclosingSpdxDocument) {
 			this.node = pkgNode;
+			this.enclosingSpdxDocument = enclosingSpdxDocument;
 		}
 		/**
 		 * @return the declaredName
@@ -248,7 +250,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(enclosingSpdxDocument, t.getObject()));
 			}
 			if (alLic.size() > 1) {
 				throw(new InvalidSPDXAnalysisException("Too many declared licenses"));
@@ -268,7 +270,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 				Resource s = getResource(this.node);
 				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE);
 
-				Resource lic = declaredLicense.createResource(model);
+				Resource lic = declaredLicense.createResource(this.enclosingSpdxDocument);
 				s.addProperty(p, lic);
 			}
 		}
@@ -285,7 +287,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(enclosingSpdxDocument, t.getObject()));
 			}
 			if (alLic.size() > 1) {
 				throw(new InvalidSPDXAnalysisException("Too many concluded licenses"));
@@ -304,7 +306,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			if (detectedLicenses != null) {
 				Resource s = getResource(this.node);
 				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE);
-				Resource lic = detectedLicenses.createResource(model);
+				Resource lic = detectedLicenses.createResource(this.enclosingSpdxDocument);
 				s.addProperty(p, lic);
 			}
 		}
@@ -475,7 +477,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alFiles.add(new SPDXFile(model, t.getObject()));
+				alFiles.add(new SPDXFile(enclosingSpdxDocument, t.getObject()));
 			}
 			SPDXFile[] retval = new SPDXFile[alFiles.size()];
 			return alFiles.toArray(retval);
@@ -636,7 +638,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 				Resource s = getResource(this.node);
 				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES);
 				for (int i = 0; i < licenseInfo.length; i++) {
-					Resource lic = licenseInfo[i].createResource(model);
+					Resource lic = licenseInfo[i].createResource(this.enclosingSpdxDocument);
 					s.addProperty(p, lic);
 				}
 			}
@@ -649,7 +651,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
-				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+				alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(enclosingSpdxDocument, t.getObject()));
 			}
 			AnyLicenseInfo[] retval = new AnyLicenseInfo[alLic.size()];
 			retval = alLic.toArray(retval);
@@ -1327,7 +1329,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(this, t.getObject()));
 		}
 		if (alLic.size() > 1) {
 			throw(new InvalidSPDXAnalysisException("Too many data licenses"));
@@ -1360,7 +1362,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		Resource s = getResource(getSpdxDocNode());
 		Property p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_DATA_LICENSE);
 
-		Resource lic = dataLicense.createResource(model);
+		Resource lic = dataLicense.createResource(this);
 		s.addProperty(p, lic);
 	}
 	
@@ -1371,7 +1373,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alFiles.add(new SPDXFile(model, t.getObject()));
+			alFiles.add(new SPDXFile(this, t.getObject()));
 		}
 		SPDXFile[] retval = new SPDXFile[alFiles.size()];
 		return alFiles.toArray(retval);
@@ -1538,7 +1540,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		SPDXPackage newSpdxPackage = null;
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			newSpdxPackage = new SPDXPackage(t.getObject());
+			newSpdxPackage = new SPDXPackage(t.getObject(), this);
 		}
 		this.spdxPackage = newSpdxPackage;
 		return newSpdxPackage;
@@ -1563,7 +1565,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		Resource pkgType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_PACKAGE);
 		Resource spdxPkg = model.createResource(uri, pkgType);
 		s.addProperty(p, spdxPkg);
-		return this.spdxPackage = new SPDXPackage(spdxPkg.asNode());
+		return this.spdxPackage = new SPDXPackage(spdxPkg.asNode(), this);
 	}
 	
 	public void createSpdxPackage() throws InvalidSPDXAnalysisException {
@@ -1591,7 +1593,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(new ExtractedLicenseInfo(model, t.getObject()));
+			alLic.add(new ExtractedLicenseInfo(this, t.getObject()));
 		}
 		ExtractedLicenseInfo[] nonStandardLicenses = new ExtractedLicenseInfo[alLic.size()];
 		nonStandardLicenses = alLic.toArray(nonStandardLicenses);
@@ -1630,7 +1632,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		model.removeAll(s, p, null);
 		for (int i = 0; i < nonStandardLicenses.length; i++) {
 			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
-			s.addProperty(p, nonStandardLicenses[i].createResource(model));
+			s.addProperty(p, nonStandardLicenses[i].createResource(this));
 		}
 	}
 	
@@ -1659,7 +1661,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 		}
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
-		s.addProperty(p, license.createResource(model));		
+		s.addProperty(p, license.createResource(this));		
 	}
 	
 	/**

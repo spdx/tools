@@ -39,6 +39,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	
 	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());
+	IModelContainer modelContainer;
 	private Model model = null;
 	private Resource resource = null;
 	private String name;
@@ -81,8 +82,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 * @param fileNode RDF Graph node representing the SPDX File
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SPDXFile(Model model, Node fileNode) throws InvalidSPDXAnalysisException {
-		this.model = model;
+	public SPDXFile(IModelContainer modelContainer, Node fileNode) throws InvalidSPDXAnalysisException {
+		this.modelContainer = modelContainer;
+		this.model = modelContainer.getModel();
 		this.resource = RdfParserHelper.convertToResource(model, fileNode);
 		// name
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME).asNode();
@@ -125,7 +127,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
 		}
 		if (alLic.size() > 1) {
 			throw(new InvalidSPDXAnalysisException("Too many concluded licenses for file"));
@@ -141,7 +143,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
+			alLic.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
 		}
 		this.seenLicenses = alLic.toArray(new AnyLicenseInfo[alLic.size()]);
 
@@ -152,7 +154,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			alDependencies.add(new SPDXFile(model, t.getObject()));
+			alDependencies.add(new SPDXFile(modelContainer, t.getObject()));
 		}
 		this.fileDependencies = alDependencies.toArray(new SPDXFile[alDependencies.size()]);
 		
@@ -227,6 +229,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public Resource createResource(SPDXDocument doc, String uri) throws InvalidSPDXAnalysisException {
+		this.modelContainer = doc;
 		Model model = doc.getModel();
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_FILE);
 		Resource retval = findFileResource(model, this);	// prevent duplicate files in the model
@@ -270,7 +273,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
 		model.removeAll(fileResource, p, null);
 		if (this.concludedLicenses != null) {
-			Resource lic = this.concludedLicenses.createResource(model);
+			Resource lic = this.concludedLicenses.createResource(doc);
 			fileResource.addProperty(p, lic);
 		}
 
@@ -279,7 +282,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		model.removeAll(fileResource, p, null);
 		if (this.seenLicenses != null && this.seenLicenses.length > 0) {
 			for (int i = 0; i < this.seenLicenses.length; i++) {
-				Resource lic = this.seenLicenses[i].createResource(model);
+				Resource lic = this.seenLicenses[i].createResource(doc);
 				fileResource.addProperty(p, lic);
 			}
 		}
@@ -470,7 +473,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 					this.seenLicenses = new AnyLicenseInfo[alLicNode.size()];
 					for (int k = 0; i < this.seenLicenses.length; k++) {
 						this.seenLicenses[k] = LicenseInfoFactory.getLicenseInfoFromModel(
-								model,alLicNode.get(k));
+								modelContainer, alLicNode.get(k));
 					}
 				}
 			} catch(InvalidSPDXAnalysisException e) {
@@ -493,7 +496,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			for (int i = 0; i < seenLicenses.length; i++) {
 				Resource lic;
 				try {
-					lic = seenLicenses[i].createResource(model);
+					lic = seenLicenses[i].createResource(this.modelContainer);
 				} catch (DuplicateExtractedLicenseIdException e) {
 					throw(new InvalidSPDXAnalysisException("Seen licenses contains a non-standard license ID "+
 							" which already exists in the model with different license text:" + seenLicenses[i].toString()));
@@ -675,7 +678,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 				}
 				if (this.concludedLicenses == null ||
 						!t.getObject().equals(this.concludedLicenses.getResource().asNode())) {
-					this.concludedLicenses = LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject());
+					this.concludedLicenses = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject());
 				}
 			}	catch(InvalidSPDXAnalysisException e) {
 				// just use the original property
@@ -695,7 +698,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
 			Resource lic = null;
 			try {
-				lic = fileLicenses.createResource(model);
+				lic = fileLicenses.createResource(this.modelContainer);
 			} catch (DuplicateExtractedLicenseIdException e) {
 				throw(new InvalidSPDXAnalysisException("Concluded licenses contains a non-standard license with inconsistent text with " +
 						"                                   an existing license: "+fileLicenses.toString()));
@@ -1034,7 +1037,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 				if (!fileDependenciesMatch) {
 					this.fileDependencies = new SPDXFile[alDependencyNodes.size()];
 					for (int k = 0; k < this.fileDependencies.length; k++) {
-						this.fileDependencies[k] = new SPDXFile(model, alDependencyNodes.get(k));
+						this.fileDependencies[k] = new SPDXFile(modelContainer, alDependencyNodes.get(k));
 					}
 				}
 			} catch (InvalidSPDXAnalysisException e) {

@@ -36,6 +36,7 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
@@ -75,6 +76,20 @@ public class TestLicenseInfoFactory {
 	Resource COMPLEX_LICENSE_RESOURCE;
 	
 	Model model;
+	
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 
 	/**
 	 * @throws java.lang.Exception
@@ -118,21 +133,21 @@ public class TestLicenseInfoFactory {
 		
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
-			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(model);
+			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
 		}
 		STANDARD_LICENSES_RESOURCES = new Resource[STANDARD_LICENSES.length];
 		for (int i = 0; i < STANDARD_LICENSES.length; i++) {
-			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(model);
+			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(modelContainer);
 		}
 		CONJUNCTIVE_LICENSES_RESOURCES = new Resource[CONJUNCTIVE_LICENSES.length];
 		for (int i = 0; i < CONJUNCTIVE_LICENSES.length; i++) {
-			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(model);
+			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(modelContainer);
 		}
 		DISJUNCTIVE_LICENSES_RESOURCES = new Resource[DISJUNCTIVE_LICENSES.length];
 		for (int i = 0; i < DISJUNCTIVE_LICENSES.length; i++) {
-			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(model);
+			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(modelContainer);
 		}
-		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(model);
+		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(modelContainer);
 	}
 
 	/**
@@ -150,7 +165,7 @@ public class TestLicenseInfoFactory {
 			// do nothing
 		}  
 		String id = "AFL-1.2";
-		String stdLicUri = LicenseInfoFactory.LISTED_LICENSE_URI_PREFIX + id;
+		String stdLicUri =ListedLicenses.LISTED_LICENSE_URI_PREFIX + id;
 		Model model = ModelFactory.createDefaultModel();
 		InputStream in = null;
 		try {
@@ -220,7 +235,7 @@ public class TestLicenseInfoFactory {
 		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
 		
 		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
-		SpdxListedLicense lic = LicenseInfoFactory.getLicenseFromStdLicModel(stdLicUri);
+		SpdxListedLicense lic = ListedLicenses.getListedLicenses().getLicenseFromUri(stdLicUri);
 		if (lic == null) {
 			fail("license is null");
 		}
@@ -309,7 +324,7 @@ public class TestLicenseInfoFactory {
 	@Test
 	public void testGetLicenseInfoFromModel() throws InvalidSPDXAnalysisException {
 		// standard license
-		AnyLicenseInfo li = LicenseInfoFactory.getLicenseInfoFromModel(model, STANDARD_LICENSES_RESOURCES[0].asNode());
+		AnyLicenseInfo li = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, STANDARD_LICENSES_RESOURCES[0].asNode());
 		if (!(li instanceof SpdxListedLicense)) {
 			fail ("Wrong type for standard license");
 		}
@@ -322,7 +337,7 @@ public class TestLicenseInfoFactory {
 			fail("Incorrect license text");
 		}
 		// non-standard license
-		AnyLicenseInfo li2 = LicenseInfoFactory.getLicenseInfoFromModel(model, NON_STD_LICENSES_RESOURCES[0].asNode());
+		AnyLicenseInfo li2 = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, NON_STD_LICENSES_RESOURCES[0].asNode());
 		if (!(li2 instanceof ExtractedLicenseInfo)) {
 			fail ("Wrong type for non-standard license");
 		}
@@ -332,7 +347,7 @@ public class TestLicenseInfoFactory {
 		verify = li2.verify();
 		assertEquals(0, verify.size());
 		// conjunctive license
-		AnyLicenseInfo cli = LicenseInfoFactory.getLicenseInfoFromModel(model, CONJUNCTIVE_LICENSES_RESOURCES[0].asNode());
+		AnyLicenseInfo cli = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, CONJUNCTIVE_LICENSES_RESOURCES[0].asNode());
 		if (!(cli instanceof ConjunctiveLicenseSet)) {
 			fail ("Wrong type for conjuctive licenses license");
 		}
@@ -340,7 +355,7 @@ public class TestLicenseInfoFactory {
 		verify = cli.verify();
 		assertEquals(0, verify.size());
 		// disjunctive license
-		AnyLicenseInfo dli = LicenseInfoFactory.getLicenseInfoFromModel(model, DISJUNCTIVE_LICENSES_RESOURCES[0].asNode());
+		AnyLicenseInfo dli = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, DISJUNCTIVE_LICENSES_RESOURCES[0].asNode());
 		if (!(dli instanceof DisjunctiveLicenseSet)) {
 			fail ("Wrong type for disjuncdtive licenses license");
 		}
@@ -348,7 +363,7 @@ public class TestLicenseInfoFactory {
 		verify = dli.verify();
 		assertEquals(0, verify.size());
 		// complex license
-		AnyLicenseInfo complex = LicenseInfoFactory.getLicenseInfoFromModel(model, COMPLEX_LICENSE_RESOURCE.asNode());
+		AnyLicenseInfo complex = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, COMPLEX_LICENSE_RESOURCE.asNode());
 		assertEquals(COMPLEX_LICENSE, complex);
 		verify = complex.verify();
 		assertEquals(0, verify.size());
@@ -371,15 +386,15 @@ public class TestLicenseInfoFactory {
 	public void testSpecialLicenses() throws InvalidLicenseStringException, InvalidSPDXAnalysisException {
 		// NONE
 		AnyLicenseInfo none = LicenseInfoFactory.parseSPDXLicenseString(LicenseInfoFactory.NONE_LICENSE_NAME);
-		Resource r = none.createResource(model);
-		AnyLicenseInfo comp = LicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
+		Resource r = none.createResource(modelContainer);
+		AnyLicenseInfo comp = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, r.asNode());
 		assertEquals(none, comp);
 		ArrayList<String> verify = comp.verify();
 		assertEquals(0, verify.size());
 		// NOASSERTION_NAME
 		AnyLicenseInfo noAssertion = LicenseInfoFactory.parseSPDXLicenseString(LicenseInfoFactory.NOASSERTION_LICENSE_NAME);
-		r = noAssertion.createResource(model);
-		comp = LicenseInfoFactory.getLicenseInfoFromModel(model, r.asNode());
+		r = noAssertion.createResource(modelContainer);
+		comp = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, r.asNode());
 		assertEquals(noAssertion, comp);
 		verify = comp.verify();
 		assertEquals(0, verify.size());

@@ -20,12 +20,12 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -58,6 +58,17 @@ public abstract class License extends SimpleLicensingInfo {
 	protected String licenseText;
 	protected boolean osiApproved;
 		
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param osiApproved True if this is an OSI Approvied license
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	public License(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
 		super(name, id, comments, sourceUrl);
@@ -69,11 +80,12 @@ public abstract class License extends SimpleLicensingInfo {
 	}
 	/**
 	 * Constructs an SPDX License from the licenseNode
+	 * @param modelContainer container which includes the license
 	 * @param licenseNode RDF graph node representing the SPDX License
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public License(Model spdxModel, Node licenseNode) throws InvalidSPDXAnalysisException {
-		super(spdxModel, licenseNode);
+	public License(IModelContainer modelContainer, Node licenseNode) throws InvalidSPDXAnalysisException {
+		super(modelContainer, licenseNode);
 		// text
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
@@ -185,8 +197,10 @@ public abstract class License extends SimpleLicensingInfo {
 			model.removeAll(resource, p, null);
 			// add the property
 			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT);
-			resource.addProperty(p, text);
-			this.textInHtml = false;
+			if (text != null) {
+				resource.addProperty(p, text);
+				this.textInHtml = false;
+			}
 		}
 	}
 
@@ -226,8 +240,10 @@ public abstract class License extends SimpleLicensingInfo {
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
-			resource.addProperty(p, this.standardLicenseHeader);
+			if (this.standardLicenseHeader != null) {
+				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
+				resource.addProperty(p, this.standardLicenseHeader);
+			}
 		}
 	}
 	/**
@@ -248,8 +264,10 @@ public abstract class License extends SimpleLicensingInfo {
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
-			resource.addProperty(p, this.standardLicenseTemplate);
+			if (this.standardLicenseTemplate != null) {
+				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
+				resource.addProperty(p, this.standardLicenseTemplate);
+			}
 			this.templateInHtml = false;
 		}
 	}
@@ -265,9 +283,9 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) {
+	protected Resource _createResource() {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
-		Resource r = super._createResource(model, type);
+		Resource r = super._createResource(type);
 		//text
 		if (this.licenseText != null) {
 			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
@@ -383,6 +401,21 @@ public abstract class License extends SimpleLicensingInfo {
 			// Hmmm - TODO: Figure out what to do in this case
 			return null;
 		}
+	}
+	
+	/**
+	 * Copy all of the parameters from another license
+	 * @param license
+	 */
+	public void copyFrom(License license) {
+		this.setComment(license.getComment());
+		this.setLicenseId(license.getLicenseId());
+		this.setLicenseText(license.getLicenseText());
+		this.setName(license.getName());
+		this.setOsiApproved(license.isOsiApproved());
+		this.setSeeAlso(license.getSeeAlso());
+		this.setStandardLicenseHeader(license.getStandardLicenseHeader());
+		this.setStandardLicenseTemplate(this.getStandardLicenseTemplate());
 	}
 	
 }
