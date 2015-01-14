@@ -37,6 +37,20 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class TestSpdxListedLicense {
 
+	Model model;
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -53,7 +67,7 @@ public class TestSpdxListedLicense {
 	
 	@Test
 	public void testCreate() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
@@ -63,8 +77,8 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
-		Resource licResource = stdl.createResource(model);
-		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
+		Resource licResource = stdl.createResource(modelContainer);
+		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(id, compLic.getLicenseId());
 		assertEquals(text, compLic.getLicenseText());
 		ArrayList<String> verify = stdl.verify();
@@ -81,7 +95,7 @@ public class TestSpdxListedLicense {
 	
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
@@ -92,13 +106,13 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, comments, standardLicenseHeader, template, true);
-		Resource licResource = stdl.createResource(model);
-		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
+		Resource licResource = stdl.createResource(modelContainer);
+		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(comments, compLic.getComment());
 		
 		compLic.setComment(comments2);
 		assertEquals(comments2, compLic.getComment());
-		SpdxListedLicense compLic2 = new SpdxListedLicense(model, licResource.asNode());
+		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(comments2, compLic2.getComment());
 		StringWriter writer = new StringWriter();
 		model.write(writer);
@@ -113,7 +127,7 @@ public class TestSpdxListedLicense {
 	
 	@Test
 	public void testSetIDandText() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
@@ -123,8 +137,8 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
-		Resource licResource = stdl.createResource(model);
-		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
+		Resource licResource = stdl.createResource(modelContainer);
+		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(id, compLic.getLicenseId());
 		assertEquals(text, compLic.getLicenseText());
 		
@@ -134,7 +148,7 @@ public class TestSpdxListedLicense {
 		compLic.setLicenseText(newText);
 		assertEquals(newID, compLic.getLicenseId());
 		assertEquals(newText, compLic.getLicenseText());
-		SpdxListedLicense compLic2 = new SpdxListedLicense(model, licResource.asNode());
+		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(newID, compLic2.getLicenseId());
 		assertEquals(newText, compLic2.getLicenseText());
 		ArrayList<String> verify = stdl.verify();
@@ -147,7 +161,7 @@ public class TestSpdxListedLicense {
 	public void testCreateMultile() {
 		// test to make sure if we create a node with the same id, we
 		// get back the same URI
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
@@ -162,17 +176,17 @@ public class TestSpdxListedLicense {
 		try {
     		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
     				sourceUrls1, notes, standardLicenseHeader, template, true);
-    		Resource licResource = stdl.createResource(model);
+    		Resource licResource = stdl.createResource(modelContainer);
     		
     		SpdxListedLicense stdl3 = new SpdxListedLicense(name2, id2, text,
     				sourceUrls2, notes, standardLicenseHeader, template, true);
     		@SuppressWarnings("unused")
-    		Resource compResource3 = stdl3.createResource(model);
+    		Resource compResource3 = stdl3.createResource(modelContainer);
     		
     		SpdxListedLicense stdl2 = new SpdxListedLicense(name2, id, text,
     				sourceUrls2, notes, standardLicenseHeader, template, true);
             
-    		Resource compResource = stdl2.createResource(model);
+    		Resource compResource = stdl2.createResource(modelContainer);
             assertTrue(licResource.equals(compResource));
             assertEquals(licResource.getURI(), compResource.getURI());		
 		} catch (InvalidSPDXAnalysisException e) {
@@ -182,7 +196,7 @@ public class TestSpdxListedLicense {
 	
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		String name = "name";
 		String id = "AFL-3.0";
 		String text = "text";
@@ -192,8 +206,8 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
-		Resource licResource = stdl.createResource(model);
-		SpdxListedLicense compLic = new SpdxListedLicense(model, licResource.asNode());
+		Resource licResource = stdl.createResource(modelContainer);
+		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 
 		
 		SpdxListedLicense lic2 = (SpdxListedLicense)compLic.clone();

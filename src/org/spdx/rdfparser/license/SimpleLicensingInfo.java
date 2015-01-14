@@ -18,12 +18,12 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -43,12 +43,12 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	
 
 	/**
-	 * @param model
-	 * @param licenseInfoNode
+	 * @param modelContainer container which includes the license
+	 * @param licenseInfoNode RDF Node that defines the SimpleLicensingInfo
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	SimpleLicensingInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
-		super(model, licenseInfoNode);
+	SimpleLicensingInfo(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+		super(modelContainer, licenseInfoNode);
 		// id
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
@@ -122,6 +122,12 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		
 	}
 	
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param comments Optional license comments
+	 * @param sourceUrl Optional reference URL's
+	 */
 	SimpleLicensingInfo(String name, String id, String comments, String[] sourceUrl) {
 		super();
 		this.licenseId = id;
@@ -146,8 +152,10 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
-			resource.addProperty(p, id);
+			if (id != null) {
+				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
+				resource.addProperty(p, id);
+			}
 		}
 	}
 	
@@ -169,8 +177,10 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME_VERSION_1);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
-			resource.addProperty(p, this.name);
+			if (name != null) {
+				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
+				resource.addProperty(p, this.name);
+			}
 		}
 	}
 	/**
@@ -193,8 +203,10 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTES_VERSION_1);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
-			resource.addProperty(p, this.comment);
+			if (comment != null) {
+				p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+				resource.addProperty(p, this.comment);
+			}
 		}
 	}
 	
@@ -217,10 +229,12 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
 			model.removeAll(resource, p, null);
 			// add the property
-			p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
-			for (int i = 0; i < seeAlsoUrl.length; i++) {
-				resource.addProperty(p, this.seeAlso[i]);
-			}	
+			if (seeAlsoUrl != null) {
+				p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
+				for (int i = 0; i < seeAlsoUrl.length; i++) {
+					resource.addProperty(p, this.seeAlso[i]);
+				}	
+			}
 		}
 	}
 	
@@ -236,7 +250,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	 * @param typeURI
 	 * @return
 	 */
-	protected Resource _createResource(Model model, Resource type, String uri) {
+	protected Resource _createResource(Resource type, String uri) {
 		Resource r = null;
 		if (licenseId != null) {
 			// check to see if it exists
@@ -319,12 +333,11 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	}
 
 	/**
-	 * @param model
 	 * @param type
 	 * @return
 	 */
-	public Resource _createResource(Model model, Resource type) {
-		return _createResource(model, type, null);
+	public Resource _createResource(Resource type) {
+		return _createResource(type, null);
 	}
 	
 }

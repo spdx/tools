@@ -18,11 +18,11 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -35,13 +35,13 @@ public class SpdxNoAssertionLicense extends AnyLicenseInfo {
 	static final int NO_ASSERTION_HASHCODE = 89;	// prime number - all NoAssertion licenses should have the same hashcode
 
 	/**
-	 * @param model
+	 * @param container
 	 * @param licenseInfoNode
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SpdxNoAssertionLicense(Model model, Node licenseInfoNode)
+	public SpdxNoAssertionLicense(IModelContainer container, Node licenseInfoNode)
 			throws InvalidSPDXAnalysisException {
-		super(model, licenseInfoNode);
+		super(container, licenseInfoNode);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class SpdxNoAssertionLicense extends AnyLicenseInfo {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) {
+	protected Resource _createResource() {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION);
 	}
 

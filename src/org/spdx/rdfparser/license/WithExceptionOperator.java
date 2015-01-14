@@ -18,12 +18,12 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -40,12 +40,12 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	
 	/**
 	 * Create a WithExceptionOperator from a node in an existing RDF model
-	 * @param model
-	 * @param licenseInfoNode
+	 * @param modelContainer contains the model
+	 * @param licenseInfoNode Node which defines the WithExceptionOperator
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public WithExceptionOperator(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
-		super(model, licenseInfoNode);
+	public WithExceptionOperator(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+		super(modelContainer, licenseInfoNode);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -54,7 +54,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			if (this.license != null) {
 				throw (new InvalidSPDXAnalysisException("More than one license for a license WITH expression"));
 			}
-			AnyLicenseInfo anyLicense = LicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject());
+			AnyLicenseInfo anyLicense = LicenseInfoFactory.getLicenseInfoFromModel(this.modelContainer, t.getObject());
 			if (!(anyLicense instanceof SimpleLicensingInfo) && !(anyLicense instanceof OrLaterOperator)) {
 				throw (new InvalidSPDXAnalysisException("The license for a WITH expression must be of type SimpleLicensingInfo or an OrLaterOperator"));
 			}
@@ -80,10 +80,10 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	}
 
 
-	protected Resource _createResource(Model model, Resource type) throws InvalidSPDXAnalysisException {
+	protected Resource _createResource(Resource type) throws InvalidSPDXAnalysisException {
 		Resource r = model.createResource(type);
 		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
-		Resource licResource = this.license.createResource(model);
+		Resource licResource = this.license.createResource(this.modelContainer);
 		r.addProperty(licProperty, licResource);
 		Property exceptionProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION);
 		Resource exceptionResource = this.exception.createResource(model, null);
@@ -95,10 +95,10 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model)
+	protected Resource _createResource()
 			throws InvalidSPDXAnalysisException {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_WITH_EXCEPTION_OPERATOR);
-		return _createResource(model, type);
+		return _createResource(type);
 	}
 	
 
@@ -122,7 +122,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			model.removeAll(resource, licProperty, null);
 
 			licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
-			Resource licResource = license.createResource(model);
+			Resource licResource = license.createResource(this.modelContainer);
 			resource.addProperty(licProperty, licResource);
 		}
 	}

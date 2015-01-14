@@ -23,6 +23,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -40,6 +41,21 @@ public class TestOrLaterOperator {
 	static final String LICENSE_TEXT2 = "Second licenseText";
 	private SimpleLicensingInfo license1;
 	private SimpleLicensingInfo license2;
+	
+	Model model;
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 
 	/**
 	 * @throws java.lang.Exception
@@ -116,8 +132,8 @@ public class TestOrLaterOperator {
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		OrLaterOperator olo1 = new OrLaterOperator(license1);
-		Model model = ModelFactory.createDefaultModel();
-		olo1.createResource(model);
+		model = ModelFactory.createDefaultModel();
+		olo1.createResource(modelContainer);
 		OrLaterOperator clone = (OrLaterOperator)olo1.clone();
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)olo1.getLicense();
 		ExtractedLicenseInfo lic1FromClone = (ExtractedLicenseInfo)clone.getLicense();
@@ -132,8 +148,8 @@ public class TestOrLaterOperator {
 	@Test
 	public void testSetLicense() throws InvalidSPDXAnalysisException {
 		OrLaterOperator olo1 = new OrLaterOperator(license1);
-		Model model = ModelFactory.createDefaultModel();
-		olo1.createResource(model);
+		model = ModelFactory.createDefaultModel();
+		olo1.createResource(modelContainer);
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)olo1.getLicense();
 		assertEquals(LICENSE_ID1, lic1.getLicenseId());
 		assertEquals(LICENSE_TEXT1, lic1.getExtractedText());
@@ -150,9 +166,9 @@ public class TestOrLaterOperator {
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
 		OrLaterOperator olo1 = new OrLaterOperator(license1);
-		Model model = ModelFactory.createDefaultModel();
-		Resource r = olo1.createResource(model);
-		OrLaterOperator comp = new OrLaterOperator(model, r.asNode());
+		model = ModelFactory.createDefaultModel();
+		Resource r = olo1.createResource(modelContainer);
+		OrLaterOperator comp = new OrLaterOperator(modelContainer, r.asNode());
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)olo1.getLicense();
 		assertEquals(LICENSE_ID1, lic1.getLicenseId());
 		assertEquals(LICENSE_TEXT1, lic1.getExtractedText());

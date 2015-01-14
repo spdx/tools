@@ -19,6 +19,7 @@ package org.spdx.rdfparser.license;
 import java.util.ArrayList;
 
 import org.spdx.compare.LicenseCompareHelper;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
@@ -43,12 +44,12 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 
 	
 	/**
-	 * @param model
-	 * @param licenseInfoNode
+	 * @param modelContainer container which includes the license
+	 * @param licenseInfoNode Node that defines the ExtractedLicenseInfo
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public ExtractedLicenseInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
-		super(model, licenseInfoNode);
+	public ExtractedLicenseInfo(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
+		super(modelContainer, licenseInfoNode);
 		// Text
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
@@ -59,6 +60,13 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 		}
 	}
 	
+	/**
+	 * @param id licenseID
+	 * @param text license text
+	 * @param licenseName license name
+	 * @param crossReferenceUrls Optional URL's that refer to the same license
+	 * @param comment optional comment
+	 */
 	public ExtractedLicenseInfo(String id, String text, String licenseName, String[] crossReferenceUrls, String comment) {
 		super(licenseName, id, comment, crossReferenceUrls);
 		this.extractedText = text;
@@ -76,9 +84,12 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) throws InvalidSPDXAnalysisException {
+	protected Resource _createResource() throws InvalidSPDXAnalysisException {
+		if (this.licenseId == null || this.licenseId.isEmpty()) {
+			throw(new InvalidSPDXAnalysisException("Can not create a resource for an Extracted License without a license ID"));
+		}
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
-		Resource r = super._createResource(model, type);
+		Resource r = super._createResource(type, modelContainer.getDocumentNamespace() + this.licenseId);
 		// check to make sure we are not overwriting an existing license with the same ID
 		String existingLicenseText = getLicenseTextFromModel(model, r.asNode());
 		if (existingLicenseText != null && this.extractedText != null) {

@@ -571,9 +571,12 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+1] = lic1_2;
 
 		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		ExtractedLicenseInfo[] testexl0 = doc1.getExtractedLicenseInfos();
 		doc1.setExtractedLicenseInfos(exLicenses1);
+		ExtractedLicenseInfo[] testexl1 = doc1.getExtractedLicenseInfos();
+		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
 		doc2.setExtractedLicenseInfos(exLicenses2);
+		ExtractedLicenseInfo[] testexl2 = doc2.getExtractedLicenseInfos();
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isExtractedLicensingInfosEqual());
 		assertTrue(comparer.isDifferenceFound());

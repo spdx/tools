@@ -19,11 +19,11 @@ package org.spdx.rdfparser.license;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -34,12 +34,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class ConjunctiveLicenseSet extends LicenseSet {
 
 	/**
-	 * @param model
-	 * @param node
+	 * @param modelContainer container which includes the license
+	 * @param node Node that defines the conjunctive license set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public ConjunctiveLicenseSet(Model model, Node node) throws InvalidSPDXAnalysisException {
-		super(model, node);
+	public ConjunctiveLicenseSet(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
+		super(modelContainer, node);
 	}
 
 	/**
@@ -53,9 +53,9 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) throws InvalidSPDXAnalysisException {
+	protected Resource _createResource() throws InvalidSPDXAnalysisException {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_CONJUNCTIVE_LICENSE_SET);
-		return super._createResource(model, type);
+		return super._createResource(type);
 	}
 
 	/* (non-Javadoc)

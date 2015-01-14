@@ -42,6 +42,19 @@ public class TestConjunctiveLicenseSet {
 	String[] TEXTS = new String[] {"text1", "text2", "text3", "text4"};
 	ExtractedLicenseInfo[] NON_STD_LICENSES;
 	Model model;
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 
 	/**
 	 * @throws java.lang.Exception
@@ -64,8 +77,8 @@ public class TestConjunctiveLicenseSet {
 	@Test
 	public void testCreateConjunctive() throws InvalidSPDXAnalysisException {
 		ConjunctiveLicenseSet cls = new ConjunctiveLicenseSet(NON_STD_LICENSES);
-		Resource clsResource = cls.createResource(model);
-		ConjunctiveLicenseSet cls2 = new ConjunctiveLicenseSet(model, clsResource.asNode());
+		Resource clsResource = cls.createResource(modelContainer);
+		ConjunctiveLicenseSet cls2 = new ConjunctiveLicenseSet(modelContainer, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
@@ -76,8 +89,8 @@ public class TestConjunctiveLicenseSet {
 	@Test
 	public void testCreateDisjunctive() throws InvalidSPDXAnalysisException {
 		DisjunctiveLicenseSet cls = new DisjunctiveLicenseSet(NON_STD_LICENSES);
-		Resource clsResource = cls.createResource(model);
-		DisjunctiveLicenseSet cls2 = new DisjunctiveLicenseSet(model, clsResource.asNode());
+		Resource clsResource = cls.createResource(modelContainer);
+		DisjunctiveLicenseSet cls2 = new DisjunctiveLicenseSet(modelContainer, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
@@ -89,7 +102,7 @@ public class TestConjunctiveLicenseSet {
 	public void testCloneConjunctive() throws InvalidSPDXAnalysisException {
 		ConjunctiveLicenseSet cls = new ConjunctiveLicenseSet(NON_STD_LICENSES);
 		@SuppressWarnings("unused")
-		Resource clsResource = cls.createResource(model);
+		Resource clsResource = cls.createResource(modelContainer);
 		ConjunctiveLicenseSet cls2 = (ConjunctiveLicenseSet)cls.clone();
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();
@@ -103,7 +116,7 @@ public class TestConjunctiveLicenseSet {
 	public void testCloneDisjunctive() throws InvalidSPDXAnalysisException {
 		DisjunctiveLicenseSet cls = new DisjunctiveLicenseSet(NON_STD_LICENSES);
 		@SuppressWarnings("unused")
-		Resource clsResource = cls.createResource(model);
+		Resource clsResource = cls.createResource(modelContainer);
 		DisjunctiveLicenseSet cls2 = (DisjunctiveLicenseSet)cls.clone();
 		assertTrue(cls.equals(cls2));
 		ArrayList<String> verify = cls2.verify();

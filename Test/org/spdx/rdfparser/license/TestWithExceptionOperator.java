@@ -23,6 +23,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -50,6 +51,21 @@ public class TestWithExceptionOperator {
 	private SimpleLicensingInfo license2;
 	private LicenseException exception1;
 	private LicenseException exception2;
+	
+	Model model;
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -135,8 +151,8 @@ public class TestWithExceptionOperator {
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		WithExceptionOperator weo1 = new WithExceptionOperator(license1, exception1);
-		Model model = ModelFactory.createDefaultModel();
-		weo1.createResource(model);
+		model = ModelFactory.createDefaultModel();
+		weo1.createResource(modelContainer);
 		WithExceptionOperator clone = (WithExceptionOperator) weo1.clone();
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)weo1.getLicense();
 		ExtractedLicenseInfo lic1FromClone = (ExtractedLicenseInfo)clone.getLicense();
@@ -156,8 +172,8 @@ public class TestWithExceptionOperator {
 	@Test
 	public void testSetLicense() throws InvalidSPDXAnalysisException {
 		WithExceptionOperator weo1 = new WithExceptionOperator(license1, exception1);
-		Model model = ModelFactory.createDefaultModel();
-		weo1.createResource(model);
+		model = ModelFactory.createDefaultModel();
+		weo1.createResource(modelContainer);
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)weo1.getLicense();
 		LicenseException le1 = weo1.getException();
 		assertEquals(LICENSE_ID1, lic1.getLicenseId());
@@ -183,8 +199,8 @@ public class TestWithExceptionOperator {
 	@Test
 	public void testSetException() throws InvalidSPDXAnalysisException {
 		WithExceptionOperator weo1 = new WithExceptionOperator(license1, exception1);
-		Model model = ModelFactory.createDefaultModel();
-		weo1.createResource(model);
+		model = ModelFactory.createDefaultModel();
+		weo1.createResource(modelContainer);
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)weo1.getLicense();
 		LicenseException le1 = weo1.getException();
 		assertEquals(LICENSE_ID1, lic1.getLicenseId());
@@ -209,9 +225,9 @@ public class TestWithExceptionOperator {
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
 		WithExceptionOperator weo1 = new WithExceptionOperator(license1, exception1);
-		Model model = ModelFactory.createDefaultModel();
-		Resource weo1Resource = weo1.createResource(model);
-		WithExceptionOperator weo1FromResource = new WithExceptionOperator(model, weo1Resource.asNode());
+		model = ModelFactory.createDefaultModel();
+		Resource weo1Resource = weo1.createResource(modelContainer);
+		WithExceptionOperator weo1FromResource = new WithExceptionOperator(modelContainer, weo1Resource.asNode());
 		ExtractedLicenseInfo lic1 = (ExtractedLicenseInfo)weo1.getLicense();
 		ExtractedLicenseInfo lic1FromResource = (ExtractedLicenseInfo)weo1FromResource.getLicense();
 		assertEquals(lic1.getLicenseId(), lic1FromResource.getLicenseId());

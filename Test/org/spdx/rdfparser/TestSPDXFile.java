@@ -68,6 +68,20 @@ public class TestSPDXFile {
 	Resource COMPLEX_LICENSE_RESOURCE;
 	
 	Model model;
+	
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 
 	/**
 	 * @throws java.lang.Exception
@@ -111,21 +125,21 @@ public class TestSPDXFile {
 		
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
-			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(model);
+			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
 		}
 		STANDARD_LICENSES_RESOURCES = new Resource[STANDARD_LICENSES.length];
 		for (int i = 0; i < STANDARD_LICENSES.length; i++) {
-			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(model);
+			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(modelContainer);
 		}
 		CONJUNCTIVE_LICENSES_RESOURCES = new Resource[CONJUNCTIVE_LICENSES.length];
 		for (int i = 0; i < CONJUNCTIVE_LICENSES.length; i++) {
-			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(model);
+			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(modelContainer);
 		}
 		DISJUNCTIVE_LICENSES_RESOURCES = new Resource[DISJUNCTIVE_LICENSES.length];
 		for (int i = 0; i < DISJUNCTIVE_LICENSES.length; i++) {
-			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(model);
+			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(modelContainer);
 		}
-		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(model);
+		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(modelContainer);
 	}
 
 	/**
@@ -142,7 +156,7 @@ public class TestSPDXFile {
 	 */
 	@Test
 	public void testPopulateModel() throws IOException, InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		String testDocUri = "https://olex.openlogic.com/spdxdoc/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		doc.createSpdxAnalysis(testDocUri);
@@ -178,7 +192,7 @@ public class TestSPDXFile {
 		model.write(writer);
 		String afterFileCreate = writer.toString();
 		writer.close();
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		assertEquals(file.getArtifactOf()[0].getName(), file2.getArtifactOf()[0].getName());
 		assertEquals(file.getArtifactOf()[0].getHomePage(), file2.getArtifactOf()[0].getHomePage());
 		assertEquals(file.getCopyright(), file2.getCopyright());
@@ -198,7 +212,7 @@ public class TestSPDXFile {
 
 	@Test
 	public void testNoneCopyright() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
@@ -211,13 +225,13 @@ public class TestSPDXFile {
 			assertTrue(t.getObject().isURI());
 			assertEquals(SpdxRdfConstants.URI_VALUE_NONE, t.getObject().getURI());
 		}
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		assertEquals(SpdxRdfConstants.NONE_VALUE, file2.getCopyright());
 	}
 	
 	@Test
 	public void testNoassertionCopyright() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0]);
@@ -230,13 +244,13 @@ public class TestSPDXFile {
 			assertTrue(t.getObject().isURI());
 			assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, t.getObject().getURI());
 		}
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, file2.getCopyright());
 	}
 	
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		String COMMENT1 = "comment1";
@@ -247,7 +261,7 @@ public class TestSPDXFile {
 		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		file.setLicenseComments("see if this works");
 		file.setComment(COMMENT2);
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		assertEquals(file2.getComment(), COMMENT2);
 		file2.setComment(COMMENT3);
 		assertEquals(file2.getComment(), COMMENT3);
@@ -255,7 +269,7 @@ public class TestSPDXFile {
 	
 	@Test
 	public void testSetContributors() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		String CONTRIBUTOR1 = "Contributor 1";
@@ -273,7 +287,7 @@ public class TestSPDXFile {
 		file.setContributors(contributors);
 		result = file.getContributors();
 		assertStringArraysEqual(contributors, result);
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		result = file2.getContributors();
 		assertStringArraysEqual(contributors, result);
 		file2.setContributors(new String[0]);
@@ -282,7 +296,7 @@ public class TestSPDXFile {
 	
 	@Test
 	public void testSetNoticeText() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		String fileNotice = "This is a file notice";
@@ -295,7 +309,7 @@ public class TestSPDXFile {
 		file.setNoticeText(fileNotice);
 		String result  = file.getNoticeText();
 		assertEquals(fileNotice, result);
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		result = file2.getNoticeText();
 		assertEquals(fileNotice, file2.getNoticeText());
 		file2.setNoticeText(null);
@@ -324,7 +338,7 @@ public class TestSPDXFile {
 
 	@Test
 	public void testSetFileDependencies() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		String FileDependencyName1  = "Dependency1";
@@ -345,7 +359,7 @@ public class TestSPDXFile {
 		file.setFileDependencies(fileDependencies, doc);
 		SPDXFile[] result = file.getFileDependencies();
 		assertFileArraysEqual(fileDependencies, result);
-		SPDXFile file2 = new SPDXFile(model, fileResource.asNode());
+		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		result = file2.getFileDependencies();
 		assertFileArraysEqual(fileDependencies, result);
 	}
@@ -374,7 +388,7 @@ public class TestSPDXFile {
 	
 	@Test
 	public void testFindFileResource() throws InvalidSPDXAnalysisException {
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis("http://somethingunique");
 		String FILE1_NAME = "./file/name/name1";
@@ -427,7 +441,7 @@ public class TestSPDXFile {
 		assertEquals(0, verify.size());
 
 		// clone without a model assigned to the original file
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument toDoc1 = new SPDXDocument(model);
 		String testDocUri = "https://my/test/doc1";
 		toDoc1.createSpdxAnalysis(testDocUri);
@@ -473,7 +487,7 @@ public class TestSPDXFile {
 		ArrayList<String> verify = file.verify();
 		assertEquals(0, verify.size());
 		
-		Model model = ModelFactory.createDefaultModel();
+		model = ModelFactory.createDefaultModel();
 		SPDXDocument toDoc1 = new SPDXDocument(model);
 		String testDocUri = "https://my/test/doc1";
 		toDoc1.createSpdxAnalysis(testDocUri);

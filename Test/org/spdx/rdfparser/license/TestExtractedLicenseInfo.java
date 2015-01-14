@@ -14,15 +14,22 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.IModelContainer;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SPDXDocumentFactory;
+import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -34,6 +41,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class TestExtractedLicenseInfo {
+	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample.rdf";
 	static final String ID1 = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + "1";
 	static final String TEXT1 = "Text1";
 	static final String TEXT2 = "Text2";
@@ -44,6 +52,19 @@ public class TestExtractedLicenseInfo {
 	static final String[] SOURCEURLS1 = new String[] {"url1", "url2"};
 	static final String[] SOURCEURLS2 = new String[] {"url3", "url4", "url5"};
 	Model model;
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -82,8 +103,8 @@ public class TestExtractedLicenseInfo {
 	public void testSPDXNonStandardLicenseModelNode() throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setComment(COMMENT1);
-		Resource licResource = lic.createResource(model);
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		Resource licResource = lic.createResource(modelContainer);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		assertEquals(ID1, lic2.getLicenseId());
 		assertEquals(TEXT1, lic2.getExtractedText());
 		assertEquals(COMMENT1, lic2.getComment());
@@ -107,13 +128,13 @@ public class TestExtractedLicenseInfo {
 	public void testSetText() throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setComment(COMMENT1);
-		Resource licResource = lic.createResource(model);
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		Resource licResource = lic.createResource(modelContainer);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		lic2.setExtractedText(TEXT2);
 		assertEquals(ID1, lic2.getLicenseId());
 		assertEquals(TEXT2, lic2.getExtractedText());
 		assertEquals(COMMENT1, lic2.getComment());
-		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		assertEquals(TEXT2, lic3.getExtractedText());
 	}
 
@@ -125,8 +146,8 @@ public class TestExtractedLicenseInfo {
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setComment(COMMENT1);
-		Resource licResource = lic.createResource(model);
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		Resource licResource = lic.createResource(modelContainer);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		lic2.setComment(COMMENT2);
 		assertEquals(ID1, lic2.getLicenseId());
 		assertEquals(TEXT1, lic2.getExtractedText());
@@ -135,18 +156,18 @@ public class TestExtractedLicenseInfo {
 		model.write(writer);
 		@SuppressWarnings("unused")
 		String rdfstring = writer.toString();
-		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		assertEquals(COMMENT2, lic3.getComment());	
 	}
 	@Test
 	public void testSetLicenseName() throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setName(LICENSENAME1);
-		Resource licResource = lic.createResource(model);
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		Resource licResource = lic.createResource(modelContainer);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		lic2.setName(LICENSENAME2);
 		assertEquals(LICENSENAME2, lic2.getName());
-		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		assertEquals(LICENSENAME2, lic3.getName());
 	}
 	
@@ -154,13 +175,13 @@ public class TestExtractedLicenseInfo {
 	public void testSetSourceUrls() throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
 		lic.setSeeAlso(SOURCEURLS1);
-		Resource licResource = lic.createResource(model);
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(model, licResource.asNode());
+		Resource licResource = lic.createResource(modelContainer);
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		lic2.setSeeAlso(SOURCEURLS2);
 		if (!compareArrayContent(SOURCEURLS2, lic2.getSeeAlso())) {
 			fail("Source URLS not the same");
 		}
-		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(model, licResource.asNode());
+		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		if (!compareArrayContent(SOURCEURLS2, lic3.getSeeAlso())) {
 			fail("Source URLS not the same");
 		}
@@ -196,7 +217,7 @@ public class TestExtractedLicenseInfo {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1, 
 				LICENSENAME1, SOURCEURLS1, COMMENT1);
 		@SuppressWarnings("unused")
-		Resource licResource = lic.createResource(model);
+		Resource licResource = lic.createResource(modelContainer);
 		
 		ExtractedLicenseInfo lic2 = (ExtractedLicenseInfo)lic.clone();
 
@@ -206,5 +227,13 @@ public class TestExtractedLicenseInfo {
 		assertEquals(LICENSENAME1, lic2.getName());
 		assertTrue(compareArrayContent(SOURCEURLS1, lic2.getSeeAlso()));
 		assertTrue(lic2.getResource() == null);
+	}
+	
+	@Test
+	public void testBackwardsCompatibility() throws IOException, InvalidSPDXAnalysisException {
+		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		ExtractedLicenseInfo[] extractedLicenses = doc1.getExtractedLicenseInfos();
+		doc1.setExtractedLicenseInfos(extractedLicenses);
+		ExtractedLicenseInfo[] result = doc1.getExtractedLicenseInfos();
 	}
 }

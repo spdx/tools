@@ -18,11 +18,11 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -35,12 +35,12 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	static final int NONE_LICENSE_HASHCODE = 147; // prime number - all none licenses should have the same hashcde
 
 	/**
-	 * @param model
+	 * @param container
 	 * @param node
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SpdxNoneLicense(Model model, Node node) throws InvalidSPDXAnalysisException {
-		super(model, node);
+	public SpdxNoneLicense(IModelContainer container, Node node) throws InvalidSPDXAnalysisException {
+		super(container, node);
 	}
 	
 	public SpdxNoneLicense() {
@@ -51,7 +51,7 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource(Model model) {
+	protected Resource _createResource() {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE);
 	}
 

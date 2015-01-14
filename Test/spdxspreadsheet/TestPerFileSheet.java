@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -64,6 +65,20 @@ public class TestPerFileSheet {
 	Resource COMPLEX_LICENSE_RESOURCE;
 	
 	Model model;
+	
+	IModelContainer modelContainer = new IModelContainer() {
+
+		@Override
+		public Model getModel() {
+			return model;
+		}
+
+		@Override
+		public String getDocumentNamespace() {
+			return "http://testNameSPace#";
+		}
+		
+	};
 
 	/**
 	 * @throws java.lang.Exception
@@ -107,21 +122,21 @@ public class TestPerFileSheet {
 		
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
-			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(model);
+			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
 		}
 		STANDARD_LICENSES_RESOURCES = new Resource[STANDARD_LICENSES.length];
 		for (int i = 0; i < STANDARD_LICENSES.length; i++) {
-			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(model);
+			STANDARD_LICENSES_RESOURCES[i] = STANDARD_LICENSES[i].createResource(modelContainer);
 		}
 		CONJUNCTIVE_LICENSES_RESOURCES = new Resource[CONJUNCTIVE_LICENSES.length];
 		for (int i = 0; i < CONJUNCTIVE_LICENSES.length; i++) {
-			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(model);
+			CONJUNCTIVE_LICENSES_RESOURCES[i] = CONJUNCTIVE_LICENSES[i].createResource(modelContainer);
 		}
 		DISJUNCTIVE_LICENSES_RESOURCES = new Resource[DISJUNCTIVE_LICENSES.length];
 		for (int i = 0; i < DISJUNCTIVE_LICENSES.length; i++) {
-			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(model);
+			DISJUNCTIVE_LICENSES_RESOURCES[i] = DISJUNCTIVE_LICENSES[i].createResource(modelContainer);
 		}
-		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(model);
+		COMPLEX_LICENSE_RESOURCE = COMPLEX_LICENSE.createResource(modelContainer);
 	}
 	/**
 	 * @throws java.lang.Exception

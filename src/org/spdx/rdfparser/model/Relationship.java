@@ -25,11 +25,31 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * @author Gary
+ * A Relationship represents a relationship between two SpdxElements.
+ * @author Gary O'Neall
  *
  */
 public class Relationship extends RdfModelObject {
+	
+	public enum RelationshipType {
+		 relationshipType_ancestorOf, relationshipType_buildToolOf,
+		 relationshipType_containedBy, relationshipType_contains,
+		 relationshipType_copyOf, relationshipType_dataFile,
+		 relationshipType_descendantOf, relationshipType_distributionArtifact,
+		 relationshipType_documentation, relationshipType_dynamicLink,
+		 relationshipType_expandedFromArchive, relationshipType_fileAdded,
+		 relationshipType_fileDeleted, relationshipType_fileModified,
+		 relationshipType_generatedFrom, relationshipType_generates,
+		 relationshipType_metafileOf, relationshipType_optionalComponentOf,
+		 relationshipType_other, relationshipType_packageOf,
+		 relationshipType_patchApplied, relationshipType_patchFor,
+		 relationshipType_spdxAmendment, relationshipType_staticLink,
+		 relationshipType_testcaseOf
+	}
 
+	private RelationshipType relationshipType;
+	private String comment;
+	private SpdxElement relatedSpdxElement;
 	/**
 	 * @param model
 	 * @param node
