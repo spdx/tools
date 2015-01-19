@@ -247,22 +247,31 @@ public class SpdxElement extends RdfModelObject {
 		return retval;
 	}
 	
+	protected Annotation[] cloneAnnotations() {
+		if (this.annotations == null) {
+			return null;
+		}
+		Annotation[] clonedAnnotations = new Annotation[this.annotations.length];
+		for (int i = 0; i < this.annotations.length; i++) {
+			clonedAnnotations[i] = this.annotations[i].clone();
+		}
+		return clonedAnnotations;
+	}
+	
+	protected Relationship[] cloneRelationships() {
+		if (this.relationships == null) {
+			return null;
+		}
+		Relationship[] clonedRelationships =new Relationship[this.relationships.length];
+		for (int i = 0; i < this.relationships.length; i++) {
+			clonedRelationships[i] = this.relationships[i].clone();
+		}
+		return clonedRelationships;
+	}
+	
+	@Override
 	public SpdxElement clone() {
-		Annotation[] clonedAnnotations = null;
-		if (this.annotations != null) {
-			clonedAnnotations = new Annotation[this.annotations.length];
-			for (int i = 0; i < this.annotations.length; i++) {
-				clonedAnnotations[i] = this.annotations[i].clone();
-			}
-		}
-		Relationship[] clonedRelationships = null;
-		if (this.relationships != null) {
-			clonedRelationships = new Relationship[this.relationships.length];
-			for (int i = 0; i < this.relationships.length; i++) {
-				clonedRelationships[i] = this.relationships[i].clone();
-			}
-		}
-		return new SpdxElement(this.name, this.comment, clonedAnnotations, clonedRelationships);
+		return new SpdxElement(this.name, this.comment, cloneAnnotations(), cloneRelationships());
 	}
 
 }
