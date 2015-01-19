@@ -13,17 +13,44 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */
+*/
+package org.spdx.rdfparser.model;
+
 /**
- * Model for the SPDX 2.0+ specification.
- * 
- * The model classes implement the RDF interfaces to store the class 
- * properties in a Jena RDF model using the <code>IRdfModel</code> interface.
- * 
- * All RDF Model objects are subclasses of <code>RdfModelObject</code>.
- * See the documentation for that class for details on the overall design for
- * classes in this package.
- * @author Gary O'Neall
+ * Helper class for unit tests
+ * @author Gary
  *
  */
-package org.spdx.rdfparser.model;
+public class UnitTestHelper {
+
+	/**
+	 * @param a1
+	 * @param a2
+	 */
+	public static boolean isArraysEqual(Object[] a1,
+			Object[] a2) {
+		if (a1 == null) {
+			return(a2 == null);
+		}
+		if (a2 == null) {
+			return false;
+		}
+		if (a1.length != a2.length) {
+			return false;
+		}
+		for (int i = 0; i < a1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < a2.length; j++) {
+				if (a1[i].equals(a2[j])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+}

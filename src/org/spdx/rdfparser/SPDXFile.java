@@ -122,7 +122,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		}
 		// concluded License
 		ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
-		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE).asNode();
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_CONCLUDED).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -159,7 +159,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		this.fileDependencies = alDependencies.toArray(new SPDXFile[alDependencies.size()]);
 		
 		//licenseComments
-		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS).asNode();
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -270,7 +270,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		fileResource.addProperty(p, fileTypeResource);
 
 		// concludedLicenses
-		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
+		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
 		model.removeAll(fileResource, p, null);
 		if (this.concludedLicenses != null) {
 			Resource lic = this.concludedLicenses.createResource(doc);
@@ -304,7 +304,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			}
 		}
 		//licenseComments
-		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS);
+		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 		model.removeAll(fileResource, p, null);
 		if (this.licenseComments != null) {
 			fileResource.addProperty(p, this.getLicenseComments());
@@ -510,7 +510,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 */
 	public String getLicenseComments() {
 		if (this.model != null && this.resource != null) {
-			Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS).asNode();
+			Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS).asNode();
 			Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			while (tripleIter.hasNext()) {
@@ -526,9 +526,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	public void setLicenseComments(String licenseComments) {
 		this.licenseComments = licenseComments;
 		if (this.model != null && this.resource != null) {
-			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS);
+			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 			model.removeAll(this.resource, p, null);
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LIC_COMMENTS);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 			this.resource.addProperty(p, this.getLicenseComments());
 		}	
 	}
@@ -665,7 +665,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	public AnyLicenseInfo getConcludedLicenses() {
 		if (this.model != null && this.resource != null) {
 			try {
-				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE).asNode();
+				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_CONCLUDED).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 				Triple t = null;
@@ -693,9 +693,9 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	public void setConcludedLicenses(AnyLicenseInfo fileLicenses) throws InvalidSPDXAnalysisException {
 		this.concludedLicenses = fileLicenses;
 		if (this.model != null && this.resource != null) {
-			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
+			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
 			model.removeAll(this.resource, p, null);
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_LICENSE);
+			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
 			Resource lic = null;
 			try {
 				lic = fileLicenses.createResource(this.modelContainer);

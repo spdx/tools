@@ -70,6 +70,9 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_REVIEW = "Review";
 	public static final String CLASS_SPDX_VERIFICATIONCODE = "PackageVerificationCode";
 	public static final String CLASS_ANNOTATION = "Annotation";
+	public static final String CLASS_RELATIONSHIP = "Relationship";
+	public static final String CLASS_SPDX_ITEM = "SpdxItem";
+	public static final String CLASS_SPDX_ELEMENT = "SpdxElement";
 	
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
@@ -107,6 +110,15 @@ public interface SpdxRdfConstants {
 	public static final String PROP_VERIFICATIONCODE_IGNORED_FILES = "packageVerificationCodeExcludedFile";
 	public static final String PROP_VERIFICATIONCODE_VALUE = "packageVerificationCodeValue";
 
+	// SPDX Element Properties 
+	public static final String PROP_ANNOTATION = "annotation";
+	public static final String PROP_RELATIONSHIP = "relationship";
+	
+	// SPDX Item Properties 
+	public static final String PROP_LICENSE_CONCLUDED = "licenseConcluded";
+	public static final String PROP_COPYRIGHT_TEXT = "copyrightText";	
+	public static final String PROP_LIC_COMMENTS = "licenseComments";
+	public static final String PROP_LICENSE_DECLARED = "licenseDeclared";
 	
 	// SPDX Package Properties
 	public static final String PROP_PACKAGE_DECLARED_NAME = "name";
@@ -115,8 +127,8 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_DOWNLOAD_URL = "downloadLocation";
 	public static final String PROP_PACKAGE_SOURCE_INFO = "sourceInfo";
 	public static final String PROP_PACKAGE_DECLARED_LICENSE = "licenseDeclared";
-	public static final String PROP_PACKAGE_CONCLUDED_LICENSE = "licenseConcluded";
-	public static final String PROP_PACKAGE_DECLARED_COPYRIGHT = "copyrightText";
+	public static final String PROP_PACKAGE_CONCLUDED_LICENSE = PROP_LICENSE_CONCLUDED;
+	public static final String PROP_PACKAGE_DECLARED_COPYRIGHT = PROP_COPYRIGHT_TEXT;
 	public static final String PROP_PACKAGE_SHORT_DESC = "summary";
 	public static final String PROP_PACKAGE_DESCRIPTION = "description";
 	public static final String PROP_PACKAGE_FILE = "hasFile";
@@ -159,11 +171,11 @@ public interface SpdxRdfConstants {
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_FILE_NAME = "fileName";
 	public static final String PROP_FILE_TYPE = "fileType";
-	public static final String PROP_FILE_LICENSE = "licenseConcluded";
-	public static final String PROP_FILE_COPYRIGHT = "copyrightText";
+	public static final String PROP_FILE_LICENSE = PROP_LICENSE_CONCLUDED;
+	public static final String PROP_FILE_COPYRIGHT = PROP_COPYRIGHT_TEXT;
 	public static final String PROP_FILE_CHECKSUM = "checksum";
-	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";
-	public static final String PROP_FILE_LIC_COMMENTS = "licenseComments";
+	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";	
+	public static final String PROP_FILE_LIC_COMMENTS = PROP_LIC_COMMENTS;
 	public static final String PROP_FILE_ARTIFACTOF = "artifactOf";
 	public static final String PROP_FILE_FILE_DEPENDENCY = "fileDependency"; 
 	public static final String PROP_FILE_CONTRIBUTOR = "fileContributor";
@@ -184,6 +196,10 @@ public interface SpdxRdfConstants {
 	public static final String PROP_ANNOTATOR = "annotator";
 	public static final String PROP_DATE = "date";
 	public static final String ANNOTATION_TYPE = "annotationType";
+	
+	// SPDX Relationship Properties
+	public static final String PROP_RELATED_SPDX_ELEMENT = "relatedSpdxElement";
+	public static final String PROP_RELATIONSHIP_TYPE = "relationshipType";
 	
 	// SPDX Review Properties
 	// NOTE: These have all been deprecated as of SPDX 2.0
