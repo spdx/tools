@@ -18,7 +18,9 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import org.spdx.rdfparser.IModelContainer;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -30,12 +32,12 @@ public interface IRdfModel {
 	
 	/**
 	 * Create a resource from the Java model object
-	 * @param model Jena model to create the resource
-	 * @param uri Unique resource identifier for the resource.  If null, an anonymous node is created.
+	 * @param modelContainer Contains the Jena model where to create the resource
 	 * @param parentProperty
 	 * @return The created resource
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public Resource createResource(Model model, String uri);
+	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * @return List of validation errors for any non SPDX compliant properties.

@@ -18,7 +18,9 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -50,22 +52,39 @@ public class Relationship extends RdfModelObject {
 	private RelationshipType relationshipType;
 	private String comment;
 	private SpdxElement relatedSpdxElement;
+	
 	/**
-	 * @param model
-	 * @param node
+	 * @param relatedSpdxElement The SPDX Element that is related
+	 * @param relationshipType Type of relationship - See the specification for a description of the types
+	 * @param comment optional comment for the relationship
+	 */
+	public Relationship(SpdxElement relatedSpdxElement, 
+			RelationshipType relationshipType, String comment) {
+		super();
+		this.relatedSpdxElement = relatedSpdxElement;
+		this.relationshipType = relationshipType;
+		this.comment = comment;
+	}
+	/**
+	 * @param model Model containing the relationship
+	 * @param node Node describing the relationship
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public Relationship(Model model, Node node)
+	public Relationship(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
-		super(model, node);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * 
-	 */
-	public Relationship() {
-		// TODO Auto-generated constructor stub
+		super(modelContainer, node);
+		this.relatedSpdxElement = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
+		String sRelationshipType = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
+		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+		if (sRelationshipType != null) {
+			try {
+				this.relationshipType = RelationshipType.valueOf(sRelationshipType);
+			}catch (Exception ex) {
+				throw(new InvalidSPDXAnalysisException("Invalid relationship type: "+sRelationshipType));
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -73,8 +92,17 @@ public class Relationship extends RdfModelObject {
 	 */
 	@Override
 	public ArrayList<String> verify() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> retval;
+		if (this.relatedSpdxElement == null) {
+			retval = new ArrayList<String>();
+			retval.add("Missing related SPDX element");
+		} else {
+			retval = this.relatedSpdxElement.verify();
+		}
+		if (this.relationshipType == null) {
+			retval.add("Missing relationship type");
+		}
+		return retval;
 	}
 
 	/* (non-Javadoc)
@@ -82,17 +110,117 @@ public class Relationship extends RdfModelObject {
 	 */
 	@Override
 	Resource getType(Model model) {
-		// TODO Auto-generated method stub
-		return null;
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_RELATIONSHIP);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-	void populateModel() {
-		// TODO Auto-generated method stub
-
+	void populateModel() throws InvalidSPDXAnalysisException {
+		if (this.comment != null) {
+			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
+		}
+		if (this.relatedSpdxElement != null) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
+		}
+		if (this.relationshipType != null) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, relationshipType.toString());
+		}
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	String getUri(IModelContainer modelContainer) {
+		// We will just use anonymous nodes for relationships
+		return null;
+	}
+	/**
+	 * @return the relationshipType
+	 */
+	public RelationshipType getRelationshipType() {
+		return relationshipType;
+	}
+	/**
+	 * @param relationshipType the relationshipType to set
+	 */
+	public void setRelationshipType(RelationshipType relationshipType) {
+		this.relationshipType = relationshipType;
+		if (relationshipType != null) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, relationshipType.toString());
+		} else {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
+		}
+	}
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+		setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, 
+				SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
+	}
+	/**
+	 * @return the relatedSpdxElement
+	 */
+	public SpdxElement getRelatedSpdxElement() {
+		return relatedSpdxElement;
+	}
+	/**
+	 * @param relatedSpdxElement the relatedSpdxElement to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setRelatedSpdxElement(SpdxElement relatedSpdxElement) throws InvalidSPDXAnalysisException {
+		this.relatedSpdxElement = relatedSpdxElement;
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Relationship)) {
+			return false;
+		}
+		Relationship comp = (Relationship)o;
+		return (equalsConsideringNull(relatedSpdxElement, comp.getRelatedSpdxElement()) &&
+				equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
+				equalsConsideringNull(comment, comp.getComment()));
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int retval = 0;
+		if (relatedSpdxElement != null) {
+			retval = retval ^ relatedSpdxElement.hashCode();
+		}
+		if (relationshipType != null) {
+			retval = retval ^ relationshipType.hashCode();
+		}
+		if (comment != null) {
+			retval = retval ^ comment.hashCode();
+		}
+		return retval;
+	}
+	
+	@Override
+	public Relationship clone() {
+		return new Relationship(this.relatedSpdxElement.clone(),
+				this.relationshipType, this.comment);
 	}
 
 }

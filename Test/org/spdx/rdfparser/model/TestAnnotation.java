@@ -27,6 +27,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
@@ -90,9 +91,22 @@ public class TestAnnotation {
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
-		Model model = ModelFactory.createDefaultModel();
-		Resource r = a.createResource(model, null);
-		Annotation copy = new Annotation(model, r.asNode());
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = a.createResource(modelContainer);
+		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(ANNOTATOR1, copy.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, copy.getAnnotationType());
 		assertEquals(date, copy.getDate());
@@ -125,11 +139,24 @@ public class TestAnnotation {
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
-		Model model = ModelFactory.createDefaultModel();
-		Resource r = a.createResource(model, null);
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = a.createResource(modelContainer);
 		a.setAnnotationType(REVIEW_ANNOTATION);
 		assertEquals(REVIEW_ANNOTATION, a.getAnnotationType());
-		Annotation copy = new Annotation(model, r.asNode());
+		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(REVIEW_ANNOTATION, copy.getAnnotationType());
 	}
 
@@ -144,11 +171,24 @@ public class TestAnnotation {
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
-		Model model = ModelFactory.createDefaultModel();
-		Resource r = a.createResource(model, null);
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = a.createResource(modelContainer);
 		a.setAnnotator(ANNOTATOR2);
 		assertEquals(ANNOTATOR2, a.getAnnotator());
-		Annotation copy = new Annotation(model, r.asNode());
+		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(ANNOTATOR2, copy.getAnnotator());
 	}
 
@@ -163,11 +203,24 @@ public class TestAnnotation {
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
-		Model model = ModelFactory.createDefaultModel();
-		Resource r = a.createResource(model, null);
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = a.createResource(modelContainer);
 		a.setComment(COMMENT2);
 		assertEquals(COMMENT2, a.getComment());
-		Annotation copy = new Annotation(model, r.asNode());
+		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(COMMENT2, copy.getComment());
 	}
 
@@ -182,11 +235,137 @@ public class TestAnnotation {
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
-		Model model = ModelFactory.createDefaultModel();
-		Resource r = a.createResource(model, null);
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = a.createResource(modelContainer);
 		a.setDate(oldDate);
 		assertEquals(oldDate, a.getDate());
-		Annotation copy = new Annotation(model, r.asNode());
+		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(oldDate, copy.getDate());
+	}
+	
+	@Test
+	public void testEquals() throws InvalidSPDXAnalysisException {
+		Annotation a1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
+		assertTrue(a1.equals(a1));
+		Annotation a2 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
+		assertTrue(a1.equals(a2));
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		a1.createResource(modelContainer);
+		assertTrue(a1.equals(a2));
+		// annotator
+		a2.setAnnotator(ANNOTATOR2);
+		assertFalse(a1.equals(a2));
+		a2.setAnnotator(ANNOTATOR1);
+		assertTrue(a2.equals(a1));	
+		// annotationType
+		a2.setAnnotationType(REVIEW_ANNOTATION);
+		assertFalse(a1.equals(a2));
+		a2.setAnnotationType(OTHER_ANNOTATION);
+		assertTrue(a2.equals(a1));	
+		// comment
+		a2.setComment(COMMENT2);
+		assertFalse(a1.equals(a2));
+		a2.setComment(COMMENT1);
+		assertTrue(a2.equals(a1));	
+		// date
+		a2.setDate(oldDate);
+		assertFalse(a1.equals(a2));
+		a2.setDate(date);
+		assertTrue(a2.equals(a1));	
+	}
+	
+	@Test
+	public void testHashCode() throws InvalidSPDXAnalysisException {
+		Annotation a1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
+		Annotation a2 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
+		assertEquals(a1.hashCode(), a2.hashCode());
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		a1.createResource(modelContainer);
+		assertEquals(a1.hashCode(), a2.hashCode());
+		// annotator
+		a2.setAnnotator(ANNOTATOR2);
+		assertFalse(a1.hashCode() == a2.hashCode());
+		a2.setAnnotator(ANNOTATOR1);
+		assertEquals(a1.hashCode(), a2.hashCode());
+		// annotationType
+		a2.setAnnotationType(REVIEW_ANNOTATION);
+		assertFalse(a1.hashCode() == a2.hashCode());
+		a2.setAnnotationType(OTHER_ANNOTATION);
+		assertEquals(a1.hashCode(), a2.hashCode());
+		// comment
+		a2.setComment(COMMENT2);
+		assertFalse(a1.hashCode() == a2.hashCode());
+		a2.setComment(COMMENT1);
+		assertEquals(a1.hashCode(), a2.hashCode());
+		// date
+		a2.setDate(oldDate);
+		assertFalse(a1.hashCode() == a2.hashCode());
+		a2.setDate(date);
+		assertEquals(a1.hashCode(), a2.hashCode());
+	}
+	
+	@Test
+	public void testClone() throws InvalidSPDXAnalysisException {
+		Annotation a1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		a1.createResource(modelContainer);
+		Annotation a2 = a1.clone();
+		assertEquals(a1.getAnnotationType(), a2.getAnnotationType());
+		assertEquals(a1.getAnnotator(), a2.getAnnotator());
+		assertEquals(a1.getComment(), a2.getComment());
+		assertEquals(a1.getDate(), a2.getDate());
+		assertTrue(a2.model == null);
 	}
 }

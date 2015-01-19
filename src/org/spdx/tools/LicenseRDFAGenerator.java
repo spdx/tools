@@ -53,17 +53,23 @@ import com.sampullara.mustache.MustacheException;
  *
  */
 public class LicenseRDFAGenerator {
-	static final HashSet<Character> INVALID_FILE_CHARS = new HashSet<Character>();
+	static final HashSet<Character> INVALID_FILENAME_CHARS = new HashSet<Character>();
 
 	static { 	
 
-		INVALID_FILE_CHARS.add('\\'); INVALID_FILE_CHARS.add('/'); INVALID_FILE_CHARS.add('*');
-		INVALID_FILE_CHARS.add('<'); INVALID_FILE_CHARS.add('>'); INVALID_FILE_CHARS.add('[');
-		INVALID_FILE_CHARS.add(']'); INVALID_FILE_CHARS.add('='); 
-		INVALID_FILE_CHARS.add(';'); INVALID_FILE_CHARS.add(':');
-		INVALID_FILE_CHARS.add('\''); INVALID_FILE_CHARS.add('"'); INVALID_FILE_CHARS.add('|');
-		INVALID_FILE_CHARS.add('\t'); INVALID_FILE_CHARS.add('?'); INVALID_FILE_CHARS.add('&');
-		INVALID_FILE_CHARS.add('³');
+		INVALID_FILENAME_CHARS.add('\\'); INVALID_FILENAME_CHARS.add('/'); INVALID_FILENAME_CHARS.add('*');
+		INVALID_FILENAME_CHARS.add('<'); INVALID_FILENAME_CHARS.add('>'); INVALID_FILENAME_CHARS.add('[');
+		INVALID_FILENAME_CHARS.add(']'); INVALID_FILENAME_CHARS.add('='); 
+		INVALID_FILENAME_CHARS.add(';'); INVALID_FILENAME_CHARS.add(':');
+		INVALID_FILENAME_CHARS.add('\''); INVALID_FILENAME_CHARS.add('"'); INVALID_FILENAME_CHARS.add('|');
+		INVALID_FILENAME_CHARS.add('\t'); INVALID_FILENAME_CHARS.add('?'); INVALID_FILENAME_CHARS.add('&');
+		INVALID_FILENAME_CHARS.add('³');
+	}
+	
+	static final HashSet<Character> INVALID_TEXT_CHARS = new HashSet<Character>();
+	
+	static {
+		INVALID_TEXT_CHARS.add('\uFFFD');
 	}
 	static int MIN_ARGS = 2;
 	static int MAX_ARGS = 4;
@@ -235,6 +241,8 @@ public class LicenseRDFAGenerator {
 				if (licenseIds.contains(nextException.getLicenseExceptionId())) {
 					warnings.add("A license ID exists with the same ID as an exception ID: "+nextException.getLicenseExceptionId());
 				}
+				checkText(nextException.getLicenseExceptionText(), 
+						"License Exception Text for "+nextException.getLicenseExceptionId(), warnings);
 				addedExceptionsMap.put(nextException.getLicenseExceptionId(), nextException.getLicenseExceptionText());
 				ExceptionHtml exceptionHtml = new ExceptionHtml(nextException);
 				String exceptionHtmlFileName = formLicenseHTMLFileName(nextException.getLicenseExceptionId());
@@ -250,6 +258,21 @@ public class LicenseRDFAGenerator {
 		}
 		File exceptionTocFile = new File(dir.getPath()+File.separator+EXCEPTION_TOC_FILE_NAME);
 		exceptionToc.writeToFile(exceptionTocFile, version);
+	}
+	/**
+	 * Check text for invalid characters
+	 * @param text Text to check
+	 * @param textDescription Description of the text being check (this will be used to form warning messages)
+	 * @param warnings Array list of warnings to add to if an problem is found with the text
+	 */
+	private static void checkText(String text, String textDescription,
+			ArrayList<String> warnings) {
+		for (int i = 0; i < text.length(); i++) {
+			if (INVALID_TEXT_CHARS.contains(text.charAt(i))) {
+				warnings.add("Invalid character in " + textDescription +
+						" at character location "+String.valueOf(i));
+			}
+		}
 	}
 	/**
 	 * Writes the index.html file and the individual license list HTML files
@@ -289,6 +312,7 @@ public class LicenseRDFAGenerator {
 					}
 				}
 				addedLicIdTextMap.put(license.getLicenseId(), license.getLicenseText());
+				checkText(license.getLicenseText(), "License text for "+license.getLicenseId(), warnings);
 				licHtml.setLicense(license);
 				licHtml.setDeprecated(false);
 				String licHtmlFileName = formLicenseHTMLFileName(license.getLicenseId());
@@ -345,7 +369,7 @@ public class LicenseRDFAGenerator {
 	private static String formLicenseHTMLFileName(String id) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < id.length(); i++) {
-			if (INVALID_FILE_CHARS.contains(id.charAt(i))) {
+			if (INVALID_FILENAME_CHARS.contains(id.charAt(i))) {
 				sb.append('_');
 			} else {
 				sb.append(id.charAt(i));

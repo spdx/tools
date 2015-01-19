@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
@@ -52,8 +53,8 @@ public class Annotation extends RdfModelObject {
 		this.comment = comment;
 	}
 	
-	public Annotation(Model model, Node annotationNode) throws InvalidSPDXAnalysisException {
-		super(model, annotationNode);
+	public Annotation(IModelContainer modelContainer, Node annotationNode) throws InvalidSPDXAnalysisException {
+		super(modelContainer, annotationNode);
 		//annotator
 		this.annotator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR);
 
@@ -194,5 +195,54 @@ public class Annotation extends RdfModelObject {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	String getUri(IModelContainer modelContainer) {
+		// We will just use anonymous nodes for Annotations
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Annotation)) {
+			return false;
+		}
+		Annotation comp = (Annotation)o;
+		return (equalsConsideringNull(annotator, comp.getAnnotator()) &&
+				equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
+				equalsConsideringNull(comment, comp.getComment()) &&
+				equalsConsideringNull(date, comp.getDate()));
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int retval = 0;
+		if (this.annotator != null) {
+			retval = retval ^ this.annotator.hashCode();
+		}
+		if (this.annotationType != null) {
+			retval = retval ^ this.annotationType.hashCode();
+		}
+		if (this.comment != null) {
+			retval = retval ^ this.comment.hashCode();
+		}
+		if (this.date != null) {
+			retval = retval ^ this.date.hashCode();
+		}
+		return retval;
+	}
+
+	public Annotation clone() {
+		return new Annotation(this.annotator, this.annotationType, this.date, 
+				this.comment);
+	}
 	
 }
