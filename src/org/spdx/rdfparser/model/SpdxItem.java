@@ -46,6 +46,12 @@ public class SpdxItem extends SpdxElement {
 	public SpdxItem(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		this.copyrightText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT);
+		this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
+		this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
+		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				getLicenseDeclaredPropertyName());
 	}
 	
 	/**
@@ -167,5 +173,45 @@ public class SpdxItem extends SpdxElement {
 	@Override
 	Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_ITEM);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof SpdxItem)) {
+			return false;
+		}
+		SpdxItem comp = (SpdxItem)o;
+		if (!super.equals(comp)) {
+			return false;
+		}
+		return (equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
+				equalsConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
+				equalsConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
+				equalsConsideringNull(this.licenseComment, comp.getLicenseComment()));
+	}
+	
+	@Override
+	public int hashCode() {
+		int retval = super.hashCode();
+		if (this.copyrightText != null) {
+			retval = retval ^ this.copyrightText.hashCode();
+		}
+		if (this.licenseConcluded != null) {
+			retval = retval ^ this.licenseConcluded.hashCode();
+		}
+		if (this.licenseDeclared != null) {
+			retval = retval ^ this.licenseDeclared.hashCode();
+		}
+		if (this.licenseComment != null) {
+			retval = retval ^ this.licenseComment.hashCode();
+		}
+		return retval;
+	}
+	
+	@Override
+	public SpdxItem clone() {
+		return new SpdxItem(this.name, this.comment, cloneAnnotations(), cloneRelationships(),
+				this.licenseConcluded.clone(), this.licenseDeclared.clone(), this.copyrightText, 
+				this.licenseComment);
 	}
 }
