@@ -30,8 +30,10 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -69,6 +71,23 @@ public class TestSpdxElementFactory {
 	static final String LICENSE_COMMENT1 = "License Comment 1";
 	static final String LICENSE_COMMENT2 = "License comment 2";
 	
+	String SPDX_ID1 = "SPDXRef-1";
+	String SPDX_ID2 = "SPDXRef-2";
+	
+	String FILE_CONTRIBUTOR1 = "File Contributor 1";
+	String FILE_CONTRIBUTOR2 = "File Contributor 2";
+	
+	String NOTICE_TEXT1 = "Notice1";
+	String NOTICE_TEXT2 = "Notice2";
+	
+	Checksum CHECKSUM1 = new Checksum();
+	Checksum CHECKSUM2 = new Checksum();
+	
+	FileType FILE_TYPE1 = FileType.fileType_image;
+	FileType FILE_TYPE2 = FileType.fileType_audio;
+	
+	DoapProject DOAP_PROJECT1 = new DoapProject();
+	DoapProject DOAP_PROJECT2 = new DoapProject();
 	
 	String documentNamespace;
 	Model model;
@@ -124,11 +143,15 @@ public class TestSpdxElementFactory {
 	public void testCreateElementFromModel() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
+		String[] fileContributors = new String[] {FILE_CONTRIBUTOR1, FILE_CONTRIBUTOR2};
 		
 		// SpdxFile
-		SpdxFile file = new SpdxFile(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships,LICENSE1, LICENSE2, 
-				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
+		SimpleLicensingInfo[] extractedLicenses = new ExtractedLicenseInfo[] {LICENSE2};
+		DoapProject[] artifactOfs = new DoapProject[] {DOAP_PROJECT1, DOAP_PROJECT2};
+		SpdxFile file = new SpdxFile(SPDX_ID1, ELEMENT_NAME1, ELEMENT_COMMENT1, 
+				annotations, relationships,LICENSE1, extractedLicenses, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, FILE_TYPE1, CHECKSUM1,
+				fileContributors, NOTICE_TEXT1, artifactOfs);
 		Resource r = file.createResource(modelContainer);
 		SpdxElement result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
 		assertTrue(result instanceof SpdxFile);

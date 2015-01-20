@@ -176,12 +176,12 @@ public class SpdxItem extends SpdxElement {
 	}
 	
 	@Override
-	public boolean equals(Object o) {
+	public boolean equivalent(RdfModelObject o) {
 		if (!(o instanceof SpdxItem)) {
 			return false;
 		}
 		SpdxItem comp = (SpdxItem)o;
-		if (!super.equals(comp)) {
+		if (!super.equivalent(comp)) {
 			return false;
 		}
 		return (equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
@@ -190,28 +190,25 @@ public class SpdxItem extends SpdxElement {
 				equalsConsideringNull(this.licenseComment, comp.getLicenseComment()));
 	}
 	
-	@Override
-	public int hashCode() {
-		int retval = super.hashCode();
-		if (this.copyrightText != null) {
-			retval = retval ^ this.copyrightText.hashCode();
+	protected AnyLicenseInfo cloneLicenseConcluded() {
+		if (this.licenseConcluded == null) {
+			return null;
 		}
-		if (this.licenseConcluded != null) {
-			retval = retval ^ this.licenseConcluded.hashCode();
+		return this.licenseConcluded.clone();
+	}
+	
+	
+	protected AnyLicenseInfo cloneLicenseDeclared() {
+		if (this.licenseDeclared == null) {
+			return null;
 		}
-		if (this.licenseDeclared != null) {
-			retval = retval ^ this.licenseDeclared.hashCode();
-		}
-		if (this.licenseComment != null) {
-			retval = retval ^ this.licenseComment.hashCode();
-		}
-		return retval;
+		return this.licenseDeclared.clone();
 	}
 	
 	@Override
 	public SpdxItem clone() {
 		return new SpdxItem(this.name, this.comment, cloneAnnotations(), cloneRelationships(),
-				this.licenseConcluded.clone(), this.licenseDeclared.clone(), this.copyrightText, 
+				cloneLicenseConcluded(), cloneLicenseDeclared(), this.copyrightText, 
 				this.licenseComment);
 	}
 }

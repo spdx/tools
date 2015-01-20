@@ -116,87 +116,6 @@ public class TestSpdxItem {
 	public void tearDown() throws Exception {
 	}
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#hashCode()}.
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	@Test
-	public void testHashCode() throws InvalidSPDXAnalysisException {
-		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
-		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
-				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
-		item.createResource(modelContainer);
-		SpdxItem item2 = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
-				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// Name
-		item2.setName(ELEMENT_NAME2);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setName(ELEMENT_NAME1);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// Comment
-		item2.setComment(ELEMENT_COMMENT2);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setComment(ELEMENT_COMMENT1);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// Annotations
-		// different order
-		Annotation[] annotations2 = new Annotation[] {ANNOTATION2, ANNOTATION1};
-		item2.setAnnotations(annotations2);
-		assertTrue(item.hashCode() == item2.hashCode());
-		item2.setAnnotations(new Annotation[] {ANNOTATION1});
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setAnnotations(new Annotation[] {});
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setAnnotations(null);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setAnnotations(annotations);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// Relationships
-		// different order
-		Relationship[] relationships2 = new Relationship[] {RELATIONSHIP2, RELATIONSHIP1};
-		item2.setRelationships(relationships2);
-		assertTrue(item.hashCode() == item2.hashCode());
-		item2.setRelationships(new Relationship[] {RELATIONSHIP1});
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setRelationships(new Relationship[] {});
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setRelationships(null);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setRelationships(relationships);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// License concluded
-		item2.setLicenseConcluded(LICENSE2);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setLicenseConcluded(null);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setLicenseConcluded(LICENSE1);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// License declared
-		item2.setLicenseDeclared(LICENSE1);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setLicenseDeclared(null);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setLicenseDeclared(LICENSE2);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// Copyright text
-		item2.setCopyrightText(COPYRIGHT_TEXT2);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setCopyrightText(null);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setCopyrightText(COPYRIGHT_TEXT1);
-		assertTrue(item.hashCode() == item2.hashCode());
-		// License comment
-		item2.setLicenseComment(LICENSE_COMMENT2);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setLicenseComment(null);
-		assertFalse(item.hashCode() == item2.hashCode());
-		item2.setLicenseComment(LICENSE_COMMENT1);
-		assertTrue(item.hashCode() == item2.hashCode());
-	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#getType(com.hp.hpl.jena.rdf.model.Model)}.
@@ -216,83 +135,83 @@ public class TestSpdxItem {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testEqualsObject() throws InvalidSPDXAnalysisException {
+	public void testEqualsEquivalent() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships, LICENSE1, LICENSE2, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
-		assertTrue(item.equals(item));
+		assertTrue(item.equivalent(item));
 		item.createResource(modelContainer);
-		assertTrue(item.equals(item));
+		assertTrue(item.equivalent(item));
 		SpdxItem item2 = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships, LICENSE1, LICENSE2, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// Name
 		item2.setName(ELEMENT_NAME2);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setName(ELEMENT_NAME1);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// Comment
 		item2.setComment(ELEMENT_COMMENT2);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setComment(ELEMENT_COMMENT1);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// Annotations
 		// different order
 		Annotation[] annotations2 = new Annotation[] {ANNOTATION2, ANNOTATION1};
 		item2.setAnnotations(annotations2);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		item2.setAnnotations(new Annotation[] {ANNOTATION1});
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setAnnotations(new Annotation[] {});
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setAnnotations(null);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setAnnotations(annotations);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// Relationships
 		// different order
 		Relationship[] relationships2 = new Relationship[] {RELATIONSHIP2, RELATIONSHIP1};
 		item2.setRelationships(relationships2);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		item2.setRelationships(new Relationship[] {RELATIONSHIP1});
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setRelationships(new Relationship[] {});
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setRelationships(null);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setRelationships(relationships);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// License concluded
 		item2.setLicenseConcluded(LICENSE2);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setLicenseConcluded(null);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setLicenseConcluded(LICENSE1);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// License declared
 		item2.setLicenseDeclared(LICENSE1);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setLicenseDeclared(null);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setLicenseDeclared(LICENSE2);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// Copyright text
 		item2.setCopyrightText(COPYRIGHT_TEXT2);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setCopyrightText(null);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setCopyrightText(COPYRIGHT_TEXT1);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 		// License comment
 		item2.setLicenseComment(LICENSE_COMMENT2);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setLicenseComment(null);
-		assertFalse(item.equals(item2));
+		assertFalse(item.equivalent(item2));
 		item2.setLicenseComment(LICENSE_COMMENT1);
-		assertTrue(item.equals(item2));
+		assertTrue(item.equivalent(item2));
 	}
 
 	/**
@@ -473,8 +392,8 @@ public class TestSpdxItem {
 		SpdxItem item2 = item.clone();
 		assertEquals(item.getName(), item2.getName());
 		assertEquals(item.getComment(), item2.getComment());
-		assertTrue(UnitTestHelper.isArraysEqual(item.getAnnotations(), item2.getAnnotations()));
-		assertTrue(UnitTestHelper.isArraysEqual(item.getRelationships(), item2.getRelationships()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(item.getAnnotations(), item2.getAnnotations()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(item.getRelationships(), item2.getRelationships()));
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
 		assertEquals(item.getLicenseDeclared(), item2.getLicenseDeclared());
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());

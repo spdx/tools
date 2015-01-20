@@ -75,10 +75,11 @@ public class Relationship extends RdfModelObject {
 		super(modelContainer, node);
 		this.relatedSpdxElement = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
-		String sRelationshipType = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
-		if (sRelationshipType != null) {
+		String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
+		if (relationshipTypeUri != null) {
+			String sRelationshipType = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
 			try {
 				this.relationshipType = RelationshipType.valueOf(sRelationshipType);
 			}catch (Exception ex) {
@@ -126,8 +127,9 @@ public class Relationship extends RdfModelObject {
 					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
 		}
 		if (this.relationshipType != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, relationshipType.toString());
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, 
+					SpdxRdfConstants.SPDX_NAMESPACE + this.relationshipType.toString());
 		}
 	}
 	/* (non-Javadoc)
@@ -146,12 +148,14 @@ public class Relationship extends RdfModelObject {
 	}
 	/**
 	 * @param relationshipType the relationshipType to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setRelationshipType(RelationshipType relationshipType) {
+	public void setRelationshipType(RelationshipType relationshipType) throws InvalidSPDXAnalysisException {
 		this.relationshipType = relationshipType;
 		if (relationshipType != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, relationshipType.toString());
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, 
+					SpdxRdfConstants.SPDX_NAMESPACE + this.relationshipType.toString());
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
@@ -186,41 +190,24 @@ public class Relationship extends RdfModelObject {
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
 	}
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof Relationship)) {
-			return false;
-		}
-		Relationship comp = (Relationship)o;
-		return (equalsConsideringNull(relatedSpdxElement, comp.getRelatedSpdxElement()) &&
-				equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
-				equalsConsideringNull(comment, comp.getComment()));
-	}
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int retval = 0;
-		if (relatedSpdxElement != null) {
-			retval = retval ^ relatedSpdxElement.hashCode();
-		}
-		if (relationshipType != null) {
-			retval = retval ^ relationshipType.hashCode();
-		}
-		if (comment != null) {
-			retval = retval ^ comment.hashCode();
-		}
-		return retval;
-	}
 	
 	@Override
 	public Relationship clone() {
 		return new Relationship(this.relatedSpdxElement.clone(),
 				this.relationshipType, this.comment);
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
+	 */
+	@Override
+	public boolean equivalent(RdfModelObject o) {
+		if (!(o instanceof Relationship)) {
+			return false;
+		}
+		Relationship comp = (Relationship)o;
+		return (equivalentConsideringNull(relatedSpdxElement, comp.getRelatedSpdxElement()) &&
+				equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
+				equalsConsideringNull(comment, comp.getComment()));
 	}
 
 }

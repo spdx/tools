@@ -135,16 +135,14 @@ public class TestRdfModelObject {
 		/* (non-Javadoc)
 		 * @see org.spdx.rdfparser.model.RdfModelObject#equals(java.lang.Object)
 		 */
-		@Override
-		public boolean equals(Object o) {
-			return o == this;
-		}
+
 		/* (non-Javadoc)
-		 * @see org.spdx.rdfparser.model.RdfModelObject#hashCode()
+		 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 		 */
 		@Override
-		public int hashCode() {
-			return 0;
+		public boolean equivalent(RdfModelObject compare) {
+
+			return false;
 		}
 		
 	}
@@ -490,5 +488,42 @@ public class TestRdfModelObject {
 		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, lic2);
 		result = empty.findAnyLicenseInfoPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(lic2, result);
+	}
+	
+	@Test
+	public void testSpecialValues() {
+		// test getting and setting NONE, NOASSERTION, etc.
+		fail("Not Implemented");
+	}
+	
+	@Test
+	public void testFindSetPropertyUriValue() {
+		fail("Not Implemented");
+	}
+	
+	@Test
+	public void testFindSetPropertyDaopValue() {
+		fail("Not Implemented");
+	}
+	
+	@Test
+	public void testFindSetPropertyChecksumValue() {
+		fail("Not Implemented");
+	}
+	
+	@Test
+	public void testDuplicate() {
+		// Same URI node
+		fail("Not Implemented");
+	}
+	
+	@Test public void testEquals() {
+		// test 2 different object but implement the same resource
+		fail("Not Implemented");
+	}
+	
+	@Test public void testHashcode() {
+		// test 2 different object but implement the same resource
+		fail("Not Implemented");
 	}
 }

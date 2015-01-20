@@ -204,7 +204,7 @@ public class TestRelationship {
 	}
 	
 	@Test
-	public void testEquals() throws InvalidSPDXAnalysisException {
+	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
@@ -212,56 +212,26 @@ public class TestRelationship {
 		assertEquals(relationshipType1, relationship.getRelationshipType());
 		assertEquals(comment1, relationship.getComment());
 		relationship.createResource(modelContainer);
-		assertTrue(relationship.equals(relationship));
+		assertTrue(relationship.equivalent(relationship));
 		Relationship relationship2 = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
-		assertTrue(relationship.equals(relationship2));
+		assertTrue(relationship.equivalent(relationship2));
 		relationship2.createResource(modelContainer);
-		assertTrue(relationship.equals(relationship2));
+		assertTrue(relationship.equivalent(relationship2));
 		// related SPDX element
 		relationship2.setRelatedSpdxElement(RELATED_ELEMENT2);
-		assertFalse(relationship.equals(relationship2));
+		assertFalse(relationship.equivalent(relationship2));
 		relationship2.setRelatedSpdxElement(RELATED_ELEMENT1);
-		assertTrue(relationship2.equals(relationship));
+		assertTrue(relationship2.equivalent(relationship));
 		// relationship type
 		relationship2.setRelationshipType(RelationshipType.relationshipType_dynamicLink);
-		assertFalse(relationship.equals(relationship2));
+		assertFalse(relationship.equivalent(relationship2));
 		relationship2.setRelationshipType(relationshipType1);
-		assertTrue(relationship2.equals(relationship));
+		assertTrue(relationship2.equivalent(relationship));
 		// comment
 		relationship2.setComment("yet a different comment");
-		assertFalse(relationship.equals(relationship2));
+		assertFalse(relationship.equivalent(relationship2));
 		relationship2.setComment(comment1);
-		assertTrue(relationship2.equals(relationship));
-	}
-	
-	@Test
-	public void testHashcode() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
-		String comment1 = "Comment1";
-		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
-		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
-		assertEquals(relationshipType1, relationship.getRelationshipType());
-		assertEquals(comment1, relationship.getComment());
-		relationship.createResource(modelContainer);
-		Relationship relationship2 = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
-		assertTrue(relationship.hashCode() == relationship2.hashCode());
-		relationship2.createResource(modelContainer);
-		assertTrue(relationship.hashCode() == relationship2.hashCode());
-		// related SPDX element
-		relationship2.setRelatedSpdxElement(RELATED_ELEMENT2);
-		assertFalse(relationship.hashCode() == relationship2.hashCode());
-		relationship2.setRelatedSpdxElement(RELATED_ELEMENT1);
-		assertTrue(relationship.hashCode() == relationship2.hashCode());
-		// relationship type
-		relationship2.setRelationshipType(RelationshipType.relationshipType_dynamicLink);
-		assertFalse(relationship.hashCode() == relationship2.hashCode());
-		relationship2.setRelationshipType(relationshipType1);
-		assertTrue(relationship.hashCode() == relationship2.hashCode());
-		// comment
-		relationship2.setComment("yet a different comment");
-		assertFalse(relationship.hashCode() == relationship2.hashCode());
-		relationship2.setComment(comment1);
-		assertTrue(relationship.hashCode() == relationship2.hashCode());
+		assertTrue(relationship2.equivalent(relationship));
 	}
 	
 	@Test
@@ -271,7 +241,7 @@ public class TestRelationship {
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		relationship.createResource(modelContainer);
 		Relationship relationship2 = relationship.clone();
-		assertEquals(relationship.getRelatedSpdxElement(), relationship2.getRelatedSpdxElement());
+		assertTrue(relationship.getRelatedSpdxElement().equivalent(relationship2.getRelatedSpdxElement()));
 		assertEquals(relationship.getRelationshipType(), relationship2.getRelationshipType());
 		assertEquals(relationship.getComment(), relationship2.getComment());
 		assertFalse(relationship.node == relationship2.node);

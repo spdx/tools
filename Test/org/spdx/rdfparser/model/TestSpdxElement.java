@@ -108,61 +108,6 @@ public class TestSpdxElement {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#hashCode()}.
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	@Test
-	public void testHashCode() throws InvalidSPDXAnalysisException {
-		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
-		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships);
-		SpdxElement element2 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		element2.createResource(modelContainer);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// name
-		element2.setName(ELEMENT_NAME2);
-		assertFalse(element1.hashCode() == element2.hashCode());
-		element2.setName(ELEMENT_NAME1);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// comment
-		element2.setComment(ELEMENT_COMMENT2);
-		assertFalse(element1.hashCode() == element2.hashCode());
-		element2.setComment(ELEMENT_COMMENT1);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// annotations order
-		Annotation[] annotations2 = new Annotation[] {ANNOTATION2, ANNOTATION1};
-		element2.setAnnotations(annotations2);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// annotation different
-		Annotation[] annotations3 = new Annotation[] {ANNOTATION1};
-		element2.setAnnotations(annotations3);
-		assertFalse(element1.hashCode() == element2.hashCode());
-		element2.setAnnotations(annotations);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// annotation null
-		element2.setAnnotations(null);
-		assertFalse(element1.hashCode() == element2.hashCode());
-		element2.setAnnotations(annotations);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// relationships order
-		Relationship[] relationships2 = new Relationship[] {RELATIONSHIP2, RELATIONSHIP1};
-		element2.setRelationships(relationships2);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// relationships different
-		Relationship[] relationships3 = new Relationship[] {RELATIONSHIP2};
-		element2.setRelationships(relationships3);
-		assertFalse(element1.hashCode() == element2.hashCode());
-		element2.setRelationships(relationships);
-		assertEquals(element1.hashCode(), element2.hashCode());
-		// relationship null	
-		element2.setRelationships(null);
-		assertFalse(element1.hashCode() == element2.hashCode());
-	}
-
-	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#getType(com.hp.hpl.jena.rdf.model.Model)}.
 	 */
 	@Test
@@ -195,55 +140,55 @@ public class TestSpdxElement {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testEqualsObject() throws InvalidSPDXAnalysisException {
+	public void testEquivalentObject() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships);
-		assertTrue(element1.equals(element1));
+		assertTrue(element1.equivalent(element1));
 		SpdxElement element2 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships);
-		assertTrue(element1.equals(element2));
+		assertTrue(element1.equivalent(element2));
 		element2.createResource(modelContainer);
-		assertTrue(element1.equals(element2));
+		assertTrue(element1.equivalent(element2));
 		// name
 		element2.setName(ELEMENT_NAME2);
-		assertFalse(element1.equals(element2));
+		assertFalse(element1.equivalent(element2));
 		element2.setName(ELEMENT_NAME1);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// comment
 		element2.setComment(ELEMENT_COMMENT2);
-		assertFalse(element1.equals(element2));
+		assertFalse(element1.equivalent(element2));
 		element2.setComment(ELEMENT_COMMENT1);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// annotations order
 		Annotation[] annotations2 = new Annotation[] {ANNOTATION2, ANNOTATION1};
 		element2.setAnnotations(annotations2);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// annotation different
 		Annotation[] annotations3 = new Annotation[] {ANNOTATION1};
 		element2.setAnnotations(annotations3);
-		assertFalse(element1.equals(element2));
+		assertFalse(element1.equivalent(element2));
 		element2.setAnnotations(annotations);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// annotation null
 		element2.setAnnotations(null);
-		assertFalse(element1.equals(element2));
+		assertFalse(element1.equivalent(element2));
 		element2.setAnnotations(annotations);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// relationships order
 		Relationship[] relationships2 = new Relationship[] {RELATIONSHIP2, RELATIONSHIP1};
 		element2.setRelationships(relationships2);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// relationships different
 		Relationship[] relationships3 = new Relationship[] {RELATIONSHIP2};
 		element2.setRelationships(relationships3);
-		assertFalse(element1.equals(element2));
+		assertFalse(element1.equivalent(element2));
 		element2.setRelationships(relationships);
-		assertTrue(element2.equals(element1));
+		assertTrue(element2.equivalent(element1));
 		// relationship null	
 		element2.setRelationships(null);
-		assertFalse(element1.equals(element2));
+		assertFalse(element1.equivalent(element2));
 	}
 
 	/**
