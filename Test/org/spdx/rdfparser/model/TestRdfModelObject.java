@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import static org.junit.Assert.*;
 
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -491,14 +492,59 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
-	public void testSpecialValues() {
-		// test getting and setting NONE, NOASSERTION, etc.
-		fail("Not Implemented");
+	public void testSpecialValues() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		// None
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, SpdxRdfConstants.NONE_VALUE);
+		String result = empty.findUriPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(SpdxRdfConstants.URI_VALUE_NONE, result);
+		result = empty.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(SpdxRdfConstants.NONE_VALUE, result);
+		// NoAssertion
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, SpdxRdfConstants.NOASSERTION_VALUE);
+		result = empty.findUriPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, result);
+		result = empty.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, result);
 	}
 	
 	@Test
-	public void testFindSetPropertyUriValue() {
-		fail("Not Implemented");
+	public void testFindSetPropertyUriValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		String uri = "http://this.is.a#uri";
+		empty.setPropertyUriValue(TEST_NAMESPACE, TEST_PROPNAME1, uri);
+		String result = empty.findUriPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(uri, result);
 	}
 	
 	@Test
@@ -512,18 +558,116 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
-	public void testDuplicate() {
+	public void testDuplicate() throws InvalidSPDXAnalysisException {
 		// Same URI node
-		fail("Not Implemented");
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		EmptyRdfModelObject empty = new EmptyRdfModelObject();
+		String uri = "http://a.uri.this/that#mine";
+		empty.setUri(uri);
+		Resource r = empty.createResource(modelContainer);
+		assertTrue(r.isURIResource());
+		assertEquals(uri, r.getURI());
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, TEST_PROPVALUE2);
+		String result = empty.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(TEST_PROPVALUE2, result);
+		EmptyRdfModelObject empty2 = new EmptyRdfModelObject();
+		Resource r2 = empty2.createResource(modelContainer);
+		assertFalse(r2.isURIResource());
+		result = empty2.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertTrue(result == null);
+		EmptyRdfModelObject empty3 = new EmptyRdfModelObject();
+		empty3.setUri(uri);	// this should cause the resource to reference the same
+		Resource r3 = empty3.createResource(modelContainer);
+		assertTrue(r3.isURIResource());
+		assertEquals(uri, r3.getURI());
+		result = empty3.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(TEST_PROPVALUE2, result);
+		assertEquals(r, r3);	
+		EmptyRdfModelObject empty4 = new EmptyRdfModelObject();
+		String uri2 = "http://another.uri.this/that#mine";
+		empty4.setUri(uri2);
+		Resource r4 = empty4.createResource(modelContainer);
+		assertTrue(r4.isURIResource());
+		assertEquals(uri2, r4.getURI());
+		result = empty4.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertTrue(result == null);
+
 	}
 	
-	@Test public void testEquals() {
-		// test 2 different object but implement the same resource
-		fail("Not Implemented");
+	@Test public void testEquals() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+
+		EmptyRdfModelObject empty = new EmptyRdfModelObject();
+		String uri = "http://a.uri.this/that#mine";
+		empty.setUri(uri);
+		empty.createResource(modelContainer);
+		EmptyRdfModelObject empty2 = new EmptyRdfModelObject();
+		Resource r2 = empty2.createResource(modelContainer);
+		assertFalse(empty.equals(empty2));
+		EmptyRdfModelObject empty3 = new EmptyRdfModelObject();
+		assertFalse(empty.equals(empty3));
+		empty3.setUri(uri);
+		empty3.createResource(modelContainer);
+		assertTrue(empty.equals(empty3));
+		EmptyRdfModelObject empty4 = new EmptyRdfModelObject(modelContainer, r2.asNode());
+		assertTrue(empty2.equals(empty4));
 	}
 	
-	@Test public void testHashcode() {
-		// test 2 different object but implement the same resource
-		fail("Not Implemented");
+	@Test public void testHashcode() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+
+		EmptyRdfModelObject empty = new EmptyRdfModelObject();
+		String uri = "http://a.uri#mine";
+		empty.setUri(uri);
+		empty.createResource(modelContainer);
+		EmptyRdfModelObject empty2 = new EmptyRdfModelObject();
+		Resource r2 = empty2.createResource(modelContainer);
+		assertFalse(empty.hashCode() == empty2.hashCode());
+		EmptyRdfModelObject empty3 = new EmptyRdfModelObject();
+		assertFalse(empty.hashCode() == empty3.hashCode());
+		empty3.setUri(uri);
+		empty3.createResource(modelContainer);
+		assertTrue(empty.hashCode() == empty3.hashCode());
+		EmptyRdfModelObject empty4 = new EmptyRdfModelObject(modelContainer, r2.asNode());
+		assertTrue(empty2.hashCode() == empty4.hashCode());
 	}
 }

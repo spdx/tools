@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -41,6 +42,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class SpdxElement extends RdfModelObject {
 	
+	static final Logger logger = Logger.getLogger(RdfModelObject.class);
+	
 	Annotation[] annotations;
 	String comment;
 	String name;
@@ -50,7 +53,7 @@ public class SpdxElement extends RdfModelObject {
 		super(modelContainer, node);
 		this.annotations = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION);
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
-		this.name = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, this.getNamePropertyName());
+		this.name = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, this.getNamePropertyName());
 		this.relationships = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP);
 	}
 
@@ -77,9 +80,9 @@ public class SpdxElement extends RdfModelObject {
 	}
 	
 	protected void populateModel() throws InvalidSPDXAnalysisException {
-		if (this.model != null) {
+		if (this.resource != null) {
 			if (this.name != null) {
-				setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, getNamePropertyName(), name);
+				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, getNamePropertyName(), name);
 			}
 			if (this.comment != null) {
 				setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
@@ -110,6 +113,13 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the annotations
 	 */
 	public Annotation[] getAnnotations() {
+		if (model != null) {
+			try {
+				this.annotations = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION);
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid annotations in the model",e);
+			}
+		}
 		return annotations;
 	}
 
@@ -132,6 +142,9 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the comment
 	 */
 	public String getComment() {
+		if (this.resource != null) {
+			this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+		}
 		return comment;
 	}
 
@@ -149,6 +162,9 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the name
 	 */
 	public String getName() {
+		if (this.resource != null) {
+			this.name = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, this.getNamePropertyName());
+		}
 		return name;
 	}
 
@@ -173,6 +189,13 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the relationships
 	 */
 	public Relationship[] getRelationships() {
+		if (model != null) {
+			try {
+				this.relationships = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP);
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid relationships in the model",e);
+			}
+		}
 		return relationships;
 	}
 

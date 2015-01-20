@@ -112,10 +112,12 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 */
 	@Override
 	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
-		this.modelContainer = modelContainer;
-		this.model = modelContainer.getModel();
 		String uri = getUri(modelContainer);
 		Resource duplicate = findDuplicateResource(modelContainer, uri);
+		// we need to wait to set the following to fields since they are checked
+		// by some of the setters
+		this.modelContainer = modelContainer;
+		this.model = modelContainer.getModel();	
 		if (duplicate != null) {
 			this.resource = duplicate;
 		} else if (uri == null) {			
@@ -143,7 +145,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Resource retval = ResourceFactory.createResource(uri);
 		if (modelContainer.getModel().containsResource(retval)) {
-			return retval;
+			return modelContainer.getModel().getResource(uri);
 		} else {
 			return null;
 		}
@@ -370,6 +372,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
+			if (t.getObject().isURI()) {
+				// check for predefined
+				String retval = PRE_DEFINED_URI_VALUE.get(t.getObject().getURI());
+				if (retval != null) {
+					return retval;
+				}
+			}
 			return t.getObject().toString(false);
 		}
 		return null;
@@ -391,7 +400,11 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			retval.add(t.getObject().toString(false));
+			if (t.getObject().isURI() && PRE_DEFINED_URI_VALUE.containsKey(t.getObject().getURI())) {
+				retval.add(PRE_DEFINED_URI_VALUE.get(t.getObject().getURI()));
+			} else {
+				retval.add(t.getObject().toString(false));
+			}
 		}
 		return retval.toArray(new String[retval.size()]);
 	}
