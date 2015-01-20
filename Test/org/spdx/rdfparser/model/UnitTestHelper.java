@@ -53,4 +53,35 @@ public class UnitTestHelper {
 		return true;
 	}
 
+	/**
+	 * @param a1
+	 * @param a2
+	 * @return true if the members of the two array are equivalent independent of order
+	 */
+	public static boolean isArraysEquivalent(RdfModelObject[] a1,
+			RdfModelObject[] a2) {
+		if (a1 == null) {
+			return(a2 == null);
+		}
+		if (a2 == null) {
+			return false;
+		}
+		if (a1.length != a2.length) {
+			return false;
+		}
+		for (int i = 0; i < a1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < a2.length; j++) {
+				if (a1[i].equivalent(a2[j])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

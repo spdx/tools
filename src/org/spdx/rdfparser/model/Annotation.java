@@ -34,10 +34,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class Annotation extends RdfModelObject {
 
-	/**
-	 * This field identifies the person, organization or tool that has commented 
-	 * on a file, package, or entire document. 
-	 */
 	public enum AnnotationType {annotationType_other, annotationType_review};
 	AnnotationType annotationType;
 	String annotator;
@@ -63,8 +59,10 @@ public class Annotation extends RdfModelObject {
 		//Comment
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		//Annotation type
-		String sAnnotationType =  findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.ANNOTATION_TYPE);
-		if (sAnnotationType != null) {
+		String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_ANNOTATION_TYPE);
+		if (annotationTypeUri != null) {
+			String sAnnotationType = annotationTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
 			try {
 				this.annotationType = AnnotationType.valueOf(sAnnotationType);
 			} catch (Exception ex) {
@@ -80,10 +78,14 @@ public class Annotation extends RdfModelObject {
 
 	/**
 	 * Populate the model from the properties
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected void populateModel() {
+	@Override
+	protected void populateModel() throws InvalidSPDXAnalysisException {
 		if (annotationType != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.ANNOTATION_TYPE,annotationType.toString());
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_ANNOTATION_TYPE, 
+					SpdxRdfConstants.SPDX_NAMESPACE + this.annotationType.toString());
 		}
 		if (annotator != null) {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR, annotator);
@@ -131,13 +133,16 @@ public class Annotation extends RdfModelObject {
 
 	/**
 	 * @param annotationType the annotationType to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setAnnotationType(AnnotationType annotationType) {
+	public void setAnnotationType(AnnotationType annotationType) throws InvalidSPDXAnalysisException {
 		this.annotationType = annotationType;
 		if (annotationType != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.ANNOTATION_TYPE,annotationType.toString());
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_FILE_TYPE, 
+					SpdxRdfConstants.SPDX_NAMESPACE + this.annotationType.toString());
 		} else {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.ANNOTATION_TYPE);
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_TYPE);
 		}
 	}
 
@@ -204,11 +209,16 @@ public class Annotation extends RdfModelObject {
 		return null;
 	}
 
+	public Annotation clone() {
+		return new Annotation(this.annotator, this.annotationType, this.date, 
+				this.comment);
+	}
+
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#equals(java.lang.Object)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equals(Object o) {
+	public boolean equivalent(RdfModelObject o) {
 		if (!(o instanceof Annotation)) {
 			return false;
 		}
@@ -217,32 +227,6 @@ public class Annotation extends RdfModelObject {
 				equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
 				equalsConsideringNull(comment, comp.getComment()) &&
 				equalsConsideringNull(date, comp.getDate()));
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int retval = 0;
-		if (this.annotator != null) {
-			retval = retval ^ this.annotator.hashCode();
-		}
-		if (this.annotationType != null) {
-			retval = retval ^ this.annotationType.hashCode();
-		}
-		if (this.comment != null) {
-			retval = retval ^ this.comment.hashCode();
-		}
-		if (this.date != null) {
-			retval = retval ^ this.date.hashCode();
-		}
-		return retval;
-	}
-
-	public Annotation clone() {
-		return new Annotation(this.annotator, this.annotationType, this.date, 
-				this.comment);
 	}
 	
 }

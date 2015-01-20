@@ -119,7 +119,11 @@ public class SpdxElement extends RdfModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void setAnnotations(Annotation[] annotations) throws InvalidSPDXAnalysisException {
-		this.annotations = annotations;
+		if (annotations == null) {
+			this.annotations = new Annotation[0];
+		} else {
+			this.annotations = annotations;
+		}
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION, annotations);
 	}
 
@@ -178,7 +182,11 @@ public class SpdxElement extends RdfModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void setRelationships(Relationship[] relationships) throws InvalidSPDXAnalysisException {
-		this.relationships = relationships;
+		if (relationships == null) {
+			this.relationships = new Relationship[0];
+		} else {
+			this.relationships = relationships;
+		}
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationships);
 	}
 
@@ -203,50 +211,6 @@ public class SpdxElement extends RdfModelObject {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_ELEMENT);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof SpdxElement)) {
-			return false;
-		}
-		SpdxElement comp = (SpdxElement)o;
-		return (equalsConsideringNull(comp.getName(), this.getName()) &&
-				arraysEqual(comp.getAnnotations(), this.getAnnotations()) &&
-				arraysEqual(comp.getRelationships(), this.getRelationships()) &&
-				equalsConsideringNull(comp.getComment(), this.getComment()));
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int retval = 0;
-		if (name != null) {
-			retval = retval ^ name.hashCode();
-		}
-		if (annotations != null) {
-			for (int i = 0; i < annotations.length; i++) {
-				if (annotations[i] != null) {
-					retval = retval ^ annotations[i].hashCode();
-				}
-			}
-		}
-		if (relationships != null) {
-			for (int i = 0; i < relationships.length; i++) {
-				if (relationships[i] != null) {
-					retval = retval ^ relationships[i].hashCode();
-				}
-			}
-		}
-		if (comment != null) {
-			retval = retval ^ comment.hashCode();
-		}
-		return retval;
-	}
-	
 	protected Annotation[] cloneAnnotations() {
 		if (this.annotations == null) {
 			return null;
@@ -272,6 +236,21 @@ public class SpdxElement extends RdfModelObject {
 	@Override
 	public SpdxElement clone() {
 		return new SpdxElement(this.name, this.comment, cloneAnnotations(), cloneRelationships());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
+	 */
+	@Override
+	public boolean equivalent(RdfModelObject o) {
+		if (!(o instanceof SpdxElement)) {
+			return false;
+		}
+		SpdxElement comp = (SpdxElement)o;
+		return (equalsConsideringNull(comp.getName(), this.getName()) &&
+				arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) &&
+				arraysEquivalent(comp.getRelationships(), this.getRelationships()) &&
+				equalsConsideringNull(comp.getComment(), this.getComment()));
 	}
 
 }
