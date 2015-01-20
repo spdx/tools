@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfParserHelper;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -35,8 +36,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public abstract class AnyLicenseInfo implements Cloneable {
-	
+public abstract class AnyLicenseInfo implements Cloneable, IRdfModel {
+
 	Model model = null;
 	Node licenseInfoNode = null;
 	Resource resource = null;

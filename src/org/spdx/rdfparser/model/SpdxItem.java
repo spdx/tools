@@ -80,7 +80,7 @@ public class SpdxItem extends SpdxElement {
 	 */
 	protected void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
-		if (this.model != null) {
+		if (this.resource != null) {
 			if (this.licenseConcluded != null) {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_LICENSE_CONCLUDED, licenseConcluded);
@@ -109,6 +109,14 @@ public class SpdxItem extends SpdxElement {
 	 * @return the licenseConcluded
 	 */
 	public AnyLicenseInfo getLicenseConcluded() {
+		if (this.resource != null) {
+			try {
+				this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+						SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid licenseConcluded in model",e);
+			}
+		}
 		return licenseConcluded;
 	}
 
@@ -125,6 +133,14 @@ public class SpdxItem extends SpdxElement {
 	 * @return the licenseDeclared
 	 */
 	public AnyLicenseInfo getLicenseDeclared() {
+		if (this.resource != null) {
+			try {
+				this.licenseDeclared = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+						getLicenseDeclaredPropertyName());
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid licenseDeclared in model",e);
+			}
+		}
 		return licenseDeclared;
 	}
 
@@ -141,6 +157,9 @@ public class SpdxItem extends SpdxElement {
 	 * @return the copyrightText
 	 */
 	public String getCopyrightText() {
+		if (this.resource != null) {
+			this.copyrightText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT);
+		}
 		return copyrightText;
 	}
 
@@ -156,6 +175,9 @@ public class SpdxItem extends SpdxElement {
 	 * @return the licenseComment
 	 */
 	public String getLicenseComment() {
+		if (this.resource != null) {
+			this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
+		}
 		return licenseComment;
 	}
 

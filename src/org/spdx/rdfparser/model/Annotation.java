@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -33,6 +34,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class Annotation extends RdfModelObject {
+	
+	static final Logger logger = Logger.getLogger(RdfModelObject.class.getName());
 
 	public enum AnnotationType {annotationType_other, annotationType_review};
 	AnnotationType annotationType;
@@ -66,6 +69,7 @@ public class Annotation extends RdfModelObject {
 			try {
 				this.annotationType = AnnotationType.valueOf(sAnnotationType);
 			} catch (Exception ex) {
+				logger.error("Invalid annotation type found in the model: "+sAnnotationType);
 				throw(new InvalidSPDXAnalysisException("Invalid annotation type: "+sAnnotationType));
 			}
 		}
@@ -128,6 +132,18 @@ public class Annotation extends RdfModelObject {
 	 * @return the annotationType
 	 */
 	public AnnotationType getAnnotationType() {
+		if (this.resource != null) {
+			String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_ANNOTATION_TYPE);
+			if (annotationTypeUri != null) {
+				String sAnnotationType = annotationTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+				try {
+					this.annotationType = AnnotationType.valueOf(sAnnotationType);
+				} catch (Exception ex) {
+					logger.error("Invalid annotation type found in the model - "+sAnnotationType);
+				}
+			}
+		}
 		return annotationType;
 	}
 
@@ -139,8 +155,8 @@ public class Annotation extends RdfModelObject {
 		this.annotationType = annotationType;
 		if (annotationType != null) {
 			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_FILE_TYPE, 
-					SpdxRdfConstants.SPDX_NAMESPACE + this.annotationType.toString());
+					SpdxRdfConstants.PROP_ANNOTATION_TYPE, 
+					SpdxRdfConstants.SPDX_NAMESPACE + annotationType.toString());
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_TYPE);
 		}
@@ -150,6 +166,9 @@ public class Annotation extends RdfModelObject {
 	 * @return the annotator
 	 */
 	public String getAnnotator() {
+		if (this.resource != null) {
+			this.annotator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR);
+		}
 		return annotator;
 	}
 
@@ -165,6 +184,9 @@ public class Annotation extends RdfModelObject {
 	 * @return the comment
 	 */
 	public String getComment() {
+		if (this.resource != null) {
+			this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
+		}
 		return comment;
 	}
 
@@ -180,6 +202,9 @@ public class Annotation extends RdfModelObject {
 	 * @return the date
 	 */
 	public String getDate() {
+		if (this.resource != null) {
+			date = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE);
+		}
 		return date;
 	}
 
