@@ -18,7 +18,6 @@ package org.spdx.rdfparser.model;
 
 import static org.junit.Assert.*;
 
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
 import com.hp.hpl.jena.graph.Node;
@@ -492,6 +492,41 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
+	public void testFindSetAnyLicenseInfosMultiple() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		AnyLicenseInfo[] result = empty.findAnyLicenseInfoPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		SpdxListedLicense lic1 = LicenseInfoFactory.getListedLicenseById(STANDARD_LICENSE_ID1);
+		String licId2 = "LicRef-2";
+		String licenseText2 = "License text 2";
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licenseText2);
+		AnyLicenseInfo[] licenses = new AnyLicenseInfo[] {lic1, lic2};
+		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, licenses);
+		result = empty.findAnyLicenseInfoPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(2, result.length);
+		if (result[0].equals(lic1)) {
+			assertEquals(lic2, result[1]);
+		} else {
+			assertEquals(lic1, result[1]);
+		}
+	}
+	
+	@Test
 	public void testSpecialValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new IModelContainer() {
@@ -548,13 +583,89 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
-	public void testFindSetPropertyDaopValue() {
-		fail("Not Implemented");
+	public void testFindSetPropertyUriValues() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		String uri1 = "http://this.is.a#uri";
+		String uri2 = "http://this.is.a#uri2";
+		String[] uris = new String[] {uri1, uri2};
+		empty.setPropertyUriValues(TEST_NAMESPACE, TEST_PROPNAME1, uris);
+		String[] result = empty.findUriPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(UnitTestHelper.isArraysEqual(uris, result));
 	}
 	
 	@Test
-	public void testFindSetPropertyChecksumValue() {
-		fail("Not Implemented");
+	public void testFindSetPropertyDaopValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		DoapProject p1 = new DoapProject("Name1", "http://home.page/one");
+		DoapProject p2 = new DoapProject("Name2", "http://home.page/two");
+		p2.createResource(modelContainer);
+		DoapProject[] projects = new DoapProject[] {p1, p2};
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, projects);
+		DoapProject[] result = empty.findMultipleDoapPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(UnitTestHelper.isArraysEqual(projects, result));
+	}
+	
+	@Test
+	public void testFindSetPropertyChecksumValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new IModelContainer() {
+
+			@Override
+			public Model getModel() {
+				return model;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return "http://testnamespace.com";
+			}
+			
+		};
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"1123456789abcdef0123456789abcdef01234567");
+		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, 
+				"2123456789abcdef0123456789abcdef01234567");
+		c2.createResource(modelContainer);
+		Checksum result = empty.findChecksumPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertTrue(result == null);
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, c1);
+		result = empty.findChecksumPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(c1, result);
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, c2);
+		result = empty.findChecksumPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(c2, result);
 	}
 	
 	@Test
@@ -639,7 +750,8 @@ public class TestRdfModelObject {
 		assertTrue(empty2.equals(empty4));
 	}
 	
-	@Test public void testHashcode() throws InvalidSPDXAnalysisException {
+	@Test 
+	public void testHashcode() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new IModelContainer() {
 

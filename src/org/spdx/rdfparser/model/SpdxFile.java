@@ -24,8 +24,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
-import org.spdx.rdfparser.license.SimpleLicensingInfo;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -47,14 +46,13 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		fileType_audio, fileType_binary, fileType_documentation,
 		fileType_image, fileType_other, fileType_source, fileType_spdx,
 		fileType_text, fileType_video};
-	FileType fileType;
-	Checksum checksum;
-	String[] fileContributors;
+	FileType[] fileTypes = new FileType[0];
+	Checksum[] checksums;
+	String[] fileContributors = new String[0];
 	String noticeText;
 	String id;
-	DoapProject[] artifactOf;
-	SpdxFile[] fileDependencies;
-	
+	DoapProject[] artifactOf = new DoapProject[0];
+	SpdxFile[] fileDependencies = new SpdxFile[0];
 
 	/**
 	 * @param id SPDX Identifier for the file.  Must be unique within the modelContainer
@@ -69,15 +67,15 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 */
 	public SpdxFile(String id, String name, String comment, Annotation[] annotations,
 			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
-			SimpleLicensingInfo[] licenseInfoInFile, String copyrightText,
-			String licenseComment, FileType fileType, Checksum checksum,
+			AnyLicenseInfo[] licenseInfoInFile, String copyrightText,
+			String licenseComment, FileType[] fileTypes, Checksum[] checksums,
 			String[] fileContributors, String noticeText, DoapProject[] artifactOf) {
 		super(name, comment, annotations, relationships, 
-				licenseConcluded, convertDeclaredLicense(licenseInfoInFile),
+				licenseConcluded, licenseInfoInFile,
 				copyrightText, licenseComment);
 		this.id = id;
-		this.fileType = fileType;
-		this.checksum = checksum;
+		this.fileTypes = fileTypes;
+		this.checksums = checksums;
 		this.fileContributors = fileContributors;
 		if (this.fileContributors == null) {
 			this.fileContributors = new String[0];
@@ -89,39 +87,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			this.artifactOf = new DoapProject[0];
 		}
 	}
-	
-	static AnyLicenseInfo convertDeclaredLicense(SimpleLicensingInfo[] licenseInfoInFile) {
-		if (licenseInfoInFile == null) {
-			return null;
-		} else if (licenseInfoInFile.length == 0) {
-			return null;
-		} else if (licenseInfoInFile.length == 1) {
-			return licenseInfoInFile[0];
-		} else {
-			return new DisjunctiveLicenseSet(licenseInfoInFile);
-		}
-	}
-	
-	static SimpleLicensingInfo[] convertLicenseInfoFromFile(AnyLicenseInfo declaredLicense) throws InvalidSPDXAnalysisException {
-		if (declaredLicense == null) {
-			return new SimpleLicensingInfo[0];
-		}
-		if (declaredLicense instanceof SimpleLicensingInfo) {
-			return new SimpleLicensingInfo[] {(SimpleLicensingInfo)declaredLicense};
-		} else if (declaredLicense instanceof DisjunctiveLicenseSet) {
-			AnyLicenseInfo[] members = ((DisjunctiveLicenseSet)declaredLicense).getMembers();
-			SimpleLicensingInfo[] retval = new SimpleLicensingInfo[members.length];
-			for (int i = 0; i < members.length; i++) {
-				if (!(members[i] instanceof SimpleLicensingInfo)) {
-					throw (new InvalidSPDXAnalysisException("Can not convert a complex license to license infos from file: "+declaredLicense.toString()));
-				}
-				retval[i] = (SimpleLicensingInfo)members[i];
-			}
-			return retval;
-		} else {
-			throw (new InvalidSPDXAnalysisException("Can not convert a complex license to license infos from file: "+declaredLicense.toString()));
-		}
-	}
 
 	/**
 	 * @param modelContainer
@@ -131,18 +96,10 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	public SpdxFile(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
-		String fileTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		String[] fileTypeUris = findUriPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_TYPE);
-		if (fileTypeUri != null && !fileTypeUri.isEmpty()) {
-			String fileTypeS = fileTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
-			try {
-				this.fileType = FileType.valueOf(fileTypeS);
-			} catch (Exception ex) {
-				logger.error("Invalid file type in the model - "+fileTypeS);
-				throw(new InvalidSPDXAnalysisException("Invalid file type: "+fileTypeUri));
-			}
-		}
-		this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.fileTypes = urisToFileType(fileTypeUris, false);
+		this.checksums = findMultipleChecksumPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_CHECKSUM);
 		this.fileContributors = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_FILE_CONTRIBUTOR);
@@ -173,6 +130,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 					this.fileDependencies[j++] = (SpdxFile)fileDependencyElements[i];
 				}
 			}
+		} else {
+			this.fileDependencies = new SpdxFile[0];
 		}
 		// ArtifactOfs
 		this.artifactOf = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
@@ -180,8 +139,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 
 	/**
-	 * Finds the resource for an e		this.artifactOf = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
-				SpdxRdfConstants.PROP_FILE_ARTIFACTOF);xisting file in the model
+	 * Finds the resource for an existing file in the model
 	 * @param spdxFile
 	 * @return resource of an SPDX file with the same name and checksum.  Null if none found
 	 * @throws InvalidSPDXAnalysisException 
@@ -203,7 +161,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			if (checksumMatchIterator.hasNext()) {
 				Triple checksumMatchTriple = checksumMatchIterator.next();
 				Checksum cksum = new Checksum(modelContainer, checksumMatchTriple.getObject());
-				if (cksum.getValue().compareToIgnoreCase(spdxFile.getChecksum().getValue()) == 0) {
+				if (cksum.getAlgorithm().equals(ChecksumAlgorithm.checksumAlgorithm_sha1) &&
+						cksum.getValue().compareToIgnoreCase(spdxFile.getSha1Value()) == 0) {
 					return RdfParserHelper.convertToResource(model, fileNode);
 				}
 			}
@@ -219,21 +178,64 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// are the same.
 		return findFileResource(modelContainer, this);
 	}
+	
+	/**
+	 * @return the Sha1 checksum value for this file, or a blank string if no sha1 checksum has been set
+	 */
+	public String getSha1Value() {
+		if (this.checksums != null) {
+			for (int i = 0;i < this.checksums.length; i++) {
+				if (this.checksums[i].getAlgorithm().equals(ChecksumAlgorithm.checksumAlgorithm_sha1)) {
+					return this.checksums[i].getValue();
+				}
+			}
+		}
+		// No sha1 found, return an empty string
+		return "";
+	}
+	
+	/**
+	 * Converts URI's for the different file types to file types
+	 * @param uris
+	 * @param ignoreErrors If true, any URI's that don't correspond to a know file type will not be included.  If true, an exception is thrown.
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private FileType[] urisToFileType(String[] uris, boolean ignoreErrors) throws InvalidSPDXAnalysisException {
+		ArrayList<FileType> retval = new ArrayList<FileType>();
+		for (int i = 0; i < uris.length; i++) {
+			if (uris[i] != null && !uris[i].isEmpty()) {
+				String fileTypeS = uris[i].substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+				try {
+					retval.add(FileType.valueOf(fileTypeS));
+				} catch (Exception ex) {
+					logger.error("Invalid file type in the model - "+fileTypeS);
+					if (!ignoreErrors) {
+						throw(new InvalidSPDXAnalysisException("Invalid file type: "+uris[i]));
+					}
+				}
+			}
+		}
+		return retval.toArray(new FileType[retval.size()]);
+	}
+	
+	private String[] fileTypesToUris(FileType[] fileTypes) {
+		String[] retval = new String[fileTypes.length];
+		for (int i = 0; i < retval.length; i++) {
+			retval[i] = SpdxRdfConstants.SPDX_NAMESPACE + fileTypes[i].toString();
+		}
+		return retval;
+	}
 
 
 	@Override
 	protected void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
-		if (this.fileType == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_TYPE);
-		} else {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_TYPE, 
-				SpdxRdfConstants.SPDX_NAMESPACE + this.fileType.toString());
-		}
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_CHECKSUM, this.checksum);		
+		setPropertyUriValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+			SpdxRdfConstants.PROP_FILE_TYPE, 
+			fileTypesToUris(this.fileTypes));
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_FILE_CHECKSUM, this.checksums);		
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 			SpdxRdfConstants.PROP_FILE_CONTRIBUTOR, this.fileContributors);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
@@ -257,7 +259,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	@Override
-	protected String getLicenseDeclaredPropertyName() {
+	protected String getLicenseInfoFromFilesPropertyName() {
 		return SpdxRdfConstants.PROP_FILE_SEEN_LICENSE;
 	}
 	
@@ -277,56 +279,53 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	/**
 	 * @return the fileType
 	 */
-	public FileType getFileType() {
+	public FileType[] getFileTypes() {
 		if (this.resource != null) {
-			String fileTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			String[] fileTypeUris = findUriPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_FILE_TYPE);
-			if (fileTypeUri != null && !fileTypeUri.isEmpty()) {
-				String fileTypeS = fileTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
-				try {
-					this.fileType = FileType.valueOf(fileTypeS);
-				} catch (Exception ex) {
-					logger.error("Invalid file type in the model - "+fileTypeS);
-				}
-			}
+			try {
+				this.fileTypes = urisToFileType(fileTypeUris, true);
+			} catch (InvalidSPDXAnalysisException e) {
+				// ignore the error
+			} 
 		}
-		return fileType;
+		return fileTypes;
 	}
 
 	/**
-	 * @param fileType the fileType to set
+	 * @param fileTypes the fileTypes to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setFileType(FileType fileType) throws InvalidSPDXAnalysisException {
-		this.fileType = fileType;
-		if (fileType == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_TYPE);
-		} else {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_FILE_TYPE, 
-					SpdxRdfConstants.SPDX_NAMESPACE + this.fileType.toString());
-		}
+	public void setFileTypes(FileType[] fileTypes) throws InvalidSPDXAnalysisException {
+		this.fileTypes = fileTypes;
+		setPropertyUriValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_FILE_TYPE, 
+				fileTypesToUris(fileTypes));
 	}
 
 	/**
-	 * @return the checksum
+	 * @return the checksums
 	 */
-	public Checksum getChecksum() {
+	public Checksum[] getChecksums() {
 		if (this.resource != null) {
-			this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_FILE_CHECKSUM);
+			try {
+				this.checksums = findMultipleChecksumPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+						SpdxRdfConstants.PROP_FILE_CHECKSUM);
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid checksum in model");
+			}
 		}
-		return checksum;
+		return checksums;
 	}
 
 	/**
-	 * @param checksum the checksum to set
+	 * @param checksums the checksums to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setChecksum(Checksum checksum) {
-		this.checksum = checksum;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_CHECKSUM, this.checksum);
+	public void setChecksums(Checksum[] checksums) throws InvalidSPDXAnalysisException {
+		this.checksums = checksums;
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_FILE_CHECKSUM, this.checksums);
 	}
 
 	/**
@@ -403,16 +402,21 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 */
 	public DoapProject[] getArtifactOf() {
 		if (this.resource != null) {
-			this.artifactOf = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
-					SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
+			try {
+				this.artifactOf = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+						SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid artifact of in the model");
+			}
 		}
 		return artifactOf;
 	}
 
 	/**
 	 * @param artifactOf the artifactOf to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setArtifactOf(DoapProject[] artifactOf) {
+	public void setArtifactOf(DoapProject[] artifactOf) throws InvalidSPDXAnalysisException {
 		if (artifactOf == null) {
 			this.artifactOf = new DoapProject[0];
 		} else {
@@ -483,19 +487,23 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		}
 		// compare based on properties
 		return (equalsConsideringNull(this.id, comp.getId()) &&
-				equivalentConsideringNull(this.checksum, comp.getChecksum()) &&
-				equalsConsideringNull(this.fileType, comp.getFileType()) &&
+				arraysEquivalent(this.checksums, comp.getChecksums()) &&
+				this.arraysEqual(this.fileTypes, comp.getFileTypes())&&
 				arraysEqual(this.fileContributors, comp.getFileContributors()) &&
 				arraysEquivalent(this.artifactOf, comp.getArtifactOf()) &&
 				arraysEquivalent(this.fileDependencies, comp.getFileDependencies()) &&
 				equalsConsideringNull(this.noticeText, comp.getNoticeText()));
 	}
 	
-	protected Checksum cloneChecksum() {
-		if (checksum == null) {
+	protected Checksum[] cloneChecksum() {
+		if (checksums == null) {
 			return null;
 		}
-		return checksum.clone();
+		Checksum[] retval = new Checksum[checksums.length];
+		for (int i = 0; i < checksums.length; i++) {
+			retval[i] = checksums[i].clone();
+		}
+		return retval;
 	}
 	
 	protected DoapProject[] cloneArtifactOf() {
@@ -523,27 +531,12 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	@Override public SpdxFile clone() {
 		//TODO Determine if we should clone the ID - Currently we are setting this to null
 		SpdxFile retval;
-		SimpleLicensingInfo[] licenseInfosFromFiles;
-		try {
-			licenseInfosFromFiles = convertLicenseInfoFromFile(licenseDeclared);
-			retval = new SpdxFile(null, name, comment, cloneAnnotations(),
-					cloneRelationships(), cloneLicenseConcluded(),
-					licenseInfosFromFiles, copyrightText,
-					licenseComment, fileType, cloneChecksum(),
-					fileContributors, noticeText, cloneArtifactOf());
-		} catch (InvalidSPDXAnalysisException e) {
-			// workaround for a declared license which is not compatible
-			retval = new SpdxFile(null, name, comment, cloneAnnotations(),
-					cloneRelationships(), cloneLicenseConcluded(),
-					null, copyrightText,
-					licenseComment, fileType, cloneChecksum(),
-					fileContributors, noticeText, cloneArtifactOf());
-			try {
-				retval.setLicenseDeclared(this.licenseDeclared.clone());
-			} catch (InvalidSPDXAnalysisException e1) {
-				logger.error("Error setting declared license on clone",e1);
-			}
-		}
+		retval = new SpdxFile(null, name, comment, cloneAnnotations(),
+				cloneRelationships(), cloneLicenseConcluded(),
+				cloneLicenseInfosFromFiles(), copyrightText,
+				licenseComment, fileTypes, cloneChecksum(),
+				fileContributors, noticeText, cloneArtifactOf());
+
 		if (this.fileDependencies != null) {
 			try {
 				retval.setFileDependencies(fileDependencies);
@@ -561,26 +554,16 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		if (fileName == null) {
 			fileName = "UNKNOWN";
 		}
-		if (fileType == null) {
-			retval.add("Missing required file type for file "+fileName);
-		}
-		if (copyrightText == null || copyrightText.isEmpty()) {
-			retval.add("Missing required copyright text for file "+fileName);
-		}
-		if (licenseConcluded == null) {
-			retval.add("Missing required concluded license for file "+fileName);
-		} else {
-			retval.addAll(licenseConcluded.verify());
-		}
-		if (licenseDeclared == null) {
-			retval.add("Missing required license info in filee for file "+fileName);
-		} else {
-			retval.addAll(licenseDeclared.verify());
-		}
-		if (checksum == null) {
+		if (checksums == null || checksums.length == 0) {
 			retval.add("Missing required checksum for file "+fileName);
 		} else {
-			retval.addAll(checksum.verify());
+			for (int i = 0; i < checksums.length; i++) {
+				retval.addAll(checksums[i].verify());
+			}			
+		}
+		String sha1 = getSha1Value();
+		if (sha1 == null || sha1.isEmpty()) {
+			retval.add("Missing required SHA1 hashcode value for "+name);
 		}
 		DoapProject[] projects = this.getArtifactOf();
 		if (projects != null) {

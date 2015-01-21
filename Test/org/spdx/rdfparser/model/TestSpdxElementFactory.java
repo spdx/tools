@@ -32,6 +32,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 
@@ -80,14 +81,16 @@ public class TestSpdxElementFactory {
 	String NOTICE_TEXT1 = "Notice1";
 	String NOTICE_TEXT2 = "Notice2";
 	
-	Checksum CHECKSUM1 = new Checksum();
-	Checksum CHECKSUM2 = new Checksum();
+	Checksum CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
+	Checksum CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+			"0000e1c67a2d28fced849ee1bb76e7391b93eb12");
 	
 	FileType FILE_TYPE1 = FileType.fileType_image;
 	FileType FILE_TYPE2 = FileType.fileType_audio;
 	
-	DoapProject DOAP_PROJECT1 = new DoapProject();
-	DoapProject DOAP_PROJECT2 = new DoapProject();
+	DoapProject DOAP_PROJECT1 = new DoapProject("Project1Name", "http://com.projct1");
+	DoapProject DOAP_PROJECT2 = new DoapProject("Second project name", "http://yet.another.project/hi");
 	
 	String documentNamespace;
 	Model model;
@@ -150,7 +153,7 @@ public class TestSpdxElementFactory {
 		DoapProject[] artifactOfs = new DoapProject[] {DOAP_PROJECT1, DOAP_PROJECT2};
 		SpdxFile file = new SpdxFile(SPDX_ID1, ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships,LICENSE1, extractedLicenses, 
-				COPYRIGHT_TEXT1, LICENSE_COMMENT1, FILE_TYPE1, CHECKSUM1,
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, new FileType[] {FILE_TYPE1}, new Checksum[] {CHECKSUM1},
 				fileContributors, NOTICE_TEXT1, artifactOfs);
 		Resource r = file.createResource(modelContainer);
 		SpdxElement result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
@@ -160,15 +163,13 @@ public class TestSpdxElementFactory {
 		assertEquals(ELEMENT_COMMENT1, fileResult.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, fileResult.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, fileResult.getRelationships()));
-// UNCOMMENT THE LINES BELOW ONCE SPDXFILE is IMPLEMENTED
-//		assertEquals(LICENSE1, fileResult.getLicenseConcluded());
-//		assertEquals(LICENSE2, fileResult.getLicenseDeclared());
-//		assertEquals(COPYRIGHT_TEXT1, fileResult.getCopyrightText());
-//		assertEquals(LICENSE_COMMENT1, fileResult.getLicenseComment());
+		assertEquals(LICENSE1, fileResult.getLicenseConcluded());
+		assertEquals(COPYRIGHT_TEXT1, fileResult.getCopyrightText());
+		assertEquals(LICENSE_COMMENT1, fileResult.getLicenseComment());
 		
 		// SpdxPackage
 		SpdxPackage sPackage = new SpdxPackage(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships,LICENSE1, LICENSE2, 
+				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] { LICENSE2}, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		r = sPackage.createResource(modelContainer);
 		result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
@@ -186,7 +187,7 @@ public class TestSpdxElementFactory {
 		
 		// SpdxItem
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships,LICENSE1, LICENSE2, 
+				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] {LICENSE2}, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		r = item.createResource(modelContainer);
 		result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());

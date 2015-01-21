@@ -19,6 +19,8 @@ package org.spdx.rdfparser;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+
 
 import com.hp.hpl.jena.iri.IRIFactory;
 
@@ -43,16 +45,28 @@ public class SpdxVerificationHelper {
 					"and made up of the characters from the set 'a'-'z', 'A'-'Z', '0'-'9', '+', '_', '.', and '-'.";
 		}
 	}
-	static String verifyChecksumString(String checksum) {
-		if (checksum.length() != 40) {
-			return "Invalid number of characters for checksum";
-		}
+	
+	public static String verifyChecksumString(String checksum) {
+		return verifyChecksumString(checksum, ChecksumAlgorithm.checksumAlgorithm_sha1);
+	}
+	public static String verifyChecksumString(String checksum, ChecksumAlgorithm algorithm) {
 		
 		for (int i = 0; i < checksum.length(); i++) {
 			char c = checksum.charAt(i);
 			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
 				return "Invalid checksum string character at position "+String.valueOf(i);
 			}
+		}
+		
+		if (ChecksumAlgorithm.checksumAlgorithm_sha1.equals(algorithm) && checksum.length() != 40) {
+			return "Invalid number of characters for checksum";
+		}
+	
+		if (ChecksumAlgorithm.checksumAlgorithm_sha256.equals(algorithm) && checksum.length() != 64) {
+			return "Invalid number of characters for checksum";
+		}
+		if (ChecksumAlgorithm.checksumAlgorithm_md5.equals(algorithm) && checksum.length() != 32) {
+			return "Invalid number of characters for checksum";
 		}
 		return null;	// if we got here, all OK
 	}
