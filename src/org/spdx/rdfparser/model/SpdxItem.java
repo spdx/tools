@@ -16,10 +16,15 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.util.ArrayList;
+
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -33,7 +38,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class SpdxItem extends SpdxElement {
 	
 	AnyLicenseInfo licenseConcluded;
-	AnyLicenseInfo licenseDeclared;
+	AnyLicenseInfo[] licenseInfoFromFiles;
 	String copyrightText;
 	String licenseComment;
 
@@ -50,8 +55,8 @@ public class SpdxItem extends SpdxElement {
 		this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 		this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
-		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				getLicenseDeclaredPropertyName());
+		this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				getLicenseInfoFromFilesPropertyName());
 	}
 	
 	/**
@@ -60,17 +65,17 @@ public class SpdxItem extends SpdxElement {
 	 * @param annotations Optional annotations on the items
 	 * @param relationships Optional relationships with other SPDX elements
 	 * @param licenseConcluded Concluded license for this item
-	 * @param licenseDeclared Declared license for this item
+	 * @param licenseInfoFromFiles License infos from files for this item
 	 * @param copyrightText Copyright text for this item
 	 * @param licenseComment Optional comment on the license
 	 */
 	public SpdxItem(String name, String comment, Annotation[] annotations,
 			Relationship[] relationships,AnyLicenseInfo licenseConcluded, 
-			AnyLicenseInfo licenseDeclared, String copyrightText, 
+			AnyLicenseInfo[] licenseInfoFromFiles, String copyrightText, 
 			String licenseComment) {
 		super(name, comment, annotations, relationships);
 		this.licenseConcluded = licenseConcluded;
-		this.licenseDeclared = licenseDeclared;
+		this.licenseInfoFromFiles = licenseInfoFromFiles;
 		this.copyrightText = copyrightText;
 		this.licenseComment = licenseComment;
 	}
@@ -85,9 +90,9 @@ public class SpdxItem extends SpdxElement {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_LICENSE_CONCLUDED, licenseConcluded);
 			}
-			if (this.licenseDeclared != null) {
-				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-						getLicenseDeclaredPropertyName(), licenseDeclared);
+			if (this.licenseInfoFromFiles != null) {
+				setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+						getLicenseInfoFromFilesPropertyName(), licenseInfoFromFiles);
 			}
 			if (this.copyrightText != null) {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT, copyrightText);
@@ -99,10 +104,10 @@ public class SpdxItem extends SpdxElement {
 	}
 
 	/**
-	 * @return Property name for licenseDeclared.  Override if using a subproperty of "licenseDeclared".
+	 * @return Property name for licenseInfoFromFiles.  Override if using a subproperty of "licenseDeclared".
 	 */
-	protected String getLicenseDeclaredPropertyName() {
-		return SpdxRdfConstants.PROP_LICENSE_DECLARED;
+	protected String getLicenseInfoFromFilesPropertyName() {
+		return SpdxRdfConstants.PROP_PACKAGE_LICENSE_INFO_FROM_FILES;
 	}
 
 	/**
@@ -130,27 +135,27 @@ public class SpdxItem extends SpdxElement {
 	}
 
 	/**
-	 * @return the licenseDeclared
+	 * @return the licenseInfoFromFiles 
 	 */
-	public AnyLicenseInfo getLicenseDeclared() {
+	public AnyLicenseInfo[] getLicenseInfoFromFiles() {
 		if (this.resource != null) {
 			try {
-				this.licenseDeclared = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-						getLicenseDeclaredPropertyName());
+				this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+						getLicenseInfoFromFilesPropertyName());
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid licenseDeclared in model",e);
 			}
 		}
-		return licenseDeclared;
+		return licenseInfoFromFiles;
 	}
 
 	/**
-	 * @param licenseDeclared the licenseDeclared to set
+	 * @param licenseInfoFromFiles the licenseInfoFromFiles to set
 	 */
-	public void setLicenseDeclared(AnyLicenseInfo licenseDeclared)  throws InvalidSPDXAnalysisException {
-		this.licenseDeclared = licenseDeclared;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				getLicenseDeclaredPropertyName(), licenseDeclared);
+	public void setLicenseInfosFromFiles(AnyLicenseInfo[] licenseInfoFromFiles)  throws InvalidSPDXAnalysisException {
+		this.licenseInfoFromFiles = licenseInfoFromFiles;
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				getLicenseInfoFromFilesPropertyName(), licenseInfoFromFiles);
 	}
 
 	/**
@@ -208,7 +213,7 @@ public class SpdxItem extends SpdxElement {
 		}
 		return (equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
 				equalsConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
-				equalsConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
+				this.arraysEqual(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles()) &&
 				equalsConsideringNull(this.licenseComment, comp.getLicenseComment()));
 	}
 	
@@ -220,17 +225,54 @@ public class SpdxItem extends SpdxElement {
 	}
 	
 	
-	protected AnyLicenseInfo cloneLicenseDeclared() {
-		if (this.licenseDeclared == null) {
-			return null;
+	protected AnyLicenseInfo[] cloneLicenseInfosFromFiles() {
+		if (this.licenseInfoFromFiles == null) {
+			return new AnyLicenseInfo[0];
 		}
-		return this.licenseDeclared.clone();
+		AnyLicenseInfo[] retval = new AnyLicenseInfo[this.licenseInfoFromFiles.length];
+		for (int i = 0; i < this.licenseInfoFromFiles.length; i++) {
+			retval[i] = this.licenseInfoFromFiles[i].clone();
+		}
+		return retval;
 	}
 	
 	@Override
 	public SpdxItem clone() {
 		return new SpdxItem(this.name, this.comment, cloneAnnotations(), cloneRelationships(),
-				cloneLicenseConcluded(), cloneLicenseDeclared(), this.copyrightText, 
+				cloneLicenseConcluded(), cloneLicenseInfosFromFiles(), this.copyrightText, 
 				this.licenseComment);
+	}
+	
+	@Override
+	public ArrayList<String> verify() {
+		ArrayList<String> retval = super.verify();
+		String name = "UNKNOWN";
+		if (this.name != null) {
+			name = this.name;
+		}
+		if (this.licenseConcluded == null) {
+			retval.add("Missing required concluded license for "+name);
+		}
+		if (this.copyrightText == null) {
+			retval.add("Missing required copyright text for "+name);
+		}
+		if (this.licenseInfoFromFiles == null || this.licenseInfoFromFiles.length == 0) {
+			retval.add("Missing required license information from files for "+name);
+		} else {
+			boolean foundNonSimpleLic = false;
+			for (int i = 0; i < this.licenseInfoFromFiles.length; i++) {
+				AnyLicenseInfo lic = this.licenseInfoFromFiles[i];
+				if (!(lic instanceof SimpleLicensingInfo ||
+						lic instanceof SpdxNoAssertionLicense ||
+						lic instanceof SpdxNoneLicense)) {
+					foundNonSimpleLic = true;
+					break;
+				}
+			}
+			if (foundNonSimpleLic) {
+				retval.add("license info from files contains complex licenses for "+name);
+			}
+		}
+		return retval;
 	}
 }

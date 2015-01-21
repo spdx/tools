@@ -571,18 +571,32 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace
 	 * @param propertyName
-	 * @param licenseConcluded2
+	 * @param licenses
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected void setPropertyValues(String nameSpace,
+			String propertyName, AnyLicenseInfo[] licenses) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (licenses != null) {
+				for (int i = 0; i < licenses.length; i++) {
+					this.resource.addProperty(p, licenses[i].createResource(this.modelContainer));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Set a property value for this resource.  Clears any existing resource.
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param license
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected void setPropertyValue(String nameSpace,
 			String propertyName, AnyLicenseInfo license) throws InvalidSPDXAnalysisException {
-		if (model != null && resource != null) {
-			Property p = model.createProperty(nameSpace, propertyName);
-			model.removeAll(this.resource, p, null);
-			if (license != null) {
-				this.resource.addProperty(p, license.createResource(this.modelContainer));
-			}
-		}
+		setPropertyValues(nameSpace, propertyName, new AnyLicenseInfo[] {license});
 	}
 	
 	/**
@@ -592,42 +606,103 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @return The AnyLicenseInfo value of the property or null if no property exists
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public AnyLicenseInfo findAnyLicenseInfoPropertyValue(String namespace, String propertyName) throws InvalidSPDXAnalysisException {
+	public AnyLicenseInfo[] findAnyLicenseInfoPropertyValues(String namespace, String propertyName) throws InvalidSPDXAnalysisException {
 		if (this.model == null || this.node == null) {
-			return null;
+			return new AnyLicenseInfo[0];
 		}
+		ArrayList<AnyLicenseInfo> retval = new ArrayList<AnyLicenseInfo>();
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			return LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject());
+			retval.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
 		}
-		return null;
+		return retval.toArray(new AnyLicenseInfo[retval.size()]);
+	}
+
+	/**
+	 * Find a property value with a subject of this object
+	 * @param namespace Namespace for the property name
+	 * @param propertyName Name of the property
+	 * @return The AnyLicenseInfo value of the property or null if no property exists
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public AnyLicenseInfo findAnyLicenseInfoPropertyValue(String namespace, String propertyName) throws InvalidSPDXAnalysisException {
+		AnyLicenseInfo[] licenses = findAnyLicenseInfoPropertyValues(namespace, propertyName);
+		if (licenses == null || licenses.length == 0) {
+			return null;
+		} else {
+			return licenses[0];
+		}
 	}
 	
-
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected Checksum[] findMultipleChecksumPropertyValues(String nameSpace,
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return new Checksum[0];
+		}
+		ArrayList<Checksum> retval = new ArrayList<Checksum>();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new Checksum(modelContainer, t.getObject()));
+		}
+		return retval.toArray(new Checksum[retval.size()]);
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected Checksum findChecksumPropertyValue(String nameSpace,
-			String propertyName) {
-		// TODO Auto-generated method stub
-		return null;
+			String propertyName) throws InvalidSPDXAnalysisException {
+		Checksum[] checksums = findMultipleChecksumPropertyValues(nameSpace, propertyName);
+		if (checksums == null || checksums.length == 0) {
+			return null;
+		} else {
+			return checksums[0];
+		}
 	}
 	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param checksumValues
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected void setPropertyValues(String nameSpace,
+			String propertyName, Checksum[] checksumValues) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (checksumValues != null) {
+				for (int i = 0; i < checksumValues.length; i++) {
+					this.resource.addProperty(p, checksumValues[i].createResource(this.modelContainer));
+				}
+			}
+		}
+	}
 
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param checksumValue
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected void setPropertyValue(String nameSpace,
-			String propertyName, Checksum checksumValue) {
-		// TODO Auto-generated method stub
-		
+			String propertyName, Checksum checksumValue) throws InvalidSPDXAnalysisException {
+		setPropertyValues(nameSpace, propertyName, new Checksum[] {checksumValue});
 	}
 	
 	/**
@@ -635,22 +710,41 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param propertyName
 	 * @param checksumValue
 	 * @return
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected DoapProject[] findMultipleDoapPropertyValues(String nameSpace,
-			String propertyName) {
-		return null;
-		// TODO Implement
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return new DoapProject[0];
+		}
+		ArrayList<DoapProject> retval = new ArrayList<DoapProject>();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new DoapProject(modelContainer, t.getObject()));
+		}
+		return retval.toArray(new DoapProject[retval.size()]);
 	}
 	
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param doapProjectValues
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected void setPropertyValue(String nameSpace,
-			String propertyName, DoapProject[] doapProjectValues) {
-		// TODO Auto-generated method stub
-		
+			String propertyName, DoapProject[] doapProjectValues) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (doapProjectValues != null) {
+				for (int i = 0; i < doapProjectValues.length; i++) {
+					this.resource.addProperty(p, doapProjectValues[i].createResource(this.modelContainer));
+				}
+			}
+		}
 	}
 	
 	/**
@@ -661,19 +755,57 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 */
 	protected String findUriPropertyValue(String namespace,
 			String propertyName) {
-		if (this.model == null || this.node == null) {
+		String[] values = findUriPropertyValues(namespace, propertyName);
+		if (values == null || values.length == 0) {
 			return null;
+		} else {
+			return values[0];
+		}
+	}
+	
+	/**
+	 * Find a single URI as a property value to this node
+	 * @param namespace
+	 * @param propertyName
+	 * @return
+	 */
+	protected String[] findUriPropertyValues(String namespace,
+			String propertyName) {
+		if (this.model == null || this.node == null) {
+			return new String[0];
 		}
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ArrayList<String> retval = new ArrayList<String>();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().isURI()) {
-				return t.getObject().getURI();
+				retval.add(t.getObject().getURI());
 			}
 		}
-		return null;
+		return retval.toArray(new String[retval.size()]);
+	}
+	
+	/**
+	 * Sets a property value as a list of Uris
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param uri
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void setPropertyUriValues(String nameSpace,
+			String propertyName, String[] uris) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (uris != null) {
+				for (int i = 0; i < uris.length; i++) {
+					Resource uriResource = model.createResource(uris[i]);
+					this.resource.addProperty(p, uriResource);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -685,13 +817,6 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 */
 	protected void setPropertyUriValue(String nameSpace,
 			String propertyName, String uri) throws InvalidSPDXAnalysisException {
-		if (model != null && resource != null) {
-			Property p = model.createProperty(nameSpace, propertyName);
-			model.removeAll(this.resource, p, null);
-			if (uri != null) {
-				Resource uriResource = model.createResource(uri);
-				this.resource.addProperty(p, uriResource);
-			}
-		}
+		setPropertyUriValues(nameSpace, propertyName, new String[] {uri});
 	}
 }

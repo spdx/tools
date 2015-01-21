@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
@@ -64,6 +65,8 @@ public class TestSpdxItem {
 			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
 	static final ExtractedLicenseInfo LICENSE1 = new ExtractedLicenseInfo("LicenseRef-1", "License Text 1");
 	static final ExtractedLicenseInfo LICENSE2 = new ExtractedLicenseInfo("LicenseRef-2", "License Text 2");
+	static final ExtractedLicenseInfo LICENSE3 = new ExtractedLicenseInfo("LicenseRef-3", "License Text 3");
+	static final ExtractedLicenseInfo[] LICENSES = new  ExtractedLicenseInfo[] {LICENSE2, LICENSE3};
 	static final String COPYRIGHT_TEXT1 = "copyright text 1";
 	static final String COPYRIGHT_TEXT2 = "copyright text 2";
 	static final String LICENSE_COMMENT1 = "License Comment 1";
@@ -125,7 +128,7 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertTrue(item.getType(model).getURI().endsWith(SpdxRdfConstants.CLASS_SPDX_ITEM));
 	}
@@ -139,13 +142,13 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertTrue(item.equivalent(item));
 		item.createResource(modelContainer);
 		assertTrue(item.equivalent(item));
 		SpdxItem item2 = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertTrue(item.equivalent(item2));
 		// Name
@@ -191,12 +194,13 @@ public class TestSpdxItem {
 		assertFalse(item.equivalent(item2));
 		item2.setLicenseConcluded(LICENSE1);
 		assertTrue(item.equivalent(item2));
-		// License declared
-		item2.setLicenseDeclared(LICENSE1);
+		// License info in files
+		ExtractedLicenseInfo[] licenses2 = new ExtractedLicenseInfo[] {LICENSE1};
+		item2.setLicenseInfosFromFiles(licenses2);
 		assertFalse(item.equivalent(item2));
-		item2.setLicenseDeclared(null);
+		item2.setLicenseInfosFromFiles(null);
 		assertFalse(item.equivalent(item2));
-		item2.setLicenseDeclared(LICENSE2);
+		item2.setLicenseInfosFromFiles(LICENSES);
 		assertTrue(item.equivalent(item2));
 		// Copyright text
 		item2.setCopyrightText(COPYRIGHT_TEXT2);
@@ -223,14 +227,15 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		AnyLicenseInfo[] licenses = item.getLicenseInfoFromFiles();
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, licenses));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
 		Resource r = item.createResource(modelContainer);
@@ -240,7 +245,7 @@ public class TestSpdxItem {
 		assertTrue(UnitTestHelper.isArraysEqual(item.getAnnotations(), item2.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(item.getRelationships(), item2.getRelationships()));
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
-		assertEquals(item.getLicenseDeclared(), item2.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(item.getLicenseInfoFromFiles(), item2.getLicenseInfoFromFiles()));
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());
 		assertEquals(item.getLicenseComment(), item2.getLicenseComment());	
 	}
@@ -253,14 +258,14 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());
 	}
@@ -274,14 +279,14 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
 		Resource r = item.createResource(modelContainer);
@@ -296,25 +301,26 @@ public class TestSpdxItem {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSetLicenseDeclared() throws InvalidSPDXAnalysisException {
+	public void testSetLicenseInfosFromFiles() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
 		Resource r = item.createResource(modelContainer);
-		item.setLicenseDeclared(LICENSE1);
-		assertEquals(LICENSE1, item.getLicenseDeclared());
+		AnyLicenseInfo[] newlicenses = new AnyLicenseInfo[] {LICENSE1};
+		item.setLicenseInfosFromFiles(newlicenses);
+		assertTrue(UnitTestHelper.isArraysEqual(newlicenses, item.getLicenseInfoFromFiles()));
 		SpdxItem item2= new SpdxItem(modelContainer, r.asNode());
-		assertEquals(LICENSE1, item2.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(newlicenses, item2.getLicenseInfoFromFiles()));
 	}
 
 	/**
@@ -326,14 +332,14 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
 		Resource r = item.createResource(modelContainer);
@@ -352,14 +358,14 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
 		Resource r = item.createResource(modelContainer);
@@ -378,14 +384,14 @@ public class TestSpdxItem {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSE2, 
+				annotations, relationships, LICENSE1, LICENSES, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
 		assertEquals(LICENSE1, item.getLicenseConcluded());
-		assertEquals(LICENSE2, item.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
 		item.createResource(modelContainer);
@@ -395,7 +401,7 @@ public class TestSpdxItem {
 		assertTrue(UnitTestHelper.isArraysEquivalent(item.getAnnotations(), item2.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEquivalent(item.getRelationships(), item2.getRelationships()));
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
-		assertEquals(item.getLicenseDeclared(), item2.getLicenseDeclared());
+		assertTrue(UnitTestHelper.isArraysEqual(item.getLicenseInfoFromFiles(), item2.getLicenseInfoFromFiles()));
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());
 		assertEquals(item.getLicenseComment(), item2.getLicenseComment());	
 		assertFalse(item.resource == item2.resource);

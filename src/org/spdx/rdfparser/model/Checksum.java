@@ -18,12 +18,18 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfParserHelper;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * A Checksum is value that allows the contents of a file to be authenticated. 
@@ -36,10 +42,41 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class Checksum extends RdfModelObject {
 
-	enum ChecksumAlgorithm {checksumAlgorithm_sha1, checksumAlgorithm_sha256,
+	static final Logger logger = Logger.getLogger(Checksum.class);
+	public enum ChecksumAlgorithm {checksumAlgorithm_sha1, checksumAlgorithm_sha256,
 		checksumAlgorithm_md5};
 	ChecksumAlgorithm algorithm;
 	String checksumValue;
+	
+	protected static Resource findSpdxChecksum(Model model, Checksum checksum) throws InvalidSPDXAnalysisException {
+		// find any matching checksum values
+		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
+		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, Node.createLiteral(checksum.getValue()));
+		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
+		while (checksumMatchIter.hasNext()) {
+			Triple checksumMatchTriple = checksumMatchIter.next();
+			Node checksumNode = checksumMatchTriple.getSubject();
+			// check the algorithm
+			Node algorithmProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM).asNode();
+			Triple algorithmMatch = Triple.createMatch(checksumNode, algorithmProperty, null);
+			ExtendedIterator<Triple> algorithmMatchIterator = model.getGraph().find(algorithmMatch);
+			if (algorithmMatchIterator.hasNext()) {
+				String algorithm = "UNKNOWN";
+				Triple algorithmMatchTriple = algorithmMatchIterator.next();
+				if (algorithmMatchTriple.getObject().isURI()) {
+					algorithm = algorithmMatchTriple.getObject().getURI().substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+					if (algorithm == null) {
+						algorithm = "UNKNOWN";
+					}
+					if (algorithm.equals(checksum.getAlgorithm().toString())) {
+						return RdfParserHelper.convertToResource(model, checksumNode);
+					}
+				}
+			}
+		}
+		// if we get to here, we did not find a match
+		return null;
+	}
 	
 	public Checksum(ChecksumAlgorithm algorithm, String checksumValue) {
 		this.algorithm = algorithm;
@@ -54,14 +91,78 @@ public class Checksum extends RdfModelObject {
 	public Checksum(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
-		// TODO Auto-generated constructor stub
+		// Algorithm
+		String algorithmUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
+		if (algorithmUri != null && !algorithmUri.isEmpty()) {
+			String algorithmS = algorithmUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+			try {
+				this.algorithm = ChecksumAlgorithm.valueOf(algorithmS);
+			} catch (Exception ex) {
+				logger.error("Invalid checksum algorithm in the model - "+algorithmS);
+				throw(new InvalidSPDXAnalysisException("Invalid checksum algorithm: "+algorithmS));
+			}
+		}
+		// Value
+		this.checksumValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_CHECKSUM_VALUE);
+	}
+	
+	
+
+	/**
+	 * @return the algorithm
+	 */
+	public ChecksumAlgorithm getAlgorithm() {
+		if (this.resource != null) {
+			String algorithmUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
+			if (algorithmUri != null && !algorithmUri.isEmpty()) {
+				String algorithmS = algorithmUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+				try {
+					this.algorithm = ChecksumAlgorithm.valueOf(algorithmS);
+				} catch (Exception ex) {
+					logger.error("Invalid checksum algorithm in the model - "+algorithmS);
+				}
+			}
+		}
+		return algorithm;
 	}
 
 	/**
-	 * 
+	 * @param algorithm the algorithm to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public Checksum() {
-		// TODO Auto-generated constructor stub
+	public void setAlgorithm(ChecksumAlgorithm algorithm) throws InvalidSPDXAnalysisException {
+		this.algorithm = algorithm;
+		if (algorithm == null) {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
+		} else {
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM, 
+					SpdxRdfConstants.SPDX_NAMESPACE + this.algorithm.toString());
+		}
+	}
+
+	/**
+	 * @return the checksumValue
+	 */
+	public String getValue() {
+		if (this.resource != null) {
+			this.checksumValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_CHECKSUM_VALUE);
+		}
+		return checksumValue;
+	}
+
+	/**
+	 * @param checksumValue the checksumValue to set
+	 */
+	public void setValue(String checksumValue) {
+		this.checksumValue = checksumValue;
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_CHECKSUM_VALUE, checksumValue);
 	}
 
 	/* (non-Javadoc)
@@ -69,8 +170,19 @@ public class Checksum extends RdfModelObject {
 	 */
 	@Override
 	public ArrayList<String> verify() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> retval = new ArrayList<String>();
+		if (this.algorithm == null) {
+			retval.add("Missing required algorithm");
+		}
+		if (this.checksumValue == null || this.checksumValue.isEmpty()) {
+			retval.add("Missing required checksum value");
+		} else {
+			String verify = SpdxVerificationHelper.verifyChecksumString(this.checksumValue, this.algorithm);
+			if (verify != null) {
+				retval.add(verify);
+			}
+		}
+		return retval;
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +190,7 @@ public class Checksum extends RdfModelObject {
 	 */
 	@Override
 	String getUri(IModelContainer modelContainer) {
-		// TODO Auto-generated method stub
+		// Use anonomous nodes
 		return null;
 	}
 
@@ -87,8 +199,15 @@ public class Checksum extends RdfModelObject {
 	 */
 	@Override
 	Resource getType(Model model) {
-		// TODO Auto-generated method stub
-		return null;
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_CHECKSUM);
+	}
+
+	@Override
+	protected Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
+		// see if we want to change what is considered a duplicate
+		// currently, a file is considered a duplicate if the checksum and filename
+		// are the same.
+		return findSpdxChecksum(modelContainer.getModel(), this);
 	}
 
 	/* (non-Javadoc)
@@ -96,22 +215,23 @@ public class Checksum extends RdfModelObject {
 	 */
 	@Override
 	void populateModel() throws InvalidSPDXAnalysisException {
-		// TODO Auto-generated method stub
-
+		// algorithm
+		if (algorithm == null) {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
+		} else {
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM, 
+					SpdxRdfConstants.SPDX_NAMESPACE + this.algorithm.toString());
+		}
+		// value
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_CHECKSUM_VALUE, checksumValue);
 	}
 	
 	@Override
 	public Checksum clone() {
-		return null;
-		// TODO Implement
-	}
-
-	/**
-	 * @return
-	 */
-	public String getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Checksum(this.algorithm, this.checksumValue);
 	}
 
 	/* (non-Javadoc)
@@ -119,8 +239,12 @@ public class Checksum extends RdfModelObject {
 	 */
 	@Override
 	public boolean equivalent(RdfModelObject compare) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!(compare instanceof Checksum)) {
+			return false;
+		}
+		Checksum cksum = (Checksum)compare;
+		return (this.equalsConsideringNull(this.algorithm, cksum.getAlgorithm()) &&
+				this.equalsConsideringNull(this.checksumValue, cksum.getValue()));
 	}
 
 }

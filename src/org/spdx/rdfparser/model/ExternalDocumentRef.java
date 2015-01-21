@@ -16,10 +16,10 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.util.ArrayList;
+
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SpdxRdfConstants;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -29,54 +29,33 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary
  *
  */
-public class SpdxPackage extends SpdxItem {
-
-	/**
-	 * @param name
-	 * @param comment
-	 * @param annotations
-	 * @param relationships
-	 * @param licenseConcluded
-	 * @param licenseDeclared
-	 * @param copyrightText
-	 * @param licenseComment
-	 */
-	public SpdxPackage(String name, String comment, Annotation[] annotations,
-			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
-			AnyLicenseInfo[] licenseInfosFromFiles, String copyrightText,
-			String licenseComment) {
-		super(name, comment, annotations, relationships, licenseConcluded,
-				licenseInfosFromFiles, copyrightText, licenseComment);
-		// TODO Auto-generated constructor stub
-	}
+public class ExternalDocumentRef extends RdfModelObject {
 
 	/**
 	 * @param modelContainer
 	 * @param node
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SpdxPackage(IModelContainer modelContainer, Node node)
+	public ExternalDocumentRef(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
 		// TODO Auto-generated constructor stub
 	}
-	
-	@Override
-	protected Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
-		//TODO Implement
-		// probably a package with the same verification code and
-		// the same package name
-		return null;
-	}
-	
-	@Override
-	protected void populateModel() throws InvalidSPDXAnalysisException {
-		super.populateModel();
+
+	/**
+	 * 
+	 */
+	public ExternalDocumentRef() {
+		// TODO Auto-generated constructor stub
 	}
 
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
+	 */
 	@Override
-	protected String getNamePropertyName() {
-		return SpdxRdfConstants.PROP_PROJECT_NAME;
+	public ArrayList<String> verify() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -93,19 +72,26 @@ public class SpdxPackage extends SpdxItem {
 	 */
 	@Override
 	Resource getType(Model model) {
-		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_PACKAGE);
-	}
-	
-	@Override
-	public boolean equivalent(RdfModelObject o) {
-		return false;
-		//TODO Implement
-	}
-	
-	@Override
-	public SpdxPackage clone() {
-		//TODO Implement
+		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
+	 */
+	@Override
+	void populateModel() throws InvalidSPDXAnalysisException {
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
+	 */
+	@Override
+	public boolean equivalent(RdfModelObject compare) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

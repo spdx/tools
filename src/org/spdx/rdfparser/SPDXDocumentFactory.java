@@ -48,6 +48,8 @@ public class SPDXDocumentFactory {
 	 */
 	public static SPDXDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
+//		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
+//		return docContainer.getSpdxDocument();
 	}
 	
 	/**
@@ -75,6 +77,8 @@ public class SPDXDocumentFactory {
 		Model model = ModelFactory.createDefaultModel();
 		model.read(input, baseUri, fileType);
 		return new SPDXDocument(model);
+//		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
+//		return docContainer.getSpdxDocument();
 	}
 	
 	private static String figureBaseUri(String src) {
