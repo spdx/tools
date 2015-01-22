@@ -50,12 +50,11 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	Checksum[] checksums;
 	String[] fileContributors = new String[0];
 	String noticeText;
-	String id;
 	DoapProject[] artifactOf = new DoapProject[0];
 	SpdxFile[] fileDependencies = new SpdxFile[0];
 
 	/**
-	 * @param id SPDX Identifier for the file.  Must be unique within the modelContainer
+	 * @param id SPDX Identifier for the file.  Must be unique within the modelContainer.
 	 * @param name fileName
 	 * @param comment Comment on the file
 	 * @param annotations annotations for the file
@@ -64,17 +63,21 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @param licenseInfoInFile
 	 * @param copyrightText
 	 * @param licenseComment
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SpdxFile(String id, String name, String comment, Annotation[] annotations,
 			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
 			AnyLicenseInfo[] licenseInfoInFile, String copyrightText,
 			String licenseComment, FileType[] fileTypes, Checksum[] checksums,
-			String[] fileContributors, String noticeText, DoapProject[] artifactOf) {
+			String[] fileContributors, String noticeText, DoapProject[] artifactOf) throws InvalidSPDXAnalysisException {
 		super(name, comment, annotations, relationships, 
 				licenseConcluded, licenseInfoInFile,
 				copyrightText, licenseComment);
-		this.id = id;
+		setId(id);	//TODO: Consider moving this up to SpdxElement
 		this.fileTypes = fileTypes;
+		if (this.fileTypes == null) {
+			this.fileTypes = new FileType[0];
+		}
 		this.checksums = checksums;
 		this.fileContributors = fileContributors;
 		if (this.fileContributors == null) {
@@ -105,12 +108,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 				SpdxRdfConstants.PROP_FILE_CONTRIBUTOR);
 		this.noticeText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_NOTICE);
-		// ID
-		if (this.resource.isURIResource()) {
-			if (this.resource.getURI().startsWith(modelContainer.getDocumentNamespace())) {
-				this.id = this.resource.getURI().substring(modelContainer.getDocumentNamespace().length());
-			}
-		}
 		// File dependencies
 		SpdxElement[] fileDependencyElements = findMultipleElementPropertyValues(
 				SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY);
@@ -162,7 +159,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 				Triple checksumMatchTriple = checksumMatchIterator.next();
 				Checksum cksum = new Checksum(modelContainer, checksumMatchTriple.getObject());
 				if (cksum.getAlgorithm().equals(ChecksumAlgorithm.checksumAlgorithm_sha1) &&
-						cksum.getValue().compareToIgnoreCase(spdxFile.getSha1Value()) == 0) {
+						cksum.getValue().compareToIgnoreCase(spdxFile.getSha1()) == 0) {
 					return RdfParserHelper.convertToResource(model, fileNode);
 				}
 			}
@@ -182,7 +179,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	/**
 	 * @return the Sha1 checksum value for this file, or a blank string if no sha1 checksum has been set
 	 */
-	public String getSha1Value() {
+	public String getSha1() {
 		if (this.checksums != null) {
 			for (int i = 0;i < this.checksums.length; i++) {
 				if (this.checksums[i].getAlgorithm().equals(ChecksumAlgorithm.checksumAlgorithm_sha1)) {
@@ -242,20 +239,16 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			SpdxRdfConstants.PROP_FILE_NOTICE, noticeText);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 			SpdxRdfConstants.PROP_FILE_ARTIFACTOF, artifactOf);
+		// Add ID's to any file dependencies
+		if (fileDependencies != null) {
+			for (int i = 0; i < fileDependencies.length; i++) {
+				if (fileDependencies[i].getId() == null) {
+					fileDependencies[i].setId(modelContainer.getNextSpdxElementRef());
+				}
+			}
+		}
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 			SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY, fileDependencies);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
-	 */
-	@Override
-	String getUri(IModelContainer modelContainer) {
-		if (this.id != null && !this.id.isEmpty()) {
-			return modelContainer.getDocumentNamespace() + this.id;
-		} else {
-			return null;
-		}
 	}
 	
 	@Override
@@ -298,9 +291,12 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 */
 	public void setFileTypes(FileType[] fileTypes) throws InvalidSPDXAnalysisException {
 		this.fileTypes = fileTypes;
+		if (this.fileTypes == null) {
+			this.fileTypes = new FileType[0];
+		}
 		setPropertyUriValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_TYPE, 
-				fileTypesToUris(fileTypes));
+				fileTypesToUris(this.fileTypes));
 	}
 
 	/**
@@ -371,33 +367,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_NOTICE, noticeText);
 	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		if (this.resource != null) {
-			if (this.resource.isURIResource()) {
-				if (this.resource.getURI().startsWith(modelContainer.getDocumentNamespace())) {
-					this.id = this.resource.getURI().substring(modelContainer.getDocumentNamespace().length());
-				}
-			}
-		}
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	public void setId(String id) throws InvalidSPDXAnalysisException {
-		if (this.resource != null) {
-			throw(new InvalidSPDXAnalysisException("Can not set a file ID for a file already in an RDF Model. You must create a new SPDX File with this ID."));
-		}
-		this.id = id;
-	}
 	
-		/**
+	/**
 	 * @return the artifactOf
 	 */
 	public DoapProject[] getArtifactOf() {
@@ -472,6 +443,15 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		} else {
 			this.fileDependencies = fileDependencies;
 		}		
+		// add any needed IDs
+		if (this.resource != null) {
+			for (int i = 0; i < this.fileDependencies.length; i++) {
+				if (this.fileDependencies[i].resource == null && 
+						this.fileDependencies[i].getId() == null) {
+					this.fileDependencies[i].setId(modelContainer.getNextSpdxElementRef());
+				}
+			}
+		}		
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY, this.fileDependencies);
 	}
@@ -486,8 +466,9 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			return false;
 		}
 		// compare based on properties
-		return (equalsConsideringNull(this.id, comp.getId()) &&
-				arraysEquivalent(this.checksums, comp.getChecksums()) &&
+		// Note: We don't compare the ID's since they may be different if they come
+		// from different models
+		return (arraysEquivalent(this.checksums, comp.getChecksums()) &&
 				this.arraysEqual(this.fileTypes, comp.getFileTypes())&&
 				arraysEqual(this.fileContributors, comp.getFileContributors()) &&
 				arraysEquivalent(this.artifactOf, comp.getArtifactOf()) &&
@@ -529,17 +510,22 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	@Override public SpdxFile clone() {
-		//TODO Determine if we should clone the ID - Currently we are setting this to null
+		// We will not clone ID since it is used to create the URI
 		SpdxFile retval;
-		retval = new SpdxFile(null, name, comment, cloneAnnotations(),
-				cloneRelationships(), cloneLicenseConcluded(),
-				cloneLicenseInfosFromFiles(), copyrightText,
-				licenseComment, fileTypes, cloneChecksum(),
-				fileContributors, noticeText, cloneArtifactOf());
+		try {
+			retval = new SpdxFile(null, name, comment, cloneAnnotations(),
+					cloneRelationships(), cloneLicenseConcluded(),
+					cloneLicenseInfosFromFiles(), copyrightText,
+					licenseComment, fileTypes, cloneChecksum(),
+					fileContributors, noticeText, cloneArtifactOf());
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Error cloning file: ",e);
+			retval = null;
+		}
 
 		if (this.fileDependencies != null) {
 			try {
-				retval.setFileDependencies(fileDependencies);
+				retval.setFileDependencies(cloneFileDependencies());
 			} catch (InvalidSPDXAnalysisException e1) {
 				logger.warn("Error setting file dependencies on clone", e1);
 			}
@@ -561,7 +547,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 				retval.addAll(checksums[i].verify());
 			}			
 		}
-		String sha1 = getSha1Value();
+		String sha1 = getSha1();
 		if (sha1 == null || sha1.isEmpty()) {
 			retval.add("Missing required SHA1 hashcode value for "+name);
 		}
@@ -594,4 +580,105 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
         return this.getName().compareTo(file.getName());        
     }
 
+    // the following methods are added as a TEMPORARY convenience to those
+    // migrating from the 1.2 version of the utilities
+	/**
+	 * This method should be replaced by the more consistent getCopyrightText
+	 * This method will be removed in a future release
+	 * @return
+	 */
+    @Deprecated
+	public String getCopyright() {
+		return this.getCopyrightText();
+	}
+
+    /**
+	 * This method should be replaced by the more consistent setCopyrightText
+	 * This method will be removed in a future release
+     * @param copyright
+     */
+    @Deprecated
+    public void setCopyright(String copyright) {
+    	this.setCopyrightText(copyright);
+    }
+
+	/**
+	 * This method should be replaced by the more consistent getLicenseComment (without the s)
+	 * This method will be removed in a future release
+	 * @return
+	 */
+    @Deprecated
+	public String getLicenseComments() {
+		return this.getLicenseComment();
+	}
+    
+	/**
+	 * This method should be replaced by the more consistent setLicenseComment (without the s)
+	 * This method will be removed in a future release
+	 */
+    @Deprecated
+	public void setLicenseComments(String licenseComment) {
+		this.setLicenseComment(licenseComment);
+	}
+
+	/**
+	 * This method should be replaced by the more consistent getLicenseConcluded
+	 * This method will be removed in a future release
+	 * @return
+	 */
+    @Deprecated
+	public AnyLicenseInfo getConcludedLicenses() {
+		return this.getLicenseConcluded();
+	}
+    
+	/**
+	 * This method should be replaced by the more consistent setLicenseConcluded
+	 * This method will be removed in a future release
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+    @Deprecated
+	public void setConcludedLicenses(AnyLicenseInfo concludedLicense) throws InvalidSPDXAnalysisException {
+		this.setLicenseConcluded(concludedLicense);
+	}
+
+	/**
+	 * This method should be replaced by the more consistent getFileContributors
+	 * This method will be removed in a future release
+	 * @return
+	 */
+    @Deprecated
+	public String[] getContributors() {
+		return this.getFileContributors();
+	}
+    
+	/**
+	 * This method should be replaced by the more consistent setFileContributors
+	 * This method will be removed in a future release
+	 * @return
+	 */
+    @Deprecated
+	public void setContributors(String[] contributors) {
+		this.setFileContributors(contributors);
+	}
+
+	/**
+	 * This method should be replaced by the more consistent getLicenseInfoFromFiles
+	 * This method will be removed in a future release
+	 * @return
+	 */
+    @Deprecated
+	public AnyLicenseInfo[] getSeenLicenses() {
+		return this.getLicenseInfoFromFiles();
+	}
+    
+	/**
+	 * This method should be replaced by the more consistent setLicenseInfoFromFiles
+	 * This method will be removed in a future release
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+    @Deprecated
+	public void setSeenLicenses(AnyLicenseInfo[] seenLicenses) throws InvalidSPDXAnalysisException {
+		this.setLicenseInfosFromFiles(seenLicenses);
+	}
 }
+

@@ -315,9 +315,13 @@ public class LicenseRDFAGenerator {
 				checkText(license.getLicenseText(), "License text for "+license.getLicenseId(), warnings);
 				licHtml.setLicense(license);
 				licHtml.setDeprecated(false);
-				String licHtmlFileName = formLicenseHTMLFileName(license.getLicenseId());
+				String licBaseHtmlFileName = formLicenseHTMLFileName(license.getLicenseId());
+				String licHtmlFileName = licBaseHtmlFileName + ".html";
 				String licHTMLReference = "./"+licHtmlFileName;
 				String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
+				File licBaseHtmlFile = new File(dir.getPath()+File.separator+licBaseHtmlFileName);
+				// the base file is used for direct references from tools, the html is used for rendering by the website
+				licHtml.writeToFile(licBaseHtmlFile, tocHTMLReference);
 				File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 				licHtml.writeToFile(licHtmlFile, tocHTMLReference);
 				tableOfContents.addLicense(license, licHTMLReference);

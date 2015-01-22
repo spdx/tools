@@ -36,13 +36,13 @@ public class LicenseExceptionSheet extends AbstractSheet {
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
 	static final int COL_NOTES = COL_SOURCE_URL + 1;
-	static final int COL_TEXT = COL_NOTES + 1;
-	static final int COL_EXAMPLES = COL_TEXT + 1;
+	static final int COL_EXAMPLES = COL_NOTES + 1;
+	static final int COL_TEXT = COL_EXAMPLES + 1;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		true, true};
 	static final String[] HEADER_TITLES = new String[] {"Full name of Exception", 
-		"Exception Identifier", "Source/url", "Notes", "Exception Text", "Example of use"};
+		"Exception Identifier", "Source/url", "Notes", "Example of use", "Exception Text"};
 
 	/**
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name

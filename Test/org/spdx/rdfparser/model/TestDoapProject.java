@@ -46,21 +46,8 @@ public class TestDoapProject {
 	String[] NAMES = new String[] {"Name1", "name2", "Name3"};
 	String[] HOMEPAGES = new String[] {null, "http://this.is.valid/also", ""};
 	DoapProject[] TEST_PROJECTS;
-	String documentNamespace;
 	Model model;
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return documentNamespace;
-		}
-		
-	};
+	IModelContainer modelContainer;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -71,6 +58,7 @@ public class TestDoapProject {
 			TEST_PROJECTS[i] = new DoapProject(NAMES[i], HOMEPAGES[i]);
 		}
 		model = ModelFactory.createDefaultModel();
+		modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 	}
 	/**
 	 * @throws java.lang.Exception

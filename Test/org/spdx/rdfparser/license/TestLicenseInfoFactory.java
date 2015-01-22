@@ -53,6 +53,7 @@ import com.hp.hpl.jena.util.FileManager;
  * @author Source Auditor
  *
  */
+@SuppressWarnings("restriction")
 public class TestLicenseInfoFactory {
 	static final String[] NONSTD_IDS = new String[] {SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"1",
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"2", SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"3",
@@ -87,6 +88,11 @@ public class TestLicenseInfoFactory {
 		@Override
 		public String getDocumentNamespace() {
 			return "http://testNameSPace#";
+		}
+
+		@Override
+		public String getNextSpdxElementRef() {
+			return null;
 		}
 		
 	};

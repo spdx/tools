@@ -127,6 +127,10 @@ public class Relationship extends RdfModelObject {
 			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
 		}
 		if (this.relatedSpdxElement != null) {
+			// set the ID for the related element if it does not exist
+			if (this.relatedSpdxElement.getId() == null) {
+				this.relatedSpdxElement.setId(modelContainer.getNextSpdxElementRef());
+			}
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
 		}

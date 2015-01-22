@@ -77,6 +77,11 @@ public class TestPerFileSheet {
 		public String getDocumentNamespace() {
 			return "http://testNameSPace#";
 		}
+
+		@Override
+		public String getNextSpdxElementRef() {
+			return null;
+		}
 		
 	};
 

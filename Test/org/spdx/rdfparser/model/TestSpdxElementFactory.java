@@ -92,22 +92,8 @@ public class TestSpdxElementFactory {
 	DoapProject DOAP_PROJECT1 = new DoapProject("Project1Name", "http://com.projct1");
 	DoapProject DOAP_PROJECT2 = new DoapProject("Second project name", "http://yet.another.project/hi");
 	
-	String documentNamespace;
 	Model model;
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return documentNamespace;
-		}
-		
-	};
-
+	IModelContainer modelContainer;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -128,7 +114,7 @@ public class TestSpdxElementFactory {
 	@Before
 	public void setUp() throws Exception {
 		model = ModelFactory.createDefaultModel();
-		documentNamespace = DOCUMENT_NAMESPACE;
+		modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
 	}
 
 	/**

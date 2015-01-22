@@ -37,7 +37,7 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
 public class DeprecatedLicenseSheet extends AbstractSheet {
 
 	static final Logger logger = Logger.getLogger(LicenseSheet.class.getName());
-	static final int NUM_COLS = 11;
+	static final int NUM_COLS = 8;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
@@ -45,17 +45,14 @@ public class DeprecatedLicenseSheet extends AbstractSheet {
 	static final int COL_OSI_APPROVED = COL_NOTES + 1;	
 	static final int COL_STANDARD_LICENSE_HEADER = COL_OSI_APPROVED + 1;
 	static final int COL_TEMPLATE = COL_STANDARD_LICENSE_HEADER + 1;
-	static final int COL_VERSION = COL_TEMPLATE + 1;
-	static final int COL_RELEASE_DATE = COL_VERSION + 1;
-	static final int COL_UNUSED = COL_RELEASE_DATE + 1;
-	static final int COL_DEPRECATED_VERSION = COL_UNUSED + 1;
+	static final int COL_DEPRECATED_VERSION = COL_TEMPLATE + 1;
 	
 	static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
-		false, false, true, false, false, false, false, true};
+		false, false, true, false, true};
 	static final String[] HEADER_TITLES = new String[] {"Full name of License", "License Identifier", "Source/url", "Notes on Deprecation", 
-		"OSI Approved", "Standard License Header", "Template", "License List Version", "License List Release Date", "", "Deprecated as of:"};
+		"OSI Approved", "Standard License Header", "Template", "Deprecated as of:"};
 	
 	static final String TEXT_EXTENSION = ".txt";
 	static final String ENCODING = "UTF-8";
