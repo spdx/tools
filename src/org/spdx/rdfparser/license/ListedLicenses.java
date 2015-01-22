@@ -65,8 +65,10 @@ public class ListedLicenses implements IModelContainer {
 
     String licenseListVersion = DEFAULT_LICENSE_LIST_VERSION;
 
-
 	static ListedLicenses listedLicenses = null;
+	
+	int nextId = 0;
+	
 	/**
 	 * This constructor should only be called by the getListedLicenses method
 	 */
@@ -142,6 +144,11 @@ public class ListedLicenses implements IModelContainer {
 			@Override
 			public String getDocumentNamespace() {
 				return localLicenseNamespace;
+			}
+
+			@Override
+			public String getNextSpdxElementRef() {
+				return null;	// This will not be used
 			}
 			
 		};
@@ -438,5 +445,14 @@ public class ListedLicenses implements IModelContainer {
 	@Override
 	public String getDocumentNamespace() {
 		return LISTED_LICENSE_ID_URL;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#getNextSpdxElementRef()
+	 */
+	@Override
+	public synchronized String getNextSpdxElementRef() {
+		this.nextId++;
+		return "SpdxLicenseGeneratedId-"+String.valueOf(this.nextId);
 	}
 }

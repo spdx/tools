@@ -50,22 +50,8 @@ public class TestChecksum {
 	String[] VALUES = new String[] {MD5_VALUE1, SHA1_VALUE1, SHA256_VALUE1};
 	Checksum[] TEST_CHECKSUMS;
 
-	String documentNamespace;
 	Model model;
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return documentNamespace;
-		}
-		
-	};
-
+	IModelContainer modelContainer;
 
 	/**
 	 * @throws java.lang.Exception
@@ -87,6 +73,7 @@ public class TestChecksum {
 	@Before
 	public void setUp() throws Exception {
 		this.model = ModelFactory.createDefaultModel();
+		modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		TEST_CHECKSUMS = new Checksum[ALGORITHMS.length];
 		for (int i = 0; i < ALGORITHMS.length; i++) {
 			TEST_CHECKSUMS[i] = new Checksum(ALGORITHMS[i], VALUES[i]);

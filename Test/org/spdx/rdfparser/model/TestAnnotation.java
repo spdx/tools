@@ -92,19 +92,7 @@ public class TestAnnotation {
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = a.createResource(modelContainer);
 		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(ANNOTATOR1, copy.getAnnotator());
@@ -140,19 +128,7 @@ public class TestAnnotation {
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = a.createResource(modelContainer);
 		a.setAnnotationType(REVIEW_ANNOTATION);
 		assertEquals(REVIEW_ANNOTATION, a.getAnnotationType());
@@ -172,19 +148,7 @@ public class TestAnnotation {
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = a.createResource(modelContainer);
 		a.setAnnotator(ANNOTATOR2);
 		assertEquals(ANNOTATOR2, a.getAnnotator());
@@ -204,19 +168,7 @@ public class TestAnnotation {
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = a.createResource(modelContainer);
 		a.setComment(COMMENT2);
 		assertEquals(COMMENT2, a.getComment());
@@ -236,19 +188,7 @@ public class TestAnnotation {
 		assertEquals(date, a.getDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = a.createResource(modelContainer);
 		a.setDate(oldDate);
 		assertEquals(oldDate, a.getDate());
@@ -263,19 +203,7 @@ public class TestAnnotation {
 		Annotation a2 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		assertTrue(a1.equivalent(a2));
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		a1.createResource(modelContainer);
 		assertTrue(a1.equivalent(a2));
 		// annotator
@@ -304,19 +232,7 @@ public class TestAnnotation {
 	public void testClone() throws InvalidSPDXAnalysisException {
 		Annotation a1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		a1.createResource(modelContainer);
 		Annotation a2 = a1.clone();
 		assertEquals(a1.getAnnotationType(), a2.getAnnotationType());

@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,8 +29,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
@@ -43,9 +46,12 @@ import org.spdx.rdfparser.model.SpdxFile.FileType;
 
 import spdxspreadsheet.TestPackageInfoSheet;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Gary
@@ -84,19 +90,7 @@ public class TestSpdxFile {
 	
 	Model model;
 	
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return "http://testNameSPace#";
-		}
-		
-	};
+	IModelContainer modelContainer;
 
 	/**
 	 * @throws java.lang.Exception
@@ -151,7 +145,7 @@ public class TestSpdxFile {
 				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
 		});
 		model = ModelFactory.createDefaultModel();
-		
+		modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
 			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
@@ -177,21 +171,52 @@ public class TestSpdxFile {
 	@After
 	public void tearDown() throws Exception {
 	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#findDuplicateResource(org.spdx.rdfparser.IModelContainer, java.lang.String)}.
-	 */
+	
 	@Test
-	public void testFindDuplicateResource() {
-		fail("Not yet implemented");
+	public void testGetType() throws InvalidSPDXAnalysisException {
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		String expected = SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_FILE;
+		Resource result = file.getType(model);
+		assertTrue(result.isURIResource());
+		assertEquals(expected, result.getURI());
 	}
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#getType(com.hp.hpl.jena.rdf.model.Model)}.
-	 */
 	@Test
-	public void testGetType() {
-		fail("Not yet implemented");
+	public void testSetFiletypeType() throws InvalidSPDXAnalysisException {
+		FileType[] fileTypes1 = new FileType[] {FileType.fileType_archive, 
+				FileType.fileType_spdx, FileType.fileType_other, FileType.fileType_text};
+		FileType[] fileTypes2 = new FileType[] {FileType.fileType_image, 
+				FileType.fileType_binary, FileType.fileType_documentation};
+		FileType[] fileTypeSingle = new FileType[] {FileType.fileType_source};
+
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				fileTypes1, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		FileType[] result = file.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypes1, result));
+		Resource r = file.createResource(modelContainer);
+		SpdxFile file2 = new SpdxFile(modelContainer, r.asNode());
+		result = file2.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypes1, result));
+		file.setFileTypes(fileTypes2);
+		result = file.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypes2, result));
+		result = file2.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypes2, result));
+		file2.setFileTypes(fileTypeSingle);
+		result = file2.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypeSingle, result));
+		result = file.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypeSingle, result));
+		file.setFileTypes(null);
+		assertEquals(0, file.getFileTypes().length);
+		assertEquals(0, file2.getFileTypes().length);
 	}
 
 	/**
@@ -251,11 +276,117 @@ public class TestSpdxFile {
 		verify = file2.verify();
 		assertEquals(0, verify.size());
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testCloneModelSimple() throws InvalidSPDXAnalysisException, IOException {
+		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
+		String[] contributors = new String[] {"Contrib1", "Contrib2"};
+		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
+		
+		SpdxFile fileDep1 = new SpdxFile("SpdxRef-1", "fileDep1", 
+				"Comment1", new Annotation[] {ANNOTATION1, ANNOTATION2}, null,
+				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments1",
+				new FileType[] {FileType.fileType_source}, 
+				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "1123456789abcdef0123456789abcdef01234567")}, 
+				contributors, "Notice Text", artifactOfs);
+		SpdxFile fileDep2 = new SpdxFile("SpdxRef-2", "fileDep2", 
+				"Comment2", new Annotation[] {ANNOTATION3}, null,
+				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments2",
+				new FileType[] {FileType.fileType_binary}, 
+				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "2123456789abcdef0123456789abcdef01234567")}, 
+				contributors, "Notice Text", artifactOfs);
+		SpdxFile[] fileDependencies = new SpdxFile[] {fileDep1, fileDep2};
+		String fileNotice = "File Notice";
+		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
+		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
+		Relationship[] relationships = new Relationship[] {rel1, rel2};
+		String id = "SpdxRef-3";
+		String name = "fileName";
+		String comment = "file comments";
+		Annotation[] annotations = new Annotation[] {ANNOTATION3};
+		String copyright = "Copyrights";
+		String licenseComment = "License comments";
+		FileType[] filetypes = new FileType[] {FileType.fileType_source};
+		Checksum[] checksum = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "0123456789abcdef0123456789abcdef01234567")};
+		
+		SpdxFile file = new SpdxFile(id, name, 
+				comment, annotations, relationships,
+				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
+				filetypes, checksum, contributors, fileNotice, artifactOfs);
+		file.setFileDependencies(fileDependencies);
+		ArrayList<String> verify = file.verify();
+		assertEquals(0, verify.size());
+		// assign a model to the original, then clone
+		final Model fromModel = ModelFactory.createDefaultModel();
+		final String fromDocNamespace = "https://my/test/doc2#";
+		String fromFileUri = fromDocNamespace + id;
+		
+		IModelContainer fromModelContainer = new IModelContainer() {
+			@Override
+			public String getNextSpdxElementRef() {
+				return null;
+			}
+			@Override
+			public Model getModel() {
+				return fromModel;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return fromDocNamespace;
+			}
+			
+		};
+		Resource fileResource = file.createResource(fromModelContainer);
+		assertTrue(fileResource.isURIResource());
+		assertEquals(fromFileUri, fileResource.getURI());
+		final Model toModel2 = ModelFactory.createDefaultModel();
+		final String testDocNamespace = "https://my/test/doc3#";
+		String toFileUri2 = testDocNamespace + id;
+		IModelContainer toModelContainer = new IModelContainer() {
+			@Override
+			public String getNextSpdxElementRef() {
+				return null;
+			}
+			@Override
+			public Model getModel() {
+				return toModel2;
+			}
+
+			@Override
+			public String getDocumentNamespace() {
+				return testDocNamespace;
+			}
+			
+		};
+		SpdxFile toFile = file.clone();
+		toFile.setId(id);
+		Resource toFileResource = toFile.createResource(toModelContainer);
+		assertTrue(toFileResource.isURIResource());
+		assertEquals(toFileUri2, toFileResource.getURI());
+		assertEquals(file.getArtifactOf()[0].getName(), toFile.getArtifactOf()[0].getName());
+		assertEquals(file.getArtifactOf()[0].getHomePage(), toFile.getArtifactOf()[0].getHomePage());
+		assertEquals(file.getCopyrightText(), toFile.getCopyrightText());
+		assertEquals(file.getLicenseComment(), toFile.getLicenseComment());
+		assertEquals(file.getComment(), toFile.getComment());
+		assertEquals(file.getName(), toFile.getName());
+		assertEquals(file.getSha1(), toFile.getSha1());
+		assertTrue(UnitTestHelper.isArraysEqual(file.getFileTypes(), toFile.getFileTypes()));
+		assertEquals(file.getLicenseConcluded(), toFile.getLicenseConcluded());
+		assertEquals(file.getNoticeText(), toFile.getNoticeText());
+		assertTrue(UnitTestHelper.isArraysEqual(contributors, toFile.getFileContributors()));
+		TestPackageInfoSheet.compareLicenseDeclarations(file.getLicenseInfoFromFiles(), toFile.getLicenseInfoFromFiles());
+		assertTrue(UnitTestHelper.isArraysEquivalent(file.getFileDependencies(), toFile.getFileDependencies()));
+		verify = toFile.verify();
+		assertEquals(0, verify.size());
+	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#equivalent(org.spdx.rdfparser.model.RdfModelObject)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
@@ -370,9 +501,11 @@ public class TestSpdxFile {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#verify()}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
-	public void testVerify() {
+	public void testVerify() throws InvalidSPDXAnalysisException {
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
@@ -407,111 +540,360 @@ public class TestSpdxFile {
 				comment, annotations, relationships,
 				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
 				filetypes, checksum, contributors, fileNotice, artifactOfs);
-		assertEquals(0, file.verify());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#SpdxFile(java.lang.String, java.lang.String, java.lang.String, org.spdx.rdfparser.model.Annotation[], org.spdx.rdfparser.model.Relationship[], org.spdx.rdfparser.license.AnyLicenseInfo, org.spdx.rdfparser.license.SimpleLicensingInfo[], java.lang.String, java.lang.String, org.spdx.rdfparser.model.SpdxFile.FileType, org.spdx.rdfparser.model.Checksum, java.lang.String[], java.lang.String, org.spdx.rdfparser.model.DoapProject[])}.
-	 */
-	@Test
-	public void testSpdxFileStringStringStringAnnotationArrayRelationshipArrayAnyLicenseInfoSimpleLicensingInfoArrayStringStringFileTypeChecksumStringArrayStringDoapProjectArray() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#convertDeclaredLicense(org.spdx.rdfparser.license.SimpleLicensingInfo[])}.
-	 */
-	@Test
-	public void testConvertDeclaredLicense() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#convertLicenseInfoFromFile(org.spdx.rdfparser.license.AnyLicenseInfo)}.
-	 */
-	@Test
-	public void testConvertLicenseInfoFromFile() {
-		fail("Not yet implemented");
+		file.setFileDependencies(fileDependencies);
+		assertEquals(0, file.verify().size());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#findFileResource(org.spdx.rdfparser.IModelContainer, org.spdx.rdfparser.model.SpdxFile)}.
 	 */
 	@Test
-	public void testFindFileResource() {
-		fail("Not yet implemented");
-	}
+	public void testFindFileResource() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		String namespace = "http://test.name/space";
+		IModelContainer modelContainer = new ModelContainerForTest(model, namespace);
+		
+		String FILE1_NAME = "./file/name/name1";
+		String FILE1_ID = "SpdxRef-1";
+		Checksum FILE1_SHA1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+				"1123456789abcdef0123456789abcdef01234567");
+		String FILE1_COPYRIGHT = "Copyright 1";
+		
+		String FILE2_NAME = "./file2/name/name2";
+		String FILE2_ID = "SpdxRef-2";
+		Checksum FILE2_SHA1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+				"2222456789abcdef0123456789abcdef01234567");
+		String FILE2_COPYRIGHT = "Copyright 2";
+		String FILE3_NAME = "./a/different/name";
+		String FILE3_ID = "SpdxRef-3";
+		String FILE3_COPYRIGHT = "Copyright 3";
+		Checksum FILE4_SHA1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+				"4444456789abcdef0123456789abcdef01234567");
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setFileType(org.spdx.rdfparser.model.SpdxFile.FileType)}.
-	 */
-	@Test
-	public void testSetFileType() {
-		fail("Not yet implemented");
+		SpdxFile file1 = new SpdxFile(FILE1_ID, FILE1_NAME, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE1_COPYRIGHT, null,
+				null, new Checksum[] {FILE1_SHA1}, null, null, null);
+		Resource file1Resource = file1.createResource(modelContainer);
+		SpdxFile file2 = new SpdxFile(FILE2_ID, FILE2_NAME, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE2_COPYRIGHT, null,
+				null, new Checksum[] {FILE2_SHA1}, null, null, null);		
+		Resource file2Resource = file2.createResource(modelContainer);
+		
+		SpdxFile testFile1 = new SpdxFile(FILE1_ID, FILE1_NAME, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE1_COPYRIGHT, null,
+				null, new Checksum[] {FILE1_SHA1}, null, null, null);
+		SpdxFile testFile2 = new SpdxFile(FILE2_ID, FILE2_NAME, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE2_COPYRIGHT, null,
+				null, new Checksum[] {FILE2_SHA1}, null, null, null);	
+		SpdxFile testFile3 = new SpdxFile(FILE3_ID, FILE3_NAME, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE3_COPYRIGHT, null,
+				null, new Checksum[] {FILE1_SHA1}, null, null, null);	
+		SpdxFile testFile4 = new SpdxFile(FILE3_ID, FILE3_NAME, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE3_COPYRIGHT, null,
+				null, new Checksum[] {FILE4_SHA1}, null, null, null);
+		Resource retval = SpdxFile.findFileResource(modelContainer, testFile1);
+		assertEquals(file1Resource, retval);
+		retval = SpdxFile.findFileResource(modelContainer, testFile2);
+		assertEquals(file2Resource, retval);
+		retval = SpdxFile.findFileResource(modelContainer, testFile3);
+		if (retval != null) {
+			fail("Should be null due to different file names");
+		}
+		retval = SpdxFile.findFileResource(modelContainer, testFile4);
+		if (retval != null) {
+			fail("Should be null due to different checksums");
+		}
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setChecksums(org.spdx.rdfparser.model.Checksum)}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSetChecksum() {
-		fail("Not yet implemented");
+	public void testSetChecksum() throws InvalidSPDXAnalysisException {
+		String SHA1_VALUE1 = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12";
+		String SHA1_VALUE2 = "2222e1c67a2d28fced849ee1bb76e7391b93eb12";
+		String SHA256_VALUE1 = "CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB";
+		String SHA256_VALUE2 = "F7846F55CF23E14EEBEAB5B4E1550CAD5B509E3348FBC4EFA3A1413D393CB650";
+		String MD5_VALUE1 = "9e107d9d372bb6826bd81d3542a419d6";
+		String MD5_VALUE2 = "d41d8cd98f00b204e9800998ecf8427e";
+		Checksum checksum1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE1);
+		Checksum checksum2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE2);
+		Checksum checksum3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha256, SHA256_VALUE1);
+		Checksum checksum4 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha256, SHA256_VALUE2);
+		Checksum checksum5 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, MD5_VALUE1);
+		Checksum checksum6 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, MD5_VALUE2);
+		
+		Checksum[] checksums1 = new Checksum[] {checksum1, checksum3, checksum5};
+		Checksum[] checksums2 = new Checksum[] {checksum2, checksum4, checksum6};
+		Checksum[] checksumSingle = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+				"1123456789abcdef0123456789abcdef01234567")};
+
+		
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, checksums1, null, null, null);
+		Checksum[] result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksums1, result));
+		Resource r = file.createResource(modelContainer);
+		result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksums1, result));
+		SpdxFile file2 = new SpdxFile(modelContainer, r.asNode());
+		result = file2.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksums1, result));
+		file.setChecksums(checksums2);
+		result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksums2, result));
+		result = file2.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksums2, result));
+		file2.setChecksums(checksumSingle);
+		result = file2.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksumSingle, result));
+		result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(checksumSingle, result));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setFileContributors(java.lang.String[])}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSetFileContributors() {
-		fail("Not yet implemented");
+	public void testSetFileContributors() throws InvalidSPDXAnalysisException {
+		String CONTRIBUTOR1 = "Contributor 1";
+		String CONTRIBUTOR2 = "Contributor 2";
+		String CONTRIBUTOR3 = "Contributor 3";
+		String[] contributors = new String[] {CONTRIBUTOR1, CONTRIBUTOR2, CONTRIBUTOR3};
+		
+		String CONTRIBUTOR4 = "Contributor 4";
+		String[] oneContributor = new String[] {CONTRIBUTOR4};
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, oneContributor, null, null);
+
+		assertEquals(1, file.getFileContributors().length);
+		String[] result = file.getFileContributors();
+		Resource fileResource = file.createResource(modelContainer);
+		file.setFileContributors(contributors);
+		result = file.getFileContributors();
+		assertTrue(UnitTestHelper.isArraysEqual(contributors, result));
+		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
+		result = file2.getFileContributors();
+		assertTrue(UnitTestHelper.isArraysEqual(contributors, result));
+		file2.setFileContributors(new String[0]);
+		assertEquals(0, file2.getFileContributors().length);
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setNoticeText(java.lang.String)}.
 	 */
 	@Test
-	public void testSetNoticeText() {
-		fail("Not yet implemented");
+	public void testSetNoticeText() throws InvalidSPDXAnalysisException {
+		String fileNotice = "This is a file notice";
+
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		if (file.getNoticeText() != null && !file.getNoticeText().isEmpty()) {
+			fail("nto null notice text");
+		}
+		Resource fileResource = file.createResource(modelContainer);
+		file.setNoticeText(fileNotice);
+		String result  = file.getNoticeText();
+		assertEquals(fileNotice, result);
+		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
+		result = file2.getNoticeText();
+		assertEquals(fileNotice, file2.getNoticeText());
+		file2.setNoticeText(null);
+		if (file2.getNoticeText() != null && !file2.getNoticeText().isEmpty()) {
+			fail("nto null notice text");
+		}
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setId(java.lang.String)}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSetId() {
-		fail("Not yet implemented");
+	public void testSetId() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		String id1 = "SpdxRef-1";
+		String id2 = "SpdxRef-2";
+		SpdxFile file = new SpdxFile(id1, "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		assertEquals(id1, file.getId());
+		file.setId(id2);
+		assertEquals(id2, file.getId());
+		file.setId(null);
+		assertTrue(file.getId() == null);
+		file.setId(id2);
+		assertEquals(id2, file.getId());
+		Resource r = file.createResource(modelContainer);
+		SpdxFile file2 = new SpdxFile(modelContainer, r.asNode());
+		assertEquals(id2, file2.getId());
+		assertTrue(r.isURIResource());
+		assertTrue(r.getURI().endsWith(id2));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setArtifactOf(org.spdx.rdfparser.model.DoapProject[])}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSetArtifactOf() {
-		fail("Not yet implemented");
+	public void testSetArtifactOf() throws InvalidSPDXAnalysisException {
+		DoapProject project1 = new DoapProject("Artifactof Project", "http://project.home.page/this");
+		DoapProject project2 = new DoapProject("Artifactof Project2", "http://another.home.page/this");
+		DoapProject project3 = new DoapProject("Artifactof Project3", "http://yea.home.page/this");
+		DoapProject project4 = new DoapProject("Artifactof Project4", "http://ok.home.page/this");
+		DoapProject[] artifactOfs1 = new DoapProject[] {project1, project2, project3};
+		DoapProject[] artifactOfs2 = new DoapProject[] {project2, project4};
+		DoapProject[] artifactOfSingle = new DoapProject[] {project4};
+		
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, artifactOfs1);
+		DoapProject[] result = file.getArtifactOf();
+		assertTrue(UnitTestHelper.isArraysEqual(artifactOfs1, result));
+		file.setArtifactOf(artifactOfs2);
+		result = file.getArtifactOf();
+		assertTrue(UnitTestHelper.isArraysEqual(artifactOfs2, result));
+		Resource r = file.createResource(modelContainer);
+		SpdxFile file2 = new SpdxFile(modelContainer, r.asNode());
+		result = file2.getArtifactOf();
+		assertTrue(UnitTestHelper.isArraysEqual(artifactOfs2, result));
+		file2.setArtifactOf(artifactOfSingle);
+		result = file2.getArtifactOf();
+		assertTrue(UnitTestHelper.isArraysEqual(artifactOfSingle, result));
+		result = file.getArtifactOf();
+		assertTrue(UnitTestHelper.isArraysEqual(artifactOfSingle, result));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setFileDependencies(org.spdx.rdfparser.model.SpdxFile[])}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
-	public void testSetFileDependencies() {
-		fail("Not yet implemented");
-	}
+	public void testSetFileDependencies() throws InvalidSPDXAnalysisException {
+		String FileDependencyName1  = "Dependency1";
+		String FileDependencyName2 = "dependencies/Dependency2";
+		String FileDependencyName3 = "Depenedency3";
+		String COMMENT1 = "comment";
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", COMMENT1, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#clone()}.
-	 */
-	@Test
-	public void testClone() {
-		fail("Not yet implemented");
+		SpdxFile fileDependency1 = new SpdxFile("SpdxRef-2", FileDependencyName1, COMMENT1, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		SpdxFile fileDependency2 = new SpdxFile("SpdxRef-3", FileDependencyName2, COMMENT1, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		SpdxFile fileDependency3 = new SpdxFile("SpdxRef-4", FileDependencyName3, COMMENT1, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		Resource fileResource = file.createResource(modelContainer);
+		fileDependency1.createResource(modelContainer);
+		fileDependency2.createResource(modelContainer);
+		fileDependency3.createResource(modelContainer);
+		SpdxFile[] fileDependencies = new SpdxFile[] {fileDependency1, fileDependency2, fileDependency3};
+		SpdxFile[] noDependencies = file.getFileDependencies();
+		assertEquals(0, noDependencies.length);
+		file.setFileDependencies(fileDependencies);
+		SpdxFile[] result = file.getFileDependencies();
+		assertTrue(UnitTestHelper.isArraysEqual(fileDependencies, result));
+		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
+		result = file2.getFileDependencies();
+		assertTrue(UnitTestHelper.isArraysEqual(fileDependencies, result));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#compareTo(org.spdx.rdfparser.model.SpdxFile)}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testCompareTo() {
-		fail("Not yet implemented");
+	public void testCompareTo() throws InvalidSPDXAnalysisException {
+		
+		String fileName1 = "afile";
+		String fileName2 = "bfile";
+		
+		SpdxFile file1 = new SpdxFile("SpdxRef-1", fileName1, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		SpdxFile file2 = new SpdxFile("SpdxRef-1", fileName2, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		SpdxFile file3 = new SpdxFile("SpdxRef-1", fileName1, null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		
+		assertEquals(-1, file1.compareTo(file2));
+		assertEquals(1, file2.compareTo(file1));
+		assertEquals(0, file1.compareTo(file3));
+	}
+	
+	@Test
+	public void testNoassertionCopyright() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		Resource fileResource = file.createResource(modelContainer);
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
+		Triple m = Triple.createMatch(null, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			assertTrue(t.getObject().isURI());
+			assertEquals(SpdxRdfConstants.URI_VALUE_NOASSERTION, t.getObject().getURI());
+		}
+		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
+		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, file2.getCopyrightText());
+	}
+	
+	@Test
+	public void testSetComment() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		String COMMENT1 = "comment1";
+		String COMMENT2 = "comment2";
+		String COMMENT3 = "comment3";
+		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", COMMENT1, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		assertEquals(file.getComment(), COMMENT1);
+		Resource fileResource = file.createResource(modelContainer);
+		file.setLicenseComment("see if this works");
+		file.setComment(COMMENT2);
+		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
+		assertEquals(file2.getComment(), COMMENT2);
+		file2.setComment(COMMENT3);
+		assertEquals(file2.getComment(), COMMENT3);
 	}
 
 }

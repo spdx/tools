@@ -54,7 +54,10 @@ public class TestWithExceptionOperator {
 	
 	Model model;
 	IModelContainer modelContainer = new IModelContainer() {
-
+		@Override
+		public String getNextSpdxElementRef() {
+			return null;
+		}
 		@Override
 		public Model getModel() {
 			return model;

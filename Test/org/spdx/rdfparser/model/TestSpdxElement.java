@@ -61,21 +61,8 @@ public class TestSpdxElement {
 			RelationshipType.relationshipType_contains, "Relationship Comment1");
 	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
 			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
-	String documentNamespace;
 	Model model;
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return documentNamespace;
-		}
-		
-	};
+	IModelContainer modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
 
 	/**
 	 * @throws java.lang.Exception
@@ -97,7 +84,7 @@ public class TestSpdxElement {
 	@Before
 	public void setUp() throws Exception {
 		model = ModelFactory.createDefaultModel();
-		documentNamespace = DOCUMENT_NAMESPACE;
+		modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
 	}
 
 	/**

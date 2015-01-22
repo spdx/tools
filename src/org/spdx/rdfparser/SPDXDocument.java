@@ -692,6 +692,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			if (myFiles != null) {
 				SPDXFile[] clonedFiles = new SPDXFile[myFiles.length];
 				for (int i = 0; i < clonedFiles.length; i++) {
+					// For the refactored code, replace the following by a call to clone, call to setId, then a call to createResource
 					clonedFiles[i] = myFiles[i].clone(docToCloneTo, docToCloneTo.getDocumentNamespace() + docToCloneTo.getNextSpdxElementRef());
 				}
 				retval.setFiles(clonedFiles);				

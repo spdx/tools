@@ -193,7 +193,7 @@ public class SpdxItem extends SpdxElement {
 		this.licenseComment = licenseComment;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComment);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.SpdxElement#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */

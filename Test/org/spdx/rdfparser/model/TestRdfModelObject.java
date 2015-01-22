@@ -183,19 +183,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testRdfModelObjectModelNode() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Property p = model.createProperty(TEST_NAMESPACE, TEST_PROPNAME2);
 		Resource r = model.createResource();
 		r.addProperty(p, TEST_PROPVALUE1);
@@ -211,19 +199,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		EmptyRdfModelObject empty = new EmptyRdfModelObject();
 		// Anon.
 		String URI = "http://a/uri#r";
@@ -257,19 +233,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testSetFindSinglePropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		String result = empty.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -289,19 +253,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testSetFindMultipePropertyValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		String[] result = empty.findMultiplePropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -331,19 +283,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetAnnotationsPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		Annotation[] result = empty.findAnnotationPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -379,19 +319,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetElementsPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		SpdxElement result = empty.findElementPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -413,19 +341,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetRelationshipPropertyValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		Relationship[] result = empty.findRelationshipPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -462,19 +378,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetAnyLicenseInfos() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		AnyLicenseInfo result = empty.findAnyLicenseInfoPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -494,19 +398,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetAnyLicenseInfosMultiple() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		AnyLicenseInfo[] result = empty.findAnyLicenseInfoPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
@@ -529,19 +421,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testSpecialValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		// None
@@ -561,19 +441,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetPropertyUriValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		String uri = "http://this.is.a#uri";
@@ -585,19 +453,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetPropertyUriValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		String uri1 = "http://this.is.a#uri";
@@ -611,19 +467,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetPropertyDaopValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		DoapProject p1 = new DoapProject("Name1", "http://home.page/one");
@@ -638,19 +482,7 @@ public class TestRdfModelObject {
 	@Test
 	public void testFindSetPropertyChecksumValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
@@ -672,19 +504,7 @@ public class TestRdfModelObject {
 	public void testDuplicate() throws InvalidSPDXAnalysisException {
 		// Same URI node
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		EmptyRdfModelObject empty = new EmptyRdfModelObject();
 		String uri = "http://a.uri.this/that#mine";
 		empty.setUri(uri);
@@ -720,20 +540,7 @@ public class TestRdfModelObject {
 	
 	@Test public void testEquals() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
-
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		EmptyRdfModelObject empty = new EmptyRdfModelObject();
 		String uri = "http://a.uri.this/that#mine";
 		empty.setUri(uri);
@@ -753,19 +560,7 @@ public class TestRdfModelObject {
 	@Test 
 	public void testHashcode() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new IModelContainer() {
-
-			@Override
-			public Model getModel() {
-				return model;
-			}
-
-			@Override
-			public String getDocumentNamespace() {
-				return "http://testnamespace.com";
-			}
-			
-		};
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 
 		EmptyRdfModelObject empty = new EmptyRdfModelObject();
 		String uri = "http://a.uri#mine";

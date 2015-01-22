@@ -35,6 +35,12 @@ public interface IModelContainer {
 	 * @return Namespace for document
 	 */
 	String getDocumentNamespace();
+
+	/**
+	 * @return The next available SPDX element reference ID.  The ID
+	 * is unique within a given model.
+	 */
+	String getNextSpdxElementRef();
 	
 	
 

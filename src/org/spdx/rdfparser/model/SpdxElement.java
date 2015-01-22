@@ -44,10 +44,15 @@ public class SpdxElement extends RdfModelObject {
 	
 	static final Logger logger = Logger.getLogger(RdfModelObject.class);
 	
-	Annotation[] annotations;
-	String comment;
-	String name;
-	Relationship[] relationships;
+	protected Annotation[] annotations;
+	protected String comment;
+	protected String name;
+	protected Relationship[] relationships;
+	/**
+	 * The ID is a special property for the SpdxItem.  It used to create
+	 * the unique URI for the item.  The URI is the namespace of the modelContainer + id
+	 */
+	private String id;
 	
 	public SpdxElement(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
@@ -55,6 +60,13 @@ public class SpdxElement extends RdfModelObject {
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		this.name = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, this.getNamePropertyName());
 		this.relationships = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP);
+		// ID
+		this.id = null;
+		if (this.resource.isURIResource()) {
+			if (this.resource.getURI().startsWith(modelContainer.getDocumentNamespace())) {
+				this.id = this.resource.getURI().substring(modelContainer.getDocumentNamespace().length());
+			}
+		}
 	}
 
 	/**
@@ -212,6 +224,38 @@ public class SpdxElement extends RdfModelObject {
 		}
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationships);
 	}
+	
+	/**
+	 * The ID is a unique identify for the SPDX element.  It is only required
+	 * if this element is to be used outside of the RDF model containing the element.
+	 * @return the id
+	 */
+	public String getId() {
+		// the ID from the resource URI.
+		if (this.resource != null) {
+			if (this.resource.isURIResource()) {
+				if (this.resource.getURI().startsWith(modelContainer.getDocumentNamespace())) {
+					this.id = this.resource.getURI().substring(modelContainer.getDocumentNamespace().length());
+				}
+			}
+		}
+		return id;
+	}
+
+	/**
+	 * The ID is a unique identify for the SPDX element.  It is only required
+	 * if this element is to be used outside of the RDF model containing the element.
+	 * @param id the id to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setId(String id) throws InvalidSPDXAnalysisException {
+		if (this.resource != null) {
+			throw(new InvalidSPDXAnalysisException("Can not set a file ID for a file already in an RDF Model. You must create a new SPDX File with this ID."));
+			//TODO: Implement a recreation of the resource changing it to a new URI
+		}
+		this.id = id;
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
@@ -220,9 +264,11 @@ public class SpdxElement extends RdfModelObject {
 	String getUri(IModelContainer modelContainer) {
 		if (this.node != null && this.node.isURI()) {
 			return this.node.getURI();
+		} else if (this.id != null && !this.id.isEmpty()) {
+			return modelContainer.getDocumentNamespace() + this.id;
 		} else {
 			return null;
-		}
+		}		
 	}
 
 

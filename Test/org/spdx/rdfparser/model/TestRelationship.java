@@ -57,21 +57,8 @@ public class TestRelationship {
 	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
 			"related element comment 2", null, null);
 
-	String documentNamespace;
 	Model model;
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return documentNamespace;
-		}
-		
-	};
+	IModelContainer modelContainer;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -92,7 +79,7 @@ public class TestRelationship {
 	@Before
 	public void setUp() throws Exception {
 		model = ModelFactory.createDefaultModel();
-		documentNamespace = DOCUMENT_NAMESPACE;
+		modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
 	}
 
 	/**

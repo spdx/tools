@@ -75,20 +75,7 @@ public class TestSpdxItem {
 	
 	String documentNamespace;
 	Model model;
-	IModelContainer modelContainer = new IModelContainer() {
-
-		@Override
-		public Model getModel() {
-			return model;
-		}
-
-		@Override
-		public String getDocumentNamespace() {
-			return documentNamespace;
-		}
-		
-	};
-
+	IModelContainer modelContainer;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -110,6 +97,7 @@ public class TestSpdxItem {
 	public void setUp() throws Exception {
 		model = ModelFactory.createDefaultModel();
 		documentNamespace = DOCUMENT_NAMESPACE;
+		modelContainer = new ModelContainerForTest(model, documentNamespace);
 	}
 
 	/**
