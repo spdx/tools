@@ -53,7 +53,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PROJECT_HOMEPAGE = "homepage";
 	
 	// SPDX Class Names
-	public static final String CLASS_SPDX_ANALYSIS = "SpdxDocument";
+	public static final String CLASS_SPDX_DOCUMENT = "SpdxDocument";
 	public static final String CLASS_SPDX_PACKAGE = "Package";
 	public static final String CLASS_SPDX_CREATION_INFO = "CreationInfo";
 	public static final String CLASS_SPDX_CHECKSUM = "Checksum";
@@ -83,13 +83,15 @@ public interface SpdxRdfConstants {
 	// SPDX Document Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_SPDX_REVIEWED_BY = "reviewed";
-	public static final String PROP_SPDX_NONSTANDARD_LICENSES = "hasExtractedLicensingInfo";
+	public static final String PROP_SPDX_EXTRACTED_LICENSES = "hasExtractedLicensingInfo";
 	public static final String PROP_SPDX_VERSION = "specVersion";
 	public static final String PROP_SPDX_CREATION_INFO = "creationInfo";
 	public static final String PROP_SPDX_PACKAGE = "describesPackage";
-	public static final String PROP_SPDX_FILE = "referencesFile";
+	public static final String PROP_SPDX_DESCRIBES_FILE = "describesFile";
+	@Deprecated		// since 2.0
+	public static final String PROP_SPDX_FILE_REFERENCE = "referencesFile";
 	public static final String PROP_SPDX_DATA_LICENSE = "dataLicense";
-
+	public static final String PROP_SPDX_EXTERNAL_DOC_REF = "externalDocumentRef";
 	
 	// SPDX CreationInfo Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace

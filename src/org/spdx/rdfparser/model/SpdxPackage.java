@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 
@@ -26,10 +27,24 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * @author Gary
+ * @author Gary O'Neall
  *
  */
 public class SpdxPackage extends SpdxItem {
+	
+	AnyLicenseInfo licenseDeclared;
+	Checksum checksum;
+	String description;
+	String downloadLocation;
+	String homepage;
+	String originator;
+	String packageFileName;
+	SpdxPackageVerificationCode packageVerificationCode;	//TODO Move this to RdfModelObject
+	String sourceInfo;
+	String summary;
+	String supplier;
+	String versionInfo;
+	
 
 	/**
 	 * @param name
@@ -98,5 +113,4 @@ public class SpdxPackage extends SpdxItem {
 		//TODO Implement
 		return null;
 	}
-
 }
