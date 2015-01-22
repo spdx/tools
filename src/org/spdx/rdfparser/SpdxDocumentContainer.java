@@ -133,7 +133,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		this.documentNamespace = formDocNamespace(uri);
 		model.setNsPrefix("", this.documentNamespace);
 		// set the default namespace to the document namespace
-		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
+		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_DOCUMENT);
 		model.createResource(uri, spdxAnalysisType);
 		// reset the next license number and next spdx element num
 		this.nextElementRef = 1;
@@ -188,7 +188,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	private Node getSpdxDocNode() {
 		Node spdxDocNode = null;
 		Node rdfTypePredicate = this.model.getProperty(RDF_NAMESPACE, RDF_PROP_TYPE).asNode();
-		Node spdxDocObject = this.model.getProperty(SPDX_NAMESPACE, CLASS_SPDX_ANALYSIS).asNode();
+		Node spdxDocObject = this.model.getProperty(SPDX_NAMESPACE, CLASS_SPDX_DOCUMENT).asNode();
 		Triple m = Triple.createMatch(null, rdfTypePredicate, spdxDocObject);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	// find the document
 		while (tripleIter.hasNext()) {
@@ -321,6 +321,9 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		if (!docSpecVersionMatcher.matches()) {
 			return "Invalid spdx version format - must match 'SPDX-M.N'";
 		}
+		if (!SUPPORTED_SPDX_VERSIONS.contains(spdxVersion)) {
+			return "Version "+spdxVersion+" is not supported by this version of the rdf parser";
+		}
 		return null;	// if we got here, there is no problem
 	}
 
@@ -385,7 +388,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		if (extractedLicenseExists(license.getLicenseId())) {
 			throw(new InvalidSPDXAnalysisException("Can not add license - ID "+license.getLicenseId()+" already exists."));
 		}
-		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
 		s.addProperty(p, license.createResource(this));		
 	}

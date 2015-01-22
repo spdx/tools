@@ -497,7 +497,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 				alFileNodes.add(t.getObject());
 			}
 			removeProperties(node, PROP_PACKAGE_FILE);
-			removeProperties(getSpdxDocNode(), PROP_SPDX_FILE);	// NOTE: In version 2.0, we will need to remove just the files which were in the package
+			removeProperties(getSpdxDocNode(), PROP_SPDX_FILE_REFERENCE);	// NOTE: In version 2.0, we will need to remove just the files which were in the package
 
 			for (Node fileNode : alFileNodes) {
 				model.removeAll(getResource(fileNode), null, null);
@@ -507,7 +507,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 				Resource s = getResource(this.node);
 				Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 				Resource docResource = getResource(getSpdxDocNode());
-				Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
+				Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE);
 				for (int i = 0; i < files.length; i++) {				
 					Resource file = files[i].createResource(getDocument(), getDocumentNamespace() + getNextSpdxElementRef());
 					s.addProperty(p, file);
@@ -523,7 +523,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			Resource s = getResource(this.node);
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 			Resource docResource = getResource(getSpdxDocNode());
-			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);			
+			Property docP = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE);			
 			Resource fileResource = file.createResource(getDocument(), getDocumentNamespace() + getNextSpdxElementRef());
 			s.addProperty(p, fileResource);
 			docResource.addProperty(docP, fileResource);
@@ -537,7 +537,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		public void removeFile(String fileName) throws InvalidSPDXAnalysisException {
 			ArrayList<Node> filesToRemove = new ArrayList<Node>();
 			Node fileNameProperty = model.getProperty(SPDX_NAMESPACE, PROP_FILE_NAME).asNode();
-			Property docFileProperty = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE);
+			Property docFileProperty = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE);
 			Property pkgFileProperty = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 			Resource docResource = getResource(getSpdxDocNode());
 			Resource pkgResource = getResource(this.node);
@@ -1369,7 +1369,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public SPDXFile[] getFileReferences() throws InvalidSPDXAnalysisException {
 		ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE).asNode();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE).asNode();
 		Triple m = Triple.createMatch(getSpdxDocNode(), p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -1589,7 +1589,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			throw(new InvalidSPDXAnalysisException("No SPDX Document - can not get the Non Standard Licenses"));
 		}
 		ArrayList<ExtractedLicenseInfo> alLic = new ArrayList<ExtractedLicenseInfo>();
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES).asNode();
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -1628,11 +1628,11 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		// validate the license ID's and update the next license ID property
 		initializeNextLicenseRef(nonStandardLicenses);
 		// delete the previous createdby's
-		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
 		model.removeAll(s, p, null);
 		for (int i = 0; i < nonStandardLicenses.length; i++) {
-			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+			p = model.createProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES);
 			s.addProperty(p, nonStandardLicenses[i].createResource(this));
 		}
 	}
@@ -1660,7 +1660,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		if (extractedLicenseExists(license.getLicenseId())) {
 			throw(new InvalidSPDXAnalysisException("Can not add license - ID "+license.getLicenseId()+" already exists."));
 		}
-		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_NONSTANDARD_LICENSES);
+		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
 		s.addProperty(p, license.createResource(this));		
 	}
@@ -1784,7 +1784,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		this.documentNamespace = formDocNamespace(uri);
 		model.setNsPrefix("", this.documentNamespace);
 		// set the default namespace to the document namespace
-		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_ANALYSIS);
+		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_DOCUMENT);
 		model.createResource(uri, spdxAnalysisType);
 		// add the version
 		this.setSpdxVersion(spdxVersion);
@@ -1829,7 +1829,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	private Node getSpdxDocNode() {
 		Node spdxDocNode = null;
 		Node rdfTypePredicate = this.model.getProperty(RDF_NAMESPACE, RDF_PROP_TYPE).asNode();
-		Node spdxDocObject = this.model.getProperty(SPDX_NAMESPACE, CLASS_SPDX_ANALYSIS).asNode();
+		Node spdxDocObject = this.model.getProperty(SPDX_NAMESPACE, CLASS_SPDX_DOCUMENT).asNode();
 		Triple m = Triple.createMatch(null, rdfTypePredicate, spdxDocObject);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	// find the document
 		while (tripleIter.hasNext()) {

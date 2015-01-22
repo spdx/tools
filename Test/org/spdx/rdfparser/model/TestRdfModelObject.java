@@ -30,6 +30,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
@@ -576,5 +578,48 @@ public class TestRdfModelObject {
 		assertTrue(empty.hashCode() == empty3.hashCode());
 		EmptyRdfModelObject empty4 = new EmptyRdfModelObject(modelContainer, r2.asNode());
 		assertTrue(empty2.hashCode() == empty4.hashCode());
+	}
+	
+	@Test
+	public void testFindSetSpdxCreatorInfo() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		SPDXCreatorInformation creatorInfo = new SPDXCreatorInformation(
+				new String[] {"PERSON: me", "TOOL: TEst"}, "2011-03-13T00:00:00Z", 
+				"Comment", "listVersion");
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, creatorInfo);
+		SPDXCreatorInformation result = empty.findCreationInfoPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(creatorInfo, result);
+	}
+	
+	@Test
+	public void testFindSetSpdxReviewers() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		SPDXReview rev1 = new SPDXReview("Person: Gary", "2011-03-13T00:00:00Z", "Comment1");
+		SPDXReview rev2 = new SPDXReview("Tool: test", "2011-03-13T00:00:00Z", "Comment2");
+		SPDXReview rev3 = new SPDXReview("Organization: SPDX", "2011-03-13T00:00:00Z", "Comment2");
+		SPDXReview[] reviewers = new SPDXReview[] {rev1, rev2, rev3};
+		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, reviewers);
+		SPDXReview[] result = empty.findReviewPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(UnitTestHelper.isArraysEqual(reviewers, result));
+	}	
+	@Test
+	public void testFindSetExternalDocReferences() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		ExternalDocumentRef ref1 = new ExternalDocumentRef();
+		ExternalDocumentRef ref2 = new ExternalDocumentRef();
+		ExternalDocumentRef ref3 = new ExternalDocumentRef();
+		ExternalDocumentRef[] refs = new ExternalDocumentRef[] {ref1, ref2, ref3};
+		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, refs);
+		ExternalDocumentRef[] result = empty.findExternalDocRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(UnitTestHelper.isArraysEqual(refs, result));
 	}
 }

@@ -21,6 +21,8 @@ import java.util.HashMap;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
@@ -818,5 +820,125 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	protected void setPropertyUriValue(String nameSpace,
 			String propertyName, String uri) throws InvalidSPDXAnalysisException {
 		setPropertyUriValues(nameSpace, propertyName, new String[] {uri});
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected SPDXCreatorInformation findCreationInfoPropertyValue(
+			String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			return new SPDXCreatorInformation(model, t.getObject());
+		}
+		return null;
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param creatorInfo
+	 */
+	protected void setPropertyValue(String nameSpace, 
+			String propertyName, SPDXCreatorInformation creatorInfo) {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (creatorInfo != null) {
+				this.resource.addProperty(p, creatorInfo.createResource(model));
+			}
+		}
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propSpdxExternalDocRef
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected ExternalDocumentRef[] findExternalDocRefPropertyValues(
+			String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return new ExternalDocumentRef[0];
+		}
+		ArrayList<ExternalDocumentRef> retval = new ArrayList<ExternalDocumentRef>();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new ExternalDocumentRef(modelContainer, t.getObject()));
+		}
+		return retval.toArray(new ExternalDocumentRef[retval.size()]);
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param externalDocRefs
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected void setPropertyValues(String nameSpace, String propertyName, 
+			ExternalDocumentRef[] externalDocRefs) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (externalDocRefs != null) {
+				for (int i = 0; i < externalDocRefs.length; i++) {
+					this.resource.addProperty(p, externalDocRefs[i].createResource(modelContainer));
+				}
+			}
+		}
+	}
+	
+
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param reviewers
+	 */
+	protected void setPropertyValues(String nameSpace,
+			String propertyName, SPDXReview[] reviewers) {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (reviewers != null) {
+				for (int i = 0; i < reviewers.length; i++) {
+					this.resource.addProperty(p, reviewers[i].createResource(model));
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected SPDXReview[] findReviewPropertyValues(String nameSpace,
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return new SPDXReview[0];
+		}
+		ArrayList<SPDXReview> retval = new ArrayList<SPDXReview>();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new SPDXReview(model, t.getObject()));
+		}
+		return retval.toArray(new SPDXReview[retval.size()]);
 	}
 }
