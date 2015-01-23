@@ -32,6 +32,7 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
@@ -614,12 +615,36 @@ public class TestRdfModelObject {
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
-		ExternalDocumentRef ref1 = new ExternalDocumentRef();
-		ExternalDocumentRef ref2 = new ExternalDocumentRef();
-		ExternalDocumentRef ref3 = new ExternalDocumentRef();
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"1123456789abcdef0123456789abcdef01234567");
+		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"2123456789abcdef0123456789abcdef01234567");
+		Checksum c3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"3333456789abcdef0123456789abcdef01234567");
+		String docUri1 = "http://spdx.org/docs/my/doc1";
+		String docUri2 = "http://spdx.org/docs/my/doc2";
+		String docUri3 = "http://spdx.org/docs/my/doc3";
+		ExternalDocumentRef ref1 = new ExternalDocumentRef(docUri1, c1);
+		ExternalDocumentRef ref2 = new ExternalDocumentRef(docUri2, c2);
+		ExternalDocumentRef ref3 = new ExternalDocumentRef(docUri3, c3);
 		ExternalDocumentRef[] refs = new ExternalDocumentRef[] {ref1, ref2, ref3};
 		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, refs);
 		ExternalDocumentRef[] result = empty.findExternalDocRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(refs, result));
+	}
+	
+	@Test
+	public void testFindSetVerifiationCode() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+
+		SpdxPackageVerificationCode ver = new SpdxPackageVerificationCode("2123456789abcdef0123456789abcdef01234567", new String[] {"skippedfiles1", "skippedfile2"});
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, ver);
+		SpdxPackageVerificationCode result = empty.findVerificationCodePropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(ver.getValue(), result.getValue());
+		assertTrue(UnitTestHelper.isArraysEqual(ver.getExcludedFileNames(), 
+				result.getExcludedFileNames()));
 	}
 }

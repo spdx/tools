@@ -73,6 +73,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_RELATIONSHIP = "Relationship";
 	public static final String CLASS_SPDX_ITEM = "SpdxItem";
 	public static final String CLASS_SPDX_ELEMENT = "SpdxElement";
+	public static final String CLASS_EXTERNAL_DOC_REF = "ExternalDocumentRef";
 	
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
@@ -202,6 +203,10 @@ public interface SpdxRdfConstants {
 	// SPDX Relationship Properties
 	public static final String PROP_RELATED_SPDX_ELEMENT = "relatedSpdxElement";
 	public static final String PROP_RELATIONSHIP_TYPE = "relationshipType";
+	
+	// ExternalDocumentRef properties
+	public static final String PROP_EXTERNAL_DOC_CHECKSUM = "checksum";
+	public static final String PROP_EXTERNAL_SPDX_DOCUMENT = "spdxDocument";
 	
 	// SPDX Review Properties
 	// NOTE: These have all been deprecated as of SPDX 2.0
