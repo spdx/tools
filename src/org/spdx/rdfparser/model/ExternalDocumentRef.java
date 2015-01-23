@@ -18,19 +18,44 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.SpdxVerificationHelper;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * @author Gary
+ * Information about an external SPDX document reference including the checksum.  
+ * This allows for verification of the external references.
+ * 
+ * Since an SPDX document must be in its own container, there are a few special
+ * considerations for this class:
+ *   - model, node, and resource are associated with the document making an external reference,
+ *     it does not include the actual document being referenced
+ *   - This class can be used with only the URI for the external document being provided.  It
+ *     does not require the entire document to be passed in.  The spdxDocument itself is optional.
+ * @author Gary O'Neall
  *
  */
 public class ExternalDocumentRef extends RdfModelObject {
 
+	static final Logger logger = Logger.getLogger(RdfModelObject.class.getClass());
+	/**
+	 * Force a refresh for the model on every property get.  This is slower, but
+	 * will make sure that the correct value is returned if there happens to be
+	 * two Java objects using the same RDF properties.
+	 */
+	private boolean refreshOnGet = true;	//TODO Move this up to RdfModel and implement in all the subclasses
+
+	Checksum checksum;
+	String spdxDocumentUri;
+	SpdxDocument spdxDocument = null;
+	
 	/**
 	 * @param modelContainer
 	 * @param node
@@ -39,23 +64,72 @@ public class ExternalDocumentRef extends RdfModelObject {
 	public ExternalDocumentRef(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
-		// TODO Auto-generated constructor stub
+		this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+			SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
+		this.spdxDocumentUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
+	}
+
+
+	/**
+	 * @param spdxDocumentUri Unique URI for the external SPDX document
+	 * @param checksum Sha1 checksum for the external document
+	 */
+	public ExternalDocumentRef(String spdxDocumentUri, Checksum checksum) {
+		this.spdxDocumentUri = spdxDocumentUri;
+		this.checksum = checksum;
+	}
+	
+	/**
+	 * @param externalDocument SPDX Document being referenced
+	 * @param checksum Sha1 checksum of the external document
+	 */
+	public ExternalDocumentRef(SpdxDocument externalDocument, Checksum checksum) {
+		this.spdxDocument = externalDocument;
+		this.spdxDocumentUri = documentToDocumentUri(externalDocument);
 	}
 
 	/**
-	 * 
+	 * Gets the absolute URI representing the document
+	 * @param document
+	 * @return
 	 */
-	public ExternalDocumentRef() {
-		// TODO Auto-generated constructor stub
+	private String documentToDocumentUri(SpdxDocument document) {
+		if (document == null) {
+			return null;
+		}
+		String retval = document.getDocumentContainer().getDocumentNamespace();
+		if (retval.endsWith("#")) {
+			retval = retval.substring(0, retval.length()-1);
+		}
+		return retval;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
 	public ArrayList<String> verify() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> retval = new ArrayList<String>();
+		String uri = "UNKNOWN";
+		if (this.spdxDocumentUri == null) {
+			retval.add("Missing required external document URI");
+		} else {
+			uri = this.spdxDocumentUri;
+			if (!SpdxVerificationHelper.isValidUri(uri)) {
+				retval.add("Invalid URI for external Spdx Document URI: "+this.spdxDocumentUri);
+			}
+		}
+		if (this.checksum == null) {
+			retval.add("Missing checksum for external document "+uri);
+		} else {
+			retval.addAll(this.checksum.verify());
+			if (this.checksum.getAlgorithm() != ChecksumAlgorithm.checksumAlgorithm_sha1) {
+				retval.add("Checksum algorithm is not SHA1 for external reference "+uri);
+			}
+		}
+		return retval;
 	}
 
 	/* (non-Javadoc)
@@ -63,8 +137,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 	@Override
 	String getUri(IModelContainer modelContainer) {
-		// TODO Auto-generated method stub
-		return null;
+		return null;	// these are always anonymous
 	}
 
 	/* (non-Javadoc)
@@ -72,8 +145,8 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 	@Override
 	Resource getType(Model model) {
-		// TODO Auto-generated method stub
-		return null;
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + 
+				SpdxRdfConstants.CLASS_EXTERNAL_DOC_REF);
 	}
 
 	/* (non-Javadoc)
@@ -81,17 +154,109 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 	@Override
 	void populateModel() throws InvalidSPDXAnalysisException {
-		// TODO Auto-generated method stub
-
+		this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
+				this.spdxDocumentUri);
+		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM,
+				this.checksum);
 	}
+	
+	
+
+	/**
+	 * @return the checksum
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public Checksum getChecksum() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && refreshOnGet) {
+			this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
+		}
+		return checksum;
+	}
+
+
+	/**
+	 * @param checksum the checksum to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setChecksum(Checksum checksum) throws InvalidSPDXAnalysisException {
+		this.checksum = checksum;
+		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM,
+				this.checksum);
+	}
+
+
+	/**
+	 * @return the spdxDocumentUri
+	 */
+	public String getSpdxDocumentUri() {
+		if (this.resource != null && refreshOnGet) {
+			this.spdxDocumentUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
+		}
+		return spdxDocumentUri;
+	}
+
+
+	/**
+	 * @param spdxDocumentUri the spdxDocumentUri to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setSpdxDocumentUri(String spdxDocumentUri) throws InvalidSPDXAnalysisException {
+		this.spdxDocumentUri = spdxDocumentUri;
+		if (this.spdxDocumentUri == null) {
+			this.removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
+		} else {
+			this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
+					this.spdxDocumentUri);
+		}
+	}
+
+
+	/**
+	 * @return the spdxDocument
+	 */
+	public SpdxDocument getSpdxDocument() {
+		return spdxDocument;
+	}
+
+
+	/**
+	 * @param spdxDocument the spdxDocument to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setSpdxDocument(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
+		this.spdxDocument = spdxDocument;
+		setSpdxDocumentUri(documentToDocumentUri(spdxDocument));
+	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
 	public boolean equivalent(RdfModelObject compare) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!(compare instanceof ExternalDocumentRef)) {
+			return false;
+		}
+		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
+		try {
+			return (this.equalsConsideringNull(this.spdxDocumentUri, compref.getSpdxDocumentUri())&&
+					this.equivalentConsideringNull(this.checksum, compref.getChecksum()));
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Invald SPDX Analysis exception comparing external document references: "+e.getMessage(),e);
+			return false;
+		}
+	}
+	
+	@Override
+	public ExternalDocumentRef clone() {
+		return new ExternalDocumentRef(this.spdxDocumentUri, this.checksum.clone());
 	}
 
 }

@@ -28,6 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
@@ -154,17 +155,24 @@ public class TestSpdxElementFactory {
 		assertEquals(LICENSE_COMMENT1, fileResult.getLicenseComment());
 		
 		// SpdxPackage
+		
 		SpdxPackage sPackage = new SpdxPackage(ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] { LICENSE2}, 
-				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE2, new Checksum[] {CHECKSUM1},
+				"Description", "Downlodlocation", new SpdxFile[] {file}, 
+				"http://home.page/one", "originator", "packagename", 
+				new SpdxPackageVerificationCode("0000e1c67a2d28fced849ee1bb76e7391b93eb12", new String[] {"excludedfile1", "excluedfiles2"}),
+				"sourceinfo", "summary", "supplier", "version1");
 		r = sPackage.createResource(modelContainer);
+		assertTrue(UnitTestHelper.isArraysEquivalent(annotations, sPackage.getAnnotations()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, sPackage.getRelationships()));
 		result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
 		assertTrue(result instanceof SpdxPackage);
 		SpdxPackage packageResult = (SpdxPackage)result;
 		assertEquals(ELEMENT_NAME1, packageResult.getName());
 		assertEquals(ELEMENT_COMMENT1, packageResult.getComment());
-		assertTrue(UnitTestHelper.isArraysEqual(annotations, packageResult.getAnnotations()));
-		assertTrue(UnitTestHelper.isArraysEqual(relationships, packageResult.getRelationships()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(annotations, packageResult.getAnnotations()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, packageResult.getRelationships()));
 // UNCOMMENT THE LINES BELOW ONCE SPDXFILE is IMPLEMENTED
 //		assertEquals(LICENSE1, packageResult.getLicenseConcluded());
 //		assertEquals(LICENSE2, packageResult.getLicenseDeclared());

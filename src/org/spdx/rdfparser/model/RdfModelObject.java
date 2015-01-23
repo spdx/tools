@@ -23,6 +23,7 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
@@ -704,7 +705,11 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 */
 	protected void setPropertyValue(String nameSpace,
 			String propertyName, Checksum checksumValue) throws InvalidSPDXAnalysisException {
-		setPropertyValues(nameSpace, propertyName, new Checksum[] {checksumValue});
+		if (checksumValue == null) {
+			setPropertyValues(nameSpace, propertyName, new Checksum[0]);
+		} else {
+			setPropertyValues(nameSpace, propertyName, new Checksum[] {checksumValue});
+		}	
 	}
 	
 	/**
@@ -941,4 +946,43 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return retval.toArray(new SPDXReview[retval.size()]);
 	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected SpdxPackageVerificationCode findVerificationCodePropertyValue(
+			String nameSpace,String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			return new SpdxPackageVerificationCode(model, t.getObject());
+		}
+		return null;
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param verificationCode
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void setPropertyValue(String nameSpace,
+			String propertyName, SpdxPackageVerificationCode verificationCode) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (verificationCode != null) {
+				this.resource.addProperty(p, verificationCode.createResource(model));
+			}
+		}
+	}
+	
 }

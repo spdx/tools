@@ -264,11 +264,12 @@ public class SpdxElement extends RdfModelObject {
 	String getUri(IModelContainer modelContainer) {
 		if (this.node != null && this.node.isURI()) {
 			return this.node.getURI();
-		} else if (this.id != null && !this.id.isEmpty()) {
-			return modelContainer.getDocumentNamespace() + this.id;
 		} else {
-			return null;
-		}		
+			if (this.id == null || this.id.isEmpty()) {
+				this.id = modelContainer.getNextSpdxElementRef();
+			}
+			return modelContainer.getDocumentNamespace() + this.id;
+		}
 	}
 
 
