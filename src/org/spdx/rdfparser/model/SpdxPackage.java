@@ -529,6 +529,15 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		}
 		SpdxPackage comp = (SpdxPackage)o;
 		try {
+			if (this.packageVerificationCode == null) {
+				if (comp.getPackageVerificationCode() != null) {
+					return false;
+				}
+			} else {
+				if (!(this.packageVerificationCode.equivalent(comp.getPackageVerificationCode()))) {
+					return false;
+				}
+			}
 		return (equalsConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
 				arraysEquivalent(this.checksums, comp.getChecksums()) &&
 				equalsConsideringNull(this.description, comp.getDescription()) &&
@@ -537,7 +546,6 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 				equalsConsideringNull(this.homepage, comp.getHomepage()) &&
 				equalsConsideringNull(this.originator, comp.getOriginator()) &&
 				equalsConsideringNull(this.packageFileName, comp.getPackageFileName()) &&
-				equalsConsideringNull(this.packageVerificationCode, comp.getPackageVerificationCode()) &&
 				equalsConsideringNull(this.sourceInfo, comp.getSourceInfo()) &&
 				equalsConsideringNull(this.summary, comp.getSummary()) &&
 				equalsConsideringNull(this.supplier, comp.getSupplier()) &&

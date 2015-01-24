@@ -29,10 +29,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
@@ -174,7 +172,7 @@ public class TestSpdxFile {
 	
 	@Test
 	public void testGetType() throws InvalidSPDXAnalysisException {
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
@@ -194,7 +192,7 @@ public class TestSpdxFile {
 
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				fileTypes1, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
@@ -230,13 +228,13 @@ public class TestSpdxFile {
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
 		
-		SpdxFile fileDep1 = new SpdxFile("SpdxRef-1", "fileDep1", 
+		SpdxFile fileDep1 = new SpdxFile("fileDep1", 
 				"Comment1", new Annotation[] {ANNOTATION1, ANNOTATION2}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments1",
 				new FileType[] {FileType.fileType_source}, 
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "1123456789abcdef0123456789abcdef01234567")}, 
 				contributors, "Notice Text", artifactOfs);
-		SpdxFile fileDep2 = new SpdxFile("SpdxRef-2", "fileDep2", 
+		SpdxFile fileDep2 = new SpdxFile("fileDep2", 
 				"Comment2", new Annotation[] {ANNOTATION3}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments2",
 				new FileType[] {FileType.fileType_binary}, 
@@ -247,7 +245,7 @@ public class TestSpdxFile {
 		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
 		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
-		SpdxFile file = new SpdxFile("SpdxRef-3", "fileName", 
+		SpdxFile file = new SpdxFile("fileName", 
 				"file comments", new Annotation[] {ANNOTATION3}, relationships,
 				COMPLEX_LICENSE, seenLic, "Copyrights", "License comments",
 				new FileType[] {FileType.fileType_source}, 
@@ -284,13 +282,13 @@ public class TestSpdxFile {
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
 		
-		SpdxFile fileDep1 = new SpdxFile("SpdxRef-1", "fileDep1", 
+		SpdxFile fileDep1 = new SpdxFile("fileDep1", 
 				"Comment1", new Annotation[] {ANNOTATION1, ANNOTATION2}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments1",
 				new FileType[] {FileType.fileType_source}, 
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "1123456789abcdef0123456789abcdef01234567")}, 
 				contributors, "Notice Text", artifactOfs);
-		SpdxFile fileDep2 = new SpdxFile("SpdxRef-2", "fileDep2", 
+		SpdxFile fileDep2 = new SpdxFile("fileDep2", 
 				"Comment2", new Annotation[] {ANNOTATION3}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments2",
 				new FileType[] {FileType.fileType_binary}, 
@@ -310,7 +308,7 @@ public class TestSpdxFile {
 		FileType[] filetypes = new FileType[] {FileType.fileType_source};
 		Checksum[] checksum = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "0123456789abcdef0123456789abcdef01234567")};
 		
-		SpdxFile file = new SpdxFile(id, name, 
+		SpdxFile file = new SpdxFile(name, 
 				comment, annotations, relationships,
 				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
 				filetypes, checksum, contributors, fileNotice, artifactOfs);
@@ -323,9 +321,10 @@ public class TestSpdxFile {
 		String fromFileUri = fromDocNamespace + id;
 		
 		IModelContainer fromModelContainer = new IModelContainer() {
+			int nextRef = 3;
 			@Override
 			public String getNextSpdxElementRef() {
-				return null;
+				return "SpdxRef-"+String.valueOf(nextRef++);
 			}
 			@Override
 			public Model getModel() {
@@ -394,13 +393,13 @@ public class TestSpdxFile {
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
 		
-		SpdxFile fileDep1 = new SpdxFile("SpdxRef-1", "fileDep1", 
+		SpdxFile fileDep1 = new SpdxFile("fileDep1", 
 				"Comment1", new Annotation[] {ANNOTATION1, ANNOTATION2}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments1",
 				new FileType[] {FileType.fileType_source}, 
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "1123456789abcdef0123456789abcdef01234567")}, 
 				contributors, "Notice Text", artifactOfs);
-		SpdxFile fileDep2 = new SpdxFile("SpdxRef-2", "fileDep2", 
+		SpdxFile fileDep2 = new SpdxFile("fileDep2", 
 				"Comment2", new Annotation[] {ANNOTATION3}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments2",
 				new FileType[] {FileType.fileType_binary}, 
@@ -411,7 +410,6 @@ public class TestSpdxFile {
 		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
 		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
-		String id = "SpdxRef-3";
 		String name = "fileName";
 		String comment = "file comments";
 		Annotation[] annotations = new Annotation[] {ANNOTATION3};
@@ -420,12 +418,12 @@ public class TestSpdxFile {
 		FileType[] filetypes = new FileType[] {FileType.fileType_source};
 		Checksum[] checksum = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "0123456789abcdef0123456789abcdef01234567")};
 		
-		SpdxFile file = new SpdxFile(id, name, 
+		SpdxFile file = new SpdxFile(name, 
 				comment, annotations, relationships,
 				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
 				filetypes, checksum, contributors, fileNotice, artifactOfs);
 		file.setFileDependencies(fileDependencies);
-		SpdxFile file2 = new SpdxFile(id, name, 
+		SpdxFile file2 = new SpdxFile(name, 
 				comment, annotations, relationships,
 				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
 				filetypes, checksum, contributors, fileNotice, artifactOfs);
@@ -511,13 +509,13 @@ public class TestSpdxFile {
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
 		
-		SpdxFile fileDep1 = new SpdxFile("SpdxRef-1", "fileDep1", 
+		SpdxFile fileDep1 = new SpdxFile("fileDep1", 
 				"Comment1", new Annotation[] {ANNOTATION1, ANNOTATION2}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments1",
 				new FileType[] {FileType.fileType_source}, 
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "1123456789abcdef0123456789abcdef01234567")}, 
 				contributors, "Notice Text", artifactOfs);
-		SpdxFile fileDep2 = new SpdxFile("SpdxRef-2", "fileDep2", 
+		SpdxFile fileDep2 = new SpdxFile("fileDep2", 
 				"Comment2", new Annotation[] {ANNOTATION3}, null,
 				COMPLEX_LICENSE, seenLic, "Copyright1", "License Comments2",
 				new FileType[] {FileType.fileType_binary}, 
@@ -528,7 +526,6 @@ public class TestSpdxFile {
 		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
 		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
-		String id = "SpdxRef-3";
 		String name = "fileName";
 		String comment = "file comments";
 		Annotation[] annotations = new Annotation[] {ANNOTATION3};
@@ -537,7 +534,7 @@ public class TestSpdxFile {
 		FileType[] filetypes = new FileType[] {FileType.fileType_source};
 		Checksum[] checksum = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "0123456789abcdef0123456789abcdef01234567")};
 		
-		SpdxFile file = new SpdxFile(id, name, 
+		SpdxFile file = new SpdxFile(name, 
 				comment, annotations, relationships,
 				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
 				filetypes, checksum, contributors, fileNotice, artifactOfs);
@@ -555,41 +552,38 @@ public class TestSpdxFile {
 		IModelContainer modelContainer = new ModelContainerForTest(model, namespace);
 		
 		String FILE1_NAME = "./file/name/name1";
-		String FILE1_ID = "SpdxRef-1";
 		Checksum FILE1_SHA1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"1123456789abcdef0123456789abcdef01234567");
 		String FILE1_COPYRIGHT = "Copyright 1";
 		
 		String FILE2_NAME = "./file2/name/name2";
-		String FILE2_ID = "SpdxRef-2";
 		Checksum FILE2_SHA1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"2222456789abcdef0123456789abcdef01234567");
 		String FILE2_COPYRIGHT = "Copyright 2";
 		String FILE3_NAME = "./a/different/name";
-		String FILE3_ID = "SpdxRef-3";
 		String FILE3_COPYRIGHT = "Copyright 3";
 		Checksum FILE4_SHA1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"4444456789abcdef0123456789abcdef01234567");
 
-		SpdxFile file1 = new SpdxFile(FILE1_ID, FILE1_NAME, null, null, null, 
+		SpdxFile file1 = new SpdxFile(FILE1_NAME, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE1_COPYRIGHT, null,
 				null, new Checksum[] {FILE1_SHA1}, null, null, null);
 		Resource file1Resource = file1.createResource(modelContainer);
-		SpdxFile file2 = new SpdxFile(FILE2_ID, FILE2_NAME, null, null, null, 
+		SpdxFile file2 = new SpdxFile(FILE2_NAME, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE2_COPYRIGHT, null,
 				null, new Checksum[] {FILE2_SHA1}, null, null, null);		
 		Resource file2Resource = file2.createResource(modelContainer);
 		
-		SpdxFile testFile1 = new SpdxFile(FILE1_ID, FILE1_NAME, null, null, null, 
+		SpdxFile testFile1 = new SpdxFile(FILE1_NAME, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE1_COPYRIGHT, null,
 				null, new Checksum[] {FILE1_SHA1}, null, null, null);
-		SpdxFile testFile2 = new SpdxFile(FILE2_ID, FILE2_NAME, null, null, null, 
+		SpdxFile testFile2 = new SpdxFile(FILE2_NAME, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE2_COPYRIGHT, null,
 				null, new Checksum[] {FILE2_SHA1}, null, null, null);	
-		SpdxFile testFile3 = new SpdxFile(FILE3_ID, FILE3_NAME, null, null, null, 
+		SpdxFile testFile3 = new SpdxFile(FILE3_NAME, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE3_COPYRIGHT, null,
 				null, new Checksum[] {FILE1_SHA1}, null, null, null);	
-		SpdxFile testFile4 = new SpdxFile(FILE3_ID, FILE3_NAME, null, null, null, 
+		SpdxFile testFile4 = new SpdxFile(FILE3_NAME, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, FILE3_COPYRIGHT, null,
 				null, new Checksum[] {FILE4_SHA1}, null, null, null);
 		Resource retval = SpdxFile.findFileResource(modelContainer, testFile1);
@@ -633,7 +627,7 @@ public class TestSpdxFile {
 		
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, checksums1, null, null, null);
 		Checksum[] result = file.getChecksums();
@@ -671,7 +665,7 @@ public class TestSpdxFile {
 		String[] oneContributor = new String[] {CONTRIBUTOR4};
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, oneContributor, null, null);
@@ -698,7 +692,7 @@ public class TestSpdxFile {
 
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
@@ -728,10 +722,11 @@ public class TestSpdxFile {
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
 		String id1 = "SpdxRef-1";
 		String id2 = "SpdxRef-2";
-		SpdxFile file = new SpdxFile(id1, "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		file.setId(id1);
 		assertEquals(id1, file.getId());
 		file.setId(id2);
 		assertEquals(id2, file.getId());
@@ -762,7 +757,7 @@ public class TestSpdxFile {
 		
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, artifactOfs1);
@@ -795,20 +790,20 @@ public class TestSpdxFile {
 		String COMMENT1 = "comment";
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", COMMENT1, null, null, 
+		SpdxFile file = new SpdxFile("filename", COMMENT1, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
 
-		SpdxFile fileDependency1 = new SpdxFile("SpdxRef-2", FileDependencyName1, COMMENT1, null, null, 
+		SpdxFile fileDependency1 = new SpdxFile(FileDependencyName1, COMMENT1, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
-		SpdxFile fileDependency2 = new SpdxFile("SpdxRef-3", FileDependencyName2, COMMENT1, null, null, 
+		SpdxFile fileDependency2 = new SpdxFile(FileDependencyName2, COMMENT1, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
-		SpdxFile fileDependency3 = new SpdxFile("SpdxRef-4", FileDependencyName3, COMMENT1, null, null, 
+		SpdxFile fileDependency3 = new SpdxFile(FileDependencyName3, COMMENT1, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
@@ -837,15 +832,15 @@ public class TestSpdxFile {
 		String fileName1 = "afile";
 		String fileName2 = "bfile";
 		
-		SpdxFile file1 = new SpdxFile("SpdxRef-1", fileName1, null, null, null, 
+		SpdxFile file1 = new SpdxFile(fileName1, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
-		SpdxFile file2 = new SpdxFile("SpdxRef-1", fileName2, null, null, null, 
+		SpdxFile file2 = new SpdxFile(fileName2, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
-		SpdxFile file3 = new SpdxFile("SpdxRef-1", fileName1, null, null, null, 
+		SpdxFile file3 = new SpdxFile(fileName1, null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
@@ -859,7 +854,7 @@ public class TestSpdxFile {
 	public void testNoassertionCopyright() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", null, null, null, 
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
@@ -883,7 +878,7 @@ public class TestSpdxFile {
 		String COMMENT1 = "comment1";
 		String COMMENT2 = "comment2";
 		String COMMENT3 = "comment3";
-		SpdxFile file = new SpdxFile("SpdxRef-1", "filename", COMMENT1, null, null, 
+		SpdxFile file = new SpdxFile("filename", COMMENT1, null, null, 
 				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
 				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);

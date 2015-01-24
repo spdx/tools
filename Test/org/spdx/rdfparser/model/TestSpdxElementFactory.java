@@ -138,7 +138,7 @@ public class TestSpdxElementFactory {
 		// SpdxFile
 		SimpleLicensingInfo[] extractedLicenses = new ExtractedLicenseInfo[] {LICENSE2};
 		DoapProject[] artifactOfs = new DoapProject[] {DOAP_PROJECT1, DOAP_PROJECT2};
-		SpdxFile file = new SpdxFile(SPDX_ID1, ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxFile file = new SpdxFile(ELEMENT_NAME1, ELEMENT_COMMENT1, 
 				annotations, relationships,LICENSE1, extractedLicenses, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, new FileType[] {FILE_TYPE1}, new Checksum[] {CHECKSUM1},
 				fileContributors, NOTICE_TEXT1, artifactOfs);
