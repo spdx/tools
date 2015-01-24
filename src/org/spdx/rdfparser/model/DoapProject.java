@@ -95,7 +95,7 @@ public class DoapProject extends RdfModelObject {
 	 * @return the name
 	 */
 	public String getName() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
 					SpdxRdfConstants.PROP_PROJECT_NAME);
 		}
@@ -113,7 +113,7 @@ public class DoapProject extends RdfModelObject {
 	 * @return the homePage
 	 */
 	public String getHomePage() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.homePage = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
 					SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 		}

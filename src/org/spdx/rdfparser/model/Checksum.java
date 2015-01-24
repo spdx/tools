@@ -114,7 +114,7 @@ public class Checksum extends RdfModelObject {
 	 * @return the algorithm
 	 */
 	public ChecksumAlgorithm getAlgorithm() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			String algorithmUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			if (algorithmUri != null && !algorithmUri.isEmpty()) {
@@ -149,7 +149,7 @@ public class Checksum extends RdfModelObject {
 	 * @return the checksumValue
 	 */
 	public String getValue() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.checksumValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_CHECKSUM_VALUE);
 		}

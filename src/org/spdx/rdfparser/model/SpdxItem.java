@@ -114,10 +114,13 @@ public class SpdxItem extends SpdxElement {
 	 * @return the licenseConcluded
 	 */
 	public AnyLicenseInfo getLicenseConcluded() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			try {
-				this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
+				if (refresh == null || !refresh.equals(this.licenseConcluded)) {
+					this.licenseConcluded = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid licenseConcluded in model",e);
 			}
@@ -138,10 +141,13 @@ public class SpdxItem extends SpdxElement {
 	 * @return the licenseInfoFromFiles 
 	 */
 	public AnyLicenseInfo[] getLicenseInfoFromFiles() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			try {
-				this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				AnyLicenseInfo[] refresh = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						getLicenseInfoFromFilesPropertyName());
+				if (!this.arraysEqual(refresh, this.licenseInfoFromFiles)) {
+					this.licenseInfoFromFiles = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid licenseDeclared in model",e);
 			}
@@ -162,7 +168,7 @@ public class SpdxItem extends SpdxElement {
 	 * @return the copyrightText
 	 */
 	public String getCopyrightText() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.copyrightText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT);
 		}
 		return copyrightText;
@@ -180,7 +186,7 @@ public class SpdxItem extends SpdxElement {
 	 * @return the licenseComment
 	 */
 	public String getLicenseComment() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 		}
 		return licenseComment;

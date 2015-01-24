@@ -132,7 +132,7 @@ public class Annotation extends RdfModelObject {
 	 * @return the annotationType
 	 */
 	public AnnotationType getAnnotationType() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_ANNOTATION_TYPE);
 			if (annotationTypeUri != null) {
@@ -166,7 +166,7 @@ public class Annotation extends RdfModelObject {
 	 * @return the annotator
 	 */
 	public String getAnnotator() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.annotator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR);
 		}
 		return annotator;
@@ -184,7 +184,7 @@ public class Annotation extends RdfModelObject {
 	 * @return the comment
 	 */
 	public String getComment() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		}
 		return comment;
@@ -202,7 +202,7 @@ public class Annotation extends RdfModelObject {
 	 * @return the date
 	 */
 	public String getDate() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			date = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE);
 		}
 		return date;
@@ -253,5 +253,4 @@ public class Annotation extends RdfModelObject {
 				equalsConsideringNull(comment, comp.getComment()) &&
 				equalsConsideringNull(date, comp.getDate()));
 	}
-	
 }

@@ -40,13 +40,6 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	
-	/**
-	 * Force a refresh for the model on every property get.  This is slower, but
-	 * will make sure that the correct value is returned if there happens to be
-	 * two Java objects using the same RDF properties.
-	 */
-	private boolean refreshOnGet = true;	//TODO Move this up to RdfModel and implement in all the subclasses
-	
 	AnyLicenseInfo licenseDeclared;
 	Checksum[] checksums;
 	String description;
@@ -245,8 +238,11 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	 */
 	public AnyLicenseInfo getLicenseDeclared() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
-			this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
+			AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
 					PROP_PACKAGE_DECLARED_LICENSE);
+			if (!refresh.equals(this.licenseDeclared)) {
+				this.licenseDeclared = refresh;
+			}
 		}
 		return licenseDeclared;
 	}
@@ -267,8 +263,11 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	 */
 	public Checksum[] getChecksums() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
-			this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
+			Checksum[] refresh = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
 					PROP_PACKAGE_CHECKSUM);
+			if (!this.arraysEquivalent(refresh, this.checksums)) {
+				this.checksums = refresh;
+			}
 		}
 		return checksums;
 	}
@@ -389,8 +388,11 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	 */
 	public SpdxPackageVerificationCode getPackageVerificationCode() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
-			this.packageVerificationCode = findVerificationCodePropertyValue(SPDX_NAMESPACE,
+			SpdxPackageVerificationCode refresh = findVerificationCodePropertyValue(SPDX_NAMESPACE,
 					PROP_PACKAGE_VERIFICATION_CODE);	
+			if (refresh == null || !refresh.equivalent(this.packageVerificationCode)) {
+				this.packageVerificationCode = refresh;
+			}
 		}
 		return packageVerificationCode;
 	}
@@ -494,12 +496,14 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		if (this.resource != null && refreshOnGet) {
 			SpdxElement[] filesE = findMultipleElementPropertyValues(SPDX_NAMESPACE,
 					PROP_PACKAGE_FILE);
-			this.files = new SpdxFile[filesE.length];
-			for (int i = 0; i < filesE.length; i++) {
-				if (!(filesE[i] instanceof SpdxFile)) {
-					throw(new InvalidSPDXAnalysisException("Incorrect type for a file belonging to a package: "+filesE[i].getName()));
+			if (!this.arraysEquivalent(filesE, this.files)) {
+				this.files = new SpdxFile[filesE.length];
+				for (int i = 0; i < filesE.length; i++) {
+					if (!(filesE[i] instanceof SpdxFile)) {
+						throw(new InvalidSPDXAnalysisException("Incorrect type for a file belonging to a package: "+filesE[i].getName()));
+					}
+					this.files[i] = (SpdxFile)filesE[i];
 				}
-				this.files[i] = (SpdxFile)filesE[i];
 			}
 		}
 		return files;

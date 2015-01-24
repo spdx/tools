@@ -170,8 +170,11 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 	public Checksum getChecksum() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
-			this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+			Checksum refreshedChecksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
+			if (refreshedChecksum == null || !refreshedChecksum.equivalent(this.checksum)) {
+				this.checksum = refreshedChecksum;
+			}
 		}
 		return checksum;
 	}
