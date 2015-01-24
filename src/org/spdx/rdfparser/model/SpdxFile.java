@@ -65,7 +65,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @param licenseComment
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SpdxFile(String id, String name, String comment, Annotation[] annotations,
+	public SpdxFile(String name, String comment, Annotation[] annotations,
 			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
 			AnyLicenseInfo[] licenseInfoInFile, String copyrightText,
 			String licenseComment, FileType[] fileTypes, Checksum[] checksums,
@@ -73,7 +73,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		super(name, comment, annotations, relationships, 
 				licenseConcluded, licenseInfoInFile,
 				copyrightText, licenseComment);
-		setId(id);	//TODO: Consider moving this up to SpdxElement
 		this.fileTypes = fileTypes;
 		if (this.fileTypes == null) {
 			this.fileTypes = new FileType[0];
@@ -521,7 +520,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// We will not clone ID since it is used to create the URI
 		SpdxFile retval;
 		try {
-			retval = new SpdxFile(null, name, comment, cloneAnnotations(),
+			retval = new SpdxFile(name, comment, cloneAnnotations(),
 					cloneRelationships(), cloneLicenseConcluded(),
 					cloneLicenseInfosFromFiles(), copyrightText,
 					licenseComment, fileTypes, cloneChecksum(),
