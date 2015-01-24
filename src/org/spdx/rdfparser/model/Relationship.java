@@ -152,7 +152,7 @@ public class Relationship extends RdfModelObject {
 	 * @return the relationshipType
 	 */
 	public RelationshipType getRelationshipType() {
-		if (model != null) {
+		if (model != null && this.refreshOnGet) {
 			String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 			if (relationshipTypeUri != null) {
@@ -185,7 +185,7 @@ public class Relationship extends RdfModelObject {
 	 * @return the comment
 	 */
 	public String getComment() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		}
 		return comment;
@@ -202,10 +202,13 @@ public class Relationship extends RdfModelObject {
 	 * @return the relatedSpdxElement
 	 */
 	public SpdxElement getRelatedSpdxElement() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			try {
-				this.relatedSpdxElement = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxElement refresh = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
+				if (refresh == null || !refresh.equivalent(this.relatedSpdxElement)) {
+					this.relatedSpdxElement = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid related SPDX element found in the model", e);
 			}

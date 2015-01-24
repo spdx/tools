@@ -273,7 +273,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @return the fileType
 	 */
 	public FileType[] getFileTypes() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			String[] fileTypeUris = findUriPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_FILE_TYPE);
 			try {
@@ -303,10 +303,13 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @return the checksums
 	 */
 	public Checksum[] getChecksums() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			try {
-				this.checksums = findMultipleChecksumPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Checksum[] refresh = findMultipleChecksumPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_FILE_CHECKSUM);
+				if (refresh == null || !this.arraysEquivalent(refresh, this.checksums)) {
+					this.checksums = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid checksum in model");
 			}
@@ -328,7 +331,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @return the fileContributors
 	 */
 	public String[] getFileContributors() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.fileContributors = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_FILE_CONTRIBUTOR);
 		}
@@ -352,7 +355,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @return the noticeText
 	 */
 	public String getNoticeText() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.noticeText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_FILE_NOTICE);
 		}
@@ -372,10 +375,13 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @return the artifactOf
 	 */
 	public DoapProject[] getArtifactOf() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			try {
-				this.artifactOf = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+				DoapProject[] refresh = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
+				if (refresh == null || !this.arraysEquivalent(refresh, this.artifactOf)) {
+					this.artifactOf = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid artifact of in the model");
 			}
@@ -403,24 +409,26 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 */
 	@Deprecated
 	public SpdxFile[] getFileDependencies() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			try {
 				SpdxElement[] fileDependencyElements = findMultipleElementPropertyValues(
 						SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY);
-				int count = 0;
-				if (fileDependencyElements != null) {
-					for (int i = 0; i < fileDependencyElements.length; i++) {
-						if (fileDependencyElements[i] instanceof SpdxFile) {
-							count++;
+				if (!arraysEquivalent(fileDependencyElements, this.fileDependencies)) {
+					int count = 0;
+					if (fileDependencyElements != null) {
+						for (int i = 0; i < fileDependencyElements.length; i++) {
+							if (fileDependencyElements[i] instanceof SpdxFile) {
+								count++;
+							}
 						}
 					}
-				}
-				if (count > 0) {
-					this.fileDependencies = new SpdxFile[count];
-					int j = 0;
-					for (int i = 0; i < fileDependencyElements.length; i++) {
-						if (fileDependencyElements[i] instanceof SpdxFile) {
-							this.fileDependencies[j++] = (SpdxFile)fileDependencyElements[i];
+					if (count > 0) {
+						this.fileDependencies = new SpdxFile[count];
+						int j = 0;
+						for (int i = 0; i < fileDependencyElements.length; i++) {
+							if (fileDependencyElements[i] instanceof SpdxFile) {
+								this.fileDependencies[j++] = (SpdxFile)fileDependencyElements[i];
+							}
 						}
 					}
 				}

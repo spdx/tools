@@ -345,9 +345,10 @@ public class TestSpdxFile {
 		final String testDocNamespace = "https://my/test/doc3#";
 		String toFileUri2 = testDocNamespace + id;
 		IModelContainer toModelContainer = new IModelContainer() {
+			int nextRef = 1;
 			@Override
 			public String getNextSpdxElementRef() {
-				return null;
+				return "SpdxRef-"+String.valueOf(nextRef++);
 			}
 			@Override
 			public Model getModel() {

@@ -125,9 +125,13 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the annotations
 	 */
 	public Annotation[] getAnnotations() {
-		if (model != null) {
+		if (model != null && this.refreshOnGet) {
 			try {
-				this.annotations = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION);
+				Annotation[] refresh = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+						SpdxRdfConstants.PROP_ANNOTATION);
+				if (refresh == null || !arraysEquivalent(refresh, this.annotations)) {
+					this.annotations = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid annotations in the model",e);
 			}
@@ -154,7 +158,7 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the comment
 	 */
 	public String getComment() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		}
 		return comment;
@@ -174,7 +178,7 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the name
 	 */
 	public String getName() {
-		if (this.resource != null) {
+		if (this.resource != null && this.refreshOnGet) {
 			this.name = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, this.getNamePropertyName());
 		}
 		return name;
@@ -201,9 +205,13 @@ public class SpdxElement extends RdfModelObject {
 	 * @return the relationships
 	 */
 	public Relationship[] getRelationships() {
-		if (model != null) {
+		if (model != null && this.refreshOnGet) {
 			try {
-				this.relationships = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP);
+				Relationship[] refresh = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+						SpdxRdfConstants.PROP_RELATIONSHIP);
+				if (refresh == null && !this.arraysEquivalent(refresh, this.relationships)) {
+					this.relationships = refresh;
+				}
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Invalid relationships in the model",e);
 			}

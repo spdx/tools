@@ -52,10 +52,8 @@ public class TestRelationship {
 			AnnotationType.annotationType_other, DATE_NOW, "Comment1");
 	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
 			AnnotationType.annotationType_review, DATE_NOW, "Comment2");
-	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
-			"related element comment 1", null, null);
-	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
-			"related element comment 2", null, null);
+	SpdxElement RELATED_ELEMENT1;
+	SpdxElement RELATED_ELEMENT2;
 
 	Model model;
 	IModelContainer modelContainer;
@@ -80,6 +78,10 @@ public class TestRelationship {
 	public void setUp() throws Exception {
 		model = ModelFactory.createDefaultModel();
 		modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
+		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+				"related element comment 1", null, null);
+		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+				"related element comment 2", null, null);
 	}
 
 	/**
@@ -206,6 +208,10 @@ public class TestRelationship {
 		assertTrue(relationship.equivalent(relationship2));
 		// related SPDX element
 		relationship2.setRelatedSpdxElement(RELATED_ELEMENT2);
+		assertEquals(RELATED_ELEMENT2, relationship2.getRelatedSpdxElement());
+		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
+		assertFalse(RELATED_ELEMENT1.equivalent(RELATED_ELEMENT2));
+		assertFalse(relationship.getRelatedSpdxElement().equivalent(relationship2.getRelatedSpdxElement()));
 		assertFalse(relationship.equivalent(relationship2));
 		relationship2.setRelatedSpdxElement(RELATED_ELEMENT1);
 		assertTrue(relationship2.equivalent(relationship));

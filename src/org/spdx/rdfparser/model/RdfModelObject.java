@@ -94,6 +94,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	protected Node node;
 	protected IModelContainer modelContainer;
 	
+	/**
+	 * Force a refresh for the model on every property get.  This is slower, but
+	 * will make sure that the correct value is returned if there happens to be
+	 * two Java objects using the same RDF properties.
+	 */
+	protected boolean refreshOnGet = true;	//TODO make this a configurable property
+	
 	public RdfModelObject(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		this.modelContainer = modelContainer;
 		this.model = modelContainer.getModel();

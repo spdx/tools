@@ -165,4 +165,18 @@ public class SpdxPackageVerificationCode {
 		return retval;
 	}
 
+	/**
+	 * @param comp
+	 * @return
+	 */
+	public boolean equivalent(
+			SpdxPackageVerificationCode comp) {
+		if (comp == null) {
+			return false;
+		}
+		return (SpdxVerificationHelper.equalsWithNull(this.getValue(), comp.getValue()) &&
+				SpdxVerificationHelper.equivalentArray(this.getExcludedFileNames(), 
+						comp.getExcludedFileNames()));
+	}
+
 }
