@@ -342,7 +342,6 @@ public class TestSpdxFile {
 		assertEquals(fromFileUri, fileResource.getURI());
 		final Model toModel2 = ModelFactory.createDefaultModel();
 		final String testDocNamespace = "https://my/test/doc3#";
-		String toFileUri2 = testDocNamespace + id;
 		IModelContainer toModelContainer = new IModelContainer() {
 			int nextRef = 1;
 			@Override
@@ -361,8 +360,8 @@ public class TestSpdxFile {
 			
 		};
 		SpdxFile toFile = file.clone();
-		toFile.setId(id);
 		Resource toFileResource = toFile.createResource(toModelContainer);
+		String toFileUri2 = testDocNamespace + "SpdxRef-1";
 		assertTrue(toFileResource.isURIResource());
 		assertEquals(toFileUri2, toFileResource.getURI());
 		assertEquals(file.getArtifactOf()[0].getName(), toFile.getArtifactOf()[0].getName());
@@ -710,35 +709,6 @@ public class TestSpdxFile {
 		if (file2.getNoticeText() != null && !file2.getNoticeText().isEmpty()) {
 			fail("nto null notice text");
 		}
-	}
-
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setId(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	@Test
-	public void testSetId() throws InvalidSPDXAnalysisException {
-		model = ModelFactory.createDefaultModel();
-		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
-		String id1 = "SpdxRef-1";
-		String id2 = "SpdxRef-2";
-		SpdxFile file = new SpdxFile("filename", null, null, null, 
-				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
-				null, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
-						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
-		file.setId(id1);
-		assertEquals(id1, file.getId());
-		file.setId(id2);
-		assertEquals(id2, file.getId());
-		file.setId(null);
-		assertTrue(file.getId() == null);
-		file.setId(id2);
-		assertEquals(id2, file.getId());
-		Resource r = file.createResource(modelContainer);
-		SpdxFile file2 = new SpdxFile(modelContainer, r.asNode());
-		assertEquals(id2, file2.getId());
-		assertTrue(r.isURIResource());
-		assertTrue(r.getURI().endsWith(id2));
 	}
 
 	/**

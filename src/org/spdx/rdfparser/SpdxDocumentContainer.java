@@ -97,7 +97,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		String docUri = this.documentNode.getURI();
 		this.documentNamespace = this.formDocNamespace(docUri);
 		this.spdxDocument = new SpdxDocument(this, this.documentNode);
-		initializeNextLicenseRef();
+		initializeNextLicenseRef(this.spdxDocument.getExtractedLicenseInfos());
 		initializeNextElementRef();
 	}
 	
@@ -267,7 +267,11 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		initializeNextLicenseRef(this.spdxDocument.getExtractedLicenseInfos());
 	}
 	
-	protected void initializeNextLicenseRef(ExtractedLicenseInfo[] existingLicenses) throws InvalidSPDXAnalysisException {
+	public void initializeNextLicenseRef(ExtractedLicenseInfo[] existingLicenses) throws InvalidSPDXAnalysisException {
+		if (existingLicenses == null) {
+			this.nextLicenseRef = 1;
+			return;
+		}
 		int highestNonStdLicense = 0;
 		for (int i = 0; i < existingLicenses.length; i++) {
 			try {
@@ -281,7 +285,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		}	
 		this.nextLicenseRef = highestNonStdLicense + 1;
 	}
-	
+
 	/**
 	 * Parses a license ID and return the integer representing the ID number (e.g. N in LicenseRef-N)
 	 * Note that in SPDX 1.2, non-numeric license IDs are allowed. This method will throw a NonNumericException if

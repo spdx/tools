@@ -49,7 +49,7 @@ public class SpdxElement extends RdfModelObject {
 	protected String name;
 	protected Relationship[] relationships;
 	/**
-	 * The ID is a special property for the SpdxItem.  It used to create
+	 * The ID is a special property for the SpdxElement.  It used to create
 	 * the unique URI for the item.  The URI is the namespace of the modelContainer + id
 	 */
 	private String id;
@@ -251,17 +251,16 @@ public class SpdxElement extends RdfModelObject {
 	}
 
 	/**
+	 * Set the ID to the next available SPDX Element ID from the container
 	 * The ID is a unique identify for the SPDX element.  It is only required
 	 * if this element is to be used outside of the RDF model containing the element.
-	 * @param id the id to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setId(String id) throws InvalidSPDXAnalysisException {
+	protected void setId(IModelContainer container) throws InvalidSPDXAnalysisException {
 		if (this.resource != null) {
 			throw(new InvalidSPDXAnalysisException("Can not set a file ID for a file already in an RDF Model. You must create a new SPDX File with this ID."));
-			//TODO: Implement a recreation of the resource changing it to a new URI
 		}
-		this.id = id;
+		this.id = container.getNextSpdxElementRef();
 	}
 	
 

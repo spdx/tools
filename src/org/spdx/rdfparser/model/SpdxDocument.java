@@ -168,6 +168,12 @@ public class SpdxDocument extends SpdxElement {
 		}
 		// use the appropriate property names based on the item type
 		if (this.resource != null) {
+			// set the IDs
+			for (int i = 0; i < this.spdxItems.length; i++) {
+				if (spdxItems[i] != null && spdxItems[i].getId() == null) {
+					spdxItems[i].setId(this.documentContainer);
+				}
+			}
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_SPDX_PACKAGE,
 					getPackagesFromItems(this.spdxItems));
@@ -201,6 +207,20 @@ public class SpdxDocument extends SpdxElement {
 				SpdxRdfConstants.PROP_SPDX_VERSION, specVersion);
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY, reviewers);
+		// set the IDs
+		if (this.spdxItems != null) {
+			for (int i = 0; i < this.spdxItems.length; i++) {
+				if (spdxItems[i] != null && spdxItems[i].getId() == null) {
+					spdxItems[i].setId(this.documentContainer);
+				}
+			}
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_SPDX_PACKAGE,
+					getPackagesFromItems(this.spdxItems));
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE,
+					getFilesFromItems(this.spdxItems));
+		}
 	}
 	
 	/**
@@ -302,7 +322,9 @@ public class SpdxDocument extends SpdxElement {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public ExtractedLicenseInfo[] getExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
-		if (this.resource != null && this.refreshOnGet) {
+		if (this.resource != null) {
+			//NOTE: extracted license infos are always fetched from the model
+			// since the document container can add extracted licenses
 			AnyLicenseInfo[] extractedAnyLicenseInfo;
 			try {
 				extractedAnyLicenseInfo = findAnyLicenseInfoPropertyValues(
@@ -336,6 +358,7 @@ public class SpdxDocument extends SpdxElement {
 	public void setExtractedLicenseInfos(
 			ExtractedLicenseInfo[] extractedLicenseInfos) throws InvalidSPDXAnalysisException {
 		this.extractedLicenseInfos = extractedLicenseInfos;
+		this.documentContainer.initializeNextLicenseRef(extractedLicenseInfos);
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_SPDX_EXTRACTED_LICENSES, this.extractedLicenseInfos);
 	}

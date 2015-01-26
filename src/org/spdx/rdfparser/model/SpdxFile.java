@@ -242,7 +242,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		if (fileDependencies != null) {
 			for (int i = 0; i < fileDependencies.length; i++) {
 				if (fileDependencies[i].getId() == null) {
-					fileDependencies[i].setId(modelContainer.getNextSpdxElementRef());
+					fileDependencies[i].setId(modelContainer);
 				}
 			}
 		}
@@ -455,7 +455,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			for (int i = 0; i < this.fileDependencies.length; i++) {
 				if (this.fileDependencies[i].resource == null && 
 						this.fileDependencies[i].getId() == null) {
-					this.fileDependencies[i].setId(modelContainer.getNextSpdxElementRef());
+					this.fileDependencies[i].setId(modelContainer);
 				}
 			}
 		}		

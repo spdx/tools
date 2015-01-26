@@ -41,8 +41,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class TestAnnotation {
 	
-	static final String ANNOTATOR1 = "Annotator1";
-	static final String ANNOTATOR2 = "Annotator2";
+	static final String ANNOTATOR1 = "Person: Annotator1";
+	static final String ANNOTATOR2 = "Person: Annotator2";
 	static final String COMMENT1 = "Comment1";
 	static final String COMMENT2 = "Comment2";
 	String date;
