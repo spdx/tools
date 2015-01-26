@@ -129,7 +129,7 @@ public class Relationship extends RdfModelObject {
 		if (this.relatedSpdxElement != null) {
 			// set the ID for the related element if it does not exist
 			if (this.relatedSpdxElement.getId() == null) {
-				this.relatedSpdxElement.setId(modelContainer.getNextSpdxElementRef());
+				this.relatedSpdxElement.setId(modelContainer);
 			}
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);

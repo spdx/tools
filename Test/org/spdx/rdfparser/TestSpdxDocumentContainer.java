@@ -25,6 +25,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.model.SpdxElement;
+import org.spdx.rdfparser.model.SpdxItem;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -65,18 +67,32 @@ public class TestSpdxDocumentContainer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#SpdxDocumentContainer(com.hp.hpl.jena.rdf.model.Model)}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSpdxDocumentContainerModel() {
-		fail("Not yet implemented");
+	public void testSpdxDocumentContainerModel() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		String version = "SPDX-1.2";
+		SpdxDocumentContainer container = new SpdxDocumentContainer(docUri, version);
+		assertEquals(docUri, container.getDocumentNamespace());
+		assertEquals(version, container.getSpdxDocument().getSpecVersion());
+		
+		Model model = container.getModel();
+		SpdxDocumentContainer container2 = new SpdxDocumentContainer(model);
+		assertEquals(version, container2.getSpdxDocument().getSpecVersion());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#SpdxDocumentContainer(java.lang.String, java.lang.String)}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testSpdxDocumentContainerStringString() {
-		fail("Not yet implemented");
+	public void testSpdxDocumentContainerStringString() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		String version = "SPDX-1.2";
+		SpdxDocumentContainer container = new SpdxDocumentContainer(docUri, version);
+		assertEquals(docUri, container.getDocumentNamespace());
+		assertEquals(version, container.getSpdxDocument().getSpecVersion());
 	}
 
 	@Test
@@ -130,27 +146,54 @@ public class TestSpdxDocumentContainer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#formNonStandardLicenseID(int)}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testFormNonStandardLicenseID() {
-		fail("Not yet implemented");
+	public void testFormNonStandardLicenseID() throws InvalidSPDXAnalysisException {
+		String expected = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + "44";
+		String result = SpdxDocumentContainer.formNonStandardLicenseID(44);
+		assertEquals(expected, result);
 	}
 
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#getNextLicenseRef()}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testGetNextLicenseRef() {
-		fail("Not yet implemented");
+	public void testGetNextLicenseRef() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(docUri);
+		String expected = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + String.valueOf(1);
+		assertEquals(expected, doc.getNextLicenseRef());
+		expected = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + String.valueOf(2);
+		assertEquals(expected, doc.getNextLicenseRef());
+		int licenseRefNum = 545;
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(SpdxDocumentContainer.formNonStandardLicenseID(licenseRefNum), "License Text");
+		doc.initializeNextLicenseRef(new ExtractedLicenseInfo[] {lic});
+		expected = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + String.valueOf(licenseRefNum + 1);
+		assertEquals(expected, doc.getNextLicenseRef());		
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#getNextSpdxElementRef()}.
+	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
-	public void testGetNextSpdxElementRef() {
-		fail("Not yet implemented");
+	public void testGetNextSpdxElementRef() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(docUri);
+		String expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(1);
+		assertEquals(expected, doc.getNextSpdxElementRef());
+		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(2);
+		assertEquals(expected, doc.getNextSpdxElementRef());
+		SpdxItem item = new SpdxItem("ElementName", "Comment", null, null, null, null, docUri, docUri);
+		doc.getSpdxDocument().setSpdxItems(new SpdxItem[] {item});	
+		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(4);
+		assertEquals(expected, doc.getNextSpdxElementRef());
+		Model model = doc.getModel();
+		SpdxDocumentContainer doc2 = new SpdxDocumentContainer(model);
+		assertEquals(expected, doc2.getNextSpdxElementRef());
 	}
 
 	/**
@@ -158,7 +201,9 @@ public class TestSpdxDocumentContainer {
 	 */
 	@Test
 	public void testFormSpdxElementRef() {
-		fail("Not yet implemented");
+		String expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "55";
+		String result = SpdxDocumentContainer.formSpdxElementRef(55);
+		assertEquals(expected, result);
 	}
 
 	/**
@@ -167,7 +212,7 @@ public class TestSpdxDocumentContainer {
 	@Test
 	public void testAddNonStandardLicense() throws InvalidSPDXAnalysisException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
-		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"2.0");
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
 		String NON_STD_LIC_TEXT1 = "licenseText1";
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 		ExtractedLicenseInfo[] emptyLic = doc.getSpdxDocument().getExtractedLicenseInfos();
@@ -194,7 +239,7 @@ public class TestSpdxDocumentContainer {
 	@Test
 	public void testextractedLicenseExists() throws InvalidSPDXAnalysisException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
-		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"2.0");
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
 
 		String NON_STD_LIC_ID1 = "LicenseRef-nonstd1";
 		String NON_STD_LIC_TEXT1 = "licenseText1";

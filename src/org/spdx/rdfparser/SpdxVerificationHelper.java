@@ -236,4 +236,17 @@ public class SpdxVerificationHelper {
 		}
 		return true;
 	}
+
+	/**
+	 * @param annotator
+	 * @return
+	 */
+	public static String verifyAnnotator(String annotator) {
+		if (!annotator.startsWith("Person:") && !annotator.startsWith("Tool:") &&
+				!annotator.startsWith("Organization:")) {
+			return "Reviewer does not start with Person:, Organization:, or Tool:";
+		} else {
+			return null;
+		}
+	}
 }

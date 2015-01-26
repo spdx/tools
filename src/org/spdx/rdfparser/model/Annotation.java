@@ -113,6 +113,11 @@ public class Annotation extends RdfModelObject {
 		}
 		if (annotator == null) {
 			retval.add("Missing annotator for Annotation");
+		} else {
+			String v = SpdxVerificationHelper.verifyAnnotator(this.annotator);
+			if (v != null && !v.isEmpty()) {
+				retval.add(v);
+			}
 		}
 		if (comment == null) {
 			retval.add("Missing comment for Annotation");

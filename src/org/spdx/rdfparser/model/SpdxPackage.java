@@ -620,6 +620,10 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	
 	@Override
 	public ArrayList<String> verify() {
+		String pkgName = name;
+		if (pkgName == null ) {
+			pkgName = "UNKNOWN PACKAGE";
+		}
 		ArrayList<String> retval = super.verify();
 		// summary - nothing really to check
 	
@@ -628,7 +632,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		// download location
 		String downloadLocation = this.getDownloadLocation();
 		if (downloadLocation == null || downloadLocation.isEmpty()) {
-			retval.add("Missing required download location for package");
+			retval.add("Missing required download location for package "+pkgName);
 		}
 
 		// checksum
@@ -642,7 +646,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		try {
 			AnyLicenseInfo declaredLicense = this.getLicenseDeclared();
 			if (declaredLicense == null) {
-				retval.add("Missing required declared license");
+				retval.add("Missing required declared license for package "+pkgName);
 			} else {
 				retval.addAll(declaredLicense.verify());
 			}				
@@ -653,7 +657,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		try {
 			SpdxFile[] files = this.getFiles();
 			if (files == null || files.length == 0) {
-				retval.add("Missing required package files");
+				retval.add("Missing required package files for "+pkgName);
 			} else {
 				for (int i = 0; i < files.length; i++) {
 					retval.addAll(files[i].verify());
@@ -668,7 +672,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		try {
 			verificationCode = this.getPackageVerificationCode();
 			if (verificationCode == null) {
-				retval.add("Missing required package verification code.");
+				retval.add("Missing required package verification code for package "+pkgName);
 			} else {
 				retval.addAll(verificationCode.verify());
 			}
@@ -682,7 +686,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		if (supplier != null) {
 			String error = SpdxVerificationHelper.verifySupplier(supplier);
 			if (error != null && !error.isEmpty()) {
-				retval.add("Supplier error - "+error);
+				retval.add("Supplier error - "+error+ " for package "+pkgName);
 			}
 		}
 		// originator
@@ -690,7 +694,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 		if (originator != null) {
 			String error = SpdxVerificationHelper.verifyOriginator(originator);
 			if (error != null && !error.isEmpty()) {
-				retval.add("Originator error - "+error);
+				retval.add("Originator error - "+error+ " for package "+pkgName);
 			}
 		}
 		return retval;
