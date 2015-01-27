@@ -82,6 +82,17 @@ public class TestPerFileSheet {
 		public String getNextSpdxElementRef() {
 			return null;
 		}
+
+		@Override
+		public void addSpdxElementRef(String elementRef) {
+			
+		}
+
+		@Override
+		public boolean spdxElementRefExists(String elementRef) {
+
+			return false;
+		}
 		
 	};
 

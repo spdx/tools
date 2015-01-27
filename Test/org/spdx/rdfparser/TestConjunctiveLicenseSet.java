@@ -58,6 +58,18 @@ public class TestConjunctiveLicenseSet {
 		public String getNextSpdxElementRef() {
 			return null;
 		}
+
+		@Override
+		public boolean spdxElementRefExists(String elementRef) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void addSpdxElementRef(String elementRef) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	};
 

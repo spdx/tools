@@ -165,8 +165,9 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * Get the URI for this RDF object. Null if this is for an anonomous node.
 	 * @param modelContainer
 	 * @return
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	abstract String getUri(IModelContainer modelContainer);
+	abstract String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * @return the RDF class name for the object

@@ -59,6 +59,16 @@ public class TestOrLaterOperator {
 		public String getNextSpdxElementRef() {
 			return null;
 		}
+
+		@Override
+		public boolean spdxElementRefExists(String elementRef) {
+			return false;
+		}
+
+		@Override
+		public void addSpdxElementRef(String elementRef) {
+
+		}
 		
 	};
 

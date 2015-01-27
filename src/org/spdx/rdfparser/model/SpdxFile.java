@@ -238,14 +238,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			SpdxRdfConstants.PROP_FILE_NOTICE, noticeText);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 			SpdxRdfConstants.PROP_FILE_ARTIFACTOF, artifactOf);
-		// Add ID's to any file dependencies
-		if (fileDependencies != null) {
-			for (int i = 0; i < fileDependencies.length; i++) {
-				if (fileDependencies[i].getId() == null) {
-					fileDependencies[i].setId(modelContainer);
-				}
-			}
-		}
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 			SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY, fileDependencies);
 	}
@@ -449,16 +441,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			this.fileDependencies = new SpdxFile[0];
 		} else {
 			this.fileDependencies = fileDependencies;
-		}		
-		// add any needed IDs
-		if (this.resource != null) {
-			for (int i = 0; i < this.fileDependencies.length; i++) {
-				if (this.fileDependencies[i].resource == null && 
-						this.fileDependencies[i].getId() == null) {
-					this.fileDependencies[i].setId(modelContainer);
-				}
-			}
-		}		
+		}
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY, this.fileDependencies);
 	}

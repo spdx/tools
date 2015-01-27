@@ -52,6 +52,15 @@ public class TestSpdxListedLicense {
 		public String getDocumentNamespace() {
 			return "http://testNameSPace#";
 		}
+		@Override
+		public boolean spdxElementRefExists(String elementRef) {
+			return false;
+		}
+		@Override
+		public void addSpdxElementRef(String elementRef)
+				throws InvalidSPDXAnalysisException {
+			
+		}
 		
 	};
 	/**

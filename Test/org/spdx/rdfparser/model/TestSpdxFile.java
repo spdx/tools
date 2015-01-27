@@ -335,6 +335,14 @@ public class TestSpdxFile {
 			public String getDocumentNamespace() {
 				return fromDocNamespace;
 			}
+			@Override
+			public boolean spdxElementRefExists(String elementRef) {
+				return false;
+			}
+			@Override
+			public void addSpdxElementRef(String elementRef) {
+				
+			}
 			
 		};
 		Resource fileResource = file.createResource(fromModelContainer);
@@ -356,6 +364,15 @@ public class TestSpdxFile {
 			@Override
 			public String getDocumentNamespace() {
 				return testDocNamespace;
+			}
+			@Override
+			public boolean spdxElementRefExists(String elementRef) {
+				return false;
+			}
+			@Override
+			public void addSpdxElementRef(String elementRef)
+					throws InvalidSPDXAnalysisException {
+				
 			}
 			
 		};

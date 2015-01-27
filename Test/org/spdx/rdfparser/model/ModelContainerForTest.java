@@ -16,6 +16,8 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.util.HashSet;
+
 import org.spdx.rdfparser.IModelContainer;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -30,6 +32,7 @@ public class ModelContainerForTest implements IModelContainer {
 	Model model;
 	String namespace;
 	int nextRef = 1;
+	HashSet<String> elementRefs = new HashSet<String>();
 	/**
 	 * 
 	 */
@@ -60,6 +63,22 @@ public class ModelContainerForTest implements IModelContainer {
 	@Override
 	public String getNextSpdxElementRef() {
 		return "SpdxRef-"+String.valueOf(this.nextRef++);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#SpdxElementRefExists(java.lang.String)
+	 */
+	@Override
+	public boolean spdxElementRefExists(String elementRef) {
+		return elementRefs.contains(elementRef);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addSpdxElementRef(java.lang.String)
+	 */
+	@Override
+	public void addSpdxElementRef(String elementRef) {
+		elementRefs.add(elementRef);
 	}
 
 }
