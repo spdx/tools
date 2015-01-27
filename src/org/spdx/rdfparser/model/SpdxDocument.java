@@ -168,12 +168,6 @@ public class SpdxDocument extends SpdxElement {
 		}
 		// use the appropriate property names based on the item type
 		if (this.resource != null) {
-			// set the IDs
-			for (int i = 0; i < this.spdxItems.length; i++) {
-				if (spdxItems[i] != null && spdxItems[i].getId() == null) {
-					spdxItems[i].setId(this.documentContainer);
-				}
-			}
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_SPDX_PACKAGE,
 					getPackagesFromItems(this.spdxItems));
@@ -209,11 +203,6 @@ public class SpdxDocument extends SpdxElement {
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY, reviewers);
 		// set the IDs
 		if (this.spdxItems != null) {
-			for (int i = 0; i < this.spdxItems.length; i++) {
-				if (spdxItems[i] != null && spdxItems[i].getId() == null) {
-					spdxItems[i].setId(this.documentContainer);
-				}
-			}
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_SPDX_PACKAGE,
 					getPackagesFromItems(this.spdxItems));

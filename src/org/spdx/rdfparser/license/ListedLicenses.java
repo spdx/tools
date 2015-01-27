@@ -150,6 +150,16 @@ public class ListedLicenses implements IModelContainer {
 			public String getNextSpdxElementRef() {
 				return null;	// This will not be used
 			}
+
+			@Override
+			public boolean spdxElementRefExists(String elementRef) {
+				return false;	// This will not be used
+			}
+
+			@Override
+			public void addSpdxElementRef(String elementRef) {
+				// This will not be used
+			}
 			
 		};
 		SpdxListedLicense retval;
@@ -454,5 +464,21 @@ public class ListedLicenses implements IModelContainer {
 	public synchronized String getNextSpdxElementRef() {
 		this.nextId++;
 		return "SpdxLicenseGeneratedId-"+String.valueOf(this.nextId);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#SpdxElementRefExists(java.lang.String)
+	 */
+	@Override
+	public boolean spdxElementRefExists(String elementRef) {
+		return(listdLicenseIds.contains(elementRef));
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addSpdxElementRef(java.lang.String)
+	 */
+	@Override
+	public void addSpdxElementRef(String elementRef) {
+		listdLicenseIds.add(elementRef);
 	}
 }

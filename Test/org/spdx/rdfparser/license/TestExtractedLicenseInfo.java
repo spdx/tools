@@ -68,6 +68,16 @@ public class TestExtractedLicenseInfo {
 		public String getNextSpdxElementRef() {
 			return null;
 		}
+
+		@Override
+		public boolean spdxElementRefExists(String elementRef) {
+			return false;
+		}
+
+		@Override
+		public void addSpdxElementRef(String elementRef) {
+			
+		}
 		
 	};
 	/**

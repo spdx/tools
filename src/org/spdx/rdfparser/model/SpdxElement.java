@@ -105,6 +105,7 @@ public class SpdxElement extends RdfModelObject {
 			if (this.relationships != null) {
 				setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationships);
 			}
+			// Here, we assign an 
 		}
 	}
 
@@ -251,16 +252,18 @@ public class SpdxElement extends RdfModelObject {
 	}
 
 	/**
-	 * Set the ID to the next available SPDX Element ID from the container
 	 * The ID is a unique identify for the SPDX element.  It is only required
 	 * if this element is to be used outside of the RDF model containing the element.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param id
+	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected void setId(IModelContainer container) throws InvalidSPDXAnalysisException {
-		if (this.resource != null) {
-			throw(new InvalidSPDXAnalysisException("Can not set a file ID for a file already in an RDF Model. You must create a new SPDX File with this ID."));
+	public void setId(String id) throws InvalidSPDXAnalysisException {
+		if (this.modelContainer != null) {
+			if (this.resource != null) {
+				throw(new InvalidSPDXAnalysisException("Can not set a file ID for an SPDX element already in an RDF Model. You must create a new SPDX File with this ID."));
+			}
 		}
-		this.id = container.getNextSpdxElementRef();
+		this.id = id;
 	}
 	
 
@@ -268,12 +271,14 @@ public class SpdxElement extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
-	String getUri(IModelContainer modelContainer) {
+	String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		if (this.node != null && this.node.isURI()) {
 			return this.node.getURI();
 		} else {
 			if (this.id == null || this.id.isEmpty()) {
 				this.id = modelContainer.getNextSpdxElementRef();
+			} else if (modelContainer.spdxElementRefExists(this.id)) {
+				throw(new InvalidSPDXAnalysisException("Duplicate ID: "+this.id));
 			}
 			return modelContainer.getDocumentNamespace() + this.id;
 		}

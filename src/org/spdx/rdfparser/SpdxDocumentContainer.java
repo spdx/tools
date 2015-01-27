@@ -56,12 +56,15 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
+	HashSet<String> spdxRefs = new HashSet<String>();
+	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(POINT_EIGHT_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(POINT_NINE_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ZERO_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ONE_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_TWO_SPDX_VERSION);
 	}
 	private Model model;
 	private String documentNamespace;
@@ -218,8 +221,9 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			Triple trip = tripleIter.next();
 			if (trip.getSubject().isURI()) {	// check the subject
 				String subjectUri = trip.getSubject().getURI();
-				if (subjectUri.startsWith(this.documentNamespace + SPDX_ELEMENT_REF_PRENUM)) {
+				if (subjectUri.startsWith(this.documentNamespace)) {
 					String elementRef = subjectUri.substring(this.documentNamespace.length());
+					this.spdxRefs.add(elementRef);
 					if (SPDX_ELEMENT_REF_PATTERN.matcher(elementRef).matches()) {
 						int elementRefNum = getElementRefNumber(elementRef);
 						if (elementRefNum > highestElementRef) {
@@ -230,8 +234,9 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			}
 			if (trip.getObject().isURI()) {		// check the object
 				String objectUri = trip.getObject().getURI();
-				if (objectUri.startsWith(this.documentNamespace + SPDX_ELEMENT_REF_PRENUM)) {
+				if (objectUri.startsWith(this.documentNamespace)) {
 					String elementRef = objectUri.substring(this.documentNamespace.length());
+					this.spdxRefs.add(elementRef);
 					if (SPDX_ELEMENT_REF_PATTERN.matcher(elementRef).matches()) {
 						int elementRefNum = getElementRefNumber(elementRef);
 						if (elementRefNum > highestElementRef) {
@@ -343,7 +348,8 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 */
 	public synchronized String getNextLicenseRef() {
 		int nextLicNum = this.getAndIncrementNextLicenseRef();
-		return formNonStandardLicenseID(nextLicNum);
+		String retval = formNonStandardLicenseID(nextLicNum);
+		return retval;
 	}
 	
 	
@@ -352,7 +358,13 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 */
 	public String getNextSpdxElementRef() {
 		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
-		return formSpdxElementRef(nextSpdxElementNum);
+		String retval = formSpdxElementRef(nextSpdxElementNum);
+		while (this.spdxElementRefExists(retval)) {
+			nextSpdxElementNum = this.getAndIncrementNextLicenseRef();
+			retval = formSpdxElementRef(nextSpdxElementNum);
+		}
+		this.spdxRefs.add(retval);
+		return retval;
 	}
 	
 	public static String formSpdxElementRef(int refNum) {
@@ -420,5 +432,24 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			throw(new InvalidSPDXAnalysisException("Node can not be a literal"));
 		}
 		return s;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#SpdxElementRefExists(java.lang.String)
+	 */
+	@Override
+	public boolean spdxElementRefExists(String elementRef) {
+		return this.spdxRefs.contains(elementRef);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addSpdxElementRef(java.lang.String)
+	 */
+	@Override
+	public void addSpdxElementRef(String elementRef) throws InvalidSPDXAnalysisException {
+		if (spdxElementRefExists(elementRef)) {
+			throw(new InvalidSPDXAnalysisException("Duplicate SPDX element reference: "+elementRef));
+		}
+		this.spdxRefs.add(elementRef);
 	}
 }

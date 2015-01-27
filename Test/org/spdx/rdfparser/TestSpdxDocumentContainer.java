@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.SpdxElement;
-import org.spdx.rdfparser.model.SpdxItem;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -74,7 +73,7 @@ public class TestSpdxDocumentContainer {
 		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
 		String version = "SPDX-1.2";
 		SpdxDocumentContainer container = new SpdxDocumentContainer(docUri, version);
-		assertEquals(docUri, container.getDocumentNamespace());
+		assertEquals(docUri + "#", container.getDocumentNamespace());
 		assertEquals(version, container.getSpdxDocument().getSpecVersion());
 		
 		Model model = container.getModel();
@@ -91,7 +90,7 @@ public class TestSpdxDocumentContainer {
 		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
 		String version = "SPDX-1.2";
 		SpdxDocumentContainer container = new SpdxDocumentContainer(docUri, version);
-		assertEquals(docUri, container.getDocumentNamespace());
+		assertEquals(docUri + "#", container.getDocumentNamespace());
 		assertEquals(version, container.getSpdxDocument().getSpecVersion());
 	}
 
@@ -133,15 +132,18 @@ public class TestSpdxDocumentContainer {
 		nextSpdxElementRef = doc.getNextSpdxElementRef();
 		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(2);
 		assertEquals(expected, nextSpdxElementRef);
-		// test that it survives across a new doc
+		SpdxElement element = new SpdxElement("Name", "Comment", null, null);
+		String elementRef5 = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(5);
+		element.setId(elementRef5);
+		element.createResource(doc);
+		nextSpdxElementRef = doc.getNextSpdxElementRef();
+		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(6);
+		// see if it survives in the model
+		// the highest spdx ref will be the element
 		Model model = doc.getModel();
 		SpdxDocumentContainer doc2 = new SpdxDocumentContainer(model);
 		nextSpdxElementRef = doc2.getNextSpdxElementRef();
-		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(3);
 		assertEquals(expected, nextSpdxElementRef);
-		nextSpdxElementRef = doc.getNextSpdxElementRef();
-		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(3);
-		assertEquals(expected, nextSpdxElementRef);	// original SPDX doc should maintain its own
 	}
 
 	/**
@@ -175,26 +177,6 @@ public class TestSpdxDocumentContainer {
 		assertEquals(expected, doc.getNextLicenseRef());		
 	}
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#getNextSpdxElementRef()}.
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	@Test
-	public void testGetNextSpdxElementRef() throws InvalidSPDXAnalysisException {
-		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
-		SpdxDocumentContainer doc = new SpdxDocumentContainer(docUri);
-		String expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(1);
-		assertEquals(expected, doc.getNextSpdxElementRef());
-		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(2);
-		assertEquals(expected, doc.getNextSpdxElementRef());
-		SpdxItem item = new SpdxItem("ElementName", "Comment", null, null, null, null, docUri, docUri);
-		doc.getSpdxDocument().setSpdxItems(new SpdxItem[] {item});	
-		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(4);
-		assertEquals(expected, doc.getNextSpdxElementRef());
-		Model model = doc.getModel();
-		SpdxDocumentContainer doc2 = new SpdxDocumentContainer(model);
-		assertEquals(expected, doc2.getNextSpdxElementRef());
-	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#formSpdxElementRef(int)}.

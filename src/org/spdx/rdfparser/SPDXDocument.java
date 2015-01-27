@@ -1689,6 +1689,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return return the next available SPDX element reference.
 	 */
+	@Override
 	public String getNextSpdxElementRef() {
 		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
 		return formSpdxElementRef(nextSpdxElementNum);
@@ -1852,5 +1853,24 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public SPDXDocument getSpdxDocument() {
 		return this;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#spdxElementRefExists(java.lang.String)
+	 */
+	@Override
+	public boolean spdxElementRefExists(String elementRef) {
+		// TODO Implement
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addSpdxElementRef(java.lang.String)
+	 */
+	@Override
+	public void addSpdxElementRef(String elementRef)
+			throws InvalidSPDXAnalysisException {
+		// TODO Implement
+		
 	}
 }

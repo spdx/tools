@@ -41,6 +41,22 @@ public interface IModelContainer {
 	 * is unique within a given model.
 	 */
 	String getNextSpdxElementRef();
+
+	/**
+	 * Returns true if the element reference already exists in the model
+	 * @param id
+	 * @return
+	 */
+	boolean spdxElementRefExists(String elementRef);
+
+	/**
+	 * Notifies the model container that a new element ref is in use.
+	 * This must be called for all new element references to prevent
+	 * duplication of elements.
+	 * @param elementRef
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	void addSpdxElementRef(String elementRef) throws InvalidSPDXAnalysisException;
 	
 	
 

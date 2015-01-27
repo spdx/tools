@@ -68,14 +68,12 @@ public class TestSpdxDocument {
 	static final String SHA1_VALUE1 = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12";
 	static final String SHA1_VALUE2 = "2222e1c67a2d28fced849ee1bb76e7391b93eb12";
 	private static final String DOC_COMMENT1 = "Doc Comment1";
-	private static final String DOC_COMMENT2 = "Doc Comment2";
 	private static final String REFERENCED_DOC_URI1 = "http://referenced.document/uri1";
 	private static final String REFERENCED_DOC_URI2 = "http://referenced.document/uri2";
 	static final ExtractedLicenseInfo LICENSE1 = new ExtractedLicenseInfo("LicenseRef-1", "License Text 1");
 	static final ExtractedLicenseInfo LICENSE2 = new ExtractedLicenseInfo("LicenseRef-2", "License Text 2");
 	static final ExtractedLicenseInfo LICENSE3 = new ExtractedLicenseInfo("LicenseRef-3", "License Text 3");
 	private static final String DOC_NAME1 = "DocName1";
-	private static final String DOC_NAME2 = "DocName2";
 
 	
 	AnyLicenseInfo CCO_DATALICENSE;
@@ -388,16 +386,20 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			doc.setSpdxItems(items);
-			assertEquals(0, doc.verify().size());
+			ArrayList<String> result = doc.verify();
+			assertEquals(0, result.size());
 			// data license
 			doc.setDataLicense(LicenseInfoFactory.getListedLicenseById("AFL-3.0"));
-			assertEquals(1, doc.verify().size());
+			result = doc.verify();
+			assertEquals(1, result.size());
 			// Name
 			doc.setName(null);
-			assertEquals(2, doc.verify().size());
+			result = doc.verify();
+			assertEquals(2, result.size());
 			// SpecVersion
 			doc.setSpecVersion(null);
-			assertEquals(3, doc.verify().size());
+			result = doc.verify();
+			assertEquals(3, result.size());
 	}
 
 	/**
