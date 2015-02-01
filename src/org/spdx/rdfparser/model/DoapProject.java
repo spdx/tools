@@ -62,6 +62,14 @@ public class DoapProject extends RdfModelObject {
 	public DoapProject(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getPropertiesFromModel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// name
 		this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
 				SpdxRdfConstants.PROP_PROJECT_NAME);
@@ -69,7 +77,6 @@ public class DoapProject extends RdfModelObject {
 		this.homePage = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
 				SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 	}
-
 	/**
 	 * 
 	 */

@@ -147,8 +147,8 @@ public class DocumentSheet extends AbstractSheet {
 		// data rows
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(LICENSE_LIST_VERSION_COL);
-			if (comparer.getSpdxDoc(i).getCreatorInfo().getLicenseListVersion() != null) {
-				cell.setCellValue(comparer.getSpdxDoc(i).getCreatorInfo().getLicenseListVersion());
+			if (comparer.getSpdxDoc(i).getCreationInfo().getLicenseListVersion() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getCreationInfo().getLicenseListVersion());
 			}
 		}
 	}
@@ -169,8 +169,8 @@ public class DocumentSheet extends AbstractSheet {
 		// data rows
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(SPDX_VERSION_COL);
-			if (comparer.getSpdxDoc(i).getSpdxVersion() != null) {
-				cell.setCellValue(comparer.getSpdxDoc(i).getSpdxVersion());
+			if (comparer.getSpdxDoc(i).getSpecVersion() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getSpecVersion());
 			}
 		}
 	}
@@ -209,8 +209,8 @@ public class DocumentSheet extends AbstractSheet {
 		// data rows
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(DOCUMENT_COMMENT_COL);
-			if (comparer.getSpdxDoc(i).getDocumentComment() != null) {
-				cell.setCellValue(comparer.getSpdxDoc(i).getDocumentComment());
+			if (comparer.getSpdxDoc(i).getComment() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getComment());
 			}
 		}
 	}
@@ -231,7 +231,7 @@ public class DocumentSheet extends AbstractSheet {
 		// data rows
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(CREATOR_COMMENT_COL);
-			cell.setCellValue(comparer.getSpdxDoc(i).getCreatorInfo().getComment());
+			cell.setCellValue(comparer.getSpdxDoc(i).getCreationInfo().getComment());
 		}
 	}
 
@@ -251,7 +251,7 @@ public class DocumentSheet extends AbstractSheet {
 		// data rows
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(CREATION_DATE_COL);
-			cell.setCellValue(comparer.getSpdxDoc(i).getCreatorInfo().getCreated());
+			cell.setCellValue(comparer.getSpdxDoc(i).getCreationInfo().getCreated());
 		}
 	}
 

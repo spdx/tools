@@ -24,7 +24,7 @@ import org.spdx.compare.MultiDocumentSpreadsheet;
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.compare.SpdxComparer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 /**
@@ -62,7 +62,7 @@ public class CompareMultpleSpdxDocs {
 			usage();
 			System.exit(ERROR_STATUS);
 		}
-		SPDXDocument[] compareDocs = new SPDXDocument[args.length-1];
+		SpdxDocument[] compareDocs = new SpdxDocument[args.length-1];
 		String[] docNames = new String[args.length-1];
 		@SuppressWarnings("unchecked")
 		ArrayList<String>[] verificationErrors = new ArrayList[args.length-1];

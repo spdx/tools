@@ -51,6 +51,13 @@ public class SpdxItem extends SpdxElement {
 	public SpdxItem(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getMyPropertiesFromModel();
+	}
+	
+	/**
+	 * 
+	 */
+	private void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.copyrightText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT);
 		this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 		this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
@@ -58,7 +65,15 @@ public class SpdxItem extends SpdxElement {
 		this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				getLicenseInfoFromFilesPropertyName());
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		super.getPropertiesFromModel();
+		getMyPropertiesFromModel();
+	}
 	/**
 	 * @param name Name of the item
 	 * @param comment Optional comment about the item

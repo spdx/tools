@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -38,6 +39,17 @@ public class Annotation extends RdfModelObject {
 	static final Logger logger = Logger.getLogger(RdfModelObject.class.getName());
 
 	public enum AnnotationType {annotationType_other, annotationType_review};
+	
+	public static final HashMap<AnnotationType, String> ANNOTATION_TYPE_TO_TAG = 
+			new HashMap<AnnotationType, String>();
+	public static final HashMap<String, AnnotationType> TAG_TO_ANNOTATION_TYPE = 
+			new HashMap<String, AnnotationType>();
+	static {
+		ANNOTATION_TYPE_TO_TAG.put(AnnotationType.annotationType_other, "OTHER");
+		TAG_TO_ANNOTATION_TYPE.put("OTHER", AnnotationType.annotationType_other);
+		ANNOTATION_TYPE_TO_TAG.put(AnnotationType.annotationType_review, "REVIEW");
+		TAG_TO_ANNOTATION_TYPE.put("REVIEW", AnnotationType.annotationType_review);
+	}
 	AnnotationType annotationType;
 	String annotator;
 	String comment;
@@ -54,6 +66,15 @@ public class Annotation extends RdfModelObject {
 	
 	public Annotation(IModelContainer modelContainer, Node annotationNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, annotationNode);
+		getPropertiesFromModel();
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		//annotator
 		this.annotator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR);
 

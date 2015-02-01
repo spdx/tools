@@ -30,9 +30,11 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -108,23 +110,11 @@ public class SpreadsheetToRDF {
 			usage();
 			return;
 		}
-		Model model = ModelFactory.createDefaultModel();
-		SPDXDocument analysis = null;
-		try {
-			analysis = new SPDXDocument(model);
-		} catch (InvalidSPDXAnalysisException ex) {
-			System.out.print("Error creating SPDX Analysis: "+ex.getMessage());
-			try {
-				out.close();
-			} catch (IOException e) {
-				System.out.println("Warning - unable to close output file on error: "+e.getMessage());
-			}
-			return;
-		}
+
 		SPDXSpreadsheet ss = null;
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
-			copySpreadsheetToSPDXAnalysis(ss, analysis);
+			SpdxDocument analysis = copySpreadsheetToSPDXAnalysis(ss);
 			ArrayList<String> verify = analysis.verify();
 			if (verify.size() > 0) {
 				System.out.println("Warning: The following verification errors were found in the resultant SPDX Document:");
@@ -132,7 +122,7 @@ public class SpreadsheetToRDF {
 					System.out.println("\t"+verify.get(i));
 				}
 			}
-			model.write(out, "RDF/XML-ABBREV");
+			analysis.getDocumentContainer().getModel().write(out, "RDF/XML-ABBREV");
 		} catch (SpreadsheetException e) {
 			System.out.println("Error creating or writing to spreadsheet: "+e.getMessage());
 		} catch (InvalidSPDXAnalysisException e) {
@@ -155,24 +145,25 @@ public class SpreadsheetToRDF {
 		}
 	}
 	
-	public static void copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss,
-			SPDXDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
+	public static SpdxDocument copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		// need to create a unique URL
 		// Use the download URL + "#SPDXANALYSIS"
+		//TODO Replace with the unique ID for the SPDX document
 		String pkgUrl = ss.getPackageInfoSheet().getPackageInfo(1).getUrl();
 		if (!SpdxVerificationHelper.isValidUri(pkgUrl)) {
 			// Since the download location is not valid, replace it with a spdx.org/tempspdxuri
 			pkgUrl = "http://spdx.org/tempspdxuri";
 		}
-		analysis.createSpdxAnalysis(pkgUrl+"#SPDXANALYSIS");		
+		SpdxDocumentContainer container = new SpdxDocumentContainer(pkgUrl);
+		SpdxDocument analysis = container.getSpdxDocument();
 		copyOrigins(ss.getOriginsSheet(), analysis);
-		analysis.createSpdxPackage();
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
 		// note - non std licenses must be added first so that the text is available
-		copyPackageInfo(ss.getPackageInfoSheet(), analysis.getSpdxPackage());
-		copyPerFileInfo(ss.getPerFileSheet(), analysis.getSpdxPackage());
-		copyReviewerInfo(ss.getReviewersSheet(), analysis);
-
+		//TODO: Need to redo these with a new license format
+//		copyPackageInfo(ss.getPackageInfoSheet(), analysis.getSpdxPackage());
+//		copyPerFileInfo(ss.getPerFileSheet(), analysis.getSpdxPackage());
+//		copyReviewerInfo(ss.getReviewersSheet(), analysis);
+		return analysis;
 	}
 
 	private static void copyReviewerInfo(ReviewersSheet reviewersSheet,
@@ -197,7 +188,7 @@ public class SpreadsheetToRDF {
 	}
 
 	private static void copyNonStdLicenses(
-			NonStandardLicensesSheet nonStandardLicensesSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
+			NonStandardLicensesSheet nonStandardLicensesSheet, SpdxDocument analysis) throws InvalidSPDXAnalysisException {
 		int numNonStdLicenses = nonStandardLicensesSheet.getNumDataRows();
 		int firstRow = nonStandardLicensesSheet.getFirstDataRow();
 		ExtractedLicenseInfo[] nonStdLicenses = new ExtractedLicenseInfo[numNonStdLicenses];
@@ -244,7 +235,7 @@ public class SpreadsheetToRDF {
 		}
 	}
 
-	private static void copyOrigins(OriginsSheet originsSheet, SPDXDocument analysis) throws InvalidSPDXAnalysisException {
+	private static void copyOrigins(OriginsSheet originsSheet, SpdxDocument analysis) throws InvalidSPDXAnalysisException {
 		Date createdDate = originsSheet.getCreated();
 		String created  = format.format(createdDate);
 		String[] createdBys = originsSheet.getCreatedBy();
@@ -252,7 +243,7 @@ public class SpreadsheetToRDF {
 		String licenseListVersion = originsSheet.getLicenseListVersion();
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(createdBys, created, creatorComment, licenseListVersion);
 		String specVersion = originsSheet.getSPDXVersion();
-		analysis.setSpdxVersion(specVersion);
+		analysis.setSpecVersion(specVersion);
 		String dataLicenseId = originsSheet.getDataLicense();
 		if (dataLicenseId == null || dataLicenseId.isEmpty() || dataLicenseId.equals(RdfToSpreadsheet.NOT_SUPPORTED_STRING)) {
 			if (specVersion.equals(SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION)) {
@@ -278,7 +269,7 @@ public class SpreadsheetToRDF {
 		if (docComment != null) {
 			docComment.trim();
 			if (!docComment.isEmpty()) {
-				analysis.setDocumentComment(docComment);
+				analysis.setComment(docComment);
 			}
 		}
 	}

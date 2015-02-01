@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 /**
@@ -34,10 +34,10 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
  */
 public class SpdxLicenseInfoMerger {
 	
-	private SPDXDocument output = null;
+	private SpdxDocument output = null;
 	private SpdxLicenseMapper mapper = null;
 	
-	public SpdxLicenseInfoMerger(SPDXDocument outputDoc, SpdxLicenseMapper mapper){
+	public SpdxLicenseInfoMerger(SpdxDocument outputDoc, SpdxLicenseMapper mapper){
 		this.output = outputDoc;
 		this.mapper = mapper;
 	}
@@ -48,7 +48,7 @@ public class SpdxLicenseInfoMerger {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public ExtractedLicenseInfo[] mergeNonStdLic(SPDXDocument[] subDocs) throws InvalidSPDXAnalysisException{
+	public ExtractedLicenseInfo[] mergeNonStdLic(SpdxDocument[] subDocs) throws InvalidSPDXAnalysisException{
 		
 		//an array to hold the non-standard license info from outputDoc
 		ExtractedLicenseInfo[] masterNonStdLicInfo = output.getExtractedLicenseInfos();

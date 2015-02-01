@@ -26,15 +26,13 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.spdx.tools.SpreadsheetToRDF;
 import org.spdx.tag.CommonCode;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
  * Converts a spreadsheet to a tag-value format Usage: SpreadsheetToTag
@@ -102,19 +100,11 @@ public class SpreadsheetToTag {
 				usage();
 				return;
 			}
-			Model model = ModelFactory.createDefaultModel();
-			SPDXDocument analysis = null;
-			try {
-				analysis = new SPDXDocument(model);
-			} catch (InvalidSPDXAnalysisException ex) {
-				System.out.print("Error creating SPDX Tag file: "
-						+ ex.getMessage());
-				return;
-			}
+
 			SPDXSpreadsheet ss = null;
 			try {
 				ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
-				SpreadsheetToRDF.copySpreadsheetToSPDXAnalysis(ss, analysis);
+				SpdxDocument analysis = SpreadsheetToRDF.copySpreadsheetToSPDXAnalysis(ss);
 				ArrayList<String> verify = analysis.verify();
 				if (verify.size() > 0) {
 					System.out

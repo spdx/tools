@@ -18,7 +18,7 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 /**
@@ -42,28 +42,28 @@ public class FileLicenseInfoSheet extends AbstractFileCompareSheet {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */
 	@Override
-	String getFileValue(SPDXFile spdxFile) {
-		if (spdxFile.getSeenLicenses() == null || spdxFile.getSeenLicenses().length == 0) {
+	String getFileValue(SpdxFile spdxFile) {
+		if (spdxFile.getLicenseInfoFromFiles() == null || spdxFile.getLicenseInfoFromFiles().length == 0) {
 			return "";
 		}
-		StringBuilder sb = new StringBuilder(spdxFile.getSeenLicenses()[0].toString());
-		for (int i = 1; i < spdxFile.getSeenLicenses().length; i++) {
+		StringBuilder sb = new StringBuilder(spdxFile.getLicenseInfoFromFiles()[0].toString());
+		for (int i = 1; i < spdxFile.getLicenseInfoFromFiles().length; i++) {
 			sb.append(", ");
-			sb.append(spdxFile.getSeenLicenses()[i].toString());
+			sb.append(spdxFile.getLicenseInfoFromFiles()[i].toString());
 		}
 		return sb.toString();
 	}
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.rdfparser.SPDXFile, int, org.spdx.rdfparser.SPDXFile, int)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
 	 */
 	@Override
-	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA, SPDXFile fileB,
+	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA, SpdxFile fileB,
 			int docIndexB) throws SpdxCompareException {
-		AnyLicenseInfo[] licenseInfosA = fileA.getSeenLicenses();
-		AnyLicenseInfo[] licenseInfosB = fileB.getSeenLicenses();
+		AnyLicenseInfo[] licenseInfosA = fileA.getLicenseInfoFromFiles();
+		AnyLicenseInfo[] licenseInfosB = fileB.getLicenseInfoFromFiles();
 		if (licenseInfosA.length != licenseInfosB.length) {
 			return false;
 		}

@@ -17,7 +17,7 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 
 /**
  * Sheet for file notice comparison results
@@ -41,19 +41,19 @@ public class FileNoticeSheet extends AbstractFileCompareSheet {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SPDXFile, int, org.spdx.rdfparser.SPDXFile, int)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
 	 */
 	@Override
-	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA,
-			SPDXFile fileB, int docIndexB) throws SpdxCompareException {
+	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
+			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
 		return SpdxComparer.stringsEqual(fileA.getNoticeText(), fileB.getNoticeText());
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */
 	@Override
-	String getFileValue(SPDXFile spdxFile) {
+	String getFileValue(SpdxFile spdxFile) {
 		String retval = spdxFile.getNoticeText();
 		if (retval == null) {
 			return "";

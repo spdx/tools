@@ -93,10 +93,10 @@ public class MergeToolTest {
 		String outputFileName = TEMP_DIR + File.separator + "outputFile.rdf";
 		args[3] = outputFileName;
 		MergeSpdxDocs.main(args);
-		SPDXDocument outputDoc = SPDXDocumentFactory.creatSpdxDocument(outputFileName);
-		SPDXDocument masterDoc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
-		SPDXDocument firstMergeDoc = SPDXDocumentFactory.creatSpdxDocument(args[1]);
-		SPDXDocument secondMergeDoc = SPDXDocumentFactory.creatSpdxDocument(args[2]);
+		SPDXDocument outputDoc = SPDXDocumentFactory.createLegacySpdxDocument(outputFileName);
+		SPDXDocument masterDoc = SPDXDocumentFactory.createLegacySpdxDocument(args[0]);
+		SPDXDocument firstMergeDoc = SPDXDocumentFactory.createLegacySpdxDocument(args[1]);
+		SPDXDocument secondMergeDoc = SPDXDocumentFactory.createLegacySpdxDocument(args[2]);
 		assertEquals(outputDoc.getSpdxPackage().getDeclaredName(), masterDoc.getSpdxPackage().getDeclaredName());
 		// check for licenses and build a license map
 

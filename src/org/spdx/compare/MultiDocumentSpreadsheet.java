@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.spdxspreadsheet.AbstractSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -56,7 +56,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  */
 public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	
-	class SpdxFileComparator implements Comparator<SPDXFile> {
+	class SpdxFileComparator implements Comparator<SpdxFile> {
 		
 		private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 
@@ -64,7 +64,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public int compare(SPDXFile arg0, SPDXFile arg1) {
+		public int compare(SpdxFile arg0, SpdxFile arg1) {
 			return normalizedFileNameComparator.compare(arg0.getName(), arg1.getName());
 		}	
 	}
@@ -175,6 +175,10 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	}
 	
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
+		//TODO Update for the SPDX 2.0 model
+		// add external references sheet
+		// Add sheets for each of the package results
+		// Add sheet for relationships
 		if (docNames == null) {
 			throw(new SpdxCompareException("Doc names can not be null"));
 		}
@@ -184,9 +188,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		if (docNames.length != comparer.getNumSpdxDocs()) {
 			throw(new SpdxCompareException("Number of document names does not match the number of documents compared"));
 		}
-		SPDXFile[][] files = new SPDXFile[comparer.getNumSpdxDocs()][];
+		org.spdx.rdfparser.model.SpdxFile[][] files = new SpdxFile[comparer.getNumSpdxDocs()][];
 		for (int i = 0; i < files.length; i++) {
-			SPDXFile[] docFiles = comparer.getSpdxDoc(i).getSpdxPackage().getFiles();
+			SpdxFile[] docFiles = comparer.collectAllFiles(comparer.getSpdxDoc(i));
 			Arrays.sort(docFiles, fileComparator);
 			files[i] = docFiles;
 		}

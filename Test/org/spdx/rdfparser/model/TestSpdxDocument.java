@@ -74,7 +74,8 @@ public class TestSpdxDocument {
 	static final ExtractedLicenseInfo LICENSE2 = new ExtractedLicenseInfo("LicenseRef-2", "License Text 2");
 	static final ExtractedLicenseInfo LICENSE3 = new ExtractedLicenseInfo("LicenseRef-3", "License Text 3");
 	private static final String DOC_NAME1 = "DocName1";
-
+	private static final String DOCID1 = "DocumentRef-1";
+	private static final String DOCID2 = "DocumentRef-2";
 	
 	AnyLicenseInfo CCO_DATALICENSE;
 	private SpdxDocumentContainer container;
@@ -127,8 +128,8 @@ public class TestSpdxDocument {
 		CREATIONINFO2 = new SPDXCreatorInformation(CREATORS2, DATE2, CREATOR_COMMENT2, LICENSE_LISTV2);
 		CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE1);
 		CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE2);
-		EXTERNAL_REF1 = new ExternalDocumentRef(REFERENCED_DOC_URI1, CHECKSUM1);
-		EXTERNAL_REF2 = new ExternalDocumentRef(REFERENCED_DOC_URI2, CHECKSUM2);
+		EXTERNAL_REF1 = new ExternalDocumentRef(REFERENCED_DOC_URI1, CHECKSUM1, DOCID1);
+		EXTERNAL_REF2 = new ExternalDocumentRef(REFERENCED_DOC_URI2, CHECKSUM2, DOCID2);
 		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
 				"related element comment 1", null, null);
 		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 

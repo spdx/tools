@@ -18,8 +18,8 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.DOAPProject;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.DoapProject;
+import org.spdx.rdfparser.model.SpdxFile;
 
 /**
  * @author Source Auditor
@@ -41,11 +41,11 @@ public class FileArtifactOfSheet extends AbstractFileCompareSheet {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */
 	@Override
-	String getFileValue(SPDXFile spdxFile) {
-		DOAPProject[] projects = spdxFile.getArtifactOf();
+	String getFileValue(SpdxFile spdxFile) {
+		DoapProject[] projects = spdxFile.getArtifactOf();
 		if (projects == null || projects.length == 0) {
 			return "";
 		}
@@ -65,13 +65,13 @@ public class FileArtifactOfSheet extends AbstractFileCompareSheet {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SPDXFile, int, org.spdx.rdfparser.SPDXFile, int)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
 	 */
 	@Override
-	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA,
-			SPDXFile fileB, int docIndexB) throws SpdxCompareException {
-		DOAPProject[] projectsA = fileA.getArtifactOf();
-		DOAPProject[] projectsB = fileB.getArtifactOf();
+	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
+			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
+		DoapProject[] projectsA = fileA.getArtifactOf();
+		DoapProject[] projectsB = fileB.getArtifactOf();
 		if (projectsA == null) {
 			if (projectsB == null || projectsB.length == 0) {
 				return true;

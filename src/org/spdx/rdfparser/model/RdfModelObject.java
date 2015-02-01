@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -122,6 +123,24 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 */
 	@Override
 	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
+		return createResource(modelContainer, true);
+	}
+	
+	/**
+	 * @param modelContainer
+	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * element from the model.  This is used for relationships to make sure we don't overwrite
+	 * the original element when setting the related element property value.
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public Resource createResource(IModelContainer modelContainer, boolean updateModel) throws InvalidSPDXAnalysisException {
+		if (this.modelContainer != null && this.modelContainer.equals(modelContainer) &&
+				this.resource != null) {
+			if (!this.resource.isURIResource() || this.resource.getURI().equals(getUri(modelContainer))) {
+				return this.resource;
+			}
+		}
 		String uri = getUri(modelContainer);
 		Resource duplicate = findDuplicateResource(modelContainer, uri);
 		// we need to wait to set the following to fields since they are checked
@@ -136,10 +155,20 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			this.resource = model.createResource(uri, getType(model));
 		}
 		this.node = this.resource.asNode();
-		populateModel();
+		if (duplicate == null || updateModel) {
+			populateModel();
+		} else {
+			getPropertiesFromModel();
+		}
 		return resource;
 	};
 	
+	/**
+	 * Fetch all of the properties from the model and populate the local Java properties
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	abstract void getPropertiesFromModel() throws InvalidSPDXAnalysisException;
+
 	/**
 	 * Search the model to see if there is a duplicate resource either based on the
 	 * URI or based on other information.  Subclasses may choose to override this
@@ -225,7 +254,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	@Override
 	public int hashCode() {
 		if (this.resource != null) {
-			return this.resource.hashCode() ^ 743;	// xor some randomly selected prime number
+			return this.resource.hashCode() ^ model.hashCode();
 		} else {
 			return super.hashCode();
 		}
@@ -280,11 +309,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (array1.length != array2.length) {
 			return false;
 		}
+		HashSet<Integer> foundIndexes = new HashSet<Integer>();
 		for (int i = 0; i < array1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < array2.length; j++) {
-				if (equalsConsideringNull(array1[i],array2[j])) {
+				if (!foundIndexes.contains(j) &&
+						equalsConsideringNull(array1[i],array2[j])) {
 					found = true;
+					foundIndexes.add(j);
 					break;
 				}
 			}
@@ -312,11 +344,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (array1.length != array2.length) {
 			return false;
 		}
+		HashSet<Integer> foundIndexes = new HashSet<Integer>();
 		for (int i = 0; i < array1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < array2.length; j++) {
-				if (equivalentConsideringNull(array1[i],array2[j])) {
+				if (!foundIndexes.contains(j) &&
+						equivalentConsideringNull(array1[i],array2[j])) {
 					found = true;
+					foundIndexes.add(j);
 					break;
 				}
 			}
@@ -450,28 +485,60 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	/**
+	 * Sets the spdx element property value for this resource
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param element
+	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * element from the model.  This is used for relationships to make sure we don't overwrite
+	 * the original element when setting the related element property value.
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	protected void setPropertyValue(String nameSpace, String propertyName,
-			SpdxElement[] elements) throws InvalidSPDXAnalysisException {
+			SpdxElement[] elements, boolean updateModel) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);
 			model.removeAll(this.resource, p, null);
 			if (elements != null) {
 				for (int i = 0; i < elements.length; i++) {
-					this.resource.addProperty(p, elements[i].createResource(modelContainer));
+					if (elements[i] != null) {
+						this.resource.addProperty(p, elements[i].createResource(modelContainer, updateModel));
+					}
 				}		
+			}
+		}
+	}
+	
+	/**
+	 * Sets the spdx element property value for this resource
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param element
+	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * element from the model.  This is used for relationships to make sure we don't overwrite
+	 * the original element when setting the related element property value.
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void setPropertyValue(String nameSpace, String propertyName,
+			SpdxElement element, boolean updateModel) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (element != null) {
+				this.resource.addProperty(p, element.createResource(modelContainer, updateModel));
 			}
 		}
 	}
 	
 	protected void setPropertyValue(String nameSpace, String propertyName,
 			SpdxElement element) throws InvalidSPDXAnalysisException {
-		if (model != null && resource != null) {
-			Property p = model.createProperty(nameSpace, propertyName);
-			model.removeAll(this.resource, p, null);
-			if (element != null) {
-				this.resource.addProperty(p, element.createResource(modelContainer));
-			}
-		}
+		setPropertyValue(nameSpace, propertyName, element, true);
+	}
+	
+	protected void setPropertyValue(String nameSpace, String propertyName,
+			SpdxElement[] element) throws InvalidSPDXAnalysisException {
+		setPropertyValue(nameSpace, propertyName, element, true);
 	}
 	
 	protected void setPropertyValues(String nameSpace, String propertyName,
@@ -795,8 +862,8 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		ArrayList<String> retval = new ArrayList<String>();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			if (t.getObject().isURI()) {
-				retval.add(t.getObject().getURI());
+			if (t.getObject().isURI()) {				
+				retval.add(model.expandPrefix(t.getObject().getURI()));
 			}
 		}
 		return retval.toArray(new String[retval.size()]);

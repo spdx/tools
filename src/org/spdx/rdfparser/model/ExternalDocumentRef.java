@@ -50,10 +50,10 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 * will make sure that the correct value is returned if there happens to be
 	 * two Java objects using the same RDF properties.
 	 */
-	private boolean refreshOnGet = true;	//TODO Move this up to RdfModel and implement in all the subclasses
 
 	Checksum checksum;
 	String spdxDocumentUri;
+	String externalDocumentId;
 	SpdxDocument spdxDocument = null;
 	
 	/**
@@ -64,29 +64,41 @@ public class ExternalDocumentRef extends RdfModelObject {
 	public ExternalDocumentRef(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getPropertiesFromModel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
-			SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
+				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
 		this.spdxDocumentUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
+		this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID);
 	}
-
 
 	/**
 	 * @param spdxDocumentUri Unique URI for the external SPDX document
 	 * @param checksum Sha1 checksum for the external document
 	 */
-	public ExternalDocumentRef(String spdxDocumentUri, Checksum checksum) {
+	public ExternalDocumentRef(String spdxDocumentUri, Checksum checksum, String externalDocumentId) {
 		this.spdxDocumentUri = spdxDocumentUri;
 		this.checksum = checksum;
+		this.externalDocumentId = externalDocumentId;
 	}
 	
 	/**
 	 * @param externalDocument SPDX Document being referenced
 	 * @param checksum Sha1 checksum of the external document
 	 */
-	public ExternalDocumentRef(SpdxDocument externalDocument, Checksum checksum) {
+	public ExternalDocumentRef(SpdxDocument externalDocument, Checksum checksum, String externalDocumentId) {
 		this.spdxDocument = externalDocument;
 		this.spdxDocumentUri = documentToDocumentUri(externalDocument);
+		this.externalDocumentId = externalDocumentId;
+		this.checksum = checksum;
 	}
 
 	/**
@@ -129,6 +141,13 @@ public class ExternalDocumentRef extends RdfModelObject {
 				retval.add("Checksum algorithm is not SHA1 for external reference "+uri);
 			}
 		}
+		if (this.externalDocumentId == null) {
+			retval.add("Missing external document ID for document "+uri);
+		} else {
+			if (!SpdxVerificationHelper.isValidExternalDocRef(this.externalDocumentId)) {
+				retval.add("Invalid external document ID: "+this.externalDocumentId);
+			}
+		}
 		return retval;
 	}
 
@@ -160,6 +179,8 @@ public class ExternalDocumentRef extends RdfModelObject {
 		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM,
 				this.checksum);
+		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID, this.externalDocumentId);
 	}
 	
 	
@@ -250,7 +271,8 @@ public class ExternalDocumentRef extends RdfModelObject {
 		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
 		try {
 			return (this.equalsConsideringNull(this.spdxDocumentUri, compref.getSpdxDocumentUri())&&
-					this.equivalentConsideringNull(this.checksum, compref.getChecksum()));
+					this.equivalentConsideringNull(this.checksum, compref.getChecksum()) &&
+					this.equalsConsideringNull(this.externalDocumentId,  compref.getExternalDocumentId()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invald SPDX Analysis exception comparing external document references: "+e.getMessage(),e);
 			return false;
@@ -259,7 +281,29 @@ public class ExternalDocumentRef extends RdfModelObject {
 	
 	@Override
 	public ExternalDocumentRef clone() {
-		return new ExternalDocumentRef(this.spdxDocumentUri, this.checksum.clone());
+		return new ExternalDocumentRef(this.spdxDocumentUri, this.checksum.clone(),
+				this.externalDocumentId);
 	}
 
+
+	/**
+	 *  a string containing letters, numbers, “.”, “-” or “+” which uniquely identifies an external document within this document.
+	 * @return
+	 */
+	public String getExternalDocumentId() {
+		if (this.resource != null && refreshOnGet) {
+			this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_EXTERNAL_DOC_ID);
+		}
+		return this.externalDocumentId;
+	}
+	
+	/**
+	 * @param externalDocumentId
+	 */
+	public void setExternalDocumentId(String externalDocumentId) {
+		this.externalDocumentId = externalDocumentId;
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID, externalDocumentId);
+	}
 }

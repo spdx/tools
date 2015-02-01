@@ -22,10 +22,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.DoapProject;
 
 
 /**
@@ -35,14 +35,11 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
  * @author Gary O'Neall
  *
  */
-public class SpdxFileComparer {
-	
+public class SpdxFileComparer extends SpdxItemComparer {
 	private boolean inProgress = false;
-	private SPDXFile fileA = null;
-	private SPDXFile fileB = null;
 	private boolean differenceFound = false;
-	private boolean concludedLicenseEquals;
-	private boolean seenLicenseEquals;
+	private SpdxFile fileA = null;
+	private SpdxFile fileB = null;
 	private boolean artifactOfEquals;
 	private boolean fileDependenciesEquals;
 	private boolean contributorsEquals;
@@ -67,23 +64,17 @@ public class SpdxFileComparer {
 	public boolean isNoticeTextEquals() {
 		return noticeTextEquals;
 	}
-
-	/**
-	 * Seen licenses found in fileB but not in fileA
-	 */
-	private AnyLicenseInfo[] uniqueSeenLicensesB;
-	/**
-	 * Seen licenses found in fileA but not in fileB
-	 */
-	private AnyLicenseInfo[] uniqueSeenLicensesA;
 	/**
 	 * artifactOf projects found in fileA but not fileB
 	 */
-	private DOAPProject[] uniqueArtifactOfA;
+	private DoapProject[] uniqueArtifactOfA;
 	/**
 	 * ArtifactoOf projects found in fileB but not fileA
 	 */
-	private DOAPProject[] uniqueArtifactOfB;
+	private DoapProject[] uniqueArtifactOfB;
+	
+	private Checksum[] uniqueChecksumsA;
+	private Checksum[] uniqueChecksumsB;
 	
 	/**
 	 * Compares two DOAP projects based on the name, then by the home page,
@@ -91,13 +82,13 @@ public class SpdxFileComparer {
 	 * @author Gary O'Neall
 	 *
 	 */
-	class DoapComparator implements Comparator<DOAPProject> {
+	class DoapComparator implements Comparator<DoapProject> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public int compare(DOAPProject arg0, DOAPProject arg1) {
+		public int compare(DoapProject arg0, DoapProject arg1) {
 			int retval = SpdxComparer.compareStrings(arg0.getName(), arg1.getName());
 			if (retval == 0) {
 				retval = SpdxComparer.compareStrings(arg0.getHomePage(), arg1.getHomePage());
@@ -109,11 +100,7 @@ public class SpdxFileComparer {
 		}	
 	}
 	
-	private Comparator<DOAPProject> doapComparer = new DoapComparator();
-	private boolean commentsEquals;
-	private boolean copyrightsEquals;
-	private boolean licenseCommmentsEquals;
-	private boolean namesEquals;
+	private Comparator<DoapProject> doapComparer = new DoapComparator();
 	private boolean checksumsEquals;
 	private boolean typesEquals;
 
@@ -124,89 +111,56 @@ public class SpdxFileComparer {
 
 	/**
 	 * Compare two SPDX files and store the results
-	 * @param fileA
-	 * @param fileB
+	 * @param filesA
+	 * @param filesB
 	 * @param licenseXlationMap A mapping between the license IDs from licenses in fileA to fileB
 	 * @throws SpdxCompareException 
 	 */
-	public void compare(SPDXFile fileA, SPDXFile fileB, 
+	@SuppressWarnings("deprecation")
+	public void compare(SpdxFile filesA, SpdxFile filesB, 
 			HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
+		super.compare(filesA, filesB, licenseXlationMap);
 		inProgress = true;
-		differenceFound = false;
-		this.fileA = fileA;
-		this.fileB = fileB;		
+		differenceFound = super.isDifferenceFound();
+		this.fileA = filesA;
+		this.fileB = filesB;		
 		// Artifact Of
-		compareArtifactOf(fileA.getArtifactOf(), fileB.getArtifactOf());
-		// Comments
-		if (SpdxComparer.stringsEqual(fileA.getComment(), fileB.getComment())) {
-			this.commentsEquals = true;
-		} else {
-			this.commentsEquals = false;
-			this.differenceFound = true;
-		}
-		// Concluded License
-		if (LicenseCompareHelper.isLicenseEqual(fileA.getConcludedLicenses(), 
-				fileB.getConcludedLicenses(), licenseXlationMap)) {
-			this.concludedLicenseEquals = true;
-		} else {
-			this.concludedLicenseEquals = false;
-			this.differenceFound = true;
-		}
-		// Copyrights
-		if (SpdxComparer.stringsEqual(fileA.getCopyright(), fileB.getCopyright())) {
-			this.copyrightsEquals = true;
-		} else {
-			this.copyrightsEquals = false;
-			this.differenceFound = true;
-		}
-		// license comments
-		if (SpdxComparer.stringsEqual(fileA.getLicenseComments(),
-				fileB.getLicenseComments())) {
-			this.licenseCommmentsEquals = true;
-		} else {
-			this.licenseCommmentsEquals = false;
-			this.differenceFound = true;
-		}
-		// Name
-		if (SpdxComparer.stringsEqual(fileA.getName(), fileB.getName())) {
-			this.namesEquals = true;
-		} else {
-			this.namesEquals = false;
-			this.differenceFound = true;
-		}
-		// Seen licenses
-		compareSeenLicenses(fileA.getSeenLicenses(), fileB.getSeenLicenses(),
-				licenseXlationMap);
-		// Sha1
-		if (SpdxComparer.stringsEqual(fileA.getSha1(), fileB.getSha1())) {
+		compareArtifactOf(filesA.getArtifactOf(), filesB.getArtifactOf());
+
+		// Checksums
+		if (SpdxComparer.elementsEquivalent(filesA.getChecksums(), filesB.getChecksums())) {
 			this.checksumsEquals = true;
 		} else {
 			this.checksumsEquals = false;
 			this.differenceFound = true;
+			this.uniqueChecksumsA = SpdxComparer.findUniqueChecksums(filesA.getChecksums(), 
+					filesB.getChecksums());
+			this.uniqueChecksumsB = SpdxComparer.findUniqueChecksums(filesB.getChecksums(), 
+					filesA.getChecksums());
 		}
 		// Type
-		if (SpdxComparer.stringsEqual(fileA.getType(), fileB.getType())) {
+		if (SpdxComparer.arraysEqual(filesA.getFileTypes(), filesB.getFileTypes())) {
 			this.typesEquals = true;
 		} else {
 			this.typesEquals = false;
 			this.differenceFound = true;
 		}
 		// contributors
-		if (SpdxComparer.stringArraysEqual(fileA.getContributors(), fileB.getContributors())) {
+		if (SpdxComparer.stringArraysEqual(filesA.getFileContributors(), filesB.getFileContributors())) {
 			this.contributorsEquals = true;
 		} else {
 			this.contributorsEquals = false;
 			this.differenceFound = true;
 		}
 		// notice text
-		if (SpdxComparer.stringsEqual(fileA.getNoticeText(), fileB.getNoticeText())) {
+		if (SpdxComparer.stringsEqual(filesA.getNoticeText(), filesB.getNoticeText())) {
 			this.noticeTextEquals = true;
 		} else {
 			this.noticeTextEquals = false;
 			this.differenceFound = true;
 		}
 		// file dependencies
-		if (fileNamesEquals(fileA.getFileDependencies(), fileB.getFileDependencies())) {
+		if (fileNamesEquals(filesA.getFileDependencies(), filesB.getFileDependencies())) {
 			this.fileDependenciesEquals = true;
 		} else {
 			this.fileDependenciesEquals = false;
@@ -221,8 +175,8 @@ public class SpdxFileComparer {
 	 * @param filesB
 	 * @return
 	 */
-	private boolean fileNamesEquals(SPDXFile[] filesA,
-			SPDXFile[] filesB) {
+	private boolean fileNamesEquals(SpdxFile[] filesA,
+			SpdxFile[] filesB) {
 		String[] fileNamesA = filesToFileNames(filesA);
 		String[] fileNamesB = filesToFileNames(filesB);
 		return SpdxComparer.stringArraysEqual(fileNamesA, fileNamesB);
@@ -233,7 +187,7 @@ public class SpdxFileComparer {
 	 * @param files
 	 * @return
 	 */
-	static public String[] filesToFileNames(SPDXFile[] files) {
+	static public String[] filesToFileNames(SpdxFile[] files) {
 		if (files == null) {
 			return null;
 		}
@@ -245,83 +199,17 @@ public class SpdxFileComparer {
 	}
 
 	/**
-	 * Compares seen licenses and initializes the uniqueSeenLicenses arrays
-	 * as well as the seenLicenseEquals flag and sets the differenceFound to
-	 * true if a difference was found
-	 * @param licensesA
-	 * @param licensesB
-	 * @throws SpdxCompareException 
-	 */
-	private void compareSeenLicenses(AnyLicenseInfo[] licensesA,
-			AnyLicenseInfo[] licensesB, HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
-		ArrayList<AnyLicenseInfo> alUniqueA = new ArrayList<AnyLicenseInfo>();
-		ArrayList<AnyLicenseInfo> alUniqueB = new ArrayList<AnyLicenseInfo>();		
-		// a bit brute force, but sorting licenses is a bit complex
-		// an N x M comparison of the licenses to determine which ones are unique
-		for (int i = 0; i < licensesA.length; i++) {
-			boolean found = false;
-			for (int j = 0; j < licensesB.length; j++) {
-				if (LicenseCompareHelper.isLicenseEqual(
-						licensesA[i], licensesB[j], licenseXlationMap)) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				alUniqueA.add(licensesA[i]);
-			}
-		}
-		
-		for (int i = 0; i < licensesB.length; i++) {
-			boolean found= false;
-			for (int j = 0; j < licensesA.length; j++) {
-				if (LicenseCompareHelper.isLicenseEqual(
-						// note that the order must be A, B to match the tranlation map
-						licensesA[j], licensesB[i], licenseXlationMap)) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				alUniqueB.add(licensesB[i]);
-			}
-		}
-		this.uniqueSeenLicensesA = alUniqueA.toArray(new AnyLicenseInfo[alUniqueA.size()]);
-		this.uniqueSeenLicensesB = alUniqueB.toArray(new AnyLicenseInfo[alUniqueB.size()]);
-		if (this.uniqueSeenLicensesA.length == 0 && this.uniqueSeenLicensesB.length == 0) {
-			this.seenLicenseEquals = true;
-		} else {
-			this.seenLicenseEquals = false;
-			this.differenceFound = true;
-		}
-	}
-
-	/**
 	 * @return the fileA
 	 */
-	public SPDXFile getFileA() {
+	public SpdxFile getFileA() {
 		return fileA;
 	}
 
 	/**
 	 * @return the fileB
 	 */
-	public SPDXFile getFileB() {
+	public SpdxFile getFileB() {
 		return fileB;
-	}
-
-	/**
-	 * @return the concludedLicenseEquals
-	 */
-	public boolean isConcludedLicenseEquals() {
-		return concludedLicenseEquals;
-	}
-
-	/**
-	 * @return the seenLicenseEquals
-	 */
-	public boolean isSeenLicenseEquals() {
-		return seenLicenseEquals;
 	}
 
 	/**
@@ -332,59 +220,17 @@ public class SpdxFileComparer {
 	}
 
 	/**
-	 * @return the uniqueSeenLicensesB
-	 */
-	public AnyLicenseInfo[] getUniqueSeenLicensesB() {
-		return uniqueSeenLicensesB;
-	}
-
-	/**
-	 * @return the uniqueSeenLicensesA
-	 */
-	public AnyLicenseInfo[] getUniqueSeenLicensesA() {
-		return uniqueSeenLicensesA;
-	}
-
-	/**
 	 * @return the uniqueArtifactOfA
 	 */
-	public DOAPProject[] getUniqueArtifactOfA() {
+	public DoapProject[] getUniqueArtifactOfA() {
 		return uniqueArtifactOfA;
 	}
 
 	/**
 	 * @return the uniqueArtifactOfB
 	 */
-	public DOAPProject[] getUniqueArtifactOfB() {
+	public DoapProject[] getUniqueArtifactOfB() {
 		return uniqueArtifactOfB;
-	}
-
-	/**
-	 * @return the commentsEquals
-	 */
-	public boolean isCommentsEquals() {
-		return commentsEquals;
-	}
-
-	/**
-	 * @return the copyrightsEquals
-	 */
-	public boolean isCopyrightsEquals() {
-		return copyrightsEquals;
-	}
-
-	/**
-	 * @return the licenseCommmentsEquals
-	 */
-	public boolean isLicenseCommmentsEquals() {
-		return licenseCommmentsEquals;
-	}
-
-	/**
-	 * @return the namesEquals
-	 */
-	public boolean isNamesEquals() {
-		return namesEquals;
 	}
 
 	/**
@@ -410,14 +256,14 @@ public class SpdxFileComparer {
 	 * @param artifactOfA
 	 * @param artifactOfB
 	 */
-	private void compareArtifactOf(DOAPProject[] artifactOfA,
-			DOAPProject[] artifactOfB) {
+	private void compareArtifactOf(DoapProject[] artifactOfA,
+			DoapProject[] artifactOfB) {
 		Arrays.sort(artifactOfA, doapComparer);
 		Arrays.sort(artifactOfB, doapComparer);
 		int aIndex = 0;
 		int bIndex = 0;
-		ArrayList<DOAPProject> alUniqueA = new ArrayList<DOAPProject>();
-		ArrayList<DOAPProject> alUniqueB = new ArrayList<DOAPProject>();
+		ArrayList<DoapProject> alUniqueA = new ArrayList<DoapProject>();
+		ArrayList<DoapProject> alUniqueB = new ArrayList<DoapProject>();
 		
 		while (aIndex < artifactOfA.length || bIndex < artifactOfB.length) {
 			if (aIndex >= artifactOfA.length) {
@@ -443,8 +289,8 @@ public class SpdxFileComparer {
 				}
 			}
 		}
-		this.uniqueArtifactOfA = alUniqueA.toArray(new DOAPProject[alUniqueA.size()]);
-		this.uniqueArtifactOfB = alUniqueB.toArray(new DOAPProject[alUniqueB.size()]);
+		this.uniqueArtifactOfA = alUniqueA.toArray(new DoapProject[alUniqueA.size()]);
+		this.uniqueArtifactOfB = alUniqueB.toArray(new DoapProject[alUniqueB.size()]);
 		if (this.uniqueArtifactOfA.length > 0 || this.uniqueArtifactOfB.length > 0) {
 			this.differenceFound = true;
 			this.artifactOfEquals = false;
@@ -493,9 +339,12 @@ public class SpdxFileComparer {
 			throw(new SpdxCompareException("Can not create an SPDX file difference for two files with different names"));
 		}
 		try {
-			return new SpdxFileDifference(fileA, fileB, concludedLicenseEquals, seenLicenseEquals, 
-					uniqueSeenLicensesA, uniqueSeenLicensesB, artifactOfEquals, 
-					uniqueArtifactOfA, uniqueArtifactOfB);
+			return new SpdxFileDifference(fileA, fileB, this.isConcludedLicenseEquals(), 
+					this.isSeenLicenseEquals(), this.getUniqueSeenLicensesA(), this.getUniqueSeenLicensesB(), 
+					artifactOfEquals, uniqueArtifactOfA, uniqueArtifactOfB, 
+					checksumsEquals, uniqueChecksumsA, uniqueChecksumsB, 
+					this.isRelationshipsEquals(), this.getUniqueRelationshipA(), this.getUniqueRelationshipB(),
+					this.isAnnotationsEquals(), this.getUniqueAnnotationsA(), this.getUniqueAnnotationsB());
 		} catch (InvalidSPDXAnalysisException e) {
 			throw (new SpdxCompareException("Error reading SPDX file propoerties: "+e.getMessage(),e));
 		}

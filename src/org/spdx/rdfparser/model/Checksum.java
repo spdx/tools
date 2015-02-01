@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -44,7 +45,22 @@ public class Checksum extends RdfModelObject {
 
 	static final Logger logger = Logger.getLogger(Checksum.class);
 	public enum ChecksumAlgorithm {checksumAlgorithm_sha1, checksumAlgorithm_sha256,
-		checksumAlgorithm_md5};
+		checksumAlgorithm_md5};		
+		
+	// Mapping tables for Checksum Algorithms
+	public static final Hashtable<ChecksumAlgorithm, String> CHECKSUM_ALGORITHM_TO_TAG = 
+			new Hashtable<ChecksumAlgorithm, String>();
+	public static final Hashtable<String, ChecksumAlgorithm> CHECKSUM_TAG_TO_ALGORITHM = 
+			new Hashtable<String, ChecksumAlgorithm>();
+	static {
+		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_md5, "MD5");
+		CHECKSUM_TAG_TO_ALGORITHM.put("MD5", ChecksumAlgorithm.checksumAlgorithm_md5);
+		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha1, "SHA1");
+		CHECKSUM_TAG_TO_ALGORITHM.put("SHA1", ChecksumAlgorithm.checksumAlgorithm_sha1);
+		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha256, "SHA256");
+		CHECKSUM_TAG_TO_ALGORITHM.put("SHA256", ChecksumAlgorithm.checksumAlgorithm_sha256);
+	}
+	
 	ChecksumAlgorithm algorithm;
 	String checksumValue;
 	
@@ -91,10 +107,21 @@ public class Checksum extends RdfModelObject {
 	public Checksum(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getPropertiesFromModel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// Algorithm
 		String algorithmUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 		if (algorithmUri != null && !algorithmUri.isEmpty()) {
+			if (!algorithmUri.startsWith(SpdxRdfConstants.SPDX_NAMESPACE)) {
+				throw(new InvalidSPDXAnalysisException("Invalid checksum algorithm: "+algorithmUri));
+			}
 			String algorithmS = algorithmUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
 			try {
 				this.algorithm = ChecksumAlgorithm.valueOf(algorithmS);
@@ -107,8 +134,6 @@ public class Checksum extends RdfModelObject {
 		this.checksumValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_CHECKSUM_VALUE);
 	}
-	
-	
 
 	/**
 	 * @return the algorithm
@@ -118,11 +143,15 @@ public class Checksum extends RdfModelObject {
 			String algorithmUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			if (algorithmUri != null && !algorithmUri.isEmpty()) {
-				String algorithmS = algorithmUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
-				try {
-					this.algorithm = ChecksumAlgorithm.valueOf(algorithmS);
-				} catch (Exception ex) {
-					logger.error("Invalid checksum algorithm in the model - "+algorithmS);
+				if (!algorithmUri.startsWith(SpdxRdfConstants.SPDX_NAMESPACE)) {
+					logger.error("Invalid checksum algorithm in the model - "+algorithmUri);
+				} else {
+					String algorithmS = algorithmUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+					try {
+						this.algorithm = ChecksumAlgorithm.valueOf(algorithmS);
+					} catch (Exception ex) {
+						logger.error("Invalid checksum algorithm in the model - "+algorithmS);
+					}
 				}
 			}
 		}
@@ -246,5 +275,4 @@ public class Checksum extends RdfModelObject {
 		return (this.equalsConsideringNull(this.algorithm, cksum.getAlgorithm()) &&
 				this.equalsConsideringNull(this.checksumValue, cksum.getValue()));
 	}
-
 }

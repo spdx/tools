@@ -74,7 +74,7 @@ public class TestSPDXDocument {
         	String fileName = "Test" + File.separator + "resources" + File.separator + "valid-with-explicit-base.html";
         	File file = new File(fileName);
         	String fullFilePath = file.getAbsolutePath();
-            SPDXDocumentFactory.creatSpdxDocument(fileName);
+            SPDXDocumentFactory.createSpdxDocument(fileName);
         } catch(Exception e) {
             fail("Loading 'valid-with-explicit-base.html' failed because: " + e.getMessage());
         }
@@ -87,7 +87,7 @@ public class TestSPDXDocument {
     public void testSPDXAnalysisShouldBeAbleToReadValidRDFaFileWithoutExplicitBase() {
         try {
         	String fileName = "Test" + File.separator + "resources" + File.separator + "valid-without-explicit-base.html";
-        	SPDXDocumentFactory.creatSpdxDocument(fileName);
+        	SPDXDocumentFactory.createSpdxDocument(fileName);
         } catch(Exception e) {
         	//TODO: Investigate the following failure
             // fail("Loading 'valid-without-explicit-base.html' failed because: " + e.getMessage());

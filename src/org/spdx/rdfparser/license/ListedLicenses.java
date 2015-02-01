@@ -59,6 +59,7 @@ public class ListedLicenses implements IModelContainer {
 	HashSet<String> listdLicenseIds = new HashSet<String>();
 	
 	HashMap<String, SpdxListedLicense> listedLicenseCache = null;
+	HashMap<Node, SpdxListedLicense> listedLicenseNodeCache = new HashMap<Node, SpdxListedLicense>();
     
 	Properties licenseProperties;
     boolean onlyUseLocalLicenses;
@@ -427,8 +428,13 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	public AnyLicenseInfo getLicenseFromStdLicModel(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
+		if (this.equals(modelContainer) && this.listedLicenseNodeCache.containsKey(node)) {
+			return this.listedLicenseNodeCache.get(node);
+		}
 		SpdxListedLicense retval = new SpdxListedLicense(modelContainer, node);
-		if (!this.equals(modelContainer)) {
+		if (this.equals(modelContainer)) {
+			this.listedLicenseNodeCache.put(node, retval);
+		} else {
 			String licenseId = retval.getLicenseId();
 			if (licenseId == null) {
 				URL licenseUrl;
@@ -445,7 +451,7 @@ public class ListedLicenses implements IModelContainer {
 			} catch(Exception ex) {
 				// ignore any errors - just don't copy from the license model
 			}
-		}		
+		}
 		return retval;
 	}
 

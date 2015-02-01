@@ -31,6 +31,7 @@ import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -246,7 +247,7 @@ public class TestExtractedLicenseInfo {
 	
 	@Test
 	public void testBackwardsCompatibility() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		ExtractedLicenseInfo[] extractedLicenses = doc1.getExtractedLicenseInfos();
 		doc1.setExtractedLicenseInfos(extractedLicenses);
 		ExtractedLicenseInfo[] result = doc1.getExtractedLicenseInfos();

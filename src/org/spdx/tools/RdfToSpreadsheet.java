@@ -85,7 +85,7 @@ public class RdfToSpreadsheet {
 		}
 		SPDXDocument doc = null;
 		try {
-			doc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
+			doc = SPDXDocumentFactory.createLegacySpdxDocument(args[0]);
 		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;

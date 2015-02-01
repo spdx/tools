@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
@@ -62,6 +63,18 @@ public class SpdxDocument extends SpdxElement {
 			throws InvalidSPDXAnalysisException {
 		super(documentContainer, node);
 		this.documentContainer = documentContainer;
+		getMyPropertiesFromModel();
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		super.getPropertiesFromModel();
+		getMyPropertiesFromModel();
+	}
+	
+	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		dataLicense = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_DATA_LICENSE);
 		creationInfo = findCreationInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
@@ -84,7 +97,6 @@ public class SpdxDocument extends SpdxElement {
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY);
 		spdxItems = findAllItems();
 	}
-
 
 	/**
 	 * @return All SpdxItems considering all properties and subproerties
@@ -177,7 +189,27 @@ public class SpdxDocument extends SpdxElement {
 		}
 		
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	protected String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
+		if (this.node != null && this.node.isURI()) {
+			return this.node.getURI();
+		} else {
+			// for the document, the URI is the same as the namespace
+			return modelContainer.getDocumentNamespace();
+		}
+	}
+	
+	/**
+	 * @return The unique Document URI
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public String getDocumentUri() throws InvalidSPDXAnalysisException {
+		return this.getUri(documentContainer);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
@@ -510,7 +542,7 @@ public class SpdxDocument extends SpdxElement {
 		}
 		return retval;
 	} 
-	
+
 	@Override
 	public boolean equivalent(RdfModelObject o) {
 		if (!(o instanceof SpdxDocument)) {
@@ -539,4 +571,49 @@ public class SpdxDocument extends SpdxElement {
 		return SpdxRdfConstants.PROP_NAME;
 	}
 	//NOTE: We can  not implement clone since there is only one SPDX document per model
+
+
+	/**
+	 * This method has been replaced by getSpecVersion to match the specification property name
+	 * @return 
+	 */
+	@Deprecated
+	public String getSpdxVersion() {
+		return this.getSpecVersion();
+	}
+
+
+	/**
+	 * This method has been replaced by getCreationInfo to match the specification property name
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Deprecated
+	public SPDXCreatorInformation getCreatorInfo() throws InvalidSPDXAnalysisException {
+		return this.getCreationInfo();
+	}
+
+
+	/**
+	 * This method has been replaced by getComment to match the specification property name
+	 * @return
+	 */
+	@Deprecated
+	public String getDocumentComment() {
+		return this.getComment();
+	}
+	/**
+	 * This method has been replaced by getSpdxItems
+	 * This method will fail unless there is one and only 1 SPDX document
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Deprecated
+	public SpdxPackage getSpdxPackage() throws InvalidSPDXAnalysisException {
+		SpdxItem[] retval = getPackagesFromItems(this.spdxItems);
+		if (retval.length != 1) {
+			throw(new InvalidSPDXAnalysisException("More than one SPDX package defined in the document.  Must use getSpdxItems - Likely this application has not been upgraded for SPDX 2.0"));
+		}
+		return (SpdxPackage)retval[0];
+	}
 }
