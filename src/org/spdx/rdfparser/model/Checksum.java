@@ -53,12 +53,12 @@ public class Checksum extends RdfModelObject {
 	public static final Hashtable<String, ChecksumAlgorithm> CHECKSUM_TAG_TO_ALGORITHM = 
 			new Hashtable<String, ChecksumAlgorithm>();
 	static {
-		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_md5, "MD5");
-		CHECKSUM_TAG_TO_ALGORITHM.put("MD5", ChecksumAlgorithm.checksumAlgorithm_md5);
-		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha1, "SHA1");
-		CHECKSUM_TAG_TO_ALGORITHM.put("SHA1", ChecksumAlgorithm.checksumAlgorithm_sha1);
-		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha256, "SHA256");
-		CHECKSUM_TAG_TO_ALGORITHM.put("SHA256", ChecksumAlgorithm.checksumAlgorithm_sha256);
+		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_md5, "MD5:");
+		CHECKSUM_TAG_TO_ALGORITHM.put("MD5:", ChecksumAlgorithm.checksumAlgorithm_md5);
+		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha1, "SHA1:");
+		CHECKSUM_TAG_TO_ALGORITHM.put("SHA1:", ChecksumAlgorithm.checksumAlgorithm_sha1);
+		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha256, "SHA256:");
+		CHECKSUM_TAG_TO_ALGORITHM.put("SHA256:", ChecksumAlgorithm.checksumAlgorithm_sha256);
 	}
 	
 	ChecksumAlgorithm algorithm;
