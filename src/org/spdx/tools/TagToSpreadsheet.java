@@ -27,7 +27,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
-import org.spdx.tag.BuildDocument;
+import org.spdx.tag.BuildLegacyDocument;
 import org.spdx.tag.CommonCode;
 import org.spdx.tag.HandBuiltParser;
 import org.spdx.tag.NoCommentInputStream;
@@ -88,7 +88,7 @@ public class TagToSpreadsheet {
 			HandBuiltParser parser = new HandBuiltParser(new DataInputStream(nci));
 			Model model = ModelFactory.createDefaultModel();
 			doc = new SPDXDocument(model);
-			parser.setBehavior(new BuildDocument(model, doc, constants));
+			parser.setBehavior(new BuildLegacyDocument(model, doc, constants));
 			parser.data();
 		} catch (Exception e) {
 			System.err.println("Error creating SPDX Analysis: " + e);

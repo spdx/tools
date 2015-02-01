@@ -48,13 +48,14 @@ import com.hp.hpl.jena.rdf.model.Model;
 /**
  * Translates an tag-value file to a an SPDX Document.
  * 
- * Supports SPDX version 2.0
+ * This is the legacy tag-value tranlater for versions 1.2 and earlier
  * 
- * 2.0 changes made by Gary O'Neall
+ * This has been replaced by BuildDocument which supports the SPDX 2.0 syntax
  * 
  * @author Rana Rahal, Protecode Inc.
  */
-public class BuildDocument implements TagValueBehavior, Serializable {
+@Deprecated
+public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 	private static final long serialVersionUID = -5490491489627686708L;
 
 	private static final String DEFAULT_SHA1 = "0000000000000000000000000000000000000000";
@@ -74,7 +75,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private HashMap<String, ArrayList<SPDXFile>> fileDependencyMap = 
 		new HashMap<String, ArrayList<SPDXFile>>();
 
-	public BuildDocument(Model model, SPDXDocument spdxDocument, Properties constants) {
+	public BuildLegacyDocument(Model model, SPDXDocument spdxDocument, Properties constants) {
 		this.constants = constants;
 		analysis = spdxDocument;
 		try {

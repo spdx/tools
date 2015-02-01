@@ -188,16 +188,6 @@ public class SpdxLicenseTemplateHelper {
 	}
 
 	/**
-	 * Returns true if the line contains formatting hints requiring a custom paragraph tag
-	 * @param line
-	 * @return
-	 */
-	private static boolean needsFormatting(String line) {
-		int numSpaces = countLeadingSpaces(line);
-		return numSpaces >= SPACES_PER_TAB;
-	}
-
-	/**
 	 * Creating a paragraph tag and add the correct margin considering the number of spaces or tabs
 	 * @param string
 	 * @return

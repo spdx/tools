@@ -65,6 +65,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	/**
 	 * Adds back an end paragraph tag if it was removed
 	 */
+	@SuppressWarnings("unused")
 	private void addRemovedEndParagraphTag() {
 		// this is a bit of a hack to deal with the formatting of HTML
 		// in normal text inserting end paragraphs at the end of the string
