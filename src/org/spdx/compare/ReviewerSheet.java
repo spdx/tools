@@ -112,6 +112,7 @@ public class ReviewerSheet extends AbstractSheet {
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			Cell headerCell = header.getCell(i);
 			headerCell.setCellValue(docNames[i]);
+			@SuppressWarnings("deprecation")
 			SPDXReview[] reviewers = comparer.getSpdxDoc(i).getReviewers();
 			if (reviewers == null) {
 				continue;
