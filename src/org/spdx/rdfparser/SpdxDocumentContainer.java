@@ -137,7 +137,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		model.setNsPrefix("", this.documentNamespace);
 		// set the default namespace to the document namespace
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_DOCUMENT);
-		model.createResource(uri, spdxAnalysisType);
+		model.createResource(this.documentNamespace + SPDX_DOCUMENT_ID, spdxAnalysisType);
 		// reset the next license number and next spdx element num
 		this.nextElementRef = 1;
 		this.nextLicenseRef = 1;

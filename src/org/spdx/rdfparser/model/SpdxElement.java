@@ -56,6 +56,14 @@ public class SpdxElement extends RdfModelObject {
 	
 	public SpdxElement(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getPropertiesFromModel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.annotations = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION);
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		this.name = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, this.getNamePropertyName());
@@ -334,5 +342,14 @@ public class SpdxElement extends RdfModelObject {
 				arraysEquivalent(comp.getRelationships(), this.getRelationships()) &&
 				equalsConsideringNull(comp.getComment(), this.getComment()));
 	}
-
+	
+	
+	@Override
+	public String toString() {
+		if (this.name == null) {
+			return super.toString();
+		} else {
+			return this.name;
+		}
+	}
 }

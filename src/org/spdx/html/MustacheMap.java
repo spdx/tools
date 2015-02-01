@@ -20,10 +20,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 /**
  * Provides a hashmap which maps the Mustache template strings to SPDX Document
@@ -37,20 +38,26 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
  */
 public class MustacheMap {
 
-	static public HashMap<String, Object> buildMustachMap(SPDXDocument doc) throws InvalidSPDXAnalysisException {
+	static public HashMap<String, Object> buildMustachMap(SpdxDocument doc) throws InvalidSPDXAnalysisException {
 		HashMap<String, Object>  retval = new HashMap<String, Object>();
 		// Document level information
-		retval.put("specVersion", doc.getSpdxVersion());
+		retval.put("documentName", doc.getName());
+		retval.put("documentUri", doc.getDocumentUri());
+		retval.put("specVersion", doc.getSpecVersion());
 		retval.put("dataLicense", getDataLicenseName(doc));
 		retval.put("creationInfo", new CreatorInfoContext(doc));
-		retval.put("docComment", doc.getDocumentComment());
+		retval.put("docComment", doc.getComment());
+		//TODO add annotations
+		//TODO add relationships
+		//TODO add external documents
 		retval.put("reviewed", getReviewers(doc));
-		retval.put("describesPackage", new PackageContext(doc));
+		//TODO change to describes elements
+//		retval.put("describesPackage", new PackageContext(doc));
 		retval.put("hasExtractedLicensingInfo", getExtractedLicensingInfo(doc));
 		return retval;
 	}
 	
-	private static ArrayList<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SPDXDocument doc) {
+	private static ArrayList<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SpdxDocument doc) {
 		ArrayList<ExtractedLicensingInfoContext> retval = new ArrayList<ExtractedLicensingInfoContext>();
 		try {
 			ExtractedLicenseInfo[] extractedLicenseInfos = doc.getExtractedLicenseInfos();
@@ -68,9 +75,10 @@ public class MustacheMap {
 	 * @param doc
 	 * @return
 	 */
-	private static ArrayList<ReviewerContext> getReviewers(SPDXDocument doc) {
+	private static ArrayList<ReviewerContext> getReviewers(SpdxDocument doc) {
 		ArrayList<ReviewerContext> retval = new ArrayList<ReviewerContext>();
 		try {
+			@SuppressWarnings("deprecation")
 			SPDXReview[] reviewers = doc.getReviewers();
 			if (reviewers != null) {
 				for (int i = 0; i < reviewers.length; i++) {
@@ -89,10 +97,14 @@ public class MustacheMap {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static Object getDataLicenseName(SPDXDocument doc) throws InvalidSPDXAnalysisException {
-		SpdxListedLicense dataLicense = doc.getDataLicense();
+	private static String getDataLicenseName(SpdxDocument doc) throws InvalidSPDXAnalysisException {
+		AnyLicenseInfo dataLicense = doc.getDataLicense();
 		if (dataLicense != null) {
-			return dataLicense.getName();
+			if (dataLicense instanceof SimpleLicensingInfo) {
+				return ((SimpleLicensingInfo)dataLicense).getName();
+			} else {
+				return dataLicense.toString();
+			}			
 		} else {
 			return "NONE";
 		}

@@ -45,6 +45,8 @@ public class TestExternalDocumentRef {
 	static final Checksum CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE2);
 	static final String DOCUMENT_URI1 = "http://spdx.org/docs/uniquevalue1";
 	static final String DOCUMENT_URI2 = "http://spdx.org/docs/uniquevalue2";
+	static final String DOCUMENT_ID1 = "DocumentRef-1";
+	static final String DOCUMENT_ID2 = "DocumentRef-2";
 	
 	/**
 	 * @throws java.lang.Exception
@@ -79,7 +81,8 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testGetType() {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
 		Model model = ModelFactory.createDefaultModel();
 		Resource result = edf.getType(model);
 		assertTrue(result.isURIResource());
@@ -92,7 +95,8 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testPopulateModel() throws InvalidSPDXAnalysisException {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
@@ -109,8 +113,9 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
-		ExternalDocumentRef edf2 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1.clone());
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
+		ExternalDocumentRef edf2 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1.clone(), DOCUMENT_ID1);
 		assertTrue(edf.equivalent(edf2));
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -126,6 +131,11 @@ public class TestExternalDocumentRef {
 		assertFalse(edf.equivalent(edf2));
 		edf2.setChecksum(CHECKSUM1);
 		assertTrue(edf.equivalent(edf2));
+		// ID
+		edf2.setExternalDocumentId(DOCUMENT_ID2);
+		assertFalse(edf.equivalent(edf2));
+		edf2.setExternalDocumentId(DOCUMENT_ID1);
+		assertTrue(edf.equivalent(edf2));
 	}
 	
 	/**
@@ -134,7 +144,8 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
 		assertEquals(0, edf.verify().size());
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -152,7 +163,8 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testSetChecksum() throws InvalidSPDXAnalysisException {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
 		assertTrue(CHECKSUM1.equivalent(edf.getChecksum()));
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -163,6 +175,21 @@ public class TestExternalDocumentRef {
 		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());		
 		assertTrue(CHECKSUM2.equivalent(edf2.getChecksum()));
 	}
+	
+	@Test
+	public void testSetExternalDocumentId() throws InvalidSPDXAnalysisException {
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
+		assertEquals(DOCUMENT_ID1, edf.getExternalDocumentId());
+		Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = edf.createResource(modelContainer);
+		assertEquals(DOCUMENT_ID1, edf.getExternalDocumentId());
+		edf.setExternalDocumentId(DOCUMENT_ID2);
+		assertEquals(DOCUMENT_ID2, edf.getExternalDocumentId());
+		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());		
+		assertEquals(DOCUMENT_ID2, edf2.getExternalDocumentId());
+	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#setSpdxDocumentUri(java.lang.String)}.
@@ -170,7 +197,8 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testSetSpdxDocumentUri() throws InvalidSPDXAnalysisException {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
 		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -191,7 +219,8 @@ public class TestExternalDocumentRef {
 		SpdxDocumentContainer container1 = new SpdxDocumentContainer(DOCUMENT_URI1);
 		SpdxDocument doc1 = container1.getSpdxDocument();
 		doc1.setName("DocumentName");
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI2, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI2, CHECKSUM1,
+				DOCUMENT_ID1);
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = edf.createResource(modelContainer);
@@ -215,7 +244,8 @@ public class TestExternalDocumentRef {
 	 */
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
-		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1);
+		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
+				DOCUMENT_ID1);
 		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");

@@ -18,7 +18,7 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 
 /**
  * Sheet of comparison results for file license comments
@@ -43,24 +43,24 @@ public class FileLicenseCommentsSheet extends AbstractFileCompareSheet {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */
 	@Override
-	String getFileValue(SPDXFile spdxFile) {
-		if (spdxFile.getLicenseComments() == null) {
+	String getFileValue(SpdxFile spdxFile) {
+		if (spdxFile.getLicenseComment() == null) {
 			return "";
 		} else {
-			return spdxFile.getLicenseComments();
+			return spdxFile.getLicenseComment();
 		}
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SPDXFile, int, org.spdx.rdfparser.SPDXFile, int)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
 	 */
 	@Override
-	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA,
-			SPDXFile fileB, int docIndexB) throws SpdxCompareException {
-		return SpdxComparer.stringsEqual(fileA.getLicenseComments(), fileB.getLicenseComments());
+	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
+			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
+		return SpdxComparer.stringsEqual(fileA.getLicenseComment(), fileB.getLicenseComment());
 	}
 
 }

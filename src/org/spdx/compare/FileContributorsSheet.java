@@ -17,7 +17,7 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 
 /**
  * Sheet with results for file contributor comparison results
@@ -37,21 +37,21 @@ public class FileContributorsSheet extends AbstractFileCompareSheet {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SPDXFile, int, org.spdx.rdfparser.SPDXFile, int)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
 	 */
 	@Override
-	boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA,
-			SPDXFile fileB, int docIndexB) throws SpdxCompareException {
-		return SpdxComparer.stringArraysEqual(fileA.getContributors(), fileB.getContributors());
+	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
+			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
+		return SpdxComparer.stringArraysEqual(fileA.getFileContributors(), fileB.getFileContributors());
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SPDXFile)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */
 	@Override
-	String getFileValue(SPDXFile spdxFile) {
+	String getFileValue(SpdxFile spdxFile) {
 		StringBuilder sb = new StringBuilder();
-		String[] contributors = spdxFile.getContributors();
+		String[] contributors = spdxFile.getFileContributors();
 		if (contributors != null && contributors.length > 0) {
 			sb.append(contributors[0]);
 			for (int i = 1; i < contributors.length; i++) {

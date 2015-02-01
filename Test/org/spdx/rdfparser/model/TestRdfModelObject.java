@@ -148,6 +148,14 @@ public class TestRdfModelObject {
 
 			return false;
 		}
+		/* (non-Javadoc)
+		 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+		 */
+		@Override
+		void getPropertiesFromModel() {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 
@@ -624,9 +632,12 @@ public class TestRdfModelObject {
 		String docUri1 = "http://spdx.org/docs/my/doc1";
 		String docUri2 = "http://spdx.org/docs/my/doc2";
 		String docUri3 = "http://spdx.org/docs/my/doc3";
-		ExternalDocumentRef ref1 = new ExternalDocumentRef(docUri1, c1);
-		ExternalDocumentRef ref2 = new ExternalDocumentRef(docUri2, c2);
-		ExternalDocumentRef ref3 = new ExternalDocumentRef(docUri3, c3);
+		String docId1 = "DocumentRef-1";
+		String docId2 = "DocumentRef-2";
+		String docId3 = "DocumentRef-3";
+		ExternalDocumentRef ref1 = new ExternalDocumentRef(docUri1, c1, docId1);
+		ExternalDocumentRef ref2 = new ExternalDocumentRef(docUri2, c2, docId2);
+		ExternalDocumentRef ref3 = new ExternalDocumentRef(docUri3, c3, docId3);
 		ExternalDocumentRef[] refs = new ExternalDocumentRef[] {ref1, ref2, ref3};
 		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, refs);
 		ExternalDocumentRef[] result = empty.findExternalDocRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);

@@ -38,7 +38,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
+public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparable<SpdxPackage> {
 	
 	AnyLicenseInfo licenseDeclared;
 	Checksum[] checksums;
@@ -47,7 +47,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	String homepage;
 	String originator;
 	String packageFileName;
-	SpdxPackageVerificationCode packageVerificationCode;	//TODO Move this to RdfModelObject
+	SpdxPackageVerificationCode packageVerificationCode;
 	String sourceInfo;
 	String summary;
 	String supplier;
@@ -109,6 +109,52 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 	public SpdxPackage(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getMyPropertiesFromModel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		super.getPropertiesFromModel();
+		getMyPropertiesFromModel();
+		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
+				PROP_PACKAGE_DECLARED_LICENSE);
+		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
+				PROP_PACKAGE_CHECKSUM);
+		this.description = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_DESCRIPTION);
+		this.downloadLocation = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_DOWNLOAD_URL);
+		this.homepage = findSinglePropertyValue(DOAP_NAMESPACE, 
+				PROP_PROJECT_HOMEPAGE);
+		this.originator = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_ORIGINATOR);
+		this.packageFileName = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_FILE_NAME);
+		this.packageVerificationCode = findVerificationCodePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_VERIFICATION_CODE);	
+		this.sourceInfo = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_SOURCE_INFO);
+		this.summary = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_SHORT_DESC);
+		this.supplier = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_SUPPLIER);
+		this.versionInfo = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_VERSION_INFO);
+		SpdxElement[] filesE = findMultipleElementPropertyValues(SPDX_NAMESPACE,
+				PROP_PACKAGE_FILE);
+		this.files = new SpdxFile[filesE.length];
+		for (int i = 0; i < filesE.length; i++) {
+			if (!(filesE[i] instanceof SpdxFile)) {
+				throw(new InvalidSPDXAnalysisException("Incorrect type for a file belonging to a package: "+filesE[i].getName()));
+			}
+			this.files[i] = (SpdxFile)filesE[i];
+		}
+	}
+	
+	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
 				PROP_PACKAGE_DECLARED_LICENSE);
 		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
@@ -698,6 +744,106 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants {
 			}
 		}
 		return retval;
+	}
+	// the following methods are provided to ease the migration to the SPDX 2.0 version
+
+	/**
+	 * This method has been replaced by getName() to be consistent with the spec property name
+	 * @return
+	 */
+	@Deprecated
+	public String getDeclaredName() {
+		return this.getName();
+	}
+
+	/**
+	 * This method has been replaced by getDownloadLocation() to be consistent with the spec property name
+	 * @return
+	 */
+	@Deprecated
+	public String getDownloadUrl() {
+		return this.getDownloadLocation();
+	}
+
+	/**
+	 * This method has been replaced by getSummary() to be consistent with the spec property name
+	 * @return
+	 */
+	@Deprecated
+	public String getShortDescription() {
+		return this.getSummary();
+	}
+
+	/**
+	 * This method has been replaced by getPackageFileName() to be consistent with the spec property name
+	 * @return
+	 */
+	@Deprecated
+	public String getFileName() {
+		return this.getPackageFileName();
+	}
+
+	/**
+	 * This method has been replaced by getPackageVerificationCode() to be consistent with the spec property name
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Deprecated
+	public SpdxPackageVerificationCode getVerificationCode() throws InvalidSPDXAnalysisException {
+		return this.getPackageVerificationCode();
+	}
+
+	/**
+	 * This method has been replaced by getDeclaredCopyright() to be consistent with the spec property name
+	 * @return
+	 */
+	@Deprecated
+	public String getDeclaredCopyright() {
+		return this.getCopyrightText();
+	}
+
+	/**
+	 * This method has been replaced by getLicenseDeclared() to be consistent with the spec property name
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Deprecated
+	public AnyLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
+		return this.getLicenseDeclared();
+	}
+
+	/**
+	 * This method has been replaced by getLicenseConcluded() to be consistent with the spec property name
+	 * @return
+	 */
+	@Deprecated
+	public AnyLicenseInfo getConcludedLicenses() {
+		return this.getLicenseConcluded();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(SpdxPackage pkg) {
+		// sort order is determined by the name and the version
+		String myNameVersion = this.getName();
+		String compNameVersion = pkg.getName();
+		if (myNameVersion == null) {
+			myNameVersion = "";
+		}
+		if (compNameVersion == null) {
+			compNameVersion = "";
+		}
+		String myVersion = this.getVersionInfo();
+		if (myVersion != null) {
+			myNameVersion = myNameVersion + myVersion;
+		}
+		String compVersion = pkg.getVersionInfo();
+		if (compVersion != null) {
+			compNameVersion = compNameVersion + compVersion;
+		}
+		return myNameVersion.compareTo(compNameVersion);
 	}
 	
 }

@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 /**
  * Mustache Context for converting an SPDX Document for use in the SpdxHTMLTemplate
@@ -34,15 +34,15 @@ import org.spdx.rdfparser.SPDXDocument;
  */
 public class CreatorInfoContext {
 	
-	private SPDXDocument doc;
+	private SpdxDocument doc;
 	
-	public CreatorInfoContext(SPDXDocument doc) {
-		this.doc = doc;
+	public CreatorInfoContext(SpdxDocument doc2) {
+		this.doc = doc2;
 	}
 	
 	public String created() {
 		try {
-			return doc.getCreatorInfo().getCreated();
+			return doc.getCreationInfo().getCreated();
 		} catch (InvalidSPDXAnalysisException e) {
 			return "Error getting creator created date: "+e.getMessage();
 		}
@@ -51,7 +51,7 @@ public class CreatorInfoContext {
 	public String licenseListVersion() {
 		String retval;
 		try {
-			retval = this.doc.getCreatorInfo().getLicenseListVersion();
+			retval = this.doc.getCreationInfo().getLicenseListVersion();
 		} catch (InvalidSPDXAnalysisException e) {
 			return "Error getting license list version: "+e.getMessage();
 		};
@@ -64,7 +64,7 @@ public class CreatorInfoContext {
 	public List<String> creator() {
 		ArrayList<String> creators = new ArrayList<String>();
 		try {
-			SPDXCreatorInformation creatorInfo = doc.getCreatorInfo();
+			SPDXCreatorInformation creatorInfo = doc.getCreationInfo();
 			if (creatorInfo != null) {
 				String[] creatorArray = creatorInfo.getCreators();
 				for (int i = 0; i < creatorArray.length; i++) {
@@ -79,8 +79,8 @@ public class CreatorInfoContext {
 	
 	public String comment() {
 		try {
-			if (doc.getCreatorInfo() != null) {
-				return doc.getCreatorInfo().getComment();
+			if (doc.getCreationInfo() != null) {
+				return doc.getCreationInfo().getComment();
 			} else {
 				return null;
 			}

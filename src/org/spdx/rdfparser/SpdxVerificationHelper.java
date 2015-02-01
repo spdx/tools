@@ -249,4 +249,12 @@ public class SpdxVerificationHelper {
 			return null;
 		}
 	}
+
+	/**
+	 * @param externalDocumentId
+	 * @return
+	 */
+	public static boolean isValidExternalDocRef(String externalDocumentId) {
+		return SpdxRdfConstants.EXTERNAL_DOC_REF_PATTERN.matcher(externalDocumentId).matches();
+	}
 }

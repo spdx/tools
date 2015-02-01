@@ -17,14 +17,16 @@
 */
 package org.spdx.compare;
 
+import java.util.Arrays;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
 /**
@@ -126,6 +128,36 @@ public class PackageSheet extends AbstractSheet {
 		}
 		this.clear();
 		Row header = sheet.getRow(0);
+		SpdxPackage[][] allPackages;
+		allPackages = new SpdxPackage[comparer.getNumSpdxDocs()][];
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			allPackages[i] = comparer.collectAllPackages(comparer.getSpdxDoc(i));
+			Arrays.sort(allPackages[i]);
+		}
+		int[] pkgIndexes = new int[comparer.getNumSpdxDocs()];
+		for (int i = 0; i < pkgIndexes.length; i++) {
+			pkgIndexes[i] = 0;	//might as well be explicit about it
+		}
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			Cell headerCell = header.getCell(FIRST_DOC_COL+i);
+			headerCell.setCellValue(docNames[i]);
+		}
+
+		// iterate through all of the packages in sorted order, finding any which are the same
+		while (!done(pkgIndexes, allPackages)) {
+			// find the next sorted package out of all of the indexes
+			// include all package rows which are the same
+			SpdxPackage[] nextPackages = getNextPackage(pkgIndexes, allPackages);
+			addPackageToSheet(nextPackages);	
+		}
+	}
+	
+	/**
+	 * @param nextPackages
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void addPackageToSheet(SpdxPackage[] nextPackages) throws InvalidSPDXAnalysisException {
+		MultiPackageComparer comparer = new MultiPackageComparer(nextPackages);
 		Row packageNameRow = this.addRow();
 		packageNameRow.createCell(FIELD_COL).setCellValue(PACKAGE_NAME_FIELD_TEXT);
 		if (comparer.isPackageNamesEqual()) {
@@ -252,31 +284,80 @@ public class PackageSheet extends AbstractSheet {
 		} else {
 			setCellDifferentValue(descriptionRow.createCell(EQUALS_COL));
 		}
-		for (int i = 0; i < docNames.length; i++) {
-			Cell headerCell = header.getCell(FIRST_DOC_COL+i);
-			headerCell.setCellValue(docNames[i]);
-			SPDXPackage pkg = comparer.getSpdxDoc(i).getSpdxPackage();
-			packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDeclaredName());
+		for (int i = 0; i < nextPackages.length; i++) {
+			if (nextPackages[i] == null) {
+				continue;
+			}
+
+			SpdxPackage pkg = nextPackages[i];
+			packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getName());
 			versionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getVersionInfo());
-			fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getFileName());
+			fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageFileName());
 			supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSupplier());
 			originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getOriginator());
-			homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomePage());
-			downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadUrl());
-			verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getVerificationCode().getValue());
-			verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getVerificationCode().getExcludedFileNames()));
-			checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSha1());
+			homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomepage());
+			downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadLocation());
+			verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageVerificationCode().getValue());
+			verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getPackageVerificationCode().getExcludedFileNames()));
+// TODO - replace with checksum values			checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSha1());
 			sourceInfoRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSourceInfo());
-			concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getConcludedLicenses().toString());
+			concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseConcluded().toString());
 			licenseInfosFromFilesRow.createCell(FIRST_DOC_COL+i).setCellValue(licenseInfosToString(pkg.getLicenseInfoFromFiles()));
-			declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDeclaredLicense().toString());
+			declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseDeclared().toString());
 			licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseComment());
-			copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDeclaredCopyright());
-			summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getShortDescription());
+			copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
+			summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
 			descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());
 		}
 	}
-	
+
+	/**
+	 * Find the next package in sorted ord
+	 * @param pkgIndexes
+	 * @param allPackages
+	 * @return All packages that have the same name and version, null if the package name/version does not match
+	 */
+	private SpdxPackage[] getNextPackage(int[] pkgIndexes,
+			SpdxPackage[][] allPackages) {
+		// Pass 1 - find the next package
+		SpdxPackage candidate = null;
+		for (int i = 0; i < pkgIndexes.length; i++) {
+			if (pkgIndexes[i] < allPackages[i].length) {
+				if (candidate == null || candidate.compareTo(allPackages[i][pkgIndexes[i]]) < 0) {
+					candidate = allPackages[i][pkgIndexes[i]];
+				}
+			}
+		}
+		// pass 2 - collect the packages and increment the counters
+		SpdxPackage[] retval = new SpdxPackage[pkgIndexes.length];
+		for (int i = 0; i < pkgIndexes.length; i++) {
+			if (pkgIndexes[i] < allPackages[i].length) {
+				if (allPackages[i][pkgIndexes[i]].compareTo(candidate) == 0) {
+					retval[i] = allPackages[i][pkgIndexes[i]];
+					pkgIndexes[i]++;
+				} else {
+					retval[i] = null;
+				}
+			}
+		}
+		return retval;
+	}
+
+	/**
+	 * return true if the indexes for all the packages are past the end of the arrays
+	 * @param pkgIndexes
+	 * @param allPackages
+	 * @return
+	 */
+	private boolean done(int[] pkgIndexes, SpdxPackage[][] allPackages) {
+		for (int i = 0; i < pkgIndexes.length; i++) {
+			if (pkgIndexes[i] < allPackages[i].length) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * @param licenseInfoFromFiles
 	 * @return

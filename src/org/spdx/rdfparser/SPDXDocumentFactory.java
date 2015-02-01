@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -46,10 +47,42 @@ public class SPDXDocumentFactory {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public static SPDXDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
+	public static SpdxDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
+		
+		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
+		return docContainer.getSpdxDocument();
+	}
+	
+	/**
+	 * Create a new Legacy SPDX Document populating the data from the existing model
+	 * Legacy SPDX documents only specification version 1.2 features
+	 * @param model
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public static SPDXDocument createLegacySpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
-//		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
-//		return docContainer.getSpdxDocument();
+	}
+	
+	/**
+	 * Create an Legacy SPDX Document from a file - Legacy SPDX documents only specification version 1.2 features
+	 * @param fileNameOrUrl local file name or Url containing the SPDX data.  Can be in RDF/XML or RDFa format
+	 * @return SPDX Document initialized with the exsiting data
+	 * @throws IOException
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public static SPDXDocument createLegacySpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
+		try {
+			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
+		} catch(java.lang.ClassNotFoundException e) {
+			logger.warn("Unable to load the RDFaReader Class");
+		}  
+
+		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
+		if (spdxRdfInput == null)
+			throw new FileNotFoundException("Unable to open \"" + fileNameOrUrl + "\" for reading");
+
+		return createLegacySpdxDocument(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
 	}
 	
 	/**
@@ -59,7 +92,7 @@ public class SPDXDocumentFactory {
 	 * @throws IOException
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public static SPDXDocument creatSpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
+	public static SpdxDocument createSpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {
@@ -73,12 +106,17 @@ public class SPDXDocumentFactory {
 		return createSpdxDocument(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
 	}
 	
-	public static SPDXDocument createSpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
+	public static SpdxDocument createSpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
+		Model model = ModelFactory.createDefaultModel();
+		model.read(input, baseUri, fileType);
+		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
+		return docContainer.getSpdxDocument();
+	}
+	
+	public static SPDXDocument createLegacySpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		model.read(input, baseUri, fileType);
 		return new SPDXDocument(model);
-//		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
-//		return docContainer.getSpdxDocument();
 	}
 	
 	private static String figureBaseUri(String src) {

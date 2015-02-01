@@ -25,7 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
@@ -53,27 +53,27 @@ public class SpdxLicenseInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#SpdxLicenseInfoMerger(org.spdx.rdfparser.SPDXDocument)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#SpdxLicenseInfoMerger(org.spdx.rdfparser.SpdxDocument)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSpdxLicenseInfoMerger() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxLicenseInfoMerger licMerger = new SpdxLicenseInfoMerger(doc1, new SpdxLicenseMapper());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#mergeNonStdLic(org.spdx.rdfparser.SPDXDocument[])}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#mergeNonStdLic(org.spdx.rdfparser.SpdxDocument[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testMergeNonStdLic() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxLicenseInfoMerger licMerger = new SpdxLicenseInfoMerger(doc1, new SpdxLicenseMapper());
-		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
+		SpdxDocument [] subDocs = new SpdxDocument[]{doc2};
 		ExtractedLicenseInfo[] mergedLicense = licMerger.mergeNonStdLic(subDocs);
 		ExtractedLicenseInfo[] exceptedResult = doc1.getExtractedLicenseInfos();
 		int num = 0;
@@ -96,8 +96,8 @@ public class SpdxLicenseInfoMergerTest {
 	 */
 	@Test
 	public void testCloneNonStdLic() throws IOException, InvalidSPDXAnalysisException{
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxLicenseInfoMerger licMerger = new SpdxLicenseInfoMerger(doc1, new SpdxLicenseMapper());
 		ExtractedLicenseInfo[] exceptedResult = doc2.getExtractedLicenseInfos(); 
 		ExtractedLicenseInfo[] clonedLicense = licMerger.cloneNonStdLic(exceptedResult);

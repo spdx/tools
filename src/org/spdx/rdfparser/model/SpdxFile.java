@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -42,10 +43,38 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	
 	static final Logger logger = Logger.getLogger(SpdxFile.class.getName());
 	
-	enum FileType {fileType_application, fileType_archive,
+	public enum FileType {fileType_application, fileType_archive,
 		fileType_audio, fileType_binary, fileType_documentation,
 		fileType_image, fileType_other, fileType_source, fileType_spdx,
 		fileType_text, fileType_video};
+		
+	public static final HashMap<FileType, String> FILE_TYPE_TO_TAG = new HashMap<FileType, String>();
+	public static final HashMap<String, FileType> TAG_TO_FILE_TYPE = new HashMap<String, FileType>();
+	static {
+		FILE_TYPE_TO_TAG.put(FileType.fileType_application, "APPLICATION");
+		TAG_TO_FILE_TYPE.put("APPLICATION", FileType.fileType_application);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_archive, "ARCHIVE");
+		TAG_TO_FILE_TYPE.put("ARCHIVE", FileType.fileType_archive);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_audio, "AUDIO");
+		TAG_TO_FILE_TYPE.put("AUDIO", FileType.fileType_audio);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_binary, "BINARY");
+		TAG_TO_FILE_TYPE.put("BINARY", FileType.fileType_binary);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_documentation, "DOCUMENTATION");
+		TAG_TO_FILE_TYPE.put("DOCUMENTATION", FileType.fileType_documentation);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_image, "IMAGE");
+		TAG_TO_FILE_TYPE.put("IMAGE", FileType.fileType_image);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_other, "OTHER");
+		TAG_TO_FILE_TYPE.put("OTHER", FileType.fileType_other);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_source, "SOURCE");
+		TAG_TO_FILE_TYPE.put("SOURCE", FileType.fileType_source);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_spdx, "SPDX");
+		TAG_TO_FILE_TYPE.put("SPDX", FileType.fileType_spdx);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_text, "TEXT");
+		TAG_TO_FILE_TYPE.put("TEXT", FileType.fileType_text);
+		FILE_TYPE_TO_TAG.put(FileType.fileType_video, "VIDEO");
+		TAG_TO_FILE_TYPE.put("VIDEO", FileType.fileType_video);
+		
+	}
 	FileType[] fileTypes = new FileType[0];
 	Checksum[] checksums;
 	String[] fileContributors = new String[0];
@@ -54,7 +83,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	SpdxFile[] fileDependencies = new SpdxFile[0];
 
 	/**
-	 * @param id SPDX Identifier for the file.  Must be unique within the modelContainer.
 	 * @param name fileName
 	 * @param comment Comment on the file
 	 * @param annotations annotations for the file
@@ -89,15 +117,40 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			this.artifactOf = new DoapProject[0];
 		}
 	}
+	
 
 	/**
-	 * @param modelContainer
-	 * @param node
+	 * @param fileName
+	 * @param fileTypes
+	 * @param sha1Value
+	 * @param licenseConcluded
+	 * @param licenseInfoInFiles
+	 * @param licenseComment
+	 * @param copyrightText
+	 * @param artifactOfs
+	 * @param fileComment
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SpdxFile(IModelContainer modelContainer, Node node)
-			throws InvalidSPDXAnalysisException {
-		super(modelContainer, node);
+	public SpdxFile(String fileName, FileType[] fileTypes, String sha1Value,
+			AnyLicenseInfo licenseConcluded, AnyLicenseInfo[] licenseInfoInFiles,
+			String licenseComment, String copyrightText,
+			DoapProject[] artifactOfs, String fileComment) throws InvalidSPDXAnalysisException {
+		this(fileName, fileComment, new Annotation[0], new Relationship[0], licenseConcluded, 
+				licenseInfoInFiles, copyrightText, licenseComment, fileTypes, 
+				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1Value) },
+				new String[0], "", artifactOfs);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		super.getPropertiesFromModel();
+		getMyPropertiesFromModel();
+	}
+	
+	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		String[] fileTypeUris = findUriPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_TYPE);
 		this.fileTypes = urisToFileType(fileTypeUris, false);
@@ -132,6 +185,17 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// ArtifactOfs
 		this.artifactOf = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
+	}
+	
+	/**
+	 * @param modelContainer
+	 * @param node
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public SpdxFile(IModelContainer modelContainer, Node node)
+			throws InvalidSPDXAnalysisException {
+		super(modelContainer, node);
+		getMyPropertiesFromModel();
 	}
 
 	/**
@@ -176,7 +240,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	/**
-	 * @return the Sha1 checksum value for this file, or a blank string if no sha1 checksum has been set
+	 * @return the Sha1 checksum value for this file, or a blank string if no 
+	 * sha1 checksum has been set
 	 */
 	public String getSha1() {
 		if (this.checksums != null) {
@@ -201,6 +266,9 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		ArrayList<FileType> retval = new ArrayList<FileType>();
 		for (int i = 0; i < uris.length; i++) {
 			if (uris[i] != null && !uris[i].isEmpty()) {
+				if (!uris[i].startsWith(SpdxRdfConstants.SPDX_NAMESPACE)) {
+					throw(new InvalidSPDXAnalysisException("Invalid file type: "+uris[i]));
+				}
 				String fileTypeS = uris[i].substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
 				try {
 					retval.add(FileType.valueOf(fileTypeS));
@@ -239,7 +307,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 			SpdxRdfConstants.PROP_FILE_ARTIFACTOF, artifactOf);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-			SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY, fileDependencies);
+			SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY, fileDependencies, false);
 	}
 	
 	@Override
@@ -559,7 +627,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		}
 		return retval;
 	}
-	
+
     /**
      * This method is used for sorting a list of SPDX files
      * @param file SPDXFile that is compared
@@ -567,7 +635,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
      */
     @Override
     public int compareTo(SpdxFile file) {
-        return this.getName().compareTo(file.getName());        
+    	int retval = this.getName().compareTo(file.getName());
+        return retval;        
     }
 
     // the following methods are added as a TEMPORARY convenience to those

@@ -26,6 +26,7 @@ import org.spdx.html.MustacheMap;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 import com.sampullara.mustache.Mustache;
 import com.sampullara.mustache.MustacheBuilder;
@@ -78,7 +79,7 @@ public class RdfToHtml {
 		}
 		Writer writer = null;
 		try {
-			SPDXDocument doc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
+			SpdxDocument doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
 			writer = new FileWriter(outputHtmlFile);
 			rdfToHtml(doc, writer);
 		} catch (IOException e) {
@@ -115,7 +116,7 @@ public class RdfToHtml {
 				+ "the output html file.");
 	}
 	
-    public static void rdfToHtml(SPDXDocument doc, Writer writer, String templateDirName, String templateFileName) throws MustacheException, IOException, InvalidSPDXAnalysisException {
+    public static void rdfToHtml(SpdxDocument doc, Writer writer, String templateDirName, String templateFileName) throws MustacheException, IOException, InvalidSPDXAnalysisException {
         MustacheBuilder builder = new MustacheBuilder(templateDirName);
         HashMap<String, Object> mustacheMap = MustacheMap.buildMustachMap(doc);
         Mustache mustache = builder.parseFile(templateFileName);
@@ -123,7 +124,7 @@ public class RdfToHtml {
     }
 
 
-	public static void rdfToHtml(SPDXDocument doc, Writer writer) throws MustacheException, IOException, InvalidSPDXAnalysisException {
+	public static void rdfToHtml(SpdxDocument doc, Writer writer) throws MustacheException, IOException, InvalidSPDXAnalysisException {
 		String templateDir = TEMPLATE_ROOT_PATH;
 		File templateDirectoryRoot = new File(templateDir);
 		if (!(templateDirectoryRoot.exists() && templateDirectoryRoot.isDirectory())) {

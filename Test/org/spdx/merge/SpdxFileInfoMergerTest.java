@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 
 /**
  * @author Gang Ling
@@ -57,27 +57,27 @@ public class SpdxFileInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#SpdxFileInfoMerger(org.spdx.rdfparser.SPDXDocument.SPDXPackage)}.
+	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#SpdxFileInfoMerger(org.spdx.rdfparser.SpdxDocument.SpdxPackage)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSpdxFileInfoMerger() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#mergeFileInfo(org.spdx.rdfparser.SPDXDocument[])}.
+	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#mergeFileInfo(org.spdx.rdfparser.SpdxDocument[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testMergeFileInfo() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		ExtractedLicenseInfo[] subNonStdLics = doc2.getExtractedLicenseInfos();
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
@@ -85,10 +85,10 @@ public class SpdxFileInfoMergerTest {
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
-		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
-		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
+		SpdxDocument [] subDocs = new SpdxDocument[]{doc2};
+		SpdxFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
 		
-		SPDXFile[] expectedResult = packageInfo.getFiles();
+		SpdxFile[] expectedResult = packageInfo.getFiles();
 		int num = 0;
 		for(int i = 0; i < mergedResult.length; i++){
 			for(int j = 0; j < expectedResult.length; j++){
@@ -103,19 +103,19 @@ public class SpdxFileInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#checkDOAPProject(org.spdx.rdfparser.SPDXFile)}.
+	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#checkDoapProject(org.spdx.rdfparser.SpdxFile)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
-	public void testCheckDOAPProject() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
+	public void testCheckDoapProject() throws IOException, InvalidSPDXAnalysisException {
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
-		SPDXFile[] testFiles = packageInfo.getFiles();
+		SpdxFile[] testFiles = packageInfo.getFiles();
 		int num = 0;
 		for(int i =0; i < testFiles.length; i++){
-			if(fileMerger.checkDOAPProject(testFiles[i])){
+			if(fileMerger.checkDoapProject(testFiles[i])){
 				num ++;
 			}
 		}
@@ -123,47 +123,47 @@ public class SpdxFileInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#mergeDOAPInfo(org.spdx.rdfparser.DOAPProject[], org.spdx.rdfparser.DOAPProject[])}.
+	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#mergeDOAPInfo(org.spdx.rdfparser.DoapProject[], org.spdx.rdfparser.DoapProject[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testMergeDOAPInfo() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
-		SPDXFile[] testFiles = packageInfo.getFiles();
-		ArrayList<DOAPProject> testProjects = new ArrayList<DOAPProject>();
+		SpdxFile[] testFiles = packageInfo.getFiles();
+		ArrayList<DoapProject> testProjects = new ArrayList<DoapProject>();
 		for(int i = 0; i < testFiles.length; i++){
-			if(fileMerger.checkDOAPProject(testFiles[i])){
-				DOAPProject[] retval = testFiles[i].getArtifactOf();
+			if(fileMerger.checkDoapProject(testFiles[i])){
+				DoapProject[] retval = testFiles[i].getArtifactOf();
 				for(int k = 0; k < retval.length; k++){
 					testProjects.add(retval[k]);
 				}
 			}
 		}
-		DOAPProject[] testProjects1 = new DOAPProject[testProjects.size()];
+		DoapProject[] testProjects1 = new DoapProject[testProjects.size()];
 		testProjects.toArray(testProjects1);
-		DOAPProject[] testProjects2 = new DOAPProject[testProjects.size()];
+		DoapProject[] testProjects2 = new DoapProject[testProjects.size()];
 		testProjects.toArray(testProjects2);
 		
-		DOAPProject[] result = fileMerger.mergeDOAPInfo(testProjects1, testProjects2);
+		DoapProject[] result = fileMerger.mergeDOAPInfo(testProjects1, testProjects2);
 		assertEquals(testProjects1.length,result.length);
 		assertEquals(2, result.length);
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#cloneFiles(org.spdx.rdfparser.SPDXFile[])}.
+	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#cloneFiles(org.spdx.rdfparser.SpdxFile[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testCloneFiles() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
-		SPDXFile[] testFiles = packageInfo.getFiles();
-		SPDXFile[] clonedFiles = fileMerger.cloneFiles(testFiles);
+		SpdxFile[] testFiles = packageInfo.getFiles();
+		SpdxFile[] clonedFiles = fileMerger.cloneFiles(testFiles);
 		int num = 0;
 		for(int i = 0; i < clonedFiles.length; i++){
 			for(int j = 0; j < testFiles.length; j++){
@@ -177,21 +177,21 @@ public class SpdxFileInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#cloneDOAPProject(org.spdx.rdfparser.DOAPProject[])}.
+	 * Test method for {@link org.spdx.merge.SpdxFileInfoMerger#cloneDoapProject(org.spdx.rdfparser.DoapProject[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
-	public void testCloneDOAPProject() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
+	public void testCloneDoapProject() throws IOException, InvalidSPDXAnalysisException {
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
-		SPDXFile[] testFiles = packageInfo.getFiles();
-		ArrayList<DOAPProject> testProjects = new ArrayList<DOAPProject>(); 
+		SpdxFile[] testFiles = packageInfo.getFiles();
+		ArrayList<DoapProject> testProjects = new ArrayList<DoapProject>(); 
 		for(int i = 0; i < testFiles.length; i++){
-			if(fileMerger.checkDOAPProject(testFiles[i])){
-				DOAPProject[] projects = testFiles[i].getArtifactOf();
-				DOAPProject[] clonedProjects = fileMerger.cloneDOAPProject(projects);
+			if(fileMerger.checkDoapProject(testFiles[i])){
+				DoapProject[] projects = testFiles[i].getArtifactOf();
+				DoapProject[] clonedProjects = fileMerger.cloneDoapProject(projects);
 				for(int j = 0; j < clonedProjects.length; j++){
 					testProjects.add(clonedProjects[j]);
 				}

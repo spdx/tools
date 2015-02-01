@@ -21,7 +21,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
 /**
@@ -100,7 +100,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 * @param files Array of SPDX document files - arrays must be sorted
 	 * @param docNames Document names.  Much match the documents in the files.
 	 */
-	public void importCompareResults(SpdxComparer comparer, SPDXFile[][] files, String[] docNames) throws SpdxCompareException {
+	public void importCompareResults(SpdxComparer comparer, SpdxFile[][] files, String[] docNames) throws SpdxCompareException {
 		if (docNames == null) {
 			throw(new SpdxCompareException("Document names can not be null"));
 		}
@@ -123,7 +123,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 			Cell fileNameCell = currentRow.createCell(FILENAME_COL);
 			fileNameCell.setCellValue(fileName);
 			boolean allValuesMatch = true;
-			SPDXFile lastFile = null;
+			SpdxFile lastFile = null;
 			int lastDocIndex = 0;
 			// fill in the data cells and see if all values match
 			for (int i = 0; i < files.length; i++) {
@@ -161,8 +161,8 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 * @return
 	 * @throws SpdxCompareException 
 	 */
-	abstract boolean valuesMatch(SpdxComparer comparer, SPDXFile fileA, int docIndexA,
-			SPDXFile fileB, int docIndexB) throws SpdxCompareException;
+	abstract boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
+			SpdxFile fileB, int docIndexB) throws SpdxCompareException;
 
 	/**
 	 * @param cell
@@ -185,7 +185,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 * @param spdxFile
 	 * @return
 	 */
-	abstract String getFileValue(SPDXFile spdxFile);
+	abstract String getFileValue(SpdxFile spdxFile);
 
 	/**
 	 * Get the next filename in alpha sort order from the files
@@ -193,7 +193,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 * @param fileIndexes
 	 * @return
 	 */
-	private String getNextFileName(SPDXFile[][] files, int[] fileIndexes) {
+	private String getNextFileName(SpdxFile[][] files, int[] fileIndexes) {
 		String retval = null;
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].length > fileIndexes[i]) {
@@ -212,7 +212,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 * @param fileIndexes
 	 * @return
 	 */
-	private boolean allFilesExhausted(SPDXFile[][] files, int[] fileIndexes) {
+	private boolean allFilesExhausted(SpdxFile[][] files, int[] fileIndexes) {
 		for (int i = 0; i < fileIndexes.length; i++) {
 			if (fileIndexes[i] < files[i].length) {
 				return false;

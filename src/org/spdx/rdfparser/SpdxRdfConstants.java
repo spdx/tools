@@ -18,6 +18,7 @@ package org.spdx.rdfparser;
 
 import java.util.regex.Pattern;
 
+
 /**
  * Constants which map to the SPDX specifications found at http://spdx.org/rdf/terms
  * @author Gary O'Neall
@@ -93,6 +94,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_SPDX_FILE_REFERENCE = "referencesFile";
 	public static final String PROP_SPDX_DATA_LICENSE = "dataLicense";
 	public static final String PROP_SPDX_EXTERNAL_DOC_REF = "externalDocumentRef";
+	public static final String SPDX_DOCUMENT_ID = "SPDXRef-DOCUMENT";
 	
 	// SPDX CreationInfo Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
@@ -207,6 +209,7 @@ public interface SpdxRdfConstants {
 	// ExternalDocumentRef properties
 	public static final String PROP_EXTERNAL_DOC_CHECKSUM = "checksum";
 	public static final String PROP_EXTERNAL_SPDX_DOCUMENT = "spdxDocument";
+	public static final String PROP_EXTERNAL_DOC_ID = "externalDocumentId";
 	
 	// SPDX Review Properties
 	// NOTE: These have all been deprecated as of SPDX 2.0
@@ -228,7 +231,12 @@ public interface SpdxRdfConstants {
 	
 	// SPDX Element Reference format
 	public static String SPDX_ELEMENT_REF_PRENUM = "SPDXRef-";
-	public static Pattern SPDX_ELEMENT_REF_PATTERN = Pattern.compile(SPDX_ELEMENT_REF_PRENUM+"(\\d+)$");
+	public static Pattern SPDX_ELEMENT_REF_PATTERN = Pattern.compile(SPDX_ELEMENT_REF_PRENUM+"([0-9a-zA-Z\\.\\-\\+]+)$");
+	
+	// External Document ID format
+	public static String EXTERNAL_DOC_REF_PRENUM = "DocumentRef-";
+	public static Pattern EXTERNAL_DOC_REF_PATTERN = Pattern.compile(EXTERNAL_DOC_REF_PRENUM+"([0-9a-zA-Z\\.\\-\\+]+)$");
+	
 	
 	public static Pattern SPDX_VERSION_PATTERN = Pattern.compile("^SPDX-(\\d+)\\.(\\d+)$");
 

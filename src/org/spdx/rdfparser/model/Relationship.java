@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -48,8 +49,65 @@ public class Relationship extends RdfModelObject {
 		 relationshipType_metafileOf, relationshipType_optionalComponentOf,
 		 relationshipType_other, relationshipType_packageOf,
 		 relationshipType_patchApplied, relationshipType_patchFor,
-		 relationshipType_spdxAmendment, relationshipType_staticLink,
+		 relationshipType_amendment, relationshipType_staticLink,
 		 relationshipType_testcaseOf
+	}
+	
+	public static HashMap<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG = 
+			new  HashMap<RelationshipType, String>();
+	public static HashMap<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE = 
+			new  HashMap<String, RelationshipType>();
+	static {
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_buildToolOf, "BUILD_TOOL_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("BUILD_TOOL_OF",RelationshipType.relationshipType_buildToolOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_containedBy, "CONTAINED_BY");
+		TAG_TO_RELATIONSHIP_TYPE.put("CONTAINED_BY", RelationshipType.relationshipType_containedBy);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_contains, "CONTAINS");
+		TAG_TO_RELATIONSHIP_TYPE.put("CONTAINS", RelationshipType.relationshipType_contains);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_copyOf, "COPY_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("COPY_OF", RelationshipType.relationshipType_copyOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_dataFile, "DATA_FILE_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("DATA_FILE_OF", RelationshipType.relationshipType_dataFile);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_descendantOf, "DESCENDANT_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("DESCENDANT_OF", RelationshipType.relationshipType_descendantOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_distributionArtifact, "DISTRIBUTION_ARTIFACT");
+		TAG_TO_RELATIONSHIP_TYPE.put("DISTRIBUTION_ARTIFACT", RelationshipType.relationshipType_distributionArtifact);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_documentation, "DOCUMENTATION_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("DOCUMENTATION_OF", RelationshipType.relationshipType_documentation);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_dynamicLink, "DYNAMIC_LINK");
+		TAG_TO_RELATIONSHIP_TYPE.put("DYNAMIC_LINK", RelationshipType.relationshipType_dynamicLink);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_expandedFromArchive, "EXPANDED_FROM_ARCHIVE");
+		TAG_TO_RELATIONSHIP_TYPE.put("EXPANDED_FROM_ARCHIVE", RelationshipType.relationshipType_expandedFromArchive);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_fileAdded, "FILE_ADDED");
+		TAG_TO_RELATIONSHIP_TYPE.put("FILE_ADDED", RelationshipType.relationshipType_fileAdded);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_fileDeleted, "FILE_DELETED");
+		TAG_TO_RELATIONSHIP_TYPE.put("FILE_DELETED", RelationshipType.relationshipType_fileDeleted);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_fileModified, "FILE_MODIFIED");
+		TAG_TO_RELATIONSHIP_TYPE.put("FILE_MODIFIED", RelationshipType.relationshipType_fileModified);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_generatedFrom, "GENERATED_FROM");
+		TAG_TO_RELATIONSHIP_TYPE.put("GENERATED_FROM", RelationshipType.relationshipType_generatedFrom);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_generates, "GENERATES");
+		TAG_TO_RELATIONSHIP_TYPE.put("GENERATES", RelationshipType.relationshipType_generates);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_metafileOf, "METAFILE_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("METAFILE_OF", RelationshipType.relationshipType_metafileOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_optionalComponentOf, "OPTIONAL_COMPONENT_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("OPTIONAL_COMPONENT_OF", RelationshipType.relationshipType_optionalComponentOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_other, "OTHER");
+		TAG_TO_RELATIONSHIP_TYPE.put("OTHER",RelationshipType.relationshipType_other);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_packageOf, "PACKAGE_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("PACKAGE_OF", RelationshipType.relationshipType_packageOf);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_patchApplied, "PATCH_APPLIED");
+		TAG_TO_RELATIONSHIP_TYPE.put("PATCH_APPLIED", RelationshipType.relationshipType_patchApplied);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_patchFor, "PATCH_FOR");
+		TAG_TO_RELATIONSHIP_TYPE.put("PATCH_FOR", RelationshipType.relationshipType_patchFor);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_amendment, "AMENDS");
+		TAG_TO_RELATIONSHIP_TYPE.put("AMENDS", RelationshipType.relationshipType_amendment);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_staticLink, "STATIC_LINK");
+		TAG_TO_RELATIONSHIP_TYPE.put("STATIC_LINK", RelationshipType.relationshipType_staticLink);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_testcaseOf, "TEST_CASE_OF");
+		TAG_TO_RELATIONSHIP_TYPE.put("TEST_CASE_OF", RelationshipType.relationshipType_testcaseOf);
 	}
 
 	private RelationshipType relationshipType;
@@ -76,6 +134,14 @@ public class Relationship extends RdfModelObject {
 	public Relationship(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
+		getPropertiesFromModel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.relatedSpdxElement = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
@@ -91,7 +157,6 @@ public class Relationship extends RdfModelObject {
 			}
 		}
 	}
-
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
@@ -128,7 +193,7 @@ public class Relationship extends RdfModelObject {
 		}
 		if (this.relatedSpdxElement != null) {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
+					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement, false);
 		}
 		if (this.relationshipType != null) {
 			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
@@ -239,5 +304,4 @@ public class Relationship extends RdfModelObject {
 				equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
 				equalsConsideringNull(comment, comp.getComment()));
 	}
-
 }

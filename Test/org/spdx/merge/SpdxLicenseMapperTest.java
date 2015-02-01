@@ -26,9 +26,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
@@ -73,14 +73,14 @@ public class SpdxLicenseMapperTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mappingNonStdLic(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.license.ExtractedLicenseInfo)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mappingNonStdLic(org.spdx.rdfparser.SpdxDocument, org.spdx.rdfparser.license.ExtractedLicenseInfo)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testMappingNewNonStdLic() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH3);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH3);
 		ExtractedLicenseInfo[] subNonStdLics = doc3.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
@@ -95,14 +95,14 @@ public class SpdxLicenseMapperTest {
 	
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#replaceNonStdLicInFile(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.SPDXFile)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#replaceNonStdLicInFile(org.spdx.rdfparser.SpdxDocument, org.spdx.rdfparser.SpdxFile)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testReplaceNonStdLicInFile() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH3);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH3);
 		ExtractedLicenseInfo[] subNonStdLics = doc3.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
@@ -111,7 +111,7 @@ public class SpdxLicenseMapperTest {
 		subNonStdLics[0] = clonedNonStdLic;//replace the lics 
 		doc3.setExtractedLicenseInfos(subNonStdLics);
 
-		SPDXFile[] subFiles = doc3.getSpdxPackage().getFiles();
+		SpdxFile[] subFiles = doc3.getSpdxPackage().getFiles();
 		String fileName = "lib-source/mergetest2.jar";
 		String sha1 = "5ab4e1e67a2d28fced849ee1bb76e7391b93f125";
 		AnyLicenseInfo[] mappedLicsInFile = null;
@@ -139,14 +139,14 @@ public class SpdxLicenseMapperTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mapNonStdLicInMap(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.license.AnyLicenseInfo)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mapNonStdLicInMap(org.spdx.rdfparser.SpdxDocument, org.spdx.rdfparser.license.AnyLicenseInfo)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testMapNonStdLicInMap() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH2);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH2);
 		ExtractedLicenseInfo[] subNonStdLics = doc2.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
@@ -164,15 +164,15 @@ public class SpdxLicenseMapperTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mapLicenseInfo(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.license.AnyLicenseInfo)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#mapLicenseInfo(org.spdx.rdfparser.SpdxDocument, org.spdx.rdfparser.license.AnyLicenseInfo)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 * @throws InvalidLicenseStringException 
 	 */
 	@Test
 	public void testMapLicenseInfo() throws IOException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH2);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH2);
 		ExtractedLicenseInfo[] subNonStdLics = doc3.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 
@@ -211,14 +211,14 @@ public class SpdxLicenseMapperTest {
 	}
 	
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#docInNonStdLicIdMap(org.spdx.rdfparser.SPDXDocument)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#docInNonStdLicIdMap(org.spdx.rdfparser.SpdxDocument)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testDocInNonStdLicIdMap() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH3);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH3);
 		ExtractedLicenseInfo[] subNonStdLics = doc3.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
@@ -229,14 +229,14 @@ public class SpdxLicenseMapperTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#foundNonStdLicIds(org.spdx.rdfparser.SPDXDocument)}.
+	 * Test method for {@link org.spdx.merge.SpdxLicenseMapper#foundNonStdLicIds(org.spdx.rdfparser.SpdxDocument)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testFoundNonStdLicIds() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH3);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH3);
 		ExtractedLicenseInfo[] subNonStdLics = doc3.getExtractedLicenseInfos();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		
@@ -245,7 +245,7 @@ public class SpdxLicenseMapperTest {
 		
 		HashMap<AnyLicenseInfo, AnyLicenseInfo> interalMap = mapper.foundInterMap(doc3);
 		HashMap<AnyLicenseInfo,AnyLicenseInfo> expected = new HashMap<AnyLicenseInfo, AnyLicenseInfo>();
-		String NewNonStdLicId = doc1.getNextLicenseRef();
+		String NewNonStdLicId = doc1.getDocumentContainer().getNextLicenseRef();
 		clonedNonStdLic.setLicenseId(NewNonStdLicId);
 		expected.put(subNonStdLics[0], clonedNonStdLic);
 		
@@ -260,7 +260,7 @@ public class SpdxLicenseMapperTest {
 	@Test
 	public void testIsNonStdLicIdMapEmpty() throws IOException, InvalidSPDXAnalysisException {
 		@SuppressWarnings("unused")
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 		assertTrue(mapper.isNonStdLicIdMapEmpty());
 	}
@@ -272,8 +272,8 @@ public class SpdxLicenseMapperTest {
 	 */
 	@Test
 	public void testClearNonStdLicIdMap() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH3);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH3);
 		ExtractedLicenseInfo[] subNonStdLics = doc3.getExtractedLicenseInfos().clone();
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 

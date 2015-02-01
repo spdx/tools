@@ -30,13 +30,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.compare.SpdxLicenseDifference;
 import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
-import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
-import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -49,7 +47,22 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxElement;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxItem;
+import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.Annotation.AnnotationType;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.Relationship.RelationshipType;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.model.UnitTestHelper;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
 
 /**
  * @author Gary O'Neall
@@ -61,6 +74,120 @@ public class SpdxComparerTest {
 	private static final String STD_LIC_ID_CC0 = "CC-BY-1.0";
 	private static final String STD_LIC_ID_MPL11 = "MPL-1.1";
 	File testRDFFile;
+	
+	private static final String COMMENTA = "comment A";
+	private static final String COMMENTB = "comment B";
+	private static final ExtractedLicenseInfo LICENSEA1 = new ExtractedLicenseInfo("LicenseRef-1", "License1");
+	private static final ExtractedLicenseInfo LICENSEA2 = new ExtractedLicenseInfo("LicenseRef-2", "License2");
+	private static final ExtractedLicenseInfo LICENSEA3 = new ExtractedLicenseInfo("LicenseRef-3", "License3");
+	private static final ExtractedLicenseInfo LICENSEB1 = new ExtractedLicenseInfo("LicenseRef-4", "License1");
+	private static final ExtractedLicenseInfo LICENSEB2 = new ExtractedLicenseInfo("LicenseRef-5", "License2");
+	private static final ExtractedLicenseInfo LICENSEB3 = new ExtractedLicenseInfo("LicenseRef-6", "License3");
+	private static final AnyLicenseInfo[] LICENSE_INFO_FROM_FILESA = new AnyLicenseInfo[] {LICENSEA1, LICENSEA2, LICENSEA3};
+	private static final AnyLicenseInfo[] LICENSE_INFO_FROM_FILESB = new AnyLicenseInfo[] {LICENSEB1, LICENSEB2, LICENSEB3};
+	private static final String LICENSE_COMMENTA = "License Comment A";
+	@SuppressWarnings("unused")
+	private static final String LICENSE_COMMENTB = "License Comment B";
+	private static final String COPYRIGHTA = "Copyright A";
+	@SuppressWarnings("unused")
+	private static final String COPYRIGHTB = "Copyright B";
+	private static final AnyLicenseInfo LICENSE_CONCLUDEDA = LICENSEA1;
+	private static final AnyLicenseInfo LICENSE_CONCLUDEDB = LICENSEB1;
+	private static final String NAMEA = "NameA";
+	private static final String NAMEB = "NameB";
+	private static final String NAMEC = "NameC";
+	private static final HashMap<String, String> LICENSE_XLATION_MAP = new HashMap<String, String>();
+	private static final AnyLicenseInfo LICENSE_DECLAREDA = LICENSEA2;
+	private static final AnyLicenseInfo LICENSE_DECLAREDB = LICENSEB2;
+	private static final String ORIGINATORA = "Organization: OrgA";
+	@SuppressWarnings("unused")
+	private static final String ORIGINATORB = "Organization: OrgB";
+	private static final String HOMEPAGEA = "http://home.page/a";
+	@SuppressWarnings("unused")
+	private static final String HOMEPAGEB = "http://home.page/b";
+	private static final String DOWNLOADA = "http://download.page/a";
+	@SuppressWarnings("unused")
+	private static final String DOWNLOADB = "http://download.page/b";
+	private static final String DESCRIPTIONA = "Description A";
+	@SuppressWarnings("unused")
+	private static final String DESCRIPTIONB = "Description B";
+	private static final String PACKAGE_FILENAMEA = "packageFileNameA";
+	@SuppressWarnings("unused")
+	private static final String PACKAGE_FILENAMEB = "packageFileNameB";
+	private static final String SOURCEINFOA = "Sourc info A";
+	@SuppressWarnings("unused")
+	private static final String SOURCEINFOB = "Sourc info B";
+	private static final String SUMMARYA = "Summary A";
+	@SuppressWarnings("unused")
+	private static final String SUMMARYB = "Summary B";
+	private static final String VERSIONINFOA = "Version A";
+	@SuppressWarnings("unused")
+	private static final String VERSIONINFOB = "Version B";
+	private static final String SUPPLIERA = "Person: Supplier A";
+	@SuppressWarnings("unused")
+	private static final String SUPPLIERB = "Person: Supplier B";
+	private static final String DOC_URIA = "http://spdx.org/documents/uriA";
+	private static final String DOC_URIB = "http://spdx.org/documents/uriB";
+	private static final ExtractedLicenseInfo[] EXTRACTED_LICENSESA = new ExtractedLicenseInfo[]{
+		LICENSEA1, LICENSEA2, LICENSEA3
+	};
+	private static final ExtractedLicenseInfo[] EXTRACTED_LICENSESB = new ExtractedLicenseInfo[]{
+		LICENSEB1, LICENSEB2, LICENSEB3
+	};
+	private static final String DOC_NAMEA = "DocumentA";
+	private static final String DOC_NAMEB = "DocumentB";
+	private static final SPDXCreatorInformation CREATION_INFOA = new SPDXCreatorInformation(
+			new String[] {"Person: CreatorA"}, "2010-01-29T18:30:22Z", "Creator CommentA", "1.15");
+	private static final SPDXCreatorInformation CREATION_INFOB = new SPDXCreatorInformation(
+			new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", "Creator CommentB", "1.17");
+	static {
+		LICENSE_XLATION_MAP.put("LicenseRef-1", "LicenseRef-4");
+		LICENSE_XLATION_MAP.put("LicenseRef-2", "LicenseRef-5");
+		LICENSE_XLATION_MAP.put("LicenseRef-3", "LicenseRef-6");
+	}
+	private Annotation ANNOTATION1;
+	private Annotation ANNOTATION2;
+	private Annotation ANNOTATION3;
+	private Annotation ANNOTATION4;
+	private Annotation[] ANNOTATIONSA;
+	@SuppressWarnings("unused")
+	private Annotation[] ANNOTATIONSB;
+	
+	private Relationship[] RELATIONSHIPSA;
+	@SuppressWarnings("unused")
+	private Relationship[] RELATIONSHIPSB;
+	private SpdxElement RELATED_ELEMENT1;
+	private SpdxElement RELATED_ELEMENT2;
+	private SpdxElement RELATED_ELEMENT3;
+	private SpdxElement RELATED_ELEMENT4;
+	private Relationship RELATIONSHIP1;
+	private Relationship RELATIONSHIP2;
+	private Relationship RELATIONSHIP3;
+	private Relationship RELATIONSHIP4;
+	private Checksum CHECKSUM1;
+	private Checksum CHECKSUM2;
+	private Checksum CHECKSUM3;
+	private Checksum CHECKSUM4;
+	private Checksum[] CHECKSUMSA;
+	private Checksum[] CHECKSUMSB;
+	private String FILE1_NAME = "file1Name";
+	private String FILE2_NAME = "file2Name";
+	private String FILE3_NAME = "file3Name";
+	private String FILE4_NAME = "file4Name";
+	private SpdxFile FILE1A;
+	private SpdxFile FILE1B;
+	private SpdxFile FILE1B_DIFF_CHECKSUM;
+	private SpdxFile FILE2A;
+	private SpdxFile FILE3A;
+	private SpdxFile FILE2B;
+	private SpdxFile FILE3B;
+	private SpdxFile FILE4A;
+	private SpdxFile[] FILESA;
+	private SpdxFile[] FILESB;
+	private SpdxFile[] FILESB_SAME;
+	private SpdxPackageVerificationCode VERIFICATION_CODEA;
+	@SuppressWarnings("unused")
+	private SpdxPackageVerificationCode VERIFICATION_CODEB;
 
 	/**
 	 * @throws java.lang.Exception
@@ -68,6 +195,85 @@ public class SpdxComparerTest {
 	@Before
 	public void setUp() throws Exception {
 		this.testRDFFile = new File(TEST_RDF_FILE_PATH); 
+		ANNOTATION1 = new Annotation("Annotator1", AnnotationType.annotationType_other, 
+				"2010-01-29T18:30:22Z", "AnnotationComment1");
+		ANNOTATION2 = new Annotation("Annotator2", AnnotationType.annotationType_review, 
+				"2011-01-29T18:30:22Z", "AnnotationComment2");
+		ANNOTATION3 = new Annotation("Annotator3", AnnotationType.annotationType_other, 
+				"2012-01-29T18:30:22Z", "AnnotationComment3");
+		ANNOTATION4 = new Annotation("Annotator4", AnnotationType.annotationType_review, 
+				"2013-01-29T18:30:22Z", "AnnotationComment4");
+		ANNOTATIONSA = new Annotation[] {ANNOTATION1, ANNOTATION2};
+		ANNOTATIONSB = new Annotation[] {ANNOTATION3, ANNOTATION4};
+		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+				"related element comment 1", null, null);
+		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+				"related element comment 2", null, null);
+		RELATED_ELEMENT3 = new SpdxElement("relatedElementName3", 
+				"related element comment 3", null, null);
+		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
+				"related element comment 4", null, null);
+		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+				RelationshipType.relationshipType_contains, "Relationship Comment1");
+		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+				RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3, 
+				RelationshipType.relationshipType_dataFile, "Relationship Comment3");
+		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4, 
+				RelationshipType.relationshipType_distributionArtifact, "Relationship Comment4");
+		RELATIONSHIPSA = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
+		RELATIONSHIPSB = new Relationship[] {RELATIONSHIP3, RELATIONSHIP4};
+		CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"111bf72bf99b7e471f1a27989667a903658652bb");
+		CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"222bf72bf99b7e471f1a27989667a903658652bb");
+		CHECKSUM3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"333bf72bf99b7e471f1a27989667a903658652bb");
+		CHECKSUM4 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"444bf72bf99b7e471f1a27989667a903658652bb");
+		CHECKSUMSA = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		CHECKSUMSB = new Checksum[] {CHECKSUM3, CHECKSUM4};
+		
+		FILE1A = new SpdxFile(FILE1_NAME, null, null, null, 
+				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+		FILE1B = new SpdxFile(FILE1_NAME, null, null, null, 
+				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+		FILE1B_DIFF_CHECKSUM = new SpdxFile(FILE1_NAME, null, null, null, 
+				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSB, null, null, null);
+		FILE2A = new SpdxFile(FILE2_NAME, null, null, null, 
+				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+		FILE3A = new SpdxFile(FILE3_NAME, null, null, null, 
+				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+		FILE4A = new SpdxFile(FILE4_NAME, null, null, null, 
+				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+		FILE2B = new SpdxFile(FILE2_NAME, null, null, null, 
+				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+		FILE3B = new SpdxFile(FILE3_NAME, null, null, null, 
+				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
+				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
+				CHECKSUMSA, null, null, null);
+
+		FILESA = new SpdxFile[] {FILE1A, FILE2A};
+		FILESB_SAME = new SpdxFile[] {FILE1B, FILE2B};
+		FILESB = new SpdxFile[] {FILE1B_DIFF_CHECKSUM, FILE3B};
+		VERIFICATION_CODEA = new SpdxPackageVerificationCode("aaabf72bf99b7e471f1a27989667a903658652bb",
+				new String[] {"file2"});
+		VERIFICATION_CODEB = new SpdxPackageVerificationCode("bbbbf72bf99b7e471f1a27989667a903658652bb",
+				new String[] {"file3"});
 	}
 
 	/**
@@ -78,7 +284,7 @@ public class SpdxComparerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#compare(org.spdx.rdfparser.SPDXDocument, org.spdx.rdfparser.SPDXDocument)}.
+	 * Test method for {@link org.spdx.compare.SpdxComparer#compare(org.spdx.rdfparser.SpdxDocument, org.spdx.rdfparser.SpdxDocument)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 * @throws SpdxCompareException 
@@ -86,10 +292,10 @@ public class SpdxComparerTest {
 	@Test
 	public void testCompare() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		try {
-			comparer.isCopyrightTextsEqual();	// should fail
+			comparer.isCreatorInformationEqual();	// should fail
 			fail("Not checking for comparer being complete");
 		} catch (SpdxCompareException ex) {
 			// we expect an error
@@ -110,8 +316,8 @@ public class SpdxComparerTest {
 	@Test
 	public void testCompareLicense() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException, InvalidLicenseStringException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
@@ -275,7 +481,7 @@ public class SpdxComparerTest {
 	 * @param doc
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void alterExtractedLicenseInfoIds(SPDXDocument doc, int digit) throws InvalidSPDXAnalysisException {
+	private void alterExtractedLicenseInfoIds(SpdxDocument doc, int digit) throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo[] extracted = doc.getExtractedLicenseInfos();
 		for (int i = 0; i < extracted.length; i++) {
 			String oldId = extracted[i].getLicenseId();
@@ -295,12 +501,12 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsDifferenceFound() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
-		doc2.setDocumentComment("a new doc comment");
+		doc2.setComment("a new doc comment");
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isDifferenceFound());
 		// Note - we will test the isDifferenceFound in each of the specific
@@ -317,17 +523,17 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsSpdxVersionEqual() throws InvalidSPDXAnalysisException, SpdxCompareException, IOException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
 		assertTrue(comparer.isSpdxVersionEqual());
-		doc2.setSpdxVersion("SPDX-1.0");
+		doc2.setSpecVersion("SPDX-1.0");
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isSpdxVersionEqual());
-		doc1.setSpdxVersion("SPDX-1.0");
+		doc1.setSpecVersion("SPDX-1.0");
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
 	}
@@ -341,15 +547,15 @@ public class SpdxComparerTest {
 	@Test
 	public void testGetSpdxDoc() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		String DOC_2_COMMENT = "doc2";
 		String DOC_1_COMMENT = "doc1";
-		doc1.setDocumentComment(DOC_1_COMMENT);
-		doc2.setDocumentComment(DOC_2_COMMENT);
+		doc1.setComment(DOC_1_COMMENT);
+		doc2.setComment(DOC_2_COMMENT);
 		comparer.compare(doc1, doc2);
-		assertEquals(DOC_1_COMMENT, comparer.getSpdxDoc(0).getDocumentComment());
-		assertEquals(DOC_2_COMMENT, comparer.getSpdxDoc(1).getDocumentComment());
+		assertEquals(DOC_1_COMMENT, comparer.getSpdxDoc(0).getComment());
+		assertEquals(DOC_2_COMMENT, comparer.getSpdxDoc(1).getComment());
 
 	}
 
@@ -362,13 +568,13 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsDataLicenseEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
 		assertTrue(comparer.isDataLicenseEqual());
-		doc2.setSpdxVersion("SPDX-1.0");
+		doc2.setSpecVersion("SPDX-1.0");
 		doc2.setDataLicense(LicenseInfoFactory.getListedLicenseById(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0));
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isDifferenceFound());
@@ -381,17 +587,17 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsDocumentCommentsEqual()throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isDocumentCommentsEqual());
 		assertFalse(comparer.isDifferenceFound());
-		doc2.setDocumentComment("a new doc comment");
+		doc2.setComment("a new doc comment");
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isDocumentCommentsEqual());
-		doc1.setDocumentComment("a new doc comment");
+		doc1.setComment("a new doc comment");
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isDifferenceFound());
 		assertTrue(comparer.isDocumentCommentsEqual());
@@ -400,11 +606,12 @@ public class SpdxComparerTest {
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxComparer#isReviewersEqual()}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testIsReviewersEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 
 		String reviewDate1 = "2010-02-03T00:00:00Z";
@@ -488,8 +695,8 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsExtractedLicensingInfosEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		ExtractedLicenseInfo[] orig1 = doc1.getExtractedLicenseInfos();
 		ExtractedLicenseInfo[] orig2 = doc2.getExtractedLicenseInfos();
@@ -499,47 +706,47 @@ public class SpdxComparerTest {
 
 		int doc1id = 100;
 		int doc2id = 200;
-		String id1_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id1_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text1 = "License text 1";
 		String name1 = "licname1";
 		String[] crossReff1 = new String[] {"http://cross.ref.one"};
 		String comment1 = "comment1";
 		ExtractedLicenseInfo lic1_1 = new ExtractedLicenseInfo(
 				id1_1, text1, name1, crossReff1, comment1);
-		String id1_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id1_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic1_2 = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, comment1);
 		
-		String id2_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id2_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text2 = "License text 2";
 		String name2 = "licname2";
 		String[] crossReff2 = new String[] {"http://cross.ref.one", "http://cross.ref.two"};
 		String comment2 = "comment2";
 		ExtractedLicenseInfo lic2_1 = new ExtractedLicenseInfo(
 				id2_1, text2, name2, crossReff2, comment2);
-		String id2_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id2_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic2_2 = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, comment2);
 		
-		String id3_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id3_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text3 = "License text 3";
 		String name3 = "";
 		String[] crossReff3 = new String[] {};
 		String comment3 = "comment3";
 		ExtractedLicenseInfo lic3_1 = new ExtractedLicenseInfo(
 				id3_1, text3, name3, crossReff3, comment3);
-		String id3_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id3_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic3_2 = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff3, comment3);
 
-		String id4_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id4_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text4 = "License text 4";
 		String name4 = "";
 		String[] crossReff4 = new String[] {};
 		String comment4 = "";
 		ExtractedLicenseInfo lic4_1 = new ExtractedLicenseInfo(
 				id4_1, text4, name4, crossReff4, comment4);
-		String id4_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id4_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic4_2 = new ExtractedLicenseInfo(
 				id4_2, text4, name4, crossReff4, comment4);
 
@@ -570,13 +777,10 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
 
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		ExtractedLicenseInfo[] testexl0 = doc1.getExtractedLicenseInfos();
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
-		ExtractedLicenseInfo[] testexl1 = doc1.getExtractedLicenseInfos();
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc2.setExtractedLicenseInfos(exLicenses2);
-		ExtractedLicenseInfo[] testexl2 = doc2.getExtractedLicenseInfos();
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isExtractedLicensingInfosEqual());
 		assertTrue(comparer.isDifferenceFound());
@@ -589,8 +793,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+1] = lic1_2;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -636,8 +840,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
 
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -659,8 +863,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+1] = lic1_2_diff_licenref;
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -671,11 +875,12 @@ public class SpdxComparerTest {
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxComparer#getUniqueReviewers(int, int)}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetUniqueReviewers() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 
 		String reviewDate1 = "2010-02-03T00:00:00Z";
@@ -756,11 +961,12 @@ public class SpdxComparerTest {
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxComparer#getReviewerDifferences(int, int)}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetReviewerDifferences() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 
 		String reviewDate1 = "2010-02-03T00:00:00Z";
@@ -874,8 +1080,8 @@ public class SpdxComparerTest {
 	@Test
 	public void testGetUniqueExtractedLicenses() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		ExtractedLicenseInfo[] orig1 = doc1.getExtractedLicenseInfos();
 		ExtractedLicenseInfo[] orig2 = doc2.getExtractedLicenseInfos();
@@ -885,47 +1091,47 @@ public class SpdxComparerTest {
 
 		int doc1id = 100;
 		int doc2id = 200;
-		String id1_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id1_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text1 = "License text 1";
 		String name1 = "licname1";
 		String[] crossReff1 = new String[] {"http://cross.ref.one"};
 		String comment1 = "comment1";
 		ExtractedLicenseInfo lic1_1 = new ExtractedLicenseInfo(
 				id1_1, text1, name1, crossReff1, comment1);
-		String id1_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id1_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic1_2 = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, comment1);
 		
-		String id2_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id2_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text2 = "License text 2";
 		String name2 = "licname2";
 		String[] crossReff2 = new String[] {"http://cross.ref.one", "http://cross.ref.two"};
 		String comment2 = "comment2";
 		ExtractedLicenseInfo lic2_1 = new ExtractedLicenseInfo(
 				id2_1, text2, name2, crossReff2, comment2);
-		String id2_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id2_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic2_2 = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, comment2);
 		
-		String id3_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id3_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text3 = "License text 3";
 		String name3 = "";
 		String[] crossReff3 = new String[] {};
 		String comment3 = "comment3";
 		ExtractedLicenseInfo lic3_1 = new ExtractedLicenseInfo(
 				id3_1, text3, name3, crossReff3, comment3);
-		String id3_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id3_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic3_2 = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff3, comment3);
 
-		String id4_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id4_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text4 = "License text 4";
 		String name4 = "";
 		String[] crossReff4 = new String[] {};
 		String comment4 = "";
 		ExtractedLicenseInfo lic4_1 = new ExtractedLicenseInfo(
 				id4_1, text4, name4, crossReff4, comment4);
-		String id4_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id4_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic4_2 = new ExtractedLicenseInfo(
 				id4_2, text4, name4, crossReff4, comment4);
 
@@ -1004,8 +1210,8 @@ public class SpdxComparerTest {
 	@Test
 	public void testGetExtractedLicenseDifferences() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		ExtractedLicenseInfo[] orig1 = doc1.getExtractedLicenseInfos();
 		ExtractedLicenseInfo[] orig2 = doc2.getExtractedLicenseInfos();
@@ -1015,47 +1221,47 @@ public class SpdxComparerTest {
 
 		int doc1id = 100;
 		int doc2id = 200;
-		String id1_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id1_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text1 = "License text 1";
 		String name1 = "licname1";
 		String[] crossReff1 = new String[] {"http://cross.ref.one"};
 		String comment1 = "comment1";
 		ExtractedLicenseInfo lic1_1 = new ExtractedLicenseInfo(
 				id1_1, text1, name1, crossReff1, comment1);
-		String id1_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id1_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic1_2 = new ExtractedLicenseInfo(
 				id1_2, text1, name1, crossReff1, comment1);
 		
-		String id2_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id2_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text2 = "License text 2";
 		String name2 = "licname2";
 		String[] crossReff2 = new String[] {"http://cross.ref.one", "http://cross.ref.two"};
 		String comment2 = "comment2";
 		ExtractedLicenseInfo lic2_1 = new ExtractedLicenseInfo(
 				id2_1, text2, name2, crossReff2, comment2);
-		String id2_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id2_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic2_2 = new ExtractedLicenseInfo(
 				id2_2, text2, name2, crossReff2, comment2);
 		
-		String id3_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id3_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text3 = "License text 3";
 		String name3 = "name3";
 		String[] crossReff3 = new String[] {"http://crossref3.org"};
 		String comment3 = "comment3";
 		ExtractedLicenseInfo lic3_1 = new ExtractedLicenseInfo(
 				id3_1, text3, name3, crossReff3, comment3);
-		String id3_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id3_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic3_2 = new ExtractedLicenseInfo(
 				id3_2, text3, name3, crossReff3, comment3);
 
-		String id4_1 = SPDXDocument.formNonStandardLicenseID(doc1id++);
+		String id4_1 = SpdxDocumentContainer.formNonStandardLicenseID(doc1id++);
 		String text4 = "License text 4";
 		String name4 = "";
 		String[] crossReff4 = new String[] {};
 		String comment4 = "";
 		ExtractedLicenseInfo lic4_1 = new ExtractedLicenseInfo(
 				id4_1, text4, name4, crossReff4, comment4);
-		String id4_2 = SPDXDocument.formNonStandardLicenseID(doc2id++);
+		String id4_2 = SpdxDocumentContainer.formNonStandardLicenseID(doc2id++);
 		ExtractedLicenseInfo lic4_2 = new ExtractedLicenseInfo(
 				id4_2, text4, name4, crossReff4, comment4);
 
@@ -1071,8 +1277,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2;
 		
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -1103,8 +1309,8 @@ public class SpdxComparerTest {
 		exLicenses2[orig2.length+2] = lic4_2;
 		exLicenses2[orig2.length+3] = lic2_2_diff_Comment;
 
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		doc1.setExtractedLicenseInfos(exLicenses1);
 		doc2.setExtractedLicenseInfos(exLicenses2);
 		comparer.compare(doc1, doc2);
@@ -1225,405 +1431,17 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsPackageEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
+		assertTrue(comparer.isPackagesEquals());
 		assertFalse(comparer.isDifferenceFound());
-		
-		doc1.getSpdxPackage().setDescription("Different Description");
+		((SpdxPackage)(doc1.getSpdxItems()[0])).setDescription("Different Description");
 		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageEqual());
+		assertFalse(comparer.isPackagesEquals());
 		assertTrue(comparer.isDifferenceFound());
 		// note - other test cases will test to make sure isPackageEquals is set for all changes where it should be false
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageNamesEqual()}.
-	 */
-	@Test
-	public void testIsPackageNamesEqual()  throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageNamesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setDeclaredName("New Package Name");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageNamesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageVersionsEqual()}.
-	 */
-	@Test
-	public void testIsPackageVersionsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageVersionsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setVersionInfo("2.2.2");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageVersionsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageLicenseInfoFromFilesEqual()}.
-	 */
-	@Test
-	public void testIsPackageLicenseInfoFromFilesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageVersionsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		// one additional license
-		AnyLicenseInfo[] orig = doc1.getSpdxPackage().getLicenseInfoFromFiles();
-		AnyLicenseInfo[] addOne = Arrays.copyOf(orig, orig.length+1);
-		addOne[orig.length] = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
-		doc1.getSpdxPackage().setLicenseInfoFromFiles(addOne);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageLicenseInfoFromFilesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-		
-		if (orig[0] instanceof SpdxListedLicense &&
-				((SpdxListedLicense)orig[0]).getLicenseId() == STD_LIC_ID_CC0) {
-			orig[0] = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_MPL11);
-		} else {
-			orig[0] = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
-		}
-		doc1.getSpdxPackage().setLicenseInfoFromFiles(orig);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageLicenseInfoFromFilesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageFileNamesEqual()}.
-	 */
-	@Test
-	public void testIsPackageFileNamesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageFileNamesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setFileName("NewFileName.tar.gz");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageFileNamesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageSuppliersEqual()}.
-	 */
-	@Test
-	public void testIsPackageSuppliersEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageSuppliersEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setSupplier("Person: New supplier");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageSuppliersEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageOriginatorsEqual()}.
-	 */
-	@Test
-	public void testIsPackageOriginatorsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageOriginatorsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setOriginator("Person: New originator");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageOriginatorsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageDownloadLocationsEqual()}.
-	 */
-	@Test
-	public void testIsPackageDownloadLocationsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageDownloadLocationsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setDownloadUrl("http://newdownloadurl.org");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageDownloadLocationsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-	
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageHomePagesEqual()}.
-	 */
-	@Test
-	public void testIsPackageHomePagesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.ispackageHomePagesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setHomePage("http://different/home/page");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.ispackageHomePagesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageVerificationCodesEqual()}.
-	 */
-	@Test
-	public void testIsPackageVerificationCodesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageVerificationCodesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		SpdxPackageVerificationCode oriVc =doc1.getSpdxPackage().getVerificationCode();
-		// different value
-		SpdxPackageVerificationCode newVc = new SpdxPackageVerificationCode("e6eec0619e2a58d2f5100e5c8772b56f058cbc58",
-				oriVc.getExcludedFileNames());
-		doc1.getSpdxPackage().setVerificationCode(newVc);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageVerificationCodesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-		
-		// different excluded files
-		String[] excludedFiles = new String[] {"excluded/file/one.c", "exlucded2.c"};
-		newVc = new SpdxPackageVerificationCode(oriVc.getValue(),excludedFiles);
-		doc1.getSpdxPackage().setVerificationCode(newVc);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageVerificationCodesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageChecksumsEqual()}.
-	 */
-	@Test
-	public void testIsPackageChecksumsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageChecksumsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setSha1("e6eec0619e2a58d2f5100e5c8772b56f058cbc58");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageChecksumsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isSourceInformationEqual()}.
-	 */
-	@Test
-	public void testIsSourceInformationEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isSourceInformationEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setSourceInfo("New source info");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isSourceInformationEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageDeclaredLicensesEqual()}.
-	 */
-	@Test
-	public void testIsPackageDeclaredLicensesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageDeclaredLicensesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
-		doc2.getSpdxPackage().setDeclaredLicense(lic);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageDeclaredLicensesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageConcludedLicensesEqual()}.
-	 */
-	@Test
-	public void testIsPackageConcludedLicensesEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageConcludedLicensesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
-		doc2.getSpdxPackage().setConcludedLicenses(lic);
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageConcludedLicensesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isLicenseCommentsEqual()}.
-	 */
-	@Test
-	public void testIsLicenseCommentsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isLicenseCommentsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setLicenseComment("New license Comment");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isLicenseCommentsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isCopyrightTextsEqual()}.
-	 */
-	@Test
-	public void testIsCopyrightTextsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isCopyrightTextsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setDeclaredCopyright("New copyright text");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isCopyrightTextsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageSummariesEqual()}.
-	 */
-	@Test
-	public void testIsPackageSummariesEqual()  throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageSummariesEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setShortDescription("New summary");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageSummariesEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxComparer#isPackageDescriptionsEqual()}.
-	 */
-	@Test
-	public void testIsPackageDescriptionsEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
-		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		assertTrue(comparer.isPackageEqual());
-		assertTrue(comparer.isPackageDescriptionsEqual());
-		assertFalse(comparer.isDifferenceFound());
-		
-		doc2.getSpdxPackage().setDescription("New description");
-		comparer.compare(doc1, doc2);
-		assertFalse(comparer.isPackageDescriptionsEqual());
-		assertFalse(comparer.isPackageEqual());
-		assertTrue(comparer.isDifferenceFound());
 	}
 
 	/**
@@ -1632,15 +1450,15 @@ public class SpdxComparerTest {
 	@Test
 	public void testIsCreatorInformationEqual() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isCreatorInformationEqual());
 		assertFalse(comparer.isDifferenceFound());
 
 		// one more creator
-		SPDXCreatorInformation origCreators = doc1.getCreatorInfo();
+		SPDXCreatorInformation origCreators = doc1.getCreationInfo();
 		String[] oneMore = Arrays.copyOf(origCreators.getCreators(), origCreators.getCreators().length+1);
 		oneMore[oneMore.length-1] = "Person: One More Person";
 		SPDXCreatorInformation updatedCreators = new SPDXCreatorInformation(
@@ -1691,8 +1509,8 @@ public class SpdxComparerTest {
 	@Test
 	public void testGetUniqueCreators() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException  {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isCreatorInformationEqual());
@@ -1774,46 +1592,47 @@ public class SpdxComparerTest {
 	@Test
 	public void testGetFileDifferences() throws InvalidSPDXAnalysisException, IOException, SpdxCompareException, InvalidLicenseStringException {
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		// need to remove the file dependencies to prevent values from getting over-written
+		
 		alterExtractedLicenseInfoIds(doc2, 1);
 		comparer.compare(doc1, doc2);
 		SpdxFileDifference[] differences = comparer.getFileDifferences(0, 1);
 		assertEquals(0, differences.length);
-		SPDXFile[] doc1files = doc1.getSpdxPackage().getFiles();
-		SPDXFile[] files = new SPDXFile[doc1files.length];
+		SpdxFile[] doc1files = ((SpdxPackage)doc1.getSpdxItems()[0]).getFiles();
+		SpdxFile[] files = new SpdxFile[doc1files.length];
 		for (int i = 0; i < doc1files.length; i++) {
-			files[i] = doc1files[i].clone(doc2, doc2.getDocumentNamespace() + doc2.getNextSpdxElementRef());
+			files[i] = doc1files[i].clone();
 		}
 		String file0Name = files[0].getName();
-		files[0] = new SPDXFile(files[0].getName(), files[0].getType(), files[0].getSha1(),files[0].getConcludedLicenses(),
-				files[0].getSeenLicenses(), files[0].getLicenseComments(), files[0].getCopyright(), files[0].getArtifactOf());
+		files[0] = new SpdxFile(files[0].getName(), files[0].getFileTypes(), files[0].getSha1(),files[0].getLicenseConcluded(),
+				files[0].getLicenseInfoFromFiles(), files[0].getLicenseComment(), files[0].getCopyrightText(), files[0].getArtifactOf(), files[0].getComment());
 		files[0].setComment("a new and unique comment");
 		String file1Name = files[1].getName();
-		files[1] = new SPDXFile(files[1].getName(), files[1].getType(), files[1].getSha1(),files[1].getConcludedLicenses(),
-				files[1].getSeenLicenses(), files[1].getLicenseComments(), files[1].getCopyright(), files[1].getArtifactOf());
-		files[1].setConcludedLicenses(LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
-		doc2.getSpdxPackage().setFiles(files);
-		SPDXFile[] addedFiles = doc2.getSpdxPackage().getFiles();
+		files[1] = new SpdxFile(files[1].getName(), files[1].getFileTypes(), files[1].getSha1(),files[1].getLicenseConcluded(),
+				files[1].getLicenseInfoFromFiles(), files[1].getLicenseComment(), files[1].getCopyrightText(), files[1].getArtifactOf(), files[1].getComment());
+		files[1].setLicenseConcluded(LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
+		((SpdxPackage)(doc2.getSpdxItems()[0])).setFiles(files);
 		comparer.compare(doc1, doc2);
 		differences = comparer.getFileDifferences(0, 1);
 		assertEquals(2, differences.length);
 		if (differences[0].getFileName().equals(file0Name)) {
-			assertFalse(differences[0].isCommentsEqual());
+			assertFalse(differences[0].isCommentsEquals());
 			assertEquals(differences[0].getCommentB(),files[0].getComment());
 		} else if (differences[0].getFileName().equals(file1Name)) {
-			assertFalse(differences[0].isCommentsEqual());
-			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), 
+			assertFalse(differences[0].isCommentsEquals());
+			assertEquals(((License)(files[1].getLicenseConcluded())).getLicenseId(), 
 					(differences[0].getConcludedLicenseB()));
 		} else {
 			fail("invalid file name");
 		}
 		if (differences[1].getFileName().equals(file0Name)) {
-			assertFalse(differences[1].isCommentsEqual());
+			assertFalse(differences[1].isCommentsEquals());
 			assertEquals(differences[1].getCommentB(),files[0].getComment());
 		} else if (differences[1].getFileName().equals(file1Name)) {
 			assertFalse(differences[1].isConcludedLicenseEquals());
-			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), differences[1].getConcludedLicenseB());
+			assertEquals(((License)(files[1].getLicenseConcluded())).getLicenseId(), differences[1].getConcludedLicenseB());
 		} else {
 			fail ("Invalid file name");
 		}
@@ -1822,20 +1641,20 @@ public class SpdxComparerTest {
 		differences = comparer.getFileDifferences(0, 1);
 		assertEquals(2, differences.length);
 		if (differences[0].getFileName().equals(file0Name)) {
-			assertFalse(differences[0].isCommentsEqual());
+			assertFalse(differences[0].isCommentsEquals());
 			assertEquals(differences[0].getCommentA(),files[0].getComment());
 		} else if (differences[0].getFileName().equals(file1Name)) {
 			assertFalse(differences[0].isConcludedLicenseEquals());
-			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), differences[0].getConcludedLicenseA());
+			assertEquals(((License)(files[1].getLicenseConcluded())).getLicenseId(), differences[0].getConcludedLicenseA());
 		} else {
 			fail("invalid file name");
 		}
 		if (differences[1].getFileName().equals(file0Name)) {
-			assertFalse(differences[1].isCommentsEqual());
+			assertFalse(differences[1].isCommentsEquals());
 			assertEquals(differences[1].getCommentA(),files[0].getComment());
 		} else if (differences[1].getFileName().equals(file1Name)) {
 			assertFalse(differences[1].isConcludedLicenseEquals());
-			assertEquals(((License)(files[1].getConcludedLicenses())).getLicenseId(), differences[1].getConcludedLicenseA());
+			assertEquals(((License)(files[1].getLicenseConcluded())).getLicenseId(), differences[1].getConcludedLicenseA());
 		} else {
 			fail ("Invalid file name");
 		}
@@ -1843,27 +1662,378 @@ public class SpdxComparerTest {
 	
 	@Test
 	public void testGetUniqueFiles() throws InvalidSPDXAnalysisException, IOException, SpdxCompareException {
+		SpdxFile[] pkgAFiles = new SpdxFile[] {FILE1A};
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, pkgAFiles, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxFile[] pkgBFiles = new SpdxFile[] {FILE3B};
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, pkgBFiles, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {FILE2A, pkgA};
+		SpdxItem[] itemsB = new SpdxItem[] {FILE2B, pkgB};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+
 		SpdxComparer comparer = new SpdxComparer();
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		alterExtractedLicenseInfoIds(doc2, 1);
-		comparer.compare(doc1, doc2);
-		SpdxFileDifference[] differences = comparer.getFileDifferences(0, 1);
-		assertEquals(0, differences.length);
-		SPDXFile[] files = doc1.getSpdxPackage().getFiles();
-		SPDXFile[] newFiles = new SPDXFile[files.length + 1];
-		for (int i = 0; i < files.length; i++) {
-			newFiles[i] = files[i].clone(doc2, doc2.getDocumentNamespace() + doc2.getNextSpdxElementRef());
-		}
-		newFiles[files.length] = new SPDXFile("NewName", SpdxRdfConstants.FILE_TYPE_ARCHIVE, files[0].getSha1(), 
-				files[1].getConcludedLicenses(), files[0].getSeenLicenses(), "", "", 
-				new DOAPProject[] {});
-		doc2.getSpdxPackage().setFiles(newFiles);
-		comparer.compare(doc1, doc2);
-		SPDXFile[] unique = comparer.getUniqueFiles(0, 1);
-		assertEquals(0, unique.length);
-		unique = comparer.getUniqueFiles(1, 0);
-		assertEquals(1, unique.length);
-		assertEquals(newFiles[files.length].getName(), unique[0].getName());
+		comparer.compare(docA, docB);
+		SpdxFile[] result = comparer.getUniqueFiles(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(FILE1A, result[0]);
+		result = comparer.getUniqueFiles(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(FILE3B, result[0]);
+	}
+	
+	@Test
+	public void testGetFileDifferences2()throws InvalidSPDXAnalysisException, IOException, SpdxCompareException {
+		SpdxFile[] pkgAFiles = new SpdxFile[] {FILE1A, FILE2A, FILE3A};
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, pkgAFiles, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxFile[] pkgBFiles = new SpdxFile[] {FILE1B_DIFF_CHECKSUM, FILE2B, FILE3B};
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, pkgBFiles, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		SpdxFileDifference[] result = comparer.getFileDifferences(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(FILE1A.getName(), result[0].getName());
+		assertFalse(result[0].isChecksumsEquals());
+		result = comparer.getFileDifferences(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(FILE1A.getName(), result[0].getName());
+		assertFalse(result[0].isChecksumsEquals());
+	}
+	
+	@Test
+	public void testGetPackageDifferences()throws InvalidSPDXAnalysisException, IOException, SpdxCompareException {
+		SpdxPackage pkgA1 = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgA2 = new SpdxPackage(NAMEB, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB1 = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB2 = new SpdxPackage(NAMEB, COMMENTB, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA1, pkgA2};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB1, pkgB2};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		SpdxPackageComparer[] result = comparer.getPackageDifferences(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(NAMEB, result[0].getPkgA().getName());
+		assertFalse(result[0].isCommentsEquals());
+		result = comparer.getPackageDifferences(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(NAMEB, result[0].getPkgA().getName());
+		assertFalse(result[0].isCommentsEquals());
+	}
+	
+	@Test
+	public void testGetUniquePackages()throws InvalidSPDXAnalysisException, IOException, SpdxCompareException {
+		SpdxPackage pkgA1 = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgA2 = new SpdxPackage(NAMEB, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB1 = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB2 = new SpdxPackage(NAMEC, COMMENTB, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA1, pkgA2};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB1, pkgB2};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		SpdxPackage[] result = comparer.getUniquePackages(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(pkgA2, result[0]);
+		result = comparer.getUniquePackages(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(pkgB2, result[0]);
+		
+	}
+	
+	@Test
+	public void testElementEquivalent() {
+		String nameA = "A";
+		String nameB = "B";
+		SpdxElement element1A = new SpdxElement(nameA, null, null, null);
+		SpdxElement element2A = new SpdxElement(nameA, null, null, null);
+		SpdxElement element3A = new SpdxElement(nameA, null, null, null);
+		SpdxElement element4B = new SpdxElement(nameB, null, null, null);
+		
+		assertTrue(SpdxComparer.elementsEquivalent(new SpdxElement[] {
+				element1A, element2A}, new SpdxElement[] {
+						element2A, element3A}));
+		assertFalse(SpdxComparer.elementsEquivalent(new SpdxElement[] {
+				element1A, element2A}, new SpdxElement[] {
+						element2A, element4B}));
+	}
+
+	@Test
+	public void testFindUniqueChecksums() {
+		Checksum[] checksumsA = new Checksum[] {CHECKSUM1, CHECKSUM2, CHECKSUM3};
+		Checksum[] checksumsB = new Checksum[] {CHECKSUM2, CHECKSUM3, CHECKSUM4};
+		Checksum[] result = SpdxComparer.findUniqueChecksums(checksumsA, checksumsB);
+		assertEquals(1, result.length);
+		assertEquals(CHECKSUM1, result[0]);
+	}
+	@Test
+	public void testCollectAllFiles() throws InvalidSPDXAnalysisException {
+		SpdxFile[] pkgAFiles = new SpdxFile[] {FILE1A, FILE2A};
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, pkgAFiles, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxFile[] pkgBFiles = new SpdxFile[] {FILE3B};
+		SpdxPackage pkgB = new SpdxPackage(NAMEB, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, pkgBFiles, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA, pkgB, FILE4A};
+		SpdxFile[] expected = new SpdxFile[] {FILE1A, FILE2A, FILE3B, FILE4A};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docA.setName(DOC_NAMEA);
+		docA.setCreationInfo(CREATION_INFOA);
+		docA.setSpdxItems(itemsA);
+
+		SpdxComparer comparer = new SpdxComparer();
+		SpdxFile[] result = comparer.collectAllFiles(docA);
+		assertTrue(UnitTestHelper.isArraysEqual(expected, result));
+	}
+	
+	@Test
+	public void testExternalDocumentRefsEqual() throws InvalidSPDXAnalysisException, SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+
+		ExternalDocumentRef ref1 = new ExternalDocumentRef(docB, CHECKSUM1, "SPDXDocumentRef-1");
+		ExternalDocumentRef ref2 = new ExternalDocumentRef(docB, CHECKSUM2, "SPDXDocumentRef-1");
+		ExternalDocumentRef ref3 = new ExternalDocumentRef(docA, CHECKSUM3, "SPDXDocumentRef-2");
+		docA.setExternalDocumentRefs(new ExternalDocumentRef[] {ref1, ref2} );
+		docB.setExternalDocumentRefs(new ExternalDocumentRef[] { ref2, ref3 });
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		assertTrue(comparer.isDifferenceFound());
+		assertFalse(comparer.isExternalDcoumentRefsEquals());
+		ExternalDocumentRef[] result = comparer.getUniqueExternalDocumentRefs(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(ref1, result[0]);
+		result = comparer.getUniqueExternalDocumentRefs(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(ref3, result[0]);
+	}
+	
+	@Test
+	public void testDocumentAnnotationsEquals() throws InvalidSPDXAnalysisException, SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+
+		docA.setAnnotations(new Annotation[] {ANNOTATION1, ANNOTATION2});
+		docB.setAnnotations(new Annotation[] {ANNOTATION2, ANNOTATION3});
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		assertTrue(comparer.isDifferenceFound());
+		assertFalse(comparer.isDocumentAnnotationsEquals());
+		Annotation[] result = comparer.getUniqueDocumentAnnotations(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(ANNOTATION1, result[0]);
+		result = comparer.getUniqueDocumentAnnotations(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(ANNOTATION3, result[0]);
+	}
+	@Test
+	public void testDocumentRelationshipsEquals() throws InvalidSPDXAnalysisException, SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOB);
+		docA.setSpdxItems(itemsA);
+		docB.setSpdxItems(itemsB);
+		docA.setRelationships(new Relationship[] {RELATIONSHIP1, RELATIONSHIP2});
+		docB.setRelationships(new Relationship[] {RELATIONSHIP2, RELATIONSHIP3});
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		assertTrue(comparer.isDifferenceFound());
+		assertFalse(comparer.isDocumentRelationshipsEquals());
+		Relationship[] result= comparer.getUniqueDocumentRelationship(0, 1);
+		assertEquals(1, result.length);
+		assertEquals(RELATIONSHIP1, result[0]);
+		result = comparer.getUniqueDocumentRelationship(1, 0);
+		assertEquals(1, result.length);
+		assertEquals(RELATIONSHIP3, result[0]);
+
 	}
 }

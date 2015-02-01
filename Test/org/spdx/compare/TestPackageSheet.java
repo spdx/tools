@@ -18,7 +18,6 @@ package org.spdx.compare;
 
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 
@@ -30,7 +29,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
@@ -46,9 +48,9 @@ public class TestPackageSheet {
 	String[] docNames = new String[] {"doc1", "doc2", "doc3"};
 	
 	SpdxComparer comparer = new SpdxComparer();
-	SPDXDocument doc1;	// for the unit tests, doc1 and doc2 are the same and doc3 is different
-	SPDXDocument doc2;
-	SPDXDocument doc3;
+	SpdxDocument doc1;	// for the unit tests, doc1 and doc2 are the same and doc3 is different
+	SpdxDocument doc2;
+	SpdxDocument doc3;
 	Workbook wb;
 	PackageSheet pkgSheet;
 
@@ -72,9 +74,9 @@ public class TestPackageSheet {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		doc3 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
+		doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		doc3 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		wb = new HSSFWorkbook();
 		PackageSheet.create(wb, SHEET_NAME);
 		pkgSheet = new PackageSheet(wb, SHEET_NAME);
@@ -90,15 +92,15 @@ public class TestPackageSheet {
 	@Test
 	public void testPackageNameCol() throws Exception {
 		String differentName = "DIFFERENT_NAME";
-		doc3.getSpdxPackage().setDeclaredName(differentName);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setName(differentName);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.PACKAGE_NAME_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getDeclaredName(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getDeclaredName(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getName(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getName(), getDocCellValue(1, row));
 		assertEquals(differentName, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.PACKAGE_NAME_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -107,15 +109,15 @@ public class TestPackageSheet {
 	@Test
 	public void testDescriptionCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setDescription(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setDescription(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.DESCRIPTION_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getDescription(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getDescription(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getDescription(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getDescription(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.DESCRIPTION_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -124,15 +126,15 @@ public class TestPackageSheet {
 	@Test
 	public void testSummaryCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setShortDescription(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setSummary(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.SUMMARY_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getShortDescription(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getShortDescription(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getSummary(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getSummary(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.SUMMARY_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -141,15 +143,15 @@ public class TestPackageSheet {
 	@Test
 	public void testCopyrightCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setDeclaredCopyright(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setCopyrightText(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.COPYRIGHT_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getDeclaredCopyright(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getDeclaredCopyright(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getCopyrightText(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getCopyrightText(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.COPYRIGHT_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -158,15 +160,15 @@ public class TestPackageSheet {
 	@Test
 	public void testLicenseCommentCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setLicenseComment(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setLicenseComment(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.LICENSE_COMMENT_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getLicenseComment(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getLicenseComment(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getLicenseComment(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getLicenseComment(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.LICENSE_COMMENT_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -176,15 +178,15 @@ public class TestPackageSheet {
 	public void testDeclaredLicenseCol() throws Exception {
 		AnyLicenseInfo diffLicense = new SpdxNoAssertionLicense();
 		String different = diffLicense.toString();
-		doc3.getSpdxPackage().setDeclaredLicense(diffLicense);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setLicenseConcluded(diffLicense);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.DECLARED_LICENSE_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getDeclaredLicense().toString(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getDeclaredLicense().toString(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getLicenseConcluded().toString(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getLicenseConcluded().toString(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.DECLARED_LICENSE_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -194,15 +196,15 @@ public class TestPackageSheet {
 	public void testSeenLicensesCol() throws Exception {
 		AnyLicenseInfo[] diffLicense = new AnyLicenseInfo[] {new SpdxNoAssertionLicense()};
 		String different = pkgSheet.licenseInfosToString(diffLicense);
-		doc3.getSpdxPackage().setLicenseInfoFromFiles(diffLicense);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setLicenseInfosFromFiles(diffLicense);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.LICENSE_INFOS_FROM_FILES_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(pkgSheet.licenseInfosToString(doc1.getSpdxPackage().getLicenseInfoFromFiles()), getDocCellValue(0, row));
-		assertEquals(pkgSheet.licenseInfosToString(doc2.getSpdxPackage().getLicenseInfoFromFiles()), getDocCellValue(1, row));
+		assertEquals(pkgSheet.licenseInfosToString(((SpdxPackage)doc1.getSpdxItems()[0]).getLicenseInfoFromFiles()), getDocCellValue(0, row));
+		assertEquals(pkgSheet.licenseInfosToString(((SpdxPackage)doc2.getSpdxItems()[0]).getLicenseInfoFromFiles()), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.LICENSE_INFOS_FROM_FILES_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -212,15 +214,15 @@ public class TestPackageSheet {
 	public void tesConcludedLicensetCol() throws Exception {
 		AnyLicenseInfo diffLicense = new SpdxNoAssertionLicense();
 		String different = diffLicense.toString();
-		doc3.getSpdxPackage().setConcludedLicenses(diffLicense);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setLicenseConcluded(diffLicense);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.CONCLUDED_LICENSE_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getConcludedLicenses().toString(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getConcludedLicenses().toString(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getLicenseConcluded().toString(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getLicenseConcluded().toString(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.CONCLUDED_LICENSE_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -229,15 +231,15 @@ public class TestPackageSheet {
 	@Test
 	public void testSourceInfotCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setSourceInfo(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setSourceInfo(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.SOURCEINFO_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getSourceInfo(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getSourceInfo(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getSourceInfo(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getSourceInfo(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.SOURCEINFO_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -245,16 +247,16 @@ public class TestPackageSheet {
 	
 	@Test
 	public void testChecksumCol() throws Exception {
-		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setSha1(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		Checksum[] different = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "DIFFERENT")};
+		((SpdxPackage)doc3.getSpdxItems()[0]).setChecksums(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.CHECKSUM_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getSha1(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getSha1(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getChecksums()[0].getValue(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getChecksums()[0].getValue(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.CHECKSUM_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -263,15 +265,15 @@ public class TestPackageSheet {
 	@Test
 	public void testExcludedCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().getVerificationCode().setExcludedFileNames(new String[] {different});
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).getPackageVerificationCode().setExcludedFileNames(new String[] {different});
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.VERIFICATION_EXCLUDED_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(pkgSheet.exludeFilesToString(doc1.getSpdxPackage().getVerificationCode().getExcludedFileNames()), getDocCellValue(0, row));
-		assertEquals(pkgSheet.exludeFilesToString(doc2.getSpdxPackage().getVerificationCode().getExcludedFileNames()), getDocCellValue(1, row));
+		assertEquals(pkgSheet.exludeFilesToString(((SpdxPackage)doc1.getSpdxItems()[0]).getPackageVerificationCode().getExcludedFileNames()), getDocCellValue(0, row));
+		assertEquals(pkgSheet.exludeFilesToString(((SpdxPackage)doc2.getSpdxItems()[0]).getPackageVerificationCode().getExcludedFileNames()), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.VERIFICATION_EXCLUDED_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -280,15 +282,15 @@ public class TestPackageSheet {
 	@Test
 	public void testVerificationCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().getVerificationCode().setValue(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).getPackageVerificationCode().setValue(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.VERIFICATION_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getVerificationCode().getValue(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getVerificationCode().getValue(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getPackageVerificationCode().getValue(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getPackageVerificationCode().getValue(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.VERIFICATION_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -297,15 +299,15 @@ public class TestPackageSheet {
 	@Test
 	public void testDownloadCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setDownloadUrl(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setDownloadLocation(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.DOWNLOAD_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getDownloadUrl(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getDownloadUrl(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getDownloadLocation(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getDownloadLocation(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.DOWNLOAD_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -314,15 +316,15 @@ public class TestPackageSheet {
 	@Test
 	public void testOriginatorCol() throws Exception {
 		String different = "Person: DIFFERENT";
-		doc3.getSpdxPackage().setOriginator(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setOriginator(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.ORIGINATOR_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getOriginator(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getOriginator(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getOriginator(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getOriginator(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.ORIGINATOR_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -331,15 +333,15 @@ public class TestPackageSheet {
 	@Test
 	public void testSupplierCol() throws Exception {
 		String different = "Person: DIFFERENT";
-		doc3.getSpdxPackage().setSupplier(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setSupplier(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.SUPPLIER_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getSupplier(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getSupplier(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getSupplier(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getSupplier(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.SUPPLIER_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -348,15 +350,15 @@ public class TestPackageSheet {
 	@Test
 	public void testFileNameCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setFileName(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setName(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.FILE_NAME_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getFileName(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getFileName(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getName(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getName(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.FILE_NAME_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
@@ -365,15 +367,15 @@ public class TestPackageSheet {
 	@Test
 	public void testVersionNameCol() throws Exception {
 		String different = "DIFFERENT";
-		doc3.getSpdxPackage().setVersionInfo(different);
-		comparer.compare(new SPDXDocument[] {doc1, doc2, doc3});
+		((SpdxPackage)doc3.getSpdxItems()[0]).setVersionInfo(different);
+		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.VERSION_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(doc1.getSpdxPackage().getVersionInfo(), getDocCellValue(0, row));
-		assertEquals(doc2.getSpdxPackage().getVersionInfo(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getSpdxItems()[0]).getVersionInfo(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getSpdxItems()[0]).getVersionInfo(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
-		comparer.compare(new SPDXDocument[] {doc1, doc2});
+		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});
 		row = findRow(PackageSheet.VERSION_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));

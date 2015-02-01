@@ -27,10 +27,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
-import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.VerificationCodeGenerator;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
@@ -65,21 +65,21 @@ public class SpdxPackageInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#SpdxPackageInfoMerger(org.spdx.rdfparser.SPDXDocument.SPDXPackage, org.spdx.rdfparser.SPDXDocument[])}.
+	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#SpdxPackageInfoMerger(org.spdx.rdfparser.SpdxDocument.SpdxPackage, org.spdx.rdfparser.SpdxDocument[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSpdxPackageInfoMerger() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
-		SPDXDocument[] allDocs = new SPDXDocument[]{doc1,doc2};
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument[] allDocs = new SpdxDocument[]{doc1,doc2};
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#mergePackageInfo(org.spdx.rdfparser.SPDXDocument[], org.spdx.rdfparser.SPDXFile[])}.
+	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#mergePackageInfo(org.spdx.rdfparser.SpdxDocument[], org.spdx.rdfparser.SpdxFile[])}.
 	 */
 	@Test
 	public void testMergePackageInfo() {
@@ -95,10 +95,10 @@ public class SpdxPackageInfoMergerTest {
 	 */
 	@Test
 	public void testCollectSkippedFiles() throws IOException, InvalidSPDXAnalysisException, NoSuchAlgorithmException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
-		SPDXDocument[] allDocs = new SPDXDocument[]{doc1,doc2};
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument[] allDocs = new SpdxDocument[]{doc1,doc2};
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
@@ -107,8 +107,8 @@ public class SpdxPackageInfoMergerTest {
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, mapper);
-		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
-		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
+		SpdxDocument [] subDocs = new SpdxDocument[]{doc2};
+		SpdxFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
 		String[] skippedFiles = packageMerger.collectSkippedFiles();
 		
 		SpdxPackageVerificationCode expectedResult = packageInfo.getVerificationCode();
@@ -121,17 +121,17 @@ public class SpdxPackageInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#collectLicsInFiles(org.spdx.rdfparser.SPDXFile[])}.
+	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#collectLicsInFiles(org.spdx.rdfparser.SpdxFile[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 * @throws InvalidLicenseStringException 
 	 */
 	@Test
 	public void testCollectLicsInFiles() throws IOException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
-		SPDXDocument[] allDocs = new SPDXDocument[]{doc1,doc2};
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument[] allDocs = new SpdxDocument[]{doc1,doc2};
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
@@ -140,8 +140,8 @@ public class SpdxPackageInfoMergerTest {
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, mapper);
-		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
-		SPDXFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
+		SpdxDocument [] subDocs = new SpdxDocument[]{doc2};
+		SpdxFile[] mergedResult = fileMerger.mergeFileInfo(subDocs);
 		
 		AnyLicenseInfo[] result = packageMerger.collectLicsInFiles(mergedResult);
 		
@@ -164,16 +164,16 @@ public class SpdxPackageInfoMergerTest {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#translateSubDelcaredLicsIntoComments(org.spdx.rdfparser.SPDXDocument[])}.
+	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#translateSubDelcaredLicsIntoComments(org.spdx.rdfparser.SpdxDocument[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testTranslateSubDelcaredLicsIntoComments() throws IOException, InvalidSPDXAnalysisException {
-		SPDXDocument doc1 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXDocument doc2 = SPDXDocumentFactory.creatSpdxDocument(TEST_RDF_FILE_PATH);
-		SPDXPackage packageInfo = doc1.getSpdxPackage();
-		SPDXDocument[] allDocs = new SPDXDocument[]{doc1,doc2};
+		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
+		SpdxPackage packageInfo = doc1.getSpdxPackage();
+		SpdxDocument[] allDocs = new SpdxDocument[]{doc1,doc2};
 		SpdxPackageInfoMerger packageMerger = new SpdxPackageInfoMerger(packageInfo, allDocs);
 		
 		SpdxLicenseMapper mapper = new SpdxLicenseMapper();
@@ -181,7 +181,7 @@ public class SpdxPackageInfoMergerTest {
 		ExtractedLicenseInfo clonedNonStdLic = (ExtractedLicenseInfo) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc2, clonedNonStdLic);
 		
-		SPDXDocument [] subDocs = new SPDXDocument[]{doc2};
+		SpdxDocument [] subDocs = new SpdxDocument[]{doc2};
 		
 		String result = packageMerger.translateSubDelcaredLicsIntoComments(subDocs);
 		String exceptResult = packageInfo.getLicenseComment();

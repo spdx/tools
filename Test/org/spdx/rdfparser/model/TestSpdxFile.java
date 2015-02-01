@@ -254,7 +254,9 @@ public class TestSpdxFile {
 		file.setFileDependencies(fileDependencies);
 		ArrayList<String> verify = file.verify();
 		assertEquals(0, verify.size());
+		assertTrue(UnitTestHelper.isArraysEquivalent(fileDependencies, file.getFileDependencies()));
 		Resource fileResource = file.createResource(modelContainer);
+		assertTrue(UnitTestHelper.isArraysEquivalent(fileDependencies, file.getFileDependencies()));
 		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
 		assertEquals(file.getArtifactOf()[0].getName(), file2.getArtifactOf()[0].getName());
 		assertEquals(file.getArtifactOf()[0].getHomePage(), file2.getArtifactOf()[0].getHomePage());
