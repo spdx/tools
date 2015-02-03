@@ -462,6 +462,54 @@ public class TestSpdxDocument {
 			doc.setSpdxItems(newItems);
 			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getSpdxItems()));
 	}
+	
+	@Test
+	public void testAddSpdxItems() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {
+				ANNOTATION1, ANNOTATION2	
+			};
+			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
+					EXTERNAL_REF1, EXTERNAL_REF2
+			};
+			ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
+					LICENSE1, LICENSE2
+			};
+			Relationship[] relationships = new Relationship[] {
+					RELATIONSHIP1, RELATIONSHIP2
+			};
+			SpdxItem[] items = new SpdxItem[] {
+					FILE1, FILE2, PACKAGE1, PACKAGE2
+			};
+			SpdxDocument doc = container.getSpdxDocument();
+			doc.setAnnotations(annotations);
+			doc.setComment(DOC_COMMENT1);
+			doc.setCreationInfo(CREATIONINFO1);
+			doc.setDataLicense(CCO_DATALICENSE);
+			doc.setExternalDocumentRefs(externalDocumentRefs);
+			doc.setExtractedLicenseInfos(extractedLicenseInfos);
+			doc.setName(DOC_NAME1);
+			doc.setRelationships(relationships);
+			SpdxItem[] result = doc.getSpdxItems();
+			assertEquals(0, result.length);
+			doc.addItem(items[0]);
+			result = doc.getSpdxItems();
+			assertEquals(1, result.length);
+			assertEquals(items[0], result[0]);
+			result = doc.getSpdxItems();
+			doc.addItem(items[1]);
+			result = doc.getSpdxItems();
+			assertEquals(2, result.length);
+			doc.addItem(items[2]);
+			result = doc.getSpdxItems();
+			assertEquals(3, result.length);
+			doc.addItem(items[3]);
+			result = doc.getSpdxItems();
+			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getSpdxItems()));
+			
+			SpdxItem[] newItems = new SpdxItem[] {FILE1, PACKAGE1, PACKAGE2};
+			doc.setSpdxItems(newItems);
+			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getSpdxItems()));
+	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#getDocumentContainer()}.

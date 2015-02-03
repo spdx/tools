@@ -91,6 +91,9 @@ public class SpdxItem extends SpdxElement {
 		super(name, comment, annotations, relationships);
 		this.licenseConcluded = licenseConcluded;
 		this.licenseInfoFromFiles = licenseInfoFromFiles;
+		if (this.licenseInfoFromFiles == null) {
+			this.licenseInfoFromFiles = new AnyLicenseInfo[0];
+		}
 		this.copyrightText = copyrightText;
 		this.licenseComment = licenseComment;
 	}

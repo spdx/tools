@@ -348,6 +348,30 @@ public class TestRdfModelObject {
 		result = empty.findElementPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(element2, result);
 	}
+	
+	@Test
+	public void testAddElementsPropertyValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		SpdxElement[] result = empty.findMultipleElementPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		String elementName1 = "element name 1";
+		String elementComment1 = "element comment 1";
+		SpdxElement element1 = new SpdxElement(elementName1, elementComment1, null, null);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, element1);
+		result = empty.findMultipleElementPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(1, result.length);
+		assertEquals(element1, result[0]);
+		String elementName2 = "element name 2";
+		String elementComment2 = "element comment 2";
+		SpdxElement element2 = new SpdxElement(elementName2, elementComment2, null, null);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, element2);
+		result = empty.findMultipleElementPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(2, result.length);
+		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxElement[] {element1,  element2}, result));
+	}
 
 	@Test
 	public void testFindSetRelationshipPropertyValues() throws InvalidSPDXAnalysisException {
@@ -476,6 +500,26 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
+	public void testAddSetPropertyUriValues() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		String uri1 = "http://this.is.a#uri";
+		String uri2 = "http://this.is.a#uri2";
+		String[] uris = new String[] {uri1, uri2};
+		String[] result = empty.findUriPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		empty.addPropertyUriValue(TEST_NAMESPACE, TEST_PROPNAME1, uri1);
+		result = empty.findUriPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(1, result.length);
+		assertEquals(uri1, result[0]);
+		empty.addPropertyUriValue(TEST_NAMESPACE, TEST_PROPNAME1, uri2);
+		result = empty.findUriPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(UnitTestHelper.isArraysEqual(uris, result));
+	}
+	
+	@Test
 	public void testFindSetPropertyDaopValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -509,6 +553,29 @@ public class TestRdfModelObject {
 		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, c2);
 		result = empty.findChecksumPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
 		assertEquals(c2, result);
+	}
+	
+	@Test
+	public void testAddPropertyChecksumValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+				"1123456789abcdef0123456789abcdef01234567");
+		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, 
+				"2123456789abcdef0123456789abcdef01234567");
+		c2.createResource(modelContainer);
+		Checksum[] result = empty.findMultipleChecksumPropertyValues(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(0, result.length);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, c1);
+		result = empty.findMultipleChecksumPropertyValues(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(1, result.length);
+		assertEquals(c1, result[0]);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, c2);
+		result = empty.findMultipleChecksumPropertyValues(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(2, result.length);
+		assertTrue(UnitTestHelper.isArraysEquivalent(new Checksum[] {c1, c2}, result));
 	}
 	
 	@Test

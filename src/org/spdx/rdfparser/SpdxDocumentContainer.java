@@ -16,6 +16,7 @@
 */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 
@@ -23,6 +24,9 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxElement;
+import org.spdx.rdfparser.model.SpdxElementFactory;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.graph.Node;
@@ -451,5 +455,42 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			throw(new InvalidSPDXAnalysisException("Duplicate SPDX element reference: "+elementRef));
 		}
 		this.spdxRefs.add(elementRef);
+	}
+
+	/**
+	 * get all file references contained within the container
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public SpdxFile[] getFileReferences() throws InvalidSPDXAnalysisException {
+		ArrayList<SpdxFile> alFiles = new ArrayList<SpdxFile>();
+		Node rdfTypeNode = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
+		String fileTypeUri = SPDX_NAMESPACE + CLASS_SPDX_FILE;
+		Node fileTypeNode = model.getResource(fileTypeUri).asNode();
+		Triple m = Triple.createMatch(null, rdfTypeNode, fileTypeNode);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			alFiles.add(new SpdxFile(this, t.getSubject()));
+		}
+		SpdxFile[] retval = new SpdxFile[alFiles.size()];
+		return alFiles.toArray(retval);
+	}
+
+	/**
+	 * Find an element within the container by the SPDX Identifier.  
+	 * Returns null if the element does not exist in the container.
+	 * @param id
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public SpdxElement findElementById(String id) throws InvalidSPDXAnalysisException {
+		if (!this.spdxElementRefExists(id)) {
+			return null;
+		}
+		String uri = this.getDocumentNamespace() + id;
+		Resource r = this.model.createResource(uri);
+		return SpdxElementFactory.createElementFromModel(this, r.asNode());
 	}
 }

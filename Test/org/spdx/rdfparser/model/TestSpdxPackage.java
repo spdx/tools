@@ -439,6 +439,27 @@ public class TestSpdxPackage {
 		assertTrue(UnitTestHelper.isArraysEquivalent(checksums2, pkg2.getChecksums()));
 
 	}
+	
+	@Test
+	public void testAddChecksums() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1};
+		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
+		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+
+		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
+				annotations, relationships,	LICENSE1, licenseFromFiles, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, new Checksum[] {CHECKSUM1},
+				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
+				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1);
+		
+		assertEquals(1, pkg.getChecksums().length);
+		pkg.createResource(modelContainer);
+		pkg.addChecksum(CHECKSUM2);
+		assertTrue(UnitTestHelper.isArraysEquivalent(checksums, pkg.getChecksums()));
+	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxPackage#setDescription(java.lang.String)}.
@@ -758,6 +779,31 @@ public class TestSpdxPackage {
 		pkg.setFiles(files2);
 		assertTrue(UnitTestHelper.isArraysEquivalent(files2, pkg.getFiles()));
 		assertTrue(UnitTestHelper.isArraysEquivalent(files2, pkg2.getFiles()));
+	}
+	
+	@Test
+	public void testAddFiles() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1};
+		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+
+		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
+				annotations, relationships,	LICENSE1, licenseFromFiles, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
+				DESCRIPTION1, DOWNLOAD_LOCATION1, new SpdxFile[] {FILE1},
+				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1);
+		
+		SpdxFile[] result = pkg.getFiles();
+		assertEquals(1, result.length);
+		assertEquals(FILE1, result[0]);
+		pkg.createResource(modelContainer);
+		result = pkg.getFiles();
+		assertEquals(1, result.length);
+		assertEquals(FILE1, result[0]);
+		pkg.addFile(FILE2);
+		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxFile[] {FILE1, FILE2}, pkg.getFiles()));
 	}
 
 	/**

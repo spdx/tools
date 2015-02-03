@@ -216,6 +216,29 @@ public class TestSpdxFile {
 		assertEquals(0, file.getFileTypes().length);
 		assertEquals(0, file2.getFileTypes().length);
 	}
+	
+	@Test
+	public void testAddFiletypeType() throws InvalidSPDXAnalysisException {
+		FileType[] fileTypes = new FileType[] {FileType.fileType_archive, 
+				FileType.fileType_spdx, FileType.fileType_other, FileType.fileType_text};
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				new FileType[] {fileTypes[0]}, new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
+						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
+		FileType[] result = file.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(new FileType[] {fileTypes[0]}, result));		
+		file.createResource(modelContainer);
+		result = file.getFileTypes();
+		assertTrue(UnitTestHelper.isArraysEqual(new FileType[] {fileTypes[0]}, result));
+		for (int i = 1; i < fileTypes.length; i++) {
+			file.addFileType(fileTypes[i]);
+			result = file.getFileTypes();
+			assertEquals(i+1, result.length);
+		}
+		assertTrue(UnitTestHelper.isArraysEqual(fileTypes, result));
+	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#populateModel()}.
@@ -666,6 +689,35 @@ public class TestSpdxFile {
 		assertTrue(UnitTestHelper.isArraysEqual(checksumSingle, result));
 		result = file.getChecksums();
 		assertTrue(UnitTestHelper.isArraysEqual(checksumSingle, result));
+	}
+	
+	@Test
+	public void testAddChecksum() throws InvalidSPDXAnalysisException {
+		String SHA1_VALUE1 = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12";
+		String SHA1_VALUE2 = "2222e1c67a2d28fced849ee1bb76e7391b93eb12";
+		String SHA256_VALUE1 = "CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB";
+
+		Checksum checksum1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE1);
+		Checksum checksum2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE2);
+		Checksum checksum3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha256, SHA256_VALUE1);
+
+		model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://somethingunique.com/something");
+		SpdxFile file = new SpdxFile("filename", null, null, null, 
+				COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, SpdxRdfConstants.NOASSERTION_VALUE, null,
+				null, new Checksum[] {checksum1}, null, null, null);
+		Checksum[] result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(new Checksum[] {checksum1}, result));
+		file.createResource(modelContainer);
+		result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(new Checksum[] {checksum1}, result));
+		file.addChecksum(checksum2);
+		result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(new Checksum[] {checksum1, checksum2}, result));
+		file.addChecksum(checksum3);
+		result = file.getChecksums();
+		assertTrue(UnitTestHelper.isArraysEqual(new Checksum[] {checksum1, checksum2, checksum3}, result));
+		
 	}
 
 	/**

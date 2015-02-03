@@ -287,6 +287,8 @@ public class SpdxElement extends RdfModelObject {
 				this.id = modelContainer.getNextSpdxElementRef();
 			} else if (modelContainer.spdxElementRefExists(this.id)) {
 				throw(new InvalidSPDXAnalysisException("Duplicate ID: "+this.id));
+			} else {
+				modelContainer.addSpdxElementRef(id);
 			}
 			return modelContainer.getDocumentNamespace() + this.id;
 		}
