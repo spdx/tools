@@ -531,6 +531,38 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	/**
+	 * Adds an SPDX element property value for this resource without removing the old property values
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param element
+	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * element from the model.  This is used for relationships to make sure we don't overwrite
+	 * the original element when setting the related element property value.
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void addPropertyValue(String nameSpace, String propertyName,
+			SpdxElement element, boolean updateModel) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			if (element != null) {
+				this.resource.addProperty(p, element.createResource(modelContainer, updateModel));
+			}
+		}
+	}
+	
+	/**
+	 * Adds an SPDX element property value for this resource without removing the old property values
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param element
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void addPropertyValue(String nameSpace, String propertyName,
+			SpdxElement element) throws InvalidSPDXAnalysisException {
+		addPropertyValue(nameSpace, propertyName, element, true);
+	}
+	
 	protected void setPropertyValue(String nameSpace, String propertyName,
 			SpdxElement element) throws InvalidSPDXAnalysisException {
 		setPropertyValue(nameSpace, propertyName, element, true);
@@ -659,7 +691,9 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			model.removeAll(this.resource, p, null);
 			if (licenses != null) {
 				for (int i = 0; i < licenses.length; i++) {
-					this.resource.addProperty(p, licenses[i].createResource(this.modelContainer));
+					if (licenses[i] != null) {
+						this.resource.addProperty(p, licenses[i].createResource(this.modelContainer));
+					}
 				}
 			}
 		}
@@ -754,6 +788,22 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/**
+	 * Add a checksum as a property to this resource
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param checksumValues
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected void addPropertyValue(String nameSpace,
+			String propertyName, Checksum checksumValue) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			if (checksumValue != null) {
+				this.resource.addProperty(p, checksumValue.createResource(this.modelContainer));
+			}
+		}
+	}
+	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param checksumValues
@@ -766,7 +816,9 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			model.removeAll(this.resource, p, null);
 			if (checksumValues != null) {
 				for (int i = 0; i < checksumValues.length; i++) {
-					this.resource.addProperty(p, checksumValues[i].createResource(this.modelContainer));
+					if (checksumValues[i] != null) {
+						this.resource.addProperty(p, checksumValues[i].createResource(this.modelContainer));
+					}
 				}
 			}
 		}
@@ -886,6 +938,24 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 					Resource uriResource = model.createResource(uris[i]);
 					this.resource.addProperty(p, uriResource);
 				}
+			}
+		}
+	}
+	
+	/**
+	 * Adds a property value as a list of Uris
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param uri
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void addPropertyUriValue(String nameSpace,
+			String propertyName, String uri) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			if (uri != null) {
+				Resource uriResource = model.createResource(uri);
+				this.resource.addProperty(p, uriResource);
 			}
 		}
 	}

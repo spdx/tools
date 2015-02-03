@@ -26,6 +26,9 @@ import org.junit.Test;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.SpdxElement;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.UnitTestHelper;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -262,5 +265,51 @@ public class TestSpdxDocumentContainer {
 		doc = new SpdxDocumentContainer(testDocUri);
 		assertEquals(SpdxDocumentContainer.CURRENT_SPDX_VERSION, doc.getSpdxDocument().getSpecVersion());
 		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, ((SpdxListedLicense)(doc.getSpdxDocument().getDataLicense())).getLicenseId());
+	}
+	
+	@Test
+	public void testFindElementById() throws InvalidSPDXAnalysisException {
+		String PACKAGE_ID = "SpdxRef-PackageID";
+		String FILE_ID1 = "SpdxRef-File1";
+		String FILE_ID2 = "SpdxRef-File2";
+		String FILE_ID3 = "SpdxRef-File3";
+		SpdxPackage pkg1 = new SpdxPackage("PkgName", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID);
+		SpdxFile file1 = new SpdxFile("File1", null, null, null, null, null, null, null, null);
+		file1.setId(FILE_ID1);
+		SpdxFile file2 = new SpdxFile("File2", null, null, null, null, null, null, null, null);
+		file2.setId(FILE_ID2);
+		SpdxFile file3 = new SpdxFile("File3", null, null, null, null, null, null, null, null);
+		file3.setId(FILE_ID3);
+		pkg1.addFile(file1);
+		pkg1.addFile(file2);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		doc.getSpdxDocument().addItem(pkg1);
+		doc.getSpdxDocument().addItem(file3);
+		SpdxElement result = doc.findElementById(PACKAGE_ID);
+		assertTrue(pkg1.equivalent(result));
+		result = doc.findElementById(FILE_ID1);
+		assertTrue(file1.equivalent(result));
+		result = doc.findElementById(FILE_ID2);
+		assertTrue(file2.equivalent(result));
+		result = doc.findElementById(FILE_ID3);
+		assertTrue(file3.equivalent(result));		
+	}
+	
+	@Test
+	public void testGetFileReferences() throws InvalidSPDXAnalysisException {
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		SpdxPackage pkg1 = new SpdxPackage("PkgName", null, null, null, null, null, null, null);
+		SpdxFile file1 = new SpdxFile("File1", null, null, null, null, null, null, null, null);
+		SpdxFile file2 = new SpdxFile("File2", null, null, null, null, null, null, null, null);
+		SpdxFile file3 = new SpdxFile("File3", null, null, null, null, null, null, null, null);
+		pkg1.addFile(file1);
+		pkg1.addFile(file2);
+		doc.getSpdxDocument().addItem(pkg1);
+		doc.getSpdxDocument().addItem(file3);
+		SpdxFile[] expected = new SpdxFile[] {file1, file2, file3};
+		assertTrue(UnitTestHelper.isArraysEquivalent(expected, doc.getFileReferences()));
 	}
 }

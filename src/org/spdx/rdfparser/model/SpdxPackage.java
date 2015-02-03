@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -78,9 +79,15 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				licenseInfosFromFiles, copyrightText, licenseComment);
 		this.licenseDeclared = licenseDeclared;
 		this.checksums = checksums;
+		if (this.checksums == null) {
+			this.checksums = new Checksum[0];
+		}
 		this.description = description;
 		this.downloadLocation = downloadLocation;
 		this.files = files;
+		if (this.files == null) {
+			this.files = new SpdxFile[0];
+		}
 		this.homepage = homepage;
 		this.originator = originator;
 		this.packageFileName = packageFileName;
@@ -286,7 +293,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (this.resource != null && refreshOnGet) {
 			AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
 					PROP_PACKAGE_DECLARED_LICENSE);
-			if (!refresh.equals(this.licenseDeclared)) {
+			if (refresh == null || !refresh.equals(this.licenseDeclared)) {
 				this.licenseDeclared = refresh;
 			}
 		}
@@ -326,6 +333,21 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this.checksums = checksums;
 		setPropertyValues(SPDX_NAMESPACE, 
 					PROP_PACKAGE_CHECKSUM, this.checksums);
+	}
+	
+	/**
+	 * Add a checksum to the list of checksums for this package
+	 * @param checksum
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addChecksum(Checksum checksum) throws InvalidSPDXAnalysisException {
+		if (checksum == null) {
+			return;
+		}
+		this.checksums = Arrays.copyOf(this.checksums, this.checksums.length + 1);
+		this.checksums[this.checksums.length-1] = checksum;
+		addPropertyValue(SPDX_NAMESPACE, 
+					PROP_PACKAGE_CHECKSUM, checksum);
 	}
 
 	/**
@@ -565,6 +587,25 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				PROP_PACKAGE_FILE, this.files);
 	}
 
+	/**
+	 * Add a file to the list of files attached to this package
+	 * @param file
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addFile(SpdxFile file) throws InvalidSPDXAnalysisException {
+		if (file == null) {
+			return;
+		}
+		if (this.files == null) {
+			this.files = new SpdxFile[] {file};
+		} else {
+			this.files = Arrays.copyOf(this.files, this.files.length+1);
+			this.files[this.files.length-1] = file;
+		}
+		addPropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_FILE, file);
+	}
+	
 	@Override
 	public boolean equivalent(RdfModelObject o) {
 		if (!(o instanceof SpdxPackage)) {
@@ -845,5 +886,4 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		return myNameVersion.compareTo(compNameVersion);
 	}
-	
 }

@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -106,6 +107,9 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			this.fileTypes = new FileType[0];
 		}
 		this.checksums = checksums;
+		if (this.checksums == null) {
+			this.checksums = new Checksum[0];
+		}
 		this.fileContributors = fileContributors;
 		if (this.fileContributors == null) {
 			this.fileContributors = new String[0];
@@ -357,6 +361,21 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 				SpdxRdfConstants.PROP_FILE_TYPE, 
 				fileTypesToUris(this.fileTypes));
 	}
+	
+	/**
+	 * Add a file type to this file
+	 * @param fileType
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addFileType(FileType fileType) throws InvalidSPDXAnalysisException {
+		if (fileType == null) {
+			return;
+		}
+		this.fileTypes = Arrays.copyOf(this.fileTypes, this.fileTypes.length + 1);
+		this.fileTypes[this.fileTypes.length-1] = fileType;
+		addPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_FILE_TYPE, fileType.toString());
+	}
 
 	/**
 	 * @return the checksums
@@ -384,6 +403,21 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		this.checksums = checksums;
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_FILE_CHECKSUM, this.checksums);
+	}
+	
+	/**
+	 * Add a checksum
+	 * @param checksum
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public void addChecksum(Checksum checksum) throws InvalidSPDXAnalysisException {
+		if (checksum == null) {
+			return;
+		}
+		this.checksums = Arrays.copyOf(this.checksums, this.checksums.length + 1);
+		this.checksums[this.checksums.length - 1] = checksum;
+		addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_FILE_CHECKSUM, checksum);
 	}
 
 	/**

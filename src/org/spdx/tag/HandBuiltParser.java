@@ -39,7 +39,7 @@ public class HandBuiltParser {
 	private static final String END_TEXT = "</text>";
 	private static final String START_TEXT = "<text>";
 	Pattern tagPattern = Pattern.compile("^\\w+:");
-	private BuildLegacyDocument buildDocument;
+	private TagValueBehavior buildDocument;
 	private InputStream textInput;
 
 	/**
@@ -54,7 +54,7 @@ public class HandBuiltParser {
 	/**
 	 * @param buildDocument
 	 */
-	public void setBehavior(BuildLegacyDocument buildDocument) {
+	public void setBehavior(TagValueBehavior buildDocument) {
 		this.buildDocument = buildDocument;
 	}
 

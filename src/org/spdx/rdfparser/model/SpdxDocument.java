@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -173,6 +174,11 @@ public class SpdxDocument extends SpdxElement {
 		return retval;
 	}
 	
+	/**
+	 * Sets the items which are connected directly to this document
+	 * @param items
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	public void setSpdxItems(SpdxItem[] items) throws InvalidSPDXAnalysisException {
 		this.spdxItems = items;
 		if (items == null) {
@@ -186,10 +192,30 @@ public class SpdxDocument extends SpdxElement {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE,
 					getFilesFromItems(this.spdxItems));
-		}
-		
+		}		
 	}
 	
+	/**
+	 * Adds an item to be directly connected to this document
+	 * @param item
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addItem(SpdxItem item) throws InvalidSPDXAnalysisException {
+		if (item == null) {
+			return;
+		}
+		this.spdxItems = Arrays.copyOf(this.spdxItems, this.spdxItems.length + 1);
+		this.spdxItems[this.spdxItems.length-1] = item;
+		if (item instanceof SpdxPackage) {
+			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_SPDX_PACKAGE, item);
+		} else if (item instanceof SpdxFile) {
+			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE, item);
+		} else {
+			throw(new InvalidSPDXAnalysisException("Invalid type for document item."));
+		}
+	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */

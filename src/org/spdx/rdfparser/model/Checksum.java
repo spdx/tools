@@ -66,6 +66,9 @@ public class Checksum extends RdfModelObject {
 	
 	protected static Resource findSpdxChecksum(Model model, Checksum checksum) throws InvalidSPDXAnalysisException {
 		// find any matching checksum values
+		if (checksum == null || checksum.algorithm == null || checksum.checksumValue == null) {
+			return null;
+		}
 		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
 		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, Node.createLiteral(checksum.getValue()));
 		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
