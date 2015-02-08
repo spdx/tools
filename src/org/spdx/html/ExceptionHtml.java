@@ -23,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.LicenseException;
 
 import com.sampullara.mustache.Mustache;
@@ -54,7 +55,7 @@ public class ExceptionHtml {
 		}
 		mustacheMap.put("name", exception.getName());
 		mustacheMap.put("id", exception.getLicenseExceptionId());
-		mustacheMap.put("text", exception.getLicenseExceptionText());
+		mustacheMap.put("text", SpdxLicenseTemplateHelper.escapeHTML(exception.getLicenseExceptionText()));
 		mustacheMap.put("getSourceUrl", alSourceUrls);
 		mustacheMap.put("notes", exception.getComment());
 		String example = exception.getExample();

@@ -297,6 +297,7 @@ public class SpdxItem extends SpdxElement {
 				retval.add("license info from files contains complex licenses for "+name);
 			}
 		}
+		addNameToWarnings(retval);
 		return retval;
 	}
 }

@@ -724,7 +724,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 		// checksum
 		for (int i = 0; i < checksums.length; i++) {
-			retval.addAll(checksums[i].verify());
+			ArrayList<String> checksumVerify = checksums[i].verify();
+			addNameToWarnings(checksumVerify);
+			retval.addAll(checksumVerify);
 		}
 
 		// sourceinfo - nothing really to check
@@ -735,7 +737,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			if (declaredLicense == null) {
 				retval.add("Missing required declared license for package "+pkgName);
 			} else {
-				retval.addAll(declaredLicense.verify());
+				ArrayList<String> verify = declaredLicense.verify();
+				addNameToWarnings(verify);
+				retval.addAll(verify);
 			}				
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package declared license: "+e.getMessage());
@@ -747,7 +751,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				retval.add("Missing required package files for "+pkgName);
 			} else {
 				for (int i = 0; i < files.length; i++) {
-					retval.addAll(files[i].verify());
+					ArrayList<String> verify = files[i].verify();
+					addNameToWarnings(verify);
+					retval.addAll(verify);
 				}
 			}
 		} catch (InvalidSPDXAnalysisException e) {
@@ -761,7 +767,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			if (verificationCode == null) {
 				retval.add("Missing required package verification code for package "+pkgName);
 			} else {
-				retval.addAll(verificationCode.verify());
+				ArrayList<String> verify = verificationCode.verify();
+				addNameToWarnings(verify);
+				retval.addAll(verify);
 			}
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package verification code: "+e.getMessage());

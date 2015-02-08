@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
@@ -146,8 +147,10 @@ public class SpdxElementFactory {
 				return new SpdxItem(modelContainer, node);
 			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_ELEMENT)) {
 				return new SpdxElement(modelContainer, node);
+			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_DOCUMENT)) {
+				return new SpdxDocumentContainer(modelContainer.getModel()).getSpdxDocument();
 			} else {
-				throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo '"+type+"'"));
+				throw(new InvalidSPDXAnalysisException("Invalid type for element '"+type+"'"));
 			}
 		} else {
 			return null;

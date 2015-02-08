@@ -636,7 +636,9 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			retval.add("Missing required checksum for file "+fileName);
 		} else {
 			for (int i = 0; i < checksums.length; i++) {
-				retval.addAll(checksums[i].verify());
+				ArrayList<String> verify = checksums[i].verify();
+				addNameToWarnings(verify);
+				retval.addAll(verify);
 			}			
 		}
 		String sha1 = getSha1();

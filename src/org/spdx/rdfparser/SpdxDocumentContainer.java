@@ -142,6 +142,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		// set the default namespace to the document namespace
 		Resource spdxAnalysisType = model.createResource(SPDX_NAMESPACE+CLASS_SPDX_DOCUMENT);
 		model.createResource(this.documentNamespace + SPDX_DOCUMENT_ID, spdxAnalysisType);
+		this.addSpdxElementRef(SPDX_DOCUMENT_ID);
 		// reset the next license number and next spdx element num
 		this.nextElementRef = 1;
 		this.nextLicenseRef = 1;
@@ -486,6 +487,9 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SpdxElement findElementById(String id) throws InvalidSPDXAnalysisException {
+		if (SPDX_DOCUMENT_ID.equals(id)) {
+			return this.spdxDocument;
+		}
 		if (!this.spdxElementRefExists(id)) {
 			return null;
 		}

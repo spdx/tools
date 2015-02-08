@@ -128,6 +128,23 @@ public class SpdxElement extends RdfModelObject {
 		}
 		return retval;
 	}
+	
+	/**
+	 * Add the name of the element to all strings in the arraylist
+	 * @param warnings
+	 */
+	protected void addNameToWarnings(ArrayList<String> warnings) {
+		if (warnings == null) {
+			return;
+		}
+		String localName = this.name;
+		if (localName == null) {
+			localName = "[UNKNOWN]";
+		}
+		for (int i = 0; i < warnings.size(); i++) {
+			warnings.set(i, warnings.get(i)+" in "+localName);
+		}
+	}
 
 
 	/**
