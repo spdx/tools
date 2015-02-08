@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -126,6 +127,26 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private static Pattern EXTERNAL_DOC_REF_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+SHA1:\\s+(\\S+)");
 	private static Pattern RELATIONSHIP_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+(\\S+)");
 	private static Pattern CHECKSUM_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");
+	/**
+	 * Tags used in the definition of an annotation
+	 * Note: does not include the annotator tag since that is the tag that starts the definition
+	 */
+	private HashSet<String> ANNOTATION_TAGS = new HashSet<String>();
+	/**
+	 * Tags used in the definition of a file
+	 * Note: does not include the annotator tag since that is the tag that starts the definition
+	 */
+	private HashSet<String> FILE_TAGS = new HashSet<String>();
+	/**
+	 * Tags used in the definition of a package
+	 * Note: does not include the annotator tag since that is the tag that starts the definition
+	 */
+	/**
+	 * Tags used in the definition of an extracted license
+	 * Note: does not include the annotator tag since that is the tag that starts the definition
+	 */
+	private HashSet<String> EXTRACTED_LICENSE_TAGS = new HashSet<String>();
+	private HashSet<String> PACKAGE_TAGS = new HashSet<String>();
 	private Properties constants;
 	private SpdxDocument analysis;
 	private DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
@@ -173,14 +194,24 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	/**
 	 * True if we have started defining a package in the tag/value file
 	 */
-	private boolean inPackageDefinition;
+	private boolean inPackageDefinition = false;;
 
 	/**
 	 * True if we have started to define a file AT THE DOCUMENT LEVEL 
 	 * in the tag/value file.  Note that files defined as part of a package
 	 * will have the state flag inPackageDefinition set, and inFileDefinition will be false.
 	 */
-	private boolean inFileDefinition;
+	private boolean inFileDefinition = false;;
+	
+	/**
+	 * True if we have started to define an annotation
+	 * in the tag/value file. 
+	 */
+	private boolean inAnnotation = false;;
+	/**
+	 * True if we are building an extracted license definition
+	 */
+	private boolean inExtractedLicenseDefinition = false;
 
 	/**
 	 * The last (or current) package being defined by the tag/value file
@@ -189,17 +220,113 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	public BuildDocument(SpdxDocumentContainer[] result, Properties constants) {
 		this.constants = constants;
 		this.result = result;
+		this.ANNOTATION_TAGS.add(constants.getProperty("PROP_ANNOTATION_DATE").trim()+" ");
+		this.ANNOTATION_TAGS.add(constants.getProperty("PROP_ANNOTATION_COMMENT").trim()+" ");
+		this.ANNOTATION_TAGS.add(constants.getProperty("PROP_ANNOTATION_ID").trim()+" ");
+		this.ANNOTATION_TAGS.add(constants.getProperty("PROP_ANNOTATION_TYPE").trim()+" ");
+
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_TYPE").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_LICENSE").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_COPYRIGHT").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_CHECKSUM").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_SEEN_LICENSE").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_LIC_COMMENTS").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_COMMENT").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_DEPENDENCY").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_CONTRIBUTOR").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_NOTICE_TEXT").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_ELEMENT_ID").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_NAME").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_HOMEPAGE").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_URI").trim()+" ");
+		
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_COMMENT").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_FILE_NAME").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_CHECKSUM").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_DOWNLOAD_URL").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_SOURCE_INFO").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_DECLARED_LICENSE").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_CONCLUDED_LICENSE").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_DECLARED_COPYRIGHT").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_SHORT_DESC").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_DESCRIPTION").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_VERIFICATION_CODE").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_LICENSE_INFO_FROM_FILES").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_LICENSE_COMMENT").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_VERSION_INFO").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_ORIGINATOR").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_SUPPLIER").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_HOMEPAGE_URL").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_ELEMENT_ID").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_FILE_NAME").trim()+" ");
+		
+		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_LICENSE_TEXT").trim()+" ");
+		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_EXTRACTED_TEXT").trim()+" ");
+		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_LICENSE_COMMENT").trim()+" ");
+		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_LICENSE_NAME").trim()+" ");
+		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_SOURCE_URLS").trim()+" ");
 	}
 
 	public void enter() throws Exception {
 		// do nothing???
 	}
 
-	@SuppressWarnings("deprecation")
 	public void buildDocument(String tag, String value) throws Exception {
 		tag = tag.trim()+" ";
 		value = trim(value.trim());
-		// document
+		if (this.inAnnotation && ANNOTATION_TAGS.contains(tag)) {
+			buildAnnotation(tag, value, lastAnnotation);
+		} else if (this.inFileDefinition && FILE_TAGS.contains(tag)) {
+			buildFile(this.lastFile, tag, value);
+		} else if (this.inPackageDefinition && PACKAGE_TAGS.contains(tag)) {
+			buildPackage(this.lastPackage, tag, value);
+		} else if (this.inExtractedLicenseDefinition && EXTRACTED_LICENSE_TAGS.contains(tag)) {
+			buildExtractedLicense(this.lastExtractedLicense, tag, value);
+		} else {
+			this.inAnnotation = false;
+			this.inFileDefinition = false;
+			this.inPackageDefinition = false;
+			buildDocumentProperties(tag, value);
+		}
+	}
+	
+	/**
+	 * @param lastExtractedLicense2
+	 * @param tag
+	 * @param value
+	 * @throws InvalidSpdxTagFileException 
+	 */
+	private void buildExtractedLicense(
+			ExtractedLicenseInfo license, String tag, String value) throws InvalidSpdxTagFileException {
+		if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text"));
+			}
+			license.setExtractedText(value);
+		} else if (tag.equals(constants.getProperty("PROP_LICENSE_NAME"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license name"));
+			}
+			license.setName(value);
+		} else if (tag.equals(constants.getProperty("PROP_SOURCE_URLS"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license URL"));
+			}
+			String[] values = value.split(",");
+			for (int i = 0; i < values.length; i++) {
+				values[i] = values[i].trim();
+			}
+			license.setSeeAlso(values);
+		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
+			if (lastExtractedLicense == null) {
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
+			}
+			license.setComment(value);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private void buildDocumentProperties(String tag, String value) throws Exception {		
 		if (tag.equals(constants.getProperty("PROP_SPDX_VERSION"))) {
 			this.specVersion = value;
 			if (analysis != null) {
@@ -238,6 +365,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			if (this.documentName != null) {
 				this.analysis.setName(this.documentName);
 			}
+		} else if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
+			if (!value.equals(SpdxRdfConstants.SPDX_DOCUMENT_ID)) {
+				throw(new InvalidSpdxTagFileException("SPDX Document "+value
+						+" is invalid.  Document IDs must be "+SpdxRdfConstants.SPDX_DOCUMENT_ID));
+			}
 		} else if (tag.equals(constants.getProperty("PROP_DOCUMENT_DESCRIBES"))) {
 			checkAnalysisNull();
 			this.documentDescribes.add(value);
@@ -258,27 +390,16 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			if (lastAnnotation != null) {
 				annotations.add(lastAnnotation);
 			}
+			this.inAnnotation = true;
 			lastAnnotation = new AnnotationWithId(value);
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_DATE"))) {
-			if (lastAnnotation == null) {
-				throw(new InvalidSpdxTagFileException("Annotation date found outside of an annotation: "+value));
-			}
-			lastAnnotation.setDate(value);
+			throw(new InvalidSpdxTagFileException("Annotation date found outside of an annotation: "+value));
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_COMMENT"))) {
-			if (lastAnnotation == null) {
-				throw(new InvalidSpdxTagFileException("Annotation comment found outside of an annotation: "+value));
-			}
-			lastAnnotation.setComment(value);
+			throw(new InvalidSpdxTagFileException("Annotation comment found outside of an annotation: "+value));
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_ID"))) {			
-			if (lastAnnotation == null) {
-				throw(new InvalidSpdxTagFileException("Annotation ID found outside of an annotation: "+value));
-			}
-			lastAnnotation.setId(value);
+			throw(new InvalidSpdxTagFileException("Annotation ID found outside of an annotation: "+value));
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_TYPE"))) {
-			if (lastAnnotation == null) {
-				throw(new InvalidSpdxTagFileException("Annotation type found outside of an annotation: "+value));
-			}
-			lastAnnotation.setAnnotationType(Annotation.TAG_TO_ANNOTATION_TYPE.get(value));
+			throw(new InvalidSpdxTagFileException("Annotation type found outside of an annotation: "+value));
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_CREATOR"))) {
 			checkAnalysisNull();
 			if (analysis.getCreationInfo() == null) {
@@ -338,34 +459,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			List<ExtractedLicenseInfo> licenses = new ArrayList<ExtractedLicenseInfo>(Arrays.asList(currentNonStdLicenses));
 			licenses.add(lastExtractedLicense);
 			analysis.setExtractedLicenseInfos(licenses.toArray(new ExtractedLicenseInfo[0]));
-		} else if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
-			checkAnalysisNull();
-			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text"));
-			}
-			lastExtractedLicense.setExtractedText(value);
-		} else if (tag.equals(constants.getProperty("PROP_LICENSE_NAME"))) {
-			checkAnalysisNull();
-			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license name"));
-			}
-			lastExtractedLicense.setName(value);
-		} else if (tag.equals(constants.getProperty("PROP_SOURCE_URLS"))) {
-			checkAnalysisNull();
-			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license URL"));
-			}
-			String[] values = value.split(",");
-			for (int i = 0; i < values.length; i++) {
-				values[i] = values[i].trim();
-			}
-			lastExtractedLicense.setSeeAlso(values);
-		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
-			checkAnalysisNull();
-			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
-			}
-			lastExtractedLicense.setComment(value);
+			this.inExtractedLicenseDefinition = true;
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DECLARED_NAME"))) {
 			checkAnalysisNull();
 			inPackageDefinition = true;
@@ -378,30 +472,64 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				this.analysis.addItem(this.lastPackage);
 			}
 			this.lastPackage = new SpdxPackage(value, null, null, null, null, null, null, null);
-		} else if (inPackageDefinition) {
-			buildPackage(this.lastPackage, tag, value);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
 			checkAnalysisNull();
 			//NOTE: This must follow the inPackageDefinition check since
 			// if a file is defined following a package, it is assumed to 
 			// be part of the package and not something standalone
+			addLastFile();
 			inFileDefinition = true;
 			inPackageDefinition = false;
-			if (this.lastFile != null) {
-				if (this.lastFile.getId() == null) {
-					this.warningMessages.add("Missing SPDX ID for "+this.lastFile.getName()
-							+ ".  An SPDX ID will be generated for this file.");
-				}
-				this.analysis.addItem(this.lastFile);
-			}
-			this.lastFile = new SpdxFile(value, null, null, null, null, null, null, null, null);
-		} else if (inFileDefinition) {
-			buildFile(this.lastFile, tag, value);
+			
+			this.lastFile = new SpdxFile(value, null, new Annotation[0], new Relationship[0], null,
+					new AnyLicenseInfo[0], null, null, new FileType[0], new Checksum[0],
+					new String[0] , null, new DoapProject[0]);
 		} else {
-			throw new InvalidSpdxTagFileException("Exepecting a definition of a file or package.");
+			throw new InvalidSpdxTagFileException("Expecting a definition of a file, package, license information, or document property at "+tag+value);
 		}
 	}
 	
+	
+	/**
+	 * Adds the last file to either the last package or the document
+	 * @throws InvalidSPDXAnalysisException 
+	 * 
+	 */
+	private void addLastFile() throws InvalidSPDXAnalysisException {
+		if (this.lastFile != null) {
+			if (this.lastFile.getId() == null) {
+				this.warningMessages.add("Missing SPDX ID for "+this.lastFile.getName()
+						+ ".  An SPDX ID will be generated for this file.");
+			}
+			if (this.lastPackage == null ||
+					!this.inPackageDefinition ||
+					lastFile.getId() != null && this.documentDescribes.contains(lastFile.getId())) {
+				this.analysis.addItem(this.lastFile);
+			} else {
+				this.lastPackage.addFile(lastFile);
+			}
+		}
+	}
+
+	/**
+	 * @param tag
+	 * @param value
+	 * @param annotation
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void buildAnnotation(String tag, String value,
+			AnnotationWithId annotation) throws InvalidSPDXAnalysisException {
+		if (tag.equals(constants.getProperty("PROP_ANNOTATION_DATE"))) {
+			annotation.setDate(value);
+		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_COMMENT"))) {
+			annotation.setComment(value);
+		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_ID"))) {			
+			annotation.setId(value);
+		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_TYPE"))) {
+			annotation.setAnnotationType(Annotation.TAG_TO_ANNOTATION_TYPE.get(value));
+		}
+	}
+
 	/**
 	 * @param value
 	 * @return
@@ -436,8 +564,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		if (!matcher.find()) {
 			throw(new InvalidSpdxTagFileException("Invalid external document reference: "+value));
 		}
-		ExternalDocumentRef ref = new ExternalDocumentRef(matcher.group(3), 
-						new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, matcher.group(2)),
+		ExternalDocumentRef ref = new ExternalDocumentRef(matcher.group(2), 
+						new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, matcher.group(3)),
 						matcher.group(1));
 		ExternalDocumentRef[] oldRefs = this.analysis.getExternalDocumentRefs();
 		if (oldRefs == null) {
@@ -456,8 +584,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
 			pkg.setId(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_PACKAGE_VERSION_INFO"))) {
+		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_VERSION_INFO"))) {
 			pkg.setVersionInfo(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILE_NAME"))) {
 			pkg.setPackageFileName(value);
@@ -505,17 +632,15 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DESCRIPTION"))) {
 			pkg.setDescription(value);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
-			if (this.documentDescribes.contains(value)) {
-				inFileDefinition = true;
-				inPackageDefinition = false;
-				this.lastFile = new SpdxFile(value, null, null, null, null, null, null, null, null);
-				this.analysis.addItem(this.lastFile);
-			} else {
-				this.lastFile = new SpdxFile(value, null, null, null, null, null, null, null, null);
-				pkg.addFile(this.lastFile);
-			}
-		} else {
+			addLastFile();
+			this.lastFile = new SpdxFile(value, null, new Annotation[0], new Relationship[0], null,
+					new AnyLicenseInfo[0], null, null, new FileType[0], new Checksum[0],
+					new String[0] , null, new DoapProject[0]);
+			this.inFileDefinition = true;
+		} else if (this.inFileDefinition) {
 			buildFile(this.lastFile, tag, value);
+		} else {
+			throw(new InvalidSpdxTagFileException("Expecting a file definition or a package property.  Found "+value));
 		}
 	}
 
@@ -527,7 +652,6 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	 */
 	private Checksum parseChecksum(String value) throws InvalidSpdxTagFileException {
 		Matcher matcher = CHECKSUM_PATTERN.matcher(value.trim());
-		String test = constants.getProperty("PROP_PACKAGE_CHECKSUM");
 		if (!matcher.find()) {
 			throw(new InvalidSpdxTagFileException("Invalid checksum: "+value));
 		}
@@ -544,9 +668,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private void buildFile(SpdxFile file, String tag, String value)
 			throws Exception {
 		if (file == null) {
-			if (tag.equals(constants.getProperty("PROP_FILE_TYPE")) || constants.getProperty("PROP_FILE_CHECKSUM").startsWith(tag) ||
-					tag.equals(constants.getProperty("PROP_FILE_LICENSE")) || tag.equals(constants.getProperty("PROP_FILE_LIC_COMMENTS")) ||
-					tag.equals(constants.getProperty("PROP_FILE_COPYRIGHT")) || tag.equals(constants.getProperty("PROP_FILE_COMMENT"))) {
+			if (FILE_TAGS.contains(tag)) {
 				throw(new InvalidSpdxTagFileException("Missing File Name - A file name must be specified before the file properties"));
 			} else {
 				throw(new InvalidSpdxTagFileException("Unrecognized SPDX Tag: "+tag));
@@ -554,8 +676,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		}
 		if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
 			file.setId(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_FILE_TYPE"))) {
+		} else if (tag.equals(constants.getProperty("PROP_FILE_TYPE"))) {
 			FileType fileType = SpdxFile.TAG_TO_FILE_TYPE.get(value.trim());
 			if (fileType == null) {
 				throw(new InvalidSpdxTagFileException("Unknown file type: "+value));
@@ -667,9 +788,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	}
 
 	public void exit() throws Exception {
-		if (this.lastFile != null) {
-			this.analysis.addItem(this.lastFile);
-		}
+		addLastFile();
 		if (this.lastPackage != null) {
 			this.analysis.addItem(this.lastPackage);
 		}
@@ -712,8 +831,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			lastRelationship = null;
 		}
 		for (int i = 0; i < relationships.size(); i++) {
-			SpdxElement element = this.analysis.getDocumentContainer().findElementById(relationships.get(i).getId());
-			SpdxElement relatedElement = this.analysis.getDocumentContainer().findElementById(relationships.get(i).getRelatedId());
+			RelationshipWithId relationship = relationships.get(i);
+			SpdxElement element = this.analysis.getDocumentContainer().findElementById(relationship.getId());
+			SpdxElement relatedElement = this.analysis.getDocumentContainer().findElementById(relationship.getRelatedId());
 			Relationship[] elementRelationships = element.getRelationships();
 			if (elementRelationships == null) {
 				elementRelationships = new Relationship[0];
