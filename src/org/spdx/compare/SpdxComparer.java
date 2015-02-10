@@ -464,10 +464,12 @@ public class SpdxComparer {
 	 * @param files
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void addAllRelatedFiles(SpdxElement element, HashSet<SpdxFile> files) throws InvalidSPDXAnalysisException {
-		if (element instanceof SpdxFile && files.contains(element)) {
+	private void addAllRelatedFiles(SpdxElement element, HashSet<SpdxFile> files,
+			HashSet<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
+		if (element == null || visitedElements.contains(element)) {
 			return;
 		}
+		visitedElements.add(element);
 		Relationship[] relationships = element.getRelationships();
 		if (relationships != null) {
 			for (int j = 0; j < relationships.length; j++) {
@@ -485,7 +487,7 @@ public class SpdxComparer {
 					}
 				}
 				// recursively add all of the related files to this relationships
-				addAllRelatedFiles(relationships[j].getRelatedSpdxElement(), files);
+				addAllRelatedFiles(relationships[j].getRelatedSpdxElement(), files, visitedElements);
 			}
 		}
 	}
@@ -496,10 +498,13 @@ public class SpdxComparer {
 	 * @param pkgs
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void addAllRelatedPackages(SpdxElement element, HashSet<SpdxPackage> pkgs) throws InvalidSPDXAnalysisException {
-		if (element instanceof SpdxPackage && pkgs.contains(element)) {
+	private void addAllRelatedPackages(SpdxElement element, 
+			HashSet<SpdxPackage> pkgs,
+			HashSet<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
+		if (element == null || visitedElements.contains(element)) {
 			return;
 		}
+		visitedElements.add(element);
 		Relationship[] relationships = element.getRelationships();
 		if (relationships != null) {
 			for (int j = 0; j < relationships.length; j++) {
@@ -509,7 +514,8 @@ public class SpdxComparer {
 					pkgs.add((SpdxPackage)(relationships[j].getRelatedSpdxElement()));
 				}
 				// recursively add all of the related files to this relationships
-				addAllRelatedPackages(relationships[j].getRelatedSpdxElement(), pkgs);
+				addAllRelatedPackages(relationships[j].getRelatedSpdxElement(), 
+						pkgs, visitedElements);
 			}
 		}
 	}
@@ -528,7 +534,7 @@ public class SpdxComparer {
 			if (items[i] instanceof SpdxPackage) {
 				retval.add((SpdxPackage)items[i]);
 			}
-			addAllRelatedPackages(items[i], retval);
+			addAllRelatedPackages(items[i], retval, new HashSet<SpdxElement>());
 		}	
 		return retval.toArray(new SpdxPackage[retval.size()]);
 	}
@@ -552,7 +558,7 @@ public class SpdxComparer {
 					retval.add(pkgFiles[j]);
 				}
 			}
-			addAllRelatedFiles(items[i], retval);
+			addAllRelatedFiles(items[i], retval, new HashSet<SpdxElement>());
 		}	
 		return retval.toArray(new SpdxFile[retval.size()]);
 	}
