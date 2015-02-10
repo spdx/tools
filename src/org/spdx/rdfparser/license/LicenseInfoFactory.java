@@ -169,10 +169,12 @@ public class LicenseInfoFactory {
 				return new ConjunctiveLicenseSet(modelContainer, node);
 			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET)) {
 				return new DisjunctiveLicenseSet(modelContainer, node);
-			}else if (type.equals(SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO)) {
+			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO)) {
 				return new ExtractedLicenseInfo(modelContainer, node);
-			}else if (type.equals(SpdxRdfConstants.CLASS_SPDX_LICENSE)) {
+			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_LICENSE)) {
 				return new SpdxListedLicense(modelContainer, node);
+			} else if (type.equals(SpdxRdfConstants.CLASS_OR_LATER_OPERATOR)) {
+				return new OrLaterOperator(modelContainer, node);
 			} else {
 				throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo '"+type+"'"));
 			}

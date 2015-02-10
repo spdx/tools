@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -480,12 +481,18 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inPackageDefinition = true;
 			inFileDefinition = false;
 			inAnnotation = false;
+			boolean generatedId = false;
 			if (this.lastPackage != null) {
 				if (this.lastPackage.getId() == null) {
+					generatedId = true;
 					this.warningMessages.add("Missing SPDX ID for "+this.lastPackage.getName()
 							+ ".  An SPDX ID will be generated for this package.");
 				}
 				this.analysis.addItem(this.lastPackage);
+				if (generatedId && this.documentDescribes.isEmpty()) {
+					// add the default first package ID
+					this.documentDescribes.add(this.lastPackage.getId());
+				}
 			}
 			this.lastPackage = new SpdxPackage(value, null, null, null, null, null, null, null);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
@@ -569,10 +576,22 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				relationshipType);
 	}
 
-	private void checkAnalysisNull() throws InvalidSpdxTagFileException {
+	private void checkAnalysisNull() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
 		if (this.analysis == null) {
-			throw(new InvalidSpdxTagFileException("The SPDX Document URI must be set before other SPDX document properties are set."));
+			if (this.specVersion.compareTo("SPDX-2.0") < 0) {
+				result[0] = new SpdxDocumentContainer(generateDocumentUri()); 
+				this.analysis = result[0].getSpdxDocument();
+			} else {
+				throw(new InvalidSpdxTagFileException("The SPDX Document URI must be set before other SPDX document properties are set."));
+			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private String generateDocumentUri() {
+		return "http://spdx.org/documents/"+UUID.randomUUID().toString();
 	}
 
 	/**
@@ -605,6 +624,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
 			pkg.setId(value);
+			if (this.documentDescribes.isEmpty()) {
+				// add the first package as a default if no document describes has
+				// already been added
+				this.documentDescribes.add(value);
+			}
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_VERSION_INFO"))) {
 			pkg.setVersionInfo(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILE_NAME"))) {
@@ -844,8 +868,18 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	public void exit() throws Exception {
 		addLastFile();
 		if (this.lastPackage != null) {
+			boolean generatedId = false;
+			if (this.lastPackage.getId() == null) {
+				generatedId = true;
+				this.warningMessages.add("Missing SPDX ID for "+this.lastPackage.getName()
+						+ ".  An SPDX ID will be generated for this package.");
+			}
 			this.analysis.addItem(this.lastPackage);
-		}
+			if (generatedId && this.documentDescribes.isEmpty()) {
+				// add the default first package ID
+				this.documentDescribes.add(this.lastPackage.getId());
+			}
+		}		
 		fixFileDependencies();
 		addDocumentDescribes();
 		addRelationships();

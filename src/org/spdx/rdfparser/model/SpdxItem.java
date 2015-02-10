@@ -22,6 +22,7 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.OrLaterOperator;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
@@ -288,7 +289,8 @@ public class SpdxItem extends SpdxElement {
 				AnyLicenseInfo lic = this.licenseInfoFromFiles[i];
 				if (!(lic instanceof SimpleLicensingInfo ||
 						lic instanceof SpdxNoAssertionLicense ||
-						lic instanceof SpdxNoneLicense)) {
+						lic instanceof SpdxNoneLicense ||
+						lic instanceof OrLaterOperator)) {
 					foundNonSimpleLic = true;
 					break;
 				}
