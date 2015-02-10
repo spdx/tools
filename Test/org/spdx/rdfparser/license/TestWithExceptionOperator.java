@@ -75,6 +75,14 @@ public class TestWithExceptionOperator {
 		public void addSpdxElementRef(String elementRef) {
 			
 		}
+		@Override
+		public String documentNamespaceToId(String externalNamespace) {
+			return null;
+		}
+		@Override
+		public String externalDocumentIdToNamespace(String docId) {
+			return null;
+		}
 		
 	};
 	/**

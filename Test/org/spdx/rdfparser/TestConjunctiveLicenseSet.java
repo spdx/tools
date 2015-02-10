@@ -61,14 +61,22 @@ public class TestConjunctiveLicenseSet {
 
 		@Override
 		public boolean spdxElementRefExists(String elementRef) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public void addSpdxElementRef(String elementRef) {
-			// TODO Auto-generated method stub
 			
+		}
+
+		@Override
+		public String documentNamespaceToId(String externalNamespace) {
+			return null;
+		}
+
+		@Override
+		public String externalDocumentIdToNamespace(String docId) {
+			return null;
 		}
 		
 	};

@@ -85,41 +85,42 @@ public class MergeToolTest {
 
 	@Test
 	public void testMergeMultipleDocs() throws IOException, InvalidSPDXAnalysisException {
-		String[] args = new String[4];
-		args[0] = TEST_DIR + File.separator + "SPDXRdfExample-v1.2.rdf";
-		args[1] = TEST_DIR + File.separator + "SPDXSpreadsheetMergeTest1.rdf";
-		args[2] = TEST_DIR + File.separator + "SPDXSpreadsheetMergeTest2.rdf";
-		String outputFileName = TEMP_DIR + File.separator + "outputFile.rdf";
-		args[3] = outputFileName;
-		MergeSpdxDocs.main(args);
-		SpdxDocument outputDoc = SPDXDocumentFactory.createSpdxDocument(outputFileName);
-		SpdxDocument masterDoc = SPDXDocumentFactory.createSpdxDocument(args[0]);
-		SpdxDocument firstMergeDoc = SPDXDocumentFactory.createSpdxDocument(args[1]);
-		SpdxDocument secondMergeDoc = SPDXDocumentFactory.createSpdxDocument(args[2]);
-		assertEquals(outputDoc.getSpdxPackage().getName(), masterDoc.getSpdxPackage().getName());
-		// check for licenses and build a license map
+//		String[] args = new String[4];
+//		args[0] = TEST_DIR + File.separator + "SPDXRdfExample-v1.2.rdf";
+//		args[1] = TEST_DIR + File.separator + "SPDXSpreadsheetMergeTest1.rdf";
+//		args[2] = TEST_DIR + File.separator + "SPDXSpreadsheetMergeTest2.rdf";
+//		String outputFileName = TEMP_DIR + File.separator + "outputFile.rdf";
+//		args[3] = outputFileName;
+//		MergeSpdxDocs.main(args);
+//		SpdxDocument outputDoc = SPDXDocumentFactory.createSpdxDocument(outputFileName);
+//		SpdxDocument masterDoc = SPDXDocumentFactory.createSpdxDocument(args[0]);
+//		SpdxDocument firstMergeDoc = SPDXDocumentFactory.createSpdxDocument(args[1]);
+//		SpdxDocument secondMergeDoc = SPDXDocumentFactory.createSpdxDocument(args[2]);
+//		assertEquals(outputDoc.getSpdxPackage().getName(), masterDoc.getSpdxPackage().getName());
+//		// check for licenses and build a license map
+//
+//		AnyLicenseInfo[] masterExtractedLicenses = masterDoc.getExtractedLicenseInfos();
+//		AnyLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();		
+//
+//		HashMap<String, String> masterDocLicMap = mapLicenseIds(masterExtractedLicenses, outputDocExtratedLicenses);
+//		HashMap<String, String> firstMergeDoccLicMap = mapLicenseIds(firstMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
+//		HashMap<String, String> secondMergeDocLicMap = mapLicenseIds(secondMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
+//		
+//		SpdxFile[] expectedFiles = createExpectedFiles(masterDoc,firstMergeDoc,secondMergeDoc);
+//		SpdxFile[] outputDocFiles = outputDoc.getSpdxPackage().getFiles();
+//		
+//		int num = 0;
+//		for(SpdxFile outputFile:outputDocFiles){
+//			for(SpdxFile expectedFile: expectedFiles){
+//				if(outputFile.equivalent(expectedFile)){
+//					num ++;
+//					break;
+//				}
+//			}
+//		}
+//		assertEquals(5,num);
 
-		AnyLicenseInfo[] masterExtractedLicenses = masterDoc.getExtractedLicenseInfos();
-		AnyLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();		
-
-		HashMap<String, String> masterDocLicMap = mapLicenseIds(masterExtractedLicenses, outputDocExtratedLicenses);
-		HashMap<String, String> firstMergeDoccLicMap = mapLicenseIds(firstMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
-		HashMap<String, String> secondMergeDocLicMap = mapLicenseIds(secondMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
-		
-		SpdxFile[] expectedFiles = createExpectedFiles(masterDoc,firstMergeDoc,secondMergeDoc);
-		SpdxFile[] outputDocFiles = outputDoc.getSpdxPackage().getFiles();
-		
-		int num = 0;
-		for(SpdxFile outputFile:outputDocFiles){
-			for(SpdxFile expectedFile: expectedFiles){
-				if(outputFile.equivalent(expectedFile)){
-					num ++;
-					break;
-				}
-			}
-		}
-		assertEquals(5,num);
-
+		fail("This test causes all tests to stop with a sys exit");
 	}
 
 	/**

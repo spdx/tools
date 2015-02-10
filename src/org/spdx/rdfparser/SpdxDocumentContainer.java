@@ -17,12 +17,16 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.RdfModelObject;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxElementFactory;
@@ -39,7 +43,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * This class contains the SPDX Document and provides some of the basic
- * RDF model support. This class also manages the SpdxRef and LicenseRefs.
+ * RDF model support. This class also manages the SpdxRef, ExtractedLicenseInfos,
+ * and LicenseRefs.
  * 
  * Separating the container aspects of the SpdxDocument into this separate
  * class allows for the SpdxDocument to follow the rdfparser.model pattern.
@@ -60,7 +65,27 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
+	/**
+	 * Keep track of all existing SPDX element references
+	 */
 	HashSet<String> spdxRefs = new HashSet<String>();
+	
+	/**
+	 * Map of license ID to extracted license info
+	 */
+	HashMap<String, ExtractedLicenseInfo> licenseIdToExtractedLicense = 
+			new HashMap<String, ExtractedLicenseInfo>();
+	
+	/**
+	 * Map of external document ID's to external document references
+	 */
+	HashMap<String, ExternalDocumentRef> externalDocIdToRef = 
+			new HashMap<String, ExternalDocumentRef>();
+	/**
+	 * Map of external document namespaces to external document references
+	 */
+	HashMap<String, ExternalDocumentRef> externalDocNamespaceToRef = 
+			new HashMap<String, ExternalDocumentRef>();
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
@@ -103,8 +128,9 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		}
 		String docUri = this.documentNode.getURI();
 		this.documentNamespace = this.formDocNamespace(docUri);
+		initializeExternalDocumentRefs();
 		this.spdxDocument = new SpdxDocument(this, this.documentNode);
-		initializeNextLicenseRef(this.spdxDocument.getExtractedLicenseInfos());
+		initializeNextLicenseRef();
 		initializeNextElementRef();
 	}
 	
@@ -268,16 +294,115 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			return -1;
 		}
 	}
-
+	
 	/**
-	 * Initialize the next license reference by scanning all of the existing non-standard licenses
+	 * Find an element within the container by the SPDX Identifier.  
+	 * Returns null if the element does not exist in the container.
+	 * @param id
+	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected void initializeNextLicenseRef() throws InvalidSPDXAnalysisException {
-		initializeNextLicenseRef(this.spdxDocument.getExtractedLicenseInfos());
+	public SpdxElement findElementById(String id) throws InvalidSPDXAnalysisException {
+		if (SPDX_DOCUMENT_ID.equals(id)) {
+			return this.spdxDocument;
+		}
+		String uri = null;
+		if (id.contains(":")) {
+			// external document reference
+			String[] parts = id.split(":");
+			if (parts.length != 2) {
+				throw(new InvalidSPDXAnalysisException("Invalid SPDX ID: "+id+" - must be an SPDX element ID or SPDXDocument ID: SpdxElement ID"));
+			}
+			String nameSpace = this.externalDocumentIdToNamespace(parts[0]);
+			if (nameSpace == null) {
+				throw(new InvalidSPDXAnalysisException("No external document ref found for SPDX ID "+id));
+			}
+			uri = nameSpace + "#" + parts[1];
+		} else if (!this.spdxElementRefExists(id)) {
+			return null;
+		} else {
+			uri = this.getDocumentNamespace() + id;
+		}
+		Resource r = this.model.createResource(uri);
+		return SpdxElementFactory.createElementFromModel(this, r.asNode());
+	}
+
+
+	
+	public String verifySpdxVersion(String spdxVersion) {
+		if (!spdxVersion.startsWith("SPDX-")) {
+			return "Invalid spdx version - must start with 'SPDX-'";
+		}
+		Matcher docSpecVersionMatcher = SpdxRdfConstants.SPDX_VERSION_PATTERN.matcher(spdxVersion);
+		if (!docSpecVersionMatcher.matches()) {
+			return "Invalid spdx version format - must match 'SPDX-M.N'";
+		}
+		if (!SUPPORTED_SPDX_VERSIONS.contains(spdxVersion)) {
+			return "Version "+spdxVersion+" is not supported by this version of the rdf parser";
+		}
+		return null;	// if we got here, there is no problem
+	}
+
+	/**
+	 * @return
+	 */
+	public SpdxDocument getSpdxDocument() {
+		return this.spdxDocument;
 	}
 	
-	public void initializeNextLicenseRef(ExtractedLicenseInfo[] existingLicenses) throws InvalidSPDXAnalysisException {
+	/**
+	 * @return return the next available SPDX element reference.
+	 */
+	public String getNextSpdxElementRef() {
+		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
+		String retval = formSpdxElementRef(nextSpdxElementNum);
+		while (this.spdxElementRefExists(retval)) {
+			nextSpdxElementNum = this.getAndIncrementNextLicenseRef();
+			retval = formSpdxElementRef(nextSpdxElementNum);
+		}
+		this.spdxRefs.add(retval);
+		return retval;
+	}
+	
+	public static String formSpdxElementRef(int refNum) {
+		return SPDX_ELEMENT_REF_PRENUM + String.valueOf(refNum);
+	}
+	
+	/**
+	 * @return
+	 */
+	synchronized int getAndIncrementNextElementRef() {
+		int retval = this.nextElementRef;
+		this.nextElementRef++;
+		return retval;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#SpdxElementRefExists(java.lang.String)
+	 */
+	@Override
+	public boolean spdxElementRefExists(String elementRef) {
+		return this.spdxRefs.contains(elementRef);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addSpdxElementRef(java.lang.String)
+	 */
+	@Override
+	public void addSpdxElementRef(String elementRef) throws InvalidSPDXAnalysisException {
+		if (spdxElementRefExists(elementRef)) {
+			throw(new InvalidSPDXAnalysisException("Duplicate SPDX element reference: "+elementRef));
+		}
+		this.spdxRefs.add(elementRef);
+	}
+	
+	/**
+	 * Initialize the next license reference and the cache of extracted license infos
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public void initializeNextLicenseRef() throws InvalidSPDXAnalysisException {
+		getExtractedLicenseInfosFromModel();	// this initializes the cache
+		ExtractedLicenseInfo[] existingLicenses = getExtractedLicenseInfos();
 		if (existingLicenses == null) {
 			this.nextLicenseRef = 1;
 			return;
@@ -285,10 +410,10 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		int highestNonStdLicense = 0;
 		for (int i = 0; i < existingLicenses.length; i++) {
 			try {
-			int idNum = getLicenseRefNum(existingLicenses[i].getLicenseId());
-			if (idNum > highestNonStdLicense) {
-				highestNonStdLicense = idNum;
-			}
+				int idNum = getLicenseRefNum(existingLicenses[i].getLicenseId());
+				if (idNum > highestNonStdLicense) {
+					highestNonStdLicense = idNum;
+				}
 			} catch (NonNumericLicenseIdException ex) {
 				// just continue
 			}
@@ -296,6 +421,15 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		this.nextLicenseRef = highestNonStdLicense + 1;
 	}
 
+	/**
+	 * @return next available license ID for an ExtractedLicenseInfo
+	 */
+	public synchronized String getNextLicenseRef() {
+		int nextLicNum = this.getAndIncrementNextLicenseRef();
+		String retval = formNonStandardLicenseID(nextLicNum);
+		return retval;
+	}
+	
 	/**
 	 * Parses a license ID and return the integer representing the ID number (e.g. N in LicenseRef-N)
 	 * Note that in SPDX 1.2, non-numeric license IDs are allowed. This method will throw a NonNumericException if
@@ -327,64 +461,6 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		return retval;
 	}
 	
-	public String verifySpdxVersion(String spdxVersion) {
-		if (!spdxVersion.startsWith("SPDX-")) {
-			return "Invalid spdx version - must start with 'SPDX-'";
-		}
-		Matcher docSpecVersionMatcher = SpdxRdfConstants.SPDX_VERSION_PATTERN.matcher(spdxVersion);
-		if (!docSpecVersionMatcher.matches()) {
-			return "Invalid spdx version format - must match 'SPDX-M.N'";
-		}
-		if (!SUPPORTED_SPDX_VERSIONS.contains(spdxVersion)) {
-			return "Version "+spdxVersion+" is not supported by this version of the rdf parser";
-		}
-		return null;	// if we got here, there is no problem
-	}
-
-	/**
-	 * @return
-	 */
-	public SpdxDocument getSpdxDocument() {
-		return this.spdxDocument;
-	}
-	
-	/**
-	 * @return next available license ID for an ExtractedLicenseInfo
-	 */
-	public synchronized String getNextLicenseRef() {
-		int nextLicNum = this.getAndIncrementNextLicenseRef();
-		String retval = formNonStandardLicenseID(nextLicNum);
-		return retval;
-	}
-	
-	
-	/**
-	 * @return return the next available SPDX element reference.
-	 */
-	public String getNextSpdxElementRef() {
-		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
-		String retval = formSpdxElementRef(nextSpdxElementNum);
-		while (this.spdxElementRefExists(retval)) {
-			nextSpdxElementNum = this.getAndIncrementNextLicenseRef();
-			retval = formSpdxElementRef(nextSpdxElementNum);
-		}
-		this.spdxRefs.add(retval);
-		return retval;
-	}
-	
-	public static String formSpdxElementRef(int refNum) {
-		return SPDX_ELEMENT_REF_PRENUM + String.valueOf(refNum);
-	}
-	
-	/**
-	 * @return
-	 */
-	synchronized int getAndIncrementNextElementRef() {
-		int retval = this.nextElementRef;
-		this.nextElementRef++;
-		return retval;
-	}
-	
 	/**
 	 * Adds a new non-standard license containing the text provided.  Forms the license ID
 	 * from the next License ID available
@@ -412,6 +488,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
 		s.addProperty(p, license.createResource(this));		
+		this.licenseIdToExtractedLicense.put(license.getLicenseId(), license);
 	}
 	
 	/**
@@ -419,12 +496,77 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 * @return true if the license ID is already in the model as an extracted license info
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected boolean extractedLicenseExists(String id) throws InvalidSPDXAnalysisException {
-		Node p = model.getProperty(SPDX_NAMESPACE, PROP_LICENSE_ID).asNode();
-		Node o = Node.createLiteral(id);
-		Triple m = Triple.createMatch(null, p, o);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		return tripleIter.hasNext();
+	public boolean extractedLicenseExists(String id) throws InvalidSPDXAnalysisException {
+		return this.licenseIdToExtractedLicense.containsKey(id);
+	}
+	
+	/**
+	 * @param id
+	 * @return true if the license ID is already in the model as an extracted license info
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public ExtractedLicenseInfo getExtractedLicense(String id) throws InvalidSPDXAnalysisException {
+		return this.licenseIdToExtractedLicense.get(id);
+	}
+	
+	/**
+	 * Get Update the extrated license infos from the model and resynchronize it with
+	 * the license cache.
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void getExtractedLicenseInfosFromModel() throws InvalidSPDXAnalysisException {
+		AnyLicenseInfo[] extractedAnyLicenseInfo = this.spdxDocument.findAnyLicenseInfoPropertyValues(
+				SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_SPDX_EXTRACTED_LICENSES);
+		this.licenseIdToExtractedLicense.clear();
+		
+		for (int i = 0; i < extractedAnyLicenseInfo.length; i++) {
+			if (!(extractedAnyLicenseInfo[i] instanceof ExtractedLicenseInfo)) {
+				throw new InvalidSPDXAnalysisException("Invalid type for extracted license infos");
+			}
+			ExtractedLicenseInfo lic = (ExtractedLicenseInfo)extractedAnyLicenseInfo[i];
+			this.licenseIdToExtractedLicense.put(lic.getLicenseId(), lic);
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public ExtractedLicenseInfo[] getExtractedLicenseInfos() {
+		return this.licenseIdToExtractedLicense.values().toArray(
+				new ExtractedLicenseInfo[this.licenseIdToExtractedLicense.values().size()]);
+	}
+
+	/**
+	 * @param extractedLicenseInfos
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setExtractedLicenseInfos(
+			ExtractedLicenseInfo[] extractedLicenseInfos) throws InvalidSPDXAnalysisException {
+		this.spdxDocument.setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_SPDX_EXTRACTED_LICENSES, extractedLicenseInfos);
+		this.initializeNextLicenseRef();
+	}
+
+	/**
+	 * @param license
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addExtractedLicenseInfos(ExtractedLicenseInfo license) throws InvalidSPDXAnalysisException {
+		if (license == null) {
+			return;
+		}
+		try {
+			int idNum = getLicenseRefNum(license.getLicenseId());
+			if (idNum >= this.nextLicenseRef) {
+				this.nextLicenseRef = idNum + 1;
+			}
+		} catch (NonNumericLicenseIdException ex) {
+			// just continue
+		}
+		this.licenseIdToExtractedLicense.put(license.getLicenseId(), license);
+		this.spdxDocument.addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_SPDX_EXTRACTED_LICENSES, license);
 	}
 	
 	private Resource getResource(Node node) throws InvalidSPDXAnalysisException {
@@ -437,25 +579,6 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			throw(new InvalidSPDXAnalysisException("Node can not be a literal"));
 		}
 		return s;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#SpdxElementRefExists(java.lang.String)
-	 */
-	@Override
-	public boolean spdxElementRefExists(String elementRef) {
-		return this.spdxRefs.contains(elementRef);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#addSpdxElementRef(java.lang.String)
-	 */
-	@Override
-	public void addSpdxElementRef(String elementRef) throws InvalidSPDXAnalysisException {
-		if (spdxElementRefExists(elementRef)) {
-			throw(new InvalidSPDXAnalysisException("Duplicate SPDX element reference: "+elementRef));
-		}
-		this.spdxRefs.add(elementRef);
 	}
 
 	/**
@@ -479,22 +602,68 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		return alFiles.toArray(retval);
 	}
 
+	private void initializeExternalDocumentRefs() throws InvalidSPDXAnalysisException {
+		this.initializeExternalDocumentRefs(
+				RdfModelObject.findExternalDocRefPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+				SpdxRdfConstants.PROP_SPDX_EXTERNAL_DOC_REF, this, documentNode));
+	}
+	
+	private void initializeExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs) throws InvalidSPDXAnalysisException {
+		this.externalDocIdToRef.clear();
+		this.externalDocNamespaceToRef.clear();
+		if (externalDocumentRefs == null) {
+			return;
+		}
+		for (int i = 0; i < externalDocumentRefs.length; i++) {
+			this.externalDocIdToRef.put(externalDocumentRefs[i].getExternalDocumentId(), 
+					externalDocumentRefs[i]);
+			this.externalDocNamespaceToRef.put(externalDocumentRefs[i].getSpdxDocumentNamespace(), 
+					externalDocumentRefs[i]);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#documentNamespaceToId(java.lang.String)
+	 */
+	@Override
+	public String documentNamespaceToId(String externalNamespace) {
+		ExternalDocumentRef ref = this.externalDocNamespaceToRef.get(externalNamespace);
+		if (ref == null) {
+			return null;
+		} else {
+			return ref.getExternalDocumentId();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#externalDocumentIdToNamespace(java.lang.String)
+	 */
+	@Override
+	public String externalDocumentIdToNamespace(String docId) {
+		ExternalDocumentRef ref = this.externalDocIdToRef.get(docId);
+		if (ref == null) {
+			return null;
+		} else {
+			return ref.getSpdxDocumentNamespace();
+		}
+	}
+
 	/**
-	 * Find an element within the container by the SPDX Identifier.  
-	 * Returns null if the element does not exist in the container.
-	 * @param id
-	 * @return
+	 * @return external document refs
+	 */
+	public ExternalDocumentRef[] getExternalDocumentRefs() {
+		return this.externalDocIdToRef.values().toArray(
+						new ExternalDocumentRef[this.externalDocIdToRef.values().size()]);
+	}
+
+	/**
+	 * @param externalDocumentRefs
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public SpdxElement findElementById(String id) throws InvalidSPDXAnalysisException {
-		if (SPDX_DOCUMENT_ID.equals(id)) {
-			return this.spdxDocument;
-		}
-		if (!this.spdxElementRefExists(id)) {
-			return null;
-		}
-		String uri = this.getDocumentNamespace() + id;
-		Resource r = this.model.createResource(uri);
-		return SpdxElementFactory.createElementFromModel(this, r.asNode());
+	public void setExternalDocumentRefs(
+			ExternalDocumentRef[] externalDocumentRefs) throws InvalidSPDXAnalysisException {
+		initializeExternalDocumentRefs(externalDocumentRefs);
+		this.spdxDocument.setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+				SpdxRdfConstants.PROP_SPDX_EXTERNAL_DOC_REF, externalDocumentRefs);
 	}
 }

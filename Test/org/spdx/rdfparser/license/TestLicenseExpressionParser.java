@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
@@ -96,7 +97,7 @@ public class TestLicenseExpressionParser {
 	public void testSingleStdLicense() throws InvalidSPDXAnalysisException {
 		String parseString = STD_IDS[0];
 		AnyLicenseInfo expected = STANDARD_LICENSES[0];
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -104,7 +105,7 @@ public class TestLicenseExpressionParser {
 	public void testSingleExtractedLicense() throws InvalidSPDXAnalysisException {
 		String parseString = NONSTD_IDS[0];
 		AnyLicenseInfo expected = NON_STD_LICENSES[0];
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -112,7 +113,7 @@ public class TestLicenseExpressionParser {
 	public void testOrLater() throws InvalidSPDXAnalysisException {
 		String parseString = STD_IDS[0]+"+";
 		AnyLicenseInfo expected = new OrLaterOperator(STANDARD_LICENSES[0]);
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -120,7 +121,7 @@ public class TestLicenseExpressionParser {
 	public void testWithException() throws InvalidSPDXAnalysisException {
 		String parseString = STD_IDS[0]+" WITH " + EXCEPTION_IDS[0];
 		AnyLicenseInfo expected = new WithExceptionOperator(STANDARD_LICENSES[0], LICENSE_EXCEPTIONS[0]);
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 
@@ -128,7 +129,7 @@ public class TestLicenseExpressionParser {
 	public void testSimpleAnd() throws InvalidSPDXAnalysisException {
 		String parseString = STD_IDS[0] + " AND " + NONSTD_IDS[0];
 		AnyLicenseInfo expected = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[0], NON_STD_LICENSES[0]});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -136,7 +137,7 @@ public class TestLicenseExpressionParser {
 	public void testSimpleOr() throws InvalidSPDXAnalysisException {
 		String parseString = STD_IDS[0] + " OR " + NONSTD_IDS[0];
 		AnyLicenseInfo expected = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[0], NON_STD_LICENSES[0]});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -146,7 +147,7 @@ public class TestLicenseExpressionParser {
 					STD_IDS[2] + " AND " + STD_IDS[3];
 		AnyLicenseInfo expected = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[1], 
 				NON_STD_LICENSES[1], STANDARD_LICENSES[2], STANDARD_LICENSES[3]});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -156,7 +157,7 @@ public class TestLicenseExpressionParser {
 					STD_IDS[2] + " OR " + STD_IDS[3];
 		AnyLicenseInfo expected = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[1], 
 				NON_STD_LICENSES[1], STANDARD_LICENSES[2], STANDARD_LICENSES[3]});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -166,7 +167,7 @@ public class TestLicenseExpressionParser {
 					STD_IDS[2] + " OR " + STD_IDS[3] + ")";
 		AnyLicenseInfo expected = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[1], 
 				NON_STD_LICENSES[1], STANDARD_LICENSES[2], STANDARD_LICENSES[3]});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -177,7 +178,7 @@ public class TestLicenseExpressionParser {
 		DisjunctiveLicenseSet dls = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[2], STANDARD_LICENSES[3]});
 		AnyLicenseInfo expected = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[1] ,
 				NON_STD_LICENSES[1], dls});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
 	}
 	
@@ -188,7 +189,22 @@ public class TestLicenseExpressionParser {
 		ConjunctiveLicenseSet cls = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {NON_STD_LICENSES[1], STANDARD_LICENSES[2]});
 		AnyLicenseInfo expected = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {STANDARD_LICENSES[1] ,
 				cls, STANDARD_LICENSES[3]});
-		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString);
+		AnyLicenseInfo result = LicenseExpressionParser.parseLicenseExpression(parseString, null);
 		assertTrue(expected.equals(result));
+	}
+	
+	@Test
+	public void testContainer() throws InvalidSPDXAnalysisException {
+		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
+		String version = "SPDX-1.2";
+		SpdxDocumentContainer container = new SpdxDocumentContainer(docUri, version);
+		assertTrue(container.getExtractedLicense(NONSTD_IDS[0]) == null);
+		LicenseExpressionParser.parseLicenseExpression(
+				NONSTD_IDS[0], container);
+		assertTrue(container.extractedLicenseExists(NONSTD_IDS[0]));
+		LicenseExpressionParser.parseLicenseExpression(
+				NONSTD_IDS[1] + " AND " + NONSTD_IDS[2], container);
+		assertTrue(container.extractedLicenseExists(NONSTD_IDS[1]));
+		assertTrue(container.extractedLicenseExists(NONSTD_IDS[2]));
 	}
 }

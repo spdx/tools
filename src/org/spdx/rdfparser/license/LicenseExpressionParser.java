@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
@@ -48,11 +49,13 @@ public class LicenseExpressionParser {
 	}
 	/**
 	 * Parses a license expression into an license for use in the RDF Parser
-	 * @param expression
-	 * @return
+	 * @param expression Expression to be parsed
+	 * @param container Container containing any extractedLicenseInfos - if any extractedLicenseInfos by ID already exist, they will be used.  If
+	 * none exist for an ID, they will be added.  If null, a simple Java object will be created for the extractedLicenseInfo.
+	 * @return 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	static AnyLicenseInfo parseLicenseExpression(String expression) throws InvalidSPDXAnalysisException {
+	static AnyLicenseInfo parseLicenseExpression(String expression, SpdxDocumentContainer container) throws InvalidSPDXAnalysisException {
 		if (expression == null || expression.trim().isEmpty()) {
 			throw(new LicenseParserException("Empty license expression"));
 		}
@@ -62,7 +65,7 @@ public class LicenseExpressionParser {
 		} else if (tokens.length == 1 && tokens[0].equals(SpdxRdfConstants.NONE_VALUE)) {
 			return new SpdxNoneLicense();
 		} else {
-			return parseLicenseExpression(tokens);
+			return parseLicenseExpression(tokens, container);
 		}
 	}
 
@@ -107,10 +110,11 @@ public class LicenseExpressionParser {
 	/**
 	 * Parses a tokenized license expression into a license for use in the RDF Parser
 	 * @param tokens
+	 * @param container
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static AnyLicenseInfo parseLicenseExpression(String[] tokens) throws InvalidSPDXAnalysisException {
+	private static AnyLicenseInfo parseLicenseExpression(String[] tokens, SpdxDocumentContainer container) throws InvalidSPDXAnalysisException {
 		if (tokens == null || tokens.length == 0) {
 			throw(new LicenseParserException("Expected license expression"));
 		}
@@ -127,10 +131,10 @@ public class LicenseExpressionParser {
 					throw(new LicenseParserException("Missing right parenthesis"));
 				}
 				String[] nestedTokens = Arrays.copyOfRange(tokens, tokenIndex, rightParenIndex);
-				operandStack.push(parseLicenseExpression(nestedTokens));
+				operandStack.push(parseLicenseExpression(nestedTokens, container));
 				tokenIndex = rightParenIndex + 1;		
 			} else if (OPERATOR_MAP.get(token) == null) {	// assumed to be a simple licensing type
-				operandStack.push(parseSimpleLicenseToken(token));
+				operandStack.push(parseSimpleLicenseToken(token, container));
 			} else {
 				Operator operator = OPERATOR_MAP.get(token);
 				if (operator == Operator.WITH) {
@@ -199,14 +203,26 @@ public class LicenseExpressionParser {
 	 * Converts a string token into its equivalent license
 	 * checking for a listed license
 	 * @param token
+	 * @param container 
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static AnyLicenseInfo parseSimpleLicenseToken(String token) throws InvalidSPDXAnalysisException {
+	private static AnyLicenseInfo parseSimpleLicenseToken(String token, SpdxDocumentContainer container) throws InvalidSPDXAnalysisException {
 		if (LicenseInfoFactory.isSpdxListedLicenseID(token)) {
 			return LicenseInfoFactory.getListedLicenseById(token);
 		} else {
-			return new ExtractedLicenseInfo(token, null);
+			ExtractedLicenseInfo retval = null;
+			if (container != null) {
+				if (container.extractedLicenseExists(token)) {
+					retval = container.getExtractedLicense(token);
+				} else {
+					retval = new ExtractedLicenseInfo(token, null);
+					container.addNewExtractedLicenseInfo(retval);
+				}
+			} else {
+				retval = new ExtractedLicenseInfo(token, null);
+			}
+			return retval;
 		}
 	}
 

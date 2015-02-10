@@ -1873,4 +1873,22 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		// TODO Implement
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#documentNamespaceToId(java.lang.String)
+	 */
+	@Override
+	public String documentNamespaceToId(String externalNamespace) {
+		// SPDXDocument does not support external document references
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#externalDocumentIdToNamespace(java.lang.String)
+	 */
+	@Override
+	public String externalDocumentIdToNamespace(String docId) {
+		// SPDXDocument does not support external document references
+		return null;
+	}
 }

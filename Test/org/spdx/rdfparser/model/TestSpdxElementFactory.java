@@ -26,7 +26,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -94,7 +93,7 @@ public class TestSpdxElementFactory {
 	DoapProject DOAP_PROJECT2 = new DoapProject("Second project name", "http://yet.another.project/hi");
 	
 	Model model;
-	IModelContainer modelContainer;
+	ModelContainerForTest modelContainer;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -173,11 +172,10 @@ public class TestSpdxElementFactory {
 		assertEquals(ELEMENT_COMMENT1, packageResult.getComment());
 		assertTrue(UnitTestHelper.isArraysEquivalent(annotations, packageResult.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, packageResult.getRelationships()));
-// UNCOMMENT THE LINES BELOW ONCE SPDXFILE is IMPLEMENTED
-//		assertEquals(LICENSE1, packageResult.getLicenseConcluded());
-//		assertEquals(LICENSE2, packageResult.getLicenseDeclared());
-//		assertEquals(COPYRIGHT_TEXT1, packageResult.getCopyrightText());
-//		assertEquals(LICENSE_COMMENT1, packageResult.getLicenseComment());
+		assertEquals(LICENSE1, packageResult.getLicenseConcluded());
+		assertEquals(LICENSE2, packageResult.getLicenseDeclared());
+		assertEquals(COPYRIGHT_TEXT1, packageResult.getCopyrightText());
+		assertEquals(LICENSE_COMMENT1, packageResult.getLicenseComment());
 		
 		// SpdxItem
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
@@ -191,11 +189,11 @@ public class TestSpdxElementFactory {
 		assertEquals(ELEMENT_COMMENT1, itemResult.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, itemResult.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, itemResult.getRelationships()));
-// UNCOMMENT THE LINES BELOW ONCE SPDXFILE is IMPLEMENTED
-//		assertEquals(LICENSE1, itemResult.getLicenseConcluded());
-//		assertEquals(LICENSE2, itemResult.getLicenseDeclared());
-//		assertEquals(COPYRIGHT_TEXT1, itemResult.getCopyrightText());
-//		assertEquals(LICENSE_COMMENT1, itemResult.getLicenseComment());
+		assertEquals(LICENSE1, itemResult.getLicenseConcluded());
+		assertTrue(UnitTestHelper.isArraysEqual(new SimpleLicensingInfo[] {LICENSE2},
+				itemResult.getLicenseInfoFromFiles()));
+		assertEquals(COPYRIGHT_TEXT1, itemResult.getCopyrightText());
+		assertEquals(LICENSE_COMMENT1, itemResult.getLicenseComment());
 		
 		// SpdxElement
 		SpdxElement element = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
@@ -208,6 +206,21 @@ public class TestSpdxElementFactory {
 		assertEquals(ELEMENT_COMMENT1, elementResult.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, elementResult.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, elementResult.getRelationships()));
+		
+		// external document element
+		String docId = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "docId";
+		String elementId = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "elementId";
+		String id = docId + ":" + elementId;
+		String externalNamespace = "http://external/namespace";
+		String externalUri = externalNamespace + "#" + elementId;
+		modelContainer.addExternalDocReference(docId, externalNamespace);
+		Resource external = model.createResource(externalUri);
+		result = SpdxElementFactory.createElementFromModel(modelContainer, external.asNode());
+		assertTrue(result instanceof ExternalSpdxElement);
+		ExternalSpdxElement externElement = (ExternalSpdxElement)result;
+		assertEquals(docId, externElement.getExternalDocumentId());
+		assertEquals(elementId, externElement.getExternalElementId());
+		assertEquals(id, externElement.getId());
+		assertEquals(externalUri, externElement.getUri(modelContainer));
 	}
-
 }

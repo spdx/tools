@@ -57,6 +57,7 @@ public class SpdxElement extends RdfModelObject {
 	public SpdxElement(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
 		getPropertiesFromModel();
+		SpdxElementFactory.addToCreatedElements(modelContainer, node, this);
 	}
 	
 	/* (non-Javadoc)
@@ -64,6 +65,7 @@ public class SpdxElement extends RdfModelObject {
 	 */
 	@Override
 	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		SpdxElementFactory.addToCreatedElements(modelContainer, node, this);
 		this.annotations = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION);
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		this.name = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, this.getNamePropertyName());
@@ -73,6 +75,15 @@ public class SpdxElement extends RdfModelObject {
 		if (this.resource.isURIResource()) {
 			if (this.resource.getURI().startsWith(modelContainer.getDocumentNamespace())) {
 				this.id = this.resource.getURI().substring(modelContainer.getDocumentNamespace().length());
+			} else {
+				// look for external document ID
+				String[] parts = this.resource.getURI().split("#");
+				if (parts.length == 2) {
+					String docId = this.modelContainer.documentNamespaceToId(parts[0]);
+					if (docId != null) {
+						this.id = docId + ":" + parts[1];
+					}
+				}
 			}
 		}
 	}
@@ -113,7 +124,7 @@ public class SpdxElement extends RdfModelObject {
 			if (this.relationships != null) {
 				setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationships);
 			}
-			// Here, we assign an 
+			SpdxElementFactory.addToCreatedElements(modelContainer, node, this);
 		}
 	}
 
@@ -346,19 +357,33 @@ public class SpdxElement extends RdfModelObject {
 	public SpdxElement clone() {
 		return new SpdxElement(this.name, this.comment, cloneAnnotations(), cloneRelationships());
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
 	public boolean equivalent(RdfModelObject o) {
+		return equivalent(o, true);
+	}
+
+
+	/**
+	 * Test for equivalent
+	 * @param o
+	 * @param testRelationships If true, test relationships
+	 * @return
+	 */
+	public boolean equivalent(RdfModelObject o, boolean testRelationships) {
 		if (!(o instanceof SpdxElement)) {
 			return false;
 		}
 		SpdxElement comp = (SpdxElement)o;
+		
+		if (testRelationships && !arraysEquivalent(comp.getRelationships(), this.getRelationships())) {
+			return false;
+		}
 		return (equalsConsideringNull(comp.getName(), this.getName()) &&
 				arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) &&
-				arraysEquivalent(comp.getRelationships(), this.getRelationships()) &&
 				equalsConsideringNull(comp.getComment(), this.getComment()));
 	}
 	

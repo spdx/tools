@@ -99,11 +99,11 @@ public class TestExternalDocumentRef {
 				DOCUMENT_ID1);
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
-		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
 		assertTrue(CHECKSUM1.equivalent(edf.getChecksum()));
 		Resource r = edf.createResource(modelContainer);
 		ExternalDocumentRef copy = new ExternalDocumentRef(modelContainer, r.asNode());
-		assertEquals(DOCUMENT_URI1, copy.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, copy.getSpdxDocumentNamespace());
 		assertTrue(CHECKSUM1.equivalent(copy.getChecksum()));
 	}
 
@@ -122,9 +122,9 @@ public class TestExternalDocumentRef {
 		edf.createResource(modelContainer);
 		assertTrue(edf.equivalent(edf2));
 		// URI
-		edf2.setSpdxDocumentUri(DOCUMENT_URI2);
+		edf2.setSpdxDocumentNamespace(DOCUMENT_URI2);
 		assertFalse(edf.equivalent(edf2));
-		edf2.setSpdxDocumentUri(DOCUMENT_URI1);
+		edf2.setSpdxDocumentNamespace(DOCUMENT_URI1);
 		assertTrue(edf.equivalent(edf2));
 		// Checksum
 		edf2.setChecksum(CHECKSUM2);
@@ -153,7 +153,7 @@ public class TestExternalDocumentRef {
 		assertEquals(0, edf.verify().size());
 		edf.setChecksum(null);
 		assertEquals(1, edf.verify().size());
-		edf.setSpdxDocumentUri(null);
+		edf.setSpdxDocumentNamespace(null);
 		assertEquals(2, edf.verify().size());		
 	}
 
@@ -192,22 +192,22 @@ public class TestExternalDocumentRef {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#setSpdxDocumentUri(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#setSpdxDocumentNamespace(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
 	public void testSetSpdxDocumentUri() throws InvalidSPDXAnalysisException {
 		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
 				DOCUMENT_ID1);
-		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = edf.createResource(modelContainer);
-		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
-		edf.setSpdxDocumentUri(DOCUMENT_URI2);
-		assertEquals(DOCUMENT_URI2, edf.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
+		edf.setSpdxDocumentNamespace(DOCUMENT_URI2);
+		assertEquals(DOCUMENT_URI2, edf.getSpdxDocumentNamespace());
 		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());		
-		assertEquals(DOCUMENT_URI2, edf2.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI2, edf2.getSpdxDocumentNamespace());
 	}
 
 	/**
@@ -225,17 +225,17 @@ public class TestExternalDocumentRef {
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = edf.createResource(modelContainer);
 		edf.setSpdxDocument(doc1);
-		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
 		assertEquals(doc1.getName(), edf.getSpdxDocument().getName());
 		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());
-		assertEquals(DOCUMENT_URI1, edf2.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, edf2.getSpdxDocumentNamespace());
 		SpdxDocumentContainer container2 = new SpdxDocumentContainer(DOCUMENT_URI2);
 		SpdxDocument doc2 = container2.getSpdxDocument();
 		doc2.setName("name2");
 		edf2.setSpdxDocument(doc2);		
-		assertEquals(DOCUMENT_URI2, edf2.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI2, edf2.getSpdxDocumentNamespace());
 		assertEquals(doc2.getName(), edf2.getSpdxDocument().getName());
-		assertEquals(DOCUMENT_URI2, edf.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI2, edf.getSpdxDocumentNamespace());
 	}
 
 	/**
@@ -246,15 +246,15 @@ public class TestExternalDocumentRef {
 	public void testClone() throws InvalidSPDXAnalysisException {
 		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
 				DOCUMENT_ID1);
-		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
+		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
 		Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		edf.createResource(modelContainer);
 		ExternalDocumentRef clone = edf.clone();
 		assertTrue(edf.equivalent(clone));
-		clone.setSpdxDocumentUri(DOCUMENT_URI2);
-		assertEquals(DOCUMENT_URI2, clone.getSpdxDocumentUri());
-		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentUri());
+		clone.setSpdxDocumentNamespace(DOCUMENT_URI2);
+		assertEquals(DOCUMENT_URI2, clone.getSpdxDocumentNamespace());
+		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
 	}
 
 }

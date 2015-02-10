@@ -19,6 +19,7 @@ package org.spdx.rdfparser.license;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
@@ -193,18 +194,41 @@ public class LicenseInfoFactory {
 	 *				keywords AND and OR
 	 *			A licenseID must NOT be "AND" or "OR"
 	 * @param licenseString String conforming to the syntax
+	 * @param container Container containing any extractedLicenseInfos - if any extractedLicenseInfos by ID already exist, they will be used.  If
+	 * none exist for an ID, they will be added.  If null, a simple Java object will be created for the extractedLicenseInfo.
 	 * @return an SPDXLicenseInfo created from the string
 	 * @throws InvalidLicenseStringException 
 	 */
-	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
+	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString, SpdxDocumentContainer container) throws InvalidLicenseStringException {
 		try {
-			return LicenseExpressionParser.parseLicenseExpression(licenseString);
+			return LicenseExpressionParser.parseLicenseExpression(licenseString, container);
 		} catch (LicenseParserException e) {
 			throw new InvalidLicenseStringException(e.getMessage(),e);
 		} catch (InvalidSPDXAnalysisException e) {
 			throw new InvalidLicenseStringException("Unexpected SPDX error parsing license string");
 		}
 	}
+
+	/**
+	 * Parses a license string and converts it into a SPDXLicenseInfo object
+	 * Syntax - A license set must start and end with a parenthesis "("
+	 * 			A conjunctive license set will have and AND after the first
+	 *				licenseInfo term
+	 * 			A disjunctive license set will have an OR after the first 
+	 *				licenseInfo term
+	 *			If there is no And or Or, then it is converted to a simple
+	 *				license type
+	 *			A space or tab must be used between license ID's and the 
+	 *				keywords AND and OR
+	 *			A licenseID must NOT be "AND" or "OR"
+	 * @param licenseString String conforming to the syntax
+	 * @return an SPDXLicenseInfo created from the string
+	 * @throws InvalidLicenseStringException 
+	 */
+	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
+		return parseSPDXLicenseString(licenseString, null);
+	}
+
 
 
 	/**
