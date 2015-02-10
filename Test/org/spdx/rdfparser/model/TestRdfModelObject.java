@@ -431,6 +431,29 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
+	public void testAddAnyLicenseInfos() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		AnyLicenseInfo[] result = empty.findAnyLicenseInfoPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		SpdxListedLicense lic1 = LicenseInfoFactory.getListedLicenseById(STANDARD_LICENSE_ID1);
+		String licId2 = "LicRef-2";
+		String licenseText2 = "License text 2";
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licenseText2);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, lic1);
+		result = empty.findAnyLicenseInfoPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(1, result.length);
+		assertEquals(lic1, result[0]);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, lic2);
+		result = empty.findAnyLicenseInfoPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(2, result.length);
+		assertTrue(UnitTestHelper.isArraysEqual(new AnyLicenseInfo[] {lic1, lic2},
+				result));
+	}
+	
+	@Test
 	public void testFindSetAnyLicenseInfosMultiple() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");

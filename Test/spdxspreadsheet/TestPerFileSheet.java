@@ -93,6 +93,16 @@ public class TestPerFileSheet {
 
 			return false;
 		}
+
+		@Override
+		public String documentNamespaceToId(String externalNamespace) {
+			return null;
+		}
+
+		@Override
+		public String externalDocumentIdToNamespace(String docId) {
+			return null;
+		}
 		
 	};
 

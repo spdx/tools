@@ -25,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
@@ -175,7 +176,7 @@ public class TestSpdxDocumentContainer {
 		assertEquals(expected, doc.getNextLicenseRef());
 		int licenseRefNum = 545;
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(SpdxDocumentContainer.formNonStandardLicenseID(licenseRefNum), "License Text");
-		doc.initializeNextLicenseRef(new ExtractedLicenseInfo[] {lic});
+		doc.setExtractedLicenseInfos(new ExtractedLicenseInfo[] {lic});
 		expected = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + String.valueOf(licenseRefNum + 1);
 		assertEquals(expected, doc.getNextLicenseRef());		
 	}
@@ -247,6 +248,32 @@ public class TestSpdxDocumentContainer {
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
 		assertTrue(doc.extractedLicenseExists(lic2.getLicenseId()));
 	}
+	
+	@Test
+	public void testGetExtractedLicenseInfo() throws InvalidSPDXAnalysisException {
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+
+		String NON_STD_LIC_ID1 = "LicenseRef-nonstd1";
+		String NON_STD_LIC_TEXT1 = "licenseText1";
+		String NON_STD_LIC_NAME1 = "licenseName1";
+		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
+		String NON_STD_LIC_COMMENT1 = "License 1 comment";
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
+		
+		String NON_STD_LIC_TEXT2 = "LicenseText2";
+
+		ExtractedLicenseInfo[] emptyLic = doc.getSpdxDocument().getExtractedLicenseInfos();
+		assertEquals(0,emptyLic.length);
+		assertTrue(doc.getExtractedLicense(NON_STD_LIC_ID1) == null);
+		
+		doc.addNewExtractedLicenseInfo(lic1);
+		assertEquals(lic1, doc.getExtractedLicense(NON_STD_LIC_ID1));
+		
+		ExtractedLicenseInfo lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
+		assertEquals(lic2, doc.getExtractedLicense(lic2.getLicenseId()));
+	}
 
 	@Test
 	public void testSpdxDocVersions() throws InvalidSPDXAnalysisException {
@@ -311,5 +338,42 @@ public class TestSpdxDocumentContainer {
 		doc.getSpdxDocument().addItem(file3);
 		SpdxFile[] expected = new SpdxFile[] {file1, file2, file3};
 		assertTrue(UnitTestHelper.isArraysEquivalent(expected, doc.getFileReferences()));
+	}
+	
+	@Test
+	public void testDocumentNamespaceToId() throws InvalidSPDXAnalysisException {
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		String uri1 = "http://www.uri.one";
+		String id1 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "one";
+		String uri2 = "http://www.uri.two";
+		String id2 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "two";
+		String uri3 = "http://www.uri.three";
+		String id3 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "three";
+		String uri4 = "http://www.uri.four";
+		String id4 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "four";
+		assertTrue(doc.externalDocumentIdToNamespace(id1) == null);
+		assertTrue(doc.documentNamespaceToId(uri1) == null);
+		ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
+				new ExternalDocumentRef(uri1, null, id1),
+				new ExternalDocumentRef(uri2, null, id2)
+		};
+		doc.setExternalDocumentRefs(externalDocumentRefs);
+		assertEquals(uri1, doc.externalDocumentIdToNamespace(id1));
+		assertEquals(id1, doc.documentNamespaceToId(uri1));
+		assertEquals(uri2, doc.externalDocumentIdToNamespace(id2));
+		assertEquals(id2, doc.documentNamespaceToId(uri2));
+		
+		ExternalDocumentRef[] newRefs = new ExternalDocumentRef[] {
+				new ExternalDocumentRef(uri3, null, id3),
+				new ExternalDocumentRef(uri4, null, id4)
+		};
+		doc.setExternalDocumentRefs(newRefs);
+		assertTrue(doc.externalDocumentIdToNamespace(id1) == null);
+		assertTrue(doc.documentNamespaceToId(uri1) == null);
+		assertEquals(uri3, doc.externalDocumentIdToNamespace(id3));
+		assertEquals(id3, doc.documentNamespaceToId(uri3));
+		assertEquals(uri4, doc.externalDocumentIdToNamespace(id4));
+		assertEquals(id4, doc.documentNamespaceToId(uri4));
 	}
 }

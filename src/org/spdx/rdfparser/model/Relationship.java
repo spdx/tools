@@ -125,6 +125,7 @@ public class Relationship extends RdfModelObject {
 		this.relatedSpdxElement = relatedSpdxElement;
 		this.relationshipType = relationshipType;
 		this.comment = comment;
+		this.refreshOnGet = true;	//TODO: This must be set to false to avoid infinite recursion.  We can redesign the model by having everything go through SpdxElementFactory
 	}
 	/**
 	 * @param model Model containing the relationship
@@ -267,7 +268,7 @@ public class Relationship extends RdfModelObject {
 			try {
 				SpdxElement refresh = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
-				if (refresh == null || !refresh.equivalent(this.relatedSpdxElement)) {
+				if (refresh == null || !refresh.equivalent(this.relatedSpdxElement, false)) {
 					this.relatedSpdxElement = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -300,7 +301,12 @@ public class Relationship extends RdfModelObject {
 			return false;
 		}
 		Relationship comp = (Relationship)o;
-		return (equivalentConsideringNull(relatedSpdxElement, comp.getRelatedSpdxElement()) &&
+		if (relatedSpdxElement == null) {
+			if (comp.getRelatedSpdxElement() != null) {
+				return false;
+			}
+		}
+		return (relatedSpdxElement.equivalent(comp.getRelatedSpdxElement(), false) &&	// Note - we don't want to test relationships since that may send us into an infinite loop
 				equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
 				equalsConsideringNull(comment, comp.getComment()));
 	}

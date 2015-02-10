@@ -1935,9 +1935,9 @@ public class SpdxComparerTest {
 		docA.setSpdxItems(itemsA);
 		docB.setSpdxItems(itemsB);
 
-		ExternalDocumentRef ref1 = new ExternalDocumentRef(docB, CHECKSUM1, "SPDXDocumentRef-1");
-		ExternalDocumentRef ref2 = new ExternalDocumentRef(docB, CHECKSUM2, "SPDXDocumentRef-1");
-		ExternalDocumentRef ref3 = new ExternalDocumentRef(docA, CHECKSUM3, "SPDXDocumentRef-2");
+		ExternalDocumentRef ref1 = new ExternalDocumentRef("http://namespace/one", CHECKSUM1, "SPDXDocumentRef-1");
+		ExternalDocumentRef ref2 = new ExternalDocumentRef("http://namespace/two", CHECKSUM2, "SPDXDocumentRef-2");
+		ExternalDocumentRef ref3 = new ExternalDocumentRef("http://namespace/three", CHECKSUM3, "SPDXDocumentRef-3");
 		docA.setExternalDocumentRefs(new ExternalDocumentRef[] {ref1, ref2} );
 		docB.setExternalDocumentRefs(new ExternalDocumentRef[] { ref2, ref3 });
 		SpdxComparer comparer = new SpdxComparer();

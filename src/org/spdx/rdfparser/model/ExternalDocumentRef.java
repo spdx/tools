@@ -52,7 +52,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 
 	Checksum checksum;
-	String spdxDocumentUri;
+	String spdxDocumentNamespace;
 	String externalDocumentId;
 	SpdxDocument spdxDocument = null;
 	
@@ -74,7 +74,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
-		this.spdxDocumentUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+		this.spdxDocumentNamespace = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
 		this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID);
@@ -85,7 +85,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 * @param checksum Sha1 checksum for the external document
 	 */
 	public ExternalDocumentRef(String spdxDocumentUri, Checksum checksum, String externalDocumentId) {
-		this.spdxDocumentUri = spdxDocumentUri;
+		this.spdxDocumentNamespace = spdxDocumentUri;
 		this.checksum = checksum;
 		this.externalDocumentId = externalDocumentId;
 	}
@@ -96,7 +96,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 	public ExternalDocumentRef(SpdxDocument externalDocument, Checksum checksum, String externalDocumentId) {
 		this.spdxDocument = externalDocument;
-		this.spdxDocumentUri = documentToDocumentUri(externalDocument);
+		this.spdxDocumentNamespace = documentToDocumentUri(externalDocument);
 		this.externalDocumentId = externalDocumentId;
 		this.checksum = checksum;
 	}
@@ -125,12 +125,12 @@ public class ExternalDocumentRef extends RdfModelObject {
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		String uri = "UNKNOWN";
-		if (this.spdxDocumentUri == null) {
+		if (this.spdxDocumentNamespace == null) {
 			retval.add("Missing required external document URI");
 		} else {
-			uri = this.spdxDocumentUri;
+			uri = this.spdxDocumentNamespace;
 			if (!SpdxVerificationHelper.isValidUri(uri)) {
-				retval.add("Invalid URI for external Spdx Document URI: "+this.spdxDocumentUri);
+				retval.add("Invalid URI for external Spdx Document URI: "+this.spdxDocumentNamespace);
 			}
 		}
 		if (this.checksum == null) {
@@ -175,7 +175,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	void populateModel() throws InvalidSPDXAnalysisException {
 		this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
-				this.spdxDocumentUri);
+				this.spdxDocumentNamespace);
 		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM,
 				this.checksum);
@@ -214,30 +214,30 @@ public class ExternalDocumentRef extends RdfModelObject {
 
 
 	/**
-	 * @return the spdxDocumentUri
+	 * @return the spdxDocumentNamespace
 	 */
-	public String getSpdxDocumentUri() {
+	public String getSpdxDocumentNamespace() {
 		if (this.resource != null && refreshOnGet) {
-			this.spdxDocumentUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+			this.spdxDocumentNamespace = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
 		}
-		return spdxDocumentUri;
+		return spdxDocumentNamespace;
 	}
 
 
 	/**
-	 * @param spdxDocumentUri the spdxDocumentUri to set
+	 * @param spdxDocumentNamespace the spdxDocumentNamespace to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setSpdxDocumentUri(String spdxDocumentUri) throws InvalidSPDXAnalysisException {
-		this.spdxDocumentUri = spdxDocumentUri;
-		if (this.spdxDocumentUri == null) {
+	public void setSpdxDocumentNamespace(String spdxDocumentNamespace) throws InvalidSPDXAnalysisException {
+		this.spdxDocumentNamespace = spdxDocumentNamespace;
+		if (this.spdxDocumentNamespace == null) {
 			this.removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
 		} else {
 			this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
-					this.spdxDocumentUri);
+					this.spdxDocumentNamespace);
 		}
 	}
 
@@ -256,7 +256,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 */
 	public void setSpdxDocument(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
 		this.spdxDocument = spdxDocument;
-		setSpdxDocumentUri(documentToDocumentUri(spdxDocument));
+		setSpdxDocumentNamespace(documentToDocumentUri(spdxDocument));
 	}
 
 
@@ -270,7 +270,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 		}
 		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
 		try {
-			return (this.equalsConsideringNull(this.spdxDocumentUri, compref.getSpdxDocumentUri())&&
+			return (this.equalsConsideringNull(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace())&&
 					this.equivalentConsideringNull(this.checksum, compref.getChecksum()) &&
 					this.equalsConsideringNull(this.externalDocumentId,  compref.getExternalDocumentId()));
 		} catch (InvalidSPDXAnalysisException e) {
@@ -281,7 +281,7 @@ public class ExternalDocumentRef extends RdfModelObject {
 	
 	@Override
 	public ExternalDocumentRef clone() {
-		return new ExternalDocumentRef(this.spdxDocumentUri, this.checksum.clone(),
+		return new ExternalDocumentRef(this.spdxDocumentNamespace, this.checksum.clone(),
 				this.externalDocumentId);
 	}
 

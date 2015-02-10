@@ -41,8 +41,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * The superclass for all classes the use the Jena RDF model.
  * 
  * There are two different lifecycles for objects that subclass RdfModelObject:
- * - If there is an existing model which already contains this object, use the constructor
- * <code>RdfModelObject(ModelContainer container, Node node)</code>
+ * - If there is an existing model which already contains this object, use the static
+ * method <code>RdfModelObject.createModelObject(ModelContainer container, Node node)</code>
  * where the node contains the property values for the class.  The subclass
  * implementations should implement the population of the Java properties from the 
  * model.  From that point forward, using standard getters and setters will keep
@@ -94,6 +94,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	protected Resource resource;
 	protected Node node;
 	protected IModelContainer modelContainer;
+	static RdfModelObject rdfModelObject;
 	
 	/**
 	 * Force a refresh for the model on every property get.  This is slower, but
@@ -684,7 +685,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param licenses
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected void setPropertyValues(String nameSpace,
+	public void setPropertyValues(String nameSpace,
 			String propertyName, AnyLicenseInfo[] licenses) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);
@@ -696,6 +697,21 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 					}
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Add a property value of type AnyLicenseInfo without removing the existing property values
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param license
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public void addPropertyValue (String nameSpace,
+			String propertyName, AnyLicenseInfo license) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null && license != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			this.resource.addProperty(p, license.createResource(this.modelContainer));
 		}
 	}
 	
@@ -1009,24 +1025,32 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	public ExternalDocumentRef[] findExternalDocRefPropertyValues(
+			String nameSpace, String propertyName)  throws InvalidSPDXAnalysisException {
+		return findExternalDocRefPropertyValues(nameSpace, propertyName,
+				this.modelContainer, this.node);
+	}
+	
 	/**
 	 * @param nameSpace
 	 * @param propSpdxExternalDocRef
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected ExternalDocumentRef[] findExternalDocRefPropertyValues(
-			String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
-		if (this.model == null || this.node == null) {
+	public static ExternalDocumentRef[] findExternalDocRefPropertyValues(
+			String nameSpace, String propertyName, IModelContainer extDocModelContainer, 
+			Node nodeContainingExternalRefs) throws InvalidSPDXAnalysisException {
+		if (extDocModelContainer == null || nodeContainingExternalRefs == null) {
 			return new ExternalDocumentRef[0];
 		}
+		Model model = extDocModelContainer.getModel();
 		ArrayList<ExternalDocumentRef> retval = new ArrayList<ExternalDocumentRef>();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
-		Triple m = Triple.createMatch(node, p, null);
+		Triple m = Triple.createMatch(nodeContainingExternalRefs, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			retval.add(new ExternalDocumentRef(modelContainer, t.getObject()));
+			retval.add(new ExternalDocumentRef(extDocModelContainer, t.getObject()));
 		}
 		return retval.toArray(new ExternalDocumentRef[retval.size()]);
 	}
@@ -1037,7 +1061,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param externalDocRefs
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected void setPropertyValues(String nameSpace, String propertyName, 
+	public void setPropertyValues(String nameSpace, String propertyName, 
 			ExternalDocumentRef[] externalDocRefs) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);

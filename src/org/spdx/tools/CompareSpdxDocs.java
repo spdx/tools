@@ -331,7 +331,7 @@ public class CompareSpdxDocs {
 	private static void printExternalDocumentRef(
 			ExternalDocumentRef externalDocumentRef, PrintStream output) throws InvalidSPDXAnalysisException {
 		output.println("\tExternalDocumentRef: "+externalDocumentRef.getExternalDocumentId()+
-				" "+externalDocumentRef.getSpdxDocumentUri()+" SHA1:"+
+				" "+externalDocumentRef.getSpdxDocumentNamespace()+" SHA1:"+
 				externalDocumentRef.getChecksum().getValue());
 	}
 

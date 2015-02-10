@@ -16,6 +16,8 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.util.HashMap;
+
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
@@ -31,19 +33,64 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public class SpdxElementFactory {
+	
+	/**
+	 * Add to a cache of created elements
+	 * @param modelContainer
+	 * @param node
+	 * @param element
+	 */
+	static void addToCreatedElements(IModelContainer modelContainer,
+			Node node, SpdxElement element) {
+		HashMap<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
+		if (containerNodes == null) {
+			containerNodes = new HashMap<Node, SpdxElement>();
+			createdElements.put(modelContainer, containerNodes);
+		}
+		containerNodes.put(node, element);
+	}
+	/**
+	 * Keep track of all nodes created both for performance and to prevent
+	 * an infinite recursion from continually creating the same objects.
+	 */
+	private static HashMap<IModelContainer, HashMap<Node, SpdxElement>> createdElements = 
+			new HashMap<IModelContainer, HashMap<Node, SpdxElement>>();
 
 	public static SpdxElement createElementFromModel(IModelContainer modelContainer,
 			Node node) throws InvalidSPDXAnalysisException {
+		HashMap<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
+		if (containerNodes == null) {
+			containerNodes = new HashMap<Node, SpdxElement>();
+			createdElements.put(modelContainer, containerNodes);
+		}
+		SpdxElement retval = containerNodes.get(node);
+		if (retval != null) {
+			return retval;
+		}
 		if (!node.isURI() && !node.isBlank()) {
 			throw(new InvalidSPDXAnalysisException("Can not create an SPDX Element from a literal node"));
 		}
-		SpdxElement retval = getElementByType(modelContainer, node);
+		if (node.isURI() && !node.getURI().startsWith(modelContainer.getDocumentNamespace())) {
+			// assume this is an external document reference
+			String[] uriParts = node.getURI().split("#");
+			if (uriParts.length != 2) {
+				throw(new InvalidSPDXAnalysisException("Invalid element URI: "+node.getURI()));
+			}
+			String docId = modelContainer.documentNamespaceToId(uriParts[0]);
+			if (docId == null) {
+				throw(new InvalidSPDXAnalysisException("No external document reference was found for URI "+node.getURI()));
+			}
+			String externalId = docId + ":" + uriParts[1];
+			return new ExternalSpdxElement(externalId);
+		}
+		retval = getElementByType(modelContainer, node);
 		if (retval == null) {
 			retval = guessElementByProperties(modelContainer, node);
 			if (retval == null) {
 				throw(new InvalidSPDXAnalysisException("Unable to determine the SPDX element type from the model"));
 			}
 		}
+		containerNodes.put(node, retval);
 		return retval;
 	}
 

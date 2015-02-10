@@ -672,6 +672,44 @@ public class TestSpdxDocument {
 			assertTrue(UnitTestHelper.isArraysEqual(infos2, doc.getExtractedLicenseInfos()));
 	}
 
+	@Test
+	public void testAddExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {
+				ANNOTATION1, ANNOTATION2	
+			};
+			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
+					EXTERNAL_REF1, EXTERNAL_REF2
+			};
+			ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
+					LICENSE1
+			};
+			Relationship[] relationships = new Relationship[] {
+					RELATIONSHIP1, RELATIONSHIP2
+			};
+			SpdxItem[] items = new SpdxItem[] {
+					FILE1, FILE2, PACKAGE1, PACKAGE2
+			};
+			SpdxDocument doc = container.getSpdxDocument();
+			doc.setAnnotations(annotations);
+			doc.setComment(DOC_COMMENT1);
+			doc.setCreationInfo(CREATIONINFO1);
+			doc.setDataLicense(CCO_DATALICENSE);
+			doc.setExternalDocumentRefs(externalDocumentRefs);
+			doc.setExtractedLicenseInfos(extractedLicenseInfos);
+			doc.setName(DOC_NAME1);
+			doc.setRelationships(relationships);
+			doc.setSpdxItems(items);
+			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
+
+			doc.addExtractedLicenseInfos(LICENSE2);
+			assertEquals(2, doc.getExtractedLicenseInfos().length);
+			doc.addExtractedLicenseInfos(LICENSE3);
+			assertEquals(3, doc.getExtractedLicenseInfos().length);
+			ExtractedLicenseInfo[] expected = new ExtractedLicenseInfo[] {
+					LICENSE1, LICENSE2, LICENSE3
+			};
+			assertTrue(UnitTestHelper.isArraysEqual(expected, doc.getExtractedLicenseInfos()));
+	}
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setSpecVersion(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 

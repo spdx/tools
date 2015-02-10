@@ -16,6 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.spdx.rdfparser.IModelContainer;
@@ -33,6 +34,8 @@ public class ModelContainerForTest implements IModelContainer {
 	String namespace;
 	int nextRef = 1;
 	HashSet<String> elementRefs = new HashSet<String>();
+	HashMap<String, String> externalNamespaceToId = new HashMap<String, String>();
+	HashMap<String, String> externalIdToNamespace = new HashMap<String, String>();
 	/**
 	 * 
 	 */
@@ -79,6 +82,27 @@ public class ModelContainerForTest implements IModelContainer {
 	@Override
 	public void addSpdxElementRef(String elementRef) {
 		elementRefs.add(elementRef);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#documentNamespaceToId(java.lang.String)
+	 */
+	@Override
+	public String documentNamespaceToId(String externalNamespace) {
+		return this.externalNamespaceToId.get(externalNamespace);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#externalDocumentIdToNamespace(java.lang.String)
+	 */
+	@Override
+	public String externalDocumentIdToNamespace(String docId) {
+		return this.externalIdToNamespace.get(docId);
+	}
+	
+	public void addExternalDocReference(String docId, String docNamespace) {
+		this.externalIdToNamespace.put(docId, docNamespace);
+		this.externalNamespaceToId.put(docNamespace, docId);
 	}
 
 }

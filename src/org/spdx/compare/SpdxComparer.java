@@ -465,10 +465,15 @@ public class SpdxComparer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void addAllRelatedFiles(SpdxElement element, HashSet<SpdxFile> files) throws InvalidSPDXAnalysisException {
+		if (element instanceof SpdxFile && files.contains(element)) {
+			return;
+		}
 		Relationship[] relationships = element.getRelationships();
 		if (relationships != null) {
 			for (int j = 0; j < relationships.length; j++) {
-				if (relationships[j] != null && relationships[j].getRelatedSpdxElement() instanceof SpdxFile) {
+				if (relationships[j] != null && 
+						relationships[j].getRelatedSpdxElement() instanceof SpdxFile &&
+						!files.contains(relationships[j].getRelatedSpdxElement())) {
 					files.add((SpdxFile)(relationships[j].getRelatedSpdxElement()));
 				} else if (relationships[j] != null && 
 						relationships[j].getRelatedSpdxElement() instanceof SpdxPackage) {
@@ -492,11 +497,15 @@ public class SpdxComparer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void addAllRelatedPackages(SpdxElement element, HashSet<SpdxPackage> pkgs) throws InvalidSPDXAnalysisException {
+		if (element instanceof SpdxPackage && pkgs.contains(element)) {
+			return;
+		}
 		Relationship[] relationships = element.getRelationships();
 		if (relationships != null) {
 			for (int j = 0; j < relationships.length; j++) {
 				if (relationships[j] != null && 
-						relationships[j].getRelatedSpdxElement() instanceof SpdxPackage) {
+						relationships[j].getRelatedSpdxElement() instanceof SpdxPackage &&
+						!pkgs.contains(relationships[j].getRelatedSpdxElement())) {
 					pkgs.add((SpdxPackage)(relationships[j].getRelatedSpdxElement()));
 				}
 				// recursively add all of the related files to this relationships
@@ -2102,8 +2111,8 @@ public class SpdxComparer {
 			boolean found = false;
 			if (externalDocRefsB != null) {
 				for (int j = 0; j < externalDocRefsB.length; j++) {
-					if (compareStrings(externalDocRefsA[i].getSpdxDocumentUri(),
-							externalDocRefsB[j].getSpdxDocumentUri()) == 0 &&
+					if (compareStrings(externalDocRefsA[i].getSpdxDocumentNamespace(),
+							externalDocRefsB[j].getSpdxDocumentNamespace()) == 0 &&
 							elementsEquivalent(externalDocRefsA[i].getChecksum(),
 									externalDocRefsB[j].getChecksum())) {
 						found = true;

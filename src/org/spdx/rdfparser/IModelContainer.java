@@ -57,7 +57,18 @@ public interface IModelContainer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	void addSpdxElementRef(String elementRef) throws InvalidSPDXAnalysisException;
-	
-	
 
+	/**
+	 * Translate an external document namespace URI to an external document ID 
+	 * @param externalNamespace
+	 * @return
+	 */
+	String documentNamespaceToId(String externalNamespace);
+
+	/**
+	 * Translate an external document ID to the external document's namespace
+	 * @param docId
+	 * @return
+	 */
+	String externalDocumentIdToNamespace(String docId);
 }

@@ -161,6 +161,18 @@ public class ListedLicenses implements IModelContainer {
 			public void addSpdxElementRef(String elementRef) {
 				// This will not be used
 			}
+
+			@Override
+			public String documentNamespaceToId(String externalNamespace) {
+				// Listed licenses do not support external documents
+				return null;
+			}
+
+			@Override
+			public String externalDocumentIdToNamespace(String docId) {
+				//  Listed licenses do not support external documents
+				return null;
+			}
 			
 		};
 		SpdxListedLicense retval;
@@ -486,5 +498,23 @@ public class ListedLicenses implements IModelContainer {
 	@Override
 	public void addSpdxElementRef(String elementRef) {
 		listdLicenseIds.add(elementRef);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#documentNamespaceToId(java.lang.String)
+	 */
+	@Override
+	public String documentNamespaceToId(String externalNamespace) {
+		// Listed licenses do not support external documents
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#externalDocumentIdToNamespace(java.lang.String)
+	 */
+	@Override
+	public String externalDocumentIdToNamespace(String docId) {
+		// Listed licenses do not support external documents
+		return null;
 	}
 }

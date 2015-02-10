@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
@@ -78,6 +77,16 @@ public class TestExtractedLicenseInfo {
 		@Override
 		public void addSpdxElementRef(String elementRef) {
 			
+		}
+
+		@Override
+		public String documentNamespaceToId(String externalNamespace) {
+			return null;
+		}
+
+		@Override
+		public String externalDocumentIdToNamespace(String docId) {
+			return null;
 		}
 		
 	};
@@ -250,6 +259,6 @@ public class TestExtractedLicenseInfo {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		ExtractedLicenseInfo[] extractedLicenses = doc1.getExtractedLicenseInfos();
 		doc1.setExtractedLicenseInfos(extractedLicenses);
-		ExtractedLicenseInfo[] result = doc1.getExtractedLicenseInfos();
+		doc1.getExtractedLicenseInfos();
 	}
 }
