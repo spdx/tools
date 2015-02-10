@@ -18,6 +18,8 @@ package org.spdx.rdfparser;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,10 +28,12 @@ import org.junit.Test;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.model.UnitTestHelper;
+import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -375,5 +379,60 @@ public class TestSpdxDocumentContainer {
 		assertEquals(id3, doc.documentNamespaceToId(uri3));
 		assertEquals(uri4, doc.externalDocumentIdToNamespace(id4));
 		assertEquals(id4, doc.documentNamespaceToId(uri4));
+	}
+	
+	@Test
+	public void testFindAllPackage() throws InvalidSPDXAnalysisException {
+		String PACKAGE_ID1 = "SpdxRef-PackageID";
+		String PACKAGE_ID2 = "SpdxRef-PackageID2";
+		String PACKAGE_ID3 = "SpdxRef-PackageID3";
+		SpdxPackage pkg1 = new SpdxPackage("PkgName1", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID1);
+		SpdxPackage pkg2 = new SpdxPackage("PkgName1", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID2);
+		SpdxPackage pkg3 = new SpdxPackage("PkgName1", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID3);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		assertTrue(doc.findAllPackages().isEmpty());
+		doc.getSpdxDocument().addItem(pkg1);
+		List<SpdxPackage> result = doc.findAllPackages();
+		assertEquals(1, result.size());
+		assertTrue(result.contains(pkg1));
+		Relationship rel = new Relationship(pkg3, RelationshipType.relationshipType_ancestorOf, "");
+		pkg2.setRelationships(new Relationship[] {rel});
+		doc.getSpdxDocument().addItem(pkg2);
+		result = doc.findAllPackages();
+		assertEquals(3, result.size());
+		SpdxPackage[] resultArray = result.toArray(new SpdxPackage[result.size()]);
+		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxPackage[] {pkg1,  pkg2, pkg3}, resultArray));
+	}
+	
+	@Test
+	public void testFindAllFiles() throws InvalidSPDXAnalysisException {
+		String FILE_ID1 = "SpdxRef-File1";
+		String FILE_ID2 = "SpdxRef-File2";
+		String FILE_ID3 = "SpdxRef-File3";
+		SpdxFile file1 = new SpdxFile("File1", null, null, null, null, null, null, null, null);
+		file1.setId(FILE_ID1);
+		SpdxFile file2 = new SpdxFile("File2", null, null, null, null, null, null, null, null);
+		file2.setId(FILE_ID2);
+		SpdxFile file3 = new SpdxFile("File3", null, null, null, null, null, null, null, null);
+		file3.setId(FILE_ID3);
+		
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		assertTrue(doc.findAllFiles().isEmpty());
+		doc.getSpdxDocument().addItem(file1);
+		List<SpdxFile> result = doc.findAllFiles();
+		assertEquals(1, result.size());
+		assertTrue(result.contains(file1));
+		Relationship rel = new Relationship(file3, RelationshipType.relationshipType_ancestorOf, "");
+		file2.setRelationships(new Relationship[] {rel});
+		doc.getSpdxDocument().addItem(file2);
+		result = doc.findAllFiles();
+		assertEquals(3, result.size());
+		SpdxFile[] resultArray = result.toArray(new SpdxFile[result.size()]);
+		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxFile[] {file1,  file2, file3}, resultArray));
 	}
 }

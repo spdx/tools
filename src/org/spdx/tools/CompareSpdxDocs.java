@@ -303,9 +303,13 @@ public class CompareSpdxDocs {
 	 */
 	private static void printRelationship(Relationship relationship, String elementId,
 			PrintStream output) {
+		String relatedElementId = "[NONE]";
+		if (relationship.getRelatedSpdxElement() != null) {
+			relatedElementId = relationship.getRelatedSpdxElement().getId();
+		}
 		output.println("\tRelationship: "+
 			elementId+Relationship.RELATIONSHIP_TYPE_TO_TAG.get(relationship.getRelationshipType()+
-					" "+relationship.getRelatedSpdxElement().getId()));
+					" "+relatedElementId));
 		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
 			output.println("\tRelationshipComment: "+relationship.getComment());
 		}
@@ -982,6 +986,29 @@ public class CompareSpdxDocs {
 				output.println("The following annotations are only present in "+doc2Name+":");
 				for (int i = 0; i < uniqueB.length; i++) {
 					printAnnotation(uniqueB[i], output);
+				}
+			}
+		}
+		// files
+		if (!spdxPackageComparer.isPackageFilesEquals()) {
+			if (spdxPackageComparer.getUniqueFilesA().length > 0) {
+				output.println("The following files are only present in "+spdxPackageComparer.getPkgA().getName()+
+						" in "+doc1Name+":");
+				for (int i = 0; i < spdxPackageComparer.getUniqueFilesA().length; i++) {
+					output.println("\t"+spdxPackageComparer.getUniqueFilesA()[i].getName());
+				}
+			}
+			if (spdxPackageComparer.getUniqueFilesB().length > 0) {
+				output.println("The following files are only present in "+spdxPackageComparer.getPkgB().getName()+
+						" in "+doc2Name+":");
+				for (int i = 0; i < spdxPackageComparer.getUniqueFilesB().length; i++) {
+					output.println("\t"+spdxPackageComparer.getUniqueFilesB()[i].getName());
+				}
+			}
+			if (spdxPackageComparer.getFileDifferences().length > 0) {
+				output.println("The following file differences were found in "+spdxPackageComparer.getPkgB().getName());
+				for (int i = 0; i < spdxPackageComparer.getFileDifferences().length; i++) {
+					printFileDifference(spdxPackageComparer.getFileDifferences()[i], output, doc1Name, doc2Name);
 				}
 			}
 		}

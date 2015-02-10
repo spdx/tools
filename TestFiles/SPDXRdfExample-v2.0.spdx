@@ -1,6 +1,6 @@
-SPDXVersion: SPDX-2.0
+﻿SPDXVersion: SPDX-2.0
 DataLicense: CC0-1.0
-DocumentID: http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT
+DocumentID: http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT
 DocumentName: SPDX-Tools-v2.0
 SPDXID: SPDXRef-DOCUMENT
 DocumentComment: <text>This document was created using SPDX 2.0 using licenses from the web site.</text>
@@ -8,10 +8,11 @@ DocumentComment: <text>This document was created using SPDX 2.0 using licenses f
 Annotator: Person: Jane Doe ()
 AnnotationDate: 2010-01-29T18:30:22Z
 Comment: <text>Document level annotation</text>
-AnnotationType: null
+AnnotationType: OTHER
 SPDXID: SPDXRef-DOCUMENT
 ## Relationships
 Relationship: SPDXRef-DOCUMENT CONTAINS SPDXRef-Package
+Relationship: SPDXRef-DOCUMENT COPY_OF DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement
 DocumentDescribes: SPDXRef-Package
 DocumentDescribes: SPDXRef-File
 
@@ -34,7 +35,7 @@ SPDXID: SPDXRef-Package
 Annotator: Person: File Commenter
 AnnotationDate: 2011-01-29T18:30:22Z
 Comment: <text>File level annotation</text>
-AnnotationType: null
+AnnotationType: OTHER
 SPDXID: SPDXRef-Package
 ## Relationships
 Relationship: SPDXRef-Package CONTAINS SPDXRef-JenaLib
@@ -88,7 +89,7 @@ FileComment: <text>This file belongs to Jena</text>
 Annotator: Person: Someone Else
 AnnotationDate: 2011-01-29T18:30:22Z
 Comment: <text>Package level annotation</text>
-AnnotationType: null
+AnnotationType: OTHER
 SPDXID: SPDXRef-JenaLib
 ## Relationships
 Relationship: SPDXRef-JenaLib DYNAMIC_LINK SPDXRef-Package

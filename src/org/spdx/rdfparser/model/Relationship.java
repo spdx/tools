@@ -304,10 +304,14 @@ public class Relationship extends RdfModelObject {
 		if (relatedSpdxElement == null) {
 			if (comp.getRelatedSpdxElement() != null) {
 				return false;
-			}
-		}
-		return (relatedSpdxElement.equivalent(comp.getRelatedSpdxElement(), false) &&	// Note - we don't want to test relationships since that may send us into an infinite loop
-				equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
+			} else {
+				return (equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
 				equalsConsideringNull(comment, comp.getComment()));
+			}
+		} else {
+			return (relatedSpdxElement.equivalent(comp.getRelatedSpdxElement(), false) &&	// Note - we don't want to test relationships since that may send us into an infinite loop
+					equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
+					equalsConsideringNull(comment, comp.getComment()));
+		}
 	}
 }

@@ -19,6 +19,7 @@ package org.spdx.rdfparser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -31,6 +32,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxElementFactory;
 import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.graph.Node;
@@ -665,5 +667,31 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		initializeExternalDocumentRefs(externalDocumentRefs);
 		this.spdxDocument.setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_EXTERNAL_DOC_REF, externalDocumentRefs);
+	}
+	
+	public List<SpdxPackage> findAllPackages() throws InvalidSPDXAnalysisException {
+		Node rdfTypePredicate = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
+		Node packageTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_PACKAGE).asNode();
+		Triple m = Triple.createMatch(null, rdfTypePredicate, packageTypeObject);
+		ArrayList<SpdxPackage> retval = new ArrayList<SpdxPackage>();
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			retval.add((SpdxPackage)SpdxElementFactory.createElementFromModel(this, tripleIter.next().getSubject()));
+		}
+		return retval;
+	}
+	
+	public List<SpdxFile> findAllFiles() throws InvalidSPDXAnalysisException {
+		Node rdfTypePredicate = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
+		Node packageTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_FILE).asNode();
+		Triple m = Triple.createMatch(null, rdfTypePredicate, packageTypeObject);
+		ArrayList<SpdxFile> retval = new ArrayList<SpdxFile>();
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			retval.add((SpdxFile)SpdxElementFactory.createElementFromModel(this, tripleIter.next().getSubject()));
+		}
+		return retval;
 	}
 }
