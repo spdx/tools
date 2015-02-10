@@ -135,7 +135,7 @@ public class SpdxElement extends RdfModelObject {
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (this.name == null) {
-			retval.add("Missing required name");
+			retval.add("Missing required name for type "+this.getClass().getName());
 		}
 		return retval;
 	}
