@@ -590,23 +590,25 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		return retval;
 	}
 	
-	public SpdxFile[] cloneFileDependencies() {
+	public SpdxFile[] cloneFileDependencies(HashMap<String, SpdxElement> clonedElementIds) {
 		if (this.fileDependencies == null) {
 			return null;
 		}
 		SpdxFile[] retval = new SpdxFile[this.fileDependencies.length];
 		for (int i = 0; i < this.fileDependencies.length; i++) {
-			retval[i] = this.fileDependencies[i].clone();
+			retval[i] = this.fileDependencies[i].clone(clonedElementIds);
 		}
 		return retval;
 	}
 	
-	@Override public SpdxFile clone() {
-		// We will not clone ID since it is used to create the URI
+	public SpdxFile clone(HashMap<String, SpdxElement> clonedElementIds) {
+		if (clonedElementIds.containsKey(this.getId())) {
+			return (SpdxFile)clonedElementIds.get(this.getId());
+		}
 		SpdxFile retval;
 		try {
 			retval = new SpdxFile(name, comment, cloneAnnotations(),
-					cloneRelationships(), cloneLicenseConcluded(),
+					null, cloneLicenseConcluded(),
 					cloneLicenseInfosFromFiles(), copyrightText,
 					licenseComment, fileTypes, cloneChecksum(),
 					fileContributors, noticeText, cloneArtifactOf());
@@ -614,15 +616,24 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			logger.error("Error cloning file: ",e);
 			retval = null;
 		}
-
+		clonedElementIds.put(this.getId(), retval);
+		try {
+			retval.setRelationships(cloneRelationships(clonedElementIds));
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Unexected error setting relationships during clone",e);
+		}
 		if (this.fileDependencies != null) {
 			try {
-				retval.setFileDependencies(cloneFileDependencies());
+				retval.setFileDependencies(cloneFileDependencies(clonedElementIds));
 			} catch (InvalidSPDXAnalysisException e1) {
 				logger.warn("Error setting file dependencies on clone", e1);
 			}
 		}
 		return retval;
+	}
+	
+	@Override public SpdxFile clone() {
+		return clone(new HashMap<String, SpdxElement>());
 	}
 	
 	@Override

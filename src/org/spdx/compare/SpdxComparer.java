@@ -19,6 +19,7 @@ package org.spdx.compare;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -235,12 +236,9 @@ public class SpdxComparer {
 		new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxPackage[]>>();
 	
 	/**
-	 * Holds a map of any SPDX packages which have package differences.  A package difference
-	 * is a package with the same name and version name but different files or properties
+	 * Map of package names to package comparisons
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxPackageComparer[]>> packageDifferences = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxPackageComparer[]>>();
-	
+	private HashMap<String, SpdxPackageComparer> packageComparers = new HashMap<String, SpdxPackageComparer>();
 	// Annotation comparison results
 	private HashMap<SpdxDocument, HashMap<SpdxDocument, Annotation[]>> uniqueDocumentAnnotations = 
 		new HashMap<SpdxDocument, HashMap<SpdxDocument, Annotation[]>>();
@@ -440,8 +438,7 @@ public class SpdxComparer {
 				if (uniqueAB != null && uniqueAB.length > 0) {
 					uniqueAMap.put(spdxDocs[j], uniqueAB);
 				}
-				HashMap<String, String> licenseIdMap = this.extractedLicenseIdMap.get(spdxDocs[i]).get(spdxDocs[j]);
-				SpdxFileDifference[] differences = findFileDifferences(filesA, filesB, licenseIdMap);
+				SpdxFileDifference[] differences = findFileDifferences(spdxDocs[i], spdxDocs[j], filesA, filesB, this.extractedLicenseIdMap);
 				if (differences != null && differences.length > 0) {
 					diffMap.put(spdxDocs[j], differences);
 				}
@@ -571,18 +568,21 @@ public class SpdxComparer {
 	 * @return
 	 * @throws SpdxCompareException 
 	 */
-	static SpdxFileDifference[] findFileDifferences(SpdxFile[] filesA,
-			SpdxFile[] filesB, HashMap<String, String> licenseIdXlationMap) throws SpdxCompareException {
-		SpdxFileComparer fileComparer = new SpdxFileComparer();
+	static SpdxFileDifference[] findFileDifferences(SpdxDocument docA, SpdxDocument docB,
+			SpdxFile[] filesA, SpdxFile[] filesB, 
+			HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> licenseIdXlationMap) throws SpdxCompareException {
+		
 		ArrayList<SpdxFileDifference> alRetval = new ArrayList<SpdxFileDifference>();
 		int aIndex = 0;
 		int bIndex = 0;
 		while (aIndex < filesA.length && bIndex < filesB.length) {
 			int compare = filesA[aIndex].getName().compareTo(filesB[bIndex].getName());
 			if (compare == 0) {
-				fileComparer.compare(filesA[aIndex], filesB[bIndex], licenseIdXlationMap);
+				SpdxFileComparer fileComparer = new SpdxFileComparer(licenseIdXlationMap);
+				fileComparer.addDocumentFile(docA, filesA[aIndex]);
+				fileComparer.addDocumentFile(docB, filesB[bIndex]);
 				if (fileComparer.isDifferenceFound()) {
-					alRetval.add(fileComparer.getFileDifference());
+					alRetval.add(fileComparer.getFileDifference(docA, docB));
 				}
 				aIndex++;
 				bIndex++;
@@ -595,42 +595,6 @@ public class SpdxComparer {
 			}
 		}
 		SpdxFileDifference[] retval = alRetval.toArray(new SpdxFileDifference[alRetval.size()]);
-		return retval;
-	}
-	
-	/**
-	 * Returns an array of package differences between A and B where the names
-	 * are the same, but one or more properties are different for that file
-	 * @param pkgsA
-	 * @param pkgsB
-	 * @return
-	 * @throws SpdxCompareException 
-	 */
-	static SpdxPackageComparer[] findPackageDifferences(SpdxPackage[] pkgsA,
-			SpdxPackage[] pkgsB, HashMap<String, String> licenseIdXlationMap) throws SpdxCompareException {
-		
-		ArrayList<SpdxPackageComparer> alRetval = new ArrayList<SpdxPackageComparer>();
-		int aIndex = 0;
-		int bIndex = 0;
-		while (aIndex < pkgsA.length && bIndex < pkgsB.length) {
-			int compare = pkgsA[aIndex].compareTo(pkgsB[bIndex]);
-			if (compare == 0) {
-				SpdxPackageComparer pkgComparer = new SpdxPackageComparer();
-				pkgComparer.compare(pkgsA[aIndex], pkgsB[bIndex], licenseIdXlationMap);
-				if (pkgComparer.isDifferenceFound()) {
-					alRetval.add(pkgComparer);
-				}
-				aIndex++;
-				bIndex++;
-			} else if (compare > 0) {
-				// fileA is greater than fileB
-				bIndex++;
-			} else {
-				// fileB is greater than fileA
-				aIndex++;
-			}
-		}
-		SpdxPackageComparer[] retval = alRetval.toArray(new SpdxPackageComparer[alRetval.size()]);
 		return retval;
 	}
 
@@ -794,7 +758,7 @@ public class SpdxComparer {
 			return;
 		}
 		this.uniquePackages.clear();
-		this.packageDifferences.clear();
+		this.packageComparers.clear();
 		// N x N comparison of all files
 		for (int i = 0; i < spdxDocs.length; i++) {
 			SpdxPackage[] pkgsA;
@@ -805,16 +769,11 @@ public class SpdxComparer {
 			}
 			// note - the package arrays MUST be sorted for the comparator methods to work
 			Arrays.sort(pkgsA);
+			addPackageComparers(spdxDocs[i], pkgsA, this.extractedLicenseIdMap);
 			HashMap<SpdxDocument, SpdxPackage[]> uniqueAMap = 
 				this.uniquePackages.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
 				uniqueAMap = new HashMap<SpdxDocument, SpdxPackage[]>();
-			}
-			// this map will be added to uniqueFiles at the end if we find anything
-			HashMap<SpdxDocument, SpdxPackageComparer[]> diffMap = 
-				this.packageDifferences.get(spdxDocs[i]);
-			if (diffMap == null) {
-				diffMap = new HashMap<SpdxDocument, SpdxPackageComparer[]>();
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
 				if (j == i) {
@@ -832,22 +791,33 @@ public class SpdxComparer {
 				if (uniqueAB != null && uniqueAB.length > 0) {
 					uniqueAMap.put(spdxDocs[j], uniqueAB);
 				}
-				HashMap<String, String> licenseIdMap = this.extractedLicenseIdMap.get(spdxDocs[i]).get(spdxDocs[j]);
-				SpdxPackageComparer[] differences = findPackageDifferences(pkgsA, pkgsB, licenseIdMap);
-				if (differences != null && differences.length > 0) {
-					diffMap.put(spdxDocs[j], differences);
-				}
 			}
 			if (!uniqueAMap.isEmpty()) {
 				this.uniquePackages.put(spdxDocs[i], uniqueAMap);
-			}
-			if (!diffMap.isEmpty()) {
-				this.packageDifferences.put(spdxDocs[i], diffMap);
 			}
 		}
 		if (!_isPackagesEqualsNoCheck()) {
 			this.differenceFound = true;
 		}		
+	}
+
+	/**
+	 * add all the document packages to the multi-comparer
+	 * @param spdxDocument
+	 * @param pkgs
+	 * @param extractedLicenseIdMap 
+	 * @throws SpdxCompareException 
+	 */
+	private void addPackageComparers(SpdxDocument spdxDocument,
+			SpdxPackage[] pkgs, HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap) throws SpdxCompareException {
+		for (int i = 0; i < pkgs.length; i++) {
+			SpdxPackageComparer mpc = this.packageComparers.get(pkgs[i].getName());
+			if (mpc == null) {
+				mpc = new SpdxPackageComparer(extractedLicenseIdMap);
+				this.packageComparers.put(pkgs[i].getName(), mpc);
+			}
+			mpc.addDocumentPackage(spdxDocument, pkgs[i]);
+		}
 	}
 
 	/**
@@ -1764,8 +1734,9 @@ public class SpdxComparer {
 
 	/**
 	 * @return
+	 * @throws SpdxCompareException 
 	 */
-	private boolean _isPackagesEqualsNoCheck() {
+	private boolean _isPackagesEqualsNoCheck() throws SpdxCompareException {
 		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, SpdxPackage[]>>> iter = 
 				this.uniquePackages.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -1776,14 +1747,10 @@ public class SpdxComparer {
 				}
 			}
 		}
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, SpdxPackageComparer[]>>> diffIter = 
-				this.packageDifferences.entrySet().iterator();
+		Iterator<SpdxPackageComparer> diffIter = this.packageComparers.values().iterator();
 		while (diffIter.hasNext()) {
-			Iterator<SpdxPackageComparer[]> docIterator = diffIter.next().getValue().values().iterator();
-			while (docIterator.hasNext()) {
-				if (docIterator.next().length > 0) {
-					return false;
-				}
+			if (diffIter.next().isDifferenceFound()) {
+				return false;
 			}
 		}
 		return true;
@@ -1926,29 +1893,38 @@ public class SpdxComparer {
 		}
 		return retval;
 	}
-
+	
 	/**
-	 * Returns any package differences found between the first and second SPDX documents
-	 * as specified by the document index
-	 * @param docindex1
-	 * @param docindex2
-	 * @return
+	 * @return Package comparers where there is at least one difference
 	 * @throws SpdxCompareException 
 	 */
-	public SpdxPackageComparer[] getPackageDifferences(int docindex1, int docindex2) throws SpdxCompareException {
-		this.checkDocsField();
-		this.checkInProgress();
-		this.checkDocsIndex(docindex1);
-		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, SpdxPackageComparer[]> uniqueMap = this.packageDifferences.get(this.spdxDocs[docindex1]);
-		if (uniqueMap == null) {
-			return new SpdxPackageComparer[0];
+	public SpdxPackageComparer[] getPackageDifferences() throws SpdxCompareException {
+		Collection<SpdxPackageComparer> comparers = this.packageComparers.values();
+		Iterator<SpdxPackageComparer> iter = comparers.iterator();
+		int count = 0;
+		while (iter.hasNext()) {
+			if (iter.next().isDifferenceFound()) {
+				count++;
+			}
 		}
-		SpdxPackageComparer[] retval = uniqueMap.get(this.spdxDocs[docindex2]);
-		if (retval == null) {
-			return new SpdxPackageComparer[0];
+		SpdxPackageComparer[] retval = new SpdxPackageComparer[count];		
+		iter = comparers.iterator();
+		int i = 0;
+		while (iter.hasNext()) {
+			SpdxPackageComparer comparer = iter.next();
+			if (comparer.isDifferenceFound()) {
+				retval[i++] = comparer;
+			}
 		}
 		return retval;
+	}
+	
+	/**
+	 * @return all package comparers
+	 */
+	public SpdxPackageComparer[] getPackageComparers() {
+		return this.packageComparers.values().toArray(
+				new SpdxPackageComparer[this.packageComparers.values().size()]);
 	}
 
 	/**
@@ -2132,4 +2108,12 @@ public class SpdxComparer {
 		}
 		return retval.toArray(new ExternalDocumentRef[retval.size()]);
 	}
+
+	/**
+	 * @return
+	 */
+	public SpdxDocument[] getSpdxDocuments() {
+		return this.spdxDocs;
+	}
+
 }

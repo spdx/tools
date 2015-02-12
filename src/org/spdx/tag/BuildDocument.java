@@ -298,6 +298,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		} else if (this.inExtractedLicenseDefinition && EXTRACTED_LICENSE_TAGS.contains(tag)) {
 			buildExtractedLicense(this.lastExtractedLicense, tag, value);
 		} else {
+			if (inFileDefinition) {
+				addLastFile();
+			}
 			this.inAnnotation = false;
 			this.inFileDefinition = false;
 			this.inPackageDefinition = false;
@@ -533,6 +536,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				this.lastPackage.addFile(lastFile);
 			}
 		}
+		this.lastFile = null;
 	}
 
 	/**

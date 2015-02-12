@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -342,20 +343,41 @@ public class SpdxElement extends RdfModelObject {
 		return clonedAnnotations;
 	}
 	
-	protected Relationship[] cloneRelationships() {
+	protected Relationship[] cloneRelationships(HashMap<String, SpdxElement> clonedElementIds) {
 		if (this.relationships == null) {
 			return null;
 		}
 		Relationship[] clonedRelationships =new Relationship[this.relationships.length];
 		for (int i = 0; i < this.relationships.length; i++) {
-			clonedRelationships[i] = this.relationships[i].clone();
+			clonedRelationships[i] = this.relationships[i].clone(clonedElementIds);
 		}
 		return clonedRelationships;
 	}
 	
 	@Override
 	public SpdxElement clone() {
-		return new SpdxElement(this.name, this.comment, cloneAnnotations(), cloneRelationships());
+		return clone(new HashMap<String, SpdxElement>());
+	}
+	
+	/**
+	 * Clones this element, but prevents infinite recursion by 
+	 * keeping track of all elements which have been cloned
+	 * @param clonedElementIds element ID's fo all elements which have been cloned
+	 * @return
+	 */
+	public SpdxElement clone(HashMap<String, SpdxElement> clonedElementIds) {
+		if (clonedElementIds.containsKey(this.getId())) {
+			return clonedElementIds.get(this.getId());
+		}
+		SpdxElement retval = new SpdxElement(this.name, this.comment, cloneAnnotations(), 
+				null);
+		clonedElementIds.put(this.getId(), retval);
+		try {
+			retval.setRelationships(cloneRelationships(clonedElementIds));
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Unexected error setting relationships during clone",e);
+		}
+		return retval;
 	}
 	
 	/* (non-Javadoc)

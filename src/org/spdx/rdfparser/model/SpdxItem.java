@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -263,9 +264,23 @@ public class SpdxItem extends SpdxElement {
 	
 	@Override
 	public SpdxItem clone() {
-		return new SpdxItem(this.name, this.comment, cloneAnnotations(), cloneRelationships(),
+		return clone(new HashMap<String, SpdxElement>());
+	}
+	
+	public SpdxItem clone(HashMap<String, SpdxElement> clonedElementIds) {
+		if (clonedElementIds.containsKey(this.getId())) {
+			return (SpdxItem)clonedElementIds.get(this.getId());
+		}
+		SpdxItem retval =  new SpdxItem(this.name, this.comment, cloneAnnotations(),null,
 				cloneLicenseConcluded(), cloneLicenseInfosFromFiles(), this.copyrightText, 
 				this.licenseComment);
+		clonedElementIds.put(this.getId(), retval);
+		try {
+			retval.setRelationships(cloneRelationships(clonedElementIds));
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Unexected error setting relationships during clone",e);
+		}
+		return retval;
 	}
 	
 	@Override

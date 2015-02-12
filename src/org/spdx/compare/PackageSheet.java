@@ -18,7 +18,9 @@
 package org.spdx.compare;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,6 +28,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
@@ -37,6 +43,8 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class PackageSheet extends AbstractSheet {
+	
+	static final Logger logger = Logger.getLogger(PackageSheet.class);
 	private static final int COL_WIDTH = 60;
 	protected static final int FIELD_COL = 0;
 	protected static final int EQUALS_COL = 1;
@@ -65,8 +73,10 @@ public class PackageSheet extends AbstractSheet {
 	protected static final String DIFFERENT_STRING = "Diff";
 	protected static final String EQUAL_STRING = "Equal";
 	protected static final String HOMEPAGE_FIELD_TEXT = "Home Page";
+	protected static final String ID_FIELD_TEXT = "SPDX ID";
+	protected static final String ANNOTATION_FIELD_TEXT = "Annotations";
+	protected static final String RELATIONSHIPS_FIELD_TEXT = "Relationships";
 	
-
 	/**
 	 * @param workbook
 	 * @param sheetName
@@ -128,60 +138,75 @@ public class PackageSheet extends AbstractSheet {
 		}
 		this.clear();
 		Row header = sheet.getRow(0);
-		SpdxPackage[][] allPackages;
-		allPackages = new SpdxPackage[comparer.getNumSpdxDocs()][];
-		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
-			allPackages[i] = comparer.collectAllPackages(comparer.getSpdxDoc(i));
-			Arrays.sort(allPackages[i]);
-		}
-		int[] pkgIndexes = new int[comparer.getNumSpdxDocs()];
-		for (int i = 0; i < pkgIndexes.length; i++) {
-			pkgIndexes[i] = 0;	//might as well be explicit about it
-		}
+
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			Cell headerCell = header.getCell(FIRST_DOC_COL+i);
 			headerCell.setCellValue(docNames[i]);
 		}
+		
+		SpdxPackageComparer[] packagComparers = comparer.getPackageComparers();
+		Arrays.sort(packagComparers, new Comparator<SpdxPackageComparer>() {
 
-		// iterate through all of the packages in sorted order, finding any which are the same
-		while (!done(pkgIndexes, allPackages)) {
-			// find the next sorted package out of all of the indexes
-			// include all package rows which are the same
-			SpdxPackage[] nextPackages = getNextPackage(pkgIndexes, allPackages);
-			addPackageToSheet(nextPackages);	
+			@Override
+			public int compare(SpdxPackageComparer o1, SpdxPackageComparer o2) {
+				try {
+					return o1.getPackageName().compareTo(o2.getPackageName());
+				} catch (SpdxCompareException e) {
+					logger.error("Error getting package names during compare",e);
+					return 0;	// can't throw an exception
+				}
+			}
+			
+		});
+		for (int i = 0; i < packagComparers.length; i++) {
+			addPackageToSheet(packagComparers[i], comparer.getSpdxDocuments());
 		}
 	}
 	
 	/**
 	 * @param nextPackages
 	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException 
 	 */
-	private void addPackageToSheet(SpdxPackage[] nextPackages) throws InvalidSPDXAnalysisException {
-		MultiPackageComparer comparer = new MultiPackageComparer(nextPackages);
+	private void addPackageToSheet(SpdxPackageComparer comparer, 
+			SpdxDocument[] docs) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Row packageNameRow = this.addRow();
 		packageNameRow.createCell(FIELD_COL).setCellValue(PACKAGE_NAME_FIELD_TEXT);
-		if (comparer.isPackageNamesEqual()) {
-			setCellEqualValue(packageNameRow.createCell(EQUALS_COL));
+		setCellEqualValue(packageNameRow.createCell(EQUALS_COL));
+		Row idRow = this.addRow();
+		idRow.createCell(FIELD_COL).setCellValue(ID_FIELD_TEXT);
+		setCellEqualValue(idRow.createCell(EQUALS_COL));
+		Row annotationsRow = this.addRow();
+		annotationsRow.createCell(FIELD_COL).setCellValue(ANNOTATION_FIELD_TEXT);
+		if (comparer.isAnnotationsEquals()) {
+			setCellEqualValue(annotationsRow.createCell(EQUALS_COL));
 		} else {
-			setCellDifferentValue(packageNameRow.createCell(EQUALS_COL));
+			setCellDifferentValue(annotationsRow.createCell(EQUALS_COL));
+		}
+		Row relationshipsRow = this.addRow();
+		relationshipsRow.createCell(FIELD_COL).setCellValue(RELATIONSHIPS_FIELD_TEXT);
+		if (comparer.isRelationshipsEquals()) {
+			setCellEqualValue(relationshipsRow.createCell(EQUALS_COL));
+		} else {
+			setCellDifferentValue(relationshipsRow.createCell(EQUALS_COL));
 		}
 		Row versionRow = this.addRow();
 		versionRow.createCell(FIELD_COL).setCellValue(VERSION_FIELD_TEXT);
-		if (comparer.isPackageVersionsEqual()) {
+		if (comparer.isPackageVersionsEquals()) {
 			setCellEqualValue(versionRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(versionRow.createCell(EQUALS_COL));
 		}
 		Row fileNameRow = this.addRow();
 		fileNameRow.createCell(FIELD_COL).setCellValue(FILE_NAME_FIELD_TEXT);
-		if (comparer.isPackageFileNamesEqual()) {
+		if (comparer.isPackageFilenamesEquals()) {
 			setCellEqualValue(fileNameRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(fileNameRow.createCell(EQUALS_COL));
 		}
 		Row supplierRow = this.addRow();
 		supplierRow.createCell(FIELD_COL).setCellValue(SUPPLIER_FIELD_TEXT);
-		if (comparer.isPackageSuppliersEqual()) {
+		if (comparer.isPackageSuppliersEquals()) {
 			setCellEqualValue(supplierRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(supplierRow.createCell(EQUALS_COL));
@@ -193,113 +218,116 @@ public class PackageSheet extends AbstractSheet {
 		} else {
 			setCellDifferentValue(originatorRow.createCell(EQUALS_COL));
 		}
-		Row homePageRow = this.addRow();
-		homePageRow.createCell(FIELD_COL).setCellValue(HOMEPAGE_FIELD_TEXT);
-		if (comparer.ispackageHomePagesEqual()) {
-			setCellEqualValue(homePageRow.createCell(EQUALS_COL));
-		} else {
-			setCellDifferentValue(homePageRow.createCell(EQUALS_COL));
-		}
 		Row downloadRow = this.addRow();
 		downloadRow.createCell(FIELD_COL).setCellValue(DOWNLOAD_FIELD_TEXT);
-		if (comparer.isPackageDownloadLocationsEqual()) {
+		if (comparer.isPackageDownloadLocationsEquals()) {
 			setCellEqualValue(downloadRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(downloadRow.createCell(EQUALS_COL));
 		}
 		Row verificationRow = this.addRow();
 		verificationRow.createCell(FIELD_COL).setCellValue(VERIFICATION_FIELD_TEXT);
-		if (comparer.isPackageVerificationCodesEqual()) {
+		if (comparer.isPackageVerificationCodesEquals()) {
 			setCellEqualValue(verificationRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(verificationRow.createCell(EQUALS_COL));
 		}
 		Row verificationExcludedRow = this.addRow();
 		verificationExcludedRow.createCell(FIELD_COL).setCellValue(VERIFICATION_EXCLUDED_FIELD_TEXT);
-		if (comparer.isPackageVerificationCodesEqual()) {
+		if (comparer.isPackageVerificationCodesEquals()) {
 			setCellEqualValue(verificationExcludedRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(verificationExcludedRow.createCell(EQUALS_COL));
 		}
 		Row checksumRow = this.addRow();
 		checksumRow.createCell(FIELD_COL).setCellValue(CHECKSUM_FIELD_TEXT);
-		if (comparer.isPackageChecksumsEqual()) {
+		if (comparer.isPackageChecksumsEquals()) {
 			setCellEqualValue(checksumRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(checksumRow.createCell(EQUALS_COL));
 		}
+		Row homePageRow = this.addRow();
+		homePageRow.createCell(FIELD_COL).setCellValue(HOMEPAGE_FIELD_TEXT);
+		if (comparer.isPackageHomePagesEquals()) {
+			setCellEqualValue(homePageRow.createCell(EQUALS_COL));
+		} else {
+			setCellDifferentValue(homePageRow.createCell(EQUALS_COL));
+		}
 		Row sourceInfoRow = this.addRow();
 		sourceInfoRow.createCell(FIELD_COL).setCellValue(SOURCEINFO_FIELD_TEXT);
-		if (comparer.isSourceInformationEqual()) {
+		if (comparer.isPackageSourceInfosEquals()) {
 			setCellEqualValue(sourceInfoRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(sourceInfoRow.createCell(EQUALS_COL));
 		}
 		Row concludedLicenseRow = this.addRow();
 		concludedLicenseRow.createCell(FIELD_COL).setCellValue(CONCLUDED_LICENSE_FIELD_TEXT);
-		if (comparer.isPackageConcludedLicensesEqual()) {
+		if (comparer.isConcludedLicenseEquals()) {
 			setCellEqualValue(concludedLicenseRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(concludedLicenseRow.createCell(EQUALS_COL));
 		}
 		Row licenseInfosFromFilesRow = this.addRow();
 		licenseInfosFromFilesRow.createCell(FIELD_COL).setCellValue(LICENSE_INFOS_FROM_FILES_FIELD_TEXT);
-		if (comparer.isPackageLicenseInfoFromFilesEqual()) {
+		if (comparer.isSeenLicenseEquals()) {
 			setCellEqualValue(licenseInfosFromFilesRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(licenseInfosFromFilesRow.createCell(EQUALS_COL));
 		}
 		Row declaredLicenseRow = this.addRow();
 		declaredLicenseRow.createCell(FIELD_COL).setCellValue(DECLARED_LICENSE_FIELD_TEXT);
-		if (comparer.isPackageDeclaredLicensesEqual()) {
+		if (comparer.isDeclaredLicensesEquals()) {
 			setCellEqualValue(declaredLicenseRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(declaredLicenseRow.createCell(EQUALS_COL));
 		}
 		Row licenseCommentRow = this.addRow();
 		licenseCommentRow.createCell(FIELD_COL).setCellValue(LICENSE_COMMENT_FIELD_TEXT);
-		if (comparer.isLicenseCommentsEqual()) {
+		if (comparer.isLicenseCommmentsEquals()) {
 			setCellEqualValue(licenseCommentRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(licenseCommentRow.createCell(EQUALS_COL));
 		}
 		Row copyrightRow = this.addRow();
 		copyrightRow.createCell(FIELD_COL).setCellValue(COPYRIGHT_FIELD_TEXT);
-		if (comparer.isCopyrightTextsEqual()) {
+		if (comparer.isCopyrightsEquals()) {
 			setCellEqualValue(copyrightRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(copyrightRow.createCell(EQUALS_COL));
 		}
 		Row summaryRow = this.addRow();
 		summaryRow.createCell(FIELD_COL).setCellValue(SUMMARY_FIELD_TEXT);
-		if (comparer.isPackageSummariesEqual()) {
+		if (comparer.isPackageSummaryEquals()) {
 			setCellEqualValue(summaryRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(summaryRow.createCell(EQUALS_COL));
 		}
 		Row descriptionRow = this.addRow();
 		descriptionRow.createCell(FIELD_COL).setCellValue(DESCRIPTION_FIELD_TEXT);
-		if (comparer.isPackageDescriptionsEqual()) {
+		if (comparer.isPackageDescriptionsEquals()) {
 			setCellEqualValue(descriptionRow.createCell(EQUALS_COL));
 		} else {
 			setCellDifferentValue(descriptionRow.createCell(EQUALS_COL));
 		}
-		for (int i = 0; i < nextPackages.length; i++) {
-			if (nextPackages[i] == null) {
+		
+		for (int i = 0; i < docs.length; i++) {
+			SpdxPackage pkg = comparer.getDocPackage(docs[i]);
+			if (pkg == null) {
 				continue;
 			}
-
-			SpdxPackage pkg = nextPackages[i];
 			packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getName());
+			idRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getId());
+			annotationsRow.createCell(FIRST_DOC_COL+i).setCellValue(annotationsToString(pkg.getAnnotations()));
+			relationshipsRow.createCell(FIRST_DOC_COL+i).setCellValue(relationshipsToString(pkg.getRelationships()));
 			versionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getVersionInfo());
 			fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageFileName());
 			supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSupplier());
 			originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getOriginator());
-			homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomepage());
 			downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadLocation());
 			verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageVerificationCode().getValue());
 			verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getPackageVerificationCode().getExcludedFileNames()));
-// TODO - replace with checksum values			checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSha1());
+			checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(checksumsToString(pkg.getChecksums()));
+			homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomepage());
 			sourceInfoRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSourceInfo());
 			concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseConcluded().toString());
 			licenseInfosFromFilesRow.createCell(FIRST_DOC_COL+i).setCellValue(licenseInfosToString(pkg.getLicenseInfoFromFiles()));
@@ -308,54 +336,106 @@ public class PackageSheet extends AbstractSheet {
 			copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
 			summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
 			descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());
+	
 		}
 	}
 
 	/**
-	 * Find the next package in sorted ord
-	 * @param pkgIndexes
-	 * @param allPackages
-	 * @return All packages that have the same name and version, null if the package name/version does not match
-	 */
-	private SpdxPackage[] getNextPackage(int[] pkgIndexes,
-			SpdxPackage[][] allPackages) {
-		// Pass 1 - find the next package
-		SpdxPackage candidate = null;
-		for (int i = 0; i < pkgIndexes.length; i++) {
-			if (pkgIndexes[i] < allPackages[i].length) {
-				if (candidate == null || candidate.compareTo(allPackages[i][pkgIndexes[i]]) < 0) {
-					candidate = allPackages[i][pkgIndexes[i]];
-				}
-			}
-		}
-		// pass 2 - collect the packages and increment the counters
-		SpdxPackage[] retval = new SpdxPackage[pkgIndexes.length];
-		for (int i = 0; i < pkgIndexes.length; i++) {
-			if (pkgIndexes[i] < allPackages[i].length) {
-				if (allPackages[i][pkgIndexes[i]].compareTo(candidate) == 0) {
-					retval[i] = allPackages[i][pkgIndexes[i]];
-					pkgIndexes[i]++;
-				} else {
-					retval[i] = null;
-				}
-			}
-		}
-		return retval;
-	}
-
-	/**
-	 * return true if the indexes for all the packages are past the end of the arrays
-	 * @param pkgIndexes
-	 * @param allPackages
+	 * @param relationships
 	 * @return
 	 */
-	private boolean done(int[] pkgIndexes, SpdxPackage[][] allPackages) {
-		for (int i = 0; i < pkgIndexes.length; i++) {
-			if (pkgIndexes[i] < allPackages[i].length) {
-				return false;
-			}
+	private String relationshipsToString(Relationship[] relationships) {
+		if (relationships == null || relationships.length == 0) {
+			return "";
 		}
-		return true;
+		StringBuilder sb = new StringBuilder(relationshipToString(relationships[0]));
+		for (int i = 1; i < relationships.length; i++) {
+			sb.append("\n");
+			sb.append(relationshipToString(relationships[i]));
+		}
+		return sb.toString();
+	}
+	
+	static String relationshipToString(Relationship relationship) {
+		if (relationship == null) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(
+				relationship.getRelationshipType()));
+		sb.append(":");
+		sb.append(relationship.getRelatedSpdxElement().getId());
+		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
+			sb.append("(");
+			sb.append(relationship.getComment());
+			sb.append(")");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * @param annotations
+	 * @return
+	 */
+	private String annotationsToString(Annotation[] annotations) {
+		if (annotations == null || annotations.length == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(annotationToString(annotations[0]));
+		for (int i = 1; i < annotations.length; i++) {
+			sb.append("\n");
+			sb.append(annotationToString(annotations[i]));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * @param annotation
+	 * @return
+	 */
+	public static String annotationToString(Annotation annotation) {
+		if (annotation == null) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(annotation.getDate());
+		sb.append(" ");
+		sb.append(annotation.getAnnotator());
+		sb.append(": ");
+		sb.append(annotation.getComment());
+		sb.append("[");
+		sb.append(Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
+		sb.append("]");
+		return sb.toString();
+	}
+
+	/**
+	 * Create a string from an array of checksums
+	 * @param checksums
+	 * @return
+	 */
+	static String checksumsToString(Checksum[] checksums) {
+		if (checksums == null || checksums.length == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(checksumToString(checksums[0]));
+		for (int i = 1; i < checksums.length; i++) {
+			sb.append("\n");
+			sb.append(checksumToString(checksums[0]));
+		}
+		return sb.toString();
+	}
+	
+
+	/**
+	 * @param checksum
+	 * @return
+	 */
+	public static String checksumToString(Checksum checksum) {
+		if (checksum == null) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(checksum.getAlgorithm()));
+		sb.append(checksum.getValue());
+		return sb.toString();
 	}
 
 	/**
@@ -407,5 +487,4 @@ public class PackageSheet extends AbstractSheet {
 		cell.setCellValue(EQUAL_STRING);
 		cell.setCellStyle(greenWrapped);
 	}
-
 }

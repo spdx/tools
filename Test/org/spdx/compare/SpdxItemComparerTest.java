@@ -25,12 +25,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxItem;
 
@@ -56,15 +58,27 @@ public class SpdxItemComparerTest {
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDA = LICENSEA1;
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDB = LICENSEB1;
 	private static final String NAMEA = "NameA";
-	private static final String NAMEB = "NameB";
-	private static final HashMap<String, String> LICENSE_XLATION_MAP = new HashMap<String, String>();
+	private static final HashMap<String, String> LICENSE_XLATION_MAPAB = new HashMap<String, String>();
 	
 	static {
-		LICENSE_XLATION_MAP.put("LicenseRef-1", "LicenseRef-4");
-		LICENSE_XLATION_MAP.put("LicenseRef-2", "LicenseRef-5");
-		LICENSE_XLATION_MAP.put("LicenseRef-3", "LicenseRef-6");
+		LICENSE_XLATION_MAPAB.put("LicenseRef-1", "LicenseRef-4");
+		LICENSE_XLATION_MAPAB.put("LicenseRef-2", "LicenseRef-5");
+		LICENSE_XLATION_MAPAB.put("LicenseRef-3", "LicenseRef-6");
 	}
+	
+	private static final HashMap<String, String> LICENSE_XLATION_MAPBA = new HashMap<String, String>();
+	
+	static {
+		LICENSE_XLATION_MAPBA.put("LicenseRef-4", "LicenseRef-1");
+		LICENSE_XLATION_MAPBA.put("LicenseRef-5", "LicenseRef-2");
+		LICENSE_XLATION_MAPBA.put("LicenseRef-6", "LicenseRef-3");
+	}
+	
+	private final HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> LICENSE_XLATION_MAP = 
+			new HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>>();
 
+	private SpdxDocument DOCA;
+	private SpdxDocument DOCB;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -133,6 +147,20 @@ public class SpdxItemComparerTest {
 				RelationshipType.relationshipType_distributionArtifact, "Relationship Comment4");
 		RELATIONSHIPSA = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		RELATIONSHIPSB = new Relationship[] {RELATIONSHIP3, RELATIONSHIP4};
+		String uri1 = "http://doc/uri1";
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(uri1);
+		DOCA = containerA.getSpdxDocument();
+		String uri2 = "http://doc/uri2";
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(uri2);
+		DOCB = containerB.getSpdxDocument();
+		HashMap<SpdxDocument, HashMap<String, String>> bmap = 
+				new HashMap<SpdxDocument, HashMap<String, String>>();
+		bmap.put(DOCB, LICENSE_XLATION_MAPAB);
+		LICENSE_XLATION_MAP.put(DOCA, bmap);
+		HashMap<SpdxDocument, HashMap<String, String>> amap = 
+				new HashMap<SpdxDocument, HashMap<String, String>>();
+		amap.put(DOCA, LICENSE_XLATION_MAPBA);
+		LICENSE_XLATION_MAP.put(DOCB, amap);
 	}
 
 	/**
@@ -152,15 +180,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertFalse(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -175,15 +203,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSEB2, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertFalse(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -198,15 +226,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1}, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertFalse(comparer.isSeenLicenseEquals());
 	}
@@ -223,18 +251,18 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, s1, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, s2, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertFalse(comparer.isSeenLicenseEquals());
-		AnyLicenseInfo[] result = comparer.getUniqueSeenLicensesB();
+		AnyLicenseInfo[] result = comparer.getUniqueSeenLicenses(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(LICENSEB2, result[0]);
 		
@@ -242,8 +270,10 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(0, comparer.getUniqueSeenLicensesB().length);
+		comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(0, comparer.getUniqueSeenLicenses(DOCB, DOCA).length);
 
 	}
 
@@ -259,18 +289,18 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, s1, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, s2, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertFalse(comparer.isSeenLicenseEquals());
-		AnyLicenseInfo[] result = comparer.getUniqueSeenLicensesA();
+		AnyLicenseInfo[] result = comparer.getUniqueSeenLicenses(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertEquals(LICENSEA2, result[0]);
 		
@@ -278,8 +308,10 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(0, comparer.getUniqueSeenLicensesA().length);
+		comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(0, comparer.getUniqueSeenLicenses(DOCA, DOCB).length);
 	}
 
 	/**
@@ -292,15 +324,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTB, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertFalse(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -315,15 +347,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTB, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertFalse(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -338,38 +370,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTB);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertFalse(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
-		assertTrue(comparer.isRelationshipsEquals());
-		assertTrue(comparer.isSeenLicenseEquals());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isNamesEquals()}.
-	 * @throws SpdxCompareException 
-	 */
-	@Test
-	public void testIsNamesEquals() throws SpdxCompareException {
-		SpdxItem itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
-				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItem itemB = new SpdxItem(NAMEB, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
-				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertTrue(comparer.isDifferenceFound());
-		assertTrue(comparer.isAnnotationsEquals());
-		assertTrue(comparer.isCommentsEquals());
-		assertTrue(comparer.isConcludedLicenseEquals());
-		assertTrue(comparer.isCopyrightsEquals());
-		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertFalse(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -379,30 +388,18 @@ public class SpdxItemComparerTest {
 	 * @throws SpdxCompareException 
 	 */
 	@Test
-	public void testGetItemA() throws SpdxCompareException {
+	public void testGetItem() throws SpdxCompareException {
 		SpdxItem itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItem itemB = new SpdxItem(NAMEB, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
+		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTB, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(itemA, comparer.getItemA());
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(itemA, comparer.getItem(DOCA));
+		assertEquals(itemB, comparer.getItem(DOCB));
 	}
 
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getItemB()}.
-	 * @throws SpdxCompareException 
-	 */
-	@Test
-	public void testGetItemB() throws SpdxCompareException {
-		SpdxItem itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
-				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItem itemB = new SpdxItem(NAMEB, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
-				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(itemB, comparer.getItemB());
-	}
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isRelationshipsEquals()}.
@@ -416,15 +413,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, r2,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertFalse(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -441,26 +438,28 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, r2,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertFalse(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
-		Relationship[] result = comparer.getUniqueRelationshipA();
+		Relationship[] result = comparer.getUniqueRelationship(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertEquals(RELATIONSHIP1, result[0]);
 		itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(0, comparer.getUniqueRelationshipA().length);
+		comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(0, comparer.getUniqueRelationship(DOCA, DOCB).length);
 	}
 
 	/**
@@ -475,26 +474,28 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, r2,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);;
 		assertTrue(comparer.isDifferenceFound());
 		assertTrue(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertFalse(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
-		Relationship[] result = comparer.getUniqueRelationshipB();
+		Relationship[] result = comparer.getUniqueRelationship(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(RELATIONSHIP3, result[0]);
 		itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(0, comparer.getUniqueRelationshipB().length);
+		comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(0, comparer.getUniqueRelationship(DOCB, DOCA).length);
 	}
 
 	/**
@@ -509,15 +510,15 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, a2, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
 	}
@@ -534,26 +535,28 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, a2, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
-		Annotation[] result = comparer.getUniqueAnnotationsA();
+		Annotation[] result = comparer.getUniqueAnnotations(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertEquals(ANNOTATION1, result[0]);
 		itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(0, comparer.getUniqueAnnotationsA().length);
+		comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(0, comparer.getUniqueAnnotations(DOCA, DOCB).length);
 	}
 
 	/**
@@ -568,73 +571,27 @@ public class SpdxItemComparerTest {
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, a2, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
+		SpdxItemComparer comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isAnnotationsEquals());
 		assertTrue(comparer.isCommentsEquals());
 		assertTrue(comparer.isConcludedLicenseEquals());
 		assertTrue(comparer.isCopyrightsEquals());
 		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
 		assertTrue(comparer.isRelationshipsEquals());
 		assertTrue(comparer.isSeenLicenseEquals());
-		Annotation[] result = comparer.getUniqueAnnotationsB();
+		Annotation[] result = comparer.getUniqueAnnotations(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(ANNOTATION3, result[0]);
 		itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertEquals(0, comparer.getUniqueAnnotationsB().length);
+		comparer = new SpdxItemComparer(LICENSE_XLATION_MAP);
+		comparer.addDocumentItem(DOCA, itemA);
+		comparer.addDocumentItem(DOCB, itemB);
+		assertEquals(0, comparer.getUniqueAnnotations(DOCB, DOCA).length);
 	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getFileDifference()}.
-	 * @throws SpdxCompareException 
-	 */
-	@Test
-	public void testGetItemDifference() throws SpdxCompareException {
-		SpdxItem itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
-				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItem itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
-				LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB, COPYRIGHTA, LICENSE_COMMENTA);
-		SpdxItemComparer comparer = new SpdxItemComparer();
-		comparer.compare(itemA, itemB, LICENSE_XLATION_MAP);
-		assertFalse(comparer.isDifferenceFound());
-		assertTrue(comparer.isAnnotationsEquals());
-		assertTrue(comparer.isCommentsEquals());
-		assertTrue(comparer.isConcludedLicenseEquals());
-		assertTrue(comparer.isCopyrightsEquals());
-		assertTrue(comparer.isLicenseCommmentsEquals());
-		assertTrue(comparer.isNamesEquals());
-		assertTrue(comparer.isRelationshipsEquals());
-		assertTrue(comparer.isSeenLicenseEquals());
-		SpdxItemDifference diff = comparer.getItemDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(COMMENTA ,diff.getCommentA());
-		assertEquals(COMMENTA ,diff.getCommentB());
-		assertEquals(LICENSE_CONCLUDEDA.toString() ,diff.getConcludedLicenseA());
-		assertEquals(LICENSE_CONCLUDEDB.toString() ,diff.getConcludedLicenseB());
-		assertEquals(COPYRIGHTA ,diff.getCopyrightA());
-		assertEquals(COPYRIGHTA ,diff.getCopyrightB());
-		assertEquals(LICENSE_COMMENTA ,diff.getLicenseCommentsA());
-		assertEquals(LICENSE_COMMENTA ,diff.getLicenseCommentsB());
-		assertEquals(0 ,diff.getUniqueAnnotationsA().length);
-		assertEquals(0 ,diff.getUniqueAnnotationsB().length);
-		assertEquals(0 ,diff.getUniqueRelationshipA().length);
-		assertEquals(0 ,diff.getUniqueRelationshipB().length);
-		assertEquals(0 ,diff.getUniqueSeenLicensesA().length);
-		assertEquals(0 ,diff.getUniqueSeenLicensesB().length);
-		
-	}
-
 }
