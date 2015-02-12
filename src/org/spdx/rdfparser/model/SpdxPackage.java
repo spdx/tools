@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -643,16 +644,36 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 	}
 	
-	@Override
-	public SpdxPackage clone() {
-		return new SpdxPackage(this.name, this.comment, this.cloneAnnotations(), 
-				this.cloneRelationships(), this.cloneLicenseConcluded(),
+	public SpdxPackage clone(HashMap<String, SpdxElement> clonedElementIds) {
+		if (clonedElementIds.containsKey(this.getId())) {
+			return (SpdxPackage)clonedElementIds.get(this.getId());
+		}
+		
+		SpdxPackage retval = new SpdxPackage(this.name, this.comment, this.cloneAnnotations(), 
+				null, this.cloneLicenseConcluded(),
 				this.cloneLicenseInfosFromFiles(), this.copyrightText,
 				this.licenseComment, this.cloneLicenseDeclared(), this.cloneCheckums(),
-				this.description, this.downloadLocation, this.cloneFiles(),
+				this.description, this.downloadLocation, null,
 				this.homepage, this.originator, this.packageFileName, 
 				this.clonePackageVerificationCode(), this.sourceInfo, 
 				this.summary, this.supplier, this.versionInfo);
+		clonedElementIds.put(this.getId(), retval);
+		try {
+			retval.setRelationships(cloneRelationships(clonedElementIds));
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Unexected error setting relationships during clone",e);
+		}
+		try {
+			retval.setFiles(this.cloneFiles(clonedElementIds));
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Unexected error setting relationships during clone",e);
+		}
+		return retval;
+	}
+	
+	@Override
+	public SpdxPackage clone() {
+		return clone(new HashMap<String, SpdxElement>());
 	}
 
 	/**
@@ -669,13 +690,13 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	/**
 	 * @return
 	 */
-	private SpdxFile[] cloneFiles() {
+	private SpdxFile[] cloneFiles(HashMap<String, SpdxElement> clonedElementIds) {
 		if (this.files == null) {
 			return new SpdxFile[0];
 		}
 		SpdxFile[] retval = new SpdxFile[this.files.length];
 		for (int i = 0; i < files.length; i++) {
-			retval[i] = this.files[i].clone();
+			retval[i] = this.files[i].clone(clonedElementIds);
 		}
 		return retval;
 	}

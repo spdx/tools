@@ -25,11 +25,13 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
@@ -66,7 +68,6 @@ public class SpdxPackageComparerTest {
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDB = LICENSEB1;
 	private static final String NAMEA = "NameA";
 	private static final String NAMEB = "NameB";
-	private static final HashMap<String, String> LICENSE_XLATION_MAP = new HashMap<String, String>();
 	private static final AnyLicenseInfo LICENSE_DECLAREDA = LICENSEA2;
 	private static final AnyLicenseInfo LICENSE_DECLAREDB = LICENSEB2;
 	private static final String ORIGINATORA = "Organization: OrgA";
@@ -88,12 +89,27 @@ public class SpdxPackageComparerTest {
 	private static final String VERSIONINFOB = "Version B";
 	private static final String SUPPLIERA = "Person: Supplier A";
 	private static final String SUPPLIERB = "Person: Supplier B";
+	private static final HashMap<String, String> LICENSE_XLATION_MAPAB = new HashMap<String, String>();
 	
 	static {
-		LICENSE_XLATION_MAP.put("LicenseRef-1", "LicenseRef-4");
-		LICENSE_XLATION_MAP.put("LicenseRef-2", "LicenseRef-5");
-		LICENSE_XLATION_MAP.put("LicenseRef-3", "LicenseRef-6");
+		LICENSE_XLATION_MAPAB.put("LicenseRef-1", "LicenseRef-4");
+		LICENSE_XLATION_MAPAB.put("LicenseRef-2", "LicenseRef-5");
+		LICENSE_XLATION_MAPAB.put("LicenseRef-3", "LicenseRef-6");
 	}
+	
+	private static final HashMap<String, String> LICENSE_XLATION_MAPBA = new HashMap<String, String>();
+	
+	static {
+		LICENSE_XLATION_MAPBA.put("LicenseRef-4", "LicenseRef-1");
+		LICENSE_XLATION_MAPBA.put("LicenseRef-5", "LicenseRef-2");
+		LICENSE_XLATION_MAPBA.put("LicenseRef-6", "LicenseRef-3");
+	}
+	
+	private final HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> LICENSE_XLATION_MAP = 
+			new HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>>();
+
+	private SpdxDocument DOCA;
+	private SpdxDocument DOCB;
 	private Annotation ANNOTATION1;
 	private Annotation ANNOTATION2;
 	private Annotation ANNOTATION3;
@@ -134,6 +150,8 @@ public class SpdxPackageComparerTest {
 	private SpdxFile[] FILESB_SAME;
 	private SpdxPackageVerificationCode VERIFICATION_CODEA;
 	private SpdxPackageVerificationCode VERIFICATION_CODEB;
+	
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -228,6 +246,20 @@ public class SpdxPackageComparerTest {
 				new String[] {"file2"});
 		VERIFICATION_CODEB = new SpdxPackageVerificationCode("bbbbf72bf99b7e471f1a27989667a903658652bb",
 				new String[] {"file3"});
+		String uri1 = "http://doc/uri1";
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(uri1);
+		DOCA = containerA.getSpdxDocument();
+		String uri2 = "http://doc/uri2";
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(uri2);
+		DOCB = containerB.getSpdxDocument();
+		HashMap<SpdxDocument, HashMap<String, String>> bmap = 
+				new HashMap<SpdxDocument, HashMap<String, String>>();
+		bmap.put(DOCB, LICENSE_XLATION_MAPAB);
+		LICENSE_XLATION_MAP.put(DOCA, bmap);
+		HashMap<SpdxDocument, HashMap<String, String>> amap = 
+				new HashMap<SpdxDocument, HashMap<String, String>>();
+		amap.put(DOCA, LICENSE_XLATION_MAPBA);
+		LICENSE_XLATION_MAP.put(DOCB, amap);
 	}
 
 	/**
@@ -255,16 +287,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertFalse(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -279,36 +311,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -329,16 +335,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOB);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -353,84 +359,10 @@ public class SpdxPackageComparerTest {
 		assertFalse(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertFalse(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageFilenamesEquals()}.
-	 * @throws SpdxCompareException 
-	 */
-	@Test
-	public void testIsPackageFilenamesEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
-				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
-				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
-				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
-				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEB, COMMENTA, ANNOTATIONSA, 
-				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
-				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
-				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
-				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
-		assertTrue(pc.isDifferenceFound());
-		assertTrue(pc.isAnnotationsEquals());
-		assertTrue(pc.isCommentsEquals());
-		assertTrue(pc.isConcludedLicenseEquals());
-		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
-		assertTrue(pc.isLicenseCommmentsEquals());
-		assertFalse(pc.isNamesEquals());
-		assertTrue(pc.isPackageChecksumsEquals());
-		assertTrue(pc.isPackageDescriptionsEquals());
-		assertTrue(pc.isPackageDownloadLocationsEquals());
-		assertTrue(pc.isPackageFilenamesEquals());
-		assertTrue(pc.isPackageFilesEquals());
-		assertTrue(pc.isPackageHomePagesEquals());
-		assertTrue(pc.isPackageOriginatorsEqual());
-		assertTrue(pc.isPackageSourceInfosEquals());
-		assertTrue(pc.isPackageSummaryEquals());
-		assertTrue(pc.isPackageSuppliersEquals());
-		assertTrue(pc.isPackageVerificationCodesEquals());
-		assertTrue(pc.isPackageVersionsEquals());
-		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -451,16 +383,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERB, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -475,36 +407,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertFalse(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -525,16 +431,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADB, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertFalse(pc.isPackageDownloadLocationsEquals());
@@ -549,36 +455,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertFalse(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -599,16 +479,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEB, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -623,36 +503,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertFalse(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -673,16 +527,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertFalse(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -697,36 +551,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(2, pc.getUniqueChecksumsA().length);
-		assertEquals(2, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertFalse(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(2, diff.getUniqueChecksumsA().length);
-		assertEquals(2, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(2, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(2, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -747,16 +575,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOB,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -771,44 +599,18 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertFalse(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
-	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isDeclaredLicennsesEquals()}.
+	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isDeclaredLicensesEquals()}.
 	 * @throws SpdxCompareException 
 	 */
 	@Test
-	public void testIsDeclaredLicennsesEquals() throws SpdxCompareException {
+	public void testisDeclaredLicensesEquals() throws SpdxCompareException {
 		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
@@ -821,16 +623,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertFalse(pc.isDeclaredLicennsesEquals());
+		assertFalse(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -845,37 +647,11 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 		
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertFalse(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
 	}
 
 	/**
@@ -896,16 +672,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYB, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -920,36 +696,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertFalse(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -970,16 +720,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONB, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertFalse(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -994,36 +744,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertFalse(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -1044,16 +768,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORB, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -1068,36 +792,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertFalse(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -1118,16 +816,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEB, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -1142,36 +840,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertTrue(diff.isPackageFilesEquals());
-		assertFalse(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(0, diff.getUniqueFilesA().length);
-		assertEquals(0, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -1192,10 +864,11 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEB, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
-		assertEquals(pkgA, pc.getPkgA());
-		assertEquals(pkgB, pc.getPkgB());
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
+		assertEquals(pkgA, pc.getDocPackage(DOCA));
+		assertEquals(pkgB, pc.getDocPackage(DOCB));
 	}
 	
 
@@ -1219,12 +892,13 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertFalse(pc.isPackageChecksumsEquals());
-		assertEquals(1, pc.getUniqueChecksumsB().length);
-		Checksum[] result = pc.getUniqueChecksumsA();
+		assertEquals(1, pc.getUniqueChecksums(DOCB, DOCA).length);
+		Checksum[] result = pc.getUniqueChecksums(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertEquals(CHECKSUM1, result[0]);
 	}
@@ -1249,12 +923,13 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertFalse(pc.isPackageChecksumsEquals());
-		assertEquals(1, pc.getUniqueChecksumsA().length);
-		Checksum[] result = pc.getUniqueChecksumsB();
+		assertEquals(1, pc.getUniqueChecksums(DOCA, DOCB).length);
+		Checksum[] result = pc.getUniqueChecksums(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(CHECKSUM3, result[0]);
 	}
@@ -1277,16 +952,16 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertTrue(pc.isAnnotationsEquals());
 		assertTrue(pc.isCommentsEquals());
 		assertTrue(pc.isConcludedLicenseEquals());
 		assertTrue(pc.isCopyrightsEquals());
-		assertTrue(pc.isDeclaredLicennsesEquals());
+		assertTrue(pc.isDeclaredLicensesEquals());
 		assertTrue(pc.isLicenseCommmentsEquals());
-		assertTrue(pc.isNamesEquals());
 		assertTrue(pc.isPackageChecksumsEquals());
 		assertTrue(pc.isPackageDescriptionsEquals());
 		assertTrue(pc.isPackageDownloadLocationsEquals());
@@ -1301,36 +976,10 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
 		assertTrue(pc.isSeenLicenseEquals());	
-		assertEquals(0, pc.getUniqueChecksumsA().length);
-		assertEquals(0, pc.getUniqueChecksumsB().length);
-		assertEquals(1, pc.getUniqueFilesA().length);
-		assertEquals(1, pc.getUniqueFilesB().length);
-		SpdxPackageDifference diff = pc.getPackageDifference();
-		assertTrue(diff.isAnnotationsEquals());
-		assertTrue(diff.isCommentsEquals());
-		assertTrue(diff.isConcludedLicenseEquals());
-		assertTrue(diff.isCopyrightsEqual());
-		assertTrue(diff.isDeclaredLicennsesEquals());
-		assertTrue(diff.isLicenseCommentsEqual());
-		assertEquals(NAMEA, diff.getName());
-		assertTrue(diff.isPackageChecksumsEquals());
-		assertTrue(diff.isPackageDescriptionsEquals());
-		assertTrue(diff.isPackageDownloadLocationsEquals());
-		assertTrue(diff.isPackageFilenamesEquals());
-		assertFalse(diff.isPackageFilesEquals());
-		assertTrue(diff.isPackageHomePagesEquals());
-		assertTrue(diff.isPackageOriginatorsEqual());
-		assertTrue(diff.isPackageSourceInfosEquals());
-		assertTrue(diff.isPackageSummaryEquals());
-		assertTrue(diff.isPackageSuppliersEquals());
-		assertTrue(diff.isPackageVerificationCodeesEquals());
-		assertTrue(diff.isPackageVersionsEquals());
-		assertTrue(diff.isRelationshipsEquals());
-		assertTrue(diff.isSeenLicensesEquals());
-		assertEquals(0, diff.getUniqueChecksumsA().length);
-		assertEquals(0, diff.getUniqueChecksumsB().length);
-		assertEquals(1, diff.getUniqueFilesA().length);
-		assertEquals(1, diff.getUniqueFilesB().length);
+		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
+		assertEquals(1, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(1, pc.getUniqueFiles(DOCB, DOCA).length);
 	}
 
 	/**
@@ -1353,13 +1002,14 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertFalse(pc.isPackageFilesEquals());
-		assertEquals(0, pc.getUniqueFilesA().length);
-		assertEquals(0, pc.getUniqueFilesB().length);
-		SpdxFileDifference[] result = pc.getFileDifferences();
+		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
+		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
+		SpdxFileDifference[] result = pc.getFileDifferences(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertFalse(result[0].isChecksumsEquals());
 	}
@@ -1384,13 +1034,14 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertFalse(pc.isPackageFilesEquals());
-		assertEquals(0, pc.getFileDifferences().length);
-		assertEquals(1, pc.getUniqueFilesB().length);
-		SpdxFile[] result = pc.getUniqueFilesA();
+		assertEquals(0, pc.getFileDifferences(DOCA, DOCB).length);
+		assertEquals(1, pc.getUniqueFiles(DOCB, DOCA).length);
+		SpdxFile[] result = pc.getUniqueFiles(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertEquals(FILE1A, result[0]);
 	}
@@ -1415,13 +1066,14 @@ public class SpdxPackageComparerTest {
 				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA, 
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackageComparer pc = new SpdxPackageComparer();
-		pc.compare(pkgA, pkgB, LICENSE_XLATION_MAP);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
 		assertTrue(pc.isDifferenceFound());
 		assertFalse(pc.isPackageFilesEquals());
-		assertEquals(0, pc.getFileDifferences().length);
-		assertEquals(1, pc.getUniqueFilesA().length);
-		SpdxFile[] result = pc.getUniqueFilesB();
+		assertEquals(0, pc.getFileDifferences(DOCA, DOCB).length);
+		assertEquals(1, pc.getUniqueFiles(DOCA, DOCB).length);
+		SpdxFile[] result = pc.getUniqueFiles(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(FILE3B, result[0]);
 	}

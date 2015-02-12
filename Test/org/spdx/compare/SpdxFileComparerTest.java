@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.License;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
@@ -34,6 +35,7 @@ import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
@@ -47,14 +49,32 @@ public class SpdxFileComparerTest {
 	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample.rdf";
 	private static final String STD_LIC_ID_CC0 = "CC-BY-1.0";
 	private static final String STD_LIC_ID_MPL11 = "MPL-1.1";
+	HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> LICENSE_XLATION = 
+			new HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>>();
 	File testRDFFile;
-
+	SpdxDocument DOCA;
+	SpdxDocument DOCB;
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
 		this.testRDFFile = new File(TEST_RDF_FILE_PATH); 
+		String uri1 = "http://doc/uri1";
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(uri1);
+		DOCA = containerA.getSpdxDocument();
+		String uri2 = "http://doc/uri2";
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(uri2);
+		DOCB = containerB.getSpdxDocument();
+		HashMap<SpdxDocument, HashMap<String, String>> bmap = 
+				new HashMap<SpdxDocument, HashMap<String, String>>();
+		bmap.put(DOCB, new HashMap<String, String>());
+		LICENSE_XLATION.put(DOCA, bmap);
+		HashMap<SpdxDocument, HashMap<String, String>> amap = 
+				new HashMap<SpdxDocument, HashMap<String, String>>();
+		amap.put(DOCA, new HashMap<String, String>());
+		LICENSE_XLATION.put(DOCB, amap);
 	}
 	/**
 	 * @throws java.lang.Exception
@@ -71,7 +91,7 @@ public class SpdxFileComparerTest {
 	@Test
 	public void testSpdxFileComparer() throws InvalidLicenseStringException, SpdxCompareException {
 		@SuppressWarnings("unused")
-		SpdxFileComparer fc = new SpdxFileComparer();
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 	}
 
 	/**
@@ -115,9 +135,9 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 	}
 
@@ -162,12 +182,12 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isConcludedLicenseEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isConcludedLicenseEquals());
 	}
 
@@ -213,12 +233,12 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isSeenLicensesEquals());
 	}
 
@@ -267,36 +287,43 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		// Different homepage
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isArtifactOfsEquals());
 		
 		// different name
 		fileB.setArtifactOf(new DoapProject[] {proj3});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
 		
 		// more A
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj3});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
 
 		// more B
 		fileB.setArtifactOf(new DoapProject[] {proj2, proj3, proj1});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
 		
 		// back to equals (different order)
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj2, proj3});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isArtifactOfEquals());
 	}
@@ -343,15 +370,15 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		AnyLicenseInfo[] unique = fc.getUniqueSeenLicensesB();
+		AnyLicenseInfo[] unique = fc.getUniqueSeenLicenses(DOCB, DOCA);
 		assertEquals(1, unique.length);
 		assertEquals(STD_LIC_ID_CC0, ((License)unique[0]).getLicenseId());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isSeenLicensesEquals());
 		AnyLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesB();
 		assertEquals(1, diffUnique.length);
@@ -360,10 +387,12 @@ public class SpdxFileComparerTest {
 		
 		fileA.setLicenseInfosFromFiles(seenLicenseB);
 		fileB.setLicenseInfosFromFiles(seenLicenseA);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		unique = fc.getUniqueSeenLicensesB();
+		unique = fc.getUniqueSeenLicenses(DOCB, DOCA);
 		assertEquals(0, unique.length);
 	}
 
@@ -409,15 +438,15 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		AnyLicenseInfo[] unique = fc.getUniqueSeenLicensesA();
+		AnyLicenseInfo[] unique = fc.getUniqueSeenLicenses(DOCA, DOCB);
 		assertEquals(1, unique.length);
 		assertEquals(STD_LIC_ID_CC0, ((License)unique[0]).getLicenseId());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isSeenLicensesEquals());
 		AnyLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesA();
 		assertEquals(1, diffUnique.length);
@@ -425,10 +454,12 @@ public class SpdxFileComparerTest {
 		
 		fileA.setLicenseInfosFromFiles(seenLicenseB);
 		fileB.setLicenseInfosFromFiles(seenLicenseA);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isSeenLicenseEquals());
-		unique = fc.getUniqueSeenLicensesA();
+		unique = fc.getUniqueSeenLicenses(DOCA, DOCB);
 		assertEquals(0, unique.length);
 	}
 
@@ -477,21 +508,20 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		
 		// different name
 		fileB.setArtifactOf(new DoapProject[] {proj3});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
-		DoapProject[] uniqueA = fc.getUniqueArtifactOfA();
-		DoapProject[] uniqueB = fc.getUniqueArtifactOfB();
+		DoapProject[] uniqueA = fc.getUniqueArtifactOf(DOCA, DOCB);
+		DoapProject[] uniqueB = fc.getUniqueArtifactOf(DOCB, DOCA);
 		assertEquals(1, uniqueA.length);
 		assertEquals(proj1.getName(), uniqueA[0].getName());
 		assertEquals(1, uniqueB.length);
 		assertEquals(proj3.getName(), uniqueB[0].getName());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isArtifactOfsEquals());
 		DoapProject[] diffUnique = diff.getArtifactsOfA();
 		assertEquals(1, diffUnique.length);
@@ -503,33 +533,39 @@ public class SpdxFileComparerTest {
 		
 		// more A
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj3});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
-		uniqueA = fc.getUniqueArtifactOfA();
-		uniqueB = fc.getUniqueArtifactOfB();
+		uniqueA = fc.getUniqueArtifactOf(DOCA, DOCB);
+		uniqueB = fc.getUniqueArtifactOf(DOCB, DOCA);
 		assertEquals(1, uniqueA.length);
 		assertEquals(proj1.getName(), uniqueA[0].getName());
 		assertEquals(0, uniqueB.length);
 
 		// more B
 		fileB.setArtifactOf(new DoapProject[] {proj2, proj3, proj1});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
-		uniqueA = fc.getUniqueArtifactOfA();
-		uniqueB = fc.getUniqueArtifactOfB();
+		uniqueA = fc.getUniqueArtifactOf(DOCA, DOCB);
+		uniqueB = fc.getUniqueArtifactOf(DOCB, DOCA);
 		assertEquals(0, uniqueA.length);
 		assertEquals(1, uniqueB.length);
 		assertEquals(proj2.getName(), uniqueB[0].getName());
 		
 		// back to equals (different order)
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj2, proj3});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isArtifactOfEquals());
-		uniqueA = fc.getUniqueArtifactOfA();
-		uniqueB = fc.getUniqueArtifactOfB();
+		uniqueA = fc.getUniqueArtifactOf(DOCA, DOCB);
+		uniqueB = fc.getUniqueArtifactOf(DOCB, DOCA);
 		assertEquals(0, uniqueA.length);
 		assertEquals(0, uniqueB.length);
 	}
@@ -575,16 +611,18 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isLicenseCommmentsEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isLicenseCommentsEqual());
 		
 		fileB.setLicenseComment(licenseCommentsA);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isLicenseCommmentsEquals());		
 	}
@@ -628,16 +666,18 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isCopyrightsEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isCopyrightsEqual());
 		
 		fileB.setCopyrightText(copyrightA);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isCopyrightsEquals());	
 	}
@@ -681,69 +721,20 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isCommentsEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isCommentsEquals());
 
 		fileB.setComment(fileCommentA);
-		fc.compare(fileA, fileB, licenseXlationMap);
+	    fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isCommentsEquals());
-	}
-
-	/**
-	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isNamesEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	@Test
-	public void testIsNamesEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
-		String fileNameA = "a/b/c/name.txt";
-		String fileNameB = "fileb/dir/name.txt";
-		FileType[] fileTypeA = new FileType[]{FileType.fileType_source};
-		FileType[] fileTypeB = fileTypeA;
-		String sha1A = "027bf72bf99b7e471f1a27989667a903658652bb";
-		String sha1B = sha1A;
-		AnyLicenseInfo concludedLicenseA = LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0);
-		AnyLicenseInfo concludedLicenseB = concludedLicenseA;
-		AnyLicenseInfo[] seenLicenseA = new AnyLicenseInfo[] {
-				LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_MPL11)
-				};
-		AnyLicenseInfo[] seenLicenseB = seenLicenseA;
-		String licenseCommentsA = "License Comments";
-		String licenseCommentsB = licenseCommentsA;
-		String copyrightA = "Copyright";
-		String copyrightB = copyrightA;
-		String proj1HomePage = "http://home.page";
-		String proj1Name = "project1";
-		DoapProject proj1 = new DoapProject(proj1Name, proj1HomePage);
-		DoapProject[] artifactOfA = new DoapProject[] {proj1};
-		DoapProject[] artifactOfB = artifactOfA;
-		String fileCommentA = "file comment";
-		String fileCommentB = fileCommentA;
-		SpdxFile fileA = new SpdxFile(fileNameA,
-				fileTypeA, sha1A, concludedLicenseA,
-				seenLicenseA, licenseCommentsA, copyrightA,
-				artifactOfA, fileCommentA);
-		
-		SpdxFile fileB = new SpdxFile(fileNameB,
-				fileTypeB, sha1B, concludedLicenseB,
-				seenLicenseB, licenseCommentsB, copyrightB,
-				artifactOfB, fileCommentB);
-		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
-		assertTrue(fc.isDifferenceFound());
-		assertFalse(fc.isNamesEquals());
-		
-		fileB.setName(fileNameA);
-		fc.compare(fileA, fileB, licenseXlationMap);
-		assertFalse(fc.isDifferenceFound());
-		assertTrue(fc.isNamesEquals());
 	}
 
 	/**
@@ -795,12 +786,12 @@ public class SpdxFileComparerTest {
 				new Checksum[] {sumB, sumC},
 				fileBContributors, fileBNotice, artifactOfB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isChecksumsEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isChecksumsEquals());
 		Checksum[] result = diff.getUniqueChecksumsA();
 		assertEquals(1, result.length);
@@ -810,7 +801,9 @@ public class SpdxFileComparerTest {
 		assertEquals(sumC, result[0]);
 
 		fileA.setChecksums(new Checksum[] {sumC, sumB});
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isChecksumsEquals());
 	}
@@ -854,15 +847,17 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isTypesEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isTypeEqual());
 		fileA.setFileTypes(fileTypeB);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isTypesEquals());
 	}
@@ -917,15 +912,17 @@ public class SpdxFileComparerTest {
 				fileBContributors, fileBNotice, artifactOfB);
 		fileB.setFileDependencies(fileBDependencies);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isContributorsEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isContributorsEqual());
 		fileA.setFileContributors(fileBContributors);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isContributorsEquals());
 	}
@@ -981,15 +978,17 @@ public class SpdxFileComparerTest {
 				fileBContributors, fileBNotice, artifactOfB);
 		fileB.setFileDependencies(fileBDependencies);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isFileDependenciesEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isFileDependenciesEqual());
 		fileA.setFileDependencies(fileBDependencies);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isFileDependenciesEquals());
 	}
@@ -1045,15 +1044,17 @@ public class SpdxFileComparerTest {
 				fileBContributors, fileBNotice, artifactOfB);
 		fileB.setFileDependencies(fileBDependencies);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isNoticeTextEquals());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isNoticeTextsEqual());
 		fileA.setNoticeText(fileBNotice);
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isNoticeTextEquals());
 	}
@@ -1097,12 +1098,14 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
 		fileA.setComment("Different");
-		fc.compare(fileA, fileB, licenseXlationMap);
+		fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		// Note - all of the other fields are tested in the individual test cases
 	}
@@ -1146,11 +1149,11 @@ public class SpdxFileComparerTest {
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
 		
-		SpdxFileComparer fc = new SpdxFileComparer();
-		HashMap<String, String> licenseXlationMap = new HashMap<String, String>();
-		fc.compare(fileA, fileB, licenseXlationMap);
+		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
+		fc.addDocumentFile(DOCA, fileA);
+		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
-		SpdxFileDifference diff = fc.getFileDifference();
+		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isTypeEqual());
 		//Note - each of the individual fields is tested in their respecive unit tests
 	}

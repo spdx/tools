@@ -1788,13 +1788,13 @@ public class SpdxComparerTest {
 
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(docA, docB);
-		SpdxPackageComparer[] result = comparer.getPackageDifferences(0, 1);
+		SpdxPackageComparer[] result = comparer.getPackageDifferences();
 		assertEquals(1, result.length);
-		assertEquals(NAMEB, result[0].getPkgA().getName());
+		assertEquals(NAMEB, result[0].getDocPackage(docA).getName());
 		assertFalse(result[0].isCommentsEquals());
-		result = comparer.getPackageDifferences(1, 0);
+		result = comparer.getPackageDifferences();
 		assertEquals(1, result.length);
-		assertEquals(NAMEB, result[0].getPkgA().getName());
+		assertEquals(NAMEB, result[0].getDocPackage(docA).getName());
 		assertFalse(result[0].isCommentsEquals());
 	}
 	

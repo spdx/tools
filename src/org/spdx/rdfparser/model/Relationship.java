@@ -289,8 +289,7 @@ public class Relationship extends RdfModelObject {
 	
 	@Override
 	public Relationship clone() {
-		return new Relationship(this.relatedSpdxElement.clone(),
-				this.relationshipType, this.comment);
+		return clone(new HashMap<String, SpdxElement>());
 	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
@@ -313,5 +312,13 @@ public class Relationship extends RdfModelObject {
 					equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
 					equalsConsideringNull(comment, comp.getComment()));
 		}
+	}
+	/**
+	 * @param clonedElementIds
+	 * @return
+	 */
+	public Relationship clone(HashMap<String, SpdxElement> clonedElementIds) {
+		return new Relationship(this.relatedSpdxElement.clone(clonedElementIds),
+				this.relationshipType, this.comment);
 	}
 }

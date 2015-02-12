@@ -18,10 +18,14 @@ package org.spdx.compare;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 
 /**
@@ -34,179 +38,239 @@ import org.spdx.rdfparser.model.SpdxPackage;
 public class SpdxPackageComparer extends SpdxItemComparer {
 	private boolean inProgress = false;
 	private boolean differenceFound = false;
-	private boolean packageVersionsEquals;
-	private boolean packageFilenamesEquals;
-	private boolean packageSuppliersEquals;
-	private boolean packageDownloadLocationsEquals;
-	private boolean packageVerificationCodeesEquals;
-	private boolean packageChecksumsEquals;
-	private boolean packageSourceInfosEquals;
-	private boolean declaredLicennsesEquals;
-	private boolean packageSummaryEquals;
-	private boolean packageDescriptionsEquals;
-	private boolean packageOriginatorsEqual;
-	private boolean packageHomePagesEquals;
-	private SpdxPackage pkgA;
-	private SpdxPackage pkgB;
-	private Checksum[] uniqueChecksumsA;
-	private Checksum[] uniqueChecksumsB;
-	private boolean packageFilesEquals;
-	private SpdxFileDifference[] fileDifferences;
-	private SpdxFile[] uniqueFilesA;
-	private SpdxFile[] uniqueFilesB;
-	
-	public SpdxPackageComparer() {
-		
+	private boolean packageVersionsEquals = true;
+	private boolean packageFilenamesEquals = true;
+	private boolean packageSuppliersEquals = true;
+	private boolean packageDownloadLocationsEquals = true;
+	private boolean packageVerificationCodesEquals = true;
+	private boolean packageChecksumsEquals = true;
+	private boolean packageSourceInfosEquals = true;
+	private boolean declaredLicensesEquals = true;
+	private boolean packageSummaryEquals = true;
+	private boolean packageDescriptionsEquals = true;
+	private boolean packageOriginatorsEqual = true;
+	private boolean packageHomePagesEquals = true;
+	private boolean packageFilesEquals = true;
+	/**
+	 * Map of documents to a map of documents with unique checksums
+	 */
+	private HashMap<SpdxDocument, HashMap<SpdxDocument, Checksum[]>> uniqueChecksums = 
+			new HashMap<SpdxDocument, HashMap<SpdxDocument, Checksum[]>>();
+
+	/**
+	 * Map of documents to a map of documents with unique files
+	 */
+	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFile[]>> uniqueFiles = 
+			new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFile[]>>();
+	/**
+	 * Map of all file differences founds between any two spdx document packages
+	 */
+	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFileDifference[]>> fileDifferences = 
+			new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFileDifference[]>>();
+	/**
+	 * @param extractedLicenseIdMap map of all extracted license IDs for any SPDX documents to be added to the comparer
+	 */
+	public SpdxPackageComparer(HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap) {
+		super(extractedLicenseIdMap);
 	}
 	
 	/**
-	 * Compare two SPDX documents and store the results
-	 * @param pkg1
-	 * @param pkg2
+	 * Add a package to the comparer and performs the comparison to any existing documents
+	 * @param spdxDocument document containing the package
+	 * @param spdxPackage packaged to be added
 	 * @param licenseXlationMap A mapping between the license IDs from licenses in fileA to fileB
 	 * @throws SpdxCompareException 
 	 */
-	public void compare(SpdxPackage pkg1, SpdxPackage pkg2, 
-			HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
-		super.compare(pkg1, pkg2, licenseXlationMap);
+	public void addDocumentPackage(SpdxDocument spdxDocument,
+			SpdxPackage spdxPackage) throws SpdxCompareException {
+		checkInProgress();
+		if (this.name == null) {
+			this.name = spdxPackage.getName();
+		} else if (!this.name.equals(spdxPackage.getName())) {
+			throw(new SpdxCompareException("Names do not match for item being added to comparer: "+
+					spdxPackage.getName()+", expecting "+this.name));
+		}
 		inProgress = true;
-		differenceFound = super.isDifferenceFound();
-		this.pkgA = pkg1;
-		this.pkgB = pkg2;
-
-		this.packageVersionsEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getVersionInfo(), pkg2.getVersionInfo())) {
-			this.packageVersionsEquals = false;
-			this.differenceFound = true;
+		Iterator<Entry<SpdxDocument, SpdxItem>> iter = this.documentItem.entrySet().iterator();
+		SpdxPackage pkg2 = null;
+		HashMap<String, String> licenseXlationMap = null;
+		while (iter.hasNext() && pkg2 == null) {
+			Entry<SpdxDocument, SpdxItem> entry = iter.next();
+			if (entry.getValue() instanceof SpdxPackage) {
+				pkg2 = (SpdxPackage)entry.getValue();
+				licenseXlationMap = this.extractedLicenseIdMap.get(spdxDocument).get(entry.getKey());
+			}
 		}
-		this.packageFilenamesEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getPackageFileName(), pkg2.getPackageFileName())) {
-			this.packageFilenamesEquals = false;
-			this.differenceFound = true;
-		}
-		this.packageSuppliersEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getSupplier(), pkg2.getSupplier())) {
-			this.packageSuppliersEquals = false;
-			this.differenceFound = true;
-		}
-		this.packageOriginatorsEqual = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getOriginator(), pkg2.getOriginator())) {
-			this.packageOriginatorsEqual = false;
-			this.differenceFound = true;
-		}
-		this.packageDownloadLocationsEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getDownloadLocation(), pkg2.getDownloadLocation())) {
-			this.packageDownloadLocationsEquals = false;
-			this.differenceFound = true;
-		}
-		this.packageVerificationCodeesEquals = true;
-		try {
-			if (!SpdxComparer.compareVerificationCodes(pkg1.getPackageVerificationCode(), pkg2.getPackageVerificationCode())) {
-				this.packageVerificationCodeesEquals = false;
+		if (pkg2 != null) {
+			if (!SpdxComparer.stringsEqual(spdxPackage.getVersionInfo(), pkg2.getVersionInfo())) {
+				this.packageVersionsEquals = false;
 				this.differenceFound = true;
 			}
-		} catch (InvalidSPDXAnalysisException e) {
-			throw(new SpdxCompareException("SPDX error getting package verification codes: "+e.getMessage(),e));
-		}
-		this.packageChecksumsEquals = true;
-		try {
-			if (!SpdxComparer.elementsEquivalent(pkg1.getChecksums(), pkg2.getChecksums())) {
-				this.packageChecksumsEquals = false;
+			if (!SpdxComparer.stringsEqual(spdxPackage.getPackageFileName(), pkg2.getPackageFileName())) {
+				this.packageFilenamesEquals = false;
 				this.differenceFound = true;
-				this.uniqueChecksumsA = SpdxComparer.findUniqueChecksums(pkg1.getChecksums(), 
-						pkg2.getChecksums());
-				this.uniqueChecksumsB = SpdxComparer.findUniqueChecksums(pkg2.getChecksums(), 
-						pkg1.getChecksums());
-			} else {
-				this.uniqueChecksumsA = new Checksum[0];
-				this.uniqueChecksumsB = new Checksum[0];
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getSupplier(), pkg2.getSupplier())) {
+				this.packageSuppliersEquals = false;
+				this.differenceFound = true;
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getOriginator(), pkg2.getOriginator())) {
+				this.packageOriginatorsEqual = false;
+				this.differenceFound = true;
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getDownloadLocation(), pkg2.getDownloadLocation())) {
+				this.packageDownloadLocationsEquals = false;
+				this.differenceFound = true;
+			}
+			try {
+				if (!SpdxComparer.compareVerificationCodes(spdxPackage.getPackageVerificationCode(), pkg2.getPackageVerificationCode())) {
+					this.packageVerificationCodesEquals = false;
+					this.differenceFound = true;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpdxCompareException("SPDX error getting package verification codes: "+e.getMessage(),e));
+			}
+			try {
+				compareNewPackageChecksums(spdxDocument, spdxPackage.getChecksums());
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpdxCompareException("SPDX error getting package checksums: "+e.getMessage(),e));
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getSourceInfo(), pkg2.getSourceInfo())) {
+				this.packageSourceInfosEquals = false;
+				this.differenceFound = true;
+			}
+			try {
+				if (!LicenseCompareHelper.isLicenseEqual(spdxPackage.getLicenseDeclared(), 
+						pkg2.getLicenseDeclared(), licenseXlationMap)) {
+					this.declaredLicensesEquals = false;
+					this.differenceFound = true;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpdxCompareException("SPDX error getting declared license: "+e.getMessage(),e));
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getSummary(), pkg2.getSummary())) {
+				this.packageSummaryEquals = false;
+				this.differenceFound = true;
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getDescription(), pkg2.getDescription())) {
+				this.packageDescriptionsEquals = false;
+				this.differenceFound = true;
+			}
+			if (!SpdxComparer.stringsEqual(spdxPackage.getHomepage(), pkg2.getHomepage())) {
+				this.packageHomePagesEquals = false;
+				this.differenceFound = true;
+			}
+			try {
+				compareNewPackageFiles(spdxDocument, spdxPackage.getFiles());
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpdxCompareException("SPDX error getting package files: "+e.getMessage(),e));
+			}	
+		}
+		inProgress = false;
+		super.addDocumentItem(spdxDocument, spdxPackage);
+	}
+	
+	/**
+	 * @param spdxDocument
+	 * @param files
+	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void compareNewPackageFiles(SpdxDocument spdxDocument,
+			SpdxFile[] files) throws SpdxCompareException, InvalidSPDXAnalysisException {
+		Arrays.sort(files);
+		HashMap<SpdxDocument, SpdxFile[]> docUniqueFiles = this.uniqueFiles.get(spdxDocument);
+		if (docUniqueFiles == null) {
+			docUniqueFiles = new HashMap<SpdxDocument, SpdxFile[]>();
+			this.uniqueFiles.put(spdxDocument, docUniqueFiles);
+		}
+		HashMap<SpdxDocument, SpdxFileDifference[]> docDifferentFiles = this.fileDifferences.get(spdxDocument);
+		if (docDifferentFiles == null) {
+			docDifferentFiles = new HashMap<SpdxDocument, SpdxFileDifference[]>();
+			this.fileDifferences.put(spdxDocument, docDifferentFiles);
+		}
+		Iterator<Entry<SpdxDocument, SpdxItem>> iter = this.documentItem.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<SpdxDocument, SpdxItem> entry = iter.next();
+			if (entry.getValue() instanceof SpdxPackage) {
+				SpdxFile[] compareFiles = ((SpdxPackage)entry.getValue()).getFiles();
+				Arrays.sort(compareFiles);
+				SpdxFileDifference[] fileDifferences = 
+						SpdxComparer.findFileDifferences(spdxDocument, entry.getKey(), files, compareFiles, this.extractedLicenseIdMap);
+				if (fileDifferences.length > 0) {
+					this.packageFilesEquals = false;
+					this.differenceFound = true;
+				}
+				docDifferentFiles.put(entry.getKey(), fileDifferences);
+				HashMap<SpdxDocument, SpdxFileDifference[]> compareDifferentFiles = 
+						this.fileDifferences.get(entry.getKey());
+				if (compareDifferentFiles == null) {
+					compareDifferentFiles = new HashMap<SpdxDocument, SpdxFileDifference[]>();
+					this.fileDifferences.put(entry.getKey(), compareDifferentFiles);
+				}
+				compareDifferentFiles.put(spdxDocument, fileDifferences);
+				SpdxFile[] uniqueFiles = SpdxComparer.findUniqueFiles(files, compareFiles);
+				if (uniqueFiles.length > 0) {
+					this.packageFilesEquals = false;
+					this.differenceFound = true;
+				}
+				docUniqueFiles.put(entry.getKey(), uniqueFiles);
+				HashMap<SpdxDocument, SpdxFile[]> compareUniqueFiles = 
+						this.uniqueFiles.get(entry.getKey());
+				if (compareUniqueFiles == null) {
+					compareUniqueFiles = new HashMap<SpdxDocument, SpdxFile[]>();
+					this.uniqueFiles.put(entry.getKey(), compareUniqueFiles);
+				}
+				uniqueFiles = SpdxComparer.findUniqueFiles(compareFiles, files);
+				if (uniqueFiles.length > 0) {
+					this.packageFilesEquals = false;
+					this.differenceFound = true;
+				}
+				compareUniqueFiles.put(spdxDocument, uniqueFiles);
+			}
+		}
+	}
+
+	/**
+	 * Compare the checks for a new package being added to the existing
+	 * package checksums filling in the unique checksums map
+	 * @param spdxDocument
+	 * @param checksums
+	 * @throws SpdxCompareException 
+	 */
+	private void compareNewPackageChecksums(SpdxDocument spdxDocument,
+			Checksum[] checksums) throws SpdxCompareException {
+		try {
+			HashMap<SpdxDocument, Checksum[]> docUniqueChecksums = 
+					new HashMap<SpdxDocument, Checksum[]>();
+			this.uniqueChecksums.put(spdxDocument, docUniqueChecksums);
+			Iterator<Entry<SpdxDocument,SpdxItem>> iter = this.documentItem.entrySet().iterator();
+			while (iter.hasNext()) {
+				Entry<SpdxDocument,SpdxItem> entry = iter.next();
+				if (entry.getValue() instanceof SpdxPackage) {
+					Checksum[] compareChecksums = ((SpdxPackage)entry.getValue()).getChecksums();
+					Checksum[] uniqueChecksums = SpdxComparer.findUniqueChecksums(checksums, compareChecksums);
+					if (uniqueChecksums.length > 0) {
+						this.packageChecksumsEquals = false;
+						this.differenceFound = true;
+					}
+					docUniqueChecksums.put(entry.getKey(), uniqueChecksums);
+					HashMap<SpdxDocument, Checksum[]> compareUniqueChecksums = this.uniqueChecksums.get(entry.getKey());
+					if (compareUniqueChecksums == null) {
+						compareUniqueChecksums = new HashMap<SpdxDocument, Checksum[]>();
+						this.uniqueChecksums.put(entry.getKey(), compareUniqueChecksums);
+					}
+					uniqueChecksums = SpdxComparer.findUniqueChecksums(compareChecksums, checksums);
+					if (uniqueChecksums.length > 0) {
+						this.packageChecksumsEquals = false;
+						this.differenceFound = true;
+					}
+					compareUniqueChecksums.put(spdxDocument, uniqueChecksums);
+				}
 			}
 		} catch (InvalidSPDXAnalysisException e) {
 			throw(new SpdxCompareException("SPDX error getting package checksums: "+e.getMessage(),e));
 		}
-		this.packageSourceInfosEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getSourceInfo(), pkg2.getSourceInfo())) {
-			this.packageSourceInfosEquals = false;
-			this.differenceFound = true;
-		}
-		this.declaredLicennsesEquals = true;
-		try {
-			
-			if (!LicenseCompareHelper.isLicenseEqual(pkg1.getLicenseDeclared(), 
-					pkg2.getLicenseDeclared(), licenseXlationMap)) {
-				this.declaredLicennsesEquals = false;
-				this.differenceFound = true;
-			}
-		} catch (InvalidSPDXAnalysisException e) {
-			throw(new SpdxCompareException("SPDX error getting declared license: "+e.getMessage(),e));
-		}
-		this.packageSummaryEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getSummary(), pkg2.getSummary())) {
-			this.packageSummaryEquals = false;
-			this.differenceFound = true;
-		}
-		this.packageDescriptionsEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getDescription(), pkg2.getDescription())) {
-			this.packageDescriptionsEquals = false;
-			this.differenceFound = true;
-		}
-
-		this.packageHomePagesEquals = true;
-		if (!SpdxComparer.stringsEqual(pkg1.getHomepage(), pkg2.getHomepage())) {
-			this.packageHomePagesEquals = false;
-			this.differenceFound = true;
-		}
-		this.packageFilesEquals = true;
-		try {
-			compareFiles(pkg1.getFiles(), pkg2.getFiles(), licenseXlationMap);
-			if (uniqueFilesA.length > 0 || uniqueFilesB.length > 0 || fileDifferences.length > 0) {
-				this.packageFilesEquals = false;
-				this.differenceFound = true;
-			}
-		} catch (InvalidSPDXAnalysisException e) {
-			throw(new SpdxCompareException("SPDX error getting package files: "+e.getMessage(),e));
-		}
-	}
-	
-	/**
-	 * @param filesA
-	 * @param filesB
-	 * @throws SpdxCompareException 
-	 */
-	private void compareFiles(SpdxFile[] filesA, SpdxFile[] filesB, 
-			HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
-	Arrays.sort(filesA);
-		Arrays.sort(filesB);
-		this.fileDifferences = SpdxComparer.findFileDifferences(filesA, filesB, licenseXlationMap);
-		this.uniqueFilesA = SpdxComparer.findUniqueFiles(filesA, filesB);
-		this.uniqueFilesB = SpdxComparer.findUniqueFiles(filesB, filesA);
-	}
-
-	public SpdxPackageDifference getPackageDifference() throws SpdxCompareException {
-		SpdxPackageDifference retval = new SpdxPackageDifference(this.pkgA, this.pkgB, 
-				this.isConcludedLicenseEquals(), this.isSeenLicenseEquals(), 
-				this.getUniqueSeenLicensesA(), this.getUniqueSeenLicensesB(), 
-				this.isRelationshipsEquals(), this.getUniqueRelationshipA(), this.getUniqueRelationshipB(),
-				this.isAnnotationsEquals(), this.getUniqueAnnotationsA(), this.getUniqueAnnotationsB());
-		retval.setPackageVersionsEquals(packageVersionsEquals);
-		retval.setPackageFilenamesEquals(packageFilenamesEquals);
-		retval.setPackageSuppliersEquals(packageSuppliersEquals);
-		retval.setPackageDownloadLocationsEquals(packageDownloadLocationsEquals);
-		retval.setPackageVerificationCodeesEquals(packageVerificationCodeesEquals);
-		retval.setPackageChecksumsEquals(packageChecksumsEquals);
-		retval.setPackageSourceInfosEquals(packageSourceInfosEquals);
-		retval.setDeclaredLicennsesEquals(declaredLicennsesEquals);
-		retval.setPackageSummaryEquals(packageSummaryEquals);
-		retval.setPackageDescriptionsEquals(packageDescriptionsEquals);
-		retval.setPackageOriginatorsEqual(packageOriginatorsEqual);
-		retval.setPackageHomePagesEquals(packageHomePagesEquals);
-		retval.setUniqueChecksumsA(uniqueChecksumsA);
-		retval.setUniqueChecksumsB(uniqueChecksumsB);
-		retval.setPackageFilesEquals(packageFilesEquals);
-		retval.setUniqueFilesA(uniqueFilesA);
-		retval.setUniqueFilesB(uniqueFilesB);
-		retval.setFileDifferences(this.fileDifferences);
-		return retval;
 	}
 
 	/**
@@ -218,149 +282,207 @@ public class SpdxPackageComparer extends SpdxItemComparer {
 
 	/**
 	 * @return the differenceFound
+	 * @throws SpdxCompareException 
 	 */
-	public boolean isDifferenceFound() {
-		return differenceFound;
-	}
+	public boolean isDifferenceFound() throws SpdxCompareException {
+		checkInProgress();
+		return differenceFound || super.isDifferenceFound();
+	} 
 
 	/**
-	 * @return the packageVersionsEquals
+	 * checks to make sure there is not a compare in progress
+	 * @throws SpdxCompareException 
+	 * 
 	 */
-	public boolean isPackageVersionsEquals() {
+	protected void checkInProgress() throws SpdxCompareException {
+		if (inProgress) {
+			throw(new SpdxCompareException("File compare in progress - can not obtain compare results until compare has completed"));
+		}
+		super.checkInProgress();
+	}
+	/**
+	 * @return the packageVersionsEquals
+	 * @throws SpdxCompareException 
+	 */
+	public boolean isPackageVersionsEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageVersionsEquals;
 	}
 
 	/**
 	 * @return the packageFilenamesEquals
 	 */
-	public boolean isPackageFilenamesEquals() {
+	public boolean isPackageFilenamesEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageFilenamesEquals;
 	}
 
 	/**
 	 * @return the packageSuppliersEquals
 	 */
-	public boolean isPackageSuppliersEquals() {
+	public boolean isPackageSuppliersEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageSuppliersEquals;
 	}
 
 	/**
 	 * @return the packageDownloadLocationsEquals
 	 */
-	public boolean isPackageDownloadLocationsEquals() {
+	public boolean isPackageDownloadLocationsEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageDownloadLocationsEquals;
 	}
 
 	/**
 	 * @return the packageVerificationCodeesEquals
 	 */
-	public boolean isPackageVerificationCodesEquals() {
-		return packageVerificationCodeesEquals;
+	public boolean isPackageVerificationCodesEquals() throws SpdxCompareException {
+		checkInProgress();
+		return packageVerificationCodesEquals;
 	}
 
 	/**
 	 * @return the packageChecksumsEquals
 	 */
-	public boolean isPackageChecksumsEquals() {
+	public boolean isPackageChecksumsEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageChecksumsEquals;
 	}
 
 	/**
 	 * @return the packageSourceInfosEquals
 	 */
-	public boolean isPackageSourceInfosEquals() {
+	public boolean isPackageSourceInfosEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageSourceInfosEquals;
 	}
 
 	/**
-	 * @return the declaredLicennsesEquals
+	 * @return the declaredLicensesEquals
 	 */
-	public boolean isDeclaredLicennsesEquals() {
-		return declaredLicennsesEquals;
+	public boolean isDeclaredLicensesEquals() throws SpdxCompareException {
+		checkInProgress();
+		return declaredLicensesEquals;
 	}
 
 	/**
 	 * @return the packageSummaryEquals
 	 */
-	public boolean isPackageSummaryEquals() {
+	public boolean isPackageSummaryEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageSummaryEquals;
 	}
 
 	/**
 	 * @return the packageDescriptionsEquals
 	 */
-	public boolean isPackageDescriptionsEquals() {
+	public boolean isPackageDescriptionsEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageDescriptionsEquals;
 	}
 
 	/**
 	 * @return the packageOriginatorsEqual
 	 */
-	public boolean isPackageOriginatorsEqual() {
+	public boolean isPackageOriginatorsEqual() throws SpdxCompareException {
+		checkInProgress();
 		return packageOriginatorsEqual;
 	}
 
 	/**
 	 * @return the packageHomePagesEquals
 	 */
-	public boolean isPackageHomePagesEquals() {
+	public boolean isPackageHomePagesEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageHomePagesEquals;
 	}
-
+	
 	/**
-	 * @return the pkgA
+	 * Return the package associated with the document
+	 * @param document 
+	 * @return The document associated with the document
 	 */
-	public SpdxPackage getPkgA() {
-		return pkgA;
+	public SpdxPackage getDocPackage(SpdxDocument document) throws SpdxCompareException {
+		SpdxItem retItem = this.documentItem.get(document);
+		if (retItem != null && retItem instanceof SpdxPackage) {
+			return (SpdxPackage)retItem;
+		} else {
+			return null;
+		}
 	}
 
 	/**
-	 * @return the pkgB
+	 * Get the checksums which are present in document A but not in document B
+	 * @return the uniqueChecksums
 	 */
-	public SpdxPackage getPkgB() {
-		return pkgB;
-	}
-
-	/**
-	 * @return the uniqueChecksumsA
-	 */
-	public Checksum[] getUniqueChecksumsA() {
-		return uniqueChecksumsA;
-	}
-
-	/**
-	 * @return the uniqueChecksumsB
-	 */
-	public Checksum[] getUniqueChecksumsB() {
-		return uniqueChecksumsB;
+	public Checksum[] getUniqueChecksums(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
+		checkInProgress();
+		HashMap<SpdxDocument, Checksum[]> uniqueMap = 
+				this.uniqueChecksums.get(docA);
+		if (uniqueMap == null) {
+			return new Checksum[0];
+		}
+		Checksum[] retval = uniqueMap.get(docB);
+		if (retval == null) {
+			return new Checksum[0];
+		}
+		return retval;
 	}
 
 	/**
 	 * @return the packageFilesEquals
 	 */
-	public boolean isPackageFilesEquals() {
+	public boolean isPackageFilesEquals() throws SpdxCompareException {
+		checkInProgress();
 		return packageFilesEquals;
 	}
 
 	/**
-	 * @return the fileDifferences
+	 * Get any fileDifferences which are in docA but not in docB
+	 * @param docA
+	 * @param docB
+	 * @return
 	 */
-	public SpdxFileDifference[] getFileDifferences() {
-		return fileDifferences;
+	public SpdxFileDifference[] getFileDifferences(SpdxDocument docA, 
+			SpdxDocument docB) throws SpdxCompareException {
+		checkInProgress();
+		HashMap<SpdxDocument, SpdxFileDifference[]> uniqueMap = this.fileDifferences.get(docA);
+		if (uniqueMap == null) {
+			return new SpdxFileDifference[0];
+		}
+		SpdxFileDifference[] retval = uniqueMap.get(docB);
+		if (retval == null) {
+			return new SpdxFileDifference[0];
+		}
+		return retval;
+	}
+
+
+	/**
+	 * Return any unique files by name which are in docA but not in docB
+	 * @param docA
+	 * @param docB
+	 * @return
+	 */
+	public SpdxFile[] getUniqueFiles(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
+		checkInProgress();
+		HashMap<SpdxDocument, SpdxFile[]> uniqueMap = this.uniqueFiles.get(docA);
+		if (uniqueMap == null) {
+			return new SpdxFile[0];
+		}
+		SpdxFile[] retval = uniqueMap.get(docB);
+		if (retval == null) {
+			return new SpdxFile[0];
+		}
+		return retval;
 	}
 
 	/**
-	 * @return the uniqueFilesA
+	 * @return
 	 */
-	public SpdxFile[] getUniqueFilesA() {
-		return uniqueFilesA;
-	}
-
-	/**
-	 * @return the uniqueFilesB
-	 */
-	public SpdxFile[] getUniqueFilesB() {
-		return uniqueFilesB;
+	public String getPackageName() throws SpdxCompareException {
+		checkInProgress();
+		return this.name;
 	}
 	
 }
