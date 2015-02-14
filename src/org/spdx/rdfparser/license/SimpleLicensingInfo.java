@@ -20,7 +20,9 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -338,6 +340,16 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	 */
 	public Resource _createResource(Resource type) {
 		return _createResource(type, null);
+	}
+	
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof SimpleLicensingInfo)) {
+			return false;
+		}
+		SimpleLicensingInfo sCompare = (SimpleLicensingInfo)compare;
+		return RdfModelHelper.equalsConsideringNull(this.comment, sCompare.getComment()) &&
+				RdfModelHelper.equalsConsideringNull(this.name, sCompare.getName()) &&
+				RdfModelHelper.arraysEqual(this.seeAlso, sCompare.getSeeAlso());
 	}
 	
 }

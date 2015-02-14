@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.model.ModelContainerForTest;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -47,6 +48,9 @@ public class TestLicenseException {
 	static final String[] EXCEPTION_SEEALSO2 = new String[] {"http://url3"};
 	static final String EXCEPTION_COMMENT2 = "comment2";
 	static final String EXCEPTION_EXAMPLE2 = "example2";
+	static final String TEST_NAMESPACE = "http://spdx.org/test/namespace";
+	ModelContainerForTest testContainer;
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -66,6 +70,8 @@ public class TestLicenseException {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		Model model = ModelFactory.createDefaultModel();
+		this.testContainer = new ModelContainerForTest(model, TEST_NAMESPACE);
 	}
 
 	/**
@@ -93,30 +99,14 @@ public class TestLicenseException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
-		
-		model = ModelFactory.createDefaultModel();
-		String licenseUri = "http://spdx.org/licenses/exceptions#ex1";
-		LicenseException le3 = new LicenseException(EXCEPTION_ID1,
-				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
-				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
-		Resource leResourceUri = le3.createResource(model, licenseUri);
-		assertEquals(licenseUri, leResourceUri.getURI());
-		LicenseException le4 = new LicenseException(model, leResourceUri.asNode());
-		assertEquals(EXCEPTION_ID1, le4.getLicenseExceptionId());
-		assertEquals(EXCEPTION_NAME1, le4.getName());
-		assertEquals(EXCEPTION_TEXT1, le4.getLicenseExceptionText());
-		assertStringsEquals(EXCEPTION_SEEALSO1, le4.getSeeAlso());
-		assertEquals(EXCEPTION_COMMENT1, le4.getComment());
-		assertEquals(EXCEPTION_EXAMPLE1, le4.getExample());
 	}
 	
 	@Test
@@ -131,8 +121,7 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		le.createResource(model, null);
+		le.createResource(testContainer);
 		LicenseException le3 = le.clone();
 		assertEquals(EXCEPTION_ID1, le3.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le3.getName());
@@ -175,9 +164,8 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT2, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
@@ -211,9 +199,8 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE2, le.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
@@ -247,9 +234,8 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID2, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
@@ -283,9 +269,8 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT2, le2.getLicenseExceptionText());
@@ -319,9 +304,8 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO2, le.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
@@ -355,9 +339,8 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le.getExample());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME2, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
@@ -394,9 +377,8 @@ public class TestLicenseException {
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
 		assertEquals(0,le.verify().size());
-		Model model = ModelFactory.createDefaultModel();
-		Resource leResource = le.createResource(model, null);
-		LicenseException le2 = new LicenseException(model, leResource.asNode());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
@@ -439,14 +421,13 @@ public class TestLicenseException {
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
 		assertEquals(0,le.verify().size());
-		Model model = ModelFactory.createDefaultModel();
-		le.createResource(model, null);
+		le.createResource(testContainer);
 		LicenseException le2 = new LicenseException(EXCEPTION_ID1,
 				EXCEPTION_NAME2, EXCEPTION_TEXT2, EXCEPTION_SEEALSO2,
 				EXCEPTION_COMMENT2, EXCEPTION_EXAMPLE2);
 		boolean error = false;
 		try {
-			le2.createResource(model, null);
+			le2.createResource(testContainer);
 		} catch (InvalidSPDXAnalysisException e) {
 			error = true;
 		}
@@ -459,12 +440,11 @@ public class TestLicenseException {
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
 		assertEquals(0,le.verify().size());
-		Model model = ModelFactory.createDefaultModel();
-		le.createResource(model, null);
+		le.createResource(testContainer);
 		LicenseException le2 = new LicenseException(EXCEPTION_ID2,
 				EXCEPTION_NAME2, EXCEPTION_TEXT2, EXCEPTION_SEEALSO2,
 				EXCEPTION_COMMENT2, EXCEPTION_EXAMPLE2);
-		le2.createResource(model, null);
+		le2.createResource(testContainer);
 		boolean error = false;
 		try {
 			le2.setLicenseExceptionId(EXCEPTION_ID1);
@@ -472,5 +452,43 @@ public class TestLicenseException {
 			error = true;
 		}
 		assertTrue(error);
+	}
+	
+	@Test public void testEquivalent() throws InvalidSPDXAnalysisException {
+		LicenseException le = new LicenseException(EXCEPTION_ID1,
+				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
+				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
+		assertTrue(le.equivalent(le));
+		le.createResource(testContainer);
+		assertTrue(le.equivalent(le));
+		Model model2 = ModelFactory.createDefaultModel();
+		ModelContainerForTest testContainer2 = new ModelContainerForTest(model2, "http://Another/uri");
+		
+		LicenseException le2 = new LicenseException(EXCEPTION_ID2,
+				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
+				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);
+		assertTrue(le.equivalent(le2));
+		le2.createResource(testContainer2);
+		assertTrue(le.equivalent(le2));
+		le2.setName(EXCEPTION_NAME2);
+		assertFalse(le.equivalent(le2));
+		le2.setName(EXCEPTION_NAME1);
+		assertTrue(le.equivalent(le2));
+		le2.setExample(EXCEPTION_EXAMPLE2);
+		assertFalse(le.equivalent(le2));
+		le2.setExample(EXCEPTION_EXAMPLE1);
+		assertTrue(le.equivalent(le2));
+		le2.setComment(EXCEPTION_COMMENT2);
+		assertFalse(le.equivalent(le2));
+		le2.setComment(EXCEPTION_COMMENT1);
+		assertTrue(le.equivalent(le2));
+		le2.setLicenseExceptionText(EXCEPTION_TEXT2);
+		assertFalse(le.equivalent(le2));
+		le2.setLicenseExceptionText(EXCEPTION_TEXT1);
+		assertTrue(le.equivalent(le2));
+		le2.setSeeAlso(EXCEPTION_SEEALSO2);
+		assertFalse(le.equivalent(le2));
+		le2.setSeeAlso(EXCEPTION_SEEALSO1);
+		assertTrue(le.equivalent(le2));
 	}
 }

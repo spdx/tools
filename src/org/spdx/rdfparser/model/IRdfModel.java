@@ -43,5 +43,11 @@ public interface IRdfModel {
 	 * @return List of validation errors for any non SPDX compliant properties.
 	 */
 	public ArrayList<String> verify();
-
+	
+	/**
+	 * Returns true if the compare object contains properties which would be equal if they were contained in the same RDF Model
+	 * @param compare
+	 * @return
+	 */
+	public boolean equivalent(IRdfModel compare);
 }

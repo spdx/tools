@@ -20,7 +20,9 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -100,6 +102,18 @@ public class SpdxListedLicense extends License {
 			r.addProperty(osiApprovedPropery, String.valueOf(this.osiApproved));
 		}
 		return r;
+	}
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof SpdxListedLicense)) {
+			return false;
+		}
+		// For a listed license, if the ID's equal, it is considered equivalent
+		SpdxListedLicense sCompare = (SpdxListedLicense)compare;
+		return RdfModelHelper.equalsConsideringNull(this.licenseId, sCompare.getLicenseId());
 	}
 
 }

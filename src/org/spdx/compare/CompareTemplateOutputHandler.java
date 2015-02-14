@@ -176,6 +176,8 @@ public class CompareTemplateOutputHandler implements
 	 * @return
 	 */
 	private String buildRemainingCompareText() {
+		//TODO: Most of the matches are greedy (e.g. .+), need to limit the compare text
+		// to only include up to the tokens that match after
 		StringBuilder sb = new StringBuilder();
 		if (this.nextCompareToken != null) {
 			sb.append(this.nextCompareToken);

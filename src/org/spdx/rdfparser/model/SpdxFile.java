@@ -23,6 +23,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -385,7 +386,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			try {
 				Checksum[] refresh = findMultipleChecksumPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_FILE_CHECKSUM);
-				if (refresh == null || !this.arraysEquivalent(refresh, this.checksums)) {
+				if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.checksums)) {
 					this.checksums = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -472,7 +473,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			try {
 				DoapProject[] refresh = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
-				if (refresh == null || !this.arraysEquivalent(refresh, this.artifactOf)) {
+				if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.artifactOf)) {
 					this.artifactOf = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -506,7 +507,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			try {
 				SpdxElement[] fileDependencyElements = findMultipleElementPropertyValues(
 						SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY);
-				if (!arraysEquivalent(fileDependencyElements, this.fileDependencies)) {
+				if (!RdfModelHelper.arraysEquivalent(fileDependencyElements, this.fileDependencies)) {
 					int count = 0;
 					if (fileDependencyElements != null) {
 						for (int i = 0; i < fileDependencyElements.length; i++) {
@@ -549,7 +550,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		if (!(o instanceof SpdxFile)) {
 			return false;
 		}
@@ -560,12 +561,12 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// compare based on properties
 		// Note: We don't compare the ID's since they may be different if they come
 		// from different models
-		return (arraysEquivalent(this.checksums, comp.getChecksums()) &&
-				this.arraysEqual(this.fileTypes, comp.getFileTypes())&&
-				arraysEqual(this.fileContributors, comp.getFileContributors()) &&
-				arraysEquivalent(this.artifactOf, comp.getArtifactOf()) &&
-				arraysEquivalent(this.fileDependencies, comp.getFileDependencies()) &&
-				equalsConsideringNull(this.noticeText, comp.getNoticeText()));
+		return (RdfModelHelper.arraysEquivalent(this.checksums, comp.getChecksums()) &&
+				RdfModelHelper.arraysEqual(this.fileTypes, comp.getFileTypes())&&
+				RdfModelHelper.arraysEqual(this.fileContributors, comp.getFileContributors()) &&
+				RdfModelHelper.arraysEquivalent(this.artifactOf, comp.getArtifactOf()) &&
+				RdfModelHelper.arraysEquivalent(this.fileDependencies, comp.getFileDependencies()) &&
+				RdfModelHelper.equalsConsideringNull(this.noticeText, comp.getNoticeText()));
 	}
 	
 	protected Checksum[] cloneChecksum() {

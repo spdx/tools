@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -93,6 +94,14 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	@Override
 	public AnyLicenseInfo clone() {
 		return new SpdxNoneLicense();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		return this.equals(compare);
 	}
 
 }

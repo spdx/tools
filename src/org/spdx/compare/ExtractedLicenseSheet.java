@@ -87,7 +87,7 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 
 	/**
 	 * @param wb
-	 * @param extractedLicenseSheetName
+	 * @param sheetName
 	 */
 	public static void create(Workbook wb, String sheetName) {
 		int sheetNum = wb.getSheetIndex(sheetName);
@@ -140,13 +140,13 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 			for (int i = 0; i < extractedLicenses.length; i++) {
 				if (extractedLicenses[i].length > licenseIndexes[i]) {
 					if  (extractedLicenses[i][licenseIndexes[i]] instanceof ExtractedLicenseInfo) {
-					String compareExtractedText = ((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]).getExtractedText();
-					if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicenseText, 
-							compareExtractedText)) {
-						Cell licenseIdCell = currentRow.createCell(FIRST_LIC_ID_COL+i);
-						licenseIdCell.setCellValue(formatLicenseInfo((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]));
-						licenseIndexes[i]++;
-					}
+						String compareExtractedText = ((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]).getExtractedText();
+						if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicenseText, 
+								compareExtractedText)) {
+							Cell licenseIdCell = currentRow.createCell(FIRST_LIC_ID_COL+i);
+							licenseIdCell.setCellValue(formatLicenseInfo((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]));
+							licenseIndexes[i]++;
+						}
 					} else {
 						licenseIndexes[i]++;	// skip any licenses which are not non-standard licenses
 					}

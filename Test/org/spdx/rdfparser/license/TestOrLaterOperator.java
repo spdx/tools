@@ -202,5 +202,18 @@ public class TestOrLaterOperator {
 		assertEquals(LICENSE_ID1, compLic.getLicenseId());
 		assertEquals(LICENSE_TEXT1, compLic.getExtractedText());
 	}
+	
+	@Test
+	public void testEquivalent() throws InvalidSPDXAnalysisException {
+		OrLaterOperator olo1 = new OrLaterOperator(license1);
+		model = ModelFactory.createDefaultModel();
+		assertTrue(olo1.equivalent(olo1));
+		olo1.createResource(modelContainer);
+		assertTrue(olo1.equivalent(olo1));
+		OrLaterOperator olo2 = new OrLaterOperator(license1);
+		assertTrue(olo1.equivalent(olo2));
+		OrLaterOperator olo3 = new OrLaterOperator(license2);
+		assertFalse(olo1.equivalent(olo3));
+	}
 
 }

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -159,5 +160,16 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 			clonedSet[i++] = iter.next().clone();
 		}
 		return new ConjunctiveLicenseSet(clonedSet);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof ConjunctiveLicenseSet)) {
+			return false;
+		}
+		return super.equivalent(compare);
 	}
 }

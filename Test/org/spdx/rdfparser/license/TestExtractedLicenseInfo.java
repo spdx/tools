@@ -261,4 +261,16 @@ public class TestExtractedLicenseInfo {
 		doc1.setExtractedLicenseInfos(extractedLicenses);
 		doc1.getExtractedLicenseInfos();
 	}
+	
+	@Test
+	public void testEquivalent() throws InvalidSPDXAnalysisException {
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1, 
+				LICENSENAME1, SOURCEURLS1, COMMENT1);
+		assertTrue(lic.equivalent(lic));
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(ID1, TEXT1+"    ", 
+				LICENSENAME2, SOURCEURLS2, COMMENT2);;
+		assertTrue(lic.equivalent(lic2));
+		lic2.setExtractedText(TEXT2);
+		assertFalse(lic.equivalent(lic2));
+	}
 }

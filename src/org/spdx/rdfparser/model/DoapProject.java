@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
@@ -249,12 +250,12 @@ public class DoapProject extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equivalent(RdfModelObject compare) {
+	public boolean equivalent(IRdfModel compare) {
 		if (!(compare instanceof DoapProject)) {
 			return false;
 		}
 		DoapProject comp = (DoapProject)compare;
-		return (equalsConsideringNull(this.name, comp.getName()) &&
-				equalsConsideringNull(this.homePage, comp.getHomePage()));
+		return (RdfModelHelper.equalsConsideringNull(this.name, comp.getName()) &&
+				RdfModelHelper.equalsConsideringNull(this.homePage, comp.getHomePage()));
 	}
 }

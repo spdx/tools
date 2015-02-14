@@ -104,7 +104,29 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private FileNoticeSheet fileNoticeSheet;
 	private static final String VERIFICATION_SHEET_NAME = "Verification Errors";
 	public static final int MAX_DOCUMENTS = 25;
+	private static final String EXTERNAL_REFERENCES_SHEET_NAME = "Ext. Doc. References";
+	private static final String DOCUMENT_RELATIONSHIP_SHEET_NAME = "Doc. Relationships";
+	private static final String DOCUMENT_ANNOTATION_SHEET_NAME = "Doc. Annotations";
+	private static final String FILE_SPDX_ID_SHEET_NAME = "File IDs";
+	private static final String FILE_COPYRIGHT_SHEET_NAME = "File Copyrights";
+	private static final String FILE_ANNOTATION_SHEET_NAME = "File Annot.";
+	private static final String FILE_RELATIONSHIP_SHEET = "File Relationships";
+	
 	private VerificationSheet verificationSheet;
+
+	private ExternalReferencesSheet externalReferencesSheet;
+
+	private DocumentAnnotationSheet documentAnnotationSheet;
+
+	private DocumentRelationshipSheet documentRelationshipSheet;
+
+	private FileSpdxIdSheet fileSpdxIdSheet;
+
+	private FileCopyrightSheet fileCopyrightSheet;
+
+	private FileAnnotationSheet fileAnnotationSheet;
+
+	private FileRelationshipSheet fileRelationshipSheet;
 	
 	/**
 	 * @param spreadsheetFile
@@ -116,19 +138,27 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			boolean readonly) throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
 		documentSheet = new DocumentSheet(this.workbook, DOCUMENT_SHEET_NAME);
+		externalReferencesSheet = new ExternalReferencesSheet(this.workbook, EXTERNAL_REFERENCES_SHEET_NAME);
 		creatorSheet = new CreatorSheet(this.workbook, CREATOR_SHEET_NAME);
+		documentAnnotationSheet = new DocumentAnnotationSheet(this.workbook, DOCUMENT_ANNOTATION_SHEET_NAME);
+		documentRelationshipSheet = new DocumentRelationshipSheet(this.workbook, DOCUMENT_RELATIONSHIP_SHEET_NAME);
 		packageSheet = new PackageSheet(this.workbook, PACKAGE_SHEET_NAME);
 		extractedLicenseSheet = new ExtractedLicenseSheet(this.workbook, EXTRACTED_LICENSE_SHEET_NAME);
+		fileSpdxIdSheet = new FileSpdxIdSheet(this.workbook, FILE_SPDX_ID_SHEET_NAME);
+		fileTypeSheet = new FileTypeSheet(this.workbook, FILE_TYPE_SHEET_NAME);
 		fileChecksumSheet = new FileChecksumSheet(this.workbook, FILE_CHECKSUM_SHEET_NAME);
 		fileConcludedSheet = new FileConcludedSheet(this.workbook, FILE_CONCLUDED_SHEET_NAME);
 		fileLicenseInfoSheet = new FileLicenseInfoSheet(this.workbook, FILE_FOUND_SHEET_NAME);
-		fileCommentSheet = new FileCommentSheet(this.workbook, FILE_COMMENT_SHEET_NAME);
 		fileLicenseCommentsSheet = new FileLicenseCommentsSheet(this.workbook, FILE_LICENSE_COMMENT_SHEET_NAME);
-		fileArtifactOfSheet = new FileArtifactOfSheet(this.workbook, FILE_ARTIFACT_OF_SHEET_NAME);
-		fileTypeSheet = new FileTypeSheet(this.workbook, FILE_TYPE_SHEET_NAME);
+		fileCopyrightSheet = new FileCopyrightSheet(this.workbook, FILE_COPYRIGHT_SHEET_NAME);
+		fileArtifactOfSheet = new FileArtifactOfSheet(this.workbook, FILE_ARTIFACT_OF_SHEET_NAME);		
+		fileCommentSheet = new FileCommentSheet(this.workbook, FILE_COMMENT_SHEET_NAME);
+		fileNoticeSheet = new FileNoticeSheet(this.workbook, FILE_NOTICE_SHEET_NAME);
 		fileContributorsSheet = new FileContributorsSheet(this.workbook, FILE_CONTRIBUTOR_SHEET_NAME);
 		fileDependenciesSheet = new FileDependenciesSheet(this.workbook, FILE_DEPENDENCIES_SHEET_NAME);
-		fileNoticeSheet = new FileNoticeSheet(this.workbook, FILE_NOTICE_SHEET_NAME);
+		fileAnnotationSheet = new FileAnnotationSheet(this.workbook, FILE_ANNOTATION_SHEET_NAME);
+		fileRelationshipSheet = new FileRelationshipSheet(this.workbook, FILE_RELATIONSHIP_SHEET);
+		
 		reviewerSheet = new ReviewerSheet(this.workbook, REVIEWER_SHEET_NAME);	
 		verificationSheet = new VerificationSheet(this.workbook, VERIFICATION_SHEET_NAME);	
 		String verify = this.verifyWorkbook();
@@ -142,8 +172,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	 * @see org.spdx.spdxspreadsheet.AbstractSpreadsheet#create(java.io.File)
 	 */
 	@Override
-	public void create(File spreadsheetFile) throws IOException,
-			SpreadsheetException {
+	public void create(File spreadsheetFile) throws IOException, SpreadsheetException {
 		if (!spreadsheetFile.createNewFile()) {
 			logger.error("Unable to create "+spreadsheetFile.getName());
 			throw(new SpreadsheetException("Unable to create "+spreadsheetFile.getName()));
@@ -154,18 +183,25 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			Workbook wb = new HSSFWorkbook();
 			DocumentSheet.create(wb, DOCUMENT_SHEET_NAME);
 			CreatorSheet.create(wb, CREATOR_SHEET_NAME);
+			ExternalReferencesSheet.create(wb, EXTERNAL_REFERENCES_SHEET_NAME);
+			DocumentAnnotationSheet.create(wb, DOCUMENT_ANNOTATION_SHEET_NAME);
+			DocumentRelationshipSheet.create(wb, DOCUMENT_RELATIONSHIP_SHEET_NAME);
 			PackageSheet.create(wb, PACKAGE_SHEET_NAME);
 			ExtractedLicenseSheet.create(wb, EXTRACTED_LICENSE_SHEET_NAME);
+			FileSpdxIdSheet.create(wb, FILE_SPDX_ID_SHEET_NAME);
 			FileChecksumSheet.create(wb, FILE_CHECKSUM_SHEET_NAME);
 			FileConcludedSheet.create(wb, FILE_CONCLUDED_SHEET_NAME);
 			FileLicenseInfoSheet.create(wb, FILE_FOUND_SHEET_NAME);
 			FileCommentSheet.create(wb, FILE_COMMENT_SHEET_NAME);
+			FileCopyrightSheet.create(wb, FILE_COPYRIGHT_SHEET_NAME);
 			FileLicenseCommentsSheet.create(wb, FILE_LICENSE_COMMENT_SHEET_NAME);
 			FileArtifactOfSheet.create(wb, FILE_ARTIFACT_OF_SHEET_NAME);
 			FileTypeSheet.create(wb, FILE_TYPE_SHEET_NAME);
 			FileContributorsSheet.create(wb, FILE_CONTRIBUTOR_SHEET_NAME);
 			FileDependenciesSheet.create(wb, FILE_DEPENDENCIES_SHEET_NAME);
 			FileNoticeSheet.create(wb, FILE_NOTICE_SHEET_NAME);
+			FileAnnotationSheet.create(wb, FILE_ANNOTATION_SHEET_NAME);
+			FileRelationshipSheet.create(wb, FILE_RELATIONSHIP_SHEET);
 			ReviewerSheet.create(wb, REVIEWER_SHEET_NAME);	
 			VerificationSheet.create(wb, VERIFICATION_SHEET_NAME);
 			wb.write(excelOut);
@@ -175,10 +211,6 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	}
 	
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
-		//TODO Update for the SPDX 2.0 model
-		// add external references sheet
-		// Add sheets for each of the package results
-		// Add sheet for relationships
 		if (docNames == null) {
 			throw(new SpdxCompareException("Doc names can not be null"));
 		}
@@ -198,8 +230,16 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		documentSheet.resizeRows();
 		creatorSheet.importCompareResults(comparer, docNames);
 		creatorSheet.resizeRows();
+		externalReferencesSheet.importCompareResults(comparer, docNames);
+		externalReferencesSheet.resizeRows();
+		documentAnnotationSheet.importCompareResults(comparer, docNames);
+		documentAnnotationSheet.resizeRows();
+		documentRelationshipSheet.importCompareResults(comparer, docNames);
+		documentRelationshipSheet.resizeRows();
 		packageSheet.importCompareResults(comparer, docNames);	
 		packageSheet.resizeRows();
+		fileSpdxIdSheet.importCompareResults(comparer, files, docNames);
+		fileSpdxIdSheet.resizeRows();
 		extractedLicenseSheet.importCompareResults(comparer, docNames);
 		extractedLicenseSheet.resizeRows();
 		fileChecksumSheet.importCompareResults(comparer, files, docNames);
@@ -208,6 +248,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileConcludedSheet.resizeRows();
 		fileLicenseInfoSheet.importCompareResults(comparer, files, docNames);
 		fileLicenseInfoSheet.resizeRows();
+		fileCopyrightSheet.importCompareResults(comparer, files, docNames);
+		fileCopyrightSheet.resizeRows();
 		fileCommentSheet.importCompareResults(comparer, files, docNames);
 		fileCommentSheet.resizeRows();
 		fileLicenseCommentsSheet.importCompareResults(comparer, files, docNames);
@@ -222,6 +264,10 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileDependenciesSheet.resizeRows();
 		fileNoticeSheet.importCompareResults(comparer, files, docNames);
 		fileNoticeSheet.resizeRows();
+		fileAnnotationSheet.importCompareResults(comparer, files, docNames);
+		fileAnnotationSheet.resizeRows();
+		fileRelationshipSheet.importCompareResults(comparer, files, docNames);
+		fileRelationshipSheet.resizeRows();
 		reviewerSheet.importCompareResults(comparer, docNames);
 		reviewerSheet.resizeRows();
 	}

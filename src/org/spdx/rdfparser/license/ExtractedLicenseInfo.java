@@ -23,6 +23,7 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -233,5 +234,17 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	public AnyLicenseInfo clone() {
 		return new ExtractedLicenseInfo(this.getLicenseId(), this.getExtractedText(), this.getName(), 
 				this.getSeeAlso(), this.getComment());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof ExtractedLicenseInfo)) {
+			return false;
+		}
+		// Only test for the text - other fields do not need to equal to be considered equivalent
+		return LicenseCompareHelper.isLicenseTextEquivalent(this.extractedText, ((ExtractedLicenseInfo)compare).getExtractedText());
 	}
 }

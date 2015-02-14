@@ -30,7 +30,7 @@ import org.spdx.rdfparser.model.SpdxFile.FileType;
  */
 public class FileTypeSheet extends AbstractFileCompareSheet {
 
-	private static final int FILE_TYPE_COL_WIDTH = 15;
+	private static final int FILE_TYPE_COL_WIDTH = 20;
 
 	/**
 	 * @param workbook
@@ -55,7 +55,7 @@ public class FileTypeSheet extends AbstractFileCompareSheet {
 			FileType[] fileTypes = spdxFile.getFileTypes();
 			String[] sFileTypes = new String[fileTypes.length];
 			for (int i = 0; i < fileTypes.length; i++) {
-				sFileTypes[i] = fileTypes[i].toString();
+				sFileTypes[i] = SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]);
 			}
 			Arrays.sort(sFileTypes);
 			StringBuilder sb = new StringBuilder(sFileTypes[0]);

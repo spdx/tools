@@ -94,6 +94,7 @@ public class LicenseCompareHelper {
 		EQUIV_TOKENS.put("noncommercial","non-commercial");   EQUIV_TOKENS.put("non-commercial","noncommercial");    
 		EQUIV_TOKENS.put("copyright-holder", "copyright-owner");   EQUIV_TOKENS.put("copyright-owner", "copyright-holder");
 		EQUIV_TOKENS.put("sub-license", "sublicense"); EQUIV_TOKENS.put("sublicense", "sub-license");
+		EQUIV_TOKENS.put("noninfringement", "non-infringement"); EQUIV_TOKENS.put("non-infringement", "noninfringement");
 	}
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
 	static final String PER_CENT_REGEX = "(?i)per\\scent";
@@ -118,6 +119,12 @@ public class LicenseCompareHelper {
 		// Need to take care of multi-word equivalent words - convert to single words with hypens
 		
 		// tokenize each of the strings
+		if (licenseTextA == null) {
+			return licenseTextB == null;
+		}
+		if (licenseTextB == null) {
+			return false;
+		}
 		
 		String[] licenseATokens = replaceMultWord(licenseTextA).split(TOKEN_DELIM);
 		String[] licenseBTokens = replaceMultWord(licenseTextB).split(TOKEN_DELIM);

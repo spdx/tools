@@ -19,10 +19,12 @@ package org.spdx.rdfparser.license;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -416,6 +418,19 @@ public abstract class License extends SimpleLicensingInfo {
 		this.setSeeAlso(license.getSeeAlso());
 		this.setStandardLicenseHeader(license.getStandardLicenseHeader());
 		this.setStandardLicenseTemplate(this.getStandardLicenseTemplate());
+	}
+	/**
+	 * @param compare
+	 * @return
+	 */
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof License)) {
+			return false;
+		}
+		// only test the text - other fields do not apply - if the license text is equivalent, then the license is considered equivalent
+		License lCompare = (License)compare;
+		return LicenseCompareHelper.isLicenseTextEquivalent(this.licenseText, lCompare.getLicenseText());
+				
 	}
 	
 }

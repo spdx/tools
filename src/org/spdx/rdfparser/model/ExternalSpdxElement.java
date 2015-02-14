@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
@@ -93,7 +94,7 @@ public class ExternalSpdxElement extends SpdxElement {
 	}
 	
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		if (!(o instanceof ExternalSpdxElement)) {
 			return false;
 		}
@@ -101,7 +102,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		if (!super.equivalent(comp)) {
 			return false;
 		}
-		return (equalsConsideringNull(this.getId(), comp.getId()));
+		return (RdfModelHelper.equalsConsideringNull(this.getId(), comp.getId()));
 	}
 	
 	@Override

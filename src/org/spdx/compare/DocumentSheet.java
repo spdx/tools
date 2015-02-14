@@ -35,21 +35,30 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class DocumentSheet extends AbstractSheet {
 	
-	int NUM_COLS = 7;
+	int NUM_COLS = 12;
 	int DOCUMENT_NAME_COL = 0;
 	int SPDX_VERSION_COL = DOCUMENT_NAME_COL + 1;
 	int DATA_LICENSE_COL = SPDX_VERSION_COL + 1;
-	int DOCUMENT_COMMENT_COL = DATA_LICENSE_COL + 1;
+	int SPDX_IDENTIFIER_COL = DATA_LICENSE_COL + 1;
+	int DOCUMENT_URI_COL = SPDX_IDENTIFIER_COL + 1;
+	int SPDX_DOCUMENT_CONTENT_COL = DOCUMENT_URI_COL + 1;
+	int DOCUMENT_COMMENT_COL = SPDX_DOCUMENT_CONTENT_COL + 1;
 	int CREATION_DATE_COL = DOCUMENT_COMMENT_COL + 1;
 	int CREATOR_COMMENT_COL = CREATION_DATE_COL + 1;
 	int LICENSE_LIST_VERSION_COL = CREATOR_COMMENT_COL + 1;
+	int ANNOTATION_COL = LICENSE_LIST_VERSION_COL + 1;
+	int RELATIONSHIP_COL = ANNOTATION_COL + 1;
 
 	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, false, true, false, false};
+	static final boolean[] REQUIRED = new boolean[] {true, true, true, 
+		true, true, true, false, true, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Document Name", "SPDX Version", 
-		"Data License", "Document Comment", "Creation Date", "Creator Comment", "Lic. List. Ver."};
+		"Data License", "ID", "Document Namespace", "Document Describes",
+		"Document Comment", "Creation Date", "Creator Comment", "Lic. List. Ver.",
+		"Annotations", "Relationships"};
 	
-	static final int[] COLUMN_WIDTHS = new int[] {35, 15, 15, 60, 22, 60, 22};
+	static final int[] COLUMN_WIDTHS = new int[] {30, 15, 15, 15, 60, 40, 60, 
+		22, 60, 22, 80, 80};
 	private static final String DIFFERENT_STRING = "Diff";
 	private static final String EQUAL_STRING = "Equals";
 
@@ -109,7 +118,7 @@ public class DocumentSheet extends AbstractSheet {
 	}
 
 	/**
-	 * Import comapare results from a comparison
+	 * Import compare results from a comparison
 	 * @param comparer Comparer which compared the documents
 	 * @param docNames Document names - order must be the same as the documents provided
 	 * @throws InvalidSPDXAnalysisException 
@@ -123,13 +132,103 @@ public class DocumentSheet extends AbstractSheet {
 		for (int i = 0; i < docNames.length+1; i++) {
 			addRow();
 		}
-		importDocumentNames(docNames);
+		importDocumentNames(comparer);
 		importSpdxVersion(comparer);
 		importDataLicense(comparer);
+		importSpdxId(comparer);
+		importDocumentNamespace(comparer);
+		importDocumentDescribes(comparer);
 		importDocumentComments(comparer);
 		importCreationDate(comparer);
 		importCreatorComment(comparer);
 		importLicenseListVersions(comparer);
+		importAnnotations(comparer);
+		importRelationships(comparer);
+	}
+
+	/**
+	 * @param comparer
+	 * @throws SpdxCompareException 
+	 */
+	private void importRelationships(SpdxComparer comparer) throws SpdxCompareException {
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(ANNOTATION_COL);
+		if (comparer.isDocumentAnnotationsEquals()) {
+			setCellEqualValue(cell);
+		} else {
+			setCellDifferentValue(cell);
+		}
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(ANNOTATION_COL);
+			cell.setCellValue(CompareHelper.annotationsToString((comparer.getSpdxDoc(i).getAnnotations())));
+		}
+	}
+
+	/**
+	 * @param comparer
+	 * @throws SpdxCompareException 
+	 */
+	private void importAnnotations(SpdxComparer comparer) throws SpdxCompareException {
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(RELATIONSHIP_COL);
+		if (comparer.isDocumentRelationshipsEquals()) {
+			setCellEqualValue(cell);
+		} else {
+			setCellDifferentValue(cell);
+		}
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(RELATIONSHIP_COL);
+			cell.setCellValue(CompareHelper.relationshipsToString(comparer.getSpdxDoc(i).getRelationships()));
+		}
+	}
+
+	/**
+	 * @param comparer
+	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void importDocumentDescribes(SpdxComparer comparer) throws SpdxCompareException, InvalidSPDXAnalysisException {
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(SPDX_DOCUMENT_CONTENT_COL);
+		if (comparer.isDocumentContentsEquals()) {
+			setCellEqualValue(cell);
+		} else {
+			setCellDifferentValue(cell);
+		}
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(SPDX_DOCUMENT_CONTENT_COL);
+			cell.setCellValue(CompareHelper.formatSpdxElementList(comparer.getSpdxDoc(i).getDocumentDescribes()));
+		}
+	}
+
+	/**
+	 * @param comparer
+	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void importDocumentNamespace(SpdxComparer comparer) throws InvalidSPDXAnalysisException, SpdxCompareException {
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(DOCUMENT_URI_COL);
+		cell.setCellValue("N/A");
+		// data rows
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(DOCUMENT_URI_COL);
+			if (comparer.getSpdxDoc(i).getDocumentUri() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getDocumentUri());
+			}
+		}
+	}
+
+	/**
+	 * @param comparer
+	 * @throws SpdxCompareException 
+	 */
+	private void importSpdxId(SpdxComparer comparer) throws SpdxCompareException {
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(SPDX_IDENTIFIER_COL);
+		cell.setCellValue("N/A");
+		// data rows
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(SPDX_IDENTIFIER_COL);
+			if (comparer.getSpdxDoc(i).getId() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getId());
+			}
+		}
 	}
 
 	/**
@@ -273,15 +372,16 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param docNames
+	 * @throws SpdxCompareException 
 	 */
-	private void importDocumentNames(String[] docNames) {
+	private void importDocumentNames(SpdxComparer comparer) throws SpdxCompareException {
 		// comparison row
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(DOCUMENT_NAME_COL);
 		cell.setCellValue("Compare Results");
 		// data rows
-		for (int i = 0; i < docNames.length; i++) {
+		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
 			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(DOCUMENT_NAME_COL);
-			cell.setCellValue(docNames[i]);
+			cell.setCellValue(comparer.getSpdxDoc(i).getName());
 		}
 	}
 

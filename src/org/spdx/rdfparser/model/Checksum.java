@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
@@ -270,12 +271,12 @@ public class Checksum extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equivalent(RdfModelObject compare) {
+	public boolean equivalent(IRdfModel compare) {
 		if (!(compare instanceof Checksum)) {
 			return false;
 		}
 		Checksum cksum = (Checksum)compare;
-		return (this.equalsConsideringNull(this.algorithm, cksum.getAlgorithm()) &&
-				this.equalsConsideringNull(this.checksumValue, cksum.getValue()));
+		return (RdfModelHelper.equalsConsideringNull(this.algorithm, cksum.getAlgorithm()) &&
+				RdfModelHelper.equalsConsideringNull(this.checksumValue, cksum.getValue()));
 	}
 }

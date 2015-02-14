@@ -22,7 +22,9 @@ import java.util.Iterator;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -132,5 +134,16 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 			retval.addAll(iter.next().verify());
 		}
 		return retval;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof LicenseSet)) {
+			return false;
+		}
+		return RdfModelHelper.arraysEquivalent(this.getMembers(), ((LicenseSet)compare).getMembers());
 	}
 }

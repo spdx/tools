@@ -35,7 +35,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class CreatorSheet extends AbstractSheet {
-	private static final int COL_WIDTH = 60;
+	private static final int COL_WIDTH = 50;
 	/**
 	 * @param workbook
 	 * @param sheetName

@@ -19,9 +19,12 @@ package org.spdx.rdfparser.license;
 import java.util.ArrayList;
 
 import org.spdx.compare.LicenseCompareHelper;
+import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -37,7 +40,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class LicenseException  {
+public class LicenseException implements IRdfModel  {
 	
 	Model model = null;
 	Node exceptionNode = null;
@@ -49,9 +52,8 @@ public class LicenseException  {
 	private String[] seeAlso;
 	private String comment;
 	private String example;
-	
-	public LicenseException(Model model, Node node) throws InvalidSPDXAnalysisException {
-		this.model = model;
+	public LicenseException(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
+		this.model = modelContainer.getModel();
 		this.exceptionNode = node;
 		resource = RdfParserHelper.convertToResource(model, exceptionNode);
 		// fill in the local property cache
@@ -164,14 +166,14 @@ public class LicenseException  {
 	 * @return resource created from the model
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected Resource createResource(Model model, String uri) throws InvalidSPDXAnalysisException {	
+	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {	
 		if (this.model != null &&
 				this.exceptionNode != null &&
 				this.resource != null &&
 				(this.model.equals(model) || (this.exceptionNode.isURI()))) {
 			return resource;
 		} else {
-			this.model = model;
+			this.model = modelContainer.getModel();
 			this.exceptionNode = findException(model, this.licenseExceptionId);
 			this.resource = null;
 			if (this.exceptionNode != null) {	// found an existing exception in the model
@@ -182,11 +184,7 @@ public class LicenseException  {
 				}
 			} else {	// create a node
 				Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE_EXCEPTION);
-				if (uri == null || uri.isEmpty()) {
-					this.resource = model.createResource(type);
-				} else {
-					this.resource = model.createResource(uri, type);
-				}
+				this.resource = model.createResource(type);
 			}
 			// check to make sure we are not overwriting an existing exception with the same ID
 			if (this.exceptionNode != null) {
@@ -483,5 +481,22 @@ public class LicenseException  {
 			retval.add("Missing required license exception text");
 		}
 		return retval;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof LicenseException)) {
+			return false;
+		}
+		LicenseException lCompare = (LicenseException)compare;
+		return (LicenseCompareHelper.isLicenseTextEquivalent(this.licenseExceptionText,
+				lCompare.getLicenseExceptionText()) &&
+				RdfModelHelper.equalsConsideringNull(this.comment, lCompare.getComment()) &&
+				RdfModelHelper.equalsConsideringNull(this.example, lCompare.getExample()) &&
+				RdfModelHelper.equalsConsideringNull(this.name, lCompare.getName()) &&
+				RdfModelHelper.arraysEqual(this.seeAlso, lCompare.getSeeAlso()));
 	}
 }
