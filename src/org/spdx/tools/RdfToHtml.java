@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 import org.spdx.html.MustacheMap;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxDocument;
 

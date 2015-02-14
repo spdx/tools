@@ -25,8 +25,6 @@ public class Main {
 
 		if (spdxTool.equalsIgnoreCase("SpdxViewer")) {
 			SpdxViewer.main(args);
-		} else if (spdxTool.equalsIgnoreCase("PrettyPrinter")) {
-			PrettyPrinter.main(args);
 		} else if (spdxTool.equalsIgnoreCase("TagToSpreadsheet")) {
 			TagToSpreadsheet.main(args);
 		} else if (spdxTool.equalsIgnoreCase("TagToRDF")) {

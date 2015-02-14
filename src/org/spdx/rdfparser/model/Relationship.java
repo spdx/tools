@@ -126,7 +126,7 @@ public class Relationship extends RdfModelObject {
 		this.relatedSpdxElement = relatedSpdxElement;
 		this.relationshipType = relationshipType;
 		this.comment = comment;
-		this.refreshOnGet = true;	//TODO: This must be set to false to avoid infinite recursion.  We can redesign the model by having everything go through SpdxElementFactory
+		this.refreshOnGet = true;
 	}
 	/**
 	 * @param model Model containing the relationship

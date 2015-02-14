@@ -34,7 +34,6 @@ public class NoListedLicenseRdfModel extends InvalidSPDXAnalysisException {
 	 */
 	public NoListedLicenseRdfModel(String msg) {
 		super(msg);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -43,7 +42,6 @@ public class NoListedLicenseRdfModel extends InvalidSPDXAnalysisException {
 	 */
 	public NoListedLicenseRdfModel(String msg, Throwable inner) {
 		super(msg, inner);
-		// TODO Auto-generated constructor stub
 	}
 
 }

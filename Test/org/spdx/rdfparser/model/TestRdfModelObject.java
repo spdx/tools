@@ -153,7 +153,6 @@ public class TestRdfModelObject {
 		 */
 		@Override
 		void getPropertiesFromModel() {
-			// TODO Auto-generated method stub
 			
 		}
 		
