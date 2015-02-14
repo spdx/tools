@@ -22,6 +22,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
@@ -269,14 +270,14 @@ public class Annotation extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		if (!(o instanceof Annotation)) {
 			return false;
 		}
 		Annotation comp = (Annotation)o;
-		return (equalsConsideringNull(annotator, comp.getAnnotator()) &&
-				equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
-				equalsConsideringNull(comment, comp.getComment()) &&
-				equalsConsideringNull(date, comp.getDate()));
+		return (RdfModelHelper.equalsConsideringNull(annotator, comp.getAnnotator()) &&
+				RdfModelHelper.equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
+				RdfModelHelper.equalsConsideringNull(comment, comp.getComment()) &&
+				RdfModelHelper.equalsConsideringNull(date, comp.getDate()));
 	}
 }

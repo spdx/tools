@@ -20,7 +20,9 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -174,6 +176,17 @@ public class OrLaterOperator extends AnyLicenseInfo {
 			clonedLicense = (SimpleLicensingInfo)this.license.clone();
 		}
 		return new OrLaterOperator(clonedLicense);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof OrLaterOperator)) {
+			return false;
+		}
+		return RdfModelHelper.equivalentConsideringNull(this.license, ((OrLaterOperator)compare).getLicense());
 	}
 	
 }

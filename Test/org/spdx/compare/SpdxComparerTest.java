@@ -128,6 +128,7 @@ public class SpdxComparerTest {
 	private static final String SUPPLIERB = "Person: Supplier B";
 	private static final String DOC_URIA = "http://spdx.org/documents/uriA";
 	private static final String DOC_URIB = "http://spdx.org/documents/uriB";
+	private static final String DOC_URIC = "http://spdx.org/documents/uriC";
 	private static final ExtractedLicenseInfo[] EXTRACTED_LICENSESA = new ExtractedLicenseInfo[]{
 		LICENSEA1, LICENSEA2, LICENSEA3
 	};
@@ -1437,7 +1438,7 @@ public class SpdxComparerTest {
 		comparer.compare(doc1, doc2);
 		assertTrue(comparer.isPackagesEquals());
 		assertFalse(comparer.isDifferenceFound());
-		((SpdxPackage)(doc1.getSpdxItems()[0])).setDescription("Different Description");
+		((SpdxPackage)(doc1.getDocumentDescribes()[0])).setDescription("Different Description");
 		comparer.compare(doc1, doc2);
 		assertFalse(comparer.isPackagesEquals());
 		assertTrue(comparer.isDifferenceFound());
@@ -1600,7 +1601,7 @@ public class SpdxComparerTest {
 		comparer.compare(doc1, doc2);
 		SpdxFileDifference[] differences = comparer.getFileDifferences(0, 1);
 		assertEquals(0, differences.length);
-		SpdxFile[] doc1files = ((SpdxPackage)doc1.getSpdxItems()[0]).getFiles();
+		SpdxFile[] doc1files = ((SpdxPackage)doc1.getDocumentDescribes()[0]).getFiles();
 		SpdxFile[] files = new SpdxFile[doc1files.length];
 		for (int i = 0; i < doc1files.length; i++) {
 			files[i] = doc1files[i].clone();
@@ -1613,7 +1614,7 @@ public class SpdxComparerTest {
 		files[1] = new SpdxFile(files[1].getName(), files[1].getFileTypes(), files[1].getSha1(),files[1].getLicenseConcluded(),
 				files[1].getLicenseInfoFromFiles(), files[1].getLicenseComment(), files[1].getCopyrightText(), files[1].getArtifactOf(), files[1].getComment());
 		files[1].setLicenseConcluded(LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
-		((SpdxPackage)(doc2.getSpdxItems()[0])).setFiles(files);
+		((SpdxPackage)(doc2.getDocumentDescribes()[0])).setFiles(files);
 		comparer.compare(doc1, doc2);
 		differences = comparer.getFileDifferences(0, 1);
 		assertEquals(2, differences.length);
@@ -1688,8 +1689,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(docA, docB);
@@ -1729,8 +1730,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(docA, docB);
@@ -1783,8 +1784,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(docA, docB);
@@ -1837,8 +1838,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(docA, docB);
@@ -1899,7 +1900,7 @@ public class SpdxComparerTest {
 		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
 		docA.setName(DOC_NAMEA);
 		docA.setCreationInfo(CREATION_INFOA);
-		docA.setSpdxItems(itemsA);
+		docA.setDocumentDescribes(itemsA);
 
 		SpdxComparer comparer = new SpdxComparer();
 		SpdxFile[] result = comparer.collectAllFiles(docA);
@@ -1932,8 +1933,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 
 		ExternalDocumentRef ref1 = new ExternalDocumentRef("http://namespace/one", CHECKSUM1, "SPDXDocumentRef-1");
 		ExternalDocumentRef ref2 = new ExternalDocumentRef("http://namespace/two", CHECKSUM2, "SPDXDocumentRef-2");
@@ -1978,8 +1979,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 
 		docA.setAnnotations(new Annotation[] {ANNOTATION1, ANNOTATION2});
 		docB.setAnnotations(new Annotation[] {ANNOTATION2, ANNOTATION3});
@@ -2020,8 +2021,8 @@ public class SpdxComparerTest {
 		docB.setName(DOC_NAMEB);
 		docA.setCreationInfo(CREATION_INFOA);
 		docB.setCreationInfo(CREATION_INFOB);
-		docA.setSpdxItems(itemsA);
-		docB.setSpdxItems(itemsB);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
 		docA.setRelationships(new Relationship[] {RELATIONSHIP1, RELATIONSHIP2});
 		docB.setRelationships(new Relationship[] {RELATIONSHIP2, RELATIONSHIP3});
 		SpdxComparer comparer = new SpdxComparer();
@@ -2034,6 +2035,57 @@ public class SpdxComparerTest {
 		result = comparer.getUniqueDocumentRelationship(1, 0);
 		assertEquals(1, result.length);
 		assertEquals(RELATIONSHIP3, result[0]);
-
+	}
+	
+	@Test
+	public void testSpdxDocumentContentsEquals() throws InvalidSPDXAnalysisException, SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOA);
+		docA.setDocumentDescribes(itemsA);
+		docB.setDocumentDescribes(itemsB);
+		assertTrue(pkgA.equivalent(pkgB));
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		assertFalse(comparer.isDifferenceFound());
+		assertTrue(comparer.isDocumentContentsEquals());
+		SpdxPackage pkgC = new SpdxPackage(NAMEB, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		assertFalse(pkgA.equivalent(pkgC));
+		SpdxDocumentContainer containerC = new SpdxDocumentContainer(DOC_URIC);
+		SpdxDocument docC = containerC.getSpdxDocument();
+		docC.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
+		docC.setName(DOC_NAMEA);
+		docC.setCreationInfo(CREATION_INFOA);
+		docC.setDocumentDescribes(new SpdxItem[] {pkgC});
+		comparer = new SpdxComparer();
+		comparer.compare(new SpdxDocument[] {docA, docB, docC});
+		assertTrue(comparer.isDifferenceFound());
+		assertFalse(comparer.isDocumentContentsEquals());
 	}
 }

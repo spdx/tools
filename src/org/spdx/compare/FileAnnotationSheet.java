@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013 Source Auditor Inc.
+ * Copyright (c) 2015 Source Auditor Inc.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,49 +17,41 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.model.SpdxFile;
 
 /**
- * Sheet with results for file contributor comparison results
+ * Sheet comparing file annotations
  * @author Gary O'Neall
  *
  */
-public class FileContributorsSheet extends AbstractFileCompareSheet {
+public class FileAnnotationSheet extends AbstractFileCompareSheet {
 	
-	private static final int FILE_CONTRIBUTOR_COL_WIDTH = 50;
+	static final int ANNOTATION_COL_WIDTH = 80;
 	
-	public FileContributorsSheet(Workbook workbook, String sheetName) {
+	public FileAnnotationSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
 
 	static void create(Workbook wb, String sheetName) {
-		AbstractFileCompareSheet.create(wb, sheetName, FILE_CONTRIBUTOR_COL_WIDTH);
+		AbstractFileCompareSheet.create(wb, sheetName, ANNOTATION_COL_WIDTH);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.model.SpdxFile, int, org.spdx.rdfparser.model.SpdxFile, int)
 	 */
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
-		return SpdxComparer.stringArraysEqual(fileA.getFileContributors(), fileB.getFileContributors());
+		return RdfModelHelper.arraysEquivalent(fileA.getAnnotations(), fileB.getAnnotations());
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
+	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.model.SpdxFile)
 	 */
 	@Override
 	String getFileValue(SpdxFile spdxFile) {
-		StringBuilder sb = new StringBuilder();
-		String[] contributors = spdxFile.getFileContributors();
-		if (contributors != null && contributors.length > 0) {
-			sb.append(contributors[0]);
-			for (int i = 1; i < contributors.length; i++) {
-				sb.append(", ");
-				sb.append(contributors[i]);
-			}
-		}
-		return sb.toString();
+		return CompareHelper.annotationsToString(spdxFile.getAnnotations());
 	}
 
 }

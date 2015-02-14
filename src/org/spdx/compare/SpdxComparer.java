@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
@@ -166,6 +167,7 @@ public class SpdxComparer {
 	private boolean documentCommentsEqual = true;
 	private boolean dataLicenseEqual = true;
 	private boolean licenseListVersionEquals = true;
+	private boolean documentContentsEquals = true;
 	
 	// Reviewer results
 	/**
@@ -526,7 +528,7 @@ public class SpdxComparer {
 	 */
 	protected SpdxPackage[] collectAllPackages(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
 		HashSet<SpdxPackage> retval = new HashSet<SpdxPackage>();
-		SpdxItem[] items = spdxDocument.getSpdxItems();
+		SpdxItem[] items = spdxDocument.getDocumentDescribes();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] instanceof SpdxPackage) {
 				retval.add((SpdxPackage)items[i]);
@@ -545,7 +547,7 @@ public class SpdxComparer {
 	 */
 	protected SpdxFile[] collectAllFiles(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
 		HashSet<SpdxFile> retval = new HashSet<SpdxFile>();
-		SpdxItem[] items = spdxDocument.getSpdxItems();
+		SpdxItem[] items = spdxDocument.getDocumentDescribes();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] instanceof SpdxFile) {
 				retval.add((SpdxFile)items[i]);			
@@ -873,8 +875,28 @@ public class SpdxComparer {
 		compareDataLicense();
 		compareDocumentComments();
 		compareSpdxVerions();
+		compareDocumentContents();
 		if (!this.dataLicenseEqual || !this.spdxVersionsEqual || !this.documentCommentsEqual) {
 			this.differenceFound = true;
+		}
+	}
+	
+	private void compareDocumentContents() throws SpdxCompareException {
+		documentContentsEquals = true;
+		try {
+			for (int i = 0; i < spdxDocs.length; i++) {
+				SpdxItem[] itemsA = spdxDocs[i].getDocumentDescribes();
+				for (int j = i; j < spdxDocs.length; j++) {
+					SpdxItem[] itemsB = spdxDocs[j].getDocumentDescribes();
+					if (!RdfModelHelper.arraysEquivalent(itemsA, itemsB)) {
+						this.documentContentsEquals = false;
+						this.differenceFound = true;
+						return;
+					}
+				}
+			}
+		} catch(InvalidSPDXAnalysisException ex) {
+			throw(new SpdxCompareException("Error getting SPDX document items: "+ex.getMessage()));
 		}
 	}
 
@@ -2114,6 +2136,15 @@ public class SpdxComparer {
 	 */
 	public SpdxDocument[] getSpdxDocuments() {
 		return this.spdxDocs;
+	}
+
+	/**
+	 * @return
+	 * @throws SpdxCompareException 
+	 */
+	public boolean isDocumentContentsEquals() throws SpdxCompareException {
+		checkInProgress();
+		return this.documentContentsEquals;
 	}
 
 }

@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -319,7 +320,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (this.resource != null && refreshOnGet) {
 			Checksum[] refresh = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
 					PROP_PACKAGE_CHECKSUM);
-			if (!this.arraysEquivalent(refresh, this.checksums)) {
+			if (!RdfModelHelper.arraysEquivalent(refresh, this.checksums)) {
 				this.checksums = refresh;
 			}
 		}
@@ -565,7 +566,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (this.resource != null && refreshOnGet) {
 			SpdxElement[] filesE = findMultipleElementPropertyValues(SPDX_NAMESPACE,
 					PROP_PACKAGE_FILE);
-			if (!this.arraysEquivalent(filesE, this.files)) {
+			if (!RdfModelHelper.arraysEquivalent(filesE, this.files)) {
 				this.files = new SpdxFile[filesE.length];
 				for (int i = 0; i < filesE.length; i++) {
 					if (!(filesE[i] instanceof SpdxFile)) {
@@ -608,7 +609,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	}
 	
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		if (!(o instanceof SpdxPackage)) {
 			return false;
 		}
@@ -626,18 +627,18 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 					return false;
 				}
 			}
-		return (equalsConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
-				arraysEquivalent(this.checksums, comp.getChecksums()) &&
-				equalsConsideringNull(this.description, comp.getDescription()) &&
-				equalsConsideringNull(this.downloadLocation, comp.getDownloadLocation()) &&
-				arraysEquivalent(this.files, comp.getFiles()) &&
-				equalsConsideringNull(this.homepage, comp.getHomepage()) &&
-				equalsConsideringNull(this.originator, comp.getOriginator()) &&
-				equalsConsideringNull(this.packageFileName, comp.getPackageFileName()) &&
-				equalsConsideringNull(this.sourceInfo, comp.getSourceInfo()) &&
-				equalsConsideringNull(this.summary, comp.getSummary()) &&
-				equalsConsideringNull(this.supplier, comp.getSupplier()) &&
-				equalsConsideringNull(this.versionInfo, comp.getVersionInfo()));
+		return (RdfModelHelper.equivalentConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
+				RdfModelHelper.arraysEquivalent(this.checksums, comp.getChecksums()) &&
+				RdfModelHelper.equalsConsideringNull(this.description, comp.getDescription()) &&
+				RdfModelHelper.equalsConsideringNull(this.downloadLocation, comp.getDownloadLocation()) &&
+				RdfModelHelper.arraysEquivalent(this.files, comp.getFiles()) &&
+				RdfModelHelper.equalsConsideringNull(this.homepage, comp.getHomepage()) &&
+				RdfModelHelper.equalsConsideringNull(this.originator, comp.getOriginator()) &&
+				RdfModelHelper.equalsConsideringNull(this.packageFileName, comp.getPackageFileName()) &&
+				RdfModelHelper.equalsConsideringNull(this.sourceInfo, comp.getSourceInfo()) &&
+				RdfModelHelper.equalsConsideringNull(this.summary, comp.getSummary()) &&
+				RdfModelHelper.equalsConsideringNull(this.supplier, comp.getSupplier()) &&
+				RdfModelHelper.equalsConsideringNull(this.versionInfo, comp.getVersionInfo()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invalid analysis exception on comparing equivalent: "+e.getMessage(),e);
 			return false;

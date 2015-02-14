@@ -22,6 +22,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
@@ -295,7 +296,7 @@ public class Relationship extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		if (!(o instanceof Relationship)) {
 			return false;
 		}
@@ -304,13 +305,13 @@ public class Relationship extends RdfModelObject {
 			if (comp.getRelatedSpdxElement() != null) {
 				return false;
 			} else {
-				return (equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
-				equalsConsideringNull(comment, comp.getComment()));
+				return (RdfModelHelper.equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
+				RdfModelHelper.equalsConsideringNull(comment, comp.getComment()));
 			}
 		} else {
 			return (relatedSpdxElement.equivalent(comp.getRelatedSpdxElement(), false) &&	// Note - we don't want to test relationships since that may send us into an infinite loop
-					equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
-					equalsConsideringNull(comment, comp.getComment()));
+					RdfModelHelper.equalsConsideringNull(relationshipType, comp.getRelationshipType()) &&
+					RdfModelHelper.equalsConsideringNull(comment, comp.getComment()));
 		}
 	}
 	/**

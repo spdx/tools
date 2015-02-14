@@ -20,7 +20,9 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -68,7 +70,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			if (this.exception != null) {
 				throw (new InvalidSPDXAnalysisException("More than one exception license WITH expression"));
 			}
-			this.exception = new LicenseException(model, t.getObject());
+			this.exception = new LicenseException(modelContainer, t.getObject());
 		}
 	}
 
@@ -86,7 +88,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		Resource licResource = this.license.createResource(this.modelContainer);
 		r.addProperty(licProperty, licResource);
 		Property exceptionProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION);
-		Resource exceptionResource = this.exception.createResource(model, null);
+		Resource exceptionResource = this.exception.createResource(modelContainer);
 		r.addProperty(exceptionProperty, exceptionResource);
 		return r;
 	}
@@ -148,7 +150,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			model.removeAll(resource, exceptionProperty, null);
 
 			exceptionProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION);
-			Resource exceptionResource = exception.createResource(model, null);
+			Resource exceptionResource = exception.createResource(modelContainer);
 			resource.addProperty(exceptionProperty, exceptionResource);
 		}
 	}
@@ -240,6 +242,20 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 			clonedException = this.exception.clone();
 		}
 		return new WithExceptionOperator(clonedLicense, clonedException);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean equivalent(IRdfModel compare) {
+		if (!(compare instanceof WithExceptionOperator)) {
+			return false;
+		}
+		WithExceptionOperator wCompare = (WithExceptionOperator)compare;
+		return (RdfModelHelper.equivalentConsideringNull(license, wCompare.getLicense()) &&
+				RdfModelHelper.equivalentConsideringNull(this.exception, wCompare.getException()));
 	}
 
 }

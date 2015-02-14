@@ -27,7 +27,7 @@ import org.spdx.rdfparser.model.SpdxFile;
  */
 public class FileConcludedSheet extends AbstractFileCompareSheet {
 
-	private static final int LICENSE_COL_WIDTH = 60;
+	private static final int LICENSE_COL_WIDTH = 40;
 
 	/**
 	 * @param workbook

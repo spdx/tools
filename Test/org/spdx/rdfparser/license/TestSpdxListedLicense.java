@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package org.spdx.rdfparser;
+package org.spdx.rdfparser.license;
 
 
 import static org.junit.Assert.*;
@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.IModelContainer;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -265,5 +267,31 @@ public class TestSpdxListedLicense {
 			}
 		}
 		return true;
+	}
+	
+	@Test
+	public void testEquivalent() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		String name = "name";
+		String name2 = "name2";
+		String id = "AFL-3.0";
+		String text = "text";
+		String text2 = "text2";
+		String[] sourceUrls = new String[] {"source url1", "source url2"};
+		String[] sourceUrls2 = new String[] {"source url2"};
+		String notes = "notes";
+		String notes2 = "notes2";
+		String standardLicenseHeader = "Standard license header";
+		String standardLicenseHeader2 = "Standard license header2";
+		String template = "template";
+		String template2 = "template2";
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
+				sourceUrls, notes, standardLicenseHeader, template, true);
+		assertTrue(stdl.equivalent(stdl));
+		SpdxListedLicense stdl2 = new SpdxListedLicense(name2, id, text2,
+				sourceUrls2, notes2, standardLicenseHeader2, template2, false);
+		assertTrue(stdl2.equivalent(stdl));
+		stdl2.setLicenseId("Apache-2.0");
+		assertFalse(stdl.equivalent(stdl2));
 	}
 }

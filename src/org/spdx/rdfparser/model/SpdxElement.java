@@ -22,6 +22,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.hp.hpl.jena.graph.Node;
@@ -167,7 +168,7 @@ public class SpdxElement extends RdfModelObject {
 			try {
 				Annotation[] refresh = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_ANNOTATION);
-				if (refresh == null || !arraysEquivalent(refresh, this.annotations)) {
+				if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.annotations)) {
 					this.annotations = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -247,7 +248,7 @@ public class SpdxElement extends RdfModelObject {
 			try {
 				Relationship[] refresh = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_RELATIONSHIP);
-				if (refresh == null && !this.arraysEquivalent(refresh, this.relationships)) {
+				if (refresh == null && !RdfModelHelper.arraysEquivalent(refresh, this.relationships)) {
 					this.relationships = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -384,7 +385,7 @@ public class SpdxElement extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		return equivalent(o, true);
 	}
 
@@ -395,18 +396,18 @@ public class SpdxElement extends RdfModelObject {
 	 * @param testRelationships If true, test relationships
 	 * @return
 	 */
-	public boolean equivalent(RdfModelObject o, boolean testRelationships) {
+	public boolean equivalent(IRdfModel o, boolean testRelationships) {
 		if (!(o instanceof SpdxElement)) {
 			return false;
 		}
 		SpdxElement comp = (SpdxElement)o;
 		
-		if (testRelationships && !arraysEquivalent(comp.getRelationships(), this.getRelationships())) {
+		if (testRelationships && !RdfModelHelper.arraysEquivalent(comp.getRelationships(), this.getRelationships())) {
 			return false;
 		}
-		return (equalsConsideringNull(comp.getName(), this.getName()) &&
-				arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) &&
-				equalsConsideringNull(comp.getComment(), this.getComment()));
+		return (RdfModelHelper.equalsConsideringNull(comp.getName(), this.getName()) &&
+				RdfModelHelper.arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) &&
+				RdfModelHelper.equalsConsideringNull(comp.getComment(), this.getComment()));
 	}
 	
 	

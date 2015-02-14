@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.OrLaterOperator;
@@ -165,7 +166,7 @@ public class SpdxItem extends SpdxElement {
 			try {
 				AnyLicenseInfo[] refresh = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						getLicenseInfoFromFilesPropertyName());
-				if (!this.arraysEqual(refresh, this.licenseInfoFromFiles)) {
+				if (!RdfModelHelper.arraysEqual(refresh, this.licenseInfoFromFiles)) {
 					this.licenseInfoFromFiles = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -229,7 +230,7 @@ public class SpdxItem extends SpdxElement {
 	}
 	
 	@Override
-	public boolean equivalent(RdfModelObject o) {
+	public boolean equivalent(IRdfModel o) {
 		if (!(o instanceof SpdxItem)) {
 			return false;
 		}
@@ -237,10 +238,10 @@ public class SpdxItem extends SpdxElement {
 		if (!super.equivalent(comp)) {
 			return false;
 		}
-		return (equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
-				equalsConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
-				this.arraysEqual(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles()) &&
-				equalsConsideringNull(this.licenseComment, comp.getLicenseComment()));
+		return (RdfModelHelper.equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
+				RdfModelHelper.equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
+				RdfModelHelper.arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles()) &&
+				RdfModelHelper.equalsConsideringNull(this.licenseComment, comp.getLicenseComment()));
 	}
 	
 	protected AnyLicenseInfo cloneLicenseConcluded() {

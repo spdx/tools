@@ -484,5 +484,14 @@ public class SpdxPackageComparer extends SpdxItemComparer {
 		checkInProgress();
 		return this.name;
 	}
+
+	/**
+	 * @return
+	 * @throws SpdxCompareException 
+	 */
+	public int getNumPackages() throws SpdxCompareException {
+		checkInProgress();
+		return this.documentItem.size();
+	}
 	
 }

@@ -27,10 +27,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.model.Annotation;
-import org.spdx.rdfparser.model.Checksum;
-import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AbstractSheet;
@@ -50,7 +46,7 @@ public class PackageSheet extends AbstractSheet {
 	protected static final int EQUALS_COL = 1;
 	protected static final int FIRST_DOC_COL = 2;
 	private static final int FIELD_COL_WIDTH = 20;
-	private static final int EQUALS_COL_WIDTH = 6;
+	private static final int EQUALS_COL_WIDTH = 7;
 	protected static final String FIELD_HEADER_TEXT = "Package Property";
 	protected static final String EQUALS_HEADER_TEXT = "Equals";
 	protected static final String DESCRIPTION_FIELD_TEXT = "Description";
@@ -72,10 +68,12 @@ public class PackageSheet extends AbstractSheet {
 	protected static final String PACKAGE_NAME_FIELD_TEXT = "Package Name";
 	protected static final String DIFFERENT_STRING = "Diff";
 	protected static final String EQUAL_STRING = "Equal";
+	protected static final String MISSING_STRING = "Equal*";
 	protected static final String HOMEPAGE_FIELD_TEXT = "Home Page";
 	protected static final String ID_FIELD_TEXT = "SPDX ID";
 	protected static final String ANNOTATION_FIELD_TEXT = "Annotations";
 	protected static final String RELATIONSHIPS_FIELD_TEXT = "Relationships";
+	private static final String NO_PACKAGE = "[No Package]";
 	
 	/**
 	 * @param workbook
@@ -171,288 +169,194 @@ public class PackageSheet extends AbstractSheet {
 	private void addPackageToSheet(SpdxPackageComparer comparer, 
 			SpdxDocument[] docs) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Row packageNameRow = this.addRow();
+		boolean allDocsPresent = comparer.getNumPackages() == docs.length;
 		packageNameRow.createCell(FIELD_COL).setCellValue(PACKAGE_NAME_FIELD_TEXT);
-		setCellEqualValue(packageNameRow.createCell(EQUALS_COL));
+		setCellEqualValue(packageNameRow.createCell(EQUALS_COL), allDocsPresent);
 		Row idRow = this.addRow();
 		idRow.createCell(FIELD_COL).setCellValue(ID_FIELD_TEXT);
-		setCellEqualValue(idRow.createCell(EQUALS_COL));
+		setCellEqualValue(idRow.createCell(EQUALS_COL), allDocsPresent);
 		Row annotationsRow = this.addRow();
 		annotationsRow.createCell(FIELD_COL).setCellValue(ANNOTATION_FIELD_TEXT);
 		if (comparer.isAnnotationsEquals()) {
-			setCellEqualValue(annotationsRow.createCell(EQUALS_COL));
+			setCellEqualValue(annotationsRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(annotationsRow.createCell(EQUALS_COL));
 		}
 		Row relationshipsRow = this.addRow();
 		relationshipsRow.createCell(FIELD_COL).setCellValue(RELATIONSHIPS_FIELD_TEXT);
 		if (comparer.isRelationshipsEquals()) {
-			setCellEqualValue(relationshipsRow.createCell(EQUALS_COL));
+			setCellEqualValue(relationshipsRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(relationshipsRow.createCell(EQUALS_COL));
 		}
 		Row versionRow = this.addRow();
 		versionRow.createCell(FIELD_COL).setCellValue(VERSION_FIELD_TEXT);
 		if (comparer.isPackageVersionsEquals()) {
-			setCellEqualValue(versionRow.createCell(EQUALS_COL));
+			setCellEqualValue(versionRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(versionRow.createCell(EQUALS_COL));
 		}
 		Row fileNameRow = this.addRow();
 		fileNameRow.createCell(FIELD_COL).setCellValue(FILE_NAME_FIELD_TEXT);
 		if (comparer.isPackageFilenamesEquals()) {
-			setCellEqualValue(fileNameRow.createCell(EQUALS_COL));
+			setCellEqualValue(fileNameRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(fileNameRow.createCell(EQUALS_COL));
 		}
 		Row supplierRow = this.addRow();
 		supplierRow.createCell(FIELD_COL).setCellValue(SUPPLIER_FIELD_TEXT);
 		if (comparer.isPackageSuppliersEquals()) {
-			setCellEqualValue(supplierRow.createCell(EQUALS_COL));
+			setCellEqualValue(supplierRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(supplierRow.createCell(EQUALS_COL));
 		}
 		Row originatorRow = this.addRow();
 		originatorRow.createCell(FIELD_COL).setCellValue(ORIGINATOR_FIELD_TEXT);
 		if (comparer.isPackageOriginatorsEqual()) {
-			setCellEqualValue(originatorRow.createCell(EQUALS_COL));
+			setCellEqualValue(originatorRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(originatorRow.createCell(EQUALS_COL));
 		}
 		Row downloadRow = this.addRow();
 		downloadRow.createCell(FIELD_COL).setCellValue(DOWNLOAD_FIELD_TEXT);
 		if (comparer.isPackageDownloadLocationsEquals()) {
-			setCellEqualValue(downloadRow.createCell(EQUALS_COL));
+			setCellEqualValue(downloadRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(downloadRow.createCell(EQUALS_COL));
 		}
 		Row verificationRow = this.addRow();
 		verificationRow.createCell(FIELD_COL).setCellValue(VERIFICATION_FIELD_TEXT);
 		if (comparer.isPackageVerificationCodesEquals()) {
-			setCellEqualValue(verificationRow.createCell(EQUALS_COL));
+			setCellEqualValue(verificationRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(verificationRow.createCell(EQUALS_COL));
 		}
 		Row verificationExcludedRow = this.addRow();
 		verificationExcludedRow.createCell(FIELD_COL).setCellValue(VERIFICATION_EXCLUDED_FIELD_TEXT);
 		if (comparer.isPackageVerificationCodesEquals()) {
-			setCellEqualValue(verificationExcludedRow.createCell(EQUALS_COL));
+			setCellEqualValue(verificationExcludedRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(verificationExcludedRow.createCell(EQUALS_COL));
 		}
 		Row checksumRow = this.addRow();
 		checksumRow.createCell(FIELD_COL).setCellValue(CHECKSUM_FIELD_TEXT);
 		if (comparer.isPackageChecksumsEquals()) {
-			setCellEqualValue(checksumRow.createCell(EQUALS_COL));
+			setCellEqualValue(checksumRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(checksumRow.createCell(EQUALS_COL));
 		}
 		Row homePageRow = this.addRow();
 		homePageRow.createCell(FIELD_COL).setCellValue(HOMEPAGE_FIELD_TEXT);
 		if (comparer.isPackageHomePagesEquals()) {
-			setCellEqualValue(homePageRow.createCell(EQUALS_COL));
+			setCellEqualValue(homePageRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(homePageRow.createCell(EQUALS_COL));
 		}
 		Row sourceInfoRow = this.addRow();
 		sourceInfoRow.createCell(FIELD_COL).setCellValue(SOURCEINFO_FIELD_TEXT);
 		if (comparer.isPackageSourceInfosEquals()) {
-			setCellEqualValue(sourceInfoRow.createCell(EQUALS_COL));
+			setCellEqualValue(sourceInfoRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(sourceInfoRow.createCell(EQUALS_COL));
 		}
 		Row concludedLicenseRow = this.addRow();
 		concludedLicenseRow.createCell(FIELD_COL).setCellValue(CONCLUDED_LICENSE_FIELD_TEXT);
 		if (comparer.isConcludedLicenseEquals()) {
-			setCellEqualValue(concludedLicenseRow.createCell(EQUALS_COL));
+			setCellEqualValue(concludedLicenseRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(concludedLicenseRow.createCell(EQUALS_COL));
 		}
 		Row licenseInfosFromFilesRow = this.addRow();
 		licenseInfosFromFilesRow.createCell(FIELD_COL).setCellValue(LICENSE_INFOS_FROM_FILES_FIELD_TEXT);
 		if (comparer.isSeenLicenseEquals()) {
-			setCellEqualValue(licenseInfosFromFilesRow.createCell(EQUALS_COL));
+			setCellEqualValue(licenseInfosFromFilesRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(licenseInfosFromFilesRow.createCell(EQUALS_COL));
 		}
 		Row declaredLicenseRow = this.addRow();
 		declaredLicenseRow.createCell(FIELD_COL).setCellValue(DECLARED_LICENSE_FIELD_TEXT);
 		if (comparer.isDeclaredLicensesEquals()) {
-			setCellEqualValue(declaredLicenseRow.createCell(EQUALS_COL));
+			setCellEqualValue(declaredLicenseRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(declaredLicenseRow.createCell(EQUALS_COL));
 		}
 		Row licenseCommentRow = this.addRow();
 		licenseCommentRow.createCell(FIELD_COL).setCellValue(LICENSE_COMMENT_FIELD_TEXT);
 		if (comparer.isLicenseCommmentsEquals()) {
-			setCellEqualValue(licenseCommentRow.createCell(EQUALS_COL));
+			setCellEqualValue(licenseCommentRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(licenseCommentRow.createCell(EQUALS_COL));
 		}
 		Row copyrightRow = this.addRow();
 		copyrightRow.createCell(FIELD_COL).setCellValue(COPYRIGHT_FIELD_TEXT);
 		if (comparer.isCopyrightsEquals()) {
-			setCellEqualValue(copyrightRow.createCell(EQUALS_COL));
+			setCellEqualValue(copyrightRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(copyrightRow.createCell(EQUALS_COL));
 		}
 		Row summaryRow = this.addRow();
 		summaryRow.createCell(FIELD_COL).setCellValue(SUMMARY_FIELD_TEXT);
 		if (comparer.isPackageSummaryEquals()) {
-			setCellEqualValue(summaryRow.createCell(EQUALS_COL));
+			setCellEqualValue(summaryRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(summaryRow.createCell(EQUALS_COL));
 		}
 		Row descriptionRow = this.addRow();
 		descriptionRow.createCell(FIELD_COL).setCellValue(DESCRIPTION_FIELD_TEXT);
 		if (comparer.isPackageDescriptionsEquals()) {
-			setCellEqualValue(descriptionRow.createCell(EQUALS_COL));
+			setCellEqualValue(descriptionRow.createCell(EQUALS_COL), allDocsPresent);
 		} else {
 			setCellDifferentValue(descriptionRow.createCell(EQUALS_COL));
 		}
 		
 		for (int i = 0; i < docs.length; i++) {
 			SpdxPackage pkg = comparer.getDocPackage(docs[i]);
-			if (pkg == null) {
-				continue;
+			if (pkg != null) {
+				packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getName());
+				idRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getId());
+				annotationsRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.annotationsToString(pkg.getAnnotations()));
+				relationshipsRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.relationshipsToString(pkg.getRelationships()));
+				versionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getVersionInfo());
+				fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageFileName());
+				supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSupplier());
+				originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getOriginator());
+				downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadLocation());
+				verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageVerificationCode().getValue());
+				verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getPackageVerificationCode().getExcludedFileNames()));
+				checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.checksumsToString(pkg.getChecksums()));
+				homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomepage());
+				sourceInfoRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSourceInfo());
+				concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseConcluded().toString());
+				licenseInfosFromFilesRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.licenseInfosToString(pkg.getLicenseInfoFromFiles()));
+				declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseDeclared().toString());
+				licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseComment());
+				copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
+				summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
+				descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());
+			} else {
+				packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				idRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				annotationsRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				relationshipsRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				versionRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				sourceInfoRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				licenseInfosFromFilesRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
 			}
-			packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getName());
-			idRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getId());
-			annotationsRow.createCell(FIRST_DOC_COL+i).setCellValue(annotationsToString(pkg.getAnnotations()));
-			relationshipsRow.createCell(FIRST_DOC_COL+i).setCellValue(relationshipsToString(pkg.getRelationships()));
-			versionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getVersionInfo());
-			fileNameRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageFileName());
-			supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSupplier());
-			originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getOriginator());
-			downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadLocation());
-			verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageVerificationCode().getValue());
-			verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getPackageVerificationCode().getExcludedFileNames()));
-			checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(checksumsToString(pkg.getChecksums()));
-			homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomepage());
-			sourceInfoRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSourceInfo());
-			concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseConcluded().toString());
-			licenseInfosFromFilesRow.createCell(FIRST_DOC_COL+i).setCellValue(licenseInfosToString(pkg.getLicenseInfoFromFiles()));
-			declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseDeclared().toString());
-			licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseComment());
-			copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
-			summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
-			descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());
-	
 		}
-	}
-
-	/**
-	 * @param relationships
-	 * @return
-	 */
-	private String relationshipsToString(Relationship[] relationships) {
-		if (relationships == null || relationships.length == 0) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder(relationshipToString(relationships[0]));
-		for (int i = 1; i < relationships.length; i++) {
-			sb.append("\n");
-			sb.append(relationshipToString(relationships[i]));
-		}
-		return sb.toString();
-	}
-	
-	static String relationshipToString(Relationship relationship) {
-		if (relationship == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(
-				relationship.getRelationshipType()));
-		sb.append(":");
-		sb.append(relationship.getRelatedSpdxElement().getId());
-		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
-			sb.append("(");
-			sb.append(relationship.getComment());
-			sb.append(")");
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * @param annotations
-	 * @return
-	 */
-	private String annotationsToString(Annotation[] annotations) {
-		if (annotations == null || annotations.length == 0) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder(annotationToString(annotations[0]));
-		for (int i = 1; i < annotations.length; i++) {
-			sb.append("\n");
-			sb.append(annotationToString(annotations[i]));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * @param annotation
-	 * @return
-	 */
-	public static String annotationToString(Annotation annotation) {
-		if (annotation == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder(annotation.getDate());
-		sb.append(" ");
-		sb.append(annotation.getAnnotator());
-		sb.append(": ");
-		sb.append(annotation.getComment());
-		sb.append("[");
-		sb.append(Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
-		sb.append("]");
-		return sb.toString();
-	}
-
-	/**
-	 * Create a string from an array of checksums
-	 * @param checksums
-	 * @return
-	 */
-	static String checksumsToString(Checksum[] checksums) {
-		if (checksums == null || checksums.length == 0) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder(checksumToString(checksums[0]));
-		for (int i = 1; i < checksums.length; i++) {
-			sb.append("\n");
-			sb.append(checksumToString(checksums[0]));
-		}
-		return sb.toString();
-	}
-	
-
-	/**
-	 * @param checksum
-	 * @return
-	 */
-	public static String checksumToString(Checksum checksum) {
-		if (checksum == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder(Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(checksum.getAlgorithm()));
-		sb.append(checksum.getValue());
-		return sb.toString();
-	}
-
-	/**
-	 * @param licenseInfoFromFiles
-	 * @return
-	 */
-	protected String licenseInfosToString(AnyLicenseInfo[] licenseInfoFromFiles) {
-		if (licenseInfoFromFiles == null || licenseInfoFromFiles.length == 0) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append(licenseInfoFromFiles[0].toString());
-		for (int i = 1; i < licenseInfoFromFiles.length; i++) {
-			sb.append(", ");
-			sb.append(licenseInfoFromFiles[i].toString());
-		}
-		return sb.toString();
 	}
 
 	/**
@@ -483,8 +387,12 @@ public class PackageSheet extends AbstractSheet {
 	/**
 	 * @param cell
 	 */
-	private void setCellEqualValue(Cell cell) {
-		cell.setCellValue(EQUAL_STRING);
+	private void setCellEqualValue(Cell cell, boolean allPkgsPresent) {
+		if (allPkgsPresent) {
+			cell.setCellValue(EQUAL_STRING);
+		} else {
+			cell.setCellValue(MISSING_STRING);
+		}		
 		cell.setCellStyle(greenWrapped);
 	}
 }

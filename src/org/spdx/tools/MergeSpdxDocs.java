@@ -139,7 +139,7 @@ public class MergeSpdxDocs {
 			try {
 				//TODO: This assumes only a single package per document which is no longer true
 				//in SPDX 2.0 - 
-				SpdxItem[] items = master.getSpdxItems();
+				SpdxItem[] items = master.getDocumentDescribes();
 				if (items.length != 1 || !(items[0] instanceof SpdxPackage)) {
 					System.out.println("Merging documents with more than one package being described is not supported.");
 					//System.exit(1);

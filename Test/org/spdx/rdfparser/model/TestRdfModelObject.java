@@ -144,7 +144,7 @@ public class TestRdfModelObject {
 		 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 		 */
 		@Override
-		public boolean equivalent(RdfModelObject compare) {
+		public boolean equivalent(IRdfModel compare) {
 
 			return false;
 		}

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
@@ -264,15 +265,15 @@ public class ExternalDocumentRef extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
 	@Override
-	public boolean equivalent(RdfModelObject compare) {
+	public boolean equivalent(IRdfModel compare) {
 		if (!(compare instanceof ExternalDocumentRef)) {
 			return false;
 		}
 		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
 		try {
-			return (this.equalsConsideringNull(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace())&&
-					this.equivalentConsideringNull(this.checksum, compref.getChecksum()) &&
-					this.equalsConsideringNull(this.externalDocumentId,  compref.getExternalDocumentId()));
+			return (RdfModelHelper.equalsConsideringNull(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace())&&
+					RdfModelHelper.equivalentConsideringNull(this.checksum, compref.getChecksum()) &&
+					RdfModelHelper.equalsConsideringNull(this.externalDocumentId,  compref.getExternalDocumentId()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invald SPDX Analysis exception comparing external document references: "+e.getMessage(),e);
 			return false;

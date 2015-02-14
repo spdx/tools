@@ -955,7 +955,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			items[i] = (SpdxItem)element;
 		}
-		this.analysis.setSpdxItems(items);
+		this.analysis.setDocumentDescribes(items);
 	}
 
 	/**

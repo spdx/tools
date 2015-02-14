@@ -234,7 +234,7 @@ public class TestSpdxDocument {
 		doc.setName(DOC_NAME1);
 		doc.setRelationships(relationships);
 		doc.setReviewers(reviewers);
-		doc.setSpdxItems(items);
+		doc.setDocumentDescribes(items);
 		assertTrue(UnitTestHelper.isArraysEquivalent(annotations, doc.getAnnotations()));
 		assertEquals(DOC_COMMENT1, doc.getComment());
 		assertEquals(CREATIONINFO1, doc.getCreationInfo());
@@ -244,7 +244,7 @@ public class TestSpdxDocument {
 		assertEquals(DOC_NAME1, doc.getName());
 		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, doc.getRelationships()));
 		assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc.getReviewers()));
-		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getSpdxItems()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
 		
 		Model model = container.getModel();
 		SpdxDocumentContainer container2 = new SpdxDocumentContainer(model);
@@ -258,7 +258,7 @@ public class TestSpdxDocument {
 		assertEquals(DOC_NAME1, doc2.getName());
 		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, doc2.getRelationships()));
 		assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc2.getReviewers()));
-		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc2.getSpdxItems()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc2.getDocumentDescribes()));
 	}
 
 	/**
@@ -296,7 +296,7 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			doc.setReviewers(reviewers);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			assertTrue(UnitTestHelper.isArraysEquivalent(annotations, doc.getAnnotations()));
 			assertEquals(DOC_COMMENT1, doc.getComment());
 			assertEquals(CREATIONINFO1, doc.getCreationInfo());
@@ -306,7 +306,7 @@ public class TestSpdxDocument {
 			assertEquals(DOC_NAME1, doc.getName());
 			assertTrue(UnitTestHelper.isArraysEquivalent(relationships, doc.getRelationships()));
 			assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc.getReviewers()));
-			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getSpdxItems()));
+			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
 			
 			assertTrue(doc.equivalent(doc));
 			
@@ -322,7 +322,7 @@ public class TestSpdxDocument {
 			doc2.setName(DOC_NAME1);
 			doc2.setRelationships(relationships);
 			doc2.setReviewers(reviewers);
-			doc2.setSpdxItems(items);
+			doc2.setDocumentDescribes(items);
 			assertTrue(doc.equivalent(doc2));
 			// CreationInfo
 			doc2.setCreationInfo(CREATIONINFO2);
@@ -350,9 +350,9 @@ public class TestSpdxDocument {
 			doc2.setReviewers(reviewers);
 			assertTrue(doc.equivalent(doc2));
 			// Items
-			doc2.setSpdxItems(new SpdxItem[] {FILE3, PACKAGE3});
+			doc2.setDocumentDescribes(new SpdxItem[] {FILE3, PACKAGE3});
 			assertFalse(doc.equivalent(doc2));
-			doc2.setSpdxItems(items);
+			doc2.setDocumentDescribes(items);
 			assertTrue(doc.equivalent(doc2));
 	}
 
@@ -386,7 +386,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			ArrayList<String> result = doc.verify();
 			assertEquals(0, result.size());
 			// data license
@@ -426,7 +426,7 @@ public class TestSpdxDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setSpdxItems(org.spdx.rdfparser.model.SpdxItem[])}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setDocumentDescribes(org.spdx.rdfparser.model.SpdxItem[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
@@ -455,12 +455,12 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
-			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getSpdxItems()));
+			doc.setDocumentDescribes(items);
+			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
 			
 			SpdxItem[] newItems = new SpdxItem[] {FILE1, PACKAGE1, PACKAGE2};
-			doc.setSpdxItems(newItems);
-			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getSpdxItems()));
+			doc.setDocumentDescribes(newItems);
+			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getDocumentDescribes()));
 	}
 	
 	@Test
@@ -489,26 +489,26 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			SpdxItem[] result = doc.getSpdxItems();
+			SpdxItem[] result = doc.getDocumentDescribes();
 			assertEquals(0, result.length);
 			doc.addItem(items[0]);
-			result = doc.getSpdxItems();
+			result = doc.getDocumentDescribes();
 			assertEquals(1, result.length);
 			assertEquals(items[0], result[0]);
-			result = doc.getSpdxItems();
+			result = doc.getDocumentDescribes();
 			doc.addItem(items[1]);
-			result = doc.getSpdxItems();
+			result = doc.getDocumentDescribes();
 			assertEquals(2, result.length);
 			doc.addItem(items[2]);
-			result = doc.getSpdxItems();
+			result = doc.getDocumentDescribes();
 			assertEquals(3, result.length);
 			doc.addItem(items[3]);
-			result = doc.getSpdxItems();
-			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getSpdxItems()));
+			result = doc.getDocumentDescribes();
+			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
 			
 			SpdxItem[] newItems = new SpdxItem[] {FILE1, PACKAGE1, PACKAGE2};
-			doc.setSpdxItems(newItems);
-			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getSpdxItems()));
+			doc.setDocumentDescribes(newItems);
+			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getDocumentDescribes()));
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			assertEquals(CREATIONINFO1, doc.getCreationInfo());
 			doc.setCreationInfo(CREATIONINFO2);
 			assertEquals(CREATIONINFO2, doc.getCreationInfo());
@@ -586,7 +586,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			
 			assertEquals(CCO_DATALICENSE, doc.getDataLicense());
 			SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById("Apache-2.0");
@@ -624,7 +624,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc.getExternalDocumentRefs()));
 			ExternalDocumentRef[] ref2 = new ExternalDocumentRef[] {
 					EXTERNAL_REF2
@@ -663,7 +663,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 			ExtractedLicenseInfo[] infos2 = new ExtractedLicenseInfo[] {
 					LICENSE2, LICENSE3
@@ -698,7 +698,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 
 			doc.addExtractedLicenseInfos(LICENSE2);
@@ -740,7 +740,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setSpdxItems(items);
+			doc.setDocumentDescribes(items);
 			
 			assertEquals(SpdxDocumentContainer.CURRENT_SPDX_VERSION, doc.getSpecVersion());
 			String ver = "2.1";
