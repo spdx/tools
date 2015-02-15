@@ -35,7 +35,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public class Annotation extends RdfModelObject {
+public class Annotation extends RdfModelObject implements Comparable<Annotation> {
 	
 	static final Logger logger = Logger.getLogger(RdfModelObject.class.getName());
 
@@ -279,5 +279,55 @@ public class Annotation extends RdfModelObject {
 				RdfModelHelper.equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
 				RdfModelHelper.equalsConsideringNull(comment, comp.getComment()) &&
 				RdfModelHelper.equalsConsideringNull(date, comp.getDate()));
+	}
+	
+	/**
+	 * @return The tag value of the annotation type
+	 */
+	public String getAnnotationTypeTag() {
+		return ANNOTATION_TYPE_TO_TAG.get(this.annotationType);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Annotation o) {
+		if (o == null) {
+			return 1;
+		}
+		if (o.getDate() == null) {
+			if (this.date != null) {
+				return 1;
+			}
+		}
+		if (this.date == null) {
+			return -1;
+		}
+		int retval = this.date.compareTo(o.getDate());
+		if (retval != 0) {
+			return retval;
+		}
+		if (o.getAnnotator() == null) {
+			if (this.annotator != null) {
+				return 1;
+			}
+		}
+		if (this.annotator == null) {
+			return -1;
+		}
+		retval = this.annotator.compareToIgnoreCase(o.getAnnotator());
+		if (retval != 0) {
+			return retval;
+		}
+		if (o.getAnnotationType() == null) {
+			if (this.annotationType != null) {
+				return 1;
+			}
+		}
+		if (this.annotationType == null) {
+			return -1;
+		}
+		return this.annotationType.compareTo(o.getAnnotationType());
 	}
 }

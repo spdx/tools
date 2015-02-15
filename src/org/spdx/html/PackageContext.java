@@ -19,13 +19,14 @@ package org.spdx.html;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 
 /**
@@ -35,23 +36,21 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
  */
 public class PackageContext {
 	
-	private SPDXPackage pkg = null;
+	private SpdxPackage pkg = null;
+	private HashMap<String, String> spdxIdToUrl;
 
 	/**
 	 * @param doc
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public PackageContext(SPDXDocument doc) throws InvalidSPDXAnalysisException {
-		pkg = doc.getSpdxPackage();
+	public PackageContext(SpdxPackage pkg, HashMap<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+		this.pkg = pkg;
+		this.spdxIdToUrl = spdxIdToUrl;
 	}
 	
 	public String name() {
-		if (pkg != null) {
-			try {
-				return pkg.getDeclaredName();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package name: "+e.getMessage();
-			}
+		if (this.pkg != null) {
+			return pkg.getName();
 		} else {
 			return null;
 		}
@@ -59,11 +58,7 @@ public class PackageContext {
 
 	public String versionInfo() {
 		if (pkg != null) {
-			try {
-				return pkg.getVersionInfo();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package version: "+e.getMessage();
-			}
+			return pkg.getVersionInfo();
 		} else {
 			return null;
 		}
@@ -71,11 +66,7 @@ public class PackageContext {
 	
 	public String downloadLocation() {
 		if (pkg != null) {
-			try {
-				return pkg.getDownloadUrl();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package download URL: "+e.getMessage();
-			}
+			return pkg.getDownloadLocation();
 		} else {
 			return null;
 		}
@@ -83,11 +74,7 @@ public class PackageContext {
 	
 	public String summary() {
 		if (pkg != null) {
-			try {
-				return pkg.getShortDescription();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package summary: "+e.getMessage();
-			}
+			return pkg.getSummary();
 		} else {
 			return null;
 		}
@@ -95,11 +82,7 @@ public class PackageContext {
 	
 	public String sourceInfo() {
 		if (pkg != null) {
-			try {
-				return pkg.getSourceInfo();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package source info: "+e.getMessage();
-			}
+			return pkg.getSourceInfo();
 		} else {
 			return null;
 		}
@@ -107,11 +90,7 @@ public class PackageContext {
 	
 	public String packageFileName() {
 		if (pkg != null) {
-			try {
-				return pkg.getFileName();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package file name: "+e.getMessage();
-			}
+			return pkg.getPackageFileName();
 		} else {
 			return null;
 		}
@@ -119,11 +98,7 @@ public class PackageContext {
 	
 	public String supplier() {
 		if (pkg != null) {
-			try {
-				return pkg.getSupplier();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package supplier: "+e.getMessage();
-			}
+			return pkg.getSupplier();
 		} else {
 			return null;
 		}
@@ -131,11 +106,7 @@ public class PackageContext {
 	
 	public String originator() {
 		if (pkg != null) {
-			try {
-				return pkg.getOriginator();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package originator: "+e.getMessage();
-			}
+			return pkg.getOriginator();
 		} else {
 			return null;
 		}
@@ -143,11 +114,7 @@ public class PackageContext {
 	
 	public String description() {
 		if (pkg != null) {
-			try {
-				return pkg.getDescription();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package description: "+e.getMessage();
-			}
+			return pkg.getDescription();
 		} else {
 			return null;
 		}
@@ -159,7 +126,7 @@ public class PackageContext {
 		}
 		SpdxPackageVerificationCode verificationCode;
 		try {
-			verificationCode = pkg.getVerificationCode();
+			verificationCode = pkg.getPackageVerificationCode();
 			if (verificationCode == null) {
 				return null;
 			}
@@ -170,13 +137,24 @@ public class PackageContext {
 
 	}
 	
-	public String checksum() {
+	public List<String> checksum() {
 		if (pkg != null) {
+			ArrayList<String> retval = new ArrayList<String>();
+
 			try {
-				return "SHA1: "+pkg.getSha1();
+				Checksum[] checksums = pkg.getChecksums();
+				if (checksums == null || checksums.length > 0) {
+					return null;
+				}
+				for (int i = 0; i < checksums.length; i++) {
+					retval.add(Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(checksums[i].getAlgorithm())+
+							" "+checksums[i].getValue());
+				}
 			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package checksum: "+e.getMessage();
+				retval.add("Error getting SPDX Package checksum: "+e.getMessage());
 			}
+			Collections.sort(retval);
+			return retval;
 		} else {
 			return null;
 		}
@@ -184,11 +162,7 @@ public class PackageContext {
 	
 	public String copyrightText() {
 		if (pkg != null) {
-			try {
-				return pkg.getDeclaredCopyright();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package copyright: "+e.getMessage();
-			}
+			return pkg.getCopyrightText();
 		} else {
 			return null;
 		}
@@ -197,7 +171,7 @@ public class PackageContext {
 	public String licenseDeclared() {
 		if (pkg != null) {
 			try {
-				AnyLicenseInfo info = pkg.getDeclaredLicense();
+				AnyLicenseInfo info = pkg.getLicenseDeclared();
 				if (info != null) {
 					return info.toString();
 				} else {
@@ -213,15 +187,11 @@ public class PackageContext {
 	
 	public String licenseConcluded() {
 		if (pkg != null) {
-			try {
-				AnyLicenseInfo info = pkg.getConcludedLicenses();
-				if (info != null) {
-					return info.toString();
-				} else {
-					return null;
-				}
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package concluded license: "+e.getMessage();
+			AnyLicenseInfo info = pkg.getLicenseConcluded();
+			if (info != null) {
+				return info.toString();
+			} else {
+				return null;
 			}
 		} else {
 			return null;
@@ -230,11 +200,7 @@ public class PackageContext {
 	
 	public String licenseComments() {
 		if (pkg != null) {
-			try {
-				return pkg.getLicenseComment();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package license comments: "+e.getMessage();
-			}
+			return pkg.getLicenseComment();
 		} else {
 			return null;
 		}
@@ -242,11 +208,7 @@ public class PackageContext {
 	
 	public String homePage() {
 		if (pkg != null) {
-			try {
-				return pkg.getHomePage();
-			} catch (InvalidSPDXAnalysisException e) {
-				return "Error getting SPDX Package hone page: "+e.getMessage();
-			}
+			return pkg.getHomepage();
 		} else {
 			return  null;
 		}
@@ -256,11 +218,7 @@ public class PackageContext {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (pkg != null) {
 			AnyLicenseInfo[] licenseInfos = null;
-			try {
-				licenseInfos = pkg.getLicenseInfoFromFiles();
-			} catch (InvalidSPDXAnalysisException e) {
-				retval.add("Error geting license information from files: "+e.getMessage());
-			}
+			licenseInfos = pkg.getLicenseInfoFromFiles();
 			if (licenseInfos != null) {
 				for (int i = 0; i < licenseInfos.length; i++) {
 					retval.add(licenseInfos[i].toString());
@@ -271,25 +229,40 @@ public class PackageContext {
 		return retval;
 	}
 	
-	public List<FileContext> hasFile() {
-		ArrayList<FileContext> retval = new ArrayList<FileContext>();
+	public String spdxId() {
+		if (pkg == null) {
+			return null;
+		}
+		return pkg.getId();
+	}
+	
+	public List<ElementContext> hasFile() {
+		ArrayList<ElementContext> retval = new ArrayList<ElementContext>();
 		if (pkg != null) {
-			SPDXFile[] files;
+			SpdxFile[] files;
 			try {
 				files = pkg.getFiles();
 				if (files != null) {
 					for (int i = 0; i < files.length; i++) {
-						retval.add(new FileContext(files[i]));
+						retval.add(new ElementContext(files[i], this.spdxIdToUrl));
 					}
 				}
 			} catch (InvalidSPDXAnalysisException e) {
-				retval.add(new FileContext(e));
+				retval.add(new ElementContext(e));
 			}
 		}
-		Collections.sort(retval, new Comparator<FileContext>() {
+		Collections.sort(retval, new Comparator<ElementContext>() {
             @Override
-            public int compare(FileContext o1, FileContext o2) {
-                return o1.fileName().compareToIgnoreCase(o2.fileName());
+            public int compare(ElementContext o1, ElementContext o2) {
+                if (o1 == null || o1.getId() == null) {
+                	if (o2 != null && o2.getId() != null) {
+                		return 1;
+                	}
+                }
+                if (o2 == null || o2.getId() == null) {
+                	return -1;
+                }
+                return o1.getId().compareTo(o2.getId());
             }} );
 		return retval;
 	}

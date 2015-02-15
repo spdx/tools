@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
+<title>{{name}}</title>
+</head>
+<body>
+<h2>SPDX File Information for {{about}}</h2>
+{{#hasFile}}
+<h3 id="{{spdxId}}">File Name: {{fileName}}</h3>
+SPDXID: {{spdxId}}<br />
+<ul>
+{{#fileType}}
+<li>File Type: {{fileType}}</li>
+{{/fileType}}
+</ul>
+<h4>Checksums:</h4>
+<ul>
+{{#checksums}}
+<li>{{checksums}}</li>
+{{/checksums}}
+</ul>
+Concluded License:{{licenseConcluded}}<br />
+<h4>License Information from Files</h4>
+<ul>
+{{#licenseInfoInFile}}
+    <li>{{licenseInfoInFile}}</li>
+{{/licenseInfoInFile}}
+</ul>
+{{#licenseComments}}
+License Comments: {{licenseComments}}<br />
+{{/licenseComments}}
+Copyright Text: {{copyrightText}}<br />
+{{#artifactOf}}
+Artifact of Project: {{name}};
+{{#homepage}} 
+Artifact of Home Page: {{homepage}}; 
+{{/homepage}}
+Artifact of URI: {{ArtifactOfProjectURI}}<br />
+{{/artifactOf}}
+{{#comment}}
+File comment: {{comment}}<br />
+{{/comment}}
+{{#noticeText}}
+Notice Text: {{noticeText}}<br />
+{{/noticeText}}
+Contributors:<br />
+<ul>
+{{#contributors}}
+<li>{{contributors}}</li>
+{{/contributors}}
+</ul>
+Dependencies:<br />
+<ul>
+{{#fileDependencies}}
+<li>{{fileDependencies}}</li>
+{{/fileDependencies}}
+</ul>
+{{/hasFile}}
+</body>
+</html>

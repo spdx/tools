@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
+<title>{{name}}</title>
+</head>
+<body>
+<h2>SPDX Package Information for {{name}}</h2>
+SPDXID: {{spdxId}}<br />
+Version: {{versionInfo}}<br />
+File name: {{packageFileName}}<br />
+{{#supplier}}
+Supplier: {{supplier}}<br />
+{{/supplier}}
+{{#originator}}
+Originator: {{originator}}<br />
+{{/originator}}
+{{#downloadLocation}}
+Download Location: {{downloadLocation}}<br />
+{{/downloadLocation}}
+{{#packageVerificationCode}}
+<h3>Package Verification Code</h3>
+Value: {{packageVerificationCodeValue}}
+<h4>Skipped Files:</h4>
+<ul>
+    {{#packageVerificationCodeExcludedFile}}
+    <li>{{packageVerificationCodeExcludedFile}}</li>
+    {{/packageVerificationCodeExcludedFile}}
+</ul>
+{{/packageVerificationCode}}
+<ul>
+{{#checksum}}
+<li>Checksum: {{checksum}}</li>
+{{/checksum}}
+</ul>
+{{#homePage}}
+Home Page: {{homePage}}<br />
+{{/homePage}}
+{{#sourceInfo}}
+Source Information: {{sourceInfo}}<br />
+{{/sourceInfo}}
+Concluded License: {{licenseConcluded}}<br />
+<h3>License information from Files</h3>
+<ul>
+{{#licenseInfoFromFiles}}
+    <li>{{licenseInfoFromFiles}}</li>
+{{/licenseInfoFromFiles}}
+</ul>
+Declared License: {{licenseDeclared}}<br />
+{{#licenseComments}}
+License Comments: {{licenseComments}}
+{{/licenseComments}}
+Copyright Text: {{copyrightText}}<br />
+Summary: {{summary}}<br />
+<h3>Description</h3>
+{{description}}<br />
+<h3>Files</h3>
+<ul>
+{{#hasFile}}
+<li>File name: <a href="{{elementLink}}">{{name}}</a></li>
+{{/hasFile}}
+</ul>
+</body>
+</html>
