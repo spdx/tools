@@ -16,7 +16,7 @@
 */
 package org.spdx.html;
 
-import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.model.DoapProject;
 
 /**
  * Context for a DOAP Project reference
@@ -26,7 +26,7 @@ import org.spdx.rdfparser.DOAPProject;
 public class ProjectContext {
 
 	Exception error = null;
-	DOAPProject project = null;
+	DoapProject project = null;
 	
 	/**
 	 * @param error
@@ -38,7 +38,7 @@ public class ProjectContext {
 	/**
 	 * @param doapProject
 	 */
-	public ProjectContext(DOAPProject doapProject) {
+	public ProjectContext(DoapProject doapProject) {
 		this.project = doapProject;
 	}
 	

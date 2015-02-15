@@ -34,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public class Relationship extends RdfModelObject {
+public class Relationship extends RdfModelObject implements Comparable<Relationship> {
 	
 	static final Logger logger = Logger.getLogger(RdfModelObject.class);
 	
@@ -321,5 +321,45 @@ public class Relationship extends RdfModelObject {
 	public Relationship clone(HashMap<String, SpdxElement> clonedElementIds) {
 		return new Relationship(this.relatedSpdxElement.clone(clonedElementIds),
 				this.relationshipType, this.comment);
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Relationship o) {
+		if (o.getRelationshipType() == null) {
+			if (this.relationshipType != null) {
+				return 1;
+			}
+		}
+		if (this.relationshipType == null) {
+			return -1;
+		}
+		int retval = this.relationshipType.toString().compareTo(o.getRelationshipType().toString());
+		if (retval != 0) {
+			return retval;
+		}
+		SpdxElement compareRelatedElement = o.getRelatedSpdxElement();
+		if (compareRelatedElement == null || compareRelatedElement.getId() == null) {
+			if (this.relatedSpdxElement != null && this.relatedSpdxElement.getId() != null) {
+				return 1;
+			}
+		}
+		if (this.relatedSpdxElement == null || this.relatedSpdxElement.getId() == null) {
+			return -1;
+		}
+		retval = this.relatedSpdxElement.getId().compareTo(compareRelatedElement.getId());
+		if (retval != 0) {
+			return retval;
+		}
+		if (o.getComment() == null) {
+			if (this.comment != null) {
+				return 1;
+			}
+		}
+		if (this.comment == null) {
+			return -1;
+		}
+		return this.comment.compareTo(o.getComment());
 	}
 }

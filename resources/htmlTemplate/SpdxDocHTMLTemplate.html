@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
+<title>{{name}}</title>
+</head>
+<body>
+<h2>SPDX Document Information</h2>
+<h3>Document Name</h3>
+{{documentName}}
+<h3>Document URI</h3>
+{{documentUri}}
+<h3>SPDX Version</h3>
+{{specVersion}}
+<h3>Data License</h3>
+{{dataLicense}}
+<h2>Creator Information</h2>
+{{#creationInfo}}
+	<ul>
+	{{#creator}}
+	<li>Creator: {{creator}}</li>
+	{{/creator}}
+	</ul>
+Created on: {{created}}<br />
+{{#comment}}
+Creator comment: {{comment}}
+{{/comment}} <br />
+{{#licenseListVersion}}
+License List Version: {{licenseListVersion}}
+{{/licenseListVersion}} <br />
+{{/creationInfo}}
+{{#docComment}}
+Document Comment: {{docComment}}<br />
+{{/docComment}}
+<h2>Annotations</h2>
+{{#annotations}}
+Annotator: {{annotator}}<br />
+Comment: {{comment}}<br />
+Date: {{date}}<br />
+Annotation Type: {{annotationTypeTag}}<br />
+<br />
+{{/annotations}}
+{{^annotations}}No annotations<br />{{/annotations}}
+<h2>Document Relationships</h2>
+<ul>
+{{#relationships}}
+<li>{{type}}:<a href="{{elementLink}}">{{relatedElementId}}</a>{{#comment}} ({{comment}}){{/comment}}</li>
+{{/relationships}}
+</ul>
+{{^relationships}}
+No relationships<br />
+{{/relationships}}
+<h2>External Document References</h2>
+<ul>
+{{#externalDocRelationships}}
+<li>{{externalDocumentId}} {{spdxDocumentNamespace}} {{checksum}}</li>
+{{/externalDocRelationships}}
+</ul>
+{{^externalDocRelationships}}
+No External Document Relationships
+{{/externalDocRelationships}}
+<h2>Described Packages</h2>
+<ul>
+{{#describesPackage}}
+<li>Name:<a href="{{elementLink}}">{{name}}</a></li>
+{{/describesPackage}}
+</ul>
+<h2>Described Files</h2>
+<ul>
+{{#describesFile}}
+<li>File name: <a href="{{elementLink}}">{{name}}</a></li>
+{{/describesFile}}
+</ul>
+<h2>Extracted License Information</h2>
+<ul>
+{{#hasExtractedLicensingInfo}}
+<li><a href="{{licenseLink}}">{{licenseId}}</a></li>
+{{/hasExtractedLicensingInfo}}
+</ul>
+</body>
+</html>

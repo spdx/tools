@@ -43,7 +43,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public class ExternalDocumentRef extends RdfModelObject {
+public class ExternalDocumentRef extends RdfModelObject implements Comparable<ExternalDocumentRef> {
 
 	static final Logger logger = Logger.getLogger(RdfModelObject.class.getClass());
 	/**
@@ -306,5 +306,53 @@ public class ExternalDocumentRef extends RdfModelObject {
 		this.externalDocumentId = externalDocumentId;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID, externalDocumentId);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ExternalDocumentRef o) {
+		if (o.getExternalDocumentId() == null) {
+			if (this.externalDocumentId != null) {
+				return 1;
+			}
+		}
+		if (this.externalDocumentId == null) {
+			return -1;
+		}
+		int retval = this.externalDocumentId.compareTo(o.getExternalDocumentId());
+		if (retval != 0) {
+			return retval;
+		}
+		if (o.getSpdxDocumentNamespace() == null) {
+			if (this.spdxDocumentNamespace != null) {
+				return 1;
+			}
+		}
+		if (this.spdxDocumentNamespace == null) {
+			return -1;
+		}
+		retval = this.spdxDocumentNamespace.compareTo(o.getSpdxDocumentNamespace());
+		if (retval != 0) {
+			return retval;
+		}
+		try {
+			if (o.getChecksum() == null || o.getChecksum().getValue() == null) {
+				if (this.checksum != null && this.checksum.getValue() != null) {
+					return 1;
+				}
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			// do nothing
+		}
+		if (this.checksum == null || this.checksum.getValue() == null) {
+			return -1;
+		}
+		try {
+			return (this.checksum.getValue().compareTo(o.getChecksum().getValue()));
+		} catch (InvalidSPDXAnalysisException e) {
+			return 0;
+		}
 	}
 }

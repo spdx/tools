@@ -18,11 +18,14 @@ package org.spdx.html;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import org.spdx.rdfparser.DOAPProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.DoapProject;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 /**
@@ -33,14 +36,14 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
  */
 public class FileContext {
 	
-	SPDXFile spdxFile = null;
+	SpdxFile spdxFile = null;
 	Exception error = null;
 
 	/**
-	 * @param spdxFile
+	 * @param SpdxFile
 	 */
-	public FileContext(SPDXFile spdxFile) {
-		this.spdxFile = spdxFile;
+	public FileContext(SpdxFile SpdxFile) {
+		this.spdxFile = SpdxFile;
 	}
 
 	/**
@@ -61,14 +64,50 @@ public class FileContext {
 		}
 	}
 	
-	public String fileType() {
+	public String spdxId() {
 		if (spdxFile == null && error != null) {
 			return "Error getting SPDX file information: "+error.getMessage();
 		}
-		if (spdxFile != null) {
-			return spdxFile.getType();
-		} else {
+		return spdxFile.getId();
+	}
+	
+	public List<String> checksums() {
+		if (spdxFile == null && error != null) {
+			ArrayList<String> retval = new ArrayList<String>();
+			retval.add("Error getting SPDX file information: "+error.getMessage());
+			return retval;
+		}
+		Checksum[] fileChecksums = this.spdxFile.getChecksums();
+		if (fileChecksums == null || fileChecksums.length ==0) {
 			return null;
+		}
+		ArrayList<String> retval = new ArrayList<String>();
+		for (int i = 0; i < fileChecksums.length; i++) {
+			retval.add(Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(fileChecksums[i].getAlgorithm())+
+					" "+fileChecksums[i].getValue());
+		}
+		Collections.sort(retval);
+		return retval;
+	}
+	
+	public List<String> fileType() {
+		if (spdxFile == null && error != null) {
+			ArrayList<String> retval = new ArrayList<String>();
+			retval.add("Error getting SPDX file information: "+error.getMessage());
+			return retval;
+		} else {
+			if (spdxFile != null && spdxFile.getFileTypes() != null && 
+					spdxFile.getFileTypes().length > 0) {	
+				ArrayList<String> retval = new ArrayList<String>();
+				FileType[] fileTypes = spdxFile.getFileTypes();
+				for (int i = 0; i < fileTypes.length; i++) {
+					retval.add(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]));
+				}
+				Collections.sort(retval);
+				return retval;
+			} else {
+				return null;
+			}
 		}
 	}
 	
@@ -88,7 +127,7 @@ public class FileContext {
 			return "Error getting SPDX file information: "+error.getMessage();
 		}
 		if (spdxFile != null) {
-			return spdxFile.getConcludedLicenses().toString();
+			return spdxFile.getLicenseConcluded().toString();
 		} else {
 			return null;
 		}
@@ -99,7 +138,7 @@ public class FileContext {
 			return "Error getting SPDX file information: "+error.getMessage();
 		}
 		if (spdxFile != null) {
-			return spdxFile.getLicenseComments();
+			return spdxFile.getLicenseComment();
 		} else {
 			return null;
 		}
@@ -111,7 +150,7 @@ public class FileContext {
 			retval.add("Error getting SPDX file information: "+error.getMessage());
 		}
 		if (spdxFile != null) {
-			AnyLicenseInfo[] licenseInfos = spdxFile.getSeenLicenses();
+			AnyLicenseInfo[] licenseInfos = spdxFile.getLicenseInfoFromFiles();
 			for (int i = 0; i < licenseInfos.length; i++) {
 				retval.add(licenseInfos[i].toString());
 			}
@@ -124,7 +163,7 @@ public class FileContext {
 			return "Error getting SPDX file information: "+error.getMessage();
 		}
 		if (spdxFile != null) {
-			return spdxFile.getCopyright();
+			return spdxFile.getCopyrightText();
 		} else {
 			return null;
 		}
@@ -136,7 +175,7 @@ public class FileContext {
 			retval.add(new ProjectContext(error));
 		}
 		if (spdxFile != null) {
-			DOAPProject[] projects = spdxFile.getArtifactOf();
+			DoapProject[] projects = spdxFile.getArtifactOf();
 			if (projects != null) {
 				for (int i = 0; i < projects.length; i++) {
 					retval.add(new ProjectContext(projects[i]));
@@ -163,18 +202,19 @@ public class FileContext {
 	}
 	
 	public List<String> contributors() {
-		if (spdxFile == null || spdxFile.getContributors() == null) {
+		if (spdxFile == null || spdxFile.getFileContributors() == null) {
 			return null;
 		}
-		return Arrays.asList(spdxFile.getContributors());
+		return Arrays.asList(spdxFile.getFileContributors());
 	}
 	
 	public List<String> fileDependencies() {
-		if (spdxFile == null || spdxFile.getFileDependencies() == null) {
+		if (spdxFile == null || spdxFile.getFileContributors() == null) {
 			return null;
 		}
 		ArrayList<String> retval = new ArrayList<String>();
-		SPDXFile[] dep = this.spdxFile.getFileDependencies();
+		@SuppressWarnings("deprecation")
+		SpdxFile[] dep = this.spdxFile.getFileDependencies();
 		for (int i = 0; i < dep.length; i++) {
 			retval.add(dep[i].getName());
 		}

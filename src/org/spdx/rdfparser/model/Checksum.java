@@ -279,4 +279,13 @@ public class Checksum extends RdfModelObject {
 		return (RdfModelHelper.equalsConsideringNull(this.algorithm, cksum.getAlgorithm()) &&
 				RdfModelHelper.equalsConsideringNull(this.checksumValue, cksum.getValue()));
 	}
+	
+	@Override
+	public String toString() {
+		if (this.algorithm == null || this.checksumValue == null) {
+			return "";
+		} else {
+			return (CHECKSUM_ALGORITHM_TO_TAG.get(this.algorithm)+" "+this.checksumValue);
+		}
+	}
 }
