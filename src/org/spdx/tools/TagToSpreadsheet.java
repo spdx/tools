@@ -24,18 +24,13 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXDocument;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
-import org.spdx.tag.BuildLegacyDocument;
+import org.spdx.tag.BuildDocument;
 import org.spdx.tag.CommonCode;
 import org.spdx.tag.HandBuiltParser;
 import org.spdx.tag.NoCommentInputStream;
-import org.spdx.tag.TagValueLexer;
-import org.spdx.tag.TagValueParser;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 /**
  * Translates an tag-value file to a SPDX Spreadsheet format Usage:
  * TagToSpreadsheet spdxfile.spdx spreadsheetfile.xls where spdxfile.spdx is a
@@ -80,15 +75,13 @@ public class TagToSpreadsheet {
 			}
 			return;
 		}
-		SPDXDocument doc = null;
+		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
 		try {
 			// read the tag-value constants from a file
 			Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 			NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
 			HandBuiltParser parser = new HandBuiltParser(new DataInputStream(nci));
-			Model model = ModelFactory.createDefaultModel();
-			doc = new SPDXDocument(model);
-			parser.setBehavior(new BuildLegacyDocument(model, doc, constants));
+			parser.setBehavior(new BuildDocument(result, constants));
 			parser.data();
 		} catch (Exception e) {
 			System.err.println("Error creating SPDX Analysis: " + e);
@@ -96,7 +89,7 @@ public class TagToSpreadsheet {
 		SPDXSpreadsheet ss = null;
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
-			RdfToSpreadsheet.copyRdfXmlToSpreadsheet(doc, ss);
+			RdfToSpreadsheet.copyRdfXmlToSpreadsheet(result[0].getSpdxDocument(), ss);
 		} catch (SpreadsheetException e) {
 			System.out.println("Error opening or writing to spreadsheet: "
 					+ e.getMessage());

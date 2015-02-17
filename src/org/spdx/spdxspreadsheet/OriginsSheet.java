@@ -186,5 +186,13 @@ public abstract class OriginsSheet extends AbstractSheet {
 	/**
 	 * @param licenseVersion
 	 */
-	public abstract void setLicenseListVersion(String licenseVersion);	
+	public abstract void setLicenseListVersion(String licenseVersion);
+
+	/**
+	 * @return
+	 */
+	public String getNamespace() {
+		// TODO - Implement
+		return null;
+	}	
 }

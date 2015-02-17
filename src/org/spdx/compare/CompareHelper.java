@@ -16,11 +16,14 @@
 */
 package org.spdx.compare;
 
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 
 /**
  * @author Gary
@@ -172,4 +175,44 @@ public class CompareHelper {
 		return sb.toString();
 	}
 
+	/**
+	 * @param fileTypes
+	 * @return
+	 */
+	public static String fileTypesToString(FileType[] fileTypes) {
+		if (fileTypes == null || fileTypes.length == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[0]));
+		for (int i = 1;i < fileTypes.length; i++) {
+			sb.append(", ");
+			sb.append(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * @param typeStr
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static FileType[] parseFileTypeString(String typeStr) throws InvalidSPDXAnalysisException {
+		if (typeStr == null || typeStr.trim().isEmpty()) {
+			return new FileType[0];
+		}
+		String[] fileTypeStrs = typeStr.split(",");
+		FileType[] retval = new FileType[fileTypeStrs.length];
+		for (int i = 0; i < fileTypeStrs.length; i++) {
+			fileTypeStrs[i] = fileTypeStrs[i].trim();
+			if (fileTypeStrs[i].endsWith(",")) {
+				fileTypeStrs[i] = fileTypeStrs[i].substring(0, fileTypeStrs[i].length()-1);
+				fileTypeStrs[i] = fileTypeStrs[i].trim();
+			}
+			retval[i] = SpdxFile.TAG_TO_FILE_TYPE.get(fileTypeStrs[i]);
+			if (retval[i] == null) {
+				throw(new InvalidSPDXAnalysisException("Unrecognized file type "+fileTypeStrs[i]));
+			}
+		}
+		return retval;
+	}
 }

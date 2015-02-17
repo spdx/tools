@@ -21,7 +21,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -109,17 +109,18 @@ public abstract class PerFileSheet extends AbstractSheet {
 	}
 	
 	/**
-	 * Add information about a specific SPDX file to the PerFileSheet
-	 * @param fileInfo
+	 * Add the file to the spreadsheet
+	 * @param file
+	 * @param pkgIds string containing the package ID's which contain this file
 	 */
-	public abstract void add(SPDXFile fileInfo);
-
+	public abstract void add(SpdxFile file, String pkgIds);
+	
 	/**
 	 * Get the file information for a row in the PerFileSheet
 	 * @param rowNum
 	 * @return
 	 */
-	public abstract SPDXFile getFileInfo(int rowNum) throws SpreadsheetException;
+	public abstract SpdxFile getFileInfo(int rowNum) throws SpreadsheetException;
 
 	/**	
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name
@@ -130,5 +131,16 @@ public abstract class PerFileSheet extends AbstractSheet {
 		//NOTE: This needs to be updated the the most current version
 		PerFileSheetV1d2.create(wb, perFileSheetName);
 	}
+
+	/**
+	 * @param row
+	 * @return
+	 */
+	public String[] getPackageIds(int row) {
+		// TODO Make abstract and implement
+		return null;
+	}
+
+
 
 }

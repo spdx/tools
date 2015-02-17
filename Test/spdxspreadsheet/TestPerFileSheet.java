@@ -23,10 +23,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.DOAPProject;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.DoapProject;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
@@ -173,10 +177,11 @@ public class TestPerFileSheet {
 
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheetV09d3#add(org.spdx.rdfparser.SPDXFile)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheetV09d3#add(org.spdx.rdfparser.SpdxFile)}.
 	 * @throws SpreadsheetException 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testAddAndGet() throws SpreadsheetException, InvalidSPDXAnalysisException {
 		Workbook wb = new HSSFWorkbook();
@@ -184,47 +189,59 @@ public class TestPerFileSheet {
 		PerFileSheet fileInfoSheet = PerFileSheet.openVersion(wb, "File Info", SPDXSpreadsheet.CURRENT_VERSION);
 		AnyLicenseInfo[] testLicenses1 = new AnyLicenseInfo[] {COMPLEX_LICENSE};
 		AnyLicenseInfo[] testLicenses2 = new AnyLicenseInfo[] {NON_STD_LICENSES[0]};
-		DOAPProject[] testProject2 = new DOAPProject[] {new DOAPProject("artifactof 2", "home page2")};
-		DOAPProject[] testProject3 = new DOAPProject[] {new DOAPProject("artifactof 3", "home page3"), 
-				new DOAPProject("artifactof 4", "home page4")};
+		DoapProject[] testProject2 = new DoapProject[] {new DoapProject("artifactof 2", "home page2")};
+		DoapProject[] testProject3 = new DoapProject[] {new DoapProject("artifactof 3", "home page3"), 
+				new DoapProject("artifactof 4", "home page4")};
 		String fileComment1 = "comment 1";
 		String[] contributors1 = new String[] {"Contrib1", "Contrib2"};
 		String noticeText1 = "notice 1";
-		SPDXFile testFile1 = new SPDXFile("FileName1", "fileType1", "sha1", COMPLEX_LICENSE, testLicenses2, 
-				"license comments 1", "copyright (c) 1", testProject2, fileComment1,
-				new SPDXFile[0], contributors1, noticeText1);
-		SPDXFile testFile2 = new SPDXFile("FileName2", "fileType2", "sha12", NON_STD_LICENSES[0], testLicenses1, 
-				"license comments2", "copyright (c) 12", testProject3);
-		SPDXFile testFile3 = new SPDXFile("FileName3", "fileType3", "sha13", NON_STD_LICENSES[0], testLicenses1, 
-				"license comments3", "copyright (c) 123", new DOAPProject[0], "Comment3",
-				new SPDXFile[] {testFile1, testFile2}, new String[] {"c1"}, "Notice");
-		fileInfoSheet.add(testFile1);
-		fileInfoSheet.add(testFile3);
-		fileInfoSheet.add(testFile2);
-		SPDXFile result1 = fileInfoSheet.getFileInfo(1);
-		SPDXFile result3 = fileInfoSheet.getFileInfo(2);
-		SPDXFile result2 = fileInfoSheet.getFileInfo(3);
-		SPDXFile result4 = fileInfoSheet.getFileInfo(4);
-		compareSPDXFile(testFile1, result1);
-		compareSPDXFile(testFile2, result2);
-		compareSPDXFile(testFile3, result3);
+		SpdxFile testFile1 = new SpdxFile("FileName1", fileComment1, new Annotation[0],
+				new Relationship[0], COMPLEX_LICENSE,
+				testLicenses2, "copyright (c) 1",
+				"license comments 1", new FileType[] {FileType.fileType_binary} ,
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "sha1")},
+				contributors1, noticeText1, testProject2);
+		SpdxFile testFile2 = new SpdxFile("FileName2", fileComment1, new Annotation[0],
+				new Relationship[0], NON_STD_LICENSES[0],
+				testLicenses1,  "copyright (c) 12",
+				"license comments2", new FileType[] {FileType.fileType_source} ,
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "sha12")},
+				contributors1, noticeText1, testProject3);
+		SpdxFile testFile3 = new SpdxFile("FileName3",  "Comment3", new Annotation[0],
+				new Relationship[0], NON_STD_LICENSES[0],
+				testLicenses1, "copyright (c) 123",
+				"license comments3", new FileType[] {FileType.fileType_other} ,
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "sha13")},
+				new String[] {"c1"}, "Notice", new DoapProject[0]);
+		testFile3.setFileDependencies(new SpdxFile[] {testFile1, testFile2});
+		fileInfoSheet.add(testFile1, "");
+		fileInfoSheet.add(testFile3, "");
+		fileInfoSheet.add(testFile2, "");
+		SpdxFile result1 = fileInfoSheet.getFileInfo(1);
+		SpdxFile result3 = fileInfoSheet.getFileInfo(2);
+		SpdxFile result2 = fileInfoSheet.getFileInfo(3);
+		SpdxFile result4 = fileInfoSheet.getFileInfo(4);
+		compareSpdxFile(testFile1, result1);
+		compareSpdxFile(testFile2, result2);
+		compareSpdxFile(testFile3, result3);
 		if (result4 != null) {
 			fail("expected null");
 		}
 	}
 
-	private void compareSPDXFile(SPDXFile testFile, SPDXFile result) throws InvalidSPDXAnalysisException {
-		assertEquals(testFile.getConcludedLicenses(), result.getConcludedLicenses());
-		compareLicenseDeclarations(testFile.getSeenLicenses(), result.getSeenLicenses());
+	@SuppressWarnings("deprecation")
+	private void compareSpdxFile(SpdxFile testFile, SpdxFile result) throws InvalidSPDXAnalysisException {
+		assertEquals(testFile.getLicenseConcluded(), result.getLicenseConcluded());
+		compareLicenseDeclarations(testFile.getLicenseInfoFromFiles(), result.getLicenseInfoFromFiles());
 		compareProjects(testFile.getArtifactOf(), result.getArtifactOf());
-		assertEquals(testFile.getCopyright(), result.getCopyright());
-		assertEquals(testFile.getLicenseComments(), result.getLicenseComments());
+		assertEquals(testFile.getCopyrightText(), result.getCopyrightText());
+		assertEquals(testFile.getLicenseComment(), result.getLicenseComment());
 		assertEquals(testFile.getName(), result.getName());
 		assertEquals(testFile.getSha1(), result.getSha1());
-		assertEquals(testFile.getType(), result.getType());
+		assertEquals(testFile.getFileTypes()[0], result.getFileTypes()[0]);
 		assertEquals(testFile.getNoticeText(), result.getNoticeText());
-		compareStrings(testFile.getContributors(), result.getContributors());
-		compareSPDXFiles(testFile.getFileDependencies(), result.getFileDependencies());
+		compareStrings(testFile.getFileContributors(), result.getFileContributors());
+		compareSpdxFiles(testFile.getFileDependencies(), result.getFileDependencies());
 	}
 	
 	/**
@@ -232,15 +249,15 @@ public class TestPerFileSheet {
 	 * @param files2
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void compareSPDXFiles(SPDXFile[] files1,
-			SPDXFile[] files2) throws InvalidSPDXAnalysisException {
+	private void compareSpdxFiles(SpdxFile[] files1,
+			SpdxFile[] files2) throws InvalidSPDXAnalysisException {
 		assertEquals(files1.length, files2.length);
 		for (int i = 0; i < files1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < files2.length; j++) {
 				if (files1[i].getName().equals(files2[j].getName())) {
 					found = true;
-					compareSPDXFile(files1[i], files2[j]);
+					compareSpdxFile(files1[i], files2[j]);
 					break;
 				}
 			}
@@ -269,8 +286,8 @@ public class TestPerFileSheet {
 	 * @param artifactOf
 	 * @param artifactOf2
 	 */
-	private void compareProjects(DOAPProject[] projects,
-			DOAPProject[] result) {
+	private void compareProjects(DoapProject[] projects,
+			DoapProject[] result) {
 		assertEquals(projects.length, result.length);
 		for (int i = 0; i < projects.length; i++) {
 			boolean found = false;

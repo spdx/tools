@@ -24,18 +24,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
-import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.model.SpdxDocument;
-import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
@@ -47,9 +47,6 @@ import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.ReviewersSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
  * Converts a spreadsheet to an SPDX RDF Analysis file
@@ -146,12 +143,16 @@ public class SpreadsheetToRDF {
 	}
 	
 	public static SpdxDocument copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss) throws SpreadsheetException, InvalidSPDXAnalysisException {
-		// need to create a unique URL
-		// Use the download URL + "#SPDXANALYSIS"
-		//TODO Replace with the unique ID for the SPDX document
-		String pkgUrl = ss.getPackageInfoSheet().getPackageInfo(1).getUrl();
+		String pkgUrl = ss.getOriginsSheet().getNamespace() + "#" + SpdxRdfConstants.SPDX_DOCUMENT_ID;
+		if (!SpdxVerificationHelper.isValidUri(pkgUrl)) {
+			// need to create a unique URL
+			// Use the download URL + "#SPDXANALYSIS"
+			logger.warn("Missing or invalid document namespace.  Using download location URL for the document namespace");
+			pkgUrl = ss.getPackageInfoSheet().getPackageInfo(1).getUrl();
+		}
 		if (!SpdxVerificationHelper.isValidUri(pkgUrl)) {
 			// Since the download location is not valid, replace it with a spdx.org/tempspdxuri
+			logger.warn("Missing or invalid download location.  Using temporary namespace http://spdx.org/tempspdxuri");
 			pkgUrl = "http://spdx.org/tempspdxuri";
 		}
 		SpdxDocumentContainer container = new SpdxDocumentContainer(pkgUrl);
@@ -159,15 +160,16 @@ public class SpreadsheetToRDF {
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
 		// note - non std licenses must be added first so that the text is available
-		//TODO: Need to redo these with a new license format
-//		copyPackageInfo(ss.getPackageInfoSheet(), analysis.getSpdxPackage());
-//		copyPerFileInfo(ss.getPerFileSheet(), analysis.getSpdxPackage());
-//		copyReviewerInfo(ss.getReviewersSheet(), analysis);
+		HashMap<String, SpdxPackage> pkgIdToPackage = copyPackageInfo(ss.getPackageInfoSheet(), analysis);
+		// note - packages need to be added before the files so that the files can be added to the packages
+		copyPerFileInfo(ss.getPerFileSheet(), analysis, pkgIdToPackage);
+		copyReviewerInfo(ss.getReviewersSheet(), analysis);
 		return analysis;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static void copyReviewerInfo(ReviewersSheet reviewersSheet,
-			SPDXDocument analysis) throws InvalidSPDXAnalysisException {
+			SpdxDocument analysis) throws InvalidSPDXAnalysisException {
 		int numReviewers = reviewersSheet.getNumDataRows();
 		int firstRow = reviewersSheet.getFirstDataRow();
 		SPDXReview[] reviewers = new SPDXReview[numReviewers];
@@ -179,11 +181,25 @@ public class SpreadsheetToRDF {
 	}
 
 	private static void copyPerFileInfo(PerFileSheet perFileSheet,
-			SPDXPackage spdxPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
+			SpdxDocument analysis, HashMap<String, SpdxPackage> pkgIdToPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		int firstRow = perFileSheet.getFirstDataRow();
 		int numFiles = perFileSheet.getNumDataRows();
 		for (int i = 0; i < numFiles; i++) {
-			spdxPackage.addFile(perFileSheet.getFileInfo(firstRow+i));
+			SpdxFile file = perFileSheet.getFileInfo(firstRow+i);
+			String[] pkgIds = perFileSheet.getPackageIds(firstRow+i);
+			boolean fileAdded = false;
+			for (int j = 0;j < pkgIds.length; j++) {
+				SpdxPackage pkg = pkgIdToPackage.get(pkgIds[j]);
+				if (pkg != null) {
+					pkg.addFile(file);
+					fileAdded = true;
+				} else {
+					logger.warn("Can not add file "+file.getName()+" to package "+pkgIds[j]);
+				}
+			}
+			if (!fileAdded) {
+				analysis.addItem(file);
+			}
 		}
 	}
 
@@ -202,37 +218,15 @@ public class SpreadsheetToRDF {
 		analysis.setExtractedLicenseInfos(nonStdLicenses);
 	}
 
-	private static void copyPackageInfo(PackageInfoSheet packageInfoSheet,
-			SPDXPackage spdxPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
-		SPDXPackageInfo info = packageInfoSheet.getPackageInfo(packageInfoSheet.getFirstDataRow());
-		if (info == null) {
-			throw(new InvalidSPDXAnalysisException("No package info in the spreadsheet"));
+	private static HashMap<String, SpdxPackage> copyPackageInfo(PackageInfoSheet packageInfoSheet,
+			SpdxDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
+		SpdxPackage[] packages = packageInfoSheet.getPackages(packageInfoSheet.getFirstDataRow());
+		HashMap<String, SpdxPackage> pkgIdToPackage = new HashMap<String, SpdxPackage>();
+		for (int i = 0; i < packages.length; i++) {
+			pkgIdToPackage.put(packages[i].getId(), packages[i]);
+			//TODO figure out where we need to add these packages - considering relationshisps
 		}
-		spdxPackage.setDeclaredCopyright(info.getDeclaredCopyright());
-		spdxPackage.setDeclaredLicense(info.getDeclaredLicenses());
-		spdxPackage.setDeclaredName(info.getDeclaredName());
-		spdxPackage.setDescription(info.getDescription());
-		spdxPackage.setConcludedLicenses(info.getConcludedLicense());
-		spdxPackage.setLicenseInfoFromFiles(info.getLicensesFromFiles());
-		spdxPackage.setLicenseComment(info.getLicenseComments());
-		spdxPackage.setVerificationCode(info.getPackageVerification());
-		spdxPackage.setFileName(info.getFileName());
-		spdxPackage.setSha1(info.getSha1());
-		spdxPackage.setShortDescription(info.getShortDescription());
-		spdxPackage.setSourceInfo(info.getSourceInfo());
-		spdxPackage.setDownloadUrl(info.getUrl());
-		if (info.getVersionInfo() != null && !info.getVersionInfo().isEmpty()) {
-			spdxPackage.setVersionInfo(info.getVersionInfo());
-		}
-		if (info.getOriginator() != null && !info.getOriginator().isEmpty()) {
-			spdxPackage.setOriginator(info.getOriginator());
-		}
-		if (info.getSupplier() != null && !info.getSupplier().isEmpty()) {
-			spdxPackage.setSupplier(info.getSupplier());
-		}
-		if (info.getHomePage() != null && !info.getHomePage().isEmpty()) {
-			spdxPackage.setHomePage(info.getHomePage());
-		}
+		return pkgIdToPackage;
 	}
 
 	private static void copyOrigins(OriginsSheet originsSheet, SpdxDocument analysis) throws InvalidSPDXAnalysisException {
@@ -246,7 +240,7 @@ public class SpreadsheetToRDF {
 		analysis.setSpecVersion(specVersion);
 		String dataLicenseId = originsSheet.getDataLicense();
 		if (dataLicenseId == null || dataLicenseId.isEmpty() || dataLicenseId.equals(RdfToSpreadsheet.NOT_SUPPORTED_STRING)) {
-			if (specVersion.equals(SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION)) {
+			if (specVersion.equals(SpdxDocumentContainer.ONE_DOT_ZERO_SPDX_VERSION)) {
 				dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0;
 			} else {
 				dataLicenseId = SpdxRdfConstants.SPDX_DATA_LICENSE_ID;
