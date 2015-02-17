@@ -21,9 +21,11 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.DOAPProject;
+import org.spdx.compare.CompareHelper;
+import org.spdx.rdfparser.model.DoapProject;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
@@ -68,35 +70,36 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 		false, false, false, false, false, false, false};
 
 	
-	public void add(SPDXFile fileInfo) {
+	public void add(SpdxFile fileInfo, String packageIds) {
 		Row row = addRow();
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
 			// currently, this is restricted to only 0 or zero
-			DOAPProject project = fileInfo.getArtifactOf()[0];
+			DoapProject project = fileInfo.getArtifactOf()[0];
 			row.createCell(ARTIFACT_OF_PROJECT_COL).setCellValue(project.getName());
 			row.createCell(ARTIFACT_OF_HOMEPAGE_COL).setCellValue(project.getHomePage());
 			row.createCell(ARTIFACT_OF_PROJECT_URL_COL).setCellValue(project.getProjectUri());
 		}
-		if (fileInfo.getConcludedLicenses() != null) {
-			row.createCell(CONCLUDED_LIC_COL).setCellValue(fileInfo.getConcludedLicenses().toString());
+		if (fileInfo.getLicenseConcluded() != null) {
+			row.createCell(CONCLUDED_LIC_COL).setCellValue(fileInfo.getLicenseConcluded().toString());
 		}
 		row.createCell(FILE_NAME_COL).setCellValue(fileInfo.getName());
 		if (fileInfo.getSha1() != null && !fileInfo.getSha1().isEmpty()) {
 			row.createCell(SHA1_COL).setCellValue(fileInfo.getSha1());
 		}
-		row.createCell(FILE_TYPE_COL).setCellValue(fileInfo.getType());
-		if (fileInfo.getLicenseComments() != null && !fileInfo.getLicenseComments().isEmpty()) {
-			row.createCell(LIC_COMMENTS_COL).setCellValue(fileInfo.getLicenseComments());
+		row.createCell(FILE_TYPE_COL).setCellValue(
+				CompareHelper.fileTypesToString(fileInfo.getFileTypes()));
+		if (fileInfo.getLicenseComment() != null && !fileInfo.getLicenseComment().isEmpty()) {
+			row.createCell(LIC_COMMENTS_COL).setCellValue(fileInfo.getLicenseComment());
 		}
-		if (fileInfo.getCopyright() != null && !fileInfo.getCopyright().isEmpty()) {
-			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyright());
+		if (fileInfo.getCopyrightText() != null && !fileInfo.getCopyrightText().isEmpty()) {
+			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyrightText());
 		}
-		if (fileInfo.getSeenLicenses() != null && fileInfo.getSeenLicenses().length > 0) {
-			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheetV09d2.licensesToString(fileInfo.getSeenLicenses()));
+		if (fileInfo.getLicenseInfoFromFiles() != null && fileInfo.getLicenseInfoFromFiles().length > 0) {
+			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheetV09d2.licensesToString(fileInfo.getLicenseInfoFromFiles()));
 		}
 	}
 	
-	public SPDXFile getFileInfo(int rowNum) throws SpreadsheetException {
+	public SpdxFile getFileInfo(int rowNum) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -106,7 +109,13 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			throw(new SpreadsheetException(ver));
 		}
 		String name = row.getCell(FILE_NAME_COL).getStringCellValue();
-		String type = row.getCell(FILE_TYPE_COL).getStringCellValue();
+		String typeStr = row.getCell(FILE_TYPE_COL).getStringCellValue();
+		FileType[] types;
+		try {
+			types = CompareHelper.parseFileTypeString(typeStr);
+		} catch (InvalidSPDXAnalysisException e1) {
+			throw(new SpreadsheetException("Error converting file types: "+e1.getMessage()));
+		}
 		Cell sha1cell = row.getCell(SHA1_COL);
 		String sha1;
 		if (sha1cell != null) {
@@ -146,7 +155,7 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 		} else {
 			copyright = "";
 		}
-		DOAPProject[] artifactOf;
+		DoapProject[] artifactOf;
 		Cell artifactOfCell = row.getCell(ARTIFACT_OF_PROJECT_COL);
 		if (artifactOfCell != null && !artifactOfCell.getStringCellValue().isEmpty()) {
 			String projectName = artifactOfCell.getStringCellValue();
@@ -160,20 +169,24 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			if (uriCell != null) {
 				uri = uriCell.getStringCellValue();
 			}
-			DOAPProject project = new DOAPProject(projectName, homePage);
+			
+			DoapProject project = new DoapProject(projectName, homePage);
 			if (uri != null && !uri.isEmpty()) {
 				try {
-					project.setUri(uri);
+					project.setProjectUri(uri);
 				} catch (InvalidSPDXAnalysisException e) {
 					throw new SpreadsheetException("Error setting the URI for the artifact of");
 				}
 			}
-			artifactOf = new DOAPProject[] {project};
+			artifactOf = new DoapProject[] {project};
 		} else {
-			artifactOf = new DOAPProject[0];
+			artifactOf = new DoapProject[0];
 		}
-		return new SPDXFile(name, type, sha1, fileLicenses, 
-				seenLicenses, licenseComments, copyright, artifactOf);		
+		try {
+			return new SpdxFile(name, types, sha1, fileLicenses, seenLicenses, licenseComments, copyright, artifactOf, "");
+		} catch (InvalidSPDXAnalysisException e) {
+			throw(new SpreadsheetException("Error creating new SPDX file: "+e.getMessage()));
+		}	
 	}
 
 	/* (non-Javadoc)

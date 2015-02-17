@@ -22,21 +22,22 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
-import org.spdx.rdfparser.SPDXDocument;
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.SPDXFile;
-import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
@@ -83,9 +84,9 @@ public class RdfToSpreadsheet {
 			System.out.println("Spreadsheet file already exists - please specify a new file.");
 			return;
 		}
-		SPDXDocument doc = null;
+		SpdxDocument doc = null;
 		try {
-			doc = SPDXDocumentFactory.createLegacySpdxDocument(args[0]);
+			doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
 		} catch (InvalidSPDXAnalysisException ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
@@ -120,16 +121,17 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	public static void copyRdfXmlToSpreadsheet(SPDXDocument doc,
+	@SuppressWarnings("deprecation")
+	public static void copyRdfXmlToSpreadsheet(SpdxDocument doc,
 			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
 			System.out.println("Warning: No document to copy");
 			return;
 		}
 		copyOrigins(doc, ss.getOriginsSheet());
-		copyPackageInfo(doc.getSpdxPackage(), ss.getPackageInfoSheet());
+		HashMap<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(), ss.getPackageInfoSheet());
 		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
-		copyPerFileInfo(doc.getSpdxPackage().getFiles(), ss.getPerFileSheet());
+		copyPerFileInfo(doc.getDocumentContainer().findAllFiles(), ss.getPerFileSheet(), fileIdToPackageId);
 		copyReviewerInfo(doc.getReviewers(), ss.getReviewersSheet());
 	}
 
@@ -152,16 +154,12 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyPerFileInfo(SPDXFile[] files,
-			PerFileSheet perFileSheet) {            
-             /* Add files to a List */
-            List<SPDXFile> sortedFileList = new ArrayList<SPDXFile>();
-            /* Sort the SPDX files before printout */
-            sortedFileList = Arrays.asList(files);
-            Collections.sort(sortedFileList);
+	private static void copyPerFileInfo(List<SpdxFile> fileList,
+			PerFileSheet perFileSheet, HashMap<String, String> fileIdToPackageId) {            
+            Collections.sort(fileList);
             /* Print out sorted files */            
-		for (SPDXFile file : sortedFileList) {
-			perFileSheet.add(file);
+		for (SpdxFile file : fileList) {
+			perFileSheet.add(file, fileIdToPackageId.get(file.getId()));
 		}
 	}
 
@@ -175,23 +173,41 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static void copyPackageInfo(SPDXPackage spdxPackage,
+	private static HashMap<String, String> copyPackageInfo(List<SpdxPackage> packages,
 			PackageInfoSheet packageInfoSheet) throws InvalidSPDXAnalysisException {
-		SPDXPackageInfo pkgInfo = spdxPackage.getPackageInfo();
-		packageInfoSheet.add(pkgInfo);
+		HashMap<String, String> fileIdToPkgId = new HashMap<String, String>();
+		Collections.sort(packages);
+		Iterator<SpdxPackage> iter = packages.iterator();
+		while (iter.hasNext()) {
+			SpdxPackage pkg = iter.next();
+			String pkgId = pkg.getId();
+			SpdxFile[] files = pkg.getFiles();
+			for (int i = 0; i < files.length; i++) {
+				String fileId = files[i].getId();
+				String pkgIdsForFile = fileIdToPkgId.get(fileId);
+				if (pkgIdsForFile == null) {
+					pkgIdsForFile = pkgId;
+				} else {
+					pkgIdsForFile = pkgIdsForFile + ", " + pkgId;
+				}
+			}
+			packageInfoSheet.add(pkg);
+		}
+		return fileIdToPkgId;
 	}
 
-	private static void copyOrigins(SPDXDocument doc, OriginsSheet originsSheet) throws InvalidSPDXAnalysisException {
+	private static void copyOrigins(SpdxDocument doc, OriginsSheet originsSheet) throws InvalidSPDXAnalysisException {
+		//TODO Review and update for new spreasheet format
 		// SPDX Version
-		originsSheet.setSPDXVersion(doc.getSpdxVersion());
+		originsSheet.setSPDXVersion(doc.getSpecVersion());
 		// Created by
-		SPDXCreatorInformation creator = doc.getCreatorInfo();
+		SPDXCreatorInformation creator = doc.getCreationInfo();
 		String[] createdBys = creator.getCreators();
 		originsSheet.setCreatedBy(createdBys);
 		// Data license
-		SpdxListedLicense dataLicense = doc.getDataLicense();
-		if (dataLicense != null) {
-			originsSheet.setDataLicense(dataLicense.getLicenseId());
+		AnyLicenseInfo dataLicense = doc.getDataLicense();
+		if (dataLicense != null && (dataLicense instanceof SimpleLicensingInfo)) {
+			originsSheet.setDataLicense(((SimpleLicensingInfo)dataLicense).getLicenseId());
 		}
 		// Author Comments
 		String comments = creator.getComment();
@@ -206,12 +222,12 @@ public class RdfToSpreadsheet {
 			throw(new InvalidSPDXAnalysisException("Invalid created date - unable to parse"));
 		}
 		// Document comments
-		String docComment = doc.getDocumentComment();
+		String docComment = doc.getComment();
 		if (docComment != null) {
 			originsSheet.setDocumentComment(docComment);
 		}
 		// License List Version
-		String licenseListVersion = doc.getCreatorInfo().getLicenseListVersion();
+		String licenseListVersion = doc.getCreationInfo().getLicenseListVersion();
 		if (licenseListVersion != null) {
 			originsSheet.setLicenseListVersion(licenseListVersion);
 		}

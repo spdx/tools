@@ -23,9 +23,15 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.DOAPProject;
+import org.spdx.compare.CompareHelper;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXFile;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
@@ -76,12 +82,13 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	/**
 	 * Hashmap of the file name to SPDX file
 	 */
-	HashMap<String, SPDXFile> fileCache = new HashMap<String, SPDXFile>();
+	HashMap<String, SpdxFile> fileCache = new HashMap<String, SpdxFile>();
 	
-	public void add(SPDXFile fileInfo) {
+	@SuppressWarnings("deprecation")
+	public void add(SpdxFile fileInfo, String pkgId) {
 		Row row = addRow();
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
-			DOAPProject[] projects = fileInfo.getArtifactOf();
+			DoapProject[] projects = fileInfo.getArtifactOf();
 			String[] projectNames = new String[projects.length];
 			String[] projectHomePages = new String[projects.length];
 			String[] projectUrls = new String[projects.length];
@@ -106,31 +113,32 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 			row.createCell(ARTIFACT_OF_HOMEPAGE_COL).setCellValue(stringsToCsv(projectHomePages));
 			row.createCell(ARTIFACT_OF_PROJECT_URL_COL).setCellValue(stringsToCsv(projectUrls));
 		}
-		if (fileInfo.getConcludedLicenses() != null) {
-			row.createCell(CONCLUDED_LIC_COL).setCellValue(fileInfo.getConcludedLicenses().toString());
+		if (fileInfo.getLicenseConcluded() != null) {
+			row.createCell(CONCLUDED_LIC_COL).setCellValue(fileInfo.getLicenseConcluded().toString());
 		}
 		row.createCell(FILE_NAME_COL).setCellValue(fileInfo.getName());
 		if (fileInfo.getSha1() != null && !fileInfo.getSha1().isEmpty()) {
 			row.createCell(SHA1_COL).setCellValue(fileInfo.getSha1());
 		}
-		row.createCell(FILE_TYPE_COL).setCellValue(fileInfo.getType());
-		if (fileInfo.getLicenseComments() != null && !fileInfo.getLicenseComments().isEmpty()) {
-			row.createCell(LIC_COMMENTS_COL).setCellValue(fileInfo.getLicenseComments());
+		row.createCell(FILE_TYPE_COL).setCellValue(
+				CompareHelper.fileTypesToString(fileInfo.getFileTypes()));
+		if (fileInfo.getLicenseComment() != null && !fileInfo.getLicenseComment().isEmpty()) {
+			row.createCell(LIC_COMMENTS_COL).setCellValue(fileInfo.getLicenseComment());
 		}
-		if (fileInfo.getCopyright() != null && !fileInfo.getCopyright().isEmpty()) {
-			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyright());
+		if (fileInfo.getCopyrightText() != null && !fileInfo.getCopyrightText().isEmpty()) {
+			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyrightText());
 		}
-		if (fileInfo.getSeenLicenses() != null && fileInfo.getSeenLicenses().length > 0) {
-			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getSeenLicenses()));
+		if (fileInfo.getLicenseInfoFromFiles() != null && fileInfo.getLicenseInfoFromFiles().length > 0) {
+			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheet.licensesToString(fileInfo.getLicenseInfoFromFiles()));
 		}
 		if (fileInfo.getComment() != null && !fileInfo.getComment().isEmpty()) {
 			row.createCell(COMMENT_COL).setCellValue(fileInfo.getComment());
 		}
-		if (fileInfo.getContributors() != null && fileInfo.getContributors().length > 0) {
-			row.createCell(CONTRIBUTORS_COL).setCellValue(stringsToCsv(fileInfo.getContributors()));	
+		if (fileInfo.getFileContributors() != null && fileInfo.getFileContributors().length > 0) {
+			row.createCell(CONTRIBUTORS_COL).setCellValue(stringsToCsv(fileInfo.getFileContributors()));	
 		}
 		if (fileInfo.getFileDependencies() != null && fileInfo.getFileDependencies().length > 0) {
-			SPDXFile[] fileDependencies = fileInfo.getFileDependencies();
+			SpdxFile[] fileDependencies = fileInfo.getFileDependencies();
 			String[] fileDependencyNames = new String[fileDependencies.length];
 			for (int i = 0; i < fileDependencies.length; i++) {
 				fileDependencyNames[i] = fileDependencies[i].getName();
@@ -142,7 +150,8 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		}
 	}
 
-	public SPDXFile getFileInfo(int rowNum) throws SpreadsheetException {
+	@SuppressWarnings("deprecation")
+	public SpdxFile getFileInfo(int rowNum) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -157,7 +166,13 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 			return this.fileCache.get(name);
 		}
 		
-		String type = row.getCell(FILE_TYPE_COL).getStringCellValue();
+		String typeStr = row.getCell(FILE_TYPE_COL).getStringCellValue();
+		FileType[] types;
+		try {
+			types = CompareHelper.parseFileTypeString(typeStr);
+		} catch (InvalidSPDXAnalysisException e1) {
+			throw(new SpreadsheetException("Error converting file types: "+e1.getMessage()));
+		}
 		Cell sha1cell = row.getCell(SHA1_COL);
 		String sha1;
 		if (sha1cell != null) {
@@ -216,27 +231,27 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		}
 		int numProjects = projectNames.length;
 
-		DOAPProject[] projects = new DOAPProject[numProjects];
+		DoapProject[] projects = new DoapProject[numProjects];
 		for (int i = 0; i < numProjects; i++) {
 			String homePage = null;
 			if (projectHomePages.length > i) {
 				homePage = projectHomePages[i];
 			}
-			projects[i] = new DOAPProject(projectNames[i], homePage);
+			projects[i] = new DoapProject(projectNames[i], homePage);
 			if (projectUrls.length > i && !projectUrls[i].isEmpty()) {
 				try {
-					projects[i].setUri(projectUrls[i]);
+					projects[i].setProjectUri(projectUrls[i]);
 				} catch (InvalidSPDXAnalysisException e) {
 					throw new SpreadsheetException("Error setting the URI for the artifact of");
 				}
 			}			
 		}
 		
-		SPDXFile[] fileDependencies = new SPDXFile[0];
+		SpdxFile[] fileDependencies = new SpdxFile[0];
 		Cell fileDependencyCells = row.getCell(FILE_DEPENDENCIES_COL);
 		if (fileDependencyCells != null && !fileDependencyCells.getStringCellValue().isEmpty()) {
 			String[] fileDependencyNames = csvToStrings(fileDependencyCells.getStringCellValue());
-			fileDependencies = new SPDXFile[fileDependencyNames.length];
+			fileDependencies = new SpdxFile[fileDependencyNames.length];
 			for (int i = 0; i < fileDependencyNames.length; i++) {
 				fileDependencies[i] = findFileByName(fileDependencyNames[i].trim());
 			}
@@ -258,9 +273,17 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		if (commentCell != null) {
 			comment = commentCell.getStringCellValue();
 		}
-		SPDXFile retval = new SPDXFile(name, type, sha1, fileLicenses, 
-				seenLicenses, licenseComments, copyright, projects, comment, 
-				fileDependencies, contributors, noticeText);
+
+		SpdxFile retval;
+		try {
+			retval = new SpdxFile(name, comment, new Annotation[0], new Relationship[0], 
+					fileLicenses, seenLicenses, copyright, licenseComments, types, 
+					new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1)},
+					contributors, noticeText, projects);
+			retval.setFileDependencies(fileDependencies);
+		} catch (InvalidSPDXAnalysisException e) {
+			throw(new SpreadsheetException("Error creating new SPDX file: "+e.getMessage()));
+		}
 		this.fileCache.put(name, retval);
 		return retval;
 	}
@@ -271,7 +294,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	 * @return
 	 * @throws SpreadsheetException 
 	 */
-	public SPDXFile findFileByName(String fileName) throws SpreadsheetException {
+	public SpdxFile findFileByName(String fileName) throws SpreadsheetException {
 		if (this.fileCache.containsKey(fileName)) {
 			return this.fileCache.get(fileName);
 		}
