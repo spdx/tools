@@ -35,7 +35,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
  */
 public class SpdxLicenseInfoMergerTest {
 
-	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v1.2.rdf";
+	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v2.0.rdf";
 	File testFile;
 	/**
 	 * @throws java.lang.Exception
