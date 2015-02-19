@@ -19,7 +19,6 @@ package org.spdx.tools;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,12 +29,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.SPDXReview;
@@ -123,7 +119,7 @@ public class RdfToSpreadsheet {
 
 	@SuppressWarnings("deprecation")
 	public static void copyRdfXmlToSpreadsheet(SpdxDocument doc,
-			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException {
+			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException, SpreadsheetException {
 		if (doc == null) {
 			System.out.println("Warning: No document to copy");
 			return;
@@ -196,41 +192,8 @@ public class RdfToSpreadsheet {
 		return fileIdToPkgId;
 	}
 
-	private static void copyOrigins(SpdxDocument doc, OriginsSheet originsSheet) throws InvalidSPDXAnalysisException {
-		//TODO Review and update for new spreasheet format
-		// SPDX Version
-		originsSheet.setSPDXVersion(doc.getSpecVersion());
-		// Created by
-		SPDXCreatorInformation creator = doc.getCreationInfo();
-		String[] createdBys = creator.getCreators();
-		originsSheet.setCreatedBy(createdBys);
-		// Data license
-		AnyLicenseInfo dataLicense = doc.getDataLicense();
-		if (dataLicense != null && (dataLicense instanceof SimpleLicensingInfo)) {
-			originsSheet.setDataLicense(((SimpleLicensingInfo)dataLicense).getLicenseId());
-		}
-		// Author Comments
-		String comments = creator.getComment();
-		if (comments != null && !comments.isEmpty()) {
-			originsSheet.setAuthorComments(comments);
-		}
-		String created = creator.getCreated();
-		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
-		try {
-			originsSheet.setCreated(dateFormat.parse(created));
-		} catch (ParseException e) {
-			throw(new InvalidSPDXAnalysisException("Invalid created date - unable to parse"));
-		}
-		// Document comments
-		String docComment = doc.getComment();
-		if (docComment != null) {
-			originsSheet.setDocumentComment(docComment);
-		}
-		// License List Version
-		String licenseListVersion = doc.getCreationInfo().getLicenseListVersion();
-		if (licenseListVersion != null) {
-			originsSheet.setLicenseListVersion(licenseListVersion);
-		}
+	private static void copyOrigins(SpdxDocument doc, OriginsSheet originsSheet) throws SpreadsheetException {
+		originsSheet.addDocument(doc);
 	}
 
 	private static void usage() {

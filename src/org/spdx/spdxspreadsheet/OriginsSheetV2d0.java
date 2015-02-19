@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2011 Source Auditor Inc.
+ * Copyright (c) 2015 Source Auditor Inc.
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -12,12 +13,13 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */
+*/
 package org.spdx.spdxspreadsheet;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,39 +34,48 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxItem;
 
 /**
- * Sheet containing information about the origins of an SPDX document
- * Version 1.1
- * @author Gary O'Neall
+ * @author Gary
  *
  */
-public class OriginsSheetV1d1 extends OriginsSheet {
-
-	static final int NUM_COLS = 8;
+public class OriginsSheetV2d0 extends OriginsSheet {
+	
+	static final int NUM_COLS = 14;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
-	static final int CREATED_BY_COL = SPDX_VERSION_COL + 1;
-	static final int CREATED_COL = CREATED_BY_COL + 1;
-	static final int DATA_LICENSE_COL = CREATED_COL + 1;
-	static final int AUTHOR_COMMENTS_COL = DATA_LICENSE_COL + 1;
-	static final int DOCUMENT_COMMENT_COL = AUTHOR_COMMENTS_COL + 1;
-	static final int USER_DEFINED_COL = DOCUMENT_COMMENT_COL + 1;
+	static final int DATA_LICENSE_COL = SPDX_VERSION_COL + 1;
+	static final int SPDX_ID_COL = DATA_LICENSE_COL + 1;
+	static final int LICENSE_LIST_VERSION_COL = SPDX_ID_COL + 1;
+	static final int DOCUMENT_NAME_COL = LICENSE_LIST_VERSION_COL + 1;
+	static final int NAMESPACE_COL = DOCUMENT_NAME_COL + 1;
+	static final int DOCUMENT_DESCRIBES_COL = NAMESPACE_COL + 1;
+	static final int EXTERNAL_DOC_REFS_COL = DOCUMENT_DESCRIBES_COL + 1;
+	static final int DOCUMENT_COMMENT_COL = EXTERNAL_DOC_REFS_COL + 1;	
+	static final int CREATED_BY_COL = DOCUMENT_COMMENT_COL + 1;
+	static final int CREATED_COL = CREATED_BY_COL + 1;	
+	static final int AUTHOR_COMMENTS_COL = CREATED_COL + 1;
+	static final int USER_DEFINED_COL = AUTHOR_COMMENTS_COL + 1;
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
-		true, true, false, false, false};
+		false, true, true, true, false, false, true, true, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
-		"SPDX Version", "Creator", "Created", "Data License", "Creator Comment", 
-		"Document Comment", "Optional User Defined Columns..."};
-	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 16, 40, 70, 70, 70};
-	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, 
-		true, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, 
-		false, false, false};
+		"SPDX Version", "Data License", "SPDX Identifier", "License List Version",
+		"Document Name", "Document Namespace", "Document Contents",
+		"External Document References", "Document Comment", "Creator", "Created",   
+		"Creator Comment", "Optional User Defined Columns..."};
+	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 20, 16, 40, 60,
+		50, 70, 70, 60, 50, 70, 60};
+	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, false, 
+		false, true, true, true, true, true, true, false, true, true};
+	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, true, true, 
+		true, false, false, false, false, false, false, true, false, false};
 	
-	public OriginsSheetV1d1(Workbook workbook, String sheetName, String version) {
+	public OriginsSheetV2d0(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
+
 
 	@Override
 	public String verify() {
@@ -82,7 +93,7 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 				return "Spreadsheet version "+version+" not supported.";
 			}
 			Row firstRow = sheet.getRow(firstRowNum);
-			for (int i = 0; i < NUM_COLS; i++) {
+			for (int i = 0; i < NUM_COLS-1; i++) {	// don't check the last col - which is the user defined column
 				Cell cell = firstRow.getCell(i+firstCellNum);
 				if (cell == null || 
 						cell.getStringCellValue() == null ||
@@ -124,9 +135,6 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 						return "Created column in origin spreadsheet is not of type Date";
 					}
 				}
-//				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
-//					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
-//				}
 			}
 		}
 		return null;
@@ -217,15 +225,20 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 		}
 		setDataCellStringValue(CREATED_BY_COL, createdBy[0]);
 		for (int i = 1; i < createdBy.length; i++) {
-			Row row = sheet.getRow(firstRowNum + DATA_ROW_NUM + i);
-			if (row == null) {
-				row = sheet.createRow(firstRowNum + DATA_ROW_NUM + i);
-			}
+			Row row = getDataRow(i);
 			Cell cell = row.getCell(CREATED_BY_COL);
 			if (cell == null) {
 				cell = row.createCell(CREATED_BY_COL);
 			}
 			cell.setCellValue(createdBy[i]);
+		}
+		// delete any remaining rows
+		for (int i = firstRowNum + DATA_ROW_NUM + createdBy.length; i <= this.lastRowNum; i++) {
+			Row row = sheet.getRow(i);
+			Cell cell = row.getCell(CREATED_BY_COL);
+			if (cell != null) {
+				row.removeCell(cell);
+			}
 		}
 	}
 	
@@ -269,7 +282,7 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 	 */
 	@Override
 	public String getLicenseListVersion() {
-		return null;
+		return getDataCellStringValue(LICENSE_LIST_VERSION_COL);
 	}
 
 	/* (non-Javadoc)
@@ -277,7 +290,7 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 	 */
 	@Override
 	public void setLicenseListVersion(String licenseVersion) {
-		
+		setDataCellStringValue(LICENSE_LIST_VERSION_COL, licenseVersion);
 	}
 	
 	/* (non-Javadoc)
@@ -340,64 +353,132 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 		if (licenseListVersion != null) {
 			setLicenseListVersion(licenseListVersion);
 		}
+		setSpdxId(doc.getId());
+		setDocumentName(doc.getName());
+		SpdxItem[] contents = null;
+		try {
+			contents = doc.getDocumentDescribes();
+		} catch (InvalidSPDXAnalysisException e1) {
+			throw(new SpreadsheetException("Error getting the document describes: "+e1.getMessage()));
+		}
+		String[] contentIds = new String[contents.length];
+		for (int i = 0; i < contents.length; i++) {
+			contentIds[i] = contents[i].getId();
+		}
+		Arrays.sort(contentIds);
+		setDocumentDescribes(contentIds);
+		try {
+			setExternalDocumentRefs(doc.getExternalDocumentRefs());
+		} catch (InvalidSPDXAnalysisException e) {
+			throw(new SpreadsheetException("Error getting the external document references: "+e.getMessage()));
+		}
 	}
-	
+
+
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getSpdxId()
 	 */
 	@Override
 	public String getSpdxId() {
-		return null;
+		return getDataCellStringValue(SPDX_ID_COL);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setSpdxId(java.lang.String)
 	 */
 	@Override
 	public void setSpdxId(String id) {
-		// not supported in this version 
+		setDataCellStringValue(SPDX_ID_COL, id);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getDocumentName()
 	 */
 	@Override
 	public String getDocumentName() {
-		return null;
+		return getDataCellStringValue(DOCUMENT_NAME_COL);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setDocumentName(java.lang.String)
 	 */
 	@Override
 	public void setDocumentName(String documentName) {
-		// not supported in this version 
+		setDataCellStringValue(DOCUMENT_NAME_COL, documentName);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getDocumentContents()
 	 */
 	@Override
 	public String[] getDocumentContents() {
-		return new String[0];
+		// first count rows
+		int numRows = 0;
+		while (sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows) != null &&
+				sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows).getCell(DOCUMENT_DESCRIBES_COL) != null &&
+				!sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows).getCell(DOCUMENT_DESCRIBES_COL).getStringCellValue().isEmpty()) {
+			numRows ++;
+		}
+		String[] retval = new String[numRows];
+		for (int i = 0; i < numRows; i++) {
+			retval[i] = sheet.getRow(firstRowNum + DATA_ROW_NUM + i).getCell(DOCUMENT_DESCRIBES_COL).getStringCellValue();
+		}
+		return retval;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setDocumentContents(java.lang.String[])
 	 */
 	@Override
 	public void setDocumentDescribes(String[] contents) {
-		// Not supported in this version
-		
+		if (contents == null || contents.length < 1) {
+			setDataCellStringValue(CREATED_BY_COL, "");
+			int i = firstRowNum + DATA_ROW_NUM + 1;
+			Row nextRow = sheet.getRow(i);
+			while (nextRow != null) {
+				Cell documentDescribesCell = nextRow.getCell(DOCUMENT_DESCRIBES_COL);
+				if (documentDescribesCell != null) {
+					documentDescribesCell.setCellValue("");
+				}
+				i++;
+				nextRow = sheet.getRow(i);
+			}
+			return;
+		}
+		setDataCellStringValue(CREATED_BY_COL, contents[0]);
+		for (int i = 1; i < contents.length; i++) {
+			Row row = getDataRow(i);
+			Cell cell = row.getCell(DOCUMENT_DESCRIBES_COL);
+			if (cell == null) {
+				cell = row.createCell(DOCUMENT_DESCRIBES_COL);
+			}
+			cell.setCellValue(contents[i]);
+		}
+		// delete any remaining rows
+		for (int i = firstRowNum + DATA_ROW_NUM + contents.length; i <= this.lastRowNum; i++) {
+			Row row = sheet.getRow(i);
+			Cell cell = row.getCell(DOCUMENT_DESCRIBES_COL);
+			if (cell != null) {
+				row.removeCell(cell);
+			}
+		}
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getExternalDocumentRefs()
 	 */
 	@Override
 	public ExternalDocumentRef[] getExternalDocumentRefs() {
-		return new ExternalDocumentRef[0];
+		// TODO Auto-generated method stub
+		return null;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setExternalDocumentRefs(org.spdx.rdfparser.model.ExternalDocumentRef[])
@@ -405,7 +486,7 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 	@Override
 	public void setExternalDocumentRefs(
 			ExternalDocumentRef[] externalDocumentRefs) {
-		// not supported in this version
+		// TODO Auto-generated method stub
+		
 	}
-
 }

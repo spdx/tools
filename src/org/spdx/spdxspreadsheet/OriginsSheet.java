@@ -20,6 +20,8 @@ import java.util.Date;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 /**
  * Abstract class for sheet containing information about the origins of an SPDX document
@@ -191,8 +193,49 @@ public abstract class OriginsSheet extends AbstractSheet {
 	/**
 	 * @return
 	 */
-	public String getNamespace() {
-		// TODO - Implement
-		return null;
-	}	
+	public abstract String getNamespace();
+
+	/**
+	 * Add all origin information from the document
+	 * @param doc
+	 * @throws SpreadsheetException 
+	 */
+	public abstract void addDocument(SpdxDocument doc) throws SpreadsheetException;
+	
+	/**
+	 * @return SPDX Identifier for the document
+	 */
+	public abstract String getSpdxId();
+	/**
+	 * Set the SPDX identified for the document
+	 * @param id
+	 */
+	public abstract void setSpdxId(String id);
+	/**
+	 * @return Document name
+	 */
+	public abstract String getDocumentName();
+	/**
+	 * Set the document name
+	 * @param documentName
+	 */
+	public abstract void setDocumentName(String documentName);
+	/**
+	 * @return SPDX ID's for content described by this SPDX document
+	 */
+	public abstract String[] getDocumentContents();
+	/**
+	 * Set the SPDX ID's for content described by this SPDX document
+	 * @param contents
+	 */
+	public abstract void setDocumentDescribes(String[] contents);
+	/**
+	 * @return External document refs
+	 */
+	public abstract ExternalDocumentRef[] getExternalDocumentRefs();
+	/**
+	 * Set the external document refs
+	 * @param externalDocumentRefs
+	 */
+	public abstract void setExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs);
 }
