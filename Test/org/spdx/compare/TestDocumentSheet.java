@@ -123,8 +123,8 @@ public class TestDocumentSheet {
 		docSheet.importCompareResults(comparer, docNames);
 		SpdxDocument[] comparedDocs = comparer.getSpdxDocuments();
 		for (int i = 0; i < comparedDocs.length; i++) {
-			assertEquals(comparedDocs[i].getDocumentUri(),
-					getDataValue(docSheet.DOCUMENT_URI_COL, i));
+			assertEquals(comparedDocs[i].getDocumentNamespace(),
+					getDataValue(docSheet.DOCUMENT_NAMESPACE_COL, i));
 		}
 	}
 	

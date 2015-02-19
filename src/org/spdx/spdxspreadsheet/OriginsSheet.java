@@ -42,7 +42,7 @@ public abstract class OriginsSheet extends AbstractSheet {
 
 	public static void create(Workbook wb, String sheetName) {
 		//NOTE: this must be updated to the latest version
-		OriginsSheetV1d2.create(wb, sheetName);
+		OriginsSheetV2d0.create(wb, sheetName);
 	}
 
 	/**
@@ -58,8 +58,10 @@ public abstract class OriginsSheet extends AbstractSheet {
 			return new OriginsSheetV0d9d4(workbook, originSheetName, version);
 		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_1_0) <=0) {
 			return new OriginsSheetV1d1(workbook, originSheetName, version);
-		} else {
+		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_2_0) <=0) {
 			return new OriginsSheetV1d2(workbook, originSheetName, version);
+		} else {
+			return new OriginsSheetV2d0(workbook, originSheetName, version);
 		}
 	}
 	
@@ -231,11 +233,13 @@ public abstract class OriginsSheet extends AbstractSheet {
 	public abstract void setDocumentDescribes(String[] contents);
 	/**
 	 * @return External document refs
+	 * @throws SpreadsheetException 
 	 */
-	public abstract ExternalDocumentRef[] getExternalDocumentRefs();
+	public abstract ExternalDocumentRef[] getExternalDocumentRefs() throws SpreadsheetException;
 	/**
 	 * Set the external document refs
 	 * @param externalDocumentRefs
+	 * @throws SpreadsheetException 
 	 */
-	public abstract void setExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs);
+	public abstract void setExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs) throws SpreadsheetException;
 }

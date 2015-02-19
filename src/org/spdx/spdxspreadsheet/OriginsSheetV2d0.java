@@ -32,9 +32,12 @@ import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
+import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxItem;
+import org.spdx.tag.BuildDocument;
+import org.spdx.tag.InvalidSpdxTagFileException;
 
 /**
  * @author Gary
@@ -65,8 +68,8 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 		"Document Name", "Document Namespace", "Document Contents",
 		"External Document References", "Document Comment", "Creator", "Created",   
 		"Creator Comment", "Optional User Defined Columns..."};
-	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 20, 16, 40, 60,
-		50, 70, 70, 60, 50, 70, 60};
+	static final int[] COLUMN_WIDTHS = new int[] {20, 16, 20, 20, 16, 40, 80,
+		50, 140, 70, 60, 20, 70, 60};
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, false, 
 		false, true, true, true, true, true, true, false, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, true, true, 
@@ -298,7 +301,7 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 	 */
 	@Override
 	public String getNamespace() {
-		return "";
+		return getDataCellStringValue(NAMESPACE_COL);
 	}
 
 	/* (non-Javadoc)
@@ -307,6 +310,7 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 	@Override
 	public void addDocument(SpdxDocument doc) throws SpreadsheetException {
 		// SPDX Version
+		setSPDXVersion(doc.getSpecVersion());
 		// Created by
 		SPDXCreatorInformation creator;
 		try {
@@ -355,6 +359,11 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 		}
 		setSpdxId(doc.getId());
 		setDocumentName(doc.getName());
+		try {
+			setNamespace(doc.getDocumentNamespace());
+		} catch (InvalidSPDXAnalysisException e) {
+			throw(new SpreadsheetException("Error getting the document namespace: "+e.getMessage()));
+		}
 		SpdxItem[] contents = null;
 		try {
 			contents = doc.getDocumentDescribes();
@@ -372,6 +381,14 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 		} catch (InvalidSPDXAnalysisException e) {
 			throw(new SpreadsheetException("Error getting the external document references: "+e.getMessage()));
 		}
+	}
+
+
+	/**
+	 * @param namespace
+	 */
+	private void setNamespace(String namespace) {
+		setDataCellStringValue(NAMESPACE_COL, namespace);
 	}
 
 
@@ -437,7 +454,7 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 	@Override
 	public void setDocumentDescribes(String[] contents) {
 		if (contents == null || contents.length < 1) {
-			setDataCellStringValue(CREATED_BY_COL, "");
+			setDataCellStringValue(DOCUMENT_DESCRIBES_COL, "");
 			int i = firstRowNum + DATA_ROW_NUM + 1;
 			Row nextRow = sheet.getRow(i);
 			while (nextRow != null) {
@@ -450,7 +467,7 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 			}
 			return;
 		}
-		setDataCellStringValue(CREATED_BY_COL, contents[0]);
+		setDataCellStringValue(DOCUMENT_DESCRIBES_COL, contents[0]);
 		for (int i = 1; i < contents.length; i++) {
 			Row row = getDataRow(i);
 			Cell cell = row.getCell(DOCUMENT_DESCRIBES_COL);
@@ -474,9 +491,26 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getExternalDocumentRefs()
 	 */
 	@Override
-	public ExternalDocumentRef[] getExternalDocumentRefs() {
-		// TODO Auto-generated method stub
-		return null;
+	public ExternalDocumentRef[] getExternalDocumentRefs() throws SpreadsheetException {
+		int numRows = 0;
+		while (sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows) != null &&
+				sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows).getCell(EXTERNAL_DOC_REFS_COL) != null &&
+				!sheet.getRow(firstRowNum + DATA_ROW_NUM + numRows).getCell(EXTERNAL_DOC_REFS_COL).getStringCellValue().isEmpty()) {
+			numRows ++;
+		}
+		ExternalDocumentRef[] retval = new ExternalDocumentRef[numRows];
+		for (int i = 0; i < numRows; i++) {
+			try {
+				retval[i] = BuildDocument.parseExternalDocumentRef(sheet.getRow(
+						firstRowNum + DATA_ROW_NUM + i).
+						getCell(EXTERNAL_DOC_REFS_COL).getStringCellValue());
+			} catch (InvalidSpdxTagFileException e) {
+				throw(new SpreadsheetException("Invalid external document reference string: "+sheet.getRow(
+						firstRowNum + DATA_ROW_NUM + i).
+						getCell(EXTERNAL_DOC_REFS_COL).getStringCellValue()));
+			}
+		}
+		return retval;
 	}
 
 
@@ -484,9 +518,62 @@ public class OriginsSheetV2d0 extends OriginsSheet {
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setExternalDocumentRefs(org.spdx.rdfparser.model.ExternalDocumentRef[])
 	 */
 	@Override
-	public void setExternalDocumentRefs(
-			ExternalDocumentRef[] externalDocumentRefs) {
-		// TODO Auto-generated method stub
-		
+	public void setExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs) throws SpreadsheetException {
+		if (externalDocumentRefs == null || externalDocumentRefs.length < 1) {
+			setDataCellStringValue(EXTERNAL_DOC_REFS_COL, "");
+			int i = firstRowNum + DATA_ROW_NUM + 1;
+			Row nextRow = sheet.getRow(i);
+			while (nextRow != null) {
+				Cell externalDocRefsCell = nextRow.getCell(EXTERNAL_DOC_REFS_COL);
+				if (externalDocRefsCell != null) {
+					externalDocRefsCell.setCellValue("");
+				}
+				i++;
+				nextRow = sheet.getRow(i);
+			}
+			return;
+		}
+		try {
+			setDataCellStringValue(EXTERNAL_DOC_REFS_COL, 
+					externalDocRefToStr(externalDocumentRefs[0]));
+		} catch (InvalidSPDXAnalysisException e) {
+			throw(new SpreadsheetException("Error getting external document reference",e));
+		}
+		for (int i = 1; i < externalDocumentRefs.length; i++) {
+			Row row = getDataRow(i);
+			Cell cell = row.getCell(EXTERNAL_DOC_REFS_COL);
+			if (cell == null) {
+				cell = row.createCell(EXTERNAL_DOC_REFS_COL);
+			}
+			try {
+				cell.setCellValue(externalDocRefToStr(externalDocumentRefs[i]));
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpreadsheetException("Error getting external document reference",e));
+			}
+		}
+		// delete any remaining rows
+		for (int i = firstRowNum + DATA_ROW_NUM + externalDocumentRefs.length; i <= this.lastRowNum; i++) {
+			Row row = sheet.getRow(i);
+			Cell cell = row.getCell(EXTERNAL_DOC_REFS_COL);
+			if (cell != null) {
+				row.removeCell(cell);
+			}
+		}
+	}
+
+
+	/**
+	 * @param externalDocumentRef
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private String externalDocRefToStr(ExternalDocumentRef externalDocumentRef) throws InvalidSPDXAnalysisException {
+		if (externalDocumentRef == null) {
+			return "";
+		}
+		return externalDocumentRef.getExternalDocumentId() +
+				" " + externalDocumentRef.getSpdxDocumentNamespace() + 
+				" " + Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(externalDocumentRef.getChecksum().getAlgorithm()) +
+				" " + externalDocumentRef.getChecksum().getValue();
 	}
 }

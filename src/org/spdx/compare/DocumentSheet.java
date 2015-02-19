@@ -40,8 +40,8 @@ public class DocumentSheet extends AbstractSheet {
 	int SPDX_VERSION_COL = DOCUMENT_NAME_COL + 1;
 	int DATA_LICENSE_COL = SPDX_VERSION_COL + 1;
 	int SPDX_IDENTIFIER_COL = DATA_LICENSE_COL + 1;
-	int DOCUMENT_URI_COL = SPDX_IDENTIFIER_COL + 1;
-	int SPDX_DOCUMENT_CONTENT_COL = DOCUMENT_URI_COL + 1;
+	int DOCUMENT_NAMESPACE_COL = SPDX_IDENTIFIER_COL + 1;
+	int SPDX_DOCUMENT_CONTENT_COL = DOCUMENT_NAMESPACE_COL + 1;
 	int DOCUMENT_COMMENT_COL = SPDX_DOCUMENT_CONTENT_COL + 1;
 	int CREATION_DATE_COL = DOCUMENT_COMMENT_COL + 1;
 	int CREATOR_COMMENT_COL = CREATION_DATE_COL + 1;
@@ -204,13 +204,13 @@ public class DocumentSheet extends AbstractSheet {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void importDocumentNamespace(SpdxComparer comparer) throws InvalidSPDXAnalysisException, SpdxCompareException {
-		Cell cell = sheet.getRow(getFirstDataRow()).createCell(DOCUMENT_URI_COL);
+		Cell cell = sheet.getRow(getFirstDataRow()).createCell(DOCUMENT_NAMESPACE_COL);
 		cell.setCellValue("N/A");
 		// data rows
 		for (int i = 0; i < comparer.getNumSpdxDocs(); i++) {
-			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(DOCUMENT_URI_COL);
-			if (comparer.getSpdxDoc(i).getDocumentUri() != null) {
-				cell.setCellValue(comparer.getSpdxDoc(i).getDocumentUri());
+			cell = sheet.getRow(getFirstDataRow()+i+1).createCell(DOCUMENT_NAMESPACE_COL);
+			if (comparer.getSpdxDoc(i).getDocumentNamespace() != null) {
+				cell.setCellValue(comparer.getSpdxDoc(i).getDocumentNamespace());
 			}
 		}
 	}

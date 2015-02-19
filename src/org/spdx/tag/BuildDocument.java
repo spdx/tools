@@ -239,7 +239,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		this.FILE_TAGS.add(constants.getProperty("PROP_ELEMENT_ID").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_NAME").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_HOMEPAGE").trim()+" ");
-		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_URI").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_DOCUMENT_NAMESPACE").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_RELATIONSHIP").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_RELATIONSHIP_COMMENT").trim()+" ");		
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATOR").trim()+" ");
@@ -367,9 +367,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			if (analysis != null) {
 				this.analysis.setName(value);
 			}
-		} else if (tag.equals(constants.getProperty("PROP_DOCUMENT_URI"))) {
+		} else if (tag.equals(constants.getProperty("PROP_DOCUMENT_NAMESPACE"))) {
 			if (this.analysis != null) {
-				throw(new InvalidSpdxTagFileException("More than one document URI was specified"));
+				throw(new InvalidSpdxTagFileException("More than one document namespace was specified"));
 			}
 			if (this.specVersion == null) {
 				result[0] = new SpdxDocumentContainer(value);
@@ -583,10 +583,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private void checkAnalysisNull() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
 		if (this.analysis == null) {
 			if (this.specVersion.compareTo("SPDX-2.0") < 0) {
-				result[0] = new SpdxDocumentContainer(generateDocumentUri()); 
+				result[0] = new SpdxDocumentContainer(generateDocumentNamespace()); 
 				this.analysis = result[0].getSpdxDocument();
 			} else {
-				throw(new InvalidSpdxTagFileException("The SPDX Document URI must be set before other SPDX document properties are set."));
+				throw(new InvalidSpdxTagFileException("The SPDX Document Namespace must be set before other SPDX document properties are set."));
 			}
 		}
 	}
@@ -594,7 +594,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	/**
 	 * @return
 	 */
-	private String generateDocumentUri() {
+	private String generateDocumentNamespace() {
 		return "http://spdx.org/documents/"+UUID.randomUUID().toString();
 	}
 
@@ -604,13 +604,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void addExternalDocRef(String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
-		Matcher matcher = EXTERNAL_DOC_REF_PATTERN.matcher(value.trim());
-		if (!matcher.find()) {
-			throw(new InvalidSpdxTagFileException("Invalid external document reference: "+value));
-		}
-		ExternalDocumentRef ref = new ExternalDocumentRef(matcher.group(2), 
-						new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, matcher.group(3)),
-						matcher.group(1));
+		ExternalDocumentRef ref = parseExternalDocumentRef(value);
 		ExternalDocumentRef[] oldRefs = this.analysis.getExternalDocumentRefs();
 		if (oldRefs == null) {
 			oldRefs = new ExternalDocumentRef[0];
@@ -618,6 +612,23 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		ExternalDocumentRef[] newRefs = Arrays.copyOf(oldRefs, oldRefs.length+1);
 		newRefs[oldRefs.length] = ref;
 		this.analysis.setExternalDocumentRefs(newRefs);
+	}
+
+	/**
+	 * Parse a tag/value exteranl document reference string
+	 * @param refStr
+	 * @return
+	 * @throws InvalidSpdxTagFileException 
+	 */
+	public static ExternalDocumentRef parseExternalDocumentRef(String refStr) throws InvalidSpdxTagFileException {
+		Matcher matcher = EXTERNAL_DOC_REF_PATTERN.matcher(refStr.trim());
+		if (!matcher.find()) {
+			throw(new InvalidSpdxTagFileException("Invalid external document reference: "+refStr));
+		}
+		ExternalDocumentRef ref = new ExternalDocumentRef(matcher.group(2), 
+						new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, matcher.group(3)),
+						matcher.group(1));
+		return ref;
 	}
 
 	/**
