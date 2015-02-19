@@ -41,7 +41,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
  */
 public class SpdxLicenseMapperTest {
 
-	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v1.2.rdf";
+	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v2.0.rdf";
 	static final String TEST_RDF_FILE_PATH2 = "TestFiles"+File.separator+"SPDXSpreadsheetMergeTest1.rdf";
 	static final String TEST_RDF_FILE_PATH3 = "TestFiles"+File.separator+"SPDXSpreadsheetMergeTest2.rdf";
 	File testFile;

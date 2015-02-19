@@ -45,7 +45,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
  */
 public class SpdxPackageInfoMergerTest {
 	
-	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v1.2.rdf";
+	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample-v2.0.rdf";
 	private static final String STD_LIC_ID_Apache = "Apache-2.0";
 	private static final String NonSTD_LIC_ID = "LicenseRef-1";
 	File testFile;
