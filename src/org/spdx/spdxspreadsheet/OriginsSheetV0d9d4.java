@@ -15,6 +15,9 @@
  */
 package org.spdx.spdxspreadsheet;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -22,6 +25,13 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
+import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 /**
  * Sheet containing information about the origins of an SPDX document
@@ -265,4 +275,133 @@ public class OriginsSheetV0d9d4 extends OriginsSheet {
 	public void setLicenseListVersion(String licenseVersion) {
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getNamespace()
+	 */
+	@Override
+	public String getNamespace() {
+		return "";
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#addDocument(org.spdx.rdfparser.model.SpdxDocument)
+	 */
+	@Override
+	public void addDocument(SpdxDocument doc) throws SpreadsheetException {
+		// SPDX Version
+		// Created by
+		SPDXCreatorInformation creator;
+		try {
+			creator = doc.getCreationInfo();
+		} catch (InvalidSPDXAnalysisException e1) {
+			throw(new SpreadsheetException("Error getting the creation info: "+e1.getMessage()));
+		}
+		String[] createdBys = creator.getCreators();
+		setCreatedBy(createdBys);
+		// Data license
+		AnyLicenseInfo dataLicense;
+		try {
+			dataLicense = doc.getDataLicense();
+		} catch (InvalidSPDXAnalysisException e1) {
+			throw(new SpreadsheetException("Error getting the data license info: "+e1.getMessage()));
+		}
+		if (dataLicense != null && (dataLicense instanceof SimpleLicensingInfo)) {
+			setDataLicense(((SimpleLicensingInfo)dataLicense).getLicenseId());
+		}
+		// Author Comments
+		String comments = creator.getComment();
+		if (comments != null && !comments.isEmpty()) {
+			setAuthorComments(comments);
+		}
+		String created = creator.getCreated();
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
+		try {
+			setCreated(dateFormat.parse(created));
+		} catch (ParseException e) {
+			throw(new SpreadsheetException("Invalid created date - unable to parse"));
+		}
+		// Document comments
+		String docComment = doc.getComment();
+		if (docComment != null) {
+			setDocumentComment(docComment);
+		}
+		// License List Version
+		String licenseListVersion;
+		try {
+			licenseListVersion = doc.getCreationInfo().getLicenseListVersion();
+		} catch (InvalidSPDXAnalysisException e) {
+			throw(new SpreadsheetException("Error getting the license list info: "+e.getMessage()));
+		}
+		if (licenseListVersion != null) {
+			setLicenseListVersion(licenseListVersion);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getSpdxId()
+	 */
+	@Override
+	public String getSpdxId() {
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setSpdxId(java.lang.String)
+	 */
+	@Override
+	public void setSpdxId(String id) {
+		// not supported in this version 
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getDocumentName()
+	 */
+	@Override
+	public String getDocumentName() {
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setDocumentName(java.lang.String)
+	 */
+	@Override
+	public void setDocumentName(String documentName) {
+		// not supported in this version 
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getDocumentContents()
+	 */
+	@Override
+	public String[] getDocumentContents() {
+		return new String[0];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setDocumentContents(java.lang.String[])
+	 */
+	@Override
+	public void setDocumentDescribes(String[] contents) {
+		// Not supported in this version
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getExternalDocumentRefs()
+	 */
+	@Override
+	public ExternalDocumentRef[] getExternalDocumentRefs() {
+		return new ExternalDocumentRef[0];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.OriginsSheet#setExternalDocumentRefs(org.spdx.rdfparser.model.ExternalDocumentRef[])
+	 */
+	@Override
+	public void setExternalDocumentRefs(
+			ExternalDocumentRef[] externalDocumentRefs) {
+		// not supported in this version
+	}
+
 }
