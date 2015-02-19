@@ -204,8 +204,8 @@ public class CompareSpdxDocs {
 			String doc2Name, SpdxDocument spdxDoc1, SpdxDocument spdxDoc2, PrintStream output) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		output.println("Comparing SPDX Documents: "+doc1Name+
 				" and "+doc2Name);
-		output.println(doc1Name + " URI: "+comparer.getSpdxDoc(0).getDocumentUri());
-		output.println(doc2Name + " URI: "+comparer.getSpdxDoc(1).getDocumentUri());
+		output.println(doc1Name + " Namespace: "+comparer.getSpdxDoc(0).getDocumentNamespace());
+		output.println(doc2Name + " NamespaceI: "+comparer.getSpdxDoc(1).getDocumentNamespace());
 		if (!comparer.isDifferenceFound()) {
 			output.println("Both SPDX documents match - no differences found.");
 			return;

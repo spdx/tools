@@ -294,6 +294,7 @@ public class OriginsSheetV1d1 extends OriginsSheet {
 	@Override
 	public void addDocument(SpdxDocument doc) throws SpreadsheetException {
 		// SPDX Version
+		setSPDXVersion(doc.getSpecVersion());
 		// Created by
 		SPDXCreatorInformation creator;
 		try {

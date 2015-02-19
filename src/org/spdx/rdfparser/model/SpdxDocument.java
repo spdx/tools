@@ -217,11 +217,16 @@ public class SpdxDocument extends SpdxElement {
 	}
 	
 	/**
-	 * @return The unique Document URI
+	 * @return The unique Document Namespace
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public String getDocumentUri() throws InvalidSPDXAnalysisException {
 		return this.getUri(documentContainer);
+	}
+	
+	public String getDocumentNamespace() throws InvalidSPDXAnalysisException {
+		String[] parts = this.getDocumentUri().split("#");
+		return parts[0];
 	}
 
 	/* (non-Javadoc)

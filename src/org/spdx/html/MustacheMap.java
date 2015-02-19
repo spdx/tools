@@ -52,7 +52,7 @@ public class MustacheMap {
 		HashMap<String, Object>  retval = new HashMap<String, Object>();
 		// Document level information
 		retval.put("documentName", doc.getName());
-		retval.put("documentUri", doc.getDocumentUri());
+		retval.put("documentNamespace", doc.getDocumentNamespace());
 		retval.put("specVersion", doc.getSpecVersion());
 		retval.put("dataLicense", getDataLicenseName(doc));
 		retval.put("creationInfo", new CreatorInfoContext(doc));

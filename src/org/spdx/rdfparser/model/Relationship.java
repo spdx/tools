@@ -39,6 +39,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	static final Logger logger = Logger.getLogger(RdfModelObject.class);
 	
 	public enum RelationshipType {
+		relationshipType_desribes, relationshipType_describedBy,
 		 relationshipType_ancestorOf, relationshipType_buildToolOf,
 		 relationshipType_containedBy, relationshipType_contains,
 		 relationshipType_copyOf, relationshipType_dataFile,
@@ -59,6 +60,12 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	public static HashMap<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE = 
 			new  HashMap<String, RelationshipType>();
 	static {
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_desribes, "DESCRIBES");
+		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBES", RelationshipType.relationshipType_desribes);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_describedBy, "DESCRIBED_BY");
+		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBED_BY", RelationshipType.relationshipType_describedBy);
+
+		
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
 		TAG_TO_RELATIONSHIP_TYPE.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_buildToolOf, "BUILD_TOOL_OF");
