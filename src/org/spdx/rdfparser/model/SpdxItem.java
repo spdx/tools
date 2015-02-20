@@ -43,7 +43,7 @@ public class SpdxItem extends SpdxElement {
 	AnyLicenseInfo licenseConcluded;
 	AnyLicenseInfo[] licenseInfoFromFiles;
 	String copyrightText;
-	String licenseComment;
+	String licenseComments;
 
 	/**
 	 * Create an SPDX item from a Jena model
@@ -62,7 +62,7 @@ public class SpdxItem extends SpdxElement {
 	 */
 	private void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.copyrightText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT);
-		this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
+		this.licenseComments = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 		this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
 		this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
@@ -98,7 +98,7 @@ public class SpdxItem extends SpdxElement {
 			this.licenseInfoFromFiles = new AnyLicenseInfo[0];
 		}
 		this.copyrightText = copyrightText;
-		this.licenseComment = licenseComment;
+		this.licenseComments = licenseComment;
 	}
 	
 	/* (non-Javadoc)
@@ -118,8 +118,8 @@ public class SpdxItem extends SpdxElement {
 			if (this.copyrightText != null) {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT, copyrightText);
 			}
-			if (this.licenseComment != null) {
-				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComment);
+			if (this.licenseComments != null) {
+				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComments);
 			}
 		}
 	}
@@ -206,19 +206,36 @@ public class SpdxItem extends SpdxElement {
 	/**
 	 * @return the licenseComment
 	 */
-	public String getLicenseComment() {
+	public String getLicenseComments() {
 		if (this.resource != null && this.refreshOnGet) {
-			this.licenseComment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
+			this.licenseComments = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
 		}
-		return licenseComment;
+		return licenseComments;
+	}
+	
+	/**
+	 * This has been replaced by getLicenseComments to match the latest SPDX 2.0 spec
+	 * @return
+	 */
+	@Deprecated
+	public String getLicenseComment() {
+		return this.getLicenseComments();
 	}
 
 	/**
-	 * @param licenseComment the licenseComment to set
+	 * @param licenseComments the licenseComment to set
 	 */
+	public void setLicenseComments(String licenseComments) {
+		this.licenseComments = licenseComments;
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComments);
+	}
+	
+	/**
+	 * This has been replaced by setLicenseComments to match the latest SPDX 2.0 spec
+	 */
+	@Deprecated
 	public void setLicenseComment(String licenseComment) {
-		this.licenseComment = licenseComment;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComment);
+		this.setLicenseComments(licenseComment);
 	}
 
 	/* (non-Javadoc)
@@ -241,7 +258,7 @@ public class SpdxItem extends SpdxElement {
 		return (RdfModelHelper.equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
 				RdfModelHelper.equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
 				RdfModelHelper.arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles()) &&
-				RdfModelHelper.equalsConsideringNull(this.licenseComment, comp.getLicenseComment()));
+				RdfModelHelper.equalsConsideringNull(this.licenseComments, comp.getLicenseComments()));
 	}
 	
 	protected AnyLicenseInfo cloneLicenseConcluded() {
@@ -274,7 +291,7 @@ public class SpdxItem extends SpdxElement {
 		}
 		SpdxItem retval =  new SpdxItem(this.name, this.comment, cloneAnnotations(),null,
 				cloneLicenseConcluded(), cloneLicenseInfosFromFiles(), this.copyrightText, 
-				this.licenseComment);
+				this.licenseComments);
 		clonedElementIds.put(this.getId(), retval);
 		try {
 			retval.setRelationships(cloneRelationships(clonedElementIds));

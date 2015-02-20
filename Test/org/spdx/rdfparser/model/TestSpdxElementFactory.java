@@ -151,7 +151,7 @@ public class TestSpdxElementFactory {
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, fileResult.getRelationships()));
 		assertEquals(LICENSE1, fileResult.getLicenseConcluded());
 		assertEquals(COPYRIGHT_TEXT1, fileResult.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, fileResult.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, fileResult.getLicenseComments());
 		
 		// SpdxPackage
 		
@@ -175,7 +175,7 @@ public class TestSpdxElementFactory {
 		assertEquals(LICENSE1, packageResult.getLicenseConcluded());
 		assertEquals(LICENSE2, packageResult.getLicenseDeclared());
 		assertEquals(COPYRIGHT_TEXT1, packageResult.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, packageResult.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, packageResult.getLicenseComments());
 		
 		// SpdxItem
 		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
@@ -193,7 +193,7 @@ public class TestSpdxElementFactory {
 		assertTrue(UnitTestHelper.isArraysEqual(new SimpleLicensingInfo[] {LICENSE2},
 				itemResult.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, itemResult.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, itemResult.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, itemResult.getLicenseComments());
 		
 		// SpdxElement
 		SpdxElement element = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 

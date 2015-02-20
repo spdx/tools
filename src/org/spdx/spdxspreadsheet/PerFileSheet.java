@@ -58,8 +58,10 @@ public abstract class PerFileSheet extends AbstractSheet {
 			return new PerFileSheetV09d3(workbook, perFileSheetName, version);
 		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_1_0) <= 0) {
 			return new PerFileSheetV1d1(workbook, perFileSheetName, version);
-		} else {
+		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_2_0) <=0) {
 			return new PerFileSheetV1d2(workbook, perFileSheetName, version);
+		} else {
+			return new PerFileSheetV2d0(workbook, perFileSheetName, version);
 		}
 	}
 	
@@ -129,18 +131,12 @@ public abstract class PerFileSheet extends AbstractSheet {
 	 */
 	public static void create(Workbook wb, String perFileSheetName) {
 		//NOTE: This needs to be updated the the most current version
-		PerFileSheetV1d2.create(wb, perFileSheetName);
+		PerFileSheetV2d0.create(wb, perFileSheetName);
 	}
 
 	/**
 	 * @param row
 	 * @return
 	 */
-	public String[] getPackageIds(int row) {
-		// TODO Make abstract and implement
-		return null;
-	}
-
-
-
+	public abstract String[] getPackageIds(int row);
 }

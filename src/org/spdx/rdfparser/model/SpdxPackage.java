@@ -653,7 +653,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		SpdxPackage retval = new SpdxPackage(this.name, this.comment, this.cloneAnnotations(), 
 				null, this.cloneLicenseConcluded(),
 				this.cloneLicenseInfosFromFiles(), this.copyrightText,
-				this.licenseComment, this.cloneLicenseDeclared(), this.cloneCheckums(),
+				this.licenseComments, this.cloneLicenseDeclared(), this.cloneCheckums(),
 				this.description, this.downloadLocation, null,
 				this.homepage, this.originator, this.packageFileName, 
 				this.clonePackageVerificationCode(), this.sourceInfo, 

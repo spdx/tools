@@ -203,7 +203,7 @@ public class TestSpdxPackage {
 		assertEquals(LICENSE1, pkg.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(licenseFromFiles, pkg.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, pkg.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, pkg.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, pkg.getLicenseComments());
 		assertEquals(LICENSE3, pkg.getLicenseDeclared());
 		assertTrue(UnitTestHelper.isArraysEqual(checksums, pkg.getChecksums()));
 		assertEquals(DESCRIPTION1, pkg.getDescription());
@@ -226,7 +226,7 @@ public class TestSpdxPackage {
 		assertEquals(LICENSE1, pkg.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(licenseFromFiles, pkg.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, pkg.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, pkg.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, pkg.getLicenseComments());
 		assertEquals(LICENSE3, pkg.getLicenseDeclared());
 		assertTrue(UnitTestHelper.isArraysEqual(checksums, pkg.getChecksums()));
 		assertEquals(DESCRIPTION1, pkg.getDescription());
@@ -248,7 +248,7 @@ public class TestSpdxPackage {
 		assertEquals(LICENSE1, pkg2.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(licenseFromFiles, pkg2.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, pkg2.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, pkg2.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, pkg2.getLicenseComments());
 		assertEquals(LICENSE3, pkg2.getLicenseDeclared());
 		assertTrue(UnitTestHelper.isArraysEquivalent(checksums, pkg2.getChecksums()));
 		assertEquals(DESCRIPTION1, pkg2.getDescription());

@@ -159,7 +159,7 @@ public class DocumentAnnotationSheet extends AbstractSheet {
 					Annotation compareAnnotation = annotations[i][annotationIndexes[i]];
 					if (annotationComparator.compare(nextAnnotation, compareAnnotation) == 0) {
 						Cell dateCell = currentRow.createCell(FIRST_DATE_COL+i);
-						dateCell.setCellValue(annotations[i][annotationIndexes[i]].getDate());
+						dateCell.setCellValue(annotations[i][annotationIndexes[i]].getAnnotationDate());
 						annotationIndexes[i]++;
 					}
 				}

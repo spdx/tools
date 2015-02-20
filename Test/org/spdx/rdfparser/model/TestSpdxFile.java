@@ -284,7 +284,7 @@ public class TestSpdxFile {
 		assertEquals(file.getArtifactOf()[0].getName(), file2.getArtifactOf()[0].getName());
 		assertEquals(file.getArtifactOf()[0].getHomePage(), file2.getArtifactOf()[0].getHomePage());
 		assertEquals(file.getCopyrightText(), file2.getCopyrightText());
-		assertEquals(file.getLicenseComment(), file2.getLicenseComment());
+		assertEquals(file.getLicenseComments(), file2.getLicenseComments());
 		assertEquals(file.getComment(), file2.getComment());
 		assertEquals(file.getName(), file2.getName());
 		assertTrue(UnitTestHelper.isArraysEquivalent(file.getChecksums(), file2.getChecksums()));
@@ -425,7 +425,7 @@ public class TestSpdxFile {
 		assertEquals(file.getArtifactOf()[0].getName(), toFile.getArtifactOf()[0].getName());
 		assertEquals(file.getArtifactOf()[0].getHomePage(), toFile.getArtifactOf()[0].getHomePage());
 		assertEquals(file.getCopyrightText(), toFile.getCopyrightText());
-		assertEquals(file.getLicenseComment(), toFile.getLicenseComment());
+		assertEquals(file.getLicenseComments(), toFile.getLicenseComments());
 		assertEquals(file.getComment(), toFile.getComment());
 		assertEquals(file.getName(), toFile.getName());
 		assertEquals(file.getSha1(), toFile.getSha1());
@@ -524,9 +524,9 @@ public class TestSpdxFile {
 		file2.setCopyrightText(copyright);
 		assertTrue(file.equivalent(file2));
 		// license comments
-		file2.setLicenseComment("New license comment");
+		file2.setLicenseComments("New license comment");
 		assertFalse(file.equivalent(file2));
-		file2.setLicenseComment(licenseComment);
+		file2.setLicenseComments(licenseComment);
 		assertTrue(file.equivalent(file2));
 		// file types
 		file2.setFileTypes(new FileType[] {FileType.fileType_text, FileType.fileType_archive});
@@ -941,7 +941,7 @@ public class TestSpdxFile {
 						"1123456789abcdef0123456789abcdef01234567")}, null, null, null);
 		assertEquals(file.getComment(), COMMENT1);
 		Resource fileResource = file.createResource(modelContainer);
-		file.setLicenseComment("see if this works");
+		file.setLicenseComments("see if this works");
 		file.setComment(COMMENT2);
 		SpdxFile file2 = new SpdxFile(modelContainer, fileResource.asNode());
 		assertEquals(file2.getComment(), COMMENT2);

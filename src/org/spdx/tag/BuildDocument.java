@@ -78,7 +78,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			annotation.setAnnotator(annotator);
 		}
 		public void setDate(String date) throws InvalidSPDXAnalysisException {
-			annotation.setDate(date);
+			annotation.setAnnotationDate(date);
 		}
 		public void setAnnotationType(AnnotationType annotationType) throws InvalidSPDXAnalysisException {
 			annotation.setAnnotationType(annotationType);
@@ -239,6 +239,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		this.FILE_TAGS.add(constants.getProperty("PROP_ELEMENT_ID").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_NAME").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_HOMEPAGE").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_PROJECT_URI").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_DOCUMENT_NAMESPACE").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_RELATIONSHIP").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_RELATIONSHIP_COMMENT").trim()+" ");		
@@ -684,7 +685,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer());
 			pkg.setLicenseDeclared(licenseSet);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_COMMENT"))) {
-			pkg.setLicenseComment(value);
+			pkg.setLicenseComments(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DECLARED_COPYRIGHT"))) {
 			pkg.setCopyrightText(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_SHORT_DESC"))) {
@@ -727,7 +728,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	 * @return
 	 * @throws InvalidSpdxTagFileException 
 	 */
-	private Checksum parseChecksum(String value) throws InvalidSpdxTagFileException {
+	public static Checksum parseChecksum(String value) throws InvalidSpdxTagFileException {
 		Matcher matcher = CHECKSUM_PATTERN.matcher(value.trim());
 		if (!matcher.find()) {
 			throw(new InvalidSpdxTagFileException("Invalid checksum: "+value));
@@ -770,7 +771,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			seenLicenses.add(fileLicense);
 			file.setLicenseInfosFromFiles(seenLicenses.toArray(new AnyLicenseInfo[0]));
 		} else if (tag.equals(constants.getProperty("PROP_FILE_LIC_COMMENTS"))) {
-			file.setLicenseComment(value);
+			file.setLicenseComments(value);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_COPYRIGHT"))) {
 			file.setCopyrightText(value);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_COMMENT"))) {

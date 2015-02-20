@@ -90,8 +90,8 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 		}
 		row.createCell(FILE_TYPE_COL).setCellValue(
 				CompareHelper.fileTypesToString(fileInfo.getFileTypes()));
-		if (fileInfo.getLicenseComment() != null && !fileInfo.getLicenseComment().isEmpty()) {
-			row.createCell(LIC_COMMENTS_COL).setCellValue(fileInfo.getLicenseComment());
+		if (fileInfo.getLicenseComments() != null && !fileInfo.getLicenseComments().isEmpty()) {
+			row.createCell(LIC_COMMENTS_COL).setCellValue(fileInfo.getLicenseComments());
 		}
 		if (fileInfo.getCopyrightText() != null && !fileInfo.getCopyrightText().isEmpty()) {
 			row.createCell(SEEN_COPYRIGHT_COL).setCellValue(fileInfo.getCopyrightText());
@@ -287,5 +287,13 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.spdxspreadsheet.PerFileSheet#getPackageIds(int)
+	 */
+	@Override
+	public String[] getPackageIds(int row) {
+		return new String[0];
 	}
 }

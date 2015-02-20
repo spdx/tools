@@ -235,7 +235,7 @@ public class TestPerFileSheet {
 		compareLicenseDeclarations(testFile.getLicenseInfoFromFiles(), result.getLicenseInfoFromFiles());
 		compareProjects(testFile.getArtifactOf(), result.getArtifactOf());
 		assertEquals(testFile.getCopyrightText(), result.getCopyrightText());
-		assertEquals(testFile.getLicenseComment(), result.getLicenseComment());
+		assertEquals(testFile.getLicenseComments(), result.getLicenseComments());
 		assertEquals(testFile.getName(), result.getName());
 		assertEquals(testFile.getSha1(), result.getSha1());
 		assertEquals(testFile.getFileTypes()[0], result.getFileTypes()[0]);

@@ -79,11 +79,11 @@ public class SpdxItemDifference {
 		if (this.copyrightB == null) {
 			this.copyrightB = "";
 		}
-		this.licenseCommentsA = itemA.getLicenseComment();
+		this.licenseCommentsA = itemA.getLicenseComments();
 		if (this.licenseCommentsA == null) {
 			this.licenseCommentsA = "";
 		}
-		this.licenseCommentsB = itemB.getLicenseComment();
+		this.licenseCommentsB = itemB.getLicenseComments();
 		if (this.licenseCommentsB == null) {
 			this.licenseCommentsB = "";
 		}

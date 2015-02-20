@@ -47,10 +47,10 @@ public class FileLicenseCommentsSheet extends AbstractFileCompareSheet {
 	 */
 	@Override
 	String getFileValue(SpdxFile spdxFile) {
-		if (spdxFile.getLicenseComment() == null) {
+		if (spdxFile.getLicenseComments() == null) {
 			return "";
 		} else {
-			return spdxFile.getLicenseComment();
+			return spdxFile.getLicenseComments();
 		}
 	}
 
@@ -60,7 +60,7 @@ public class FileLicenseCommentsSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
-		return SpdxComparer.stringsEqual(fileA.getLicenseComment(), fileB.getLicenseComment());
+		return SpdxComparer.stringsEqual(fileA.getLicenseComments(), fileB.getLicenseComments());
 	}
 
 }

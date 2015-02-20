@@ -54,14 +54,14 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	AnnotationType annotationType;
 	String annotator;
 	String comment;
-	String date;
+	String annotationDate;
 	
 	public Annotation(String annotator, AnnotationType annotationType, String date,
 			String comment) {
 		super();
 		this.annotator = annotator;
 		this.annotationType = annotationType;
-		this.date = date;
+		this.annotationDate = date;
 		this.comment = comment;
 	}
 	
@@ -80,7 +80,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		this.annotator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR);
 
 		//Date
-		this.date = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE);
+		this.annotationDate = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_DATE);
 		//Comment
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		//Annotation type
@@ -119,8 +119,8 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		if (comment != null) {
 			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
 		}
-		if (date != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE, date);
+		if (annotationDate != null) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_DATE, annotationDate);
 		}
 	}
 
@@ -144,10 +144,10 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		if (comment == null) {
 			retval.add("Missing comment for Annotation");
 		}
-		if (date == null) {
+		if (annotationDate == null) {
 			retval.add("Missing date for Annotation");
 		} else {
-			String dateVerify = SpdxVerificationHelper.verifyDate(date);
+			String dateVerify = SpdxVerificationHelper.verifyDate(annotationDate);
 			if (dateVerify != null && !dateVerify.isEmpty()) {
 				retval.add(dateVerify);
 			}
@@ -228,27 +228,27 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	/**
 	 * @return the date
 	 */
-	public String getDate() {
+	public String getAnnotationDate() {
 		if (this.resource != null && this.refreshOnGet) {
-			date = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE);
+			annotationDate = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_DATE);
 		}
-		return date;
+		return annotationDate;
 	}
 
 	/**
 	 * @param date the date to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setDate(String date) throws InvalidSPDXAnalysisException {
-		this.date = date;
+	public void setAnnotationDate(String date) throws InvalidSPDXAnalysisException {
+		this.annotationDate = date;
 		if (date != null) {
 			String dateVerify = SpdxVerificationHelper.verifyDate(date);
 			if (dateVerify != null && !dateVerify.isEmpty()) {
 				throw(new InvalidSPDXAnalysisException("Invalid date format: "+dateVerify));
 			}
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE, date);
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_DATE, date);
 		} else {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_DATE);
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_DATE);
 		}
 	}
 
@@ -262,7 +262,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	}
 
 	public Annotation clone() {
-		return new Annotation(this.annotator, this.annotationType, this.date, 
+		return new Annotation(this.annotator, this.annotationType, this.annotationDate, 
 				this.comment);
 	}
 
@@ -278,7 +278,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		return (RdfModelHelper.equalsConsideringNull(annotator, comp.getAnnotator()) &&
 				RdfModelHelper.equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
 				RdfModelHelper.equalsConsideringNull(comment, comp.getComment()) &&
-				RdfModelHelper.equalsConsideringNull(date, comp.getDate()));
+				RdfModelHelper.equalsConsideringNull(annotationDate, comp.getAnnotationDate()));
 	}
 	
 	/**
@@ -296,15 +296,15 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		if (o == null) {
 			return 1;
 		}
-		if (o.getDate() == null) {
-			if (this.date != null) {
+		if (o.getAnnotationDate() == null) {
+			if (this.annotationDate != null) {
 				return 1;
 			}
 		}
-		if (this.date == null) {
+		if (this.annotationDate == null) {
 			return -1;
 		}
-		int retval = this.date.compareTo(o.getDate());
+		int retval = this.annotationDate.compareTo(o.getAnnotationDate());
 		if (retval != 0) {
 			return retval;
 		}

@@ -149,13 +149,13 @@ public class TestPackageSheet {
 	@Test
 	public void testLicenseCommentCol() throws Exception {
 		String different = "DIFFERENT";
-		((SpdxPackage)doc3.getDocumentDescribes()[0]).setLicenseComment(different);
+		((SpdxPackage)doc3.getDocumentDescribes()[0]).setLicenseComments(different);
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);
 		Row row = findRow(PackageSheet.LICENSE_COMMENT_FIELD_TEXT);
 		assertEquals(PackageSheet.DIFFERENT_STRING, getEqualCellValue(row));
-		assertEquals(((SpdxPackage)doc1.getDocumentDescribes()[0]).getLicenseComment(), getDocCellValue(0, row));
-		assertEquals(((SpdxPackage)doc2.getDocumentDescribes()[0]).getLicenseComment(), getDocCellValue(1, row));
+		assertEquals(((SpdxPackage)doc1.getDocumentDescribes()[0]).getLicenseComments(), getDocCellValue(0, row));
+		assertEquals(((SpdxPackage)doc2.getDocumentDescribes()[0]).getLicenseComments(), getDocCellValue(1, row));
 		assertEquals(different, getDocCellValue(2, row));
 		comparer.compare(new SpdxDocument[] {doc1, doc2});
 		pkgSheet.importCompareResults(comparer, new String[] {docNames[0], docNames[1]});

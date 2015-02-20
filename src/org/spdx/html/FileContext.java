@@ -138,7 +138,7 @@ public class FileContext {
 			return "Error getting SPDX file information: "+error.getMessage();
 		}
 		if (spdxFile != null) {
-			return spdxFile.getLicenseComment();
+			return spdxFile.getLicenseComments();
 		} else {
 			return null;
 		}

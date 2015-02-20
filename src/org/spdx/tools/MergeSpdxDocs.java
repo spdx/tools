@@ -212,7 +212,7 @@ public class MergeSpdxDocs {
 				//set package's file information
 				outputDoc.getSpdxPackage().setFiles(fileInfoResult);
 				//set package's license comments information 
-				outputDoc.getSpdxPackage().setLicenseComment(packageInfoResult.getLicenseComment());
+				outputDoc.getSpdxPackage().setLicenseComments(packageInfoResult.getLicenseComments());
 				//set package's verification code
 				outputDoc.getSpdxPackage().setPackageVerificationCode(packageInfoResult.getPackageVerificationCode());
 			}catch(InvalidSPDXAnalysisException e){

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013 Source Auditor Inc.
+ * Copyright (c) 2015 Source Auditor Inc.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -24,36 +24,32 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.compare.CompareHelper;
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
-import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
 
 /**
- * @author Gary O'Neall
+ * @author Gary
  *
  */
-public class PerFileSheetV1d2 extends PerFileSheet {
+public class PerFileSheetV2d0 extends PerFileSheet {
 
-	/**
-	 * @param workbook
-	 * @param sheetName
-	 * @param version
-	 */
-	public PerFileSheetV1d2(Workbook workbook, String sheetName, String version) {
+	PerFileSheetV2d0(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
-	static final int NUM_COLS = 15;
+	static final int NUM_COLS = 17;
 	static final int FILE_NAME_COL = 0;
-	static final int FILE_TYPE_COL = FILE_NAME_COL + 1;
-	static final int SHA1_COL = FILE_TYPE_COL + 1;
-	static final int CONCLUDED_LIC_COL = SHA1_COL + 1;
+	static final int ID_COL = FILE_NAME_COL + 1;
+	static final int PACKAGE_ID_COL = ID_COL + 1;
+	static final int FILE_TYPE_COL = PACKAGE_ID_COL + 1;
+	static final int CHECKSUMS_COL = FILE_TYPE_COL + 1;
+	static final int CONCLUDED_LIC_COL = CHECKSUMS_COL + 1;
 	static final int LIC_INFO_IN_FILE_COL = CONCLUDED_LIC_COL + 1;
 	static final int LIC_COMMENTS_COL = LIC_INFO_IN_FILE_COL + 1;
 	static final int SEEN_COPYRIGHT_COL = LIC_COMMENTS_COL + 1;
@@ -61,22 +57,23 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	static final int ARTIFACT_OF_PROJECT_COL = NOTICE_TEXT_COL + 1;
 	static final int ARTIFACT_OF_HOMEPAGE_COL = ARTIFACT_OF_PROJECT_COL + 1;
 	static final int ARTIFACT_OF_PROJECT_URL_COL = ARTIFACT_OF_HOMEPAGE_COL + 1;
-	static final int FILE_DEPENDENCIES_COL = ARTIFACT_OF_PROJECT_URL_COL + 1;
-	static final int CONTRIBUTORS_COL = FILE_DEPENDENCIES_COL + 1;
+	static final int CONTRIBUTORS_COL = ARTIFACT_OF_PROJECT_URL_COL + 1;
 	static final int COMMENT_COL = CONTRIBUTORS_COL + 1;
-	static final int USER_DEFINED_COL = COMMENT_COL + 1;
+	static final int FILE_DEPENDENCIES_COL = COMMENT_COL + 1;
+	static final int USER_DEFINED_COL = FILE_DEPENDENCIES_COL + 1;
 	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, 
+	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, false, false, 
 		false, false, false, false, false, false, false, false, false, false, false};
-	static final String[] HEADER_TITLES = new String[] {"File Name", "File Type",
-		"File Checksum", "License Concluded", "License Info in File", "License Comments",
+	static final String[] HEADER_TITLES = new String[] {"File Name", "SPDX Identifier",
+		"Package Identifier", "File Type(s)",
+		"File Checksum(s)", "License Concluded", "License Info in File", "License Comments",
 		"File Copyright Text", "Notice Text", "Artifact of Project", "Artifact of Homepage", 
-		"Artifact of URL", "File Dependencies", "Contribuors", "File Comment", "User Defined Columns..."};
-	static final int[] COLUMN_WIDTHS = new int[] {60, 10, 25, 30, 30, 40,
-		40, 40, 25, 60, 60, 60, 60, 60, 60};
-	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true, 
+		"Artifact of URL", "Contributors", "File Comment", "File Dependencies", "User Defined Columns..."};
+	static final int[] COLUMN_WIDTHS = new int[] {60, 25, 25, 30, 85, 50, 50, 60,
+		70, 70, 35, 60, 60, 60, 60, 60, 60};
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, false, true, true, 
 		true, true, true, true, true, true, true, true, true, true, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false, 
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, true, false, false, 
 		false, false, false, false, false, false, false, false, false, false, false, false};
 	
 	/**
@@ -87,6 +84,12 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	@SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String pkgId) {
 		Row row = addRow();
+		if (fileInfo.getId() != null && !fileInfo.getId().isEmpty()) {
+			row.createCell(ID_COL).setCellValue(fileInfo.getId());
+		}
+		if (pkgId != null && !pkgId.isEmpty()) {
+			row.createCell(PACKAGE_ID_COL).setCellValue(pkgId);
+		}
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
 			DoapProject[] projects = fileInfo.getArtifactOf();
 			String[] projectNames = new String[projects.length];
@@ -117,8 +120,8 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 			row.createCell(CONCLUDED_LIC_COL).setCellValue(fileInfo.getLicenseConcluded().toString());
 		}
 		row.createCell(FILE_NAME_COL).setCellValue(fileInfo.getName());
-		if (fileInfo.getSha1() != null && !fileInfo.getSha1().isEmpty()) {
-			row.createCell(SHA1_COL).setCellValue(fileInfo.getSha1());
+		if (fileInfo.getChecksums() != null && fileInfo.getChecksums().length > 0) {
+			row.createCell(CHECKSUMS_COL).setCellValue(CompareHelper.checksumsToString(fileInfo.getChecksums()));
 		}
 		row.createCell(FILE_TYPE_COL).setCellValue(
 				CompareHelper.fileTypesToString(fileInfo.getFileTypes()));
@@ -165,7 +168,6 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		if (this.fileCache.containsKey(name)) {
 			return this.fileCache.get(name);
 		}
-		
 		String typeStr = row.getCell(FILE_TYPE_COL).getStringCellValue();
 		FileType[] types;
 		try {
@@ -173,12 +175,14 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		} catch (InvalidSPDXAnalysisException e1) {
 			throw(new SpreadsheetException("Error converting file types: "+e1.getMessage()));
 		}
-		Cell sha1cell = row.getCell(SHA1_COL);
-		String sha1;
-		if (sha1cell != null) {
-			sha1 = sha1cell.getStringCellValue();
-		} else {
-			sha1 = "";
+		Cell checksumsCell = row.getCell(CHECKSUMS_COL);
+		Checksum[] checksums = new Checksum[0];
+		if (checksumsCell != null) {
+			try {
+				checksums = CompareHelper.strToChecksums(checksumsCell.getStringCellValue());
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpreadsheetException("Error converting file checksums: "+e.getMessage()));
+			}
 		}
 		AnyLicenseInfo fileLicenses;
 		Cell assertedLicenseCell = row.getCell(CONCLUDED_LIC_COL);
@@ -278,8 +282,11 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		try {
 			retval = new SpdxFile(name, comment, new Annotation[0], new Relationship[0], 
 					fileLicenses, seenLicenses, copyright, licenseComments, types, 
-					new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1)},
-					contributors, noticeText, projects);
+					checksums, contributors, noticeText, projects);
+			Cell idCell = row.getCell(ID_COL);
+			if (idCell != null && idCell.getStringCellValue() != null && !idCell.getStringCellValue().isEmpty()) {
+				retval.setId(idCell.getStringCellValue());
+			}
 			retval.setFileDependencies(fileDependencies);
 		} catch (InvalidSPDXAnalysisException e) {
 			throw(new SpreadsheetException("Error creating new SPDX file: "+e.getMessage()));
@@ -354,9 +361,6 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum());
 				}
 			} else {
-//				if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
-//					return "Invalid cell format for "+HEADER_TITLES[i]+" for forw "+String.valueOf(row.getRowNum());
-//				}
 				if (i == CONCLUDED_LIC_COL || i == LIC_INFO_IN_FILE_COL) {
 					try {
 						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
@@ -402,7 +406,16 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	 */
 	@Override
 	public String[] getPackageIds(int row) {
-		return new String[0];
+		Cell pkgIdCell = sheet.getRow(row).getCell(PACKAGE_ID_COL);
+		if (pkgIdCell == null || pkgIdCell.getStringCellValue() == null ||
+				pkgIdCell.getStringCellValue().isEmpty()) {
+			return new String[0];
+		}
+		String[] parts = pkgIdCell.getStringCellValue().split(",");
+		String[] retval = new String[parts.length];
+		for (int i = 0; i < parts.length; i++) {
+			retval[i] = parts[i].trim();
+		}
+		return retval;
 	}
-
 }

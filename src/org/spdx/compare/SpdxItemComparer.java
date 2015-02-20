@@ -116,8 +116,8 @@ public class SpdxItemComparer {
 				this.differenceFound = true;
 			}
 			// license comments
-			if (!SpdxComparer.stringsEqual(spdxItem.getLicenseComment(),
-					itemB.getLicenseComment())) {
+			if (!SpdxComparer.stringsEqual(spdxItem.getLicenseComments(),
+					itemB.getLicenseComments())) {
 				this.licenseCommmentsEquals = false;
 				this.differenceFound = true;
 			}
