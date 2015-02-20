@@ -18,6 +18,7 @@ package org.spdx.merge;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
@@ -68,7 +69,7 @@ public class SpdxPackageInfoMerger {
 			packageInfoResult.setLicenseDeclared(declaredLicense);		
 			
 			String licComments = translateSubDelcaredLicsIntoComments(subDocs);
-			packageInfoResult.setLicenseComment(licComments);
+			packageInfoResult.setLicenseComments(licComments);
 						
 			return packageInfoResult;			
 		}
@@ -81,8 +82,9 @@ public class SpdxPackageInfoMerger {
 		public String[] collectSkippedFiles() throws InvalidSPDXAnalysisException{
 			ArrayList<String> excludedFileNamesList = new ArrayList<String>();
 			for(int p = 0; p < allDocs.length; p++){
-				String[] retval = allDocs[p].getSpdxPackage().getPackageVerificationCode().getExcludedFileNames();
-				
+			  List<SpdxPackage> packageList = allDocs[p].getDocumentContainer().findAllPackages();
+			  for(int h = 0; h < packageList.size(); h++){
+				String[] retval = packageList.get(h).getPackageVerificationCode().getExcludedFileNames();
 				if(excludedFileNamesList.size() == 0){
 					for(int i = 0; i < retval.length; i++){
 						excludedFileNamesList.add(i, retval[i]);
@@ -100,6 +102,7 @@ public class SpdxPackageInfoMerger {
 						}
 					}
 				}
+			  }
 			}
 			String[] excludedFileNamesArray = new String[excludedFileNamesList.size()];
 			excludedFileNamesList.toArray(excludedFileNamesArray);
@@ -150,23 +153,29 @@ public class SpdxPackageInfoMerger {
 		public String translateSubDelcaredLicsIntoComments(SpdxDocument[] subDocs) throws InvalidSPDXAnalysisException{
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 				if(!mapper.isNonStdLicIdMapEmpty()){
-					StringBuilder buffer = new StringBuilder(packageInfoResult.getLicenseComment() 
+					StringBuilder buffer = new StringBuilder(packageInfoResult.getLicenseComments() 
 							+ ". This package merged several packages and the sub-package contain the following licenses:");
-			
+
 					for(int k = 0; k < subDocs.length; k++){
 						if(mapper.docInNonStdLicIdMap(subDocs[k])){
-							AnyLicenseInfo license = subDocs[k].getSpdxPackage().getLicenseDeclared();
+						 List<SpdxPackage> tempList = subDocs[k].getDocumentContainer().findAllPackages();
+						  for(int h = 0; h < tempList.size(); h++){
+							AnyLicenseInfo license = tempList.get(h).getLicenseDeclared();
 							AnyLicenseInfo result = mapper.mapLicenseInfo(subDocs[k], license); 
-							buffer.append(subDocs[k].getSpdxPackage().getFileName());
+							buffer.append(tempList.get(h).getPackageFileName());
 							buffer.append(" (" + result.toString() + ") ");
-						}else{				
-							buffer.append(subDocs[k].getSpdxPackage().getFileName());
-							buffer.append(" (" + subDocs[k].getSpdxPackage().getDeclaredLicense().toString() + ") ");
+						  }
+						}else{
+							List<SpdxPackage> tempList = subDocs[k].getDocumentContainer().findAllPackages();
+							for(int q = 0; q < tempList.size(); q++){
+							buffer.append(tempList.get(q).getPackageFileName());
+							buffer.append(" (" + tempList.get(q).getLicenseDeclared().toString() + ") ");
+						  }
 						}
 					}			
 					return buffer.toString();
 			}else{
-				return packageInfoResult.getLicenseComment();
+				return packageInfoResult.getLicenseComments();
 			}
 		}
 }

@@ -18,6 +18,7 @@ package org.spdx.merge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -61,7 +62,7 @@ public class SpdxFileInfoMerger{
 			
 			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
-				SpdxFile[] subFileInfo = cloneFiles(subDocs[q].getSpdxPackage().getFiles());
+				SpdxFile[] subFileInfo = cloneList(subDocs[q].getDocumentContainer().findAllFiles());
 				
 				for(int k = 0; k < subFileInfo.length; k++){
 					boolean foundNameMatch = false;
@@ -165,17 +166,31 @@ public class SpdxFileInfoMerger{
 	
 	/**
 	 * 
-	 * @param orgFilesArray
+	 * @param filesArray
 	 * @return clonedFilesArray
 	 */
-	public SpdxFile[] cloneFiles(SpdxFile[] orgFilesArray){
-		SpdxFile[] clonedFilesArray = new SpdxFile[orgFilesArray.length];
-		for(int h = 0; h < orgFilesArray.length; h++){
-			clonedFilesArray[h] = orgFilesArray[h].clone();
+	public SpdxFile[] cloneFiles(SpdxFile[] filesArray){
+		SpdxFile[] clonedFilesArray = new SpdxFile[filesArray.length];
+		for(int h = 0; h < filesArray.length; h++){
+			clonedFilesArray[h] = filesArray[h].clone();
 		}
 		return clonedFilesArray;
 	}
-	
+
+	/**
+	 * 
+	 * @param filesList
+	 * @return clonedFilesArray
+	 */
+	public SpdxFile[] cloneList(List<SpdxFile> filesList){
+		List<SpdxFile> clonedFilesList = new ArrayList<SpdxFile>();
+		for(int h = 0; h < filesList.size(); h++){
+			clonedFilesList.add(filesList.get(h));
+		}
+		SpdxFile[] clonedFilesArray = new SpdxFile[clonedFilesList.size()];
+		clonedFilesList.toArray(clonedFilesArray);
+		return clonedFilesArray;	
+	}
 	/**
 	 * 
 	 * @param orgProjectArray
