@@ -199,7 +199,7 @@ public interface SpdxRdfConstants {
 	
 	// SPDX Annotation Properties
 	public static final String PROP_ANNOTATOR = "annotator";
-	public static final String PROP_DATE = "date";
+	public static final String PROP_ANNOTATION_DATE = "annotationDate";
 	public static final String PROP_ANNOTATION_TYPE = "annotationType";
 	
 	// SPDX Relationship Properties

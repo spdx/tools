@@ -611,7 +611,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			retval = new SpdxFile(name, comment, cloneAnnotations(),
 					null, cloneLicenseConcluded(),
 					cloneLicenseInfosFromFiles(), copyrightText,
-					licenseComment, fileTypes, cloneChecksum(),
+					licenseComments, fileTypes, cloneChecksum(),
 					fileContributors, noticeText, cloneArtifactOf());
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Error cloning file: ",e);
@@ -708,25 +708,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
     public void setCopyright(String copyright) {
     	this.setCopyrightText(copyright);
     }
-
-	/**
-	 * This method should be replaced by the more consistent getLicenseComment (without the s)
-	 * This method will be removed in a future release
-	 * @return
-	 */
-    @Deprecated
-	public String getLicenseComments() {
-		return this.getLicenseComment();
-	}
-    
-	/**
-	 * This method should be replaced by the more consistent setLicenseComment (without the s)
-	 * This method will be removed in a future release
-	 */
-    @Deprecated
-	public void setLicenseComments(String licenseComment) {
-		this.setLicenseComment(licenseComment);
-	}
 
 	/**
 	 * This method should be replaced by the more consistent getLicenseConcluded

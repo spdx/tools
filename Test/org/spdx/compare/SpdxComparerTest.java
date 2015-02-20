@@ -1608,11 +1608,11 @@ public class SpdxComparerTest {
 		}
 		String file0Name = files[0].getName();
 		files[0] = new SpdxFile(files[0].getName(), files[0].getFileTypes(), files[0].getSha1(),files[0].getLicenseConcluded(),
-				files[0].getLicenseInfoFromFiles(), files[0].getLicenseComment(), files[0].getCopyrightText(), files[0].getArtifactOf(), files[0].getComment());
+				files[0].getLicenseInfoFromFiles(), files[0].getLicenseComments(), files[0].getCopyrightText(), files[0].getArtifactOf(), files[0].getComment());
 		files[0].setComment("a new and unique comment");
 		String file1Name = files[1].getName();
 		files[1] = new SpdxFile(files[1].getName(), files[1].getFileTypes(), files[1].getSha1(),files[1].getLicenseConcluded(),
-				files[1].getLicenseInfoFromFiles(), files[1].getLicenseComment(), files[1].getCopyrightText(), files[1].getArtifactOf(), files[1].getComment());
+				files[1].getLicenseInfoFromFiles(), files[1].getLicenseComments(), files[1].getCopyrightText(), files[1].getArtifactOf(), files[1].getComment());
 		files[1].setLicenseConcluded(LicenseInfoFactory.parseSPDXLicenseString(STD_LIC_ID_CC0));
 		((SpdxPackage)(doc2.getDocumentDescribes()[0])).setFiles(files);
 		comparer.compare(doc1, doc2);

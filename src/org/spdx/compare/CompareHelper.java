@@ -24,6 +24,8 @@ import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.tag.BuildDocument;
+import org.spdx.tag.InvalidSpdxTagFileException;
 
 /**
  * @author Gary
@@ -46,7 +48,7 @@ public class CompareHelper {
 		if (annotation == null) {
 			return "";
 		}
-		StringBuilder sb = new StringBuilder(annotation.getDate());
+		StringBuilder sb = new StringBuilder(annotation.getAnnotationDate());
 		sb.append(" ");
 		sb.append(annotation.getAnnotator());
 		sb.append(": ");
@@ -211,6 +213,27 @@ public class CompareHelper {
 			retval[i] = SpdxFile.TAG_TO_FILE_TYPE.get(fileTypeStrs[i]);
 			if (retval[i] == null) {
 				throw(new InvalidSPDXAnalysisException("Unrecognized file type "+fileTypeStrs[i]));
+			}
+		}
+		return retval;
+	}
+
+	/**
+	 * @param checksumsString
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static Checksum[] strToChecksums(String checksumsString) throws InvalidSPDXAnalysisException {
+		if (checksumsString == null || checksumsString.trim().isEmpty()) {
+			return new Checksum[0];
+		}
+		String[] parts = checksumsString.split(",");
+		Checksum[] retval = new Checksum[parts.length];
+		for (int i = 0; i < parts.length; i++) {
+			try {
+				retval[i] = BuildDocument.parseChecksum(parts[i].trim());
+			} catch (InvalidSpdxTagFileException e) {
+				throw(new InvalidSPDXAnalysisException("Invalid checksum string: "+parts[i]));
 			}
 		}
 		return retval;

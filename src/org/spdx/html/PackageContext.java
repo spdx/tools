@@ -200,7 +200,7 @@ public class PackageContext {
 	
 	public String licenseComments() {
 		if (pkg != null) {
-			return pkg.getLicenseComment();
+			return pkg.getLicenseComments();
 		} else {
 			return null;
 		}

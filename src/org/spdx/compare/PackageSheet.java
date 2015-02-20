@@ -329,7 +329,7 @@ public class PackageSheet extends AbstractSheet {
 				concludedLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseConcluded().toString());
 				licenseInfosFromFilesRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.licenseInfosToString(pkg.getLicenseInfoFromFiles()));
 				declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseDeclared().toString());
-				licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseComment());
+				licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseComments());
 				copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
 				summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
 				descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());

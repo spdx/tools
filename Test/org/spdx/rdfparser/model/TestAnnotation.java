@@ -89,7 +89,7 @@ public class TestAnnotation {
 		Annotation a = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		assertEquals(ANNOTATOR1, a.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
-		assertEquals(date, a.getDate());
+		assertEquals(date, a.getAnnotationDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -97,7 +97,7 @@ public class TestAnnotation {
 		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(ANNOTATOR1, copy.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, copy.getAnnotationType());
-		assertEquals(date, copy.getDate());
+		assertEquals(date, copy.getAnnotationDate());
 		assertEquals(COMMENT1, copy.getComment());
 	}
 
@@ -111,7 +111,7 @@ public class TestAnnotation {
 		assertEquals(0, a.verify().size());
 		a.setAnnotationType(null);
 		a.setAnnotator(null);
-		a.setDate(null);
+		a.setAnnotationDate(null);
 		a.setComment(null);
 		assertEquals(4, a.verify().size());
 	}
@@ -125,7 +125,7 @@ public class TestAnnotation {
 		Annotation a = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		assertEquals(ANNOTATOR1, a.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
-		assertEquals(date, a.getDate());
+		assertEquals(date, a.getAnnotationDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -145,7 +145,7 @@ public class TestAnnotation {
 		Annotation a = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		assertEquals(ANNOTATOR1, a.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
-		assertEquals(date, a.getDate());
+		assertEquals(date, a.getAnnotationDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -165,7 +165,7 @@ public class TestAnnotation {
 		Annotation a = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		assertEquals(ANNOTATOR1, a.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
-		assertEquals(date, a.getDate());
+		assertEquals(date, a.getAnnotationDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -177,7 +177,7 @@ public class TestAnnotation {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.Annotation#setDate(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.model.Annotation#setAnnotationDate(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
@@ -185,15 +185,15 @@ public class TestAnnotation {
 		Annotation a = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
 		assertEquals(ANNOTATOR1, a.getAnnotator());
 		assertEquals(OTHER_ANNOTATION, a.getAnnotationType());
-		assertEquals(date, a.getDate());
+		assertEquals(date, a.getAnnotationDate());
 		assertEquals(COMMENT1, a.getComment());
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = a.createResource(modelContainer);
-		a.setDate(oldDate);
-		assertEquals(oldDate, a.getDate());
+		a.setAnnotationDate(oldDate);
+		assertEquals(oldDate, a.getAnnotationDate());
 		Annotation copy = new Annotation(modelContainer, r.asNode());
-		assertEquals(oldDate, copy.getDate());
+		assertEquals(oldDate, copy.getAnnotationDate());
 	}
 	
 	@Test
@@ -222,9 +222,9 @@ public class TestAnnotation {
 		a2.setComment(COMMENT1);
 		assertTrue(a2.equivalent(a1));	
 		// date
-		a2.setDate(oldDate);
+		a2.setAnnotationDate(oldDate);
 		assertFalse(a1.equivalent(a2));
-		a2.setDate(date);
+		a2.setAnnotationDate(date);
 		assertTrue(a2.equivalent(a1));	
 	}
 	
@@ -238,7 +238,7 @@ public class TestAnnotation {
 		assertEquals(a1.getAnnotationType(), a2.getAnnotationType());
 		assertEquals(a1.getAnnotator(), a2.getAnnotator());
 		assertEquals(a1.getComment(), a2.getComment());
-		assertEquals(a1.getDate(), a2.getDate());
+		assertEquals(a1.getAnnotationDate(), a2.getAnnotationDate());
 		assertTrue(a2.model == null);
 	}
 }

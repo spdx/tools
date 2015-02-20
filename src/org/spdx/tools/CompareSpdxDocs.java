@@ -324,7 +324,7 @@ public class CompareSpdxDocs {
 	private static void printAnnotation(Annotation annotation,
 			PrintStream output) {
 		output.println("\tAnnotator: "+annotation.getAnnotator());
-		output.println("\tAnnotationDate: "+annotation.getDate());
+		output.println("\tAnnotationDate: "+annotation.getAnnotationDate());
 		output.println("\tAnnotationType: "+Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
 		output.println("\tAnnotationComment: "+annotation.getComment());
 	}
@@ -906,13 +906,13 @@ public class CompareSpdxDocs {
 		// comments on license
 		if (!spdxPackageComparer.isLicenseCommmentsEquals()) {
 			output.println("Package license comments differ.");
-			String s1 = spdxPackageComparer.getDocPackage(spdxDoc1).getLicenseComment();
+			String s1 = spdxPackageComparer.getDocPackage(spdxDoc1).getLicenseComments();
 			if (s1 == null || s1.trim().isEmpty()) {
 				output.println("\t"+doc1Name+": [no license comments]");
 			} else {
 				output.println("\t"+doc1Name+": "+s1);
 			}
-			String s2 = spdxPackageComparer.getDocPackage(spdxDoc2).getLicenseComment();
+			String s2 = spdxPackageComparer.getDocPackage(spdxDoc2).getLicenseComments();
 			if (s2 == null || s2.trim().isEmpty()) {
 				output.println("\t"+doc2Name+": [no license comments]");
 			} else {

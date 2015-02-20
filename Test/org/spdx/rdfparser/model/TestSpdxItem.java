@@ -198,11 +198,11 @@ public class TestSpdxItem {
 		item2.setCopyrightText(COPYRIGHT_TEXT1);
 		assertTrue(item.equivalent(item2));
 		// License comment
-		item2.setLicenseComment(LICENSE_COMMENT2);
+		item2.setLicenseComments(LICENSE_COMMENT2);
 		assertFalse(item.equivalent(item2));
-		item2.setLicenseComment(null);
+		item2.setLicenseComments(null);
 		assertFalse(item.equivalent(item2));
-		item2.setLicenseComment(LICENSE_COMMENT1);
+		item2.setLicenseComments(LICENSE_COMMENT1);
 		assertTrue(item.equivalent(item2));
 	}
 
@@ -225,7 +225,7 @@ public class TestSpdxItem {
 		AnyLicenseInfo[] licenses = item.getLicenseInfoFromFiles();
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, licenses));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
 		Resource r = item.createResource(modelContainer);
 		SpdxItem item2 = new SpdxItem(modelContainer, r.asNode());
 		assertEquals(item.getName(), item2.getName());
@@ -235,7 +235,7 @@ public class TestSpdxItem {
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(item.getLicenseInfoFromFiles(), item2.getLicenseInfoFromFiles()));
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());
-		assertEquals(item.getLicenseComment(), item2.getLicenseComment());	
+		assertEquals(item.getLicenseComments(), item2.getLicenseComments());	
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
 		Resource r = item.createResource(modelContainer);
 		item.setLicenseConcluded(LICENSE2);
 		assertEquals(LICENSE2, item.getLicenseConcluded());
@@ -302,7 +302,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
 		Resource r = item.createResource(modelContainer);
 		AnyLicenseInfo[] newlicenses = new AnyLicenseInfo[] {LICENSE1};
 		item.setLicenseInfosFromFiles(newlicenses);
@@ -329,7 +329,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
 		Resource r = item.createResource(modelContainer);
 		item.setCopyrightText(COPYRIGHT_TEXT2);
 		assertEquals(COPYRIGHT_TEXT2, item.getCopyrightText());
@@ -338,7 +338,7 @@ public class TestSpdxItem {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#setLicenseComment(java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#setLicenseComments(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
@@ -355,12 +355,12 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
 		Resource r = item.createResource(modelContainer);
-		item.setLicenseComment(LICENSE_COMMENT2);
-		assertEquals(LICENSE_COMMENT2, item.getLicenseComment());
+		item.setLicenseComments(LICENSE_COMMENT2);
+		assertEquals(LICENSE_COMMENT2, item.getLicenseComments());
 		SpdxItem item2= new SpdxItem(modelContainer, r.asNode());
-		assertEquals(LICENSE_COMMENT2, item2.getLicenseComment());
+		assertEquals(LICENSE_COMMENT2, item2.getLicenseComments());
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComment());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
 		item.createResource(modelContainer);
 		SpdxItem item2 = item.clone();
 		assertEquals(item.getName(), item2.getName());
@@ -391,7 +391,7 @@ public class TestSpdxItem {
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(item.getLicenseInfoFromFiles(), item2.getLicenseInfoFromFiles()));
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());
-		assertEquals(item.getLicenseComment(), item2.getLicenseComment());	
+		assertEquals(item.getLicenseComments(), item2.getLicenseComments());	
 		assertFalse(item.resource == item2.resource);
 	}
 

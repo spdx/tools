@@ -619,7 +619,7 @@ public class SpdxFileComparerTest {
 		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isLicenseCommentsEqual());
 		
-		fileB.setLicenseComment(licenseCommentsA);
+		fileB.setLicenseComments(licenseCommentsA);
 		fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
