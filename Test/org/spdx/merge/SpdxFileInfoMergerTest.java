@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,8 +65,9 @@ public class SpdxFileInfoMergerTest {
 	@Test
 	public void testSpdxFileInfoMerger() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
-		SpdxPackage packageInfo = doc1.getSpdxPackage();
-		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
+		List<SpdxPackage> packageInfoList = doc1.getDocumentContainer().findAllPackages();
+		SpdxPackage[] packageInfo = packageInfoList.toArray(new SpdxPackage[packageInfoList.size()]);
+//		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
 	}
 
 	/**
