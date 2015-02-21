@@ -20,13 +20,16 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -111,17 +114,18 @@ public class SpdxLicenseMapperTest {
 		subNonStdLics[0] = clonedNonStdLic;//replace the lics 
 		doc3.setExtractedLicenseInfos(subNonStdLics);
 
-		SpdxFile[] subFiles = doc3.getSpdxPackage().getFiles();
+//		SpdxFile[] subFiles = doc3.getSpdxPackage().getFiles();
+		List<SpdxFile> subFilesList = doc3.getDocumentContainer().findAllFiles();
 		String fileName = "lib-source/mergetest2.jar";
 		String sha1 = "5ab4e1e67a2d28fced849ee1bb76e7391b93f125";
 		AnyLicenseInfo[] mappedLicsInFile = null;
 		AnyLicenseInfo subConcludedLicInFile = null;
 		AnyLicenseInfo concludedLicense = null;
-		for(int i = 0; i < subFiles.length; i++){
-			if(subFiles[i].getName().equalsIgnoreCase(fileName) && subFiles[i].getSha1().equals(sha1)){
-				mapper.replaceNonStdLicInFile(doc3, subFiles[i]);
-				mappedLicsInFile = subFiles[i].getSeenLicenses();
-				subConcludedLicInFile = subFiles[i].getConcludedLicenses();
+		for(int i = 0; i < subFilesList.size(); i++){
+			if(subFilesList.get(i).getName().equalsIgnoreCase(fileName) && subFilesList.get(i).getSha1().equals(sha1)){
+				mapper.replaceNonStdLicInFile(doc3, subFilesList.get(i));
+				mappedLicsInFile = subFilesList.get(i).getLicenseInfoFromFiles();
+				subConcludedLicInFile = subFilesList.get(i).getLicenseConcluded();
 				concludedLicense = mapper.mapLicenseInfo(doc3,subConcludedLicInFile);
 			}			
 		}
@@ -179,9 +183,16 @@ public class SpdxLicenseMapperTest {
 		ExtractedLicenseInfo clonedNonStdLic = (ExtractedLicenseInfo) subNonStdLics[0].clone();//input non-standard lic
 		mapper.mappingNewNonStdLic(doc1, doc3, clonedNonStdLic);//new clonedNonStdLic id = 5		
 		
-		AnyLicenseInfo mappedLicense = mapper.mapLicenseInfo(doc3, doc3.getSpdxPackage().getDeclaredLicense().clone());
-		AnyLicenseInfo expectedLicense = setLicense(doc3.getSpdxPackage().getDeclaredLicense().clone(),subNonStdLics[0],clonedNonStdLic);
-		assertEquals(expectedLicense, mappedLicense);
+		List<SpdxPackage> packageList = doc3.getDocumentContainer().findAllPackages();
+		List<AnyLicenseInfo> mappedLicenseList = new ArrayList<AnyLicenseInfo>();
+		List<AnyLicenseInfo> expectedLicenseList = new ArrayList<AnyLicenseInfo>();
+		
+		for(int i = 0; i < packageList.size(); i++){
+			mappedLicenseList.add(mapper.mapLicenseInfo(doc3, packageList.get(i).getLicenseDeclared().clone()));
+			expectedLicenseList.add(setLicense(packageList.get(i).getLicenseDeclared().clone(),subNonStdLics[0],clonedNonStdLic));
+		}
+      
+		assertEquals(expectedLicenseList, mappedLicenseList);
 
 	}
 	
