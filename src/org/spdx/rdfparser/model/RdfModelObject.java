@@ -576,6 +576,23 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/**
+	 * Add a relationship property value
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param relationship
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void addPropertyValue(String nameSpace,
+			String propertyName, Relationship relationship) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			if (relationship != null) {
+					this.resource.addProperty(p, relationship.createResource(modelContainer));
+			}
+		}
+	}
+	
+	/**
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace
 	 * @param propertyName

@@ -296,5 +296,18 @@ public class TestSpdxElement {
 		assertTrue(UnitTestHelper.isArraysEqual(relationships4, element1.getRelationships()));
 
 	}
+	
+	@Test
+	public void testAddRelationships() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+				annotations, new Relationship[0]);
+		assertEquals(0, element1.getRelationships().length);
+		element1.createResource(modelContainer);
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
+		element1.addRelationship(RELATIONSHIP1);
+		element1.addRelationship(RELATIONSHIP2);
+		assertTrue(UnitTestHelper.isArraysEqual(relationships, element1.getRelationships()));
+	}
 
 }

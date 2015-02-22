@@ -1,4 +1,4 @@
-- check TestFiles/spdx_licenselist_v1.19.xls difference to released version
+- Add a new test file / example file with embedded packages
 - cleanup warnings
 - windows or Unix line endings?
 - use a spdx-licenselist artifact

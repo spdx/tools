@@ -373,6 +373,26 @@ public class TestRdfModelObject {
 	}
 
 	@Test
+	public void testAddRelationshipPropertyValues() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		Relationship[] result = empty.findRelationshipPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		String elementName1 = "element name 1";
+		String elementComment1 = "element comment 1";
+		SpdxElement element1 = new SpdxElement(elementName1, elementComment1, null, null);
+		RelationshipType relType1 = RelationshipType.relationshipType_buildToolOf;
+		String relComment1 = "Relationship Comment 1";
+		Relationship relationship1 = new Relationship(element1, relType1, relComment1);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, relationship1);
+		result = empty.findRelationshipPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(1, result.length);
+		assertEquals(relationship1, result[0]);
+	}
+	
+	@Test
 	public void testFindSetRelationshipPropertyValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
