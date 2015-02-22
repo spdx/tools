@@ -67,6 +67,10 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	static final String NON_STANDARD_LICENSE_SHEET_NAME = "Extracted Lic Info";
 	private PerFileSheet perFileSheet;
 	static final String PER_FILE_SHEET_NAME = "Per File Info";
+	private RelationshipsSheet relationshipsSheet;
+	static final String RELATIONSHIPS_SHEET_NAME = "Relationships";
+	private AnnotationsSheet annotationsSheet;
+	static final String ANNOTATIONS_SHEET_NAME = "Annotations";
 	private ReviewersSheet reviewersSheet;
 	static final String REVIEWERS_SHEET_NAME = "Reviewers";
 	private String version;
@@ -94,6 +98,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		this.packageInfoSheet = PackageInfoSheet.openVersion(this.workbook, PACKAGE_INFO_SHEET_NAME, version);
 		this.nonStandardLicensesSheet = NonStandardLicensesSheetV0d9d4.openVersion(this.workbook, NON_STANDARD_LICENSE_SHEET_NAME, version);
 		this.perFileSheet = PerFileSheet.openVersion(this.workbook, PER_FILE_SHEET_NAME, version);
+		this.relationshipsSheet = new RelationshipsSheet(this.workbook, RELATIONSHIPS_SHEET_NAME);
+		this.annotationsSheet = new AnnotationsSheet(this.workbook, ANNOTATIONS_SHEET_NAME);
 		this.reviewersSheet = new ReviewersSheet(this.workbook, REVIEWERS_SHEET_NAME, version);
 
 		verifyMsg = verifyWorkbook();
@@ -157,6 +163,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			PackageInfoSheet.create(wb, PACKAGE_INFO_SHEET_NAME);
 			NonStandardLicensesSheet.create(wb, NON_STANDARD_LICENSE_SHEET_NAME);
 			PerFileSheet.create(wb, PER_FILE_SHEET_NAME);
+			RelationshipsSheet.create(wb, RELATIONSHIPS_SHEET_NAME);
+			AnnotationsSheet.create(wb, ANNOTATIONS_SHEET_NAME);
 			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
@@ -173,6 +181,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		this.packageInfoSheet.clear();
 		this.nonStandardLicensesSheet.clear();
 		this.perFileSheet.clear();
+		this.relationshipsSheet.clear();
+		this.annotationsSheet.clear();
 		this.reviewersSheet.clear();
 	}
 
@@ -193,6 +203,12 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		}
 		if (retval == null || retval.isEmpty()) {
 			retval = this.reviewersSheet.verify();
+		}
+		if (retval == null || retval.isEmpty()) {
+			retval = this.relationshipsSheet.verify();
+		}
+		if (retval == null || retval.isEmpty()) {
+			retval = this.annotationsSheet.verify();
 		}
 		return retval;
 	}
@@ -266,6 +282,50 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 */
 	public void setReviewersSheet(ReviewersSheet reviewersSheet) {
 		this.reviewersSheet = reviewersSheet;
+	}
+	
+	
+
+	public RelationshipsSheet getRelationshipsSheet() {
+		return relationshipsSheet;
+	}
+
+	public void setRelationshipsSheet(RelationshipsSheet relationshipsSheet) {
+		this.relationshipsSheet = relationshipsSheet;
+	}
+
+	public AnnotationsSheet getAnnotationsSheet() {
+		return annotationsSheet;
+	}
+
+	public void setAnnotationsSheet(AnnotationsSheet annotationsSheet) {
+		this.annotationsSheet = annotationsSheet;
+	}
+
+	public void setPackageInfoSheet(PackageInfoSheet packageInfoSheet) {
+		this.packageInfoSheet = packageInfoSheet;
+	}
+
+	public void setNonStandardLicensesSheet(
+			NonStandardLicensesSheet nonStandardLicensesSheet) {
+		this.nonStandardLicensesSheet = nonStandardLicensesSheet;
+	}
+
+	public void setPerFileSheet(PerFileSheet perFileSheet) {
+		this.perFileSheet = perFileSheet;
+	}
+
+	/**
+	 * 
+	 */
+	public void resizeRow() {
+		nonStandardLicensesSheet.resizeRows();
+//		originsSheet.resizeRows(); - Can't resize the origins sheet since it uses blank cells
+		packageInfoSheet.resizeRows();
+		perFileSheet.resizeRows();
+		relationshipsSheet.resizeRows();
+		annotationsSheet.resizeRows();
+//		reviewersSheet.resizeRows(); - Can't resize the review sheet since it uses blank cells
 	}
 
 }

@@ -382,6 +382,41 @@ public class TestSpdxDocumentContainer {
 	}
 	
 	@Test
+	public void testFindAllElements() throws InvalidSPDXAnalysisException {
+		String FILE_ID1 = "SpdxRef-File1";
+		String FILE_ID2 = "SpdxRef-File2";
+		String FILE_ID3 = "SpdxRef-File3";
+		SpdxFile file1 = new SpdxFile("File1", null, null, null, null, null, null, null, null);
+		file1.setId(FILE_ID1);
+		SpdxFile file2 = new SpdxFile("File2", null, null, null, null, null, null, null, null);
+		file2.setId(FILE_ID2);
+		SpdxFile file3 = new SpdxFile("File3", null, null, null, null, null, null, null, null);
+		file3.setId(FILE_ID3);
+		String PACKAGE_ID1 = "SpdxRef-PackageID";
+		String PACKAGE_ID2 = "SpdxRef-PackageID2";
+		String PACKAGE_ID3 = "SpdxRef-PackageID3";
+		SpdxPackage pkg1 = new SpdxPackage("PkgName1", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID1);
+		SpdxPackage pkg2 = new SpdxPackage("PkgName1", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID2);
+		SpdxPackage pkg3 = new SpdxPackage("PkgName1", null, null, null, null, null, null, null);
+		pkg1.setId(PACKAGE_ID3);
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		List<SpdxElement> result = doc.findAllElements();
+		assertEquals(1, result.size());
+		assertEquals(doc.getSpdxDocument(), result.get(0));
+		doc.addElement(file1);
+		doc.addElement(file2);
+		doc.addElement(file3);
+		doc.addElement(pkg3);
+		doc.addElement(pkg2);
+		doc.addElement(pkg1);
+		SpdxElement[] expected = new SpdxElement[] {doc.getSpdxDocument(), file1, file2, file3, pkg1, pkg2, pkg3};
+		UnitTestHelper.isArraysEquivalent(expected, doc.findAllElements().toArray(new SpdxElement[doc.findAllElements().size()]));
+	}
+	
+	@Test
 	public void testFindAllPackage() throws InvalidSPDXAnalysisException {
 		String PACKAGE_ID1 = "SpdxRef-PackageID";
 		String PACKAGE_ID2 = "SpdxRef-PackageID2";

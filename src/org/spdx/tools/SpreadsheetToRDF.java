@@ -148,7 +148,10 @@ public class SpreadsheetToRDF {
 			// need to create a unique URL
 			// Use the download URL + "#SPDXANALYSIS"
 			logger.warn("Missing or invalid document namespace.  Using download location URL for the document namespace");
-			pkgUrl = ss.getPackageInfoSheet().getPackageInfo(1).getUrl();
+			SpdxPackage[] pkgs = ss.getPackageInfoSheet().getPackages();
+			if (pkgs.length > 0) {
+				pkgUrl = pkgs[0].getDownloadLocation();
+			}
 		}
 		if (!SpdxVerificationHelper.isValidUri(pkgUrl)) {
 			// Since the download location is not valid, replace it with a spdx.org/tempspdxuri
@@ -220,7 +223,7 @@ public class SpreadsheetToRDF {
 
 	private static HashMap<String, SpdxPackage> copyPackageInfo(PackageInfoSheet packageInfoSheet,
 			SpdxDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
-		SpdxPackage[] packages = packageInfoSheet.getPackages(packageInfoSheet.getFirstDataRow());
+		SpdxPackage[] packages = packageInfoSheet.getPackages();
 		HashMap<String, SpdxPackage> pkgIdToPackage = new HashMap<String, SpdxPackage>();
 		for (int i = 0; i < packages.length; i++) {
 			pkgIdToPackage.put(packages[i].getId(), packages[i]);

@@ -199,24 +199,27 @@ public class TestPerFileSheet {
 				new Relationship[0], COMPLEX_LICENSE,
 				testLicenses2, "copyright (c) 1",
 				"license comments 1", new FileType[] {FileType.fileType_binary} ,
-				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "sha1")},
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				contributors1, noticeText1, testProject2);
+		testFile1.setId("SPDXRef-File1");
 		SpdxFile testFile2 = new SpdxFile("FileName2", fileComment1, new Annotation[0],
 				new Relationship[0], NON_STD_LICENSES[0],
 				testLicenses1,  "copyright (c) 12",
 				"license comments2", new FileType[] {FileType.fileType_source} ,
-				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "sha12")},
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				contributors1, noticeText1, testProject3);
+		testFile2.setId("SPDXRef-File2");
 		SpdxFile testFile3 = new SpdxFile("FileName3",  "Comment3", new Annotation[0],
 				new Relationship[0], NON_STD_LICENSES[0],
 				testLicenses1, "copyright (c) 123",
 				"license comments3", new FileType[] {FileType.fileType_other} ,
-				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "sha13")},
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				new String[] {"c1"}, "Notice", new DoapProject[0]);
 		testFile3.setFileDependencies(new SpdxFile[] {testFile1, testFile2});
-		fileInfoSheet.add(testFile1, "");
-		fileInfoSheet.add(testFile3, "");
-		fileInfoSheet.add(testFile2, "");
+		testFile3.setId("SPDXRef-File3");
+		fileInfoSheet.add(testFile1, "SPDXRef-Package1");
+		fileInfoSheet.add(testFile3, "SPDXRef-Package1");
+		fileInfoSheet.add(testFile2, "SPDXRef-Package1");
 		SpdxFile result1 = fileInfoSheet.getFileInfo(1);
 		SpdxFile result3 = fileInfoSheet.getFileInfo(2);
 		SpdxFile result2 = fileInfoSheet.getFileInfo(3);

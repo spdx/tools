@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,17 +30,22 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.spdxspreadsheet.AnnotationsSheet;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
 import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
+import org.spdx.spdxspreadsheet.RelationshipsSheet;
 import org.spdx.spdxspreadsheet.ReviewersSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
@@ -128,7 +134,43 @@ public class RdfToSpreadsheet {
 		HashMap<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(), ss.getPackageInfoSheet());
 		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
 		copyPerFileInfo(doc.getDocumentContainer().findAllFiles(), ss.getPerFileSheet(), fileIdToPackageId);
+		List<Relationship> allRelationships = new ArrayList<Relationship>();
+		List<Annotation> allAnnotations = new ArrayList<Annotation>();
+		List<SpdxElement> allElements = doc.getDocumentContainer().findAllElements();
+		allRelationships.addAll(Arrays.asList(doc.getRelationships()));
+		allAnnotations.addAll(Arrays.asList(doc.getAnnotations()));
+		for (SpdxElement element:allElements) {
+			allRelationships.addAll(Arrays.asList(element.getRelationships()));
+			allAnnotations.addAll(Arrays.asList(element.getAnnotations()));
+		}
+		copyRelationships(allRelationships, ss.getRelationshipsSheet());
+		copyAnnotations(allAnnotations, ss.getAnnotationsSheet());
 		copyReviewerInfo(doc.getReviewers(), ss.getReviewersSheet());
+		ss.resizeRow();
+	}
+
+	/**
+	 * @param annotations
+	 * @param annotationsSheet
+	 */
+	private static void copyAnnotations(List<Annotation> annotations,
+			AnnotationsSheet annotationsSheet) {
+		Collections.sort(annotations);
+		for (Annotation annotation:annotations) {
+			annotationsSheet.add(annotation);
+		}
+	}
+
+	/**
+	 * @param relationships
+	 * @param relationshipsSheet
+	 */
+	private static void copyRelationships(List<Relationship> relationships,
+			RelationshipsSheet relationshipsSheet) {
+		Collections.sort(relationships);
+		for (Relationship relationship:relationships) {
+			relationshipsSheet.add(relationship);
+		}
 	}
 
 	private static void copyReviewerInfo(SPDXReview[] reviewers,
@@ -186,6 +228,7 @@ public class RdfToSpreadsheet {
 				} else {
 					pkgIdsForFile = pkgIdsForFile + ", " + pkgId;
 				}
+				fileIdToPkgId.put(fileId, pkgIdsForFile);
 			}
 			packageInfoSheet.add(pkg);
 		}

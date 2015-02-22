@@ -28,6 +28,7 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -915,5 +916,21 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			compNameVersion = compNameVersion + compVersion;
 		}
 		return myNameVersion.compareTo(compNameVersion);
+	}
+	
+	/**
+	 * @return the Sha1 checksum value for this package, or a blank string if no 
+	 * sha1 checksum has been set
+	 */
+	public String getSha1() {
+		if (this.checksums != null) {
+			for (int i = 0;i < this.checksums.length; i++) {
+				if (this.checksums[i].getAlgorithm().equals(ChecksumAlgorithm.checksumAlgorithm_sha1)) {
+					return this.checksums[i].getValue();
+				}
+			}
+		}
+		// No sha1 found, return an empty string
+		return "";
 	}
 }

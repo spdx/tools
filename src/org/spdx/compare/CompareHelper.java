@@ -71,7 +71,7 @@ public class CompareHelper {
 		StringBuilder sb = new StringBuilder(CompareHelper.checksumToString(checksums[0]));
 		for (int i = 1; i < checksums.length; i++) {
 			sb.append("\n");
-			sb.append(CompareHelper.checksumToString(checksums[0]));
+			sb.append(CompareHelper.checksumToString(checksums[i]));
 		}
 		return sb.toString();
 	}
@@ -85,6 +85,7 @@ public class CompareHelper {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder(Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(checksum.getAlgorithm()));
+		sb.append(' ');
 		sb.append(checksum.getValue());
 		return sb.toString();
 	}
