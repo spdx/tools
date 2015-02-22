@@ -5,40 +5,167 @@
     xmlns="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
   <spdx:SpdxDocument rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT">
-    <spdx:annotation>
-      <spdx:Annotation>
-        <spdx:date>2010-01-29T18:30:22Z</spdx:date>
-        <rdfs:comment>Document level annotation</rdfs:comment>
-        <spdx:annotator>Person: Jane Doe ()</spdx:annotator>
-        <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-      </spdx:Annotation>
-    </spdx:annotation>
+    <spdx:reviewed>
+      <spdx:Review>
+        <rdfs:comment>Another example reviewer.</rdfs:comment>
+        <spdx:reviewDate>2011-03-13T00:00:00Z</spdx:reviewDate>
+        <spdx:reviewer>Person: Suzanne Reviewer</spdx:reviewer>
+      </spdx:Review>
+    </spdx:reviewed>
     <spdx:specVersion>SPDX-2.0</spdx:specVersion>
-    <spdx:describesPackage>
-      <spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package">
-        <spdx:downloadLocation>http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz</spdx:downloadLocation>
-        <spdx:packageVerificationCode>
-          <spdx:PackageVerificationCode>
-            <spdx:packageVerificationCodeValue>d6a770ba38583ed4bb4525bd96e50461655d2758</spdx:packageVerificationCodeValue>
-            <spdx:packageVerificationCodeExcludedFile>excludes: ./package.spdx</spdx:packageVerificationCodeExcludedFile>
-          </spdx:PackageVerificationCode>
-        </spdx:packageVerificationCode>
+    <spdx:externalDocumentRef>
+      <spdx:ExternalDocumentRef>
+        <spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
         <spdx:checksum>
           <spdx:Checksum>
-            <spdx:checksumValue>11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd</spdx:checksumValue>
-            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
+            <spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
+            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
           </spdx:Checksum>
         </spdx:checksum>
-        <spdx:licenseDeclared>
-          <spdx:ConjunctiveLicenseSet>
-            <spdx:member>
-              <spdx:License rdf:about="http://spdx.org/licenses/LGPL-2.0">
-                <spdx:standardLicenseHeader>Copyright (C) {{year}}  {{name of author}}
+        <spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+      </spdx:ExternalDocumentRef>
+    </spdx:externalDocumentRef>
+    <spdx:dataLicense>
+      <spdx:License rdf:about="http://spdx.org/licenses/CC0-1.0">
+        <spdx:standardLicenseHeader></spdx:standardLicenseHeader>
+        <spdx:licenseId>CC0-1.0</spdx:licenseId>
+        <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;Creative Commons Zero v1.0 Universal&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
+        <spdx:licenseText>Creative Commons CC0 1.0 Universal 
+CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE USE OF THIS DOCUMENT OR THE INFORMATION OR WORKS PROVIDED HEREUNDER, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM THE USE OF THIS DOCUMENT OR THE INFORMATION OR WORKS PROVIDED HEREUNDER. 
+Statement of Purpose 
+The laws of most jurisdictions throughout the world automatically confer exclusive Copyright and Related Rights (defined below) upon the creator and subsequent owner(s) (each and all, an "owner") of an original work of authorship and/or a database (each, a "Work"). 
+Certain owners wish to permanently relinquish those rights to a Work for the purpose of contributing to a commons of creative, cultural and scientific works ("Commons") that the public can reliably and without fear of later claims of infringement build upon, modify, incorporate in other works, reuse and redistribute as freely as possible in any form whatsoever and for any purposes, including without limitation commercial purposes. These owners may contribute to the Commons to promote the ideal of a free culture and the further production of creative, cultural and scientific works, or to gain reputation or greater distribution for their Work in part through the use and efforts of others. 
+For these and/or other purposes and motivations, and without any expectation of additional consideration or compensation, the person associating CC0 with a Work (the "Affirmer"), to the extent that he or she is an owner of Copyright and Related Rights in the Work, voluntarily elects to apply CC0 to the Work and publicly distribute the Work under its terms, with knowledge of his or her Copyright and Related Rights in the Work and the meaning and intended legal effect of CC0 on those rights. 
+1. Copyright and Related Rights. A Work made available under CC0 may be protected by copyright and related or neighboring rights ("Copyright and Related Rights"). Copyright and Related Rights include, but are not limited to, the following: 
+ i. the right to reproduce, adapt, distribute, perform, display, communicate, and translate a Work; 
+ ii. moral rights retained by the original author(s) and/or performer(s); 
+ iii. publicity and privacy rights pertaining to a person's image or likeness depicted in a Work; 
+ iv. rights protecting against unfair competition in regards to a Work, subject to the limitations in paragraph 4(a), below; 
+ v. rights protecting the extraction, dissemination, use and reuse of data in a Work; 
+ vi. database rights (such as those arising under Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996 on the legal protection of databases, and under any national implementation thereof, including any amended or successor version of such directive); and 
+ vii. other similar, equivalent or corresponding rights throughout the world based on applicable law or treaty, and any national implementations thereof. 
+2. Waiver. To the greatest extent permitted by, but not in contravention of, applicable law, Affirmer hereby overtly, fully, permanently, irrevocably and unconditionally waives, abandons, and surrenders all of Affirmer's Copyright and Related Rights and associated claims and causes of action, whether now known or unknown (including existing as well as future claims and causes of action), in the Work (i) in all territories worldwide, (ii) for the maximum duration provided by applicable law or treaty (including future time extensions), (iii) in any current or future medium and for any number of copies, and (iv) for any purpose whatsoever, including without limitation commercial, advertising or promotional purposes (the "Waiver"). Affirmer makes the Waiver for the benefit of each member of the public at large and to the detriment of Affirmer's heirs and successors, fully intending that such Waiver shall not be subject to revocation, rescission, cancellation, termination, or any other legal or equitable action to disrupt the quiet enjoyment of the Work by the public as contemplated by Affirmer's express Statement of Purpose. 
+3. Public License Fallback. Should any part of the Waiver for any reason be judged legally invalid or ineffective under applicable law, then the Waiver shall be preserved to the maximum extent permitted taking into account Affirmer's express Statement of Purpose. In addition, to the extent the Waiver is so judged Affirmer hereby grants to each affected person a royalty-free, non transferable, non sublicensable, non exclusive, irrevocable and unconditional license to exercise Affirmer's Copyright and Related Rights in the Work (i) in all territories worldwide, (ii) for the maximum duration provided by applicable law or treaty (including future time extensions), (iii) in any current or future medium and for any number of copies, and (iv) for any purpose whatsoever, including without limitation commercial, advertising or promotional purposes (the "License"). The License shall be deemed effective as of the date CC0 was applied by Affirmer to the Work. Should any part of the License for any reason be judged legally invalid or ineffective under applicable law, such partial invalidity or ineffectiveness shall not invalidate the remainder of the License, and in such case Affirmer hereby affirms that he or she will not (i) exercise any of his or her remaining Copyright and Related Rights in the Work or (ii) assert any associated claims and causes of action with respect to the Work, in either case contrary to Affirmer's express Statement of Purpose. 
+4. Limitations and Disclaimers. 
+ a. No trademark or patent rights held by Affirmer are waived, abandoned, surrendered, licensed or otherwise affected by this document. 
+ b. Affirmer offers the Work as-is and makes no representations or warranties of any kind concerning the Work, express, implied, statutory or otherwise, including without limitation warranties of title, merchantability, fitness for a particular purpose, non infringement, or the absence of latent or other defects, accuracy, or the present or absence of errors, whether or not discoverable, all to the greatest extent permissible under applicable law. 
+ c. Affirmer disclaims responsibility for clearing rights of other persons that may apply to the Work or any use thereof, including without limitation any person's Copyright and Related Rights in the Work. Further, Affirmer disclaims responsibility for obtaining any necessary consents, permissions or other rights required for any use of the Work. 
+ d. Affirmer understands and acknowledges that Creative Commons is not a party to this document and has no duty or obligation with respect to this CC0 or use of the Work.</spdx:licenseText>
+        <rdfs:seeAlso>http://creativecommons.org/publicdomain/zero/1.0/legalcode</rdfs:seeAlso>
+      </spdx:License>
+    </spdx:dataLicense>
+    <spdx:hasExtractedLicensingInfo>
+      <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-3">
+        <rdfs:comment>This is tye CyperNeko License</rdfs:comment>
+        <rdfs:seeAlso>http://justasample.url.com</rdfs:seeAlso>
+        <rdfs:seeAlso>http://people.apache.org/~andyc/neko/LICENSE</rdfs:seeAlso>
+        <spdx:name>CyberNeko License</spdx:name>
+        <spdx:extractedText>The CyberNeko Software License, Version 1.0
+
+ 
+(C) Copyright 2002-2005, Andy Clark.  All rights reserved.
+ 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer. 
+
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in
+   the documentation and/or other materials provided with the
+   distribution.
+
+3. The end-user documentation included with the redistribution,
+   if any, must include the following acknowledgment:  
+     "This product includes software developed by Andy Clark."
+   Alternately, this acknowledgment may appear in the software itself,
+   if and wherever such third-party acknowledgments normally appear.
+
+4. The names "CyberNeko" and "NekoHTML" must not be used to endorse
+   or promote products derived from this software without prior 
+   written permission. For written permission, please contact 
+   andyc@cyberneko.net.
+
+5. Products derived from this software may not be called "CyberNeko",
+   nor may "CyberNeko" appear in their name, without prior written
+   permission of the author.
+
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
+OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</spdx:extractedText>
+        <spdx:licenseId>LicenseRef-3</spdx:licenseId>
+      </spdx:ExtractedLicensingInfo>
+    </spdx:hasExtractedLicensingInfo>
+    <spdx:hasExtractedLicensingInfo>
+      <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-Beerware-4.2">
+        <spdx:extractedText>"THE BEER-WARE LICENSE" (Revision 42):
+phk@FreeBSD.ORG wrote this file. As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp  &lt;/
+LicenseName: Beer-Ware License (Version 42)
+LicenseCrossReference:  http://people.freebsd.org/~phk/
+LicenseComment: 
+The beerware license has a couple of other standard variants.</spdx:extractedText>
+        <spdx:licenseId>LicenseRef-Beerware-4.2</spdx:licenseId>
+      </spdx:ExtractedLicensingInfo>
+    </spdx:hasExtractedLicensingInfo>
+    <spdx:hasExtractedLicensingInfo>
+      <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-4">
+        <spdx:extractedText>/*
+ * (c) Copyright 2009 University of Bristol
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</spdx:extractedText>
+        <spdx:licenseId>LicenseRef-4</spdx:licenseId>
+      </spdx:ExtractedLicensingInfo>
+    </spdx:hasExtractedLicensingInfo>
+    <spdx:relationship>
+      <spdx:Relationship>
+        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
+        <spdx:relatedSpdxElement>
+          <spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package">
+            <spdx:downloadLocation>http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz</spdx:downloadLocation>
+            <spdx:licenseConcluded>
+              <spdx:DisjunctiveLicenseSet>
+                <spdx:member>
+                  <spdx:License rdf:about="http://spdx.org/licenses/LGPL-2.0">
+                    <spdx:standardLicenseHeader>Copyright (C) {{year}}  {{name of author}}
 &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License as published by the Free Software Foundation; version 2.&lt;/p&gt;
 &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License for more details.&lt;/p&gt;
 &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;You should have received a copy of the GNU Library General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:standardLicenseHeader>
-                <spdx:licenseId>LGPL-2.0</spdx:licenseId>
-                <spdx:licenseText>GNU LIBRARY GENERAL PUBLIC LICENSE 
+                    <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;GNU Library General Public License v2 only&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
+                    <spdx:isOsiApproved>true</spdx:isOsiApproved>
+                    <spdx:licenseText>GNU LIBRARY GENERAL PUBLIC LICENSE 
 Version 2, June 1991 
 Copyright (C) 1991 Free Software Foundation, Inc. 
  51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA 
@@ -128,74 +255,191 @@ Yoyodyne, Inc., hereby disclaims all copyright interest in
 signature of Ty Coon, 1 April 1990 
  Ty Coon, President of Vice 
 That's all there is to it!</spdx:licenseText>
-                <rdfs:seeAlso>http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html</rdfs:seeAlso>
-                <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;GNU Library General Public License v2 only&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
-                <spdx:isOsiApproved>true</spdx:isOsiApproved>
-              </spdx:License>
-            </spdx:member>
-            <spdx:member>
-              <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-3">
-                <rdfs:comment>This is tye CyperNeko License</rdfs:comment>
-                <rdfs:seeAlso>http://justasample.url.com</rdfs:seeAlso>
-                <rdfs:seeAlso>http://people.apache.org/~andyc/neko/LICENSE</rdfs:seeAlso>
-                <spdx:name>CyberNeko License</spdx:name>
-                <spdx:extractedText>The CyberNeko Software License, Version 1.0
+                    <rdfs:seeAlso>http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html</rdfs:seeAlso>
+                    <spdx:licenseId>LGPL-2.0</spdx:licenseId>
+                  </spdx:License>
+                </spdx:member>
+                <spdx:member rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-3"/>
+              </spdx:DisjunctiveLicenseSet>
+            </spdx:licenseConcluded>
+            <spdx:checksum>
+              <spdx:Checksum>
+                <spdx:checksumValue>85ed0817af83a24ad8da68c2b5094de69833983c</spdx:checksumValue>
+                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+              </spdx:Checksum>
+            </spdx:checksum>
+            <spdx:relationship>
+              <spdx:Relationship>
+                <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_contains"/>
+                <spdx:relatedSpdxElement>
+                  <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-JenaLib">
+                    <spdx:licenseConcluded>
+                      <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1">
+                        <spdx:extractedText>/*
+ * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</spdx:extractedText> <spdx:licenseId>LicenseRef-1</spdx:licenseId>
+                      </spdx:ExtractedLicensingInfo>
+                    </spdx:licenseConcluded>
+                    <spdx:relationship>
+                      <spdx:Relationship>
+                        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_dynamicLink"/>
+                        <spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
+                      </spdx:Relationship>
+                    </spdx:relationship>
+                    <spdx:licenseComments>This license is used by Jena</spdx:licenseComments>
+                    <spdx:checksum>
+                      <spdx:Checksum>
+                        <spdx:checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</spdx:checksumValue>
+                        <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+                      </spdx:Checksum>
+                    </spdx:checksum>
+                    <spdx:fileContributor>Hewlett Packard Inc.</spdx:fileContributor>
+                    <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
+                    <spdx:copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</spdx:copyrightText>
+                    <spdx:artifactOf>
+                      <doap:Project>
+                        <doap:homepage>http://www.openjena.org/</doap:homepage>
+                        <doap:name>Jena</doap:name>
+                      </doap:Project>
+                    </spdx:artifactOf>
+                    <spdx:fileContributor>Apache Software Foundation</spdx:fileContributor>
+                    <spdx:licenseInfoInFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1"/>
+                    <spdx:fileDependency>
+                      <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc">
+                        <spdx:noticeText>Apache Commons Lang
+Copyright 2001-2011 The Apache Software Foundation
 
- 
-(C) Copyright 2002-2005, Andy Clark.  All rights reserved.
- 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
 
-1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer. 
-
-2. Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in
-   the documentation and/or other materials provided with the
-   distribution.
-
-3. The end-user documentation included with the redistribution,
-   if any, must include the following acknowledgment:  
-     "This product includes software developed by Andy Clark."
-   Alternately, this acknowledgment may appear in the software itself,
-   if and wherever such third-party acknowledgments normally appear.
-
-4. The names "CyberNeko" and "NekoHTML" must not be used to endorse
-   or promote products derived from this software without prior 
-   written permission. For written permission, please contact 
-   andyc@cyberneko.net.
-
-5. Products derived from this software may not be called "CyberNeko",
-   nor may "CyberNeko" appear in their name, without prior written
-   permission of the author.
-
-THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
-OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
-OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
-OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</spdx:extractedText>
-                <spdx:licenseId>LicenseRef-3</spdx:licenseId>
-              </spdx:ExtractedLicensingInfo>
-            </spdx:member>
-          </spdx:ConjunctiveLicenseSet>
-        </spdx:licenseDeclared>
-        <spdx:licenseInfoFromFiles>
-          <spdx:License rdf:about="http://spdx.org/licenses/GPL-2.0">
-            <spdx:standardLicenseHeader>Copyright (C) {{year}}  {{name of author}}
+This product includes software from the Spring Framework,
+under the Apache License 2.0 (see: StringUtils.containsWhitespace())</spdx:noticeText>
+                        <spdx:licenseConcluded>
+                          <spdx:License rdf:about="http://spdx.org/licenses/Apache-2.0">
+                            <spdx:standardLicenseHeader> If work from Apache:&lt;br xmlns="http://www.w3.org/1999/xhtml"&gt;&lt;/br&gt;
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  You may obtain a copy of the License at
+&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt; http://www.apache.org/licenses/LICENSE-2.0&lt;/p&gt;
+&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.  &lt;/p&gt;
+&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;If licensing your own work:&lt;br&gt;&lt;/br&gt;
+Copyright [yyyy] [name of copyright owner]&lt;/p&gt;
+&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at&lt;/p&gt;
+&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;       http://www.apache.org/licenses/LICENSE-2.0&lt;/p&gt;
+&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:standardLicenseHeader>
+                            <rdfs:seeAlso>http://www.opensource.org/licenses/Apache-2.0</rdfs:seeAlso>
+                            <spdx:licenseText>Apache License 
+ Version 2.0, January 2004 
+ http://www.apache.org/licenses/ 
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION 
+1. Definitions. 
+"License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document. 
+"Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License. 
+"Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity. 
+"You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License. 
+"Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files. 
+"Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types. 
+"Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below). 
+"Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof. 
+"Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution." 
+"Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work. 
+2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form. 
+3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Work, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed. 
+4. Redistribution. You may reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications, and in Source or Object form, provided that You meet the following conditions: 
+ (a) You must give any other recipients of the Work or Derivative Works a copy of this License; and 
+ (b) You must cause any modified files to carry prominent notices stating that You changed the files; and 
+ (c) You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding those notices that do not pertain to any part of the Derivative Works; and 
+ (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works, in at least one of the following places: within a NOTICE text file distributed as part of the Derivative Works; within the Source form or documentation, if provided along with the Derivative Works; or, within a display generated by the Derivative Works, if and wherever such third-party notices normally appear. The contents of the NOTICE file are for informational purposes only and do not modify the License. You may add Your own attribution notices within Derivative Works that You distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such additional attribution notices cannot be construed as modifying the License. 
+ You may add Your own copyright statement to Your modifications and may provide additional or different license terms and conditions for use, reproduction, or distribution of Your modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and distribution of the Work otherwise complies with the conditions stated in this License. 
+5. Submission of Contributions. Unless You explicitly state otherwise, any Contribution intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms and conditions of this License, without any additional terms or conditions. Notwithstanding the above, nothing herein shall supersede or modify the terms of any separate license agreement you may have executed with Licensor regarding such Contributions. 
+6. Trademarks. This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file. 
+7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License. 
+8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages. 
+9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability. 
+END OF TERMS AND CONDITIONS 
+APPENDIX: How to apply the Apache License to your work. 
+To apply the Apache License to your work, attach the following boilerplate notice, with the fields enclosed by brackets "[]" replaced with your own identifying information. (Don't include the brackets!) The text should be enclosed in the appropriate comment syntax for the file format. We also recommend that a file or class name and description of purpose be included on the same "printed page" as the copyright notice for easier identification within third-party archives. 
+Copyright [yyyy] [name of copyright owner] 
+Licensed under the Apache License, Version 2.0 (the "License"); 
+ you may not use this file except in compliance with the License. 
+ You may obtain a copy of the License at 
+http://www.apache.org/licenses/LICENSE-2.0 
+Unless required by applicable law or agreed to in writing, software 
+ distributed under the License is distributed on an "AS IS" BASIS, 
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ See the License for the specific language governing permissions and 
+ limitations under the License.</spdx:licenseText>
+                            <rdfs:seeAlso>http://www.apache.org/licenses/LICENSE-2.0</rdfs:seeAlso>
+                            <spdx:licenseId>Apache-2.0</spdx:licenseId>
+                            <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;Apache License 2.0&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
+                            <spdx:isOsiApproved>true</spdx:isOsiApproved>
+                          </spdx:License>
+                        </spdx:licenseConcluded>
+                        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+                        <spdx:fileContributor>Apache Software Foundation</spdx:fileContributor>
+                        <spdx:artifactOf>
+                          <doap:Project>
+                            <doap:homepage>http://commons.apache.org/proper/commons-lang/</doap:homepage>
+                            <doap:name>Apache Commons Lang</doap:name>
+                          </doap:Project>
+                        </spdx:artifactOf>
+                        <spdx:checksum>
+                          <spdx:Checksum>
+                            <spdx:checksumValue>c2b4e1c67a2d28fced849ee1bb76e7391b93f125</spdx:checksumValue>
+                            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+                          </spdx:Checksum>
+                        </spdx:checksum>
+                        <spdx:fileName>./lib-source/commons-lang3-3.1-sources.jar</spdx:fileName>
+                        <spdx:copyrightText>Copyright 2001-2011 The Apache Software Foundation</spdx:copyrightText>
+                        <rdfs:comment>This file is used by Jena</rdfs:comment>
+                        <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
+                      </spdx:File>
+                    </spdx:fileDependency>
+                    <rdfs:comment>This file belongs to Jena</rdfs:comment>
+                    <spdx:fileName>./lib-source/jena-2.6.3-sources.jar</spdx:fileName>
+                  </spdx:File>
+                </spdx:relatedSpdxElement>
+              </spdx:Relationship>
+            </spdx:relationship>
+            <spdx:checksum>
+              <spdx:Checksum>
+                <spdx:checksumValue>11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd</spdx:checksumValue>
+                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
+              </spdx:Checksum>
+            </spdx:checksum>
+            <spdx:licenseInfoFromFiles>
+              <spdx:License rdf:about="http://spdx.org/licenses/GPL-2.0">
+                <spdx:standardLicenseHeader>Copyright (C) {{year}}  {{name of author}}
 &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2.&lt;/p&gt;
 &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;
 &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:standardLicenseHeader>
-            <rdfs:seeAlso>http://www.opensource.org/licenses/GPL-2.0</rdfs:seeAlso>
-            <spdx:isOsiApproved>true</spdx:isOsiApproved>
-            <spdx:licenseText>GNU GENERAL PUBLIC LICENSE 
+                <rdfs:seeAlso>http://www.opensource.org/licenses/GPL-2.0</rdfs:seeAlso>
+                <rdfs:seeAlso>http://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html</rdfs:seeAlso>
+                <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;GNU General Public License v2.0 only&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
+                <spdx:isOsiApproved>true</spdx:isOsiApproved>
+                <spdx:licenseId>GPL-2.0</spdx:licenseId>
+                <spdx:licenseText>GNU GENERAL PUBLIC LICENSE 
  Version 2, June 1991 
 Copyright (C) 1989, 1991 Free Software Foundation, Inc. 
  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA 
@@ -255,206 +499,54 @@ The hypothetical commands `show w' and `show c' should show the appropriate part
 You should also get your employer (if you work as a programmer) or your school, if any, to sign a "copyright disclaimer" for the program, if necessary. Here is a sample; alter the names: 
  Yoyodyne, Inc., hereby disclaims all copyright interest in the program `Gnomovision' (which makes passes at compilers) written by James Hacker. 
 signature of Ty Coon, 1 April 1989 Ty Coon, President of Vice</spdx:licenseText>
-            <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;GNU General Public License v2.0 only&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
-            <rdfs:seeAlso>http://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html</rdfs:seeAlso>
-            <spdx:licenseId>GPL-2.0</spdx:licenseId>
-          </spdx:License>
-        </spdx:licenseInfoFromFiles>
-        <spdx:versionInfo>2.11.1</spdx:versionInfo>
-        <spdx:licenseComments>The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change.</spdx:licenseComments>
-        <spdx:annotation>
-          <spdx:Annotation>
-            <spdx:date>2011-01-29T18:30:22Z</spdx:date>
-            <rdfs:comment>Package level annotation</rdfs:comment>
-            <spdx:annotator>Person: Someone Else</spdx:annotator>
-            <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-          </spdx:Annotation>
-        </spdx:annotation>
-        <spdx:checksum>
-          <spdx:Checksum rdf:nodeID="A0">
-            <spdx:checksumValue>624c1abb3664f4b35547e7c73864ad24</spdx:checksumValue>
-            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
-          </spdx:Checksum>
-        </spdx:checksum>
-        <spdx:licenseInfoFromFiles>
-          <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1">
-            <spdx:extractedText>/*
- * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/</spdx:extractedText>
-            <spdx:licenseId>LicenseRef-1</spdx:licenseId>
-          </spdx:ExtractedLicensingInfo>
-        </spdx:licenseInfoFromFiles>
-        <doap:homepage>http://ftp.gnu.org/gnu/glibc</doap:homepage>
-        <spdx:name>glibc</spdx:name>
-        <spdx:supplier>Person: Jane Doe (jane.doe@example.com)</spdx:supplier>
-        <spdx:originator>Organization: ExampleCodeInspect (contact@example.com)</spdx:originator>
-        <spdx:hasFile>
-          <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource">
-            <spdx:copyrightText>Copyright 2010, 2011 Source Auditor Inc.</spdx:copyrightText>
-            <spdx:fileContributor>Open Logic Inc.</spdx:fileContributor>
-            <spdx:fileContributor>Black Duck Software In.c</spdx:fileContributor>
+              </spdx:License>
+            </spdx:licenseInfoFromFiles>
+            <spdx:versionInfo>2.11.1</spdx:versionInfo>
+            <spdx:licenseComments>The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change.</spdx:licenseComments>
+            <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1"/>
+            <doap:homepage>http://ftp.gnu.org/gnu/glibc</doap:homepage>
+            <spdx:name>glibc</spdx:name>
+            <spdx:supplier>Person: Jane Doe (jane.doe@example.com)</spdx:supplier>
             <spdx:checksum>
-              <spdx:Checksum>
-                <spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+              <spdx:Checksum rdf:nodeID="A0">
+                <spdx:checksumValue>624c1abb3664f4b35547e7c73864ad24</spdx:checksumValue>
+                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
               </spdx:Checksum>
             </spdx:checksum>
-            <spdx:fileName>src/org/spdx/parser/DOAPProject.java</spdx:fileName>
-            <spdx:fileContributor>Source Auditor Inc.</spdx:fileContributor>
-            <spdx:fileContributor>SPDX Technical Team Members</spdx:fileContributor>
-            <spdx:licenseConcluded>
-              <spdx:License rdf:about="http://spdx.org/licenses/Apache-2.0">
-                <spdx:standardLicenseHeader> If work from Apache:&lt;br xmlns="http://www.w3.org/1999/xhtml"&gt;&lt;/br&gt;
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  You may obtain a copy of the License at
-&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt; http://www.apache.org/licenses/LICENSE-2.0&lt;/p&gt;
-&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.  &lt;/p&gt;
-&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;If licensing your own work:&lt;br&gt;&lt;/br&gt;
-Copyright [yyyy] [name of copyright owner]&lt;/p&gt;
-&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at&lt;/p&gt;
-&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;       http://www.apache.org/licenses/LICENSE-2.0&lt;/p&gt;
-&lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:standardLicenseHeader>
-                <rdfs:seeAlso>http://www.opensource.org/licenses/Apache-2.0</rdfs:seeAlso>
-                <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;Apache License 2.0&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
-                <spdx:licenseId>Apache-2.0</spdx:licenseId>
-                <spdx:licenseText>Apache License 
- Version 2.0, January 2004 
- http://www.apache.org/licenses/ 
-TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION 
-1. Definitions. 
-"License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document. 
-"Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License. 
-"Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity. 
-"You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License. 
-"Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files. 
-"Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types. 
-"Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below). 
-"Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof. 
-"Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution." 
-"Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work. 
-2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form. 
-3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Work, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed. 
-4. Redistribution. You may reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications, and in Source or Object form, provided that You meet the following conditions: 
- (a) You must give any other recipients of the Work or Derivative Works a copy of this License; and 
- (b) You must cause any modified files to carry prominent notices stating that You changed the files; and 
- (c) You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding those notices that do not pertain to any part of the Derivative Works; and 
- (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works, in at least one of the following places: within a NOTICE text file distributed as part of the Derivative Works; within the Source form or documentation, if provided along with the Derivative Works; or, within a display generated by the Derivative Works, if and wherever such third-party notices normally appear. The contents of the NOTICE file are for informational purposes only and do not modify the License. You may add Your own attribution notices within Derivative Works that You distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such additional attribution notices cannot be construed as modifying the License. 
- You may add Your own copyright statement to Your modifications and may provide additional or different license terms and conditions for use, reproduction, or distribution of Your modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and distribution of the Work otherwise complies with the conditions stated in this License. 
-5. Submission of Contributions. Unless You explicitly state otherwise, any Contribution intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms and conditions of this License, without any additional terms or conditions. Notwithstanding the above, nothing herein shall supersede or modify the terms of any separate license agreement you may have executed with Licensor regarding such Contributions. 
-6. Trademarks. This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file. 
-7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License. 
-8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages. 
-9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability. 
-END OF TERMS AND CONDITIONS 
-APPENDIX: How to apply the Apache License to your work. 
-To apply the Apache License to your work, attach the following boilerplate notice, with the fields enclosed by brackets "[]" replaced with your own identifying information. (Don't include the brackets!) The text should be enclosed in the appropriate comment syntax for the file format. We also recommend that a file or class name and description of purpose be included on the same "printed page" as the copyright notice for easier identification within third-party archives. 
-Copyright [yyyy] [name of copyright owner] 
-Licensed under the Apache License, Version 2.0 (the "License"); 
- you may not use this file except in compliance with the License. 
- You may obtain a copy of the License at 
-http://www.apache.org/licenses/LICENSE-2.0 
-Unless required by applicable law or agreed to in writing, software 
- distributed under the License is distributed on an "AS IS" BASIS, 
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- See the License for the specific language governing permissions and 
- limitations under the License.</spdx:licenseText>
-                <spdx:isOsiApproved>true</spdx:isOsiApproved>
-                <rdfs:seeAlso>http://www.apache.org/licenses/LICENSE-2.0</rdfs:seeAlso>
-              </spdx:License>
-            </spdx:licenseConcluded>
-            <spdx:fileContributor>Protecode Inc.</spdx:fileContributor>
-            <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-            <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-            <spdx:fileDependency>
-              <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-JenaLib">
-                <spdx:fileName>lib-source/jena-2.6.3-sources.jar</spdx:fileName>
-                <spdx:licenseConcluded rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1"/>
-                <spdx:licenseComments>This license is used by Jena</spdx:licenseComments>
-                <spdx:fileContributor>Hewlett Packard Inc.</spdx:fileContributor>
-                <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
-                <spdx:copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</spdx:copyrightText>
-                <spdx:fileContributor>Apache Software Foundation</spdx:fileContributor>
+            <spdx:annotation>
+              <spdx:Annotation>
+                <spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
+                <rdfs:comment>Package level annotation</rdfs:comment>
+                <spdx:annotator>Person: Package Commenter</spdx:annotator>
+                <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
+              </spdx:Annotation>
+            </spdx:annotation>
+            <spdx:originator>Organization: ExampleCodeInspect (contact@example.com)</spdx:originator>
+            <spdx:hasFile>
+              <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource">
+                <spdx:copyrightText>Copyright 2010, 2011 Source Auditor Inc.</spdx:copyrightText>
+                <spdx:fileContributor>Open Logic Inc.</spdx:fileContributor>
+                <spdx:fileName>./src/org/spdx/parser/DOAPProject.java</spdx:fileName>
+                <spdx:fileContributor>Black Duck Software In.c</spdx:fileContributor>
                 <spdx:checksum>
                   <spdx:Checksum>
-                    <spdx:checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</spdx:checksumValue>
+                    <spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
                     <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
                   </spdx:Checksum>
                 </spdx:checksum>
-                <spdx:artifactOf>
-                  <doap:Project>
-                    <doap:homepage>http://www.openjena.org/</doap:homepage>
-                    <doap:name>Jena</doap:name>
-                  </doap:Project>
-                </spdx:artifactOf>
-                <spdx:relationship>
-                  <spdx:Relationship>
-                    <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_dynamicLink"/>
-                    <spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
-                  </spdx:Relationship>
-                </spdx:relationship>
-                <spdx:licenseInfoInFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1"/>
-                <spdx:fileDependency>
-                  <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc">
-                    <spdx:artifactOf>
-                      <doap:Project>
-                        <doap:homepage>http://commons.apache.org/proper/commons-lang/</doap:homepage>
-                        <doap:name>Apache Commons Lang</doap:name>
-                      </doap:Project>
-                    </spdx:artifactOf>
-                    <spdx:noticeText>Apache Commons Lang
-Copyright 2001-2011 The Apache Software Foundation
-
-This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
-
-This product includes software from the Spring Framework,
-under the Apache License 2.0 (see: StringUtils.containsWhitespace())</spdx:noticeText>
-                    <spdx:licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-                    <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-                    <spdx:fileContributor>Apache Software Foundation</spdx:fileContributor>
-                    <spdx:copyrightText>Copyright 2001-2011 The Apache Software Foundation</spdx:copyrightText>
-                    <rdfs:comment>This file is used by Jena</rdfs:comment>
-                    <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
-                    <spdx:checksum>
-                      <spdx:Checksum>
-                        <spdx:checksumValue>c2b4e1c67a2d28fced849ee1bb76e7391b93f125</spdx:checksumValue>
-                        <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-                      </spdx:Checksum>
-                    </spdx:checksum>
-                    <spdx:fileName>lib-source/commons-lang3-3.1-sources.jar</spdx:fileName>
-                  </spdx:File>
-                </spdx:fileDependency>
-                <rdfs:comment>This file belongs to Jena</rdfs:comment>
+                <spdx:fileContributor>Source Auditor Inc.</spdx:fileContributor>
+                <spdx:fileContributor>SPDX Technical Team Members</spdx:fileContributor>
+                <spdx:licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+                <spdx:fileContributor>Protecode Inc.</spdx:fileContributor>
+                <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+                <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+                <spdx:fileDependency rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-JenaLib"/>
+                <spdx:fileDependency rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc"/>
               </spdx:File>
-            </spdx:fileDependency>
-            <spdx:fileDependency rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc"/>
-          </spdx:File>
-        </spdx:hasFile>
-        <spdx:licenseInfoFromFiles>
-          <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2">
-            <spdx:extractedText>This package includes the GRDDL parser developed by Hewlett Packard under the following license:
+            </spdx:hasFile>
+            <spdx:licenseInfoFromFiles>
+              <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2">
+                <spdx:extractedText>This package includes the GRDDL parser developed by Hewlett Packard under the following license:
 � Copyright 2007 Hewlett-Packard Development Company, LP
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
@@ -463,194 +555,93 @@ Redistributions of source code must retain the above copyright notice, this list
 Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. 
 The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission. 
 THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</spdx:extractedText>
-            <spdx:licenseId>LicenseRef-2</spdx:licenseId>
-          </spdx:ExtractedLicensingInfo>
-        </spdx:licenseInfoFromFiles>
-        <spdx:hasFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-JenaLib"/>
-        <spdx:relationship>
-          <spdx:Relationship>
-            <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_contains"/>
-            <spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-JenaLib"/>
-          </spdx:Relationship>
-        </spdx:relationship>
-        <spdx:hasFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc"/>
-        <spdx:sourceInfo>uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.</spdx:sourceInfo>
-        <spdx:packageFileName>glibc-2.11.1.tar.gz</spdx:packageFileName>
-        <spdx:licenseConcluded>
-          <spdx:DisjunctiveLicenseSet>
-            <spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
-            <spdx:member rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-3"/>
-          </spdx:DisjunctiveLicenseSet>
-        </spdx:licenseConcluded>
-        <spdx:summary>GNU C library.</spdx:summary>
-        <spdx:checksum>
-          <spdx:Checksum>
-            <spdx:checksumValue>85ed0817af83a24ad8da68c2b5094de69833983c</spdx:checksumValue>
-            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-          </spdx:Checksum>
-        </spdx:checksum>
-        <spdx:copyrightText>Copyright 2008-2010 John Smith</spdx:copyrightText>
-        <spdx:description>The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.</spdx:description>
-      </spdx:Package>
-    </spdx:describesPackage>
-    <spdx:reviewed>
-      <spdx:Review>
-        <rdfs:comment>Another example reviewer.</rdfs:comment>
-        <spdx:reviewDate>2011-03-13T00:00:00Z</spdx:reviewDate>
-        <spdx:reviewer>Person: Suzanne Reviewer</spdx:reviewer>
-      </spdx:Review>
-    </spdx:reviewed>
-    <spdx:relationship>
-      <spdx:Relationship>
-        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_contains"/>
-        <spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
+                <spdx:licenseId>LicenseRef-2</spdx:licenseId>
+              </spdx:ExtractedLicensingInfo>
+            </spdx:licenseInfoFromFiles>
+            <spdx:hasFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-JenaLib"/>
+            <spdx:hasFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc"/>
+            <spdx:sourceInfo>uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.</spdx:sourceInfo>
+            <spdx:packageFileName>glibc-2.11.1.tar.gz</spdx:packageFileName>
+            <spdx:summary>GNU C library.</spdx:summary>
+            <spdx:licenseDeclared>
+              <spdx:ConjunctiveLicenseSet>
+                <spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
+                <spdx:member rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-3"/>
+              </spdx:ConjunctiveLicenseSet>
+            </spdx:licenseDeclared>
+            <spdx:packageVerificationCode>
+              <spdx:PackageVerificationCode>
+                <spdx:packageVerificationCodeValue>d6a770ba38583ed4bb4525bd96e50461655d2758</spdx:packageVerificationCodeValue>
+                <spdx:packageVerificationCodeExcludedFile>excludes: ./package.spdx</spdx:packageVerificationCodeExcludedFile>
+              </spdx:PackageVerificationCode>
+            </spdx:packageVerificationCode>
+            <spdx:copyrightText>Copyright 2008-2010 John Smith</spdx:copyrightText>
+            <spdx:description>The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.</spdx:description>
+          </spdx:Package>
+        </spdx:relatedSpdxElement>
       </spdx:Relationship>
     </spdx:relationship>
-    <spdx:creationInfo>
-      <spdx:CreationInfo>
-        <spdx:licenseListVersion>1.19</spdx:licenseListVersion>
-        <spdx:creator>Tool: LicenseFind-1.0</spdx:creator>
-        <spdx:creator>Organization: ExampleCodeInspect ()</spdx:creator>
-        <spdx:creator>Person: Jane Doe ()</spdx:creator>
-        <spdx:created>2010-01-29T18:30:22Z</spdx:created>
-        <rdfs:comment>This package has been shipped in source and binary form.
-The binaries were created with gcc 4.5.1 and expect to link to
-compatible system run time libraries.</rdfs:comment>
-      </spdx:CreationInfo>
-    </spdx:creationInfo>
-    <spdx:describesFile>
-      <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
-        <spdx:fileName>./package/foo.c</spdx:fileName>
-        <spdx:licenseComments>The concluded license was taken from the package level that the file was included in.</spdx:licenseComments>
-        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2"/>
-        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/GPL-2.0"/>
-        <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_documentation"/>
-        <spdx:artifactOf>
-          <doap:Project rdf:about="http://subversion.apache.org/doap.rdf">
-            <doap:homepage>http://www.openjena.org/</doap:homepage>
-            <doap:name>Jena</doap:name>
-          </doap:Project>
-        </spdx:artifactOf>
-        <spdx:copyrightText>Copyright 2008-2010 John Smith</spdx:copyrightText>
-        <spdx:checksum>
-          <spdx:Checksum>
-            <spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2758</spdx:checksumValue>
-            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-          </spdx:Checksum>
-        </spdx:checksum>
-        <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_text"/>
-        <spdx:fileContributor>The Regents of the University of California</spdx:fileContributor>
-        <spdx:noticeText>Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.com
+    <spdx:annotation>
+      <spdx:Annotation>
+        <spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
+        <rdfs:comment>Document level annotation</rdfs:comment>
+        <spdx:annotator>Person: Jane Doe ()</spdx:annotator>
+        <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
+      </spdx:Annotation>
+    </spdx:annotation>
+    <spdx:hasExtractedLicensingInfo rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2"/>
+    <rdfs:comment>This document was created using SPDX 2.0 using licenses from the web site.</rdfs:comment>
+    <spdx:relationship>
+      <spdx:Relationship>
+        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
+        <spdx:relatedSpdxElement>
+          <spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+            <spdx:fileName>./package/foo.c</spdx:fileName>
+            <spdx:checksum>
+              <spdx:Checksum>
+                <spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2758</spdx:checksumValue>
+                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+              </spdx:Checksum>
+            </spdx:checksum>
+            <spdx:licenseComments>The concluded license was taken from the package level that the file was included in.</spdx:licenseComments>
+            <spdx:licenseConcluded>
+              <spdx:DisjunctiveLicenseSet>
+                <spdx:member rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2"/>
+                <spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
+              </spdx:DisjunctiveLicenseSet>
+            </spdx:licenseConcluded>
+            <spdx:licenseInfoInFile rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2"/>
+            <spdx:annotation>
+              <spdx:Annotation>
+                <spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
+                <rdfs:comment>File level annotation</rdfs:comment>
+                <spdx:annotator>Person: File Commenter</spdx:annotator>
+                <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
+              </spdx:Annotation>
+            </spdx:annotation>
+            <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/GPL-2.0"/>
+            <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_documentation"/>
+            <spdx:copyrightText>Copyright 2008-2010 John Smith</spdx:copyrightText>
+            <spdx:artifactOf>
+              <doap:Project rdf:about="http://subversion.apache.org/doap.rdf">
+                <doap:homepage>http://www.openjena.org/</doap:homepage>
+                <doap:name>Jena</doap:name>
+              </doap:Project>
+            </spdx:artifactOf>
+            <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_text"/>
+            <spdx:fileContributor>The Regents of the University of California</spdx:fileContributor>
+            <spdx:noticeText>Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the �Software�), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED �AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</spdx:noticeText>
-        <spdx:checksum rdf:nodeID="A0"/>
-        <spdx:fileContributor>Modified by Paul Mundt lethal@linux-sh.org</spdx:fileContributor>
-        <spdx:fileContributor>IBM Corporation</spdx:fileContributor>
-        <spdx:licenseConcluded>
-          <spdx:DisjunctiveLicenseSet>
-            <spdx:member rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2"/>
-            <spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
-          </spdx:DisjunctiveLicenseSet>
-        </spdx:licenseConcluded>
-        <rdfs:comment>The concluded license was taken from the package level that the file was included in.
+            <spdx:checksum rdf:nodeID="A0"/>
+            <spdx:fileContributor>Modified by Paul Mundt lethal@linux-sh.org</spdx:fileContributor>
+            <spdx:fileContributor>IBM Corporation</spdx:fileContributor>
+            <rdfs:comment>The concluded license was taken from the package level that the file was included in.
 This information was found in the COPYING.txt file in the xyz directory.</rdfs:comment>
-      </spdx:File>
-    </spdx:describesFile>
-    <spdx:dataLicense>
-      <spdx:License rdf:about="http://spdx.org/licenses/CC0-1.0">
-        <spdx:standardLicenseHeader></spdx:standardLicenseHeader>
-        <spdx:licenseId>CC0-1.0</spdx:licenseId>
-        <spdx:name>&lt;p xmlns="http://www.w3.org/1999/xhtml" style="margin-left: 20px;"&gt;Creative Commons Zero v1.0 Universal&lt;/p&gt;^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral</spdx:name>
-        <spdx:licenseText>Creative Commons CC0 1.0 Universal 
-CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE USE OF THIS DOCUMENT OR THE INFORMATION OR WORKS PROVIDED HEREUNDER, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM THE USE OF THIS DOCUMENT OR THE INFORMATION OR WORKS PROVIDED HEREUNDER. 
-Statement of Purpose 
-The laws of most jurisdictions throughout the world automatically confer exclusive Copyright and Related Rights (defined below) upon the creator and subsequent owner(s) (each and all, an "owner") of an original work of authorship and/or a database (each, a "Work"). 
-Certain owners wish to permanently relinquish those rights to a Work for the purpose of contributing to a commons of creative, cultural and scientific works ("Commons") that the public can reliably and without fear of later claims of infringement build upon, modify, incorporate in other works, reuse and redistribute as freely as possible in any form whatsoever and for any purposes, including without limitation commercial purposes. These owners may contribute to the Commons to promote the ideal of a free culture and the further production of creative, cultural and scientific works, or to gain reputation or greater distribution for their Work in part through the use and efforts of others. 
-For these and/or other purposes and motivations, and without any expectation of additional consideration or compensation, the person associating CC0 with a Work (the "Affirmer"), to the extent that he or she is an owner of Copyright and Related Rights in the Work, voluntarily elects to apply CC0 to the Work and publicly distribute the Work under its terms, with knowledge of his or her Copyright and Related Rights in the Work and the meaning and intended legal effect of CC0 on those rights. 
-1. Copyright and Related Rights. A Work made available under CC0 may be protected by copyright and related or neighboring rights ("Copyright and Related Rights"). Copyright and Related Rights include, but are not limited to, the following: 
- i. the right to reproduce, adapt, distribute, perform, display, communicate, and translate a Work; 
- ii. moral rights retained by the original author(s) and/or performer(s); 
- iii. publicity and privacy rights pertaining to a person's image or likeness depicted in a Work; 
- iv. rights protecting against unfair competition in regards to a Work, subject to the limitations in paragraph 4(a), below; 
- v. rights protecting the extraction, dissemination, use and reuse of data in a Work; 
- vi. database rights (such as those arising under Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996 on the legal protection of databases, and under any national implementation thereof, including any amended or successor version of such directive); and 
- vii. other similar, equivalent or corresponding rights throughout the world based on applicable law or treaty, and any national implementations thereof. 
-2. Waiver. To the greatest extent permitted by, but not in contravention of, applicable law, Affirmer hereby overtly, fully, permanently, irrevocably and unconditionally waives, abandons, and surrenders all of Affirmer's Copyright and Related Rights and associated claims and causes of action, whether now known or unknown (including existing as well as future claims and causes of action), in the Work (i) in all territories worldwide, (ii) for the maximum duration provided by applicable law or treaty (including future time extensions), (iii) in any current or future medium and for any number of copies, and (iv) for any purpose whatsoever, including without limitation commercial, advertising or promotional purposes (the "Waiver"). Affirmer makes the Waiver for the benefit of each member of the public at large and to the detriment of Affirmer's heirs and successors, fully intending that such Waiver shall not be subject to revocation, rescission, cancellation, termination, or any other legal or equitable action to disrupt the quiet enjoyment of the Work by the public as contemplated by Affirmer's express Statement of Purpose. 
-3. Public License Fallback. Should any part of the Waiver for any reason be judged legally invalid or ineffective under applicable law, then the Waiver shall be preserved to the maximum extent permitted taking into account Affirmer's express Statement of Purpose. In addition, to the extent the Waiver is so judged Affirmer hereby grants to each affected person a royalty-free, non transferable, non sublicensable, non exclusive, irrevocable and unconditional license to exercise Affirmer's Copyright and Related Rights in the Work (i) in all territories worldwide, (ii) for the maximum duration provided by applicable law or treaty (including future time extensions), (iii) in any current or future medium and for any number of copies, and (iv) for any purpose whatsoever, including without limitation commercial, advertising or promotional purposes (the "License"). The License shall be deemed effective as of the date CC0 was applied by Affirmer to the Work. Should any part of the License for any reason be judged legally invalid or ineffective under applicable law, such partial invalidity or ineffectiveness shall not invalidate the remainder of the License, and in such case Affirmer hereby affirms that he or she will not (i) exercise any of his or her remaining Copyright and Related Rights in the Work or (ii) assert any associated claims and causes of action with respect to the Work, in either case contrary to Affirmer's express Statement of Purpose. 
-4. Limitations and Disclaimers. 
- a. No trademark or patent rights held by Affirmer are waived, abandoned, surrendered, licensed or otherwise affected by this document. 
- b. Affirmer offers the Work as-is and makes no representations or warranties of any kind concerning the Work, express, implied, statutory or otherwise, including without limitation warranties of title, merchantability, fitness for a particular purpose, non infringement, or the absence of latent or other defects, accuracy, or the present or absence of errors, whether or not discoverable, all to the greatest extent permissible under applicable law. 
- c. Affirmer disclaims responsibility for clearing rights of other persons that may apply to the Work or any use thereof, including without limitation any person's Copyright and Related Rights in the Work. Further, Affirmer disclaims responsibility for obtaining any necessary consents, permissions or other rights required for any use of the Work. 
- d. Affirmer understands and acknowledges that Creative Commons is not a party to this document and has no duty or obligation with respect to this CC0 or use of the Work.</spdx:licenseText>
-        <rdfs:seeAlso>http://creativecommons.org/publicdomain/zero/1.0/legalcode</rdfs:seeAlso>
-      </spdx:License>
-    </spdx:dataLicense>
-    <spdx:hasExtractedLicensingInfo rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-3"/>
-    <spdx:hasExtractedLicensingInfo>
-      <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-Beerware-4.2">
-        <spdx:extractedText>"THE BEER-WARE LICENSE" (Revision 42):
-phk@FreeBSD.ORG wrote this file. As long as you retain this notice you
-can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp  &lt;/
-LicenseName: Beer-Ware License (Version 42)
-LicenseCrossReference:  http://people.freebsd.org/~phk/
-LicenseComment: 
-The beerware license has a couple of other standard variants.</spdx:extractedText>
-        <spdx:licenseId>LicenseRef-Beerware-4.2</spdx:licenseId>
-      </spdx:ExtractedLicensingInfo>
-    </spdx:hasExtractedLicensingInfo>
-    <spdx:hasExtractedLicensingInfo>
-      <spdx:ExtractedLicensingInfo rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-4">
-        <spdx:extractedText>/*
- * (c) Copyright 2009 University of Bristol
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/</spdx:extractedText>
-        <spdx:licenseId>LicenseRef-4</spdx:licenseId>
-      </spdx:ExtractedLicensingInfo>
-    </spdx:hasExtractedLicensingInfo>
-    <spdx:hasExtractedLicensingInfo rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-2"/>
-    <spdx:externalDocumentRef>
-      <spdx:ExternalDocumentRef>
-        <spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
-        <spdx:checksum>
-          <spdx:Checksum>
-            <spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-            <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-          </spdx:Checksum>
-        </spdx:checksum>
-        <spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
-      </spdx:ExternalDocumentRef>
-    </spdx:externalDocumentRef>
-    <rdfs:comment>This document was created using SPDX 2.0 using licenses from the web site.</rdfs:comment>
-    <spdx:relationship>
-      <spdx:Relationship>
-        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_copyOf"/>
-        <spdx:relatedSpdxElement>
-          <spdx:SpdxElement rdf:about="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-ToolsElement"/>
+          </spdx:File>
         </spdx:relatedSpdxElement>
       </spdx:Relationship>
     </spdx:relationship>
@@ -661,20 +652,38 @@ The beerware license has a couple of other standard variants.</spdx:extractedTex
         <spdx:reviewer>Person: Joe Reviewer</spdx:reviewer>
       </spdx:Review>
     </spdx:reviewed>
+    <spdx:creationInfo>
+      <spdx:CreationInfo>
+        <spdx:licenseListVersion>1.19</spdx:licenseListVersion>
+        <spdx:creator>Person: Jane Doe ()</spdx:creator>
+        <spdx:creator>Organization: ExampleCodeInspect ()</spdx:creator>
+        <spdx:creator>Tool: LicenseFind-1.0</spdx:creator>
+        <spdx:created>2010-01-29T18:30:22Z</spdx:created>
+        <rdfs:comment>This package has been shipped in source and binary form.
+The binaries were created with gcc 4.5.1 and expect to link to
+compatible system run time libraries.</rdfs:comment>
+      </spdx:CreationInfo>
+    </spdx:creationInfo>
     <spdx:name>SPDX-Tools-v2.0</spdx:name>
-    <spdx:annotation>
-      <spdx:Annotation>
-        <spdx:date>2011-01-29T18:30:22Z</spdx:date>
-        <rdfs:comment>File level annotation</rdfs:comment>
-        <spdx:annotator>Person: File Commenter</spdx:annotator>
-        <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-      </spdx:Annotation>
-    </spdx:annotation>
+    <spdx:relationship>
+      <spdx:Relationship>
+        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_contains"/>
+        <spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
+      </spdx:Relationship>
+    </spdx:relationship>
     <spdx:hasExtractedLicensingInfo rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LicenseRef-1"/>
+    <spdx:relationship>
+      <spdx:Relationship>
+        <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_copyOf"/>
+        <spdx:relatedSpdxElement>
+          <spdx:SpdxElement rdf:about="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-ToolsElement"/>
+        </spdx:relatedSpdxElement>
+      </spdx:Relationship>
+    </spdx:relationship>
   </spdx:SpdxDocument>
   <spdx:Review>
-    <rdfs:comment>This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses</rdfs:comment>
-    <spdx:reviewDate>2010-02-10T00:00:00Z</spdx:reviewDate>
-    <spdx:reviewer>Person: Joe Reviewer</spdx:reviewer>
+    <rdfs:comment>Another example reviewer.</rdfs:comment>
+    <spdx:reviewDate>2011-03-13T00:00:00Z</spdx:reviewDate>
+    <spdx:reviewer>Person: Suzanne Reviewer</spdx:reviewer>
   </spdx:Review>
 </rdf:RDF>

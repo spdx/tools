@@ -39,7 +39,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	static final Logger logger = Logger.getLogger(RdfModelObject.class);
 	
 	public enum RelationshipType {
-		relationshipType_desribes, relationshipType_describedBy,
+		relationshipType_describes, relationshipType_describedBy,
 		 relationshipType_ancestorOf, relationshipType_buildToolOf,
 		 relationshipType_containedBy, relationshipType_contains,
 		 relationshipType_copyOf, relationshipType_dataFile,
@@ -52,7 +52,8 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		 relationshipType_other, relationshipType_packageOf,
 		 relationshipType_patchApplied, relationshipType_patchFor,
 		 relationshipType_amendment, relationshipType_staticLink,
-		 relationshipType_testcaseOf
+		 relationshipType_testcaseOf, relationshipType_prerequisiteFor,
+		 relationshipType_hasPrerequisite
 	}
 	
 	public static HashMap<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG = 
@@ -60,11 +61,14 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	public static HashMap<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE = 
 			new  HashMap<String, RelationshipType>();
 	static {
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_desribes, "DESCRIBES");
-		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBES", RelationshipType.relationshipType_desribes);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_describes, "DESCRIBES");
+		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBES", RelationshipType.relationshipType_describes);
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_describedBy, "DESCRIBED_BY");
 		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBED_BY", RelationshipType.relationshipType_describedBy);
-
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_hasPrerequisite, "HAS_PREQUISITE");
+		TAG_TO_RELATIONSHIP_TYPE.put("HAS_PREQUISITE", RelationshipType.relationshipType_hasPrerequisite);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_prerequisiteFor, "PREQUISITE_FOR");
+		TAG_TO_RELATIONSHIP_TYPE.put("PREQUISITE_FOR", RelationshipType.relationshipType_prerequisiteFor);
 		
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
 		TAG_TO_RELATIONSHIP_TYPE.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);

@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -418,5 +419,17 @@ public class SpdxElement extends RdfModelObject {
 		} else {
 			return this.name;
 		}
+	}
+	
+	/**
+	 * @param describesRelationship
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addRelationship(Relationship relationship) throws InvalidSPDXAnalysisException {
+		if (relationship != null) {
+			this.relationships = Arrays.copyOf(this.relationships, this.relationships.length + 1);
+			this.relationships[this.relationships.length-1] = relationship;
+		} 
+		addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationship);
 	}
 }

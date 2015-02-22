@@ -19,6 +19,8 @@ package org.spdx.rdfparser.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -215,9 +217,6 @@ public class TestSpdxDocument {
 		ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
 				LICENSE1, LICENSE2
 		};
-		Relationship[] relationships = new Relationship[] {
-				RELATIONSHIP1, RELATIONSHIP2
-		};
 		SPDXReview[] reviewers = new SPDXReview[] {
 				REVIEWER1, REVIEWER2
 		};
@@ -232,9 +231,17 @@ public class TestSpdxDocument {
 		doc.setExternalDocumentRefs(externalDocumentRefs);
 		doc.setExtractedLicenseInfos(extractedLicenseInfos);
 		doc.setName(DOC_NAME1);
-		doc.setRelationships(relationships);
+		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+		relationships.add(RELATIONSHIP1);
+		relationships.add(RELATIONSHIP2);
+		doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
+		for (int i = 0; i < items.length; i++) {
+			Relationship rel = new Relationship(items[i], 
+					Relationship.RelationshipType.relationshipType_describes, "");
+			relationships.add(rel);
+			doc.addRelationship(rel);
+		}
 		doc.setReviewers(reviewers);
-		doc.setDocumentDescribes(items);
 		assertTrue(UnitTestHelper.isArraysEquivalent(annotations, doc.getAnnotations()));
 		assertEquals(DOC_COMMENT1, doc.getComment());
 		assertEquals(CREATIONINFO1, doc.getCreationInfo());
@@ -242,7 +249,7 @@ public class TestSpdxDocument {
 		assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc.getExternalDocumentRefs()));
 		assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 		assertEquals(DOC_NAME1, doc.getName());
-		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, doc.getRelationships()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(relationships.toArray(new Relationship[relationships.size()]), doc.getRelationships()));
 		assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc.getReviewers()));
 		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
 		
@@ -256,7 +263,7 @@ public class TestSpdxDocument {
 		assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc2.getExternalDocumentRefs()));
 		assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc2.getExtractedLicenseInfos()));
 		assertEquals(DOC_NAME1, doc2.getName());
-		assertTrue(UnitTestHelper.isArraysEquivalent(relationships, doc2.getRelationships()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(relationships.toArray(new Relationship[relationships.size()]), doc2.getRelationships()));
 		assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc2.getReviewers()));
 		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc2.getDocumentDescribes()));
 	}
@@ -277,9 +284,6 @@ public class TestSpdxDocument {
 			ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
 					LICENSE1, LICENSE2
 			};
-			Relationship[] relationships = new Relationship[] {
-					RELATIONSHIP1, RELATIONSHIP2
-			};
 			SPDXReview[] reviewers = new SPDXReview[] {
 					REVIEWER1, REVIEWER2
 			};
@@ -290,13 +294,23 @@ public class TestSpdxDocument {
 			doc.setAnnotations(annotations);
 			doc.setComment(DOC_COMMENT1);
 			doc.setCreationInfo(CREATIONINFO1);
+
 			doc.setDataLicense(CCO_DATALICENSE);
 			doc.setExternalDocumentRefs(externalDocumentRefs);
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
-			doc.setRelationships(relationships);
+
+			ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+			relationships.add(RELATIONSHIP1);
+			relationships.add(RELATIONSHIP2);
+			doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
+			for (int i = 0; i < items.length; i++) {
+				Relationship rel = new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, "");
+				relationships.add(rel);
+				doc.addRelationship(rel);
+			}
 			doc.setReviewers(reviewers);
-			doc.setDocumentDescribes(items);
 			assertTrue(UnitTestHelper.isArraysEquivalent(annotations, doc.getAnnotations()));
 			assertEquals(DOC_COMMENT1, doc.getComment());
 			assertEquals(CREATIONINFO1, doc.getCreationInfo());
@@ -304,7 +318,7 @@ public class TestSpdxDocument {
 			assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc.getExternalDocumentRefs()));
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 			assertEquals(DOC_NAME1, doc.getName());
-			assertTrue(UnitTestHelper.isArraysEquivalent(relationships, doc.getRelationships()));
+			assertTrue(UnitTestHelper.isArraysEquivalent(relationships.toArray(new Relationship[relationships.size()]), doc.getRelationships()));
 			assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc.getReviewers()));
 			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
 			
@@ -320,9 +334,8 @@ public class TestSpdxDocument {
 			doc2.setExternalDocumentRefs(externalDocumentRefs);
 			doc2.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc2.setName(DOC_NAME1);
-			doc2.setRelationships(relationships);
+			doc2.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
 			doc2.setReviewers(reviewers);
-			doc2.setDocumentDescribes(items);
 			assertTrue(doc.equivalent(doc2));
 			// CreationInfo
 			doc2.setCreationInfo(CREATIONINFO2);
@@ -350,10 +363,11 @@ public class TestSpdxDocument {
 			doc2.setReviewers(reviewers);
 			assertTrue(doc.equivalent(doc2));
 			// Items
-			doc2.setDocumentDescribes(new SpdxItem[] {FILE3, PACKAGE3});
+			doc2.addRelationship(new Relationship(FILE3, 
+					Relationship.RelationshipType.relationshipType_describes, ""));
+			doc2.addRelationship(new Relationship(PACKAGE3, 
+					Relationship.RelationshipType.relationshipType_describes, ""));
 			assertFalse(doc.equivalent(doc2));
-			doc2.setDocumentDescribes(items);
-			assertTrue(doc.equivalent(doc2));
 	}
 
 	/**
@@ -386,7 +400,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			ArrayList<String> result = doc.verify();
 			assertEquals(0, result.size());
 			// data license
@@ -425,91 +442,6 @@ public class TestSpdxDocument {
 		assertTrue(UnitTestHelper.isArraysEqual(expected, result));
 	}
 
-	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setDocumentDescribes(org.spdx.rdfparser.model.SpdxItem[])}.
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	@Test
-	public void testSetSpdxItems() throws InvalidSPDXAnalysisException {
-		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
-			};
-			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
-					EXTERNAL_REF1, EXTERNAL_REF2
-			};
-			ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
-					LICENSE1, LICENSE2
-			};
-			Relationship[] relationships = new Relationship[] {
-					RELATIONSHIP1, RELATIONSHIP2
-			};
-			SpdxItem[] items = new SpdxItem[] {
-					FILE1, FILE2, PACKAGE1, PACKAGE2
-			};
-			SpdxDocument doc = container.getSpdxDocument();
-			doc.setAnnotations(annotations);
-			doc.setComment(DOC_COMMENT1);
-			doc.setCreationInfo(CREATIONINFO1);
-			doc.setDataLicense(CCO_DATALICENSE);
-			doc.setExternalDocumentRefs(externalDocumentRefs);
-			doc.setExtractedLicenseInfos(extractedLicenseInfos);
-			doc.setName(DOC_NAME1);
-			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
-			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
-			
-			SpdxItem[] newItems = new SpdxItem[] {FILE1, PACKAGE1, PACKAGE2};
-			doc.setDocumentDescribes(newItems);
-			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getDocumentDescribes()));
-	}
-	
-	@Test
-	public void testAddSpdxItems() throws InvalidSPDXAnalysisException {
-		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
-			};
-			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
-					EXTERNAL_REF1, EXTERNAL_REF2
-			};
-			ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
-					LICENSE1, LICENSE2
-			};
-			Relationship[] relationships = new Relationship[] {
-					RELATIONSHIP1, RELATIONSHIP2
-			};
-			SpdxItem[] items = new SpdxItem[] {
-					FILE1, FILE2, PACKAGE1, PACKAGE2
-			};
-			SpdxDocument doc = container.getSpdxDocument();
-			doc.setAnnotations(annotations);
-			doc.setComment(DOC_COMMENT1);
-			doc.setCreationInfo(CREATIONINFO1);
-			doc.setDataLicense(CCO_DATALICENSE);
-			doc.setExternalDocumentRefs(externalDocumentRefs);
-			doc.setExtractedLicenseInfos(extractedLicenseInfos);
-			doc.setName(DOC_NAME1);
-			doc.setRelationships(relationships);
-			SpdxItem[] result = doc.getDocumentDescribes();
-			assertEquals(0, result.length);
-			doc.addItem(items[0]);
-			result = doc.getDocumentDescribes();
-			assertEquals(1, result.length);
-			assertEquals(items[0], result[0]);
-			result = doc.getDocumentDescribes();
-			doc.addItem(items[1]);
-			result = doc.getDocumentDescribes();
-			assertEquals(2, result.length);
-			doc.addItem(items[2]);
-			result = doc.getDocumentDescribes();
-			assertEquals(3, result.length);
-			doc.addItem(items[3]);
-			result = doc.getDocumentDescribes();
-			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
-			
-			SpdxItem[] newItems = new SpdxItem[] {FILE1, PACKAGE1, PACKAGE2};
-			doc.setDocumentDescribes(newItems);
-			assertTrue(UnitTestHelper.isArraysEquivalent(newItems, doc.getDocumentDescribes()));
-	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#getDocumentContainer()}.
@@ -550,7 +482,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			assertEquals(CREATIONINFO1, doc.getCreationInfo());
 			doc.setCreationInfo(CREATIONINFO2);
 			assertEquals(CREATIONINFO2, doc.getCreationInfo());
@@ -586,7 +521,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			
 			assertEquals(CCO_DATALICENSE, doc.getDataLicense());
 			SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById("Apache-2.0");
@@ -624,7 +562,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc.getExternalDocumentRefs()));
 			ExternalDocumentRef[] ref2 = new ExternalDocumentRef[] {
 					EXTERNAL_REF2
@@ -663,7 +604,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 			ExtractedLicenseInfo[] infos2 = new ExtractedLicenseInfo[] {
 					LICENSE2, LICENSE3
@@ -698,7 +642,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 
 			doc.addExtractedLicenseInfos(LICENSE2);
@@ -740,7 +687,10 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
-			doc.setDocumentDescribes(items);
+			for (int i = 0; i < items.length; i++) {
+				doc.addRelationship(new Relationship(items[i], 
+						Relationship.RelationshipType.relationshipType_describes, ""));
+			}
 			
 			assertEquals(SpdxDocumentContainer.CURRENT_SPDX_VERSION, doc.getSpecVersion());
 			String ver = "2.1";

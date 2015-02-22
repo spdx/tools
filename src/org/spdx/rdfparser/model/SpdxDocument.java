@@ -17,7 +17,6 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -47,7 +46,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class SpdxDocument extends SpdxElement {
 	
 	private SpdxDocumentContainer documentContainer;
-	SpdxItem[] documentDescribes;
 	SPDXCreatorInformation creationInfo;	//TODO Refactor to RdfModelObject
 	AnyLicenseInfo dataLicense;
 	String specVersion;
@@ -83,48 +81,32 @@ public class SpdxDocument extends SpdxElement {
 				SpdxRdfConstants.PROP_SPDX_VERSION);
 		reviewers = findReviewPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY);
-		documentDescribes = findAllItems();
 	}
 
-	/**
-	 * @return All SpdxItems considering all properties and subproerties
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	private SpdxItem[] findAllItems() throws InvalidSPDXAnalysisException {
-		// Packages use the PROP_SPDX_PACKAGE property
-		SpdxElement[] packages = findMultipleElementPropertyValues(
-				SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SPDX_PACKAGE);
-		SpdxElement[] files = findMultipleElementPropertyValues(
-				SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE);
-		SpdxItem[] retval = new SpdxItem[packages.length + files.length];
-		for (int i = 0; i < packages.length; i++) {
-			if (!(packages[i] instanceof SpdxItem)) {
-				throw(new InvalidSPDXAnalysisException("Described package property value is not an SPDX Item type"));
-			}
-			retval[i] = (SpdxItem)packages[i];
-		}
-		for (int i = 0; i < files.length; i++) {
-			if (!(files[i] instanceof SpdxItem)) {
-				throw(new InvalidSPDXAnalysisException("Described file property value is not an SPDX Item type"));
-			}
-			retval[i + packages.length] = (SpdxItem)files[i];
-		}
-		return retval;
-	}
-	
+
 	/**
 	 * @return all SPDX items connected directly to this document.  Does not include
 	 * children SPDX items (e.g. files within packages).
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SpdxItem[] getDocumentDescribes() throws InvalidSPDXAnalysisException {
-		if (this.resource != null && this.refreshOnGet) {
-			SpdxItem[] refresh = findAllItems();
-			if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.documentDescribes)) {
-				this.documentDescribes = refresh;
+		Relationship[] allRelationships = this.getRelationships();
+		int count = 0;
+		for (int i = 0; i < allRelationships.length; i++) {
+			if (allRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes &&
+					allRelationships[i].getRelatedSpdxElement() instanceof SpdxItem) {
+				count++;
 			}
 		}
-		return this.documentDescribes;
+		SpdxItem[] refresh = new SpdxItem[count];
+		int refreshIndex = 0;
+		for (int i = 0; i < allRelationships.length; i++) {
+			if (allRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes &&
+					allRelationships[i].getRelatedSpdxElement() instanceof SpdxItem) {
+				refresh[refreshIndex++] = (SpdxItem)allRelationships[i].getRelatedSpdxElement();
+			}
+		}
+		return refresh;
 	}
 	
 	SpdxItem[] getPackagesFromItems(SpdxItem[] items) {
@@ -160,49 +142,7 @@ public class SpdxDocument extends SpdxElement {
 		}
 		return retval;
 	}
-	
-	/**
-	 * Sets the items which are connected directly to this document
-	 * @param items
-	 * @throws InvalidSPDXAnalysisException
-	 */
-	public void setDocumentDescribes(SpdxItem[] items) throws InvalidSPDXAnalysisException {
-		this.documentDescribes = items;
-		if (items == null) {
-			this.documentDescribes = new SpdxItem[0];
-		}
-		// use the appropriate property names based on the item type
-		if (this.resource != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_SPDX_PACKAGE,
-					getPackagesFromItems(this.documentDescribes));
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE,
-					getFilesFromItems(this.documentDescribes));
-		}		
-	}
-	
-	/**
-	 * Adds an item to be directly connected to this document
-	 * @param item
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	public void addItem(SpdxItem item) throws InvalidSPDXAnalysisException {
-		if (item == null) {
-			return;
-		}
-		this.documentDescribes = Arrays.copyOf(this.documentDescribes, this.documentDescribes.length + 1);
-		this.documentDescribes[this.documentDescribes.length-1] = item;
-		if (item instanceof SpdxPackage) {
-			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_SPDX_PACKAGE, item);
-		} else if (item instanceof SpdxFile) {
-			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE, item);
-		} else {
-			throw(new InvalidSPDXAnalysisException("Invalid type for document item."));
-		}
-	}
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
@@ -249,15 +189,6 @@ public class SpdxDocument extends SpdxElement {
 				SpdxRdfConstants.PROP_SPDX_VERSION, specVersion);
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY, reviewers);
-		// set the IDs
-		if (this.documentDescribes != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_SPDX_PACKAGE,
-					getPackagesFromItems(this.documentDescribes));
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_SPDX_DESCRIBES_FILE,
-					getFilesFromItems(this.documentDescribes));
-		}
 	}
 	
 	/**
@@ -505,9 +436,12 @@ public class SpdxDocument extends SpdxElement {
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid external document references: "+e.getMessage());
 		}
-		// Elements
+		// documentDescribes relationships
 		try {
 			SpdxItem[] items = getDocumentDescribes();
+			if (items.length == 0) {
+				retval.add("Document must have at least one relationship of type DOCUMENT_DESCRIBES");
+			}
 			for (int i = 0; i < items.length; i++) {
 				retval.addAll(items[i].verify());
 			}
@@ -532,7 +466,6 @@ public class SpdxDocument extends SpdxElement {
 				RdfModelHelper.arraysEquivalent(this.getExternalDocumentRefs(), comp.getExternalDocumentRefs()) &&
 				RdfModelHelper.arraysEqual(this.getExtractedLicenseInfos(), comp.getExtractedLicenseInfos()) &&
 				RdfModelHelper.arraysEqual(this.reviewers, comp.getReviewers()) &&
-				RdfModelHelper.arraysEquivalent(this.documentDescribes, comp.getDocumentDescribes()) &&
 				RdfModelHelper.equalsConsideringNull(this.specVersion, comp.getSpecVersion()));
 		} catch (InvalidSPDXAnalysisException ex) {
 			logger.error("Error testing for equivalent",ex);
@@ -584,7 +517,7 @@ public class SpdxDocument extends SpdxElement {
 	 */
 	@Deprecated
 	public SpdxPackage getSpdxPackage() throws InvalidSPDXAnalysisException {
-		SpdxItem[] retval = getPackagesFromItems(this.documentDescribes);
+		SpdxItem[] retval = this.getDocumentDescribes();
 		if (retval.length != 1) {
 			throw(new InvalidSPDXAnalysisException("More than one SPDX package defined in the document.  Must use getSpdxItems - Likely this application has not been upgraded for SPDX 2.0"));
 		}

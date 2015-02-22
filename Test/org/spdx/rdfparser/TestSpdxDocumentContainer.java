@@ -316,8 +316,8 @@ public class TestSpdxDocumentContainer {
 		pkg1.addFile(file2);
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
-		doc.getSpdxDocument().addItem(pkg1);
-		doc.getSpdxDocument().addItem(file3);
+		doc.addElement(pkg1);
+		doc.addElement(file3);
 		SpdxElement result = doc.findElementById(PACKAGE_ID);
 		assertTrue(pkg1.equivalent(result));
 		result = doc.findElementById(FILE_ID1);
@@ -338,8 +338,8 @@ public class TestSpdxDocumentContainer {
 		SpdxFile file3 = new SpdxFile("File3", null, null, null, null, null, null, null, null);
 		pkg1.addFile(file1);
 		pkg1.addFile(file2);
-		doc.getSpdxDocument().addItem(pkg1);
-		doc.getSpdxDocument().addItem(file3);
+		doc.addElement(pkg1);
+		doc.addElement(file3);
 		SpdxFile[] expected = new SpdxFile[] {file1, file2, file3};
 		assertTrue(UnitTestHelper.isArraysEquivalent(expected, doc.getFileReferences()));
 	}
@@ -395,13 +395,13 @@ public class TestSpdxDocumentContainer {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
 		assertTrue(doc.findAllPackages().isEmpty());
-		doc.getSpdxDocument().addItem(pkg1);
+		doc.addElement(pkg1);
 		List<SpdxPackage> result = doc.findAllPackages();
 		assertEquals(1, result.size());
 		assertTrue(result.contains(pkg1));
 		Relationship rel = new Relationship(pkg3, RelationshipType.relationshipType_ancestorOf, "");
 		pkg2.setRelationships(new Relationship[] {rel});
-		doc.getSpdxDocument().addItem(pkg2);
+		doc.addElement(pkg2);
 		result = doc.findAllPackages();
 		assertEquals(3, result.size());
 		SpdxPackage[] resultArray = result.toArray(new SpdxPackage[result.size()]);
@@ -423,13 +423,13 @@ public class TestSpdxDocumentContainer {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
 		assertTrue(doc.findAllFiles().isEmpty());
-		doc.getSpdxDocument().addItem(file1);
+		doc.addElement(file1);
 		List<SpdxFile> result = doc.findAllFiles();
 		assertEquals(1, result.size());
 		assertTrue(result.contains(file1));
 		Relationship rel = new Relationship(file3, RelationshipType.relationshipType_ancestorOf, "");
 		file2.setRelationships(new Relationship[] {rel});
-		doc.getSpdxDocument().addItem(file2);
+		doc.addElement(file2);
 		result = doc.findAllFiles();
 		assertEquals(3, result.size());
 		SpdxFile[] resultArray = result.toArray(new SpdxFile[result.size()]);

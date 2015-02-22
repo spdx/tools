@@ -129,19 +129,6 @@ public class TestDocumentSheet {
 	}
 	
 	@Test
-	public void testDocumentDescribes() throws InvalidSPDXAnalysisException, SpdxCompareException {
-		doc3.getDocumentDescribes()[0].setComment("Different");
-		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
-		docSheet.importCompareResults(comparer, docNames);
-		assertEquals(DIFFERENT_STRING, getEqualsValue(docSheet.SPDX_DOCUMENT_CONTENT_COL));
-		SpdxDocument[] comparedDocs = comparer.getSpdxDocuments();
-		for (int i = 0; i < comparedDocs.length; i++) {
-			assertEquals(CompareHelper.formatSpdxElementList(comparedDocs[i].getDocumentDescribes()),
-					getDataValue(docSheet.SPDX_DOCUMENT_CONTENT_COL, i));
-		}
-	}
-	
-	@Test
 	public void testDocumentComment() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.setComment("Different");
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
@@ -210,9 +197,8 @@ public class TestDocumentSheet {
 	
 	@Test
 	public void testRelationships() throws InvalidSPDXAnalysisException, SpdxCompareException {
-		doc3.setRelationships(new Relationship[] {
-				new Relationship(doc3.getDocumentDescribes()[0], 
-						RelationshipType.relationshipType_contains, "Different")});
+		doc3.addRelationship(new Relationship(doc3.getDocumentDescribes()[0], 
+						RelationshipType.relationshipType_contains, "Different"));
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		docSheet.importCompareResults(comparer, docNames);
 		assertEquals(DIFFERENT_STRING, getEqualsValue(docSheet.RELATIONSHIP_COL));

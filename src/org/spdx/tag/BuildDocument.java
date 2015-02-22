@@ -46,7 +46,6 @@ import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
-import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -163,10 +162,6 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private HashMap<String, ArrayList<SpdxFile>> fileDependencyMap = 
 		new HashMap<String, ArrayList<SpdxFile>>();
 	/**
-	 * List of SPDX ID's that are described by this document.  These are added at the end.
-	 */
-	private ArrayList<String> documentDescribes = new ArrayList<String>();
-	/**
 	 * Keep track of the last relationship for any following relationship related tags
 	 */
 	private RelationshipWithId lastRelationship = null;
@@ -217,7 +212,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	/**
 	 * The last (or current) package being defined by the tag/value file
 	 */
-	private SpdxPackage lastPackage;
+	private SpdxPackage lastPackage = null;
 	public BuildDocument(SpdxDocumentContainer[] result, Properties constants) {
 		this.constants = constants;
 		this.result = result;
@@ -389,9 +384,6 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				throw(new InvalidSpdxTagFileException("SPDX Document "+value
 						+" is invalid.  Document IDs must be "+SpdxRdfConstants.SPDX_DOCUMENT_ID));
 			}
-		} else if (tag.equals(constants.getProperty("PROP_DOCUMENT_DESCRIBES"))) {
-			checkAnalysisNull();
-			this.documentDescribes.add(value);
 		} else if (tag.equals(constants.getProperty("PROP_EXTERNAL_DOC_URI"))) {
 			checkAnalysisNull();
 			addExternalDocRef(value);
@@ -485,19 +477,13 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inPackageDefinition = true;
 			inFileDefinition = false;
 			inAnnotation = false;
-			boolean generatedId = false;
 			if (this.lastPackage != null) {
 				if (this.lastPackage.getId() == null) {
-					generatedId = true;
 					this.warningMessages.add("Missing SPDX ID for "+this.lastPackage.getName()
 							+ ".  An SPDX ID will be generated for this package.");
 				}
-				this.analysis.addItem(this.lastPackage);
-				if (generatedId && this.documentDescribes.isEmpty()) {
-					// add the default first package ID
-					this.documentDescribes.add(this.lastPackage.getId());
-				}
-			}
+				this.analysis.getDocumentContainer().addElement(this.lastPackage);
+			}			
 			this.lastPackage = new SpdxPackage(value, null, null, null, null, null, null, null);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
 			checkAnalysisNull();
@@ -529,12 +515,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				this.warningMessages.add("Missing SPDX ID for "+this.lastFile.getName()
 						+ ".  An SPDX ID will be generated for this file.");
 			}
-			if (this.lastPackage == null ||
-					!this.inPackageDefinition ||
-					lastFile.getId() != null && this.documentDescribes.contains(lastFile.getId())) {
-				this.analysis.addItem(this.lastFile);
-			} else {
+			if (lastPackage != null) {
 				this.lastPackage.addFile(lastFile);
+			} else {
+				this.analysis.getDocumentContainer().addElement(lastFile);
 			}
 		}
 		this.lastFile = null;
@@ -640,11 +624,6 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
 			pkg.setId(value);
-			if (this.documentDescribes.isEmpty()) {
-				// add the first package as a default if no document describes has
-				// already been added
-				this.documentDescribes.add(value);
-			}
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_VERSION_INFO"))) {
 			pkg.setVersionInfo(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILE_NAME"))) {
@@ -884,26 +863,42 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	public void exit() throws Exception {
 		addLastFile();
 		if (this.lastPackage != null) {
-			boolean generatedId = false;
-			if (this.lastPackage.getId() == null) {
-				generatedId = true;
-				this.warningMessages.add("Missing SPDX ID for "+this.lastPackage.getName()
-						+ ".  An SPDX ID will be generated for this package.");
-			}
-			this.analysis.addItem(this.lastPackage);
-			if (generatedId && this.documentDescribes.isEmpty()) {
-				// add the default first package ID
-				this.documentDescribes.add(this.lastPackage.getId());
-			}
-		}		
+			this.analysis.getDocumentContainer().addElement(this.lastPackage);
+		}
 		fixFileDependencies();
-		addDocumentDescribes();
 		addRelationships();
+		checkSinglePackageDefault();
 		addAnnotations();
 		warningMessages.addAll(analysis.verify());
 		assertEquals("SpdxDocument", 0, warningMessages);
 	}
 	
+	/**
+	 * Makes sure there is a describes relationships for a single package
+	 * SPDX document
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void checkSinglePackageDefault() throws InvalidSPDXAnalysisException {
+		List<SpdxPackage> pkgs = this.analysis.getDocumentContainer().findAllPackages();
+		Relationship[] documentRelationships = this.analysis.getRelationships();
+		List<String> describedElementIds = new ArrayList<String>();
+		for (int i = 0; i < documentRelationships.length; i++) {
+			if (documentRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes) {
+				if (pkgs.contains(documentRelationships[i])) {
+					describedElementIds.add(documentRelationships[i].getRelatedSpdxElement().getId());
+				}
+			}
+		}
+		if (describedElementIds.size() == 0 && pkgs.size() == 0) {
+			// add a relationship for the package as a default
+			// See the spec for the definition of this default behavior
+			Relationship describesRelationship = new Relationship(pkgs.get(0),
+					Relationship.RelationshipType.relationshipType_describes,
+					"This describes relationship was added as a default relationship by the SPDX Tools Tag parser.");
+			this.analysis.addRelationship(describesRelationship);
+		}
+	}
+
 	/**
 	 * @throws InvalidSPDXAnalysisException 
 	 * 
@@ -914,7 +909,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			lastAnnotation = null;
 		}
 		for (int i = 0; i < annotations.size(); i++) {
-			SpdxElement element = this.analysis.getDocumentContainer().findElementById(relationships.get(i).getId());
+			SpdxElement element = this.analysis.getDocumentContainer().findElementById(annotations.get(i).getId());
 			Annotation[] elementAnnotations = element.getAnnotations();
 			if (elementAnnotations == null) {
 				elementAnnotations = new Annotation[0];
@@ -942,32 +937,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			if (elementRelationships == null) {
 				elementRelationships = new Relationship[0];
 			}
-			Relationship[] newRelationships = Arrays.copyOf(elementRelationships, elementRelationships.length+1);
-			
-			newRelationships[elementRelationships.length] = new Relationship(relatedElement, 
-					relationships.get(i).getRelationshipType(), relationships.get(i).getComment());
-			element.setRelationships(newRelationships);
+			element.addRelationship(new Relationship(relatedElement, 
+					relationships.get(i).getRelationshipType(), relationships.get(i).getComment()));
 		}
-	}
-
-	/**
-	 * Add the document describes to the document
-	 * @throws InvalidSpdxTagFileException 
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	private void addDocumentDescribes() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
-		SpdxItem[] items = new SpdxItem[this.documentDescribes.size()];
-		for (int i = 0; i < items.length; i++) {
-			SpdxElement element = this.analysis.getDocumentContainer().findElementById(this.documentDescribes.get(i));
-			if (element == null) {
-				throw(new InvalidSpdxTagFileException("Document describes element ID "+this.documentDescribes.get(i)+" not found in document."));
-			}
-			if (!(element instanceof SpdxItem)) {
-				throw(new InvalidSpdxTagFileException("Document describes is not a Package of File for SPDX ID "+element.getId()));
-			}
-			items[i] = (SpdxItem)element;
-		}
-		this.analysis.setDocumentDescribes(items);
 	}
 
 	/**

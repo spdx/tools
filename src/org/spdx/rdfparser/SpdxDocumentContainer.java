@@ -28,6 +28,7 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.RdfModelObject;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxElementFactory;
@@ -61,7 +62,8 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String ONE_DOT_TWO_SPDX_VERSION = "SPDX-1.2";
-	public static final String CURRENT_SPDX_VERSION = "SPDX-2.0";
+	public static final String TWO_POINT_ZERO_VERSION = "SPDX-2.0";
+	public static final String CURRENT_SPDX_VERSION = TWO_POINT_ZERO_VERSION;
 	
 	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.0";
 	
@@ -134,8 +136,32 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		this.spdxDocument = new SpdxDocument(this, this.documentNode);
 		initializeNextLicenseRef();
 		initializeNextElementRef();
+		if (this.spdxDocument.getDocumentDescribes() != null || 
+				this.spdxDocument.getDocumentDescribes().length == 0) {
+			upgradeDescribesToRelationship();
+		}
 	}
 	
+	/**
+	 * @throws InvalidSPDXAnalysisException 
+	 * 
+	 */
+	private void upgradeDescribesToRelationship() throws InvalidSPDXAnalysisException {
+		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_PACKAGE).asNode();
+		Triple m = Triple.createMatch(this.documentNode, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ArrayList<SpdxPackage> describedPackages = new ArrayList<SpdxPackage>();
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			describedPackages.add(new SpdxPackage(this, t.getObject()));
+		}
+		for (SpdxPackage pkg:describedPackages) {
+			Relationship describes = new Relationship(pkg, 
+					Relationship.RelationshipType.relationshipType_describes, "");
+			this.getSpdxDocument().addRelationship(describes);
+		}
+	}
+
 	/**
 	 * Creates a new empty SPDX Document with the current SPDX document version.
 	 * Note: Follow-up calls MUST be made to add the required properties for this
@@ -693,5 +719,14 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			retval.add((SpdxFile)SpdxElementFactory.createElementFromModel(this, tripleIter.next().getSubject()));
 		}
 		return retval;
+	}
+
+	/**
+	 * Add an SPDX element directly to the model without connecting it to any properties
+	 * @param element
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addElement(SpdxElement element) throws InvalidSPDXAnalysisException {
+		element.createResource(this, true);
 	}
 }

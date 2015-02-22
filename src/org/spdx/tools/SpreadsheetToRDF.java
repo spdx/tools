@@ -198,7 +198,7 @@ public class SpreadsheetToRDF {
 				}
 			}
 			if (!fileAdded) {
-				analysis.addItem(file);
+				analysis.getDocumentContainer().addElement(file);
 			}
 		}
 	}
