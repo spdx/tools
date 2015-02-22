@@ -21,12 +21,17 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
 
 /**
  * Version 1.2 implementation of PackageInfo Sheet - added home page column
@@ -34,8 +39,6 @@ import org.spdx.rdfparser.license.SpdxNoneLicense;
  *
  */
 public class PackageInfoSheetV1d2 extends PackageInfoSheet {
-
-
 
 	int NAME_COL = 0;
 	int VERSION_COL = NAME_COL+1;
@@ -200,22 +203,22 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 		}
 	}
 	
-	public void add(SPDXPackageInfo pkgInfo) {
+	public void add(SpdxPackage pkgInfo) throws InvalidSPDXAnalysisException {
 		Row row = addRow();
 		Cell nameCell = row.createCell(NAME_COL);
-		nameCell.setCellValue(pkgInfo.getDeclaredName());
+		nameCell.setCellValue(pkgInfo.getName());
 		Cell copyrightCell = row.createCell(DECLARED_COPYRIGHT_COL);
-		copyrightCell.setCellValue(pkgInfo.getDeclaredCopyright());
+		copyrightCell.setCellValue(pkgInfo.getCopyrightText());
 		Cell DeclaredLicenseCol = row.createCell(DECLARED_LICENSE_COL);
-		DeclaredLicenseCol.setCellValue(pkgInfo.getDeclaredLicenses().toString());
+		DeclaredLicenseCol.setCellValue(pkgInfo.getLicenseDeclared().toString());
 		Cell concludedLicenseCol = row.createCell(CONCLUDED_LICENSE_COL);
-		concludedLicenseCol.setCellValue(pkgInfo.getConcludedLicense().toString());
+		concludedLicenseCol.setCellValue(pkgInfo.getLicenseConcluded().toString());
 		Cell fileChecksumCell = row.createCell(FILE_VERIFICATION_VALUE_COL);
-		if (pkgInfo.getPackageVerification() != null) {
-			fileChecksumCell.setCellValue(pkgInfo.getPackageVerification().getValue());
+		if (pkgInfo.getPackageVerificationCode() != null) {
+			fileChecksumCell.setCellValue(pkgInfo.getPackageVerificationCode().getValue());
 			Cell verificationExcludedFilesCell = row.createCell(VERIFICATION_EXCLUDED_FILES_COL);
 			StringBuilder excFilesStr = new StringBuilder();
-			String[] excludedFiles = pkgInfo.getPackageVerification().getExcludedFileNames();
+			String[] excludedFiles = pkgInfo.getPackageVerificationCode().getExcludedFileNames();
 			if (excludedFiles.length > 0) {
 				excFilesStr.append(excludedFiles[0]);
 				for (int i = 1;i < excludedFiles.length; i++) {
@@ -231,13 +234,13 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 			descCell.setCellValue(pkgInfo.getDescription());
 		}
 		Cell fileNameCell = row.createCell(MACHINE_NAME_COL);
-		fileNameCell.setCellValue(pkgInfo.getFileName());
+		fileNameCell.setCellValue(pkgInfo.getPackageFileName());
 		Cell pkgSha1 = row.createCell(PACKAGE_SHA_COL);
 		if (pkgInfo.getSha1() != null) {
 			pkgSha1.setCellValue(pkgInfo.getSha1());
 		}
 		// add the license infos in files in multiple rows
-		AnyLicenseInfo[] licenseInfosInFiles = pkgInfo.getLicensesFromFiles();
+		AnyLicenseInfo[] licenseInfosInFiles = pkgInfo.getLicenseInfoFromFiles();
 		if (licenseInfosInFiles != null && licenseInfosInFiles.length > 0) {
 			StringBuilder sb = new StringBuilder(licenseInfosInFiles[0].toString());
 			for (int i = 1; i < licenseInfosInFiles.length; i++) {
@@ -249,16 +252,16 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 		if (pkgInfo.getLicenseComments() != null) {
 			row.createCell(LICENSE_COMMENT_COL).setCellValue(pkgInfo.getLicenseComments());
 		}
-		if (pkgInfo.getShortDescription() != null) {
+		if (pkgInfo.getSummary() != null) {
 			Cell shortDescCell = row.createCell(SHORT_DESC_COL);
-			shortDescCell.setCellValue(pkgInfo.getShortDescription());
+			shortDescCell.setCellValue(pkgInfo.getSummary());
 		}
 		if (pkgInfo.getSourceInfo() != null) {
 			Cell sourceInfoCell = row.createCell(SOURCE_INFO_COL);
 			sourceInfoCell.setCellValue(pkgInfo.getSourceInfo());
 		}
 		Cell urlCell = row.createCell(DOWNLOAD_URL_COL);
-		urlCell.setCellValue(pkgInfo.getUrl());
+		urlCell.setCellValue(pkgInfo.getDownloadLocation());
 		if (pkgInfo.getVersionInfo() != null) {
 			Cell versionInfoCell = row.createCell(VERSION_COL);
 			versionInfoCell.setCellValue(pkgInfo.getVersionInfo());
@@ -271,13 +274,21 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 			Cell supplierCell = row.createCell(SUPPLIER_COL);
 			supplierCell.setCellValue(pkgInfo.getSupplier());
 		}
-		if (pkgInfo.getHomePage() != null) {
+		if (pkgInfo.getHomepage() != null) {
 			Cell homePageCell = row.createCell(HOME_PAGE_COL);
-			homePageCell.setCellValue(pkgInfo.getHomePage());
+			homePageCell.setCellValue(pkgInfo.getHomepage());
 		}
 	}
 	
-	public SPDXPackageInfo getPackageInfo(int rowNum) throws SpreadsheetException {
+	public SpdxPackage[] getPackages() throws SpreadsheetException {
+		SpdxPackage[] retval = new SpdxPackage[getNumDataRows()];
+		for (int i = 0; i < retval.length; i++) {
+			retval[i] = getPackage(getFirstDataRow() + i);
+		}
+		return retval;
+	}
+	
+	private SpdxPackage getPackage(int rowNum) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -382,9 +393,12 @@ public class PackageInfoSheetV1d2 extends PackageInfoSheet {
 			homePage = "";
 		}
 		SpdxPackageVerificationCode verificationCode = new SpdxPackageVerificationCode(packageVerificationValue, excludedFiles);
-		return new SPDXPackageInfo(declaredName, versionInfo, machineName, sha1, sourceInfo, 
-				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
-				licenseComment, declaredCopyright, shortDesc, 
-				description, url, verificationCode, supplier, originator, homePage);
+		Checksum[] checksums = new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, sha1)};
+		return new SpdxPackage(declaredName, "", new Annotation[0],
+				new Relationship[0], concludedLicense, licenseInfosFromFiles, 
+				declaredCopyright, licenseComment, declaredLicenses, checksums, 
+				description, url, new SpdxFile[0], homePage, originator, 
+				machineName, verificationCode, sourceInfo, shortDesc, supplier, 
+				versionInfo);
 	}
 }

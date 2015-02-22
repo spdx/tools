@@ -24,16 +24,19 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
-import org.spdx.spdxspreadsheet.OriginsSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
-import org.spdx.spdxspreadsheet.PackageInfoSheetV09d3;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -68,7 +71,7 @@ public class TestPackageInfoSheet {
 	}
 
 	@Test
-	public void testAddAndGet() throws SpreadsheetException {
+	public void testAddAndGet() throws SpreadsheetException, InvalidSPDXAnalysisException {
 		AnyLicenseInfo[] testLicenses1 = new AnyLicenseInfo[3];
 		testLicenses1[0] = new ExtractedLicenseInfo("License1", "License1Text");
 		AnyLicenseInfo[] disjunctiveLicenses = new AnyLicenseInfo[3];
@@ -92,59 +95,64 @@ public class TestPackageInfoSheet {
 		SpdxPackageVerificationCode testVerification = new SpdxPackageVerificationCode("value",
 				new String[] {"skippedfil1", "skippedfile2"});
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
-		SPDXPackageInfo pkgInfo1 = new SPDXPackageInfo("decname1", "Version1", "machinename1", 
-				"sha1-1", "sourceinfo1", testLicense1,
-				testLicense2, testLicenseInfos, "license comments", "dec-copyright1",
-				"short desc1", "desc1", "http://url1", testVerification, "Person: supplier1", "Organization: originator1",
-				"http://www.home.page1");
-		SPDXPackageInfo pkgInfo2 = new SPDXPackageInfo("decname1", "Version2", "machinename1", 
-				"sha1-1", "sourceinfo1", testLicense1,
-				testLicense2, testLicenseInfos, "licensecomments2", "dec-copyright1",
-				"short desc1", "desc1", "http://url1", testVerification, "NOASSERTION", "Person: originator2",
-				"http://www.home.page2");
+
+		SpdxPackage pkgInfo1 =  new SpdxPackage("decname1", "Comment1", new Annotation[0],
+				new Relationship[0], testLicense1, testLicenseInfos, 
+				"dec-copyright1", "license comments", testLicense2, 
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")}, 
+				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page1", "Organization: originator1", 
+				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1", 
+				"Version1");
+		pkgInfo1.setId("SPDXRef-Package1");
+		SpdxPackage pkgInfo2 =  new SpdxPackage("decname1", "Comment1", new Annotation[0],
+				new Relationship[0], testLicense1, testLicenseInfos, 
+				"dec-copyright1", "license comments2", testLicense2, 
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")}, 
+				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page2", "Organization: originator2", 
+				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1", 
+				"Version2");
+		pkgInfo2.setId("SPDXRef-Package2");
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
 		PackageInfoSheet pkgInfoSheet = PackageInfoSheet.openVersion(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
 		pkgInfoSheet.add(pkgInfo1);
 		pkgInfoSheet.add(pkgInfo2);
-		SPDXPackageInfo tstPkgInfo1 = pkgInfoSheet.getPackageInfo(1);
-		SPDXPackageInfo tstPkgInfo2 = pkgInfoSheet.getPackageInfo(2);
+		SpdxPackage tstPkgInfo1 = pkgInfoSheet.getPackages()[0];
+		SpdxPackage tstPkgInfo2 = pkgInfoSheet.getPackages()[1];
 		comparePkgInfo(pkgInfo1, tstPkgInfo1);
 		comparePkgInfo(pkgInfo2, tstPkgInfo2);
-		SPDXPackageInfo tstPkgInfo3 = pkgInfoSheet.getPackageInfo(3);
-		if (tstPkgInfo3 != null) {
-			fail("should be null");
-		}
+		assertEquals(2, pkgInfoSheet.getPackages().length);
 	}
 
-	private void comparePkgInfo(SPDXPackageInfo pkgInfo1,
-			SPDXPackageInfo pkgInfo2) {
-		assertEquals(pkgInfo1.getDeclaredCopyright(), pkgInfo2.getDeclaredCopyright());
+	private void comparePkgInfo(SpdxPackage pkgInfo1,
+			SpdxPackage pkgInfo2) throws InvalidSPDXAnalysisException {
+		assertEquals(pkgInfo1.getId(), pkgInfo2.getId());
+		assertEquals(pkgInfo1.getCopyrightText(), pkgInfo2.getCopyrightText());
 		assertEquals(pkgInfo1.getVersionInfo(), pkgInfo2.getVersionInfo());
-		assertEquals(pkgInfo1.getDeclaredLicenses(), pkgInfo2.getDeclaredLicenses());
-		assertEquals(pkgInfo1.getConcludedLicense(), pkgInfo2.getConcludedLicense());
-		assertEquals(pkgInfo1.getDeclaredName(), pkgInfo2.getDeclaredName());
+		assertEquals(pkgInfo1.getLicenseDeclared(), pkgInfo2.getLicenseDeclared());
+		assertEquals(pkgInfo1.getLicenseConcluded(), pkgInfo2.getLicenseConcluded());
+		assertEquals(pkgInfo1.getName(), pkgInfo2.getName());
 		assertEquals(pkgInfo1.getDescription(), pkgInfo2.getDescription());
-		assertEquals(pkgInfo1.getPackageVerification().getValue(), pkgInfo2.getPackageVerification().getValue());
-		assertEquals(pkgInfo1.getFileName(), pkgInfo2.getFileName());
+		assertEquals(pkgInfo1.getPackageVerificationCode().getValue(), pkgInfo2.getPackageVerificationCode().getValue());
+		assertEquals(pkgInfo1.getPackageFileName(), pkgInfo2.getPackageFileName());
 		assertEquals(pkgInfo1.getSha1(), pkgInfo2.getSha1());
-		assertEquals(pkgInfo1.getShortDescription(), pkgInfo2.getShortDescription());
+		assertEquals(pkgInfo1.getSummary(), pkgInfo2.getSummary());
 		assertEquals(pkgInfo1.getSourceInfo(), pkgInfo2.getSourceInfo());
-		assertEquals(pkgInfo1.getUrl(), pkgInfo2.getUrl());
-		if (!compareLicenses(pkgInfo1.getLicensesFromFiles(), pkgInfo2.getLicensesFromFiles())) {
+		assertEquals(pkgInfo1.getDownloadLocation(), pkgInfo2.getDownloadLocation());
+		if (!compareLicenses(pkgInfo1.getLicenseInfoFromFiles(), pkgInfo2.getLicenseInfoFromFiles())) {
 			fail("license information in files not equal");
 		}
-		assertEquals(pkgInfo1.getPackageVerification().getValue(),
-				pkgInfo2.getPackageVerification().getValue());
-		assertEquals(pkgInfo1.getPackageVerification().getExcludedFileNames().length,
-				pkgInfo2.getPackageVerification().getExcludedFileNames().length);
-		for (int i = 0; i < pkgInfo1.getPackageVerification().getExcludedFileNames().length; i++) {
-			assertEquals(pkgInfo1.getPackageVerification().getExcludedFileNames()[i], 
-					pkgInfo2.getPackageVerification().getExcludedFileNames()[i]);
+		assertEquals(pkgInfo1.getPackageVerificationCode().getValue(),
+				pkgInfo2.getPackageVerificationCode().getValue());
+		assertEquals(pkgInfo1.getPackageVerificationCode().getExcludedFileNames().length,
+				pkgInfo2.getPackageVerificationCode().getExcludedFileNames().length);
+		for (int i = 0; i < pkgInfo1.getPackageVerificationCode().getExcludedFileNames().length; i++) {
+			assertEquals(pkgInfo1.getPackageVerificationCode().getExcludedFileNames()[i], 
+					pkgInfo2.getPackageVerificationCode().getExcludedFileNames()[i]);
 		}
 		assertEquals(pkgInfo1.getSupplier(), pkgInfo2.getSupplier());
 		assertEquals(pkgInfo1.getOriginator(), pkgInfo2.getOriginator());
-		assertEquals(pkgInfo1.getHomePage(), pkgInfo2.getHomePage());		
+		assertEquals(pkgInfo1.getHomepage(), pkgInfo2.getHomepage());		
 	}
 
 	/**

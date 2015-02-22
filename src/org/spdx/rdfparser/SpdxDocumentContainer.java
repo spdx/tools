@@ -729,4 +729,18 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	public void addElement(SpdxElement element) throws InvalidSPDXAnalysisException {
 		element.createResource(this, true);
 	}
+
+	/**
+	 * Returns all elements in the contains
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public List<SpdxElement> findAllElements() throws InvalidSPDXAnalysisException {
+		// NOTE: This needs to be updated for any new types
+		List<SpdxElement> retval = new ArrayList<SpdxElement>();
+		retval.add(this.spdxDocument);
+		retval.addAll(this.findAllFiles());
+		retval.addAll(this.findAllPackages());
+		return retval;
+	}
 }

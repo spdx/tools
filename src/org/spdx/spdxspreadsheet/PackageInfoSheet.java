@@ -17,7 +17,7 @@
 package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.SPDXPackageInfo;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.SpdxPackage;
 
@@ -35,18 +35,8 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 		this.version = version;
 	}
 	
-	public abstract void add(SPDXPackageInfo pkgInfo);
-	
-	/**
-	 * @param pkg
-	 */
-	public void add(SpdxPackage pkg) {
-		// TODO Replace the abstract add with this signature
+	public abstract void add(SpdxPackage pkgInfo) throws InvalidSPDXAnalysisException;
 		
-	}
-	
-	public abstract SPDXPackageInfo getPackageInfo(int rowNum) throws SpreadsheetException;
-	
 	public static String licensesToString(AnyLicenseInfo[] licenses) {
 		if (licenses == null || licenses.length == 0) {
 			return "";
@@ -63,7 +53,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	}
 	
 	public static void create(Workbook wb, String sheetName) {
-		PackageInfoSheetV1d2.create(wb, sheetName);
+		PackageInfoSheetV2d0.create(wb, sheetName);
 	}
 
 	/**
@@ -82,17 +72,17 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 			return new PackageInfoSheetV09d2(workbook, packageInfoSheetName, version);
 		} else if (version.compareTo(SPDXSpreadsheet.VERSION_1_1_0) <= 0) {
 			return new PackageInfoSheetV09d3(workbook, packageInfoSheetName, version);
-		} else {
+		} else if (version.compareTo(SPDXSpreadsheet.VERSION_1_2_0) <= 0) {
 			return new PackageInfoSheetV1d2(workbook, packageInfoSheetName, version);
+		} else {
+			return new PackageInfoSheetV2d0(workbook, packageInfoSheetName, version);
 		}
 	}
 
 	/**
-	 * @param firstDataRow
+	 * @param rowNum row number of the package
 	 * @return
+	 * @throws SpreadsheetException 
 	 */
-	public SpdxPackage[] getPackages(int firstDataRow) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract SpdxPackage[] getPackages() throws SpreadsheetException;
 }

@@ -79,7 +79,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 			String retval = writer.toString().trim();
 			return retval;
 		} catch (Exception e) {
-			return "ERROR PARSING CONTRIBUTORS FROM SPX FILE";
+			return "ERROR PARSING CSV Entries";
 		} finally {
 			try {
 				csvWriter.close();
