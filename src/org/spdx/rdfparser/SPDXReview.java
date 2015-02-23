@@ -38,6 +38,7 @@ public class SPDXReview {
 	private Node reviewerNode = null;
 	private Resource reviewerResource = null;
 	
+	@SuppressWarnings("deprecation")
 	public SPDXReview(Model model, Node reviewerNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
 		this.reviewerNode = reviewerNode;
@@ -97,6 +98,7 @@ public class SPDXReview {
 	 * @param model Jena model to populate
 	 * @param projectResource Project resource to populate
 	 */
+	@SuppressWarnings("deprecation")
 	private void populateModel(Model model, Resource reviewResource) {
 		this.model = model;
 		this.reviewerNode = reviewResource.asNode();
@@ -131,6 +133,7 @@ public class SPDXReview {
 	/**
 	 * @param reviewer the reviewer to set
 	 */
+	@SuppressWarnings("deprecation")
 	public void setReviewer(String reviewer) {
 		this.reviewer = reviewer;
 		if (this.reviewerNode != null && this.model != null) {
@@ -151,6 +154,7 @@ public class SPDXReview {
 	/**
 	 * @param reviewDate the reviewDate to set
 	 */
+	@SuppressWarnings("deprecation")
 	public void setReviewDate(String reviewDate) {
 		this.reviewDate = reviewDate;
 		if (this.reviewerNode != null && this.model != null) {

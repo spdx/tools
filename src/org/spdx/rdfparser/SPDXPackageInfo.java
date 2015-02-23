@@ -16,7 +16,6 @@
  */
 package org.spdx.rdfparser;
 
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 

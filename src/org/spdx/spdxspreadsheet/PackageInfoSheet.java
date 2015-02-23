@@ -17,7 +17,6 @@
 package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
