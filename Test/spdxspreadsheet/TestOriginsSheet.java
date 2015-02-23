@@ -27,7 +27,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.spdx.spdxspreadsheet.OriginsSheet;
+import org.spdx.spdxspreadsheet.DocumentInfoSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 
 /**
@@ -65,13 +65,13 @@ public class TestOriginsSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#create(org.apache.poi.ss.usermodel.Workbook, java.lang.String)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#create(org.apache.poi.ss.usermodel.Workbook, java.lang.String)}.
 	 */
 	@Test
 	public void testCreate() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String result = originsSheet.verify();
 		if (result != null && !result.isEmpty()) {
 			fail(result);
@@ -79,13 +79,13 @@ public class TestOriginsSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#setSPDXVersion(java.lang.String)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#setSPDXVersion(java.lang.String)}.
 	 */
 	@Test
 	public void testSetSPDXVersion() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String spdxVersion = "1.1";
 		originsSheet.setSPDXVersion(spdxVersion);
 		assertEquals(spdxVersion, originsSheet.getSPDXVersion());
@@ -95,13 +95,13 @@ public class TestOriginsSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#setCreatedBy(java.lang.String[])}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#setCreatedBy(java.lang.String[])}.
 	 */
 	@Test
 	public void testSetCreatedBy() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String[] createdBys = new String[] {"Person: Gary O'Neall", "Tool: Source Auditor Scanner"};
 		originsSheet.setCreatedBy(createdBys);
 		compareStrings(createdBys, originsSheet.getCreatedBy());
@@ -128,13 +128,13 @@ public class TestOriginsSheet {
 		}
 	}
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#setDataLicense(java.lang.String)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#setDataLicense(java.lang.String)}.
 	 */
 	@Test
 	public void testSetDataLicense() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String licenseId = "CC0";
 		originsSheet.setDataLicense(licenseId);
 		assertEquals(licenseId, originsSheet.getDataLicense());
@@ -144,13 +144,13 @@ public class TestOriginsSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#setAuthorComments(java.lang.String)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#setAuthorComments(java.lang.String)}.
 	 */
 	@Test
 	public void testSetAuthorComments() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String comment = "comment1";
 		originsSheet.setAuthorComments(comment);
 		assertEquals(comment, originsSheet.getAuthorComments());
@@ -160,26 +160,26 @@ public class TestOriginsSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#setCreated(java.util.Date)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#setCreated(java.util.Date)}.
 	 */
 	@Test
 	public void testSetCreated() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		Date created = new Date();
 		originsSheet.setCreated(created);
 		assertEquals(created.toString(), originsSheet.getCreated().toString());
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#getDocumentComment()}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#getDocumentComment()}.
 	 */
 	@Test
 	public void testGetDocumentomment() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String comment = "comment1";
 		originsSheet.setDocumentComment(comment);
 		assertEquals(comment, originsSheet.getDocumentComment());
@@ -189,13 +189,13 @@ public class TestOriginsSheet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.OriginsSheet#setLicenseListVersion(java.lang.String)}.
+	 * Test method for {@link org.spdx.spdxspreadsheet.DocumentInfoSheet#setLicenseListVersion(java.lang.String)}.
 	 */
 	@Test
 	public void testSetLicenseListVersion() {
 		Workbook wb = new HSSFWorkbook();
-		OriginsSheet.create(wb, "Origins");
-		OriginsSheet originsSheet = OriginsSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
+		DocumentInfoSheet.create(wb, "Origins");
+		DocumentInfoSheet originsSheet = DocumentInfoSheet.openVersion(wb, "Origins", SPDXSpreadsheet.CURRENT_VERSION);
 		String ver = "1.19";
 		originsSheet.setLicenseListVersion(ver);
 		assertEquals(ver, originsSheet.getLicenseListVersion());

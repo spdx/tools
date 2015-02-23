@@ -27,6 +27,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -42,7 +45,7 @@ import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.AnnotationsSheet;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
-import org.spdx.spdxspreadsheet.OriginsSheet;
+import org.spdx.spdxspreadsheet.DocumentInfoSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.RelationshipsSheet;
@@ -134,14 +137,14 @@ public class RdfToSpreadsheet {
 		HashMap<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(), ss.getPackageInfoSheet());
 		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
 		copyPerFileInfo(doc.getDocumentContainer().findAllFiles(), ss.getPerFileSheet(), fileIdToPackageId);
-		List<Relationship> allRelationships = new ArrayList<Relationship>();
-		List<Annotation> allAnnotations = new ArrayList<Annotation>();
-		List<SpdxElement> allElements = doc.getDocumentContainer().findAllElements();
-		allRelationships.addAll(Arrays.asList(doc.getRelationships()));
-		allAnnotations.addAll(Arrays.asList(doc.getAnnotations()));
+		Map<String, Relationship[]> allRelationships = new TreeMap<String, Relationship[]>();
+		Map<String, Annotation[]> allAnnotations = new TreeMap<String, Annotation[]>();
+		allRelationships.put(doc.getId(), doc.getRelationships());
+		allAnnotations.put(doc.getId(), doc.getAnnotations());
+		List<SpdxElement> allElements = doc.getDocumentContainer().findAllElements();		
 		for (SpdxElement element:allElements) {
-			allRelationships.addAll(Arrays.asList(element.getRelationships()));
-			allAnnotations.addAll(Arrays.asList(element.getAnnotations()));
+			allRelationships.put(element.getId(), element.getRelationships());
+			allAnnotations.put(element.getId(), element.getAnnotations());
 		}
 		copyRelationships(allRelationships, ss.getRelationshipsSheet());
 		copyAnnotations(allAnnotations, ss.getAnnotationsSheet());
@@ -153,11 +156,14 @@ public class RdfToSpreadsheet {
 	 * @param annotations
 	 * @param annotationsSheet
 	 */
-	private static void copyAnnotations(List<Annotation> annotations,
+	private static void copyAnnotations(Map<String, Annotation[]> annotationMap,
 			AnnotationsSheet annotationsSheet) {
-		Collections.sort(annotations);
-		for (Annotation annotation:annotations) {
-			annotationsSheet.add(annotation);
+		for (Entry<String, Annotation[]> entry:annotationMap.entrySet()) {
+			Annotation[] annotations = entry.getValue();
+			Arrays.sort(annotations);
+			for (int i = 0; i < annotations.length; i++) {
+				annotationsSheet.add(annotations[i], entry.getKey());
+			}
 		}
 	}
 
@@ -165,11 +171,15 @@ public class RdfToSpreadsheet {
 	 * @param relationships
 	 * @param relationshipsSheet
 	 */
-	private static void copyRelationships(List<Relationship> relationships,
+	private static void copyRelationships(Map<String, Relationship[]> relationshipMap,
 			RelationshipsSheet relationshipsSheet) {
-		Collections.sort(relationships);
-		for (Relationship relationship:relationships) {
-			relationshipsSheet.add(relationship);
+
+		for (Entry<String, Relationship[]> entry:relationshipMap.entrySet()) {
+			Relationship[] relationships = entry.getValue();
+			Arrays.sort(relationships);
+			for (int i = 0; i < relationships.length; i++) {
+				relationshipsSheet.add(relationships[i], entry.getKey());
+			}
 		}
 	}
 
@@ -235,7 +245,7 @@ public class RdfToSpreadsheet {
 		return fileIdToPkgId;
 	}
 
-	private static void copyOrigins(SpdxDocument doc, OriginsSheet originsSheet) throws SpreadsheetException {
+	private static void copyOrigins(SpdxDocument doc, DocumentInfoSheet originsSheet) throws SpreadsheetException {
 		originsSheet.addDocument(doc);
 	}
 

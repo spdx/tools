@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.compare.CompareHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -135,7 +136,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			} else {
 				if (i == DECLARED_LICENSE_COL || i == CONCLUDED_LICENSE_COL) {
 					try {
-						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
+						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue(), null);
 					} catch(SpreadsheetException ex) {
 						if (i == DECLARED_LICENSE_COL) {
 							return "Invalid declared license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
@@ -150,7 +151,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 					}
 					for (int j = 0; j < licenses.length; j++) {
 						try {
-							LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim());
+							LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim(), null);
 						} catch(SpreadsheetException ex) {
 							return "Invalid license information in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						}
@@ -282,15 +283,15 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		}
 	}
 	
-	public SpdxPackage[] getPackages() throws SpreadsheetException {
+	public SpdxPackage[] getPackages(SpdxDocumentContainer container) throws SpreadsheetException {
 		SpdxPackage[] retval = new SpdxPackage[getNumDataRows()];
 		for (int i = 0; i < retval.length; i++) {
-			retval[i] = getPackage(getFirstDataRow() + i);
+			retval[i] = getPackage(getFirstDataRow() + i, container);
 		}
 		return retval;
 	}
 	
-	private SpdxPackage getPackage(int rowNum) throws SpreadsheetException {
+	private SpdxPackage getPackage(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -322,18 +323,18 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			sourceInfo = "";
 		}
 		AnyLicenseInfo declaredLicenses = 
-				LicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
+				LicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue(), container);
 		AnyLicenseInfo concludedLicense;
 		Cell concludedLicensesCell = row.getCell(CONCLUDED_LICENSE_COL);
 		if (concludedLicensesCell != null && !concludedLicensesCell.getStringCellValue().isEmpty()) {
-			concludedLicense = LicenseInfoFactory.parseSPDXLicenseString(concludedLicensesCell.getStringCellValue());
+			concludedLicense = LicenseInfoFactory.parseSPDXLicenseString(concludedLicensesCell.getStringCellValue(), container);
 		} else {
 			concludedLicense = new SpdxNoneLicense();
 		}
 		String[] licenseStrings = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
 		AnyLicenseInfo[] licenseInfosFromFiles = new AnyLicenseInfo[licenseStrings.length];
 		for (int i = 0; i < licenseStrings.length; i++) {
-			licenseInfosFromFiles[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
+			licenseInfosFromFiles[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim(), container);
 		}
 		Cell licenseCommentCell = row.getCell(LICENSE_COMMENT_COL);
 		String licenseComment;

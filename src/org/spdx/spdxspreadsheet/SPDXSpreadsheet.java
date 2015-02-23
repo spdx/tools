@@ -59,12 +59,12 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		VERSION_0_9_3, VERSION_0_9_2, VERSION_0_9_1};
 	public static final String UNKNOWN_VERSION = "UNKNOWN";
 	
-	private OriginsSheet originsSheet;
-	static final String ORIGIN_SHEET_NAME = "Origins";
+	private DocumentInfoSheet documentInfoSheet;
+	static final String DOCUMENT_INFO_NAME = "Document Info";
 	private PackageInfoSheet packageInfoSheet;
 	static final String PACKAGE_INFO_SHEET_NAME = "Package Info";
 	private NonStandardLicensesSheet nonStandardLicensesSheet;
-	static final String NON_STANDARD_LICENSE_SHEET_NAME = "Extracted Lic Info";
+	static final String NON_STANDARD_LICENSE_SHEET_NAME = "Extracted License Info";
 	private PerFileSheet perFileSheet;
 	static final String PER_FILE_SHEET_NAME = "Per File Info";
 	private RelationshipsSheet relationshipsSheet;
@@ -85,12 +85,12 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public SPDXSpreadsheet(File spreadsheetFile, boolean create,
 			boolean readonly) throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
-		this.version = readVersion(this.workbook, ORIGIN_SHEET_NAME);	
+		this.version = readVersion(this.workbook, DOCUMENT_INFO_NAME);	
 		if (this.version.equals(UNKNOWN_VERSION)) {
 			throw(new SpreadsheetException("The version for the SPDX spreadsheet could not be read."));
 		}
-		this.originsSheet = OriginsSheet.openVersion(this.workbook, ORIGIN_SHEET_NAME, this.version);
-		String verifyMsg = originsSheet.verify();
+		this.documentInfoSheet = DocumentInfoSheet.openVersion(this.workbook, DOCUMENT_INFO_NAME, this.version);
+		String verifyMsg = documentInfoSheet.verify();
 		if (verifyMsg != null) {
 			logger.error(verifyMsg);
 			throw(new SpreadsheetException(verifyMsg));
@@ -118,11 +118,11 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	private String readVersion(Workbook workbook, String originSheetName) {
 		Sheet sheet = workbook.getSheet(originSheetName);
 		int firstRowNum = sheet.getFirstRowNum();
-		Row dataRow = sheet.getRow(firstRowNum + OriginsSheet.DATA_ROW_NUM);
+		Row dataRow = sheet.getRow(firstRowNum + DocumentInfoSheet.DATA_ROW_NUM);
 		if (dataRow == null) {
 			return UNKNOWN_VERSION;
 		}
-		Cell versionCell = dataRow.getCell(OriginsSheet.SPREADSHEET_VERSION_COL);
+		Cell versionCell = dataRow.getCell(DocumentInfoSheet.SPREADSHEET_VERSION_COL);
 		if (versionCell == null) {
 			return UNKNOWN_VERSION;
 		}
@@ -159,7 +159,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		try {
 			excelOut = new FileOutputStream(spreadsheetFile);
 			Workbook wb = new HSSFWorkbook();
-			OriginsSheet.create(wb, ORIGIN_SHEET_NAME);
+			DocumentInfoSheet.create(wb, DOCUMENT_INFO_NAME);
 			PackageInfoSheet.create(wb, PACKAGE_INFO_SHEET_NAME);
 			NonStandardLicensesSheet.create(wb, NON_STANDARD_LICENSE_SHEET_NAME);
 			PerFileSheet.create(wb, PER_FILE_SHEET_NAME);
@@ -177,7 +177,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 */
 	@Override
 	public void clear() {
-		this.originsSheet.clear();
+		this.documentInfoSheet.clear();
 		this.packageInfoSheet.clear();
 		this.nonStandardLicensesSheet.clear();
 		this.perFileSheet.clear();
@@ -191,7 +191,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 */
 	@Override
 	public String verifyWorkbook() {
-		String retval = this.originsSheet.verify();
+		String retval = this.documentInfoSheet.verify();
 		if (retval == null || retval.isEmpty()) {
 			retval = this.packageInfoSheet.verify();
 		}
@@ -216,15 +216,15 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	/**
 	 * @return the originsSheet
 	 */
-	public OriginsSheet getOriginsSheet() {
-		return originsSheet;
+	public DocumentInfoSheet getOriginsSheet() {
+		return documentInfoSheet;
 	}
 
 	/**
 	 * @param originsSheet the originsSheet to set
 	 */
-	public void setOriginsSheet(OriginsSheet originsSheet) {
-		this.originsSheet = originsSheet;
+	public void setOriginsSheet(DocumentInfoSheet originsSheet) {
+		this.documentInfoSheet = originsSheet;
 	}
 
 	/**

@@ -327,6 +327,39 @@ public class TestRdfModelObject {
 	}
 	
 	@Test
+	public void testAddPropertyValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		Annotation[] result = empty.findAnnotationPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		String annotator1 = "Annotator 1";
+		AnnotationType annType1 = AnnotationType.annotationType_other;
+		DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+		String annDate1 = format.format(new Date());
+		String annComment1 = "Annotation Comment 1";
+		Annotation an1 = new Annotation(annotator1, annType1, annDate1, annComment1);
+		String annotator2 = "Annotator 2";
+		AnnotationType annType2 = AnnotationType.annotationType_review;
+		String annDate2 = format.format(new Date(10101));
+		String annComment2 = "Annotation Comment 2";
+		Annotation an2 = new Annotation(annotator2, annType2, annDate2, annComment2);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, an1);
+		result = empty.findAnnotationPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(1, result.length);
+		assertEquals(an1, result[0]);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, an2);
+		result = empty.findAnnotationPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(2, result.length);
+		if (result[0].equals(an1)) {
+			assertEquals(result[1], an2);
+		} else {
+			assertEquals(result[0], an2);
+		}
+	}
+	
+	@Test
 	public void testFindSetElementsPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");

@@ -16,6 +16,8 @@
 */
 package org.spdx.compare;
 
+import java.util.Arrays;
+
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
@@ -68,6 +70,7 @@ public class CompareHelper {
 		if (checksums == null || checksums.length == 0) {
 			return "";
 		}
+		Arrays.sort(checksums);
 		StringBuilder sb = new StringBuilder(CompareHelper.checksumToString(checksums[0]));
 		for (int i = 1; i < checksums.length; i++) {
 			sb.append("\n");
@@ -228,7 +231,7 @@ public class CompareHelper {
 		if (checksumsString == null || checksumsString.trim().isEmpty()) {
 			return new Checksum[0];
 		}
-		String[] parts = checksumsString.split(",");
+		String[] parts = checksumsString.split("\n");
 		Checksum[] retval = new Checksum[parts.length];
 		for (int i = 0; i < parts.length; i++) {
 			try {

@@ -220,10 +220,10 @@ public class TestPerFileSheet {
 		fileInfoSheet.add(testFile1, "SPDXRef-Package1");
 		fileInfoSheet.add(testFile3, "SPDXRef-Package1");
 		fileInfoSheet.add(testFile2, "SPDXRef-Package1");
-		SpdxFile result1 = fileInfoSheet.getFileInfo(1);
-		SpdxFile result3 = fileInfoSheet.getFileInfo(2);
-		SpdxFile result2 = fileInfoSheet.getFileInfo(3);
-		SpdxFile result4 = fileInfoSheet.getFileInfo(4);
+		SpdxFile result1 = fileInfoSheet.getFileInfo(1, null);
+		SpdxFile result3 = fileInfoSheet.getFileInfo(2, null);
+		SpdxFile result2 = fileInfoSheet.getFileInfo(3, null);
+		SpdxFile result4 = fileInfoSheet.getFileInfo(4, null);
 		compareSpdxFile(testFile1, result1);
 		compareSpdxFile(testFile2, result2);
 		compareSpdxFile(testFile3, result3);

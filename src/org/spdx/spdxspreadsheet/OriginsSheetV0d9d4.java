@@ -38,7 +38,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
  * @author Gary O'Neall
  *
  */
-public class OriginsSheetV0d9d4 extends OriginsSheet {
+public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 
 	static final int NUM_COLS = 6;
 	static final int SPREADSHEET_VERSION_COL = 0;

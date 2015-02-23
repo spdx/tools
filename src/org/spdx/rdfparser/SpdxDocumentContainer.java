@@ -210,9 +210,9 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 				SpdxListedLicense dataLicense;
 				if (spdxVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
 					{ 
-					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0));
+					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0, this));
 				} else {
-					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID));				
+					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID, this));				
 				}
 				spdxDocument.setDataLicense(dataLicense);
 			} catch (InvalidLicenseStringException e) {

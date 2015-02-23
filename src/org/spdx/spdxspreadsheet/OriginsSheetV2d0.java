@@ -43,7 +43,7 @@ import org.spdx.tag.InvalidSpdxTagFileException;
  * @author Gary
  *
  */
-public class OriginsSheetV2d0 extends OriginsSheet {
+public class OriginsSheetV2d0 extends DocumentInfoSheet {
 	
 	static final int NUM_COLS = 14;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
