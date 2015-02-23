@@ -29,13 +29,13 @@ import org.spdx.rdfparser.model.SpdxDocument;
  * @author Gary O'Neall
  *
  */
-public abstract class OriginsSheet extends AbstractSheet {
+public abstract class DocumentInfoSheet extends AbstractSheet {
 	static final int SPREADSHEET_VERSION_COL = 0;
 	static final int DATA_ROW_NUM = 1;
 	
 	protected String version;
 
-	public OriginsSheet(Workbook workbook, String sheetName, String version) {
+	public DocumentInfoSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
 		this.version = version;
 	}
@@ -52,7 +52,7 @@ public abstract class OriginsSheet extends AbstractSheet {
 	 * @param version Spreadsheet version
 	 * @return
 	 */
-	public static OriginsSheet openVersion(Workbook workbook,
+	public static DocumentInfoSheet openVersion(Workbook workbook,
 			String originSheetName, String version) {
 		if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_4) <= 0) {
 			return new OriginsSheetV0d9d4(workbook, originSheetName, version);

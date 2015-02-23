@@ -21,6 +21,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.model.SpdxFile;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -122,7 +123,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 	 * @param rowNum
 	 * @return
 	 */
-	public abstract SpdxFile getFileInfo(int rowNum) throws SpreadsheetException;
+	public abstract SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException;
 
 	/**	
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name

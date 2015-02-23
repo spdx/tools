@@ -484,6 +484,16 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	protected void addPropertyValue(String nameSpace, String propertyName,
+			Annotation annotation) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			if (annotation != null) {
+					this.resource.addProperty(p, annotation.createResource(modelContainer));
+			}
+		}
+	}
+	
 	/**
 	 * Find all annotations with a subject of this object
 	 * @param nameSpace

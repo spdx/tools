@@ -117,11 +117,11 @@ public class TestPackageInfoSheet {
 		PackageInfoSheet pkgInfoSheet = PackageInfoSheet.openVersion(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
 		pkgInfoSheet.add(pkgInfo1);
 		pkgInfoSheet.add(pkgInfo2);
-		SpdxPackage tstPkgInfo1 = pkgInfoSheet.getPackages()[0];
-		SpdxPackage tstPkgInfo2 = pkgInfoSheet.getPackages()[1];
+		SpdxPackage tstPkgInfo1 = pkgInfoSheet.getPackages(null)[0];
+		SpdxPackage tstPkgInfo2 = pkgInfoSheet.getPackages(null)[1];
 		comparePkgInfo(pkgInfo1, tstPkgInfo1);
 		comparePkgInfo(pkgInfo2, tstPkgInfo2);
-		assertEquals(2, pkgInfoSheet.getPackages().length);
+		assertEquals(2, pkgInfoSheet.getPackages(null).length);
 	}
 
 	private void comparePkgInfo(SpdxPackage pkgInfo1,

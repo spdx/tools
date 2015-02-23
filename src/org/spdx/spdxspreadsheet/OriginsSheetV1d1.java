@@ -39,7 +39,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
  * @author Gary O'Neall
  *
  */
-public class OriginsSheetV1d1 extends OriginsSheet {
+public class OriginsSheetV1d1 extends DocumentInfoSheet {
 
 	static final int NUM_COLS = 8;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;

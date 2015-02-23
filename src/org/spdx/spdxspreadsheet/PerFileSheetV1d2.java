@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.compare.CompareHelper;
 import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
@@ -151,7 +152,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	}
 
 	@SuppressWarnings("deprecation")
-	public SpdxFile getFileInfo(int rowNum) throws SpreadsheetException {
+	public SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;
@@ -183,7 +184,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		AnyLicenseInfo fileLicenses;
 		Cell assertedLicenseCell = row.getCell(CONCLUDED_LIC_COL);
 		if (assertedLicenseCell != null && !assertedLicenseCell.getStringCellValue().isEmpty()) {
-			fileLicenses = LicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue());
+			fileLicenses = LicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue(), container);
 		} else {
 			fileLicenses = null;
 		}
@@ -193,7 +194,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 			String[] licenseStrings = seenLicenseCell.getStringCellValue().split(",");
 			seenLicenses = new AnyLicenseInfo[licenseStrings.length];
 			for (int i = 0; i < licenseStrings.length; i++) {
-				seenLicenses[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim());
+				seenLicenses[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim(), container);
 			}
 		} else {
 			seenLicenses = null;
@@ -253,7 +254,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 			String[] fileDependencyNames = csvToStrings(fileDependencyCells.getStringCellValue());
 			fileDependencies = new SpdxFile[fileDependencyNames.length];
 			for (int i = 0; i < fileDependencyNames.length; i++) {
-				fileDependencies[i] = findFileByName(fileDependencyNames[i].trim());
+				fileDependencies[i] = findFileByName(fileDependencyNames[i].trim(), container);
 			}
 		}
 		String[] contributors = new String[0];
@@ -294,14 +295,14 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	 * @return
 	 * @throws SpreadsheetException 
 	 */
-	public SpdxFile findFileByName(String fileName) throws SpreadsheetException {
+	public SpdxFile findFileByName(String fileName, SpdxDocumentContainer container) throws SpreadsheetException {
 		if (this.fileCache.containsKey(fileName)) {
 			return this.fileCache.get(fileName);
 		}
 		for (int i = this.firstRowNum; i < this.lastRowNum+1; i++) {
 			Cell fileNameCell = sheet.getRow(i).getCell(FILE_NAME_COL);
 			if (fileNameCell.getStringCellValue().trim().equals(fileName)) {
-				return getFileInfo(i);	//note: this will add the file to the cache
+				return getFileInfo(i, container);	//note: this will add the file to the cache
 			}
 		}
 		throw(new SpreadsheetException("Could not find dependant file in the spreadsheet: "+fileName));
@@ -359,7 +360,7 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 //				}
 				if (i == CONCLUDED_LIC_COL || i == LIC_INFO_IN_FILE_COL) {
 					try {
-						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue());
+						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue(), null);
 					} catch (SpreadsheetException ex) {
 						if (i == CONCLUDED_LIC_COL) {
 							return "Invalid asserted license string in row "+String.valueOf(row.getRowNum()) +

@@ -429,7 +429,19 @@ public class SpdxElement extends RdfModelObject {
 		if (relationship != null) {
 			this.relationships = Arrays.copyOf(this.relationships, this.relationships.length + 1);
 			this.relationships[this.relationships.length-1] = relationship;
-		} 
-		addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationship);
+			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationship);
+		} 		
+	}
+
+	/**
+	 * @param annotation
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addAnnotation(Annotation annotation) throws InvalidSPDXAnalysisException {
+		if (annotation != null) {
+			this.annotations = Arrays.copyOf(this.annotations, this.annotations.length + 1);
+			this.annotations[this.annotations.length-1] = annotation;
+			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION, annotation);
+		}
 	}
 }

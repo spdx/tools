@@ -234,6 +234,18 @@ public class TestSpdxElement {
 		assertTrue(UnitTestHelper.isArraysEqual(annotations4, element1.getAnnotations()));
 	}
 
+	@Test
+	public void testAddAnnotations() throws InvalidSPDXAnalysisException {
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+				new Annotation[0], relationships);
+		element1.createResource(modelContainer);
+		element1.addAnnotation(ANNOTATION1);
+		assertTrue(UnitTestHelper.isArraysEqual(new Annotation[] {ANNOTATION1}, element1.getAnnotations()));
+		element1.addAnnotation(ANNOTATION2);
+		assertTrue(UnitTestHelper.isArraysEqual(new Annotation[] {ANNOTATION1, ANNOTATION2}, element1.getAnnotations()));
+	}
+	
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#setComment(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 

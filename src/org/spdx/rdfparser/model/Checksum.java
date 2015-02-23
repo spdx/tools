@@ -42,7 +42,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class Checksum extends RdfModelObject {
+public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 
 	static final Logger logger = Logger.getLogger(Checksum.class);
 	public enum ChecksumAlgorithm {checksumAlgorithm_sha1, checksumAlgorithm_sha256,
@@ -287,5 +287,44 @@ public class Checksum extends RdfModelObject {
 		} else {
 			return (CHECKSUM_ALGORITHM_TO_TAG.get(this.algorithm)+" "+this.checksumValue);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Checksum compare) {
+		int retval = 0;
+		if (this.getAlgorithm() == null) {
+			if (compare.getAlgorithm() != null) {
+				retval = 1;
+			} else {
+				retval = 0;
+			}
+		} else {
+			if (compare.getAlgorithm() == null) {
+				retval = -1;
+			} else {
+				retval = Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(this.getAlgorithm()).compareTo(
+						Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(compare.getAlgorithm()));
+			}
+			
+		} 
+		if (retval == 0) {
+			if (this.getValue() == null) {
+				if (compare.getAlgorithm() != null) {
+					retval = 1;
+				} else {
+					retval = 0;
+				}
+			} else {
+				if (compare.getValue() == null) {
+					retval = -1;
+				} else {
+					retval = this.getValue().compareTo(compare.getValue());
+				}
+			}
+		}
+		return retval;
 	}
 }
