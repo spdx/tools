@@ -19,7 +19,6 @@ package org.spdx.rdfparser;
 import java.util.HashSet;
 
 import org.spdx.rdfparser.model.IRdfModel;
-import org.spdx.rdfparser.model.RdfModelObject;
 
 /**
  * Static class containing helper methods for implementations of IRdfModel

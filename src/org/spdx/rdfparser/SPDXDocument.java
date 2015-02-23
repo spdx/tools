@@ -486,6 +486,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		 * @param files the files to set
 		 * @throws InvalidSPDXAnalysisException 
 		 */
+		@SuppressWarnings("deprecation")
 		public void setFiles(SPDXFile[] files) throws InvalidSPDXAnalysisException {
 			// Delete all existing files
 			ArrayList<Node> alFileNodes = new ArrayList<Node>();
@@ -519,6 +520,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		 * Add a file to the package
 		 * @param file
 		 */
+		@SuppressWarnings("deprecation")
 		public void addFile(SPDXFile file) throws InvalidSPDXAnalysisException {
 			Resource s = getResource(this.node);
 			Property p = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
@@ -537,6 +539,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		public void removeFile(String fileName) throws InvalidSPDXAnalysisException {
 			ArrayList<Node> filesToRemove = new ArrayList<Node>();
 			Node fileNameProperty = model.getProperty(SPDX_NAMESPACE, PROP_FILE_NAME).asNode();
+			@SuppressWarnings("deprecation")
 			Property docFileProperty = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE);
 			Property pkgFileProperty = model.createProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE);
 			Resource docResource = getResource(getSpdxDocNode());
@@ -1367,6 +1370,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		s.addProperty(p, lic);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public SPDXFile[] getFileReferences() throws InvalidSPDXAnalysisException {
 		ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE).asNode();
