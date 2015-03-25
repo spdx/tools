@@ -26,6 +26,7 @@
     })();
 
   </script>
+  <script src="sorttable.js"></script>
 </head>
 
 <body typeof="rdf:Bag">
@@ -57,10 +58,10 @@
 
 <h1>SPDX License List</h1>
 
-<p>The SPDX License List is a list of commonly found open source licenses for the purposes of being able to easily and efficiently identify such licenses in an SPDX document or elsewhere. The SPDX License List includes a standardized short identifier, full name for each license, vetted license text, other basic information, and a canonical permanent URL. By providing a short identifier, users can efficiently refer to a license without having to redundantly reproduce the full license.  The SPDX License List includes a list of commonly found exceptions to open source licenses.  These exceptions can be used with the License Expression Syntax operator, "WITH" to create a license with an exception.</p>
+<p>The SPDX License List is a list of commonly found open source licenses and exceptions for the purposes of being able to easily and efficiently identify such licenses and exceptions in an SPDX document (or elsewhere). The SPDX License List includes a standardized short identifier, full name for each license, vetted license text, other basic information, and a canonical permanent URL for each license and exception. By providing a short identifier, users can efficiently refer to a license without having to redundantly reproduce the full license.  License exceptions can be used with the License Expression Syntax operator, "WITH" to create a license with an exception.</p>
 
 <ul style="list-style-type: square; padding: 5px;">
-      <li style="margin:5px 0 5px 10px;"><a href="./exceptions-index.html"><strong>License Exceptions</strong></a>: The list of commonly found exceptions to open source licenses, which can be used with the <a href="http://spdx.org/SPDX-specifications/spdx-version-2.0">License Expression Syntax</a> operator, "WITH" to create a license with an exception. </li>
+      <li style="margin:5px 0 5px 10px;"><a href="./exceptions-index.html"><strong>License Exceptions</strong></a>: The list of commonly found exceptions to open source licenses, which can be used with the <strong><a href="http://spdx.org/SPDX-specifications/spdx-version-2.0">License Expression Syntax</a></strong> operator, "WITH" to create a license with an exception. </li>
       <li style="margin:5px 0 5px 10px;"><a href="http://git.spdx.org/?p=license-list.git;a=summary"><strong>Master Files</strong></a>:  The HTML pages you see here are generated from the master files for the SPDX License List.  The master files include a spreadsheet listing all the licenses, deprecated licenses, and license exceptions; and the text for each license in a .txt file.  These files are available in a Git repository.</li>
       <li style="margin:0px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/license-list-overview"><strong>Overview</strong></a>: For general information about the SPDX License List, including principles for inclusion of a license and an explanation of the fields contained on the list.</li>
       <li style="margin:5px 0 5px 10px;"><a href="http://spdx.org/spdx-license-list/matching-guidelines"><strong>Matching Guidelines</strong></a>:  Guidelines for what constitutes a license match to the SPDX License List. For licenses that include markup, the license text on the HTML pages here will display omitable text in blue and replaceable text in red (see Guideline #2 for more information).</li>
@@ -70,10 +71,9 @@
 
 <p><strong>Version: </strong><code property="spdx:licenseListVersion">{{version}}</code></p>
 
-<h2 style="color: #003F69;">Licenses</h2>
-<table>
+<table class="sortable">
   <thead><tr>
-    <th>Full name</th><th>Identifier</th><th>OSI Approved</th><th>Text</th>
+    <th>Full name</th><th>Identifier</th><th>OSI Approved?</th><th>Text</th>
   </tr></thead>
 
   <tbody>
@@ -92,15 +92,7 @@
 <hr>
 <h2>Deprecated Licenses</h2>
 <p>
-Release 2.0 of the SPDX Specification introduces License Expression Syntax that 
-supports the ability to identify common variations on SPDX-identified licenses 
-without the need to define each potential variation as a distinct license on the 
-SPDX License List. This new syntax supports the ability to use a simple “+” 
-operator after a license short identifier to indicate “or later version” 
-(e.g. GPL-2.0+), and it also supports the ability to declare an SPDX-identified 
-license exception using the “WITH” operator (e.g. GPL-2.0+ WITH 
-Autoconf-exception-2.0). SPDX has defined a list of License Exceptions to 
-use after the “WITH” operator. As a result, a number of licenses formerly included in the SPDX License List have been deprecated as licenses, and correct usage employs the License Expression Syntax as of v2.0. The URL to each deprecated license still exists and those license pages have been updated to note the deprecation. Other licenses may have been deprecated for reasons noted.
+Release 2.0 of the SPDX Specification introduces License Expression Syntax that supports the ability to identify common variations on SPDX-identified licenses without the need to define each potential variation as a distinct license on the SPDX License List. This new syntax supports the ability to use a simple “+” operator after a license short identifier to indicate “or later version” (e.g. GPL-2.0+), and it also supports the ability to declare an SPDX-identified license exception using the “WITH” operator (e.g. GPL-2.0+ WITH Autoconf-exception-2.0). SPDX has defined a list of License Exceptions to use after the “WITH” operator. As a result, a number of licenses formerly included in the SPDX License List have been deprecated as licenses, and correct usage employs the License Expression Syntax as of v2.0. The URL to each deprecated license still exists and those license pages have been updated to note the deprecation. Other licenses may have been deprecated for reasons noted.
 </p>
 <table>
   <thead><tr>

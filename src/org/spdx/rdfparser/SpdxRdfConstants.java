@@ -89,7 +89,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_SPDX_VERSION = "specVersion";
 	public static final String PROP_SPDX_CREATION_INFO = "creationInfo";
 	public static final String PROP_SPDX_PACKAGE = "describesPackage";
-	@Deprecated		// since 2.0
+	@Deprecated		// since 2.0  Planned to be removed in next major spec revision
 	public static final String PROP_SPDX_FILE_REFERENCE = "referencesFile";
 	public static final String PROP_SPDX_DATA_LICENSE = "dataLicense";
 	public static final String PROP_SPDX_EXTERNAL_DOC_REF = "externalDocumentRef";

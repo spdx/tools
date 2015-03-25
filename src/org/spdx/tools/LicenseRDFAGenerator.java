@@ -77,6 +77,8 @@ public class LicenseRDFAGenerator {
 	static final int ERROR_STATUS = 1;
 	static final String CSS_TEMPLATE_FILE = "resources/screen.css";
 	static final String CSS_FILE_NAME = "screen.css";
+	static final String SORTTABLE_JS_FILE = "resources/sorttable.js";
+	static final String SORTTABLE_FILE_NAME = "sorttable.js";
 	static final String TEXT_FOLDER_NAME = "text";
 	static final String TEMPLATE_FOLDER_NAME = "template";
 	static final String HTML_FOLDER_NAME = "html";
@@ -167,6 +169,7 @@ public class LicenseRDFAGenerator {
 			writeExceptionList(version, licenseProvider, warnings,
 					dir, textFolder, htmlFolder, templateFolder);
 			writeCssFile(dir);
+			writeSortTableFile(dir);
 			System.out.println();
 			if (warnings.size() > 0) {
 				System.out.println("The following warning(s) were identified:");
@@ -246,8 +249,8 @@ public class LicenseRDFAGenerator {
 				addedExceptionsMap.put(nextException.getLicenseExceptionId(), nextException.getLicenseExceptionText());
 				ExceptionHtml exceptionHtml = new ExceptionHtml(nextException);
 				String exceptionHtmlFileName = formLicenseHTMLFileName(nextException.getLicenseExceptionId());
-				String exceptionHTMLReference = "./"+exceptionHtmlFileName;
-				File exceptionHtmlFile = new File(dir.getPath()+File.separator+exceptionHtmlFileName);
+				String exceptionHTMLReference = "./"+exceptionHtmlFileName + ".html";
+				File exceptionHtmlFile = new File(dir.getPath()+File.separator+exceptionHtmlFileName + ".html");
 				exceptionHtml.writeToFile(exceptionHtmlFile, exceptionHtmlTocReference);
 				exceptionToc.addException(nextException, exceptionHTMLReference);
 				File textFile = new File(textFolder.getPath() + File.separator + exceptionHtmlFileName + ".txt");
@@ -364,10 +367,19 @@ public class LicenseRDFAGenerator {
 	private static void writeCssFile(File dir) throws IOException {
 		File cssFile = new File(dir.getPath()+ File.separator + CSS_FILE_NAME);
 		if (cssFile.exists()) {
-			return;	// assume we don't need to create it
+			cssFile.delete();
 		}
 		File cssTemplateFile = new File(CSS_TEMPLATE_FILE); 
 		Files.copy(cssTemplateFile, cssFile);		
+	}
+	
+	private static void writeSortTableFile(File dir) throws IOException {
+		File sortTableFile = new File(dir.getPath()+ File.separator + SORTTABLE_FILE_NAME);
+		if (sortTableFile.exists()) {
+			return;	// assume we don't need to create it
+		}
+		File sortTableJsFile = new File(SORTTABLE_JS_FILE); 
+		Files.copy(sortTableJsFile, sortTableFile);		
 	}
 	
 	private static String formLicenseHTMLFileName(String id) {

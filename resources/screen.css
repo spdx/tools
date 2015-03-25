@@ -35,8 +35,18 @@ table {
 border-collapse: collapse;
 }
 
-td,th {
-margin: 0;
+th {
+padding: 3px;
 text-align: left;
-border: 1px solid black;
+border: 1px solid gray;
+background-color: #003F69;
+color: #ffffff;
+}
+tbody tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+td {
+padding: 3px;
+text-align: left;
+border: 1px solid gray;
 }
