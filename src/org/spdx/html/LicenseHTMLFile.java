@@ -70,6 +70,17 @@ public class LicenseHTMLFile {
 		public String getSite() {
 			return getSiteFromUrl(url);
 		}
+		
+		@SuppressWarnings("unused")
+		private String getSiteFromUrl(String url) {
+			Matcher matcher = SITE_PATTERN.matcher(url);
+			if (matcher.find() && USE_SITE) {
+				int numGroups = matcher.groupCount();
+				return matcher.group(numGroups-1);
+			} else {
+				return url;
+			}
+		}
 	}
 	private SpdxListedLicense license;
 	/**
@@ -216,15 +227,5 @@ public class LicenseHTMLFile {
 	 */
 	private String formatTemplateText(String licenseTemplate) throws LicenseTemplateRuleException {
 		return SpdxLicenseTemplateHelper.templateTextToHtml(licenseTemplate);
-	}
-	@SuppressWarnings("unused")
-	private String getSiteFromUrl(String url) {
-		Matcher matcher = SITE_PATTERN.matcher(url);
-		if (matcher.find() && USE_SITE) {
-			int numGroups = matcher.groupCount();
-			return matcher.group(numGroups-1);
-		} else {
-			return url;
-		}
 	}
 }

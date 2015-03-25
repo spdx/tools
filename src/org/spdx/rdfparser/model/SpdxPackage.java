@@ -744,6 +744,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (downloadLocation == null || downloadLocation.isEmpty()) {
 			retval.add("Missing required download location for package "+pkgName);
 		}
+		//TODO: Add a check for the download location format per SPDX 2.0
 
 		// checksum
 		for (int i = 0; i < checksums.length; i++) {
