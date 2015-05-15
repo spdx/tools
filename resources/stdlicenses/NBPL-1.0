@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Net Boolean Public License v1</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Net Boolean Public License v1</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Net Boolean Public License v1</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">NBPL-1.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.openldap.org/devel/gitweb.cgi?p=openldap.git;a=blob;f=LICENSE;hb=37b4b3f6cc4bf34e1d3dec61e69914b9819d8894" rel="rdfs:seeAlso">http://www.openldap.org/devel/gitweb.cgi?p=openldap.git;a=blob;f=LICENSE;hb=37b4b3f6cc4bf34e1d3dec61e69914b9819d8894</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was released 22 August 1998.&#10;This license was issued twice, but only with formatting differences.</p>

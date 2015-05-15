@@ -93,7 +93,7 @@ public class TestRelationshipSheet {
 				new Relationship[0]);
 		element1.setId("SPDXRef-1");
 		doc.addElement(element1);
-		Relationship rel1 = new Relationship(element1, RelationshipType.relationshipType_amendment, "Comment1");
+		Relationship rel1 = new Relationship(element1, RelationshipType.relationshipType_amends, "Comment1");
 		SpdxElement element2 = new SpdxElement("Element2", "", new Annotation[0], 
 				new Relationship[0]);
 		element2.setId("SPDXRef-2");

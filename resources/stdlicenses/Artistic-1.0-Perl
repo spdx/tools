@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Artistic License 1.0 (Perl)</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Artistic License 1.0 (Perl)</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Artistic License 1.0 (Perl)</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Artistic-1.0-Perl</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://dev.perl.org/licenses/artistic.html" rel="rdfs:seeAlso">http://dev.perl.org/licenses/artistic.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This is the Artistic License 1.0 found on the Perl site, which is different (particularly, clauses 5, 6, 7 and 8) than the Artistic License 1.0 w/clause 8 found on the OSI site.</p>

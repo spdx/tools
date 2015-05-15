@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Freetype Project License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Freetype Project License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Freetype Project License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">FTL</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://freetype.fis.uniroma2.it/FTL.TXT" rel="rdfs:seeAlso">http://freetype.fis.uniroma2.it/FTL.TXT</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was released 27 Jan 2006</p>

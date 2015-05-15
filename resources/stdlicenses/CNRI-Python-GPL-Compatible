@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">CNRI Python Open Source GPL Compatible License Agreement</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">CNRI Python Open Source GPL Compatible License Agreement</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">CNRI Python Open Source GPL Compatible License Agreement</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">CNRI-Python-GPL-Compatible</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.python.org/download/releases/1.6.1/download_win/" rel="rdfs:seeAlso">http://www.python.org/download/releases/1.6.1/download_win/</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

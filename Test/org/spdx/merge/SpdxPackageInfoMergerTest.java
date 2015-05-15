@@ -69,7 +69,7 @@ public class SpdxPackageInfoMergerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
-	@Test
+/*	@Test
 	public void testSpdxPackageInfoMerger() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
@@ -81,7 +81,7 @@ public class SpdxPackageInfoMergerTest {
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxPackageInfoMerger#mergePackageInfo(org.spdx.rdfparser.SpdxDocument[], org.spdx.rdfparser.SpdxFile[])}.
 	 */
-	@Test
+/*	@Test
 	public void testMergePackageInfo() {
 		//the majority functions will be tested by test cases bellow. 
 		//only set new declared license doesn't be tested, but it should work.
@@ -93,7 +93,7 @@ public class SpdxPackageInfoMergerTest {
 	 * @throws IOException 
 	 * @throws NoSuchAlgorithmException 
 	 */
-	@Test
+/*	@Test
 	public void testCollectSkippedFiles() throws IOException, InvalidSPDXAnalysisException, NoSuchAlgorithmException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
@@ -126,7 +126,7 @@ public class SpdxPackageInfoMergerTest {
 	 * @throws IOException 
 	 * @throws InvalidLicenseStringException 
 	 */
-	@Test
+/*	@Test
 	public void testCollectLicsInFiles() throws IOException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
@@ -168,7 +168,7 @@ public class SpdxPackageInfoMergerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
-	@Test
+/*	@Test
 	public void testTranslateSubDelcaredLicsIntoComments() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
@@ -189,5 +189,5 @@ public class SpdxPackageInfoMergerTest {
 		assertEquals(exceptResult,result);
 
 	}
-
+*/
 }

@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">BSD 2-clause NetBSD License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">BSD 2-clause NetBSD License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">BSD 2-clause NetBSD License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-2-Clause-NetBSD</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.netbsd.org/about/redistribution.html#default" rel="rdfs:seeAlso">http://www.netbsd.org/about/redistribution.html#default</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">NetBSD adopted this 2-clause license in 2008 for code contributed to NetBSD Foundation.</p>
@@ -83,12 +81,7 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-
-<div id="copyrightSection" class="optional-license-text">
- Copyright (c) 
-<span id="copyright" class="replacable-license-text">2008 The NetBSD Foundation, Inc.</span>
- All rights reserved. </div>
-
+Copyright (c) 2008 The NetBSD Foundation, Inc. All rights reserved. 
 <p>This code is derived from software contributed to The NetBSD Foundation by 
 <span id="contributors" class="replacable-license-text"></span>
  </p>

@@ -63,9 +63,9 @@
 
 <h1 property="dc:title">GNU General Public License v3.0 w/GCC Runtime Library exception</h1>
 <h1 style="color:red">Deprecated</h1>
-<div style="color:red">This license has been deprecated since 2.0rc1.</div>
+<div style="color:red">This license has been deprecated since 2.0rc2.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">GNU General Public License v3.0 w/GCC Runtime Library exception</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">GNU General Public License v3.0 w/GCC Runtime Library exception</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">GPL-3.0-with-GCC-exception</code></p>
@@ -75,12 +75,10 @@
        <li><a href="http://www.gnu.org/licenses/gcc-exception-3.1.html" rel="rdfs:seeAlso">http://www.gnu.org/licenses/gcc-exception-3.1.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">DEPRECATED: use License Expression Syntax and Exceptions list to create equivalent license</p>
+    <p style="margin-left: 20px;">DEPRECATED: Use License Expression Syntax and Exceptions list to create equivalent license.</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 

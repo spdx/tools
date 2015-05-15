@@ -8,7 +8,7 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-    <title>W3C Software Notice and License</title>
+    <title>W3C Software Notice and License (2002-12-31)</title>
     
     <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
@@ -61,9 +61,9 @@
 
 <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<h1 property="dc:title">W3C Software Notice and License</h1>
+<h1 property="dc:title">W3C Software Notice and License (2002-12-31)</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">W3C Software Notice and License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">W3C Software Notice and License (2002-12-31)</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">W3C</code></p>
@@ -74,9 +74,7 @@
        <li><a href="http://www.opensource.org/licenses/W3C" rel="rdfs:seeAlso">http://www.opensource.org/licenses/W3C</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was released: 13 December 2002.</p>

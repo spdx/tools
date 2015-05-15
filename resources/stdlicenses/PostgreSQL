@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">PostgreSQL License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">PostgreSQL License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">PostgreSQL License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">PostgreSQL</code></p>
@@ -74,9 +74,7 @@
        <li><a href="http://www.opensource.org/licenses/PostgreSQL" rel="rdfs:seeAlso">http://www.opensource.org/licenses/PostgreSQL</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

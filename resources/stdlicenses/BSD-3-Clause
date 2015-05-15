@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">BSD 3-clause &quot;New&quot; or &quot;Revised&quot; License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">BSD 3-clause &quot;New&quot; or &quot;Revised&quot; License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">BSD 3-clause &quot;New&quot; or &quot;Revised&quot; License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-3-Clause</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.opensource.org/licenses/BSD-3-Clause" rel="rdfs:seeAlso">http://www.opensource.org/licenses/BSD-3-Clause</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -83,12 +81,9 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-
-<div id="copyrightSection" class="optional-license-text">
- Copyright (c)
+Copyright (c) 
 <span id="copyright" class="replacable-license-text">&lt;year&gt; &lt;owner&gt;</span>
- All rights reserved. </div>
-
+. All rights reserved. 
 <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
 <p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. </p>
 <p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. </p>

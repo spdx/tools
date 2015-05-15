@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Affero General Public License v1.0</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Affero General Public License v1.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Affero General Public License v1.0</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">AGPL-1.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.affero.org/oagpl.html" rel="rdfs:seeAlso">http://www.affero.org/oagpl.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

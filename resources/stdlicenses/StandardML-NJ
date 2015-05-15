@@ -63,9 +63,9 @@
 
 <h1 property="dc:title">Standard ML of New Jersey License</h1>
 <h1 style="color:red">Deprecated</h1>
-<div style="color:red">This license has been deprecated since 2.0rc1.</div>
+<div style="color:red">This license has been deprecated since 2.0rc2.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Standard ML of New Jersey License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Standard ML of New Jersey License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">StandardML-NJ</code></p>
@@ -75,12 +75,10 @@
        <li><a href="https://fedoraproject.org/wiki/Licensing:MIT?rd=Licensing/MIT#Standard_ML_of_New_Jersey_Variant" rel="rdfs:seeAlso">https://fedoraproject.org/wiki/Licensing:MIT?rd=Licensing/MIT#Standard_ML_of_New_Jersey_Variant</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">DEPRECATED: This license was added twice by mistake (as of v1.17 and then in v1.20) by accident. Short identifier is: SMLNJf(this short identifier will not be used otherwise.)</p>
+    <p style="margin-left: 20px;">DEPRECATED: This license was added twice (as of v1.17 and then in v1.20) by accident. Use short identifier: SMLNJ </p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 

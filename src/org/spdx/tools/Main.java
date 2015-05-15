@@ -48,7 +48,8 @@ public class Main {
 		} else if (spdxTool.equalsIgnoreCase("GenerateVerificationCode")) {
 			GenerateVerificationCode.main(args);
 		} else if (spdxTool.equalsIgnoreCase("MergeSpdxDocs")) {
-			MergeSpdxDocs.main(args);
+			System.out.println("The merge tools are currently being upgraded to SPDX 2.0");
+		//	MergeSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("MatchingStandardLicenses")) {
 			MatchingStandardLicenses.main(args);
 		} else {

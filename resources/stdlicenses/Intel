@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Intel Open Source License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Intel Open Source License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Intel Open Source License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Intel</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://opensource.org/licenses/Intel" rel="rdfs:seeAlso">http://opensource.org/licenses/Intel</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license has been deprecated.  A note at the top of the OSI license page states, &quot;The Intel Open Source License for CDSA/CSSM Implementation (BSD License with Export Notice) (Intel has ceased to use or recommend this license)&quot;</p>
