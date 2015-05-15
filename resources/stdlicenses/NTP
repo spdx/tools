@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">NTP License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">NTP License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">NTP License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">NTP</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.opensource.org/licenses/NTP" rel="rdfs:seeAlso">http://www.opensource.org/licenses/NTP</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -84,8 +82,14 @@
 
 <div property="spdx:licenseText" class="license-text">
 NTP License (NTP)
-<p>Copyright (c) (CopyrightHoldersName) (From 4-digit-year)-(To 4-digit-year)</p>
-<p>Permission to use, copy, modify, and distribute this software and its documentation for any purpose with or without fee is hereby granted, provided that the above copyright notice appears in all copies and that both the copyright notice and this permission notice appear in supporting documentation, and that the name (TrademarkedName) not be used in advertising or publicity pertaining to distribution of the software without specific, written prior permission. (TrademarkedName) makes no representations about the suitability this software for any purpose. It is provided &quot;as is&quot; without express or implied warranty.</p>
+<p>Copyright (c) 
+<span id="copyright" class="replacable-license-text">(CopyrightHoldersName) (From 4-digit-year)-(To 4-digit-year)</span>
+</p>
+<p>Permission to use, copy, modify, and distribute this software and its documentation for any purpose with or without fee is hereby granted, provided that the above copyright notice appears in all copies and that both the copyright notice and this permission notice appear in supporting documentation, and that the name 
+<span id="TMname" class="replacable-license-text">(TrademarkedName)</span>
+ not be used in advertising or publicity pertaining to distribution of the software without specific, written prior permission. 
+<span id="TMname" class="replacable-license-text">(TrademarkedName)</span>
+ makes no representations about the suitability this software for any purpose. It is provided &quot;as is&quot; without express or implied warranty.</p>
 </div>
 
 <h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>

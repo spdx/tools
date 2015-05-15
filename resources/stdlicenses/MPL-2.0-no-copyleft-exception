@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Mozilla Public License 2.0 (no copyleft exception)</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Mozilla Public License 2.0 (no copyleft exception)</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Mozilla Public License 2.0 (no copyleft exception)</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">MPL-2.0-no-copyleft-exception</code></p>
@@ -74,9 +74,7 @@
        <li><a href="http://opensource.org/licenses/MPL-2.0" rel="rdfs:seeAlso">http://opensource.org/licenses/MPL-2.0</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was released in January 2012.&#10;This license list entry is for use when the MPL's Exhibit B, which removes the Sec 3.3 copyleft exception.</p>

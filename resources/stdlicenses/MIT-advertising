@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Enlightenment License (e16)</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Enlightenment License (e16)</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Enlightenment License (e16)</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">MIT-advertising</code></p>
@@ -73,9 +73,7 @@
        <li><a href="https://fedoraproject.org/wiki/Licensing/MIT_With_Advertising" rel="rdfs:seeAlso">https://fedoraproject.org/wiki/Licensing/MIT_With_Advertising</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license is a modified version of the common MIT license, with an additional advertising clause</p>

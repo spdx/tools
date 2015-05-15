@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">BSD 3-clause Clear License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">BSD 3-clause Clear License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">BSD 3-clause Clear License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-3-Clause-Clear</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://labs.metacarta.com/license-explanation.html#license" rel="rdfs:seeAlso">http://labs.metacarta.com/license-explanation.html#license</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -83,28 +81,19 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-
-<div id="name" class="optional-license-text">
-
 The Clear BSD License
-
-This is a license template.
-</div>
-
-<p>
-<div id="copyrightSection" class="optional-license-text">
-
+<p>This is a license template.</p>
+<p><br/>
 Copyright (c) 
 <span id="copyright" class="replacable-license-text">[xxxx]-[xxxx] [Owner Organization]</span>
-
-All rights reserved.
-</div>
-</p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted (subject to the limitations in the disclaimer below) provided that the following conditions are met:</p>
+<br/>
+All rights reserved.</p>
+<p><br/>
+Redistribution and use in source and binary forms, with or without modification, are permitted (subject to the limitations in the disclaimer below) provided that the following conditions are met:</p>
 <p>* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
 <p>* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
 <p>* Neither the name of 
-<span id="organizationClause3" class="replacable-license-text">[Owner Organization[</span>
+<span id="organizationClause3" class="replacable-license-text">[Owner Organization]</span>
  nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</p>
 <p>NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY&apos;S PATENT RIGHTS ARE GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY 
 <span id="copyrightHolderAsIs" class="replacable-license-text">THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>

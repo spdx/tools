@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">GNU Library General Public License v2 only</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">GNU Library General Public License v2 only</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">GNU Library General Public License v2 only</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">LGPL-2.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html" rel="rdfs:seeAlso">http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was released: June 1991.&#10;This license has been superseded by LGPL v2.1&#10;This refers to when this LGPL 2.0 only is being used (as opposed to &quot;or later).</p>

@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">SIL Open Font License 1.0</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">SIL Open Font License 1.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">SIL Open Font License 1.0</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">OFL-1.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://scripts.sil.org/cms/scripts/page.php?item_id=OFL10_web" rel="rdfs:seeAlso">http://scripts.sil.org/cms/scripts/page.php?item_id=OFL10_web</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license has been superseded.&#10;This license was released in November 2005.</p>

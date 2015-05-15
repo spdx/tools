@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">SCEA Shared Source License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">SCEA Shared Source License</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">SCEA Shared Source License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">SCEA</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://research.scea.com/scea_shared_source_license.html" rel="rdfs:seeAlso">http://research.scea.com/scea_shared_source_license.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

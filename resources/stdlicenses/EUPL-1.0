@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">European Union Public License 1.0</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">European Union Public License 1.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">European Union Public License 1.0</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">EUPL-1.0</code></p>
@@ -74,9 +74,7 @@
        <li><a href="http://ec.europa.eu/idabc/servlets/Doc027f.pdf?id=31096" rel="rdfs:seeAlso">http://ec.europa.eu/idabc/servlets/Doc027f.pdf?id=31096</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">The European Commission has approved the EUPL on 9 January 2007.</p>

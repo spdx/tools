@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Code Project Open License 1.02</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Code Project Open License 1.02</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Code Project Open License 1.02</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">CPOL-1.02</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.codeproject.com/info/cpol10.aspx" rel="rdfs:seeAlso">http://www.codeproject.com/info/cpol10.aspx</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -92,7 +90,7 @@ The Code Project Open License (CPOL) 1.02
 - Source Code can be modified to create derivative works. <br/>
 - No claim of suitability, guarantee, or any warranty whatsoever is provided. The software is provided &quot;as-is&quot;. <br/>
 - The Article accompanying the Work may not be distributed or republished without the Author&apos;s consent </p>
-<p>This License is entered between You, the individual or other entity reading or otherwise making use of the Work licensed pursuant to this License and the individual or other entity which offers the Work under the terms of this License (&quot;Author&quot;).</p>
+<p>This License is entered between You, the individual or other entity reading or otherwise making use of the Work licensed pursuant to this License and the individual or other entity which offers the Work under the terms of this License (�Author�).</p>
 <p>License</p>
 <p>THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CODE PROJECT OPEN LICENSE (&quot;LICENSE&quot;). THE WORK IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.</p>
 <p>BY EXERCISING ANY RIGHTS TO THE WORK PROVIDED HEREIN, YOU ACCEPT AND AGREE TO BE BOUND BY THE TERMS OF THIS LICENSE. THE AUTHOR GRANTS YOU THE RIGHTS CONTAINED HEREIN IN CONSIDERATION OF YOUR ACCEPTANCE OF SUCH TERMS AND CONDITIONS. IF YOU DO NOT AGREE TO ACCEPT AND BE BOUND BY THE TERMS OF THIS LICENSE, YOU CANNOT MAKE ANY USE OF THE WORK.</p>

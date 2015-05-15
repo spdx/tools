@@ -63,9 +63,9 @@
 
 <h1 property="dc:title">GNU General Public License v1.0 or later</h1>
 <h1 style="color:red">Deprecated</h1>
-<div style="color:red">This license has been deprecated since 2.0rc1.</div>
+<div style="color:red">This license has been deprecated since 2.0rc2.</div>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">GNU General Public License v1.0 or later</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">GNU General Public License v1.0 or later</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">GPL-1.0+</code></p>
@@ -75,12 +75,10 @@
        <li><a href="http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html" rel="rdfs:seeAlso">http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">DEPRECATED: use License Expression Syntax to create equivalent license</p>
+    <p style="margin-left: 20px;">DEPRECATED: Use License Expression Syntax to create equivalent license.</p>
 
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 

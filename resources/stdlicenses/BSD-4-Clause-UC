@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">BSD-4-Clause (University of California-Specific)</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">BSD-4-Clause (University of California-Specific)</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">BSD-4-Clause (University of California-Specific)</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-4-Clause-UC</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.freebsd.org/copyright/license.html" rel="rdfs:seeAlso">http://www.freebsd.org/copyright/license.html</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This is the same license as the BSD-4-Clause, but with a copyright notice for the Regents of the University of California.  Captures the retroactive deletion of the third (advertising) clause of the Original BSD license for BSD-licensed code developed by UC Berkeley and its contributors (see ftp://ftp.cs.berkeley.edu/pub/4bsd/README.Impt.License.Change)</p>
