@@ -1,0 +1,5 @@
+* text=auto
+
+*.java text
+*.html text
+*.xml text
