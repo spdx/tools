@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
+import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import org.json.simple.JSONArray;
@@ -50,7 +50,7 @@ public class LicenseTOCJSONFile {
 		}
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean isOsiApproved, String licenseName) {
+				String licenseId, boolean osiApproved, String licenseName) {
 			this.reference = reference;
 			this.refNumber = refNumber;
 			this.licenseId = licenseId;
@@ -117,6 +117,7 @@ public class LicenseTOCJSONFile {
 		currentRefNumber++;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void writeToFile(File jsonFile) throws IOException {
 		FileWriter writer = null;
 		if (!jsonFile.exists()) {
@@ -126,16 +127,16 @@ public class LicenseTOCJSONFile {
 		}
 		try {
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("version", version);
+			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_LIST_VERSION, version);
 			jsonObject.put("releaseDate", releaseDate);
 			JSONArray licensesList = new JSONArray();
 			for (ListedSpdxLicense license : listedLicenses) {
 				JSONObject licenseJSON = new JSONObject();
 				licenseJSON.put("reference", license.getReference());
 				licenseJSON.put("referenceNumber", license.getRefNumber());
-				licenseJSON.put("id", license.getLicenseId());
-				licenseJSON.put("osiApproved", license.getOsiApproved());
-				licenseJSON.put("name", license.getLicenseName());
+				licenseJSON.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
+				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.getOsiApproved());
+				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getLicenseName());
 				licensesList.add(licenseJSON);
 			}
 			jsonObject.put("licenses", licensesList);
