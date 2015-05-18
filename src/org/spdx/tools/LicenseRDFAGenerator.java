@@ -29,6 +29,7 @@ import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.html.ExceptionHtml;
 import org.spdx.html.ExceptionHtmlToc;
 import org.spdx.html.LicenseHTMLFile;
+import org.spdx.html.LicenseTOCJSONFile;
 import org.spdx.html.LicenseTOCHTMLFile;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
@@ -82,7 +83,8 @@ public class LicenseRDFAGenerator {
 	static final String TEXT_FOLDER_NAME = "text";
 	static final String TEMPLATE_FOLDER_NAME = "template";
 	static final String HTML_FOLDER_NAME = "html";
-	static final String LICENSE_TOC_FILE_NAME = "index.html";
+	static final String LICENSE_TOC_JSON_FILE_NAME = "licenses.json";
+	static final String LICENSE_TOC_HTML_FILE_NAME = "index.html";
 	static final String EXCEPTION_TOC_FILE_NAME = "exceptions-index.html";
 	
 	/**
@@ -277,6 +279,7 @@ public class LicenseRDFAGenerator {
 			}
 		}
 	}
+
 	/**
 	 * Writes the index.html file and the individual license list HTML files
 	 * @param version License list version
@@ -298,7 +301,8 @@ public class LicenseRDFAGenerator {
 			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, LicenseTemplateRuleException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
-		LicenseTOCHTMLFile tableOfContents = new LicenseTOCHTMLFile(version, releaseDate);
+		LicenseTOCJSONFile tableOfContentsJSON = new LicenseTOCJSONFile(version, releaseDate);
+		LicenseTOCHTMLFile tableOfContentsHTML = new LicenseTOCHTMLFile(version, releaseDate);
 		// Main page - License list
 		Iterator<SpdxListedLicense> licenseIter = licenseProvider.getLicenseIterator();
 		HashMap<String, String> addedLicIdTextMap = new HashMap<String, String>();
@@ -321,13 +325,14 @@ public class LicenseRDFAGenerator {
 				String licBaseHtmlFileName = formLicenseHTMLFileName(license.getLicenseId());
 				String licHtmlFileName = licBaseHtmlFileName + ".html";
 				String licHTMLReference = "./"+licHtmlFileName;
-				String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
+				String tocHTMLReference = "./"+LICENSE_TOC_HTML_FILE_NAME;
 				File licBaseHtmlFile = new File(dir.getPath()+File.separator+licBaseHtmlFileName);
 				// the base file is used for direct references from tools, the html is used for rendering by the website
 				licHtml.writeToFile(licBaseHtmlFile, tocHTMLReference);
 				File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 				licHtml.writeToFile(licHtmlFile, tocHTMLReference);
-				tableOfContents.addLicense(license, licHTMLReference);
+				tableOfContentsJSON.addLicense(license, licHTMLReference);
+				tableOfContentsHTML.addLicense(license, licHTMLReference);
 				File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
 				Files.write(license.getLicenseText(), textFile, utf8);
 				if (license.getStandardLicenseTemplate() != null && !license.getStandardLicenseTemplate().trim().isEmpty()) {
@@ -346,10 +351,10 @@ public class LicenseRDFAGenerator {
 			licHtml.setDeprecatedVersion(deprecatedLicense.getDeprecatedVersion());
 			String licHtmlFileName = formLicenseHTMLFileName(deprecatedLicense.getLicense().getLicenseId());
 			String licHTMLReference = "./"+licHtmlFileName;
-			String tocHTMLReference = "./"+LICENSE_TOC_FILE_NAME;
+			String tocHTMLReference = "./"+LICENSE_TOC_HTML_FILE_NAME;
 			File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
-			tableOfContents.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
+			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
 			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
 			Files.write(deprecatedLicense.getLicense().getLicenseText(), textFile, utf8);
 			if (deprecatedLicense.getLicense().getStandardLicenseTemplate() != null && !deprecatedLicense.getLicense().getStandardLicenseTemplate().trim().isEmpty()) {
@@ -360,8 +365,10 @@ public class LicenseRDFAGenerator {
 			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
 
 		}
-		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_FILE_NAME);
-		tableOfContents.writeToFile(tocHtmlFile);
+		File tocJsonFile = new File(dir.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
+		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_HTML_FILE_NAME);
+		tableOfContentsJSON.writeToFile(tocJsonFile);
+		tableOfContentsHTML.writeToFile(tocHtmlFile);
 	}
 
 	private static void writeCssFile(File dir) throws IOException {

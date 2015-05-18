@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Deutsche Freie Software Lizenz</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Deutsche Freie Software Lizenz</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Deutsche Freie Software Lizenz</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">D-FSL-1.0</code></p>
@@ -74,9 +74,7 @@
        <li><a href="http://www.dipp.nrw.de/d-fsl/index_html/lizenzen/de/D-FSL-1_0_de.txt" rel="rdfs:seeAlso">http://www.dipp.nrw.de/d-fsl/index_html/lizenzen/de/D-FSL-1_0_de.txt</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was created for and is backed by the German state.  The English translation can be found here: http://www.dipp.nrw.de/d-fsl/index_html/lizenzen/en/D-FSL-1_0_en.txt</p>

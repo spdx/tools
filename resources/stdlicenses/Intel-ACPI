@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Intel ACPI Software License Agreement</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Intel ACPI Software License Agreement</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Intel ACPI Software License Agreement</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">Intel-ACPI</code></p>
@@ -73,9 +73,7 @@
        <li><a href="https://fedoraproject.org/wiki/Licensing/Intel_ACPI_Software_License_Agreement" rel="rdfs:seeAlso">https://fedoraproject.org/wiki/Licensing/Intel_ACPI_Software_License_Agreement</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Educational Community License v1.0</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Educational Community License v1.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Educational Community License v1.0</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">ECL-1.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://opensource.org/licenses/ECL-1.0" rel="rdfs:seeAlso">http://opensource.org/licenses/ECL-1.0</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>
@@ -85,7 +83,9 @@
 <div property="spdx:licenseText" class="license-text">
 The Educational Community License
 <p>This Educational Community License (the &quot;License&quot;) applies to any original work of authorship (the &quot;Original Work&quot;) whose owner (the &quot;Licensor&quot;) has placed the following notice immediately following the copyright notice for the Original Work:</p>
-<p>Copyright (c) &lt;year&gt; &lt;copyright holders&gt;</p>
+<p>Copyright (c) 
+<span id="copyright" class="replacable-license-text">&lt;year&gt; &lt;copyright holders&gt;</span>
+</p>
 <p>Licensed under the Educational Community License version 1.0</p>
 <p>This Original Work, including software, source code, documents, or other related items, is being provided by the copyright holder(s) subject to the terms of the Educational Community License. By obtaining, using and/or copying this Original Work, you agree that you have read, understand, and will comply with the following terms and conditions of the Educational Community License:</p>
 <p>Permission to use, copy, modify, merge, publish, distribute, and sublicense this Original Work and its documentation, with or without modification, for any purpose, and without fee or royalty to the copyright holder(s) is hereby granted, provided that you include the following on ALL copies of the Original Work or portions thereof, including modifications or derivatives, that you make: </p>

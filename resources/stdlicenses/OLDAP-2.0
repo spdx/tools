@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Open LDAP Public License v2.0 (or possibly 2.0A and 2.0B)</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Open LDAP Public License v2.0 (or possibly 2.0A and 2.0B)</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Open LDAP Public License v2.0 (or possibly 2.0A and 2.0B)</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">OLDAP-2.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://www.openldap.org/devel/gitweb.cgi?p=openldap.git;a=blob;f=LICENSE;hb=cbf50f4e1185a21abd4c0a54d3f4341fe28f36ea" rel="rdfs:seeAlso">http://www.openldap.org/devel/gitweb.cgi?p=openldap.git;a=blob;f=LICENSE;hb=cbf50f4e1185a21abd4c0a54d3f4341fe28f36ea</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    false
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">This license was released 7 June 1999.</p>

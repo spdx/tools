@@ -48,7 +48,7 @@ public class TestDocumentRelationshipSheet {
 			"related element comment 2", null, null);
 	static final SpdxElement RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
 			"related element comment 4", null, null);
-	static final RelationshipType TYPE1 = RelationshipType.relationshipType_amendment;
+	static final RelationshipType TYPE1 = RelationshipType.relationshipType_amends;
 	static final RelationshipType TYPE2 = RelationshipType.relationshipType_ancestorOf;
 	static final RelationshipType TYPE3 = RelationshipType.relationshipType_descendantOf;
 	static final RelationshipType TYPE4 = RelationshipType.relationshipType_generates;

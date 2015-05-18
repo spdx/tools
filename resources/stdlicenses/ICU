@@ -8,7 +8,7 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:spdx="http://spdx.org/rdf/terms#">
 <head>
-    <title>Libtool Exception 2.0</title>
+    <title>ICU License</title>
     
     <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
 <!--[if IE 6]>
@@ -38,7 +38,7 @@
   </script>
 
 </head>
-<body typeof="spdx:LicenseException">
+<body typeof="spdx:License">
 <div id="page"><div id="page-inner">
 <div id="header"><div id="header-inner" class="clear-block">
 <div id="util_nav">
@@ -59,33 +59,42 @@
 
 </div></div> <!-- /#header-inner, /#header -->
 
-<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a> » <a href="./exceptions-index.html">Exceptions</a></div>
+<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<h1 property="dc:title">Libtool Exception 2.0</h1>
-
+<h1 property="dc:title">ICU License</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Libtool Exception 2.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">ICU License</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
-    <p style="margin-left: 20px;"><code property="spdx:licenseExceptionId">Libtool-exception-2.0</code></p>
+    <p style="margin-left: 20px;"><code property="spdx:licenseId">ICU</code></p>
 
-<h2 style="color: #003F69;">Other web pages for this exception</h2>
+<h2 style="color: #003F69;">Other web pages for this license</h2>
     <p style="margin-left: 20px;">
-    <li><a href="" rel="rdfs:seeAlso">http://git.savannah.gnu.org/cgit/libtool.git/tree/m4/libtool.m4</a></li>
+       <li><a href="http://source.icu-project.org/repos/icu/icu/trunk/license.html" rel="rdfs:seeAlso">http://source.icu-project.org/repos/icu/icu/trunk/license.html</a></li>
     </p>
     
+<div property="spdx:isOsiApproved" style="display: none;">false</div>
+
 <h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">Used with GPL 2.0 and LGPL 2.1</p>
+    <p style="margin-left: 20px;">None</p>
 
-<h2 style="color: #003F69;" id="examples">Example of Use</h2>
-    <p style="margin-left: 20px;">Libtool is included in many packages that use autoconf to build libraries, including:&#10;- acl from http://savannah.nongnu.org/projects/acl&#10;- alsa-libs from http://www.alsa-project.org/main/index.php/Main_Page&#10;- uuid from http://www.ossp.org/pkg/lib/uuid/&#10;- curl from http://curl.haxx.se/&#10;- GNU libtool from https://www.gnu.org/software/libtool/&#10;- ... and lots of other GNU packages&#10;&#10;The same exception is sometimes used together with LGPL-2.1+, for&#10;example in the ldtl library provided by libtool, e.g. used in ImageMagick.</p>
-    
-<h2 style="color: #003F69;" id="licenseExceptionText">Text</h2>
+<h2 style="color: #003F69;" id="licenseText">Text</h2>
 
-<div property="spdx:licenseExceptionText" class="exception-text">
-As a special exception to the GNU General Public License, if you distribute this file as part of a program or library that is built using GNU Libtool, you may include this file under the same distribution terms that you use for the rest of that program.
+<div property="spdx:licenseText" class="license-text">
+ICU License - ICU 1.8.1 and later
+<p>COPYRIGHT AND PERMISSION NOTICE</p>
+<p>Copyright (c) 1995-2014 International Business Machines Corporation and others<br/>
+All rights reserved.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, provided that the above copyright notice(s) and this permission notice appear in all copies of the Software and that both the above copyright notice(s) and this permission notice appear in supporting documentation.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+<p>Except as contained in this notice, the name of a copyright holder shall not be used in advertising or otherwise to promote the sale, use or other dealings in this Software without prior written authorization of the copyright holder.</p>
 </div>
 
+<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
+<div property="spdx:standardLicenseHeader" class="license-text">
+  <p style="font-style: italic">There is no standard license header for the license</p>
+  
+</div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
   <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">

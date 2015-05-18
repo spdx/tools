@@ -51,7 +51,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		 relationshipType_metafileOf, relationshipType_optionalComponentOf,
 		 relationshipType_other, relationshipType_packageOf,
 		 relationshipType_patchApplied, relationshipType_patchFor,
-		 relationshipType_amendment, relationshipType_staticLink,
+		 relationshipType_amends, relationshipType_staticLink,
 		 relationshipType_testcaseOf, relationshipType_prerequisiteFor,
 		 relationshipType_hasPrerequisite
 	}
@@ -114,8 +114,8 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		TAG_TO_RELATIONSHIP_TYPE.put("PATCH_APPLIED", RelationshipType.relationshipType_patchApplied);
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_patchFor, "PATCH_FOR");
 		TAG_TO_RELATIONSHIP_TYPE.put("PATCH_FOR", RelationshipType.relationshipType_patchFor);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_amendment, "AMENDS");
-		TAG_TO_RELATIONSHIP_TYPE.put("AMENDS", RelationshipType.relationshipType_amendment);
+		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_amends, "AMENDS");
+		TAG_TO_RELATIONSHIP_TYPE.put("AMENDS", RelationshipType.relationshipType_amends);
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_staticLink, "STATIC_LINK");
 		TAG_TO_RELATIONSHIP_TYPE.put("STATIC_LINK", RelationshipType.relationshipType_staticLink);
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_testcaseOf, "TEST_CASE_OF");
