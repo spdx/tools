@@ -1,3 +1,6 @@
+Updated RDFaLicenseGenerator to add support for JSON output (no version increment)
+- Contributed by Kyle Mitchell - pull request from GitHub
+- Includes the fields isOsiApproved, name, licenseId
 Implementation version 2.0.0
 - Refactored license classes to match the SPDX 2.0 model
   Created a new package org.spdx.rdfparser.license

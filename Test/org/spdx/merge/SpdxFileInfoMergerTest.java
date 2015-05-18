@@ -109,7 +109,7 @@ public class SpdxFileInfoMergerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
-	@Test
+/*	@Test
 	public void testCheckDoapProject() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxPackage packageInfo = doc1.getSpdxPackage();
@@ -129,7 +129,7 @@ public class SpdxFileInfoMergerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
-	@Test
+/*	@Test
 	public void testMergeDOAPInfo() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxPackage packageInfo = doc1.getSpdxPackage();
@@ -159,7 +159,7 @@ public class SpdxFileInfoMergerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
-	@Test
+/*	@Test
 	public void testCloneFiles() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxPackage packageInfo = doc1.getSpdxPackage();
@@ -183,7 +183,7 @@ public class SpdxFileInfoMergerTest {
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws IOException 
 	 */
-	@Test
+/*	@Test
 	public void testCloneDoapProject() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxPackage packageInfo = doc1.getSpdxPackage();
@@ -201,5 +201,5 @@ public class SpdxFileInfoMergerTest {
 		}
 		assertEquals(2,testProjects.size());
 	}
-
+*/
 }

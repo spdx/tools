@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">Academic Free License v2.0</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">Academic Free License v2.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">Academic Free License v2.0</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">AFL-2.0</code></p>
@@ -73,9 +73,7 @@
        <li><a href="http://opensource.linux-mirror.org/licenses/afl-2.0.txt" rel="rdfs:seeAlso">http://opensource.linux-mirror.org/licenses/afl-2.0.txt</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

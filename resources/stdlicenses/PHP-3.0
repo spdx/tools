@@ -63,7 +63,7 @@
 
 <h1 property="dc:title">PHP License v3.0</h1>
 <h2 style="color: #003F69;">Full name</h2>
-    <div property="spdx:name"><p style="margin-left: 20px;">PHP License v3.0</p></div>
+    <p style="margin-left: 20px;"><code property="spdx:name">PHP License v3.0</code></p>
 
 <h2 style="color: #003F69;">Short identifier</h2>
     <p style="margin-left: 20px;"><code property="spdx:licenseId">PHP-3.0</code></p>
@@ -74,9 +74,7 @@
        <li><a href="http://www.php.net/license/3_0.txt" rel="rdfs:seeAlso">http://www.php.net/license/3_0.txt</a></li>
     </p>
     
-<div property="spdx:isOsiApproved" style="display: none;">
-    true
-</div>
+<div property="spdx:isOsiApproved" style="display: none;">true</div>
 
 <h2 style="color: #003F69;" id="notes">Notes</h2>
     <p style="margin-left: 20px;">None</p>

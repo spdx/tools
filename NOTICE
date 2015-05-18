@@ -158,3 +158,5 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 The RDFa License Generator exports SortTable version 2 7th April 2007
   Stuart Langridge, http://www.kryogenix.org/code/browser/sorttable/
   X11 License
+  
+json-simple version 1.1.1 licensed under Apache License version 2.0 https://code.google.com/p/json-simple/
