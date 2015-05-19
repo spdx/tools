@@ -18,6 +18,7 @@ package org.spdx.merge;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -40,11 +41,52 @@ public class SpdxPackageInfoMerger {
 
 		private SpdxPackage packageInfoResult = null;
 		private SpdxDocument[] allDocs;
-		public SpdxPackageInfoMerger(SpdxPackage packageInfoResult2, SpdxDocument[] mergeDocs){
-			this.packageInfoResult = packageInfoResult2;
-			this.allDocs = mergeDocs;
+		
+		private List<SpdxPackage> packagesResult = null;
+		private SpdxDocument[] subDocs = null;
+		
+		/* 
+		 * @param masterPackagesInfo
+		 * @param subDocs
+		 */
+		public SpdxPackageInfoMerger(List<SpdxPackage> masterPackagesInfo, SpdxDocument[] subDocs){
+			this.packagesResult = masterPackagesInfo;
+			this.subDocs = subDocs;
 		}
 		
+		/* A method to merge all packages' information from sub list documents into master document
+		 * @param subDocs
+		 * @param fileMergeResult
+		 * @return packagesResult
+		 * @throws InvalidSPDXAnalysisException
+		 */
+		public List <SpdxPackage> mergePackagesInfo(SpdxDocument[] subDocs, SpdxFile[] fileMergeResult)
+				throws InvalidSPDXAnalysisException{
+			
+			List<SpdxPackage> retval = new ArrayList<SpdxPackage>(clonePackages(packagesResult));
+			
+			for(int i = 0; i < subDocs.length; i++){				
+				List<SpdxPackage> subPackagesInfo = subDocs[i].getDocumentContainer().findAllPackages();
+				
+				
+			}
+			return packagesResult;
+		}
+		
+		/**
+		 * 
+		 * @param packagesArray
+		 * @return clonedPackagesArray
+		 */
+		public List<SpdxPackage> clonePackages(List<SpdxPackage> packagesList){
+			List<SpdxPackage> clonedPackagesList = new ArrayList<SpdxPackage>();
+			for(int h = 0; h < packagesList.size(); h++){
+				clonedPackagesList.add(packagesList.get(h).clone());
+			}
+			return clonedPackagesList;
+		}
+		
+		@Deprecated
 		/**
 		 * 
 		 * @param subDocs
@@ -74,6 +116,7 @@ public class SpdxPackageInfoMerger {
 			return packageInfoResult;			
 		}
 		
+		@Deprecated
 		/**
 		 * method to collect all skipped files from input SPDX documents
 		 * @return
@@ -109,7 +152,7 @@ public class SpdxPackageInfoMerger {
 			excludedFileNamesList.clear();
 			return excludedFileNamesArray;
 		}
-		
+		@Deprecated
 		/**
 		 * method to collect all license information from file merging result
 		 * @param fileMergeResult
@@ -143,7 +186,7 @@ public class SpdxPackageInfoMerger {
 			licsList.clear();
 			return licsInFile;	
 		}
-		
+		@Deprecated
 		/**
 		 * 
 		 * @param subDocs

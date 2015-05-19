@@ -16,6 +16,7 @@
 */
 package org.spdx.merge;
 
+import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxItem;
 
 /**
@@ -24,4 +25,10 @@ import org.spdx.rdfparser.model.SpdxItem;
  */
 public class SpdxItemInfoMerger {
 		private SpdxItem itemInfoResult = null;
+		private SpdxDocument[] allDocs;
+		public SpdxItemInfoMerger(SpdxItem itemInfoResult2, SpdxDocument[] mergeDocs){
+			this.itemInfoResult = itemInfoResult2;
+			this.allDocs = mergeDocs;
+		}
+
 }
