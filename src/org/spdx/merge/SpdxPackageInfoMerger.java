@@ -67,11 +67,30 @@ public class SpdxPackageInfoMerger {
 			
 			for(int i = 0; i < subDocs.length; i++){				
 				List<SpdxPackage> subPackagesInfo = subDocs[i].getDocumentContainer().findAllPackages();
-				
+				SpdxPackage temp = null;
+				for(int p = 0; p < subPackagesInfo.size(); p++){
+					boolean foundNameMatch = false;
+					boolean foundSha1Match = false;
+	                temp = subPackagesInfo.get(p);
+	                
+	                for(int q = 0; q < retval.size(); q++){
+	                	if(retval.get(q).getName().equalsIgnoreCase(temp.getName()))
+	                		foundNameMatch = true;
+	                	if(retval.get(q).getSha1().equals(temp.getSha1())){
+	                		foundSha1Match = true;
+	                		break;
+	                	}
+	                }
+	                if(!foundNameMatch && !foundSha1Match){
+	                	retval.add(temp);
+	                }
+	                
+				}
 				
 			}
 			return packagesResult;
 		}
+
 		
 		/**
 		 * 
