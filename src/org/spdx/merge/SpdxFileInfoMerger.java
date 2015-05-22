@@ -34,15 +34,15 @@ import org.spdx.rdfparser.model.SpdxFile;
 
 public class SpdxFileInfoMerger{
 	
-	private SpdxPackage packageInfo = null;
+	private SpdxDocument master = null;
 	private SpdxLicenseMapper mapper = null;
 	
 	/**
 	 * 
-	 * @param packageInfoResult
+	 * @param master
 	 */
-	public SpdxFileInfoMerger(SpdxPackage packageInfoResult, SpdxLicenseMapper mapper){
-		this.packageInfo = packageInfoResult;
+	public SpdxFileInfoMerger(SpdxDocument master, SpdxLicenseMapper mapper){
+		this.master = master;
 		this.mapper = mapper;
 	}
 
@@ -55,10 +55,10 @@ public class SpdxFileInfoMerger{
 	public SpdxFile[] mergeFileInfo(SpdxDocument[] subDocs)throws InvalidSPDXAnalysisException{
 			
 	        //an array to store an deep copy of file information from master document.
-			SpdxFile[] masterFileInfo = packageInfo.getFiles();
+			List <SpdxFile> masterFileInfo = master.getDocumentContainer().findAllFiles();
 			
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
-			ArrayList<SpdxFile> retval = new ArrayList<SpdxFile>(Arrays.asList(cloneFiles(masterFileInfo)));
+			List<SpdxFile> retval = new ArrayList<SpdxFile>((cloneFiles(masterFileInfo)));
 			
 			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
@@ -169,10 +169,10 @@ public class SpdxFileInfoMerger{
 	 * @param filesArray
 	 * @return clonedFilesArray
 	 */
-	public SpdxFile[] cloneFiles(SpdxFile[] filesArray){
-		SpdxFile[] clonedFilesArray = new SpdxFile[filesArray.length];
-		for(int h = 0; h < filesArray.length; h++){
-			clonedFilesArray[h] = filesArray[h].clone();
+	public List <SpdxFile> cloneFiles(List <SpdxFile> filesArray){
+		List <SpdxFile> clonedFilesArray = new ArrayList <SpdxFile>();
+		for(int h = 0; h < filesArray.size(); h++){
+			clonedFilesArray.add(filesArray.get(h).clone());
 		}
 		return clonedFilesArray;
 	}
