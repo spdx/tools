@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.merge.SpdxFileInfoMerger;
@@ -134,27 +135,12 @@ public class MergeSpdxDocs {
 				return;	
 			}
 			
-			//clone package into outputDoc
-			SpdxPackage packageInfoResult = null;
+			//obtain package list from master document
+			List <SpdxPackage> packageInfoResult = null;
 			try {
-				//TODO: This assumes only a single package per document which is no longer true
-				//in SPDX 2.0 - 
-				SpdxItem[] items = master.getDocumentDescribes();
-				if (items.length != 1 || !(items[0] instanceof SpdxPackage)) {
-					System.out.println("Merging documents with more than one package being described is not supported.");
-					//System.exit(1);
-					try {
-						out.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return;
-				}
-				SpdxPackage masterPackage = (SpdxPackage)items[0];
-				packageInfoResult = masterPackage.clone();
+				 packageInfoResult = master.getDocumentContainer().findAllPackages();
 			} catch (InvalidSPDXAnalysisException e1) {
-				System.out.println("Error cloning master's package information: "+e1.getMessage());
+				System.out.println("Error obtaining master's packages: "+e1.getMessage());
 			}
 						
 			ExtractedLicenseInfo[] licInfoResult = null;
@@ -171,7 +157,7 @@ public class MergeSpdxDocs {
 				
 			SpdxFile[] fileInfoResult = null;
 			try{
-				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(packageInfoResult, licenseMapper);
+				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(master, licenseMapper);
 				//merge file information 
 				fileInfoResult = fileInfoMerger.mergeFileInfo(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
@@ -180,9 +166,9 @@ public class MergeSpdxDocs {
 			}
 	
 			try{
-				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(packageInfoResult, mergeDocs);
+				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(packageInfoResult, subDocs, licenseMapper);
 				try {
-					packInfoMerger.mergePackageInfo(subDocs, fileInfoResult);
+					packInfoMerger.mergePackagesInfo(subDocs, fileInfoResult);
 				} catch (NoSuchAlgorithmException e) {
 					System.out.println("Error merging packages' information: "+e.getMessage());
 				} catch (InvalidLicenseStringException e) {
@@ -208,13 +194,13 @@ public class MergeSpdxDocs {
 				//set extracted license information
 				outputDoc.setExtractedLicenseInfos(licInfoResult);
 				//set package's declared license information
-				outputDoc.getSpdxPackage().setLicenseDeclared(packageInfoResult.getLicenseDeclared());
+//				outputDoc.getSpdxPackage().setLicenseDeclared(packageInfoResult.getLicenseDeclared());
 				//set package's file information
-				outputDoc.getSpdxPackage().setFiles(fileInfoResult);
+//				outputDoc.getSpdxPackage().setFiles(fileInfoResult);
 				//set package's license comments information 
-				outputDoc.getSpdxPackage().setLicenseComments(packageInfoResult.getLicenseComments());
+//				outputDoc.getSpdxPackage().setLicenseComments(packageInfoResult.getLicenseComments());
 				//set package's verification code
-				outputDoc.getSpdxPackage().setPackageVerificationCode(packageInfoResult.getPackageVerificationCode());
+//				outputDoc.getSpdxPackage().setPackageVerificationCode(packageInfoResult.getPackageVerificationCode());
 			}catch(InvalidSPDXAnalysisException e){
 				System.out.println("Error to set merged information into output document "+e.getMessage());
 				//System.exit(ERROR_STATUS); - Causes unit tests to stop
