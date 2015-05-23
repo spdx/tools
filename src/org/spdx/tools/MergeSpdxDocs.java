@@ -168,7 +168,7 @@ public class MergeSpdxDocs {
 			try{
 				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(packageInfoResult, subDocs, licenseMapper);
 				try {
-					packInfoMerger.mergePackagesInfo(subDocs, fileInfoResult);
+					packInfoMerger.mergePackagesInfo(fileInfoResult);
 				} catch (NoSuchAlgorithmException e) {
 					System.out.println("Error merging packages' information: "+e.getMessage());
 				} catch (InvalidLicenseStringException e) {

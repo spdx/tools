@@ -42,8 +42,6 @@ public class SpdxPackageInfoMerger {
 
 	    @Deprecated
 		private SpdxPackage packageInfoResult = null;
-	    @Deprecated
-		private SpdxDocument[] allDocs;
 		
 		private List<SpdxPackage> packagesResult = null;
 		private SpdxDocument[] subDocs = null;
@@ -56,7 +54,7 @@ public class SpdxPackageInfoMerger {
 		public SpdxPackageInfoMerger(List<SpdxPackage> masterPackagesInfo, SpdxDocument[] subDocs
 				, SpdxLicenseMapper mapper){
 			this.packagesResult = masterPackagesInfo;
-			this.subDocs = subDocs;
+			this.subDocs = subDocs.clone();
 			this.mapper = mapper;
 		}
 		
@@ -66,7 +64,7 @@ public class SpdxPackageInfoMerger {
 		 * @return packagesResult
 		 * @throws InvalidSPDXAnalysisException
 		 */
-		public List <SpdxPackage> mergePackagesInfo(SpdxDocument[] subDocs, SpdxFile[] fileMergeResult)
+		public List <SpdxPackage> mergePackagesInfo(SpdxFile[] fileMergeResult)
 				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
 			
 			List<SpdxPackage> retval = new ArrayList<SpdxPackage>(clonePackages(packagesResult));
@@ -97,6 +95,7 @@ public class SpdxPackageInfoMerger {
 	                	retval.add(tempPackage);
 	                }
 	                else{
+	                	//process to merge license info from file
 	                	 AnyLicenseInfo[] masterLicFromFile = masterPackage.getLicenseInfoFromFiles();
 	                	 AnyLicenseInfo[] licFromFile = checkLicenseFromFile(subDocs[i],tempPackage);
 	                	 ArrayList <AnyLicenseInfo> licList = new ArrayList<AnyLicenseInfo> (Arrays.asList(masterLicFromFile));
@@ -110,10 +109,61 @@ public class SpdxPackageInfoMerger {
 	                	 }
 	                	 AnyLicenseInfo[] mergedLicFromFile = licList.toArray(new AnyLicenseInfo[licList.size()]);
 	                	 masterPackage.setLicenseInfosFromFiles(mergedLicFromFile);
+	                	 
+	                	 //process to generate new verification code
 	                	 String[] skippedFiles = collectSkippedFiles(masterPackage,tempPackage);
 	                	 VerificationCodeGenerator verCodeGenerator = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
 	                	 SpdxPackageVerificationCode newCode = verCodeGenerator.generatePackageVerificationCode(fileMergeResult, skippedFiles);
 	                	 masterPackage.setPackageVerificationCode(newCode);
+	                	 
+	                	 //process to merge package supplier info
+	                	 String supplierInfo = stringCombiner(masterPackage.getSupplier(),tempPackage.getSupplier());
+	                	 masterPackage.setSupplier(supplierInfo);
+	                	 
+	                	 //process to merge package originator
+	                	 String originator = stringCombiner(masterPackage.getOriginator(), tempPackage.getOriginator());
+	                	 masterPackage.setOriginator(originator);
+	                	 
+	                	 //process to merge home page
+	                	 String homePage = stringCombiner(masterPackage.getHomepage(), tempPackage.getHomepage());
+	                	 masterPackage.setHomepage(homePage);
+	                	 
+	                	 //process to merge package download location
+	                	 String downloadLocation = stringCombiner(masterPackage.getDownloadLocation(), tempPackage.getDownloadLocation());
+	                	 masterPackage.setDownloadLocation(downloadLocation);
+	                	 
+	                	 //process to merge source info
+	                	 String sourceInfo = stringCombiner(masterPackage.getSourceInfo(), tempPackage.getSourceInfo());
+	                	 masterPackage.setSourceInfo(sourceInfo);
+	                	 
+	                	 //process to merge license declared
+	                	 AnyLicenseInfo licDeclared1 = masterPackage.getLicenseDeclared();
+	                	 AnyLicenseInfo licDeclared2 = mapper.mapLicenseInfo(subDocs[i], tempPackage.getLicenseDeclared());
+	                	 AnyLicenseInfo licDeclared = licsCombiner(licDeclared1, licDeclared2);
+	                	 masterPackage.setLicenseDeclared(licDeclared);
+	                	 
+	                	 //process to merge license concluded
+	                	 AnyLicenseInfo licConcluded1 = masterPackage.getLicenseConcluded();
+	                	 AnyLicenseInfo licConcluded2 = mapper.mapLicenseInfo(subDocs[i], tempPackage.getLicenseConcluded());
+	                	 AnyLicenseInfo licConcluded = licsCombiner(licConcluded1, licConcluded2);
+	                	 masterPackage.setLicenseConcluded(licConcluded);
+	                	 
+	                	 //process to merge license comments
+	                	 String licenseComments = stringCombiner(masterPackage.getLicenseComments(), tempPackage.getLicenseComments());
+	                	 masterPackage.setLicenseComments(licenseComments);
+	                	 
+	                	 //process to merge summary
+	                	 String summary = stringCombiner(masterPackage.getSummary(), tempPackage.getSummary());
+	                	 masterPackage.setSummary(summary);
+	                	 
+	                	 //process to merge description
+	                	 String description = stringCombiner(masterPackage.getDescription(), tempPackage.getDescription());
+	                	 masterPackage.setDescription(description);
+	                	 
+	                	 //process to merge user defined columns
+	                	 String usrDefined = stringCombiner(masterPackage.getComment(), tempPackage.getComment());
+	                	 masterPackage.setComment(usrDefined);
+
 	                	 retval.set(index, masterPackage);
 	                }
 	                
@@ -154,26 +204,43 @@ public class SpdxPackageInfoMerger {
 			return clonedPackagesList;
 		}
 		
-		@Deprecated
 		/**
-		 * 
-		 * @param subDocs
-		 * @param fileMergeResult
+		 * A method to combine two string variables into one string
+		 * @param line1
+		 * @param line2
 		 * @return
-		 * @throws InvalidSPDXAnalysisException
-		 * @throws NoSuchAlgorithmException
+		 */
+		public String stringCombiner(String line1, String line2){
+			StringBuilder buffer = new StringBuilder();
+			if(line1.isEmpty() && line2.isEmpty()){
+				return buffer.toString();
+			}
+			else if(!line1.isEmpty()){
+				buffer.append(line1);
+				if(!line1.equalsIgnoreCase(line2) && !line2.isEmpty()){
+					buffer.append(" " + line2);
+				}
+			}
+			else{
+				buffer.append(line2);
+			}
+			return buffer.toString();
+		}
+		
+		/**
+		 * A method to combine two licenses into one
+		 * @param lic1
+		 * @param lic2
+		 * @return
 		 * @throws InvalidLicenseStringException
 		 */
-		public SpdxPackage mergePackageInfo(SpdxDocument[] subDocs, SpdxFile[] fileMergeResult) 
-				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
-			
-			AnyLicenseInfo declaredLicense = LicenseInfoFactory.parseSPDXLicenseString("NOASSERTION");
-			packageInfoResult.setLicenseDeclared(declaredLicense);		
-			
-			String licComments = translateSubDelcaredLicsIntoComments(subDocs);
-			packageInfoResult.setLicenseComments(licComments);
-						
-			return packageInfoResult;			
+		public AnyLicenseInfo licsCombiner(AnyLicenseInfo lic1, AnyLicenseInfo lic2) 
+				throws InvalidLicenseStringException{
+			StringBuilder buffer = new StringBuilder(lic1.toString());
+			if(!lic1.equals(lic2)){
+				buffer.append(" " + lic2.toString());
+			}
+			return LicenseInfoFactory.parseSPDXLicenseString(buffer.toString());
 		}
 		
 		/**
