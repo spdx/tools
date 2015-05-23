@@ -23,7 +23,6 @@ import java.util.List;
 import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.SpdxDocument;
-import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.model.SpdxFile;
 
 /**
