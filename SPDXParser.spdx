@@ -7,6 +7,13 @@
     <checksumValue>f5280ec20ade3fccb043d5b7d104d3ea76cc37ae</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>b5a4a744bed53aae6d4fc9302c5528a2b9c2f428</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>6965202787802ede2282021a3ea8059f2c3f8d65</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <File>
     <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
@@ -3230,16 +3237,16 @@
     <referencesFile>
       <File rdf:nodeID="A102">
         <licenseComments></licenseComments>
-        <fileName>src/org/spdx/merge/SpdxItemInfoMerger.java</fileName>
-        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-        <rdfs:comment></rdfs:comment>
         <checksum>
           <Checksum>
             <checksumValue>6965202787802ede2282021a3ea8059f2c3f8d65</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
           </Checksum>
         </checksum>
+        <fileName>src/org/spdx/merge/SpdxItemInfoMerger.java</fileName>
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <rdfs:comment></rdfs:comment>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -14778,6 +14785,11 @@
         <hasFile rdf:nodeID="A41"/>
         <hasFile rdf:nodeID="A165"/>
         <hasFile rdf:nodeID="A233"/>
+        <packageVerificationCode>
+          <PackageVerificationCode>
+            <packageVerificationCodeValue>b5a4a744bed53aae6d4fc9302c5528a2b9c2f428</packageVerificationCodeValue>
+          </PackageVerificationCode>
+        </packageVerificationCode>
         <hasFile rdf:nodeID="A89"/>
         <hasFile rdf:nodeID="A469"/>
         <hasFile rdf:nodeID="A230"/>
@@ -15858,11 +15870,6 @@
             <fileName>resources/stdlicenses/GPL-3.0</fileName>
           </File>
         </hasFile>
-        <packageVerificationCode>
-          <PackageVerificationCode>
-            <packageVerificationCodeValue>b5a4a744bed53aae6d4fc9302c5528a2b9c2f428</packageVerificationCodeValue>
-          </PackageVerificationCode>
-        </packageVerificationCode>
         <hasFile rdf:nodeID="A461"/>
         <hasFile rdf:nodeID="A130"/>
         <hasFile rdf:nodeID="A354"/>
