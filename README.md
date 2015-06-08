@@ -41,13 +41,12 @@ Example to convert a SPDX file from tag to rdf format:
 
         java -jar spdx-tools-jar-with-dependencies.jar CompareMultipleSpdxDocs output.xls doc1 doc2 ... docN
 
-## SPDX Viewer and PrettyPrinter
+## SPDX Viewer
   * SPDXViewer
-  * PrettyPrinter
 
 Sample usage:
 
-    java -jar spdx-tools-jar-with-dependencies.jar PrettyPrinter TestFiles/SPDXRdfExample.rdf
+    java -jar spdx-tools-jar-with-dependencies.jar SPDXViewer TestFiles/SPDXRdfExample.rdf
 
 ## Generators
   * LicenseRDFAGenerator
