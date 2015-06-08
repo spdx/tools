@@ -226,7 +226,7 @@ public interface SpdxRdfConstants {
 	public static String NON_STD_LICENSE_ID_PRENUM = "LicenseRef-";
 	public static Pattern LICENSE_ID_PATTERN_NUMERIC = 
 			Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"(\\d+)$");	// Pattern for numeric only license IDs
-	static Pattern LICENSE_ID_PATTERN = Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"([0-9a-zA-Z\\.\\-\\+]+)$");
+	static Pattern LICENSE_ID_PATTERN = Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"([0-9a-zA-Z\\.\\-\\_\\+]+)$");
 	
 	// SPDX Element Reference format
 	public static String SPDX_ELEMENT_REF_PRENUM = "SPDXRef-";
