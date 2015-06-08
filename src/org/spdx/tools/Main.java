@@ -72,7 +72,6 @@ public class Main {
 						+ "SpreadsheetToRDF         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToRDF.rdf \n"
 						+ "SpreadsheetToTag         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToTag.tag \n"
 						+ "SPDXViewer               inputFile                         TestFiles/SPDXRdfExample.rdf \n"
-						+ "PrettyPrinter            inputFile                         TestFiles/SPDXRdfExample.rdf \n"
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
 						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] \n"

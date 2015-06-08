@@ -1,3 +1,4 @@
+Fix bug 1278 - SPDXTools help lists PrettyPrint option that does not exist
 Updated RDFaLicenseGenerator to add support for JSON output (no version increment)
 - Contributed by Kyle Mitchell - pull request from GitHub
 - Includes the fields isOsiApproved, name, licenseId
