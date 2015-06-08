@@ -211,6 +211,9 @@ public class LicenseHTMLFile {
 				String header = license.getStandardLicenseHeader();
 				if (header != null && header.trim().isEmpty()) {
 					header = null;	// so the template will appropriately skip the header text
+				} else {
+					//TODO: May need to add another field for the header template text
+					header = formatTemplateText(header);
 				}
 				retval.put("licenseHeader", header);
 			}
