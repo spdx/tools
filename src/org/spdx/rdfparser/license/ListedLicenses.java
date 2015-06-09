@@ -23,6 +23,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -56,17 +58,24 @@ public class ListedLicenses implements IModelContainer {
 	
 	private Model listedLicenseModel = null;
 	
-	HashSet<String> listdLicenseIds = new HashSet<String>();
+	HashSet<String> listdLicenseIds = null;
 	
 	HashMap<String, SpdxListedLicense> listedLicenseCache = null;
 	HashMap<Node, SpdxListedLicense> listedLicenseNodeCache = new HashMap<Node, SpdxListedLicense>();
+	
+
     
 	Properties licenseProperties;
     boolean onlyUseLocalLicenses;
 
     String licenseListVersion = DEFAULT_LICENSE_LIST_VERSION;
 
-	static ListedLicenses listedLicenses = null;
+	private static volatile ListedLicenses listedLicenses = null;
+	
+	//Lock to ensure thead-safety of all modifications.
+	//Since modifications should be extremely rare, a single lock for both listed licenses and the model
+	//should be sufficient.
+	private static final ReadWriteLock listedLicenseModificationLock = new ReentrantReadWriteLock();
 	
 	int nextId = 0;
 	
@@ -80,12 +89,19 @@ public class ListedLicenses implements IModelContainer {
 		loadListedLicenseIDs();
 	}
 	
-	public static ListedLicenses getListedLicenses() {
-		if (listedLicenses == null) {
-			listedLicenses = new ListedLicenses();
-		}
-		return listedLicenses;
-	}
+    public static ListedLicenses getListedLicenses() {
+        if (listedLicenses == null) {
+            listedLicenseModificationLock.writeLock().lock();
+            try {
+                if (listedLicenses == null) {
+                    listedLicenses = new ListedLicenses();
+                }
+            } finally {
+                listedLicenseModificationLock.writeLock().unlock();
+            }
+        }
+        return listedLicenses;
+    }
 	
 	/**
 	 * Resets all of the cached license information and reloads the license IDs
@@ -93,10 +109,15 @@ public class ListedLicenses implements IModelContainer {
 	 * performance.
 	 * @return
 	 */
-	public static ListedLicenses resetListedLicenses() {
-		listedLicenses = new ListedLicenses();
-		return listedLicenses;
-	}
+    public static ListedLicenses resetListedLicenses() {
+        listedLicenseModificationLock.writeLock().lock();
+        try {
+            listedLicenses = new ListedLicenses();
+            return listedLicenses;
+        } finally {
+            listedLicenseModificationLock.writeLock().unlock();
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.IModelContainer#getModel()
@@ -114,17 +135,23 @@ public class ListedLicenses implements IModelContainer {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected SpdxListedLicense getLicenseFromUri(String uri) throws InvalidSPDXAnalysisException {
-		URL licenseUrl = null;
-		try {
-			licenseUrl = new URL(uri);
-		} catch (MalformedURLException e) {
-			throw new InvalidSPDXAnalysisException("Invalid listed license URL: "+e.getMessage());
-		}
-		String id = urlToId(licenseUrl);
-		if (listedLicenseCache.containsKey(id)) {
-			return listedLicenseCache.get(id);
-		}
+    protected SpdxListedLicense getLicenseFromUri(String uri) throws InvalidSPDXAnalysisException {
+        URL licenseUrl = null;
+        try {
+            licenseUrl = new URL(uri);
+        } catch (MalformedURLException e) {
+            throw new InvalidSPDXAnalysisException("Invalid listed license URL: " + e.getMessage());
+        }
+        String id = urlToId(licenseUrl);
+        //We will not enforce that the cache miss and the subsequent caching of the retrieved license be atomic.
+        listedLicenseModificationLock.readLock().lock();
+        try {
+            if (listedLicenseCache.containsKey(id)) {
+                return listedLicenseCache.get(id);
+            }
+        } finally {
+            listedLicenseModificationLock.readLock().unlock();
+        }
 		String base = LISTED_LICENSE_ID_URL + id;
 		final Model localLicenseModel = getLicenseModel(uri, base);
 		if (localLicenseModel == null) {
@@ -182,8 +209,13 @@ public class ListedLicenses implements IModelContainer {
 			SpdxListedLicense localLicense = new SpdxListedLicense(localLicenseContainer, licResource.asNode());
 			retval = (SpdxListedLicense)localLicense.clone();
 			retval.createResource(this);
-		}
-		listedLicenseCache.put(id, retval);
+        }
+        listedLicenseModificationLock.writeLock().lock();
+        try {
+            listedLicenseCache.put(id, retval);
+        } finally {
+            listedLicenseModificationLock.writeLock().unlock();
+        }
 		return retval;
 	}
 
@@ -347,37 +379,47 @@ public class ListedLicenses implements IModelContainer {
 		}
 	}
 	
-	private void loadListedLicenseIDs() {
-		listedLicenseCache = new HashMap<String, SpdxListedLicense>();	// clear the cache
-		try {
-			Model stdLicenseModel = getListedLicenseModel();
-			Node p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
-			Triple m = Triple.createMatch(null, p, null);
-			ExtendedIterator<Triple> tripleIter = stdLicenseModel.getGraph().find(m);	
-			while (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				listdLicenseIds.add(t.getObject().toString(false));
-			}
-			p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION).asNode();
-			m = Triple.createMatch(null, p, null);
-			tripleIter = stdLicenseModel.getGraph().find(m);	
-			if (tripleIter.hasNext()) {
-				Triple t = tripleIter.next();
-				licenseListVersion = t.getObject().toString(false);
-			}
-		} catch (Exception ex) {
-			logger.error("Error loading SPDX listed license ID's from model.");
-		}
-	}
-	
+    private void loadListedLicenseIDs() {
+        listedLicenseModificationLock.writeLock().lock();
+        try {
+            listedLicenseCache = new HashMap<String, SpdxListedLicense>(); // clear the cache
+            listdLicenseIds = new HashSet<String>(); //Clear the listed license IDs to avoid stale licenses.
+            //TODO: Can the keys of listedLicenseCache be used instead of this set?
+            Model stdLicenseModel = getListedLicenseModel();
+            Node p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
+            Triple m = Triple.createMatch(null, p, null);
+            ExtendedIterator<Triple> tripleIter = stdLicenseModel.getGraph().find(m);
+            while (tripleIter.hasNext()) {
+                Triple t = tripleIter.next();
+                listdLicenseIds.add(t.getObject().toString(false));
+            }
+            p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION).asNode();
+            m = Triple.createMatch(null, p, null);
+            tripleIter = stdLicenseModel.getGraph().find(m);
+            if (tripleIter.hasNext()) {
+                Triple t = tripleIter.next();
+                licenseListVersion = t.getObject().toString(false);
+            }
+        } catch (Exception ex) {
+            logger.error("Error loading SPDX listed license ID's from model.");
+        } finally {
+            listedLicenseModificationLock.writeLock().unlock();
+        }
+    }
+
 	/**
 	 * @param licenseID
 	 * @return true if the licenseID belongs to an SPDX listed license
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public boolean isSpdxListedLicenseID(String licenseID)  {
-		return listdLicenseIds.contains(licenseID);
-	}
+    public boolean isSpdxListedLicenseID(String licenseID) {
+        try {
+            listedLicenseModificationLock.readLock().lock();
+            return listdLicenseIds.contains(licenseID);
+        } finally {
+            listedLicenseModificationLock.readLock().unlock();
+        }
+    }
 	
 	/**
 	 * Tries to load properties from LISTED_LICENSE_PROPERTIES_FILENAME, ignoring errors
@@ -385,34 +427,43 @@ public class ListedLicenses implements IModelContainer {
 	 * 
 	 * @return a (possibly empty) set of properties
 	 */
-	private static Properties loadLicenseProperties() {
-        Properties licenseProperties = new Properties();
-        InputStream in = null;
+    private static Properties loadLicenseProperties() {
+        listedLicenseModificationLock.writeLock().lock();
         try {
-            in = LicenseInfoFactory.class.getResourceAsStream("/" + LISTED_LICENSE_PROPERTIES_FILENAME);
-            licenseProperties.load(in);
-        } catch (IOException e) {
-            // Ignore it and fall through
-        	logger.warn("IO Exception reading listed license properties file: "+e.getMessage());
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                   logger.warn("Unable to close listed license properties file: "+e.getMessage());
+            Properties licenseProperties = new Properties();
+            InputStream in = null;
+            try {
+                in = LicenseInfoFactory.class.getResourceAsStream("/" + LISTED_LICENSE_PROPERTIES_FILENAME);
+                licenseProperties.load(in);
+            } catch (IOException e) {
+                // Ignore it and fall through
+                logger.warn("IO Exception reading listed license properties file: " + e.getMessage());
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        logger.warn("Unable to close listed license properties file: " + e.getMessage());
+                    }
                 }
             }
+            return licenseProperties;
+        } finally {
+            listedLicenseModificationLock.writeLock().unlock();
         }
-        return licenseProperties;
     }
-	
 	
 	/**
 	 * @return Array of all SPDX listed license IDs
 	 */
-	public String[] getSpdxListedLicenseIds() {
-		return listdLicenseIds.toArray(new String[listdLicenseIds.size()]);
-	}
+    public String[] getSpdxListedLicenseIds() {
+        listedLicenseModificationLock.readLock().lock();
+        try {
+            return listdLicenseIds.toArray(new String[listdLicenseIds.size()]);
+        } finally {
+            listedLicenseModificationLock.readLock().unlock();
+        }
+    }
 	
 	/**
 	 * @return Version of the license list being used by the SPDXLicenseInfoFactory
