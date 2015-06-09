@@ -43,7 +43,7 @@ import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.google.common.io.Files;
-import com.sampullara.mustache.MustacheException;
+import com.github.mustachejava.MustacheException;
 
 /**
  * Converts a spreadsheet containing SPDX License information into RDFA 

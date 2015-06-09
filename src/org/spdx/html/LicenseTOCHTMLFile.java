@@ -26,9 +26,9 @@ import java.util.HashMap;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
-import com.sampullara.mustache.Mustache;
-import com.sampullara.mustache.MustacheBuilder;
-import com.sampullara.mustache.MustacheException;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.MustacheException;
 
 /**
  * This class holds a formatted HTML file for a license table of contents
@@ -272,9 +272,9 @@ public class LicenseTOCHTMLFile {
 		try {
 			stream = new FileOutputStream(htmlFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
-	        MustacheBuilder builder = new MustacheBuilder(templateDirName);
+	        DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
 	        HashMap<String, Object> mustacheMap = buildMustachMap();
-	        Mustache mustache = builder.parseFile(HTML_TEMPLATE);
+	        Mustache mustache = builder.compile(HTML_TEMPLATE);
 	        mustache.execute(writer, mustacheMap);
 		} finally {
 			if (writer != null) {

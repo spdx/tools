@@ -26,9 +26,9 @@ import java.util.HashMap;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.spdx.rdfparser.license.LicenseException;
 
-import com.sampullara.mustache.Mustache;
-import com.sampullara.mustache.MustacheBuilder;
-import com.sampullara.mustache.MustacheException;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.MustacheException;
 
 /**
  * Generates the HTML Table of Contents for License Exceptions
@@ -158,8 +158,8 @@ public class ExceptionHtmlToc {
 		try {
 			stream = new FileOutputStream(exceptionTocFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
-	        MustacheBuilder builder = new MustacheBuilder(templateDirName);
-	        Mustache mustache = builder.parseFile(HTML_TEMPLATE);
+	        DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
+	        Mustache mustache = builder.compile(HTML_TEMPLATE);
 	        mustache.execute(writer, mustacheMap);
 		} finally {
 			if (writer != null) {
