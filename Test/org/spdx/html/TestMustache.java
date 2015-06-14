@@ -29,9 +29,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sampullara.mustache.Mustache;
-import com.sampullara.mustache.MustacheBuilder;
-import com.sampullara.mustache.MustacheException;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.MustacheException;
 
 /**
  * @author Gary O'Neall
@@ -58,10 +58,10 @@ public class TestMustache {
 	@Test
 	public void testMustache() throws MustacheException, IOException {
 		File root = new File("TestFiles");
-		MustacheBuilder builder = new MustacheBuilder(root);
+		DefaultMustacheFactory builder = new DefaultMustacheFactory(root);
 		Map<String, Object> context = new HashMap<String, Object>();
 		context.put(TEST_FIELD1, TEST_RESULT1);
-		Mustache m = builder.parseFile("testSimpleTemplate.txt");
+		Mustache m = builder.compile("testSimpleTemplate.txt");
 		StringWriter writer = new StringWriter();
 		m.execute(writer, context);
 		assertEquals(TEST_RESULT1, writer.toString());

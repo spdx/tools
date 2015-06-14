@@ -26,9 +26,10 @@ import java.util.HashMap;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.LicenseException;
 
-import com.sampullara.mustache.Mustache;
-import com.sampullara.mustache.MustacheBuilder;
-import com.sampullara.mustache.MustacheException;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheException;
+
 
 /**
  * Manages the production of an HTML file based on an SpdxLicenseRestriction (a.k.a License Exception)
@@ -89,8 +90,8 @@ public class ExceptionHtml {
 		try {
 			stream = new FileOutputStream(exceptionHtmlFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
-	        MustacheBuilder builder = new MustacheBuilder(templateDirName);
-	        Mustache mustache = builder.parseFile(HTML_TEMPLATE);
+			DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
+			Mustache mustache = builder.compile(HTML_TEMPLATE);
 	        mustache.execute(writer, mustacheMap);
 		} finally {
 			if (writer != null) {
