@@ -175,6 +175,8 @@ public class LicenseInfoFactory {
 				return new SpdxListedLicense(modelContainer, node);
 			} else if (type.equals(SpdxRdfConstants.CLASS_OR_LATER_OPERATOR)) {
 				return new OrLaterOperator(modelContainer, node);
+			} else if (type.equals(SpdxRdfConstants.CLASS_WITH_EXCEPTION_OPERATOR)) {
+				return new WithExceptionOperator(modelContainer, node);
 			} else {
 				throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo '"+type+"'"));
 			}
