@@ -62,9 +62,11 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	public static final String ONE_DOT_ZERO_SPDX_VERSION = "SPDX-1.0";
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String ONE_DOT_TWO_SPDX_VERSION = "SPDX-1.2";
+	public static final String TWO_DOT_ZERO_DOT_ZERO_VERSION = "2.0.0";
+	
 	public static final String CURRENT_SPDX_VERSION = "SPDX-2.0";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.0";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.1";
 	
 	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
 	
@@ -74,6 +76,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		SUPPORTED_SPDX_VERSIONS.add(POINT_NINE_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ZERO_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ONE_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_TWO_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(TWO_DOT_ZERO_DOT_ZERO_VERSION);
 	}
 
 	/**

@@ -29,9 +29,9 @@ import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
-import com.sampullara.mustache.Mustache;
-import com.sampullara.mustache.MustacheBuilder;
-import com.sampullara.mustache.MustacheException;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.MustacheException;
 
 /**
  * This class contains a formatted HTML file for a given license.  Specific
@@ -154,9 +154,9 @@ public class LicenseHTMLFile {
 		try {
 			stream = new FileOutputStream(htmlFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
-	        MustacheBuilder builder = new MustacheBuilder(templateDirName);
+			DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
 	        HashMap<String, Object> mustacheMap = buildMustachMap();
-	        Mustache mustache = builder.parseFile(TEMPLATE_FILE_NAME);
+	        Mustache mustache = builder.compile(TEMPLATE_FILE_NAME);
 	        mustache.execute(writer, mustacheMap);
 		} finally {
 			if (writer != null) {
