@@ -16,7 +16,9 @@
 */
 package org.spdx.rdfparser.license;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,19 +31,12 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
-import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
-import sun.nio.cs.StandardCharsets;
-
+import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -53,7 +48,6 @@ import com.hp.hpl.jena.util.FileManager;
  * @author Source Auditor
  *
  */
-@SuppressWarnings("restriction")
 public class TestLicenseInfoFactory {
 	static final String[] NONSTD_IDS = new String[] {SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"1",
 		SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"2", SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"3",
@@ -330,7 +324,7 @@ public class TestLicenseInfoFactory {
 	 */
 	private String readTextFile(String filePath) throws IOException {
 		File file = new File(filePath);
-		List<String> lines = Files.readLines(file, new StandardCharsets().charsetForName("UTF-8"));
+        List<String> lines = Files.readLines(file, Charsets.UTF_8);
 		Iterator<String> iter = lines.iterator();
 		StringBuilder sb = new StringBuilder();
 		if (iter.hasNext()) {
