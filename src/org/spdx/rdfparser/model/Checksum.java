@@ -22,11 +22,11 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -276,8 +276,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 			return false;
 		}
 		Checksum cksum = (Checksum)compare;
-		return (RdfModelHelper.equalsConsideringNull(this.algorithm, cksum.getAlgorithm()) &&
-				RdfModelHelper.equalsConsideringNull(this.checksumValue, cksum.getValue()));
+        return (Objects.equal(this.algorithm, cksum.getAlgorithm()) && Objects.equal(this.checksumValue, cksum.getValue()));
 	}
 	
 	@Override

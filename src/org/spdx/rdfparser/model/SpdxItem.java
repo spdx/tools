@@ -29,6 +29,7 @@ import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -104,7 +105,8 @@ public class SpdxItem extends SpdxElement {
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	@Override
+    protected void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
 		if (this.resource != null) {
 			if (this.licenseConcluded != null) {
@@ -255,10 +257,10 @@ public class SpdxItem extends SpdxElement {
 		if (!super.equivalent(comp)) {
 			return false;
 		}
-		return (RdfModelHelper.equalsConsideringNull(this.copyrightText, comp.getCopyrightText()) &&
+		return (Objects.equal(this.copyrightText, comp.getCopyrightText()) &&
 				RdfModelHelper.equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
 				RdfModelHelper.arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles()) &&
-				RdfModelHelper.equalsConsideringNull(this.licenseComments, comp.getLicenseComments()));
+				Objects.equal(this.licenseComments, comp.getLicenseComments()));
 	}
 	
 	protected AnyLicenseInfo cloneLicenseConcluded() {
@@ -285,7 +287,8 @@ public class SpdxItem extends SpdxElement {
 		return clone(new HashMap<String, SpdxElement>());
 	}
 	
-	public SpdxItem clone(HashMap<String, SpdxElement> clonedElementIds) {
+	@Override
+    public SpdxItem clone(HashMap<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxItem)clonedElementIds.get(this.getId());
 		}

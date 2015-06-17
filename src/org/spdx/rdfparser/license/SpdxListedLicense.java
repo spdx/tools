@@ -20,10 +20,10 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -113,7 +113,7 @@ public class SpdxListedLicense extends License {
 		}
 		// For a listed license, if the ID's equal, it is considered equivalent
 		SpdxListedLicense sCompare = (SpdxListedLicense)compare;
-		return RdfModelHelper.equalsConsideringNull(this.licenseId, sCompare.getLicenseId());
+        return Objects.equal(this.licenseId, sCompare.getLicenseId());
 	}
 
 }

@@ -26,6 +26,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -113,7 +114,8 @@ public class SpdxElement extends RdfModelObject {
 		}
 	}
 	
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	@Override
+    protected void populateModel() throws InvalidSPDXAnalysisException {
 		if (this.resource != null) {
 			if (this.name != null) {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, getNamePropertyName(), name);
@@ -406,9 +408,8 @@ public class SpdxElement extends RdfModelObject {
 		if (testRelationships && !RdfModelHelper.arraysEquivalent(comp.getRelationships(), this.getRelationships())) {
 			return false;
 		}
-		return (RdfModelHelper.equalsConsideringNull(comp.getName(), this.getName()) &&
-				RdfModelHelper.arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) &&
-				RdfModelHelper.equalsConsideringNull(comp.getComment(), this.getComment()));
+        return (Objects.equal(comp.getName(), this.getName()) &&
+                RdfModelHelper.arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) && Objects.equal(comp.getComment(), this.getComment()));
 	}
 	
 	

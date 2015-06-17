@@ -26,6 +26,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -271,9 +272,9 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 		}
 		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
 		try {
-			return (RdfModelHelper.equalsConsideringNull(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace())&&
-					RdfModelHelper.equivalentConsideringNull(this.checksum, compref.getChecksum()) &&
-					RdfModelHelper.equalsConsideringNull(this.externalDocumentId,  compref.getExternalDocumentId()));
+            return (Objects.equal(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace()) &&
+                    RdfModelHelper.equivalentConsideringNull(this.checksum, compref.getChecksum()) && Objects.equal(this.externalDocumentId,
+                    compref.getExternalDocumentId()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invald SPDX Analysis exception comparing external document references: "+e.getMessage(),e);
 			return false;
