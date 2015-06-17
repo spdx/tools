@@ -22,10 +22,10 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -261,7 +261,8 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		return null;
 	}
 
-	public Annotation clone() {
+	@Override
+    public Annotation clone() {
 		return new Annotation(this.annotator, this.annotationType, this.annotationDate, 
 				this.comment);
 	}
@@ -275,10 +276,9 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 			return false;
 		}
 		Annotation comp = (Annotation)o;
-		return (RdfModelHelper.equalsConsideringNull(annotator, comp.getAnnotator()) &&
-				RdfModelHelper.equalsConsideringNull(annotationType, comp.getAnnotationType()) &&
-				RdfModelHelper.equalsConsideringNull(comment, comp.getComment()) &&
-				RdfModelHelper.equalsConsideringNull(annotationDate, comp.getAnnotationDate()));
+        return (Objects.equal(annotator, comp.getAnnotator()) &&
+                Objects.equal(annotationType, comp.getAnnotationType()) &&
+                Objects.equal(comment, comp.getComment()) && Objects.equal(annotationDate, comp.getAnnotationDate()));
 	}
 	
 	/**

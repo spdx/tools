@@ -29,6 +29,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -566,7 +567,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 				RdfModelHelper.arraysEqual(this.fileContributors, comp.getFileContributors()) &&
 				RdfModelHelper.arraysEquivalent(this.artifactOf, comp.getArtifactOf()) &&
 				RdfModelHelper.arraysEquivalent(this.fileDependencies, comp.getFileDependencies()) &&
-				RdfModelHelper.equalsConsideringNull(this.noticeText, comp.getNoticeText()));
+				Objects.equal(this.noticeText, comp.getNoticeText()));
 	}
 	
 	protected Checksum[] cloneChecksum() {
@@ -602,7 +603,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		return retval;
 	}
 	
-	public SpdxFile clone(HashMap<String, SpdxElement> clonedElementIds) {
+	@Override
+    public SpdxFile clone(HashMap<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxFile)clonedElementIds.get(this.getId());
 		}

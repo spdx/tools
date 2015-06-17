@@ -26,6 +26,7 @@ import org.spdx.rdfparser.RdfParserHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -166,7 +167,8 @@ public class LicenseException implements IRdfModel  {
 	 * @return resource created from the model
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {	
+	@Override
+    public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {	
 		if (this.model != null &&
 				this.exceptionNode != null &&
 				this.resource != null &&
@@ -432,7 +434,8 @@ public class LicenseException implements IRdfModel  {
 		}
 	}
 	
-	public LicenseException clone() {
+	@Override
+    public LicenseException clone() {
 		return new LicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),
 				this.seeAlso, this.comment, this.example);
 	}
@@ -472,7 +475,8 @@ public class LicenseException implements IRdfModel  {
 		}
 	}
 
-	public ArrayList<String> verify() {
+	@Override
+    public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		if (this.getLicenseExceptionId() == null || this.getLicenseExceptionId().trim().isEmpty()) {
 			retval.add("Missing required license exception ID");
@@ -494,9 +498,9 @@ public class LicenseException implements IRdfModel  {
 		LicenseException lCompare = (LicenseException)compare;
 		return (LicenseCompareHelper.isLicenseTextEquivalent(this.licenseExceptionText,
 				lCompare.getLicenseExceptionText()) &&
-				RdfModelHelper.equalsConsideringNull(this.comment, lCompare.getComment()) &&
-				RdfModelHelper.equalsConsideringNull(this.example, lCompare.getExample()) &&
-				RdfModelHelper.equalsConsideringNull(this.name, lCompare.getName()) &&
+                Objects.equal(this.comment, lCompare.getComment()) &&
+                Objects.equal(this.example, lCompare.getExample()) &&
+                Objects.equal(this.name, lCompare.getName()) &&
 				RdfModelHelper.arraysEqual(this.seeAlso, lCompare.getSeeAlso()));
 	}
 }

@@ -20,10 +20,10 @@ import java.util.ArrayList;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -255,7 +255,6 @@ public class DoapProject extends RdfModelObject {
 			return false;
 		}
 		DoapProject comp = (DoapProject)compare;
-		return (RdfModelHelper.equalsConsideringNull(this.name, comp.getName()) &&
-				RdfModelHelper.equalsConsideringNull(this.homePage, comp.getHomePage()));
+        return (Objects.equal(this.name, comp.getName()) && Objects.equal(this.homePage, comp.getHomePage()));
 	}
 }

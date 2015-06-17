@@ -20,6 +20,8 @@ import java.util.HashSet;
 
 import org.spdx.rdfparser.model.IRdfModel;
 
+import com.google.common.base.Objects;
+
 /**
  * Static class containing helper methods for implementations of IRdfModel
  * @author Gary O'Neall
@@ -83,18 +85,19 @@ public final class RdfModelHelper {
 		}
 	}
 
-	/**
-	 * Compares to objects considering possible null values
-	 * @param o1
-	 * @param o2
-	 * @return
-	 */
-	public static boolean equalsConsideringNull(Object o1, Object o2) {
-		if (o1 == null) {
-			return (o2 == null);
-		} else {
-			return o1.equals(o2);
-		}
+	        /**
+     * Compares to objects considering possible null values
+     * 
+     * @param o1
+     *            The first object to compare
+     * @param o2
+     *            The second object to compare
+     * @return True if the objects are equal, false otherwise
+     * @deprecated Use {@link com.google.common.base.Objects#equal(Object, Object)} instead
+     */
+	@Deprecated
+    public static boolean equalsConsideringNull(Object o1, Object o2) {
+        return Objects.equal(o1, o2);
 	}
 
 	/**
@@ -118,8 +121,7 @@ public final class RdfModelHelper {
 		for (int i = 0; i < array1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < array2.length; j++) {
-				if (!foundIndexes.contains(j) &&
-						equalsConsideringNull(array1[i],array2[j])) {
+                if (!foundIndexes.contains(j) && Objects.equal(array1[i], array2[j])) {
 					found = true;
 					foundIndexes.add(j);
 					break;

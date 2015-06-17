@@ -17,8 +17,9 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.model.SpdxFile;
+
+import com.google.common.base.Objects;
 
 /**
  * Sheet comparing file copyrights
@@ -43,7 +44,7 @@ public class FileCopyrightSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
-		return RdfModelHelper.equalsConsideringNull(fileA.getCopyrightText(), 
+        return Objects.equal(fileA.getCopyrightText(),
 				fileB.getCopyrightText());
 	}
 
