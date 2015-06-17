@@ -30,6 +30,7 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -630,23 +631,24 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			}
 		return (RdfModelHelper.equivalentConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
 				RdfModelHelper.arraysEquivalent(this.checksums, comp.getChecksums()) &&
-				RdfModelHelper.equalsConsideringNull(this.description, comp.getDescription()) &&
-				RdfModelHelper.equalsConsideringNull(this.downloadLocation, comp.getDownloadLocation()) &&
+				Objects.equal(this.description, comp.getDescription()) &&
+				Objects.equal(this.downloadLocation, comp.getDownloadLocation()) &&
 				RdfModelHelper.arraysEquivalent(this.files, comp.getFiles()) &&
-				RdfModelHelper.equalsConsideringNull(this.homepage, comp.getHomepage()) &&
-				RdfModelHelper.equalsConsideringNull(this.originator, comp.getOriginator()) &&
-				RdfModelHelper.equalsConsideringNull(this.packageFileName, comp.getPackageFileName()) &&
-				RdfModelHelper.equalsConsideringNull(this.sourceInfo, comp.getSourceInfo()) &&
-				RdfModelHelper.equalsConsideringNull(this.summary, comp.getSummary()) &&
-				RdfModelHelper.equalsConsideringNull(this.supplier, comp.getSupplier()) &&
-				RdfModelHelper.equalsConsideringNull(this.versionInfo, comp.getVersionInfo()));
+				Objects.equal(this.homepage, comp.getHomepage()) &&
+				Objects.equal(this.originator, comp.getOriginator()) &&
+				Objects.equal(this.packageFileName, comp.getPackageFileName()) &&
+				Objects.equal(this.sourceInfo, comp.getSourceInfo()) &&
+				Objects.equal(this.summary, comp.getSummary()) &&
+				Objects.equal(this.supplier, comp.getSupplier()) &&
+				Objects.equal(this.versionInfo, comp.getVersionInfo()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invalid analysis exception on comparing equivalent: "+e.getMessage(),e);
 			return false;
 		}
 	}
 	
-	public SpdxPackage clone(HashMap<String, SpdxElement> clonedElementIds) {
+	@Override
+    public SpdxPackage clone(HashMap<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxPackage)clonedElementIds.get(this.getId());
 		}

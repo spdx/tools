@@ -29,6 +29,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -177,7 +178,8 @@ public class SpdxDocument extends SpdxElement {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DOCUMENT);
 	}
 	
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	@Override
+    protected void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_DATA_LICENSE, this.dataLicense);
@@ -461,12 +463,11 @@ public class SpdxDocument extends SpdxElement {
 		}
 		SpdxDocument comp = (SpdxDocument)o;
 		try {
-		return (RdfModelHelper.equalsConsideringNull(this.creationInfo, comp.getCreationInfo()) &&
-				RdfModelHelper.equalsConsideringNull(this.dataLicense, comp.getDataLicense()) &&
+            return (Objects.equal(this.creationInfo, comp.getCreationInfo()) &&
+                    Objects.equal(this.dataLicense, comp.getDataLicense()) &&
 				RdfModelHelper.arraysEquivalent(this.getExternalDocumentRefs(), comp.getExternalDocumentRefs()) &&
 				RdfModelHelper.arraysEqual(this.getExtractedLicenseInfos(), comp.getExtractedLicenseInfos()) &&
-				RdfModelHelper.arraysEqual(this.reviewers, comp.getReviewers()) &&
-				RdfModelHelper.equalsConsideringNull(this.specVersion, comp.getSpecVersion()));
+                    RdfModelHelper.arraysEqual(this.reviewers, comp.getReviewers()) && Objects.equal(this.specVersion, comp.getSpecVersion()));
 		} catch (InvalidSPDXAnalysisException ex) {
 			logger.error("Error testing for equivalent",ex);
 			return false;

@@ -22,8 +22,9 @@ import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
+
+import com.google.common.base.Objects;
 
 /**
  * This is an SPDX element which is in an external document.
@@ -81,7 +82,8 @@ public class ExternalSpdxElement extends SpdxElement {
 		return matcher.group(2);
 	}
 	
-	public String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
+	@Override
+    public String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		Matcher matcher = SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(this.getId());
 		if (!matcher.matches()) {
 			throw(new InvalidSPDXAnalysisException("Invalid id format for an external document reference.  Must be of the form ExternalSPDXRef:SPDXID"));
@@ -102,7 +104,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		if (!super.equivalent(comp)) {
 			return false;
 		}
-		return (RdfModelHelper.equalsConsideringNull(this.getId(), comp.getId()));
+        return (Objects.equal(this.getId(), comp.getId()));
 	}
 	
 	@Override
@@ -140,7 +142,8 @@ public class ExternalSpdxElement extends SpdxElement {
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	@Override
+    protected void populateModel() throws InvalidSPDXAnalysisException {
 		// Do nothing
 	}
 }

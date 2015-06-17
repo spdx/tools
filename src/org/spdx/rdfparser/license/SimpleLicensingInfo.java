@@ -24,6 +24,7 @@ import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -342,13 +343,14 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		return _createResource(type, null);
 	}
 	
-	public boolean equivalent(IRdfModel compare) {
+	@Override
+    public boolean equivalent(IRdfModel compare) {
 		if (!(compare instanceof SimpleLicensingInfo)) {
 			return false;
 		}
 		SimpleLicensingInfo sCompare = (SimpleLicensingInfo)compare;
-		return RdfModelHelper.equalsConsideringNull(this.comment, sCompare.getComment()) &&
-				RdfModelHelper.equalsConsideringNull(this.name, sCompare.getName()) &&
+        return Objects.equal(this.comment, sCompare.getComment()) &&
+                Objects.equal(this.name, sCompare.getName()) &&
 				RdfModelHelper.arraysEqual(this.seeAlso, sCompare.getSeeAlso());
 	}
 	

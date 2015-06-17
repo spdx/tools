@@ -29,6 +29,8 @@ import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
+import com.google.common.base.Objects;
+
 /**
  * Sheet that compares the external document references
  * @author Gary O'Neall
@@ -45,8 +47,8 @@ public class ExternalReferencesSheet extends AbstractSheet {
 		public int compare(ExternalDocumentRef o1, ExternalDocumentRef o2) {
 			if (o1 instanceof ExternalDocumentRef) {
 				if (o2 instanceof ExternalDocumentRef) {
-					ExternalDocumentRef r1 = (ExternalDocumentRef)o1;
-					ExternalDocumentRef r2 = (ExternalDocumentRef)o2;
+					ExternalDocumentRef r1 = o1;
+					ExternalDocumentRef r2 = o2;
 					int retval = r1.getSpdxDocumentNamespace().compareTo((r2.getSpdxDocumentNamespace()));
 					if (retval == 0) {
 						try {
@@ -156,7 +158,7 @@ public class ExternalReferencesSheet extends AbstractSheet {
 			for (int i = 0; i < externalRefs.length; i++) {
 				if (externalRefs[i].length > refIndexes[i]) {
 					ExternalDocumentRef compareRef = externalRefs[i][refIndexes[i]];
-					if (RdfModelHelper.equalsConsideringNull(nextRef.getSpdxDocumentNamespace(),
+                    if (Objects.equal(nextRef.getSpdxDocumentNamespace(),
 							compareRef.getSpdxDocumentNamespace()) &&
 							RdfModelHelper.equivalentConsideringNull(nextRef.getChecksum(), 
 									compareRef.getChecksum())) {
