@@ -17,7 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -30,6 +30,7 @@ import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -284,11 +285,11 @@ public class SpdxItem extends SpdxElement {
 	
 	@Override
 	public SpdxItem clone() {
-		return clone(new HashMap<String, SpdxElement>());
+		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
 	
 	@Override
-    public SpdxItem clone(HashMap<String, SpdxElement> clonedElementIds) {
+    public SpdxItem clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxItem)clonedElementIds.get(this.getId());
 		}

@@ -18,8 +18,8 @@
 package org.spdx.compare;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,10 +29,12 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.LicenseSet;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+
+import com.google.common.collect.Maps;
 
 /**
  * Primarily a static class of helper functions for comparing two SPDX licenses
@@ -51,7 +53,9 @@ public class LicenseCompareHelper {
 		SKIPPABLE_TOKENS.add("*");		SKIPPABLE_TOKENS.add("\"\"\"");
 		SKIPPABLE_TOKENS.add("=begin");	SKIPPABLE_TOKENS.add("=end");
 	}
-	protected static final HashMap<String, String> EQUIV_TOKENS = new HashMap<String, String>();
+	
+	protected static final Map<String, String> EQUIV_TOKENS = Maps.newHashMap();
+	
 	static {
 		//TODO: These should be moved to a property file
 		EQUIV_TOKENS.put("acknowledgement","acknowledgment");   EQUIV_TOKENS.put("acknowledgment","acknowledgement");   
@@ -252,7 +256,7 @@ public class LicenseCompareHelper {
 	 * @throws SpdxCompareException 
 	 */
 	public static boolean isLicenseEqual(AnyLicenseInfo license1,
-			AnyLicenseInfo license2, HashMap<String, String> xlationMap) throws SpdxCompareException {
+			AnyLicenseInfo license2, Map<String, String> xlationMap) throws SpdxCompareException {
 		if (license1 instanceof ConjunctiveLicenseSet) {
 			if (!(license2 instanceof ConjunctiveLicenseSet)) {
 				return false;
@@ -279,7 +283,9 @@ public class LicenseCompareHelper {
 				}
 				return xlatedLicenseId.equals(licenseid2);
 			}
-		} else return license1.equals(license2);
+		} else {
+            return license1.equals(license2);
+        }
 	}
 
 	/**
@@ -289,9 +295,7 @@ public class LicenseCompareHelper {
 	 * @return
 	 * @throws SpdxCompareException 
 	 */
-	private static boolean isLicenseSetsEqual(
-			LicenseSet license1,
-			LicenseSet license2, HashMap<String, String> xlationMap) throws SpdxCompareException {
+	private static boolean isLicenseSetsEqual(LicenseSet license1, LicenseSet license2, Map<String, String> xlationMap) throws SpdxCompareException {
 		// note - order does not matter
 		AnyLicenseInfo[] licenseInfos1 = license1.getMembers();
 		AnyLicenseInfo[] licenseInfos2 = license2.getMembers();

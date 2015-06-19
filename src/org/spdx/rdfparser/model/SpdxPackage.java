@@ -18,7 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -31,6 +31,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -648,7 +649,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	}
 	
 	@Override
-    public SpdxPackage clone(HashMap<String, SpdxElement> clonedElementIds) {
+    public SpdxPackage clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxPackage)clonedElementIds.get(this.getId());
 		}
@@ -677,7 +678,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	
 	@Override
 	public SpdxPackage clone() {
-		return clone(new HashMap<String, SpdxElement>());
+		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
 
 	/**
@@ -694,7 +695,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	/**
 	 * @return
 	 */
-	private SpdxFile[] cloneFiles(HashMap<String, SpdxElement> clonedElementIds) {
+	private SpdxFile[] cloneFiles(Map<String, SpdxElement> clonedElementIds) {
 		if (this.files == null) {
 			return new SpdxFile[0];
 		}

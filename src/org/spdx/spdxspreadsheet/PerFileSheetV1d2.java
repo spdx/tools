@@ -16,7 +16,7 @@
 */
 package org.spdx.spdxspreadsheet;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -24,17 +24,19 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.compare.CompareHelper;
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author Gary O'Neall
@@ -83,9 +85,10 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 	/**
 	 * Hashmap of the file name to SPDX file
 	 */
-	HashMap<String, SpdxFile> fileCache = new HashMap<String, SpdxFile>();
+	Map<String, SpdxFile> fileCache = Maps.newHashMap();
 	
-	@SuppressWarnings("deprecation")
+	@Override
+    @SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String pkgId) {
 		Row row = addRow();
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
@@ -151,7 +154,8 @@ public class PerFileSheetV1d2 extends PerFileSheet {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
+    @SuppressWarnings("deprecation")
 	public SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {

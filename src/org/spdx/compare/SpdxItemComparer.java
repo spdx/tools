@@ -17,8 +17,9 @@
 package org.spdx.compare;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -26,6 +27,8 @@ import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxItem;
+
+import com.google.common.collect.Maps;
 
 /**
  * Compares two SPDX items.  The <code>compare(itemA, itemB)</code> method will perform the comparison and
@@ -43,8 +46,8 @@ public class SpdxItemComparer {
 	/**
 	 * Map of unique extractedLicenseInfos between two documents
 	 */
-	HashMap<SpdxDocument, HashMap<SpdxDocument, AnyLicenseInfo[]>> uniqueLicenseInfosInFiles = 
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, AnyLicenseInfo[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, AnyLicenseInfo[]>> uniqueLicenseInfosInFiles = Maps.newHashMap();
+	
 	private boolean commentsEquals = true;
 	private boolean copyrightsEquals = true;
 	private boolean licenseCommmentsEquals = true;
@@ -52,26 +55,26 @@ public class SpdxItemComparer {
 	/**
 	 * Map of unique relationships between two documents
 	 */
-	HashMap<SpdxDocument, HashMap<SpdxDocument, Relationship[]>> uniqueRelationships =
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, Relationship[]>>();
+	Map<SpdxDocument, Map<SpdxDocument, Relationship[]>> uniqueRelationships = Maps.newHashMap();
+	
 	private boolean annotationsEquals = true;
 	/**
 	 * Map of unique annotations between two documents
 	 */
-	HashMap<SpdxDocument, HashMap<SpdxDocument, Annotation[]>> uniqueAnnotations =
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, Annotation[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, Annotation[]>> uniqueAnnotations = Maps.newHashMap();
+	
 	/**
 	 * Map of SPDX document to Items
 	 */
-	protected HashMap<SpdxDocument, SpdxItem> documentItem = 
-			new HashMap<SpdxDocument, SpdxItem>();
+	protected Map<SpdxDocument, SpdxItem> documentItem = Maps.newHashMap();
+	
 	/**
 	 * Mapping of all extracted license info ID's between all SPDX documents included in the comparer
 	 */
-	protected HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap;
+	protected Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap;
 
 	
-	public SpdxItemComparer(HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap) {
+	public SpdxItemComparer(Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap) {
 		this.extractedLicenseIdMap = extractedLicenseIdMap;
 	}
 	
@@ -99,7 +102,7 @@ public class SpdxItemComparer {
 		if (iter.hasNext()) {
 			Entry<SpdxDocument, SpdxItem> entry = iter.next();
 			SpdxItem itemB = entry.getValue();
-			HashMap<String, String> licenseXlationMap = this.extractedLicenseIdMap.get(spdxDocument).get(entry.getKey());
+			Map<String, String> licenseXlationMap = this.extractedLicenseIdMap.get(spdxDocument).get(entry.getKey());
 			if (!SpdxComparer.stringsEqual(spdxItem.getComment(), itemB.getComment())) {
 				this.commentsEquals = false;
 				this.differenceFound = true;
@@ -141,19 +144,17 @@ public class SpdxItemComparer {
 	 */
 	private void compareAnnotation(SpdxDocument spdxDocument,
 			Annotation[] annotations) {
-		HashMap<SpdxDocument, Annotation[]> uniqueDocAnnotations = 
-				this.uniqueAnnotations.get(spdxDocument);
+		Map<SpdxDocument, Annotation[]> uniqueDocAnnotations = this.uniqueAnnotations.get(spdxDocument);
 		if (uniqueDocAnnotations == null) {
-			uniqueDocAnnotations = new HashMap<SpdxDocument, Annotation[]>();
+			uniqueDocAnnotations = Maps.newHashMap();
 			this.uniqueAnnotations.put(spdxDocument, uniqueDocAnnotations);
 		}
 		Iterator<Entry<SpdxDocument, SpdxItem>> iter = this.documentItem.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<SpdxDocument, SpdxItem> entry = iter.next();
-			HashMap<SpdxDocument, Annotation[]> compareDocAnnotations = 
-					this.uniqueAnnotations.get(entry.getKey());
+			Map<SpdxDocument, Annotation[]> compareDocAnnotations = this.uniqueAnnotations.get(entry.getKey());
 			if (compareDocAnnotations == null) {
-				compareDocAnnotations = new HashMap<SpdxDocument, Annotation[]>();
+				compareDocAnnotations = Maps.newHashMap();
 				this.uniqueAnnotations.put(entry.getKey(), compareDocAnnotations);
 			}
 			Annotation[] compareAnnotations = entry.getValue().getAnnotations();
@@ -181,19 +182,17 @@ public class SpdxItemComparer {
 	 */
 	private void compareRelationships(SpdxDocument spdxDocument,
 			Relationship[] relationships) {
-		HashMap<SpdxDocument, Relationship[]> uniqueDocRelationship = 
-				this.uniqueRelationships.get(spdxDocument);
+		Map<SpdxDocument, Relationship[]> uniqueDocRelationship = this.uniqueRelationships.get(spdxDocument);
 		if (uniqueDocRelationship == null) {
-			uniqueDocRelationship = new HashMap<SpdxDocument, Relationship[]>();
+			uniqueDocRelationship = Maps.newHashMap();
 			this.uniqueRelationships.put(spdxDocument, uniqueDocRelationship);
 		}
 		Iterator<Entry<SpdxDocument, SpdxItem>> iter = this.documentItem.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<SpdxDocument, SpdxItem> entry = iter.next();
-			HashMap<SpdxDocument, Relationship[]> uniqueCompareRelationship = 
-					this.uniqueRelationships.get(entry.getKey());
+			Map<SpdxDocument, Relationship[]> uniqueCompareRelationship = this.uniqueRelationships.get(entry.getKey());
 			if (uniqueCompareRelationship == null) {
-				uniqueCompareRelationship = new HashMap<SpdxDocument, Relationship[]>();
+				uniqueCompareRelationship = Maps.newHashMap();
 				this.uniqueRelationships.put(entry.getKey(), uniqueCompareRelationship);
 			}
 			Relationship[] compareRelationships = entry.getValue().getRelationships();
@@ -222,25 +221,25 @@ public class SpdxItemComparer {
 	 */
 	private void compareLicenseInfosInFiles(SpdxDocument spdxDocument,
 			AnyLicenseInfo[] licenses) throws SpdxCompareException {
-		HashMap<SpdxDocument, AnyLicenseInfo[]> uniqueDocLicenses = 
+		Map<SpdxDocument, AnyLicenseInfo[]> uniqueDocLicenses = 
 				this.uniqueLicenseInfosInFiles.get(spdxDocument);
 		if (uniqueDocLicenses == null) {
-			uniqueDocLicenses = new HashMap<SpdxDocument, AnyLicenseInfo[]>();
+			uniqueDocLicenses = Maps.newHashMap();
 			this.uniqueLicenseInfosInFiles.put(spdxDocument, uniqueDocLicenses);
 		}
 		Iterator<Entry<SpdxDocument, SpdxItem>> iter = this.documentItem.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<SpdxDocument, SpdxItem> entry = iter.next();
-			HashMap<SpdxDocument, AnyLicenseInfo[]> uniqueCompareLicenses = 
+			Map<SpdxDocument, AnyLicenseInfo[]> uniqueCompareLicenses = 
 					this.uniqueLicenseInfosInFiles.get(entry.getKey());
 			if (uniqueCompareLicenses == null) {
-				uniqueCompareLicenses = new HashMap<SpdxDocument, AnyLicenseInfo[]>();
+				uniqueCompareLicenses = Maps.newHashMap();
 				this.uniqueLicenseInfosInFiles.put(entry.getKey(), uniqueCompareLicenses);
 			}
 			AnyLicenseInfo[] compareLicenses = entry.getValue().getLicenseInfoFromFiles();
 			ArrayList<AnyLicenseInfo> uniqueInDoc = new ArrayList<AnyLicenseInfo>();
 			ArrayList<AnyLicenseInfo> uniqueInCompare = new ArrayList<AnyLicenseInfo>();
-			HashMap<String, String> licenseXlationMap = this.extractedLicenseIdMap.get(spdxDocument).get(entry.getKey());
+			Map<String, String> licenseXlationMap = this.extractedLicenseIdMap.get(spdxDocument).get(entry.getKey());
 			compareLicenseArrays(licenses, compareLicenses, uniqueInDoc, uniqueInCompare, licenseXlationMap);
 			if (uniqueInDoc.size() > 0 || uniqueInCompare.size() > 0) {
 				this.seenLicenseEquals = false;
@@ -265,9 +264,9 @@ public class SpdxItemComparer {
 	 */
 	private void compareLicenseArrays(AnyLicenseInfo[] licensesA,
 			AnyLicenseInfo[] licensesB,
-			ArrayList<AnyLicenseInfo> alUniqueA,
-			ArrayList<AnyLicenseInfo> alUniqueB,
-			HashMap<String, String> licenseXlationMap) throws SpdxCompareException {
+			List<AnyLicenseInfo> alUniqueA,
+			List<AnyLicenseInfo> alUniqueB,
+			Map<String, String> licenseXlationMap) throws SpdxCompareException {
 		// a bit brute force, but sorting licenses is a bit complex
 		// an N x M comparison of the licenses to determine which ones are unique
 		for (int i = 0; i < licensesA.length; i++) {
@@ -329,8 +328,7 @@ public class SpdxItemComparer {
 	public AnyLicenseInfo[] getUniqueSeenLicenses(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
 		checkCompareMade();
-		HashMap<SpdxDocument, AnyLicenseInfo[]> unique = 
-				this.uniqueLicenseInfosInFiles.get(docA);
+		Map<SpdxDocument, AnyLicenseInfo[]> unique =  this.uniqueLicenseInfosInFiles.get(docA);
 		if (unique == null) {
 			return new AnyLicenseInfo[0];
 		}
@@ -440,7 +438,7 @@ public class SpdxItemComparer {
 	public Relationship[] getUniqueRelationship(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
 		checkCompareMade();
-		HashMap<SpdxDocument, Relationship[]> unique = this.uniqueRelationships.get(docA);
+		Map<SpdxDocument, Relationship[]> unique = this.uniqueRelationships.get(docA);
 		if (unique == null) {
 			return new Relationship[0];
 		}
@@ -472,7 +470,7 @@ public class SpdxItemComparer {
 	public Annotation[] getUniqueAnnotations(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
 		checkCompareMade();
-		HashMap<SpdxDocument, Annotation[]> unique = this.uniqueAnnotations.get(docA);
+		Map<SpdxDocument, Annotation[]> unique = this.uniqueAnnotations.get(docA);
 		if (unique == null) {
 			return new Annotation[0];
 		}

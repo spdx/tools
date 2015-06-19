@@ -20,30 +20,31 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.html.ExceptionHtml;
 import org.spdx.html.ExceptionHtmlToc;
 import org.spdx.html.LicenseHTMLFile;
-import org.spdx.html.LicenseTOCJSONFile;
 import org.spdx.html.LicenseTOCHTMLFile;
+import org.spdx.html.LicenseTOCJSONFile;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
+import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.SpdxListedLicenseException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
-import com.google.common.io.Files;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
+import com.google.common.io.Files;
 
 /**
  * Converts a spreadsheet containing SPDX License information into RDFA 
@@ -229,7 +230,7 @@ public class LicenseRDFAGenerator {
 		String exceptionHtmlTocReference = "./" + EXCEPTION_TOC_FILE_NAME;
 		ExceptionHtmlToc exceptionToc = new ExceptionHtmlToc();
 		Iterator<LicenseException> exceptionIter = licenseProvider.getExceptionIterator();
-		HashMap<String, String> addedExceptionsMap = new HashMap<String, String>();
+		Map<String, String> addedExceptionsMap = Maps.newHashMap();
 		while (exceptionIter.hasNext()) {
 			System.out.print(".");
 			LicenseException nextException = exceptionIter.next();
@@ -305,7 +306,7 @@ public class LicenseRDFAGenerator {
 		LicenseTOCHTMLFile tableOfContentsHTML = new LicenseTOCHTMLFile(version, releaseDate);
 		// Main page - License list
 		Iterator<SpdxListedLicense> licenseIter = licenseProvider.getLicenseIterator();
-		HashMap<String, String> addedLicIdTextMap = new HashMap<String, String>();
+		Map<String, String> addedLicIdTextMap = Maps.newHashMap();
 		while (licenseIter.hasNext()) {
 			System.out.print(".");
 			SpdxListedLicense license = licenseIter.next();

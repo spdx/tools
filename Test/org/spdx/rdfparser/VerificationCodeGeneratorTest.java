@@ -16,7 +16,8 @@
 */
 package org.spdx.rdfparser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class VerificationCodeGeneratorTest {
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"DOAPProject.java",
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"SPDXFile.java"
 	};
-	private static final Object SHA1_RESULT = "559f9215216045864ca5785d1892a00106cf0f6a";
+	private static final Object SHA1_RESULT = "8615f031775407c75a5153e9377fdd3faf163e1a";
 	
 	private static String[] SPDX_FILE_NAMES = new String[] {
 		"file/path/abc-not-skipped.java", "file/path/skipped.spdx", "file/path/not-skipped"

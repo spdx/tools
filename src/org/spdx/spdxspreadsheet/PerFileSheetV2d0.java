@@ -16,7 +16,7 @@
 */
 package org.spdx.spdxspreadsheet;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -34,6 +34,8 @@ import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author Gary
@@ -80,9 +82,10 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 	/**
 	 * Hashmap of the file name to SPDX file
 	 */
-	HashMap<String, SpdxFile> fileCache = new HashMap<String, SpdxFile>();
+	Map<String, SpdxFile> fileCache = Maps.newHashMap();
 	
-	@SuppressWarnings("deprecation")
+	@Override
+    @SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String pkgId) {
 		Row row = addRow();
 		if (fileInfo.getId() != null && !fileInfo.getId().isEmpty()) {
@@ -154,7 +157,8 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
+    @SuppressWarnings("deprecation")
 	public SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {

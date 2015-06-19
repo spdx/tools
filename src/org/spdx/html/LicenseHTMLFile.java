@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,9 +29,10 @@ import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
-import com.github.mustachejava.Mustache;
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
 
 /**
  * This class contains a formatted HTML file for a given license.  Specific
@@ -155,7 +156,7 @@ public class LicenseHTMLFile {
 			stream = new FileOutputStream(htmlFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
 			DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
-	        HashMap<String, Object> mustacheMap = buildMustachMap();
+	        Map<String, Object> mustacheMap = buildMustachMap();
 	        Mustache mustache = builder.compile(TEMPLATE_FILE_NAME);
 	        mustache.execute(writer, mustacheMap);
 		} finally {
@@ -171,8 +172,8 @@ public class LicenseHTMLFile {
 	 * @return
 	 * @throws LicenseTemplateRuleException 
 	 */
-	private HashMap<String, Object> buildMustachMap() throws LicenseTemplateRuleException {
-			HashMap<String, Object> retval = new HashMap<String, Object>();
+	private Map<String, Object> buildMustachMap() throws LicenseTemplateRuleException {
+			Map<String, Object> retval = Maps.newHashMap();
 			if (license != null) {
 				retval.put("licenseId", license.getLicenseId());
 				String licenseTextHtml = null;

@@ -17,7 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -25,6 +25,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -56,10 +57,9 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		 relationshipType_hasPrerequisite
 	}
 	
-	public static HashMap<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG = 
-			new  HashMap<RelationshipType, String>();
-	public static HashMap<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE = 
-			new  HashMap<String, RelationshipType>();
+	public static Map<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG = Maps.newHashMap();
+	public static Map<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE = Maps.newHashMap();
+
 	static {
 		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_describes, "DESCRIBES");
 		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBES", RelationshipType.relationshipType_describes);
@@ -301,7 +301,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	
 	@Override
 	public Relationship clone() {
-		return clone(new HashMap<String, SpdxElement>());
+		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
@@ -327,10 +327,10 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	 * @param clonedElementIds
 	 * @return
 	 */
-	public Relationship clone(HashMap<String, SpdxElement> clonedElementIds) {
-		return new Relationship(this.relatedSpdxElement.clone(clonedElementIds),
-				this.relationshipType, this.comment);
+	public Relationship clone(Map<String, SpdxElement> clonedElementIds) {
+		return new Relationship(this.relatedSpdxElement.clone(clonedElementIds), this.relationshipType, this.comment);
 	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */

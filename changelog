@@ -1,6 +1,7 @@
 Implementation version 2.0.1
 - Fix bug 1290 SPDXTools does not accept WITH operator in tag file
 - Updated Mustache version to be compatible with more recent versions per github pull request 11 from Yevster
+- Removed use of HashMap implementation in API methods in favor of the Map interface. Pull request 29 from romeara
 Fix bug 1278 - SPDXTools help lists PrettyPrint option that does not exist
 Updated RDFaLicenseGenerator to add support for JSON output (no version increment)
 - Contributed by Kyle Mitchell - pull request from GitHub

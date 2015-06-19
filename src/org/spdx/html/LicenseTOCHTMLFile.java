@@ -21,14 +21,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
-import com.github.mustachejava.Mustache;
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
 
 /**
  * This class holds a formatted HTML file for a license table of contents
@@ -273,7 +274,7 @@ public class LicenseTOCHTMLFile {
 			stream = new FileOutputStream(htmlFile);
 			writer = new OutputStreamWriter(stream, "UTF-8");
 			DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
-	        HashMap<String, Object> mustacheMap = buildMustachMap();
+	        Map<String, Object> mustacheMap = buildMustachMap();
 	        Mustache mustache = builder.compile(HTML_TEMPLATE);
 	        mustache.execute(writer, mustacheMap);
 		} finally {
@@ -289,8 +290,8 @@ public class LicenseTOCHTMLFile {
 	 * Build the a hash map to map the variables in the template to the values
 	 * @return
 	 */
-	private HashMap<String, Object> buildMustachMap() {
-		HashMap<String, Object> retval = new HashMap<String, Object>();
+	private Map<String, Object> buildMustachMap() {
+		Map<String, Object> retval = Maps.newHashMap();
 		retval.put("version", generateVersionString(version, releaseDate));
 		retval.put("listedLicenses", this.listedLicenses);
 		retval.put("deprecatedLicenses", this.deprecatedLicenses);

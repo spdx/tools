@@ -21,9 +21,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.spdx.html.MustacheMap;
 import org.spdx.html.PackageContext;
@@ -35,9 +35,10 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 
-import com.github.mustachejava.Mustache;
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
 
 /**
  * Takes an input SPDX Document and produces the following HTML files in the specified directory:
@@ -193,7 +194,7 @@ public class RdfToHtml {
     		File docHtmlFile, File licenseHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
         String dirPath = docHtmlFile.getParent();
         DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
-        HashMap<String, String> spdxIdToUrl = buildIdMap(doc, dirPath);
+        Map<String, String> spdxIdToUrl = buildIdMap(doc, dirPath);
         List<SpdxPackage> allPackages = doc.getDocumentContainer().findAllPackages();
         Iterator<SpdxPackage> pkgIter = allPackages.iterator();
         while (pkgIter.hasNext()) {
@@ -206,7 +207,7 @@ public class RdfToHtml {
 					PACKAGE_FILE_HTML_FILE_POSTFIX;
 			File packageFilesHtmlFile = new File(packageFilesHtmlFilePath);
         	PackageContext pkgContext = new PackageContext(pkg, spdxIdToUrl);
-        	HashMap<String, Object> pkgFileMap = MustacheMap.buildPkgFileMap(pkg, spdxIdToUrl);
+        	Map<String, Object> pkgFileMap = MustacheMap.buildPkgFileMap(pkg, spdxIdToUrl);
         	Mustache mustache = builder.compile(SPDX_PACKAGE_HTML_TEMPLATE);
         	FileWriter packageHtmlFileWriter = new FileWriter(packageHtmlFile);
         	try {
@@ -238,7 +239,7 @@ public class RdfToHtml {
         			files[fi++] = (SpdxFile)describedItems[i];
         		}
         	}
-        	HashMap<String, Object> docFileMap = MustacheMap.buildDocFileMustacheMap(
+        	Map<String, Object> docFileMap = MustacheMap.buildDocFileMustacheMap(
         			doc, files, spdxIdToUrl);
         	Mustache mustache = builder.compile(SPDX_FILE_HTML_TEMPLATE);
         	FileWriter docFilesHtmlFileWriter = new FileWriter(docFilesHtmlFile);
@@ -248,7 +249,7 @@ public class RdfToHtml {
         		docFilesHtmlFileWriter.close();
         	}
         }
-        HashMap<String, Object> extracteLicMustacheMap = MustacheMap.buildExtractedLicMustachMap(doc, spdxIdToUrl);
+        Map<String, Object> extracteLicMustacheMap = MustacheMap.buildExtractedLicMustachMap(doc, spdxIdToUrl);
         Mustache mustache = builder.compile(SPDX_LICENSE_HTML_TEMPLATE);
         FileWriter licenseHtmlFileWriter = new FileWriter(licenseHtmlFile);
         try {
@@ -256,7 +257,7 @@ public class RdfToHtml {
         } finally {
         	licenseHtmlFileWriter.close();
         }
-        HashMap<String, Object> docMustacheMap = MustacheMap.buildDocMustachMap(doc, spdxIdToUrl);
+        Map<String, Object> docMustacheMap = MustacheMap.buildDocMustachMap(doc, spdxIdToUrl);
         mustache = builder.compile(SPDX_DOCUMENT_HTML_TEMPLATE);
         FileWriter docHtmlFileWriter = new FileWriter(docHtmlFile);
         try {
@@ -274,10 +275,9 @@ public class RdfToHtml {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static HashMap<String, String> buildIdMap(SpdxDocument doc,
-			String dirPath) throws InvalidSPDXAnalysisException {
+	private static Map<String, String> buildIdMap(SpdxDocument doc, String dirPath) throws InvalidSPDXAnalysisException {
 		// URLs are all relative and use the ID as the part
-		HashMap<String, String> retval = new HashMap<String, String>();
+		Map<String, String> retval = Maps.newHashMap();
 		// extracted license IDs
 		String extractedLicenseFileName = doc.getName() + LICENSE_HTML_FILE_POSTFIX;
 		ExtractedLicenseInfo[] extractedLicenses = doc.getDocumentContainer().getExtractedLicenseInfos();

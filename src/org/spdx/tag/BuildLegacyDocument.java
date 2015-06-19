@@ -22,9 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
@@ -34,15 +34,16 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocument;
 import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.SPDXFile;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
@@ -72,8 +73,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 	private DOAPProject lastProject = null;
 	// Keep track of all file dependencies since these need to be added after all of the files
 	// have been parsed.  Map of file dependency file name to the SPDX files which depends on it
-	private HashMap<String, ArrayList<SPDXFile>> fileDependencyMap = 
-		new HashMap<String, ArrayList<SPDXFile>>();
+	private Map<String, ArrayList<SPDXFile>> fileDependencyMap = Maps.newHashMap();
 
 	public BuildLegacyDocument(Model model, SPDXDocument spdxDocument, Properties constants) {
 		this.constants = constants;
@@ -88,11 +88,13 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 		}
 	}
 
-	public void enter() throws Exception {
+	@Override
+    public void enter() throws Exception {
 		// do nothing???
 	}
 
-	public void buildDocument(String tag, String value) throws Exception {
+	@Override
+    public void buildDocument(String tag, String value) throws Exception {
 		tag = tag.trim()+" ";
 		value = trim(value.trim());
 		// document
@@ -370,7 +372,8 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 		return value;
 	}
 
-	public void exit() throws Exception {
+	@Override
+    public void exit() throws Exception {
 		fixFileDependencies();
 		ArrayList<String> warningMessages = analysis.verify();
 		assertEquals("SPDXDocument", 0, warningMessages);
@@ -388,8 +391,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 		// a new HashMap of files (as the key) and the dependency files (arraylist) as the values
 		// Once that hashmap is built, the actual dependencies are then added.
 		// the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
-		HashMap<SPDXFile, ArrayList<SPDXFile>> filesWithDependencies = 
-			new HashMap<SPDXFile, ArrayList<SPDXFile>>();
+		Map<SPDXFile, ArrayList<SPDXFile>> filesWithDependencies = Maps.newHashMap();
 		SPDXFile[] allFiles = analysis.getFileReferences();
 		// fill in the filesWithDependencies map
 		for (int i = 0;i < allFiles.length; i++) {

@@ -16,27 +16,32 @@
 */
 package org.spdx.merge;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.model.SpdxDocument;
-import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author Gang Ling
@@ -131,7 +136,9 @@ public class SpdxLicenseMapperTest {
 		}
 		boolean licMappered = false;
 		for(int j = 0; j < mappedLicsInFile.length; j++){
-			if(mappedLicsInFile[j].equals(clonedNonStdLic));
+			if(mappedLicsInFile[j].equals(clonedNonStdLic)) {
+                ;
+            }
 			licMappered = true;
 		}
 		if(!licMappered){
@@ -254,8 +261,8 @@ public class SpdxLicenseMapperTest {
 		ExtractedLicenseInfo clonedNonStdLic = (ExtractedLicenseInfo) subNonStdLics[0].clone();
 		mapper.mappingNewNonStdLic(doc1, doc3, clonedNonStdLic);
 		
-		HashMap<AnyLicenseInfo, AnyLicenseInfo> interalMap = mapper.foundInterMap(doc3);
-		HashMap<AnyLicenseInfo,AnyLicenseInfo> expected = new HashMap<AnyLicenseInfo, AnyLicenseInfo>();
+		Map<AnyLicenseInfo, AnyLicenseInfo> interalMap = mapper.foundInterMap(doc3);
+		Map<AnyLicenseInfo,AnyLicenseInfo> expected = Maps.newHashMap();
 		String NewNonStdLicId = doc1.getDocumentContainer().getNextLicenseRef();
 		clonedNonStdLic.setLicenseId(NewNonStdLicId);
 		expected.put(subNonStdLics[0], clonedNonStdLic);

@@ -17,9 +17,9 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -36,6 +36,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -77,19 +78,16 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	/**
 	 * Map of license ID to extracted license info
 	 */
-	HashMap<String, ExtractedLicenseInfo> licenseIdToExtractedLicense = 
-			new HashMap<String, ExtractedLicenseInfo>();
+	Map<String, ExtractedLicenseInfo> licenseIdToExtractedLicense = Maps.newHashMap();
 	
 	/**
 	 * Map of external document ID's to external document references
 	 */
-	HashMap<String, ExternalDocumentRef> externalDocIdToRef = 
-			new HashMap<String, ExternalDocumentRef>();
+	Map<String, ExternalDocumentRef> externalDocIdToRef = Maps.newHashMap();
 	/**
 	 * Map of external document namespaces to external document references
 	 */
-	HashMap<String, ExternalDocumentRef> externalDocNamespaceToRef = 
-			new HashMap<String, ExternalDocumentRef>();
+	Map<String, ExternalDocumentRef> externalDocNamespaceToRef = Maps.newHashMap();
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
@@ -381,7 +379,8 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	/**
 	 * @return return the next available SPDX element reference.
 	 */
-	public String getNextSpdxElementRef() {
+	@Override
+    public String getNextSpdxElementRef() {
 		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
 		String retval = formSpdxElementRef(nextSpdxElementNum);
 		while (this.spdxElementRefExists(retval)) {
