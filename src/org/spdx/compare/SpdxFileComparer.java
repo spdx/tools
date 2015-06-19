@@ -20,19 +20,21 @@ package org.spdx.compare;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.SpdxItem;
+
+import com.google.common.collect.Maps;
 
 
 /**
@@ -53,14 +55,12 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	/**
 	 * Map of artfifactOfs found in one document but not another
 	 */
-	HashMap<SpdxDocument, HashMap<SpdxDocument, DoapProject[]>> uniqueArtifactOfs = 
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, DoapProject[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, DoapProject[]>> uniqueArtifactOfs = Maps.newHashMap();
 
 	/**
 	 *  Map of checksums found in one document but not another
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, Checksum[]>> uniqueChecksums =
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, Checksum[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, Checksum[]>> uniqueChecksums = Maps.newHashMap();
 
 	
 	/**
@@ -92,7 +92,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	private boolean typesEquals = true;
 
 	
-	public SpdxFileComparer(HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap) {
+	public SpdxFileComparer(Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap) {
 		super(extractedLicenseIdMap);
 	}
 	
@@ -157,8 +157,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	private void compareNewFileChecksums(SpdxDocument spdxDocument,
 			Checksum[] checksums) throws SpdxCompareException {
 
-		HashMap<SpdxDocument, Checksum[]> docUniqueChecksums = 
-				new HashMap<SpdxDocument, Checksum[]>();
+		Map<SpdxDocument, Checksum[]> docUniqueChecksums = Maps.newHashMap();
 		this.uniqueChecksums.put(spdxDocument, docUniqueChecksums);
 		Iterator<Entry<SpdxDocument,SpdxItem>> iter = this.documentItem.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -171,9 +170,9 @@ public class SpdxFileComparer extends SpdxItemComparer {
 					this.differenceFound = true;
 				}
 				docUniqueChecksums.put(entry.getKey(), uniqueChecksums);
-				HashMap<SpdxDocument, Checksum[]> compareUniqueChecksums = this.uniqueChecksums.get(entry.getKey());
+				Map<SpdxDocument, Checksum[]> compareUniqueChecksums = this.uniqueChecksums.get(entry.getKey());
 				if (compareUniqueChecksums == null) {
-					compareUniqueChecksums = new HashMap<SpdxDocument, Checksum[]>();
+					compareUniqueChecksums = Maps.newHashMap();
 					this.uniqueChecksums.put(entry.getKey(), compareUniqueChecksums);
 				}
 				uniqueChecksums = SpdxComparer.findUniqueChecksums(compareChecksums, checksums);
@@ -246,7 +245,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	public DoapProject[] getUniqueArtifactOf(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
 		checkCompareMade();
-		HashMap<SpdxDocument, DoapProject[]> unique = this.uniqueArtifactOfs.get(docA);
+		Map<SpdxDocument, DoapProject[]> unique = this.uniqueArtifactOfs.get(docA);
 		if (unique == null) {
 			return new DoapProject[0];
 		}
@@ -276,8 +275,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 */
 	public Checksum[] getUniqueChecksums(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
-		HashMap<SpdxDocument, Checksum[]> uniqueMap = 
-				this.uniqueChecksums.get(docA);
+		Map<SpdxDocument, Checksum[]> uniqueMap = this.uniqueChecksums.get(docA);
 		if (uniqueMap == null) {
 			return new Checksum[0];
 		}
@@ -307,10 +305,9 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 */
 	private void compareNewArtifactOf(SpdxDocument spdxDocument,
 			DoapProject[] artifactOfs) {
-		HashMap<SpdxDocument, DoapProject[]> uniqueDocArtifactOf = 
-				this.uniqueArtifactOfs.get(spdxDocument);
+		Map<SpdxDocument, DoapProject[]> uniqueDocArtifactOf = this.uniqueArtifactOfs.get(spdxDocument);
 		if (uniqueDocArtifactOf == null) {
-			uniqueDocArtifactOf = new HashMap<SpdxDocument, DoapProject[]>();
+			uniqueDocArtifactOf = Maps.newHashMap();
 			this.uniqueArtifactOfs.put(spdxDocument, uniqueDocArtifactOf);
 		}
 		Iterator<Entry<SpdxDocument, SpdxItem>> iter = this.documentItem.entrySet().iterator();
@@ -320,10 +317,9 @@ public class SpdxFileComparer extends SpdxItemComparer {
 				continue;
 			}
 			DoapProject[] compareArtifactOf = ((SpdxFile)entry.getValue()).getArtifactOf();
-			HashMap<SpdxDocument, DoapProject[]> uniqueCompareArtifactOf = 
-					this.uniqueArtifactOfs.get(entry.getKey());
+			Map<SpdxDocument, DoapProject[]> uniqueCompareArtifactOf = this.uniqueArtifactOfs.get(entry.getKey());
 			if (uniqueCompareArtifactOf == null) {
-				uniqueCompareArtifactOf = new HashMap<SpdxDocument, DoapProject[]>();
+				uniqueCompareArtifactOf = Maps.newHashMap();
 				this.uniqueArtifactOfs.put(entry.getKey(), uniqueCompareArtifactOf);
 			}
 			ArrayList<DoapProject> alDocUnique = new ArrayList<DoapProject>();
@@ -379,7 +375,8 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 * @throws SpdxCompareException 
 	 * 
 	 */
-	protected void checkInProgress() throws SpdxCompareException {
+	@Override
+    protected void checkInProgress() throws SpdxCompareException {
 		super.checkInProgress();
 		if (inProgress) {
 			throw(new SpdxCompareException("File compare in progress - can not obtain compare results until compare has completed"));
@@ -422,7 +419,8 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 * @return
 	 * @throws SpdxCompareException 
 	 */
-	public boolean isDifferenceFound() throws SpdxCompareException {
+	@Override
+    public boolean isDifferenceFound() throws SpdxCompareException {
 		checkInProgress();
 		checkCompareMade();
 		return differenceFound || super.isDifferenceFound();

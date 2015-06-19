@@ -18,7 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -30,6 +30,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -51,8 +52,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		fileType_image, fileType_other, fileType_source, fileType_spdx,
 		fileType_text, fileType_video};
 		
-	public static final HashMap<FileType, String> FILE_TYPE_TO_TAG = new HashMap<FileType, String>();
-	public static final HashMap<String, FileType> TAG_TO_FILE_TYPE = new HashMap<String, FileType>();
+	public static final Map<FileType, String> FILE_TYPE_TO_TAG = Maps.newHashMap();
+	public static final Map<String, FileType> TAG_TO_FILE_TYPE = Maps.newHashMap();
 	static {
 		FILE_TYPE_TO_TAG.put(FileType.fileType_application, "APPLICATION");
 		TAG_TO_FILE_TYPE.put("APPLICATION", FileType.fileType_application);
@@ -592,7 +593,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		return retval;
 	}
 	
-	public SpdxFile[] cloneFileDependencies(HashMap<String, SpdxElement> clonedElementIds) {
+	public SpdxFile[] cloneFileDependencies(Map<String, SpdxElement> clonedElementIds) {
 		if (this.fileDependencies == null) {
 			return null;
 		}
@@ -604,7 +605,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	@Override
-    public SpdxFile clone(HashMap<String, SpdxElement> clonedElementIds) {
+    public SpdxFile clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxFile)clonedElementIds.get(this.getId());
 		}
@@ -635,8 +636,9 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		return retval;
 	}
 	
-	@Override public SpdxFile clone() {
-		return clone(new HashMap<String, SpdxElement>());
+	@Override 
+	public SpdxFile clone() {
+		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
 	
 	@Override

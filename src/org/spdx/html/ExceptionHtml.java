@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.LicenseException;
@@ -29,6 +29,7 @@ import org.spdx.rdfparser.license.LicenseException;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
 
 
 /**
@@ -42,7 +43,8 @@ public class ExceptionHtml {
 	static final String TEMPLATE_ROOT_PATH = "resources" + File.separator + "htmlTemplate";
 	static final String HTML_TEMPLATE = "ExceptionHTMLTemplate.html";
 	
-	HashMap<String, Object> mustacheMap = new HashMap<String, Object>();
+	Map<String, Object> mustacheMap = Maps.newHashMap();
+	
 	/**
 	 * @param exception
 	 */

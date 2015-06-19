@@ -16,11 +16,12 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
@@ -34,8 +35,8 @@ public class ModelContainerForTest implements IModelContainer {
 	String namespace;
 	int nextRef = 1;
 	HashSet<String> elementRefs = new HashSet<String>();
-	HashMap<String, String> externalNamespaceToId = new HashMap<String, String>();
-	HashMap<String, String> externalIdToNamespace = new HashMap<String, String>();
+	Map<String, String> externalNamespaceToId = Maps.newHashMap();
+	Map<String, String> externalIdToNamespace = Maps.newHashMap();
 	/**
 	 * 
 	 */

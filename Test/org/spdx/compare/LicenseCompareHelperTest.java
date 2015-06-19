@@ -17,9 +17,10 @@
 */
 package org.spdx.compare;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,11 +29,13 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author Gary O'Neall
@@ -170,7 +173,7 @@ public class LicenseCompareHelperTest {
 
 	@Test
 	public void testLicenseEqualsStdLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
-		HashMap<String, String> xlation = new HashMap<String, String>();
+		Map<String, String> xlation = Maps.newHashMap();
 		String licName = "name";
 		String licId = "ID1";
 		String licText = "Text";
@@ -204,7 +207,7 @@ public class LicenseCompareHelperTest {
 	
 	@Test
 	public void testLicenseEqualsNonStdLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
-		HashMap<String, String> xlation = new HashMap<String, String>();
+		Map<String, String> xlation = Maps.newHashMap();
 		String licId = "ID1";
 		String licText = "Text";
 
@@ -238,7 +241,7 @@ public class LicenseCompareHelperTest {
 		String licId4 = "id4";
 		String licId5 = "id5";
 		String licId6 = "id6";
-		HashMap<String, String> xlation = new HashMap<String, String>();
+		Map<String, String> xlation = Maps.newHashMap();
 		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
 		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
 		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
@@ -283,7 +286,7 @@ public class LicenseCompareHelperTest {
 		String licId4 = "id4";
 		String licId5 = "id5";
 		String licId6 = "id6";
-		HashMap<String, String> xlation = new HashMap<String, String>();
+		Map<String, String> xlation = Maps.newHashMap();
 		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
 		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
 		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
@@ -401,7 +404,7 @@ public class LicenseCompareHelperTest {
 		String licId4 = "id4";
 		String licId5 = "id5";
 		String licId6 = "id6";
-		HashMap<String, String> xlation = new HashMap<String, String>();
+		Map<String, String> xlation = Maps.newHashMap();
 		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
 		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
 		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
@@ -440,7 +443,7 @@ public class LicenseCompareHelperTest {
 		String licId4 = "id4";
 		String licId5 = "id5";
 		String licId6 = "id6";
-		HashMap<String, String> xlation = new HashMap<String, String>();
+		Map<String, String> xlation = Maps.newHashMap();
 		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(licId1, licText);
 		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(licId2, licText);
 		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(licId3, licText);
@@ -477,7 +480,7 @@ public class LicenseCompareHelperTest {
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
 		SpdxNoneLicense lic3 = new SpdxNoneLicense();
 		SpdxNoneLicense lic4 = new SpdxNoneLicense();
-		HashMap<String, String> xlationMap = new HashMap<String, String>();
+		Map<String, String> xlationMap = Maps.newHashMap();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic3, xlationMap));
 	}	
@@ -488,7 +491,7 @@ public class LicenseCompareHelperTest {
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
 		SpdxNoneLicense lic3 = new SpdxNoneLicense();
 		SpdxNoneLicense lic4 = new SpdxNoneLicense();
-		HashMap<String, String> xlationMap = new HashMap<String, String>();
+		Map<String, String> xlationMap = Maps.newHashMap();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic3, lic4, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic4, lic2, xlationMap));
 	}	

@@ -17,18 +17,20 @@
 */
 package org.spdx.compare;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.compare.SpdxLicenseDifference;
 import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
@@ -41,27 +43,29 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.License;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.model.Annotation.AnnotationType;
-import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
-import org.spdx.rdfparser.model.Relationship.RelationshipType;
-import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.UnitTestHelper;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
+import com.google.common.collect.Maps;
 
 
 /**
@@ -96,7 +100,7 @@ public class SpdxComparerTest {
 	private static final String NAMEA = "NameA";
 	private static final String NAMEB = "NameB";
 	private static final String NAMEC = "NameC";
-	private static final HashMap<String, String> LICENSE_XLATION_MAP = new HashMap<String, String>();
+	private static final Map<String, String> LICENSE_XLATION_MAP = Maps.newHashMap();
 	private static final AnyLicenseInfo LICENSE_DECLAREDA = LICENSEA2;
 	private static final AnyLicenseInfo LICENSE_DECLAREDB = LICENSEB2;
 	private static final String ORIGINATORA = "Organization: OrgA";
@@ -325,7 +329,7 @@ public class SpdxComparerTest {
 		ExtractedLicenseInfo[] extractedInfos1 = doc1.getExtractedLicenseInfos();
 		ExtractedLicenseInfo[] extractedInfos2 = doc2.getExtractedLicenseInfos();
 		
-		HashMap<Integer, Integer> xlateDoc1ToDoc2LicId = createLicIdXlation(extractedInfos1, extractedInfos2);
+		Map<Integer, Integer> xlateDoc1ToDoc2LicId = createLicIdXlation(extractedInfos1, extractedInfos2);
 		
 		//Standard License
 		SpdxListedLicense lic1 = LicenseInfoFactory.getListedLicenseById(STD_LIC_ID_CC0);
@@ -458,10 +462,10 @@ public class SpdxComparerTest {
 	 * @param licInfos2
 	 * @return
 	 */
-	private HashMap<Integer, Integer> createLicIdXlation(
+	private Map<Integer, Integer> createLicIdXlation(
 			ExtractedLicenseInfo[] licInfos1,
 			ExtractedLicenseInfo[] licInfos2) {
-		HashMap<Integer, Integer> retval = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> retval = Maps.newHashMap();
 		for (int i = 0;i < licInfos1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < licInfos2.length; j++) {

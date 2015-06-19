@@ -8,3 +8,4 @@
 /release.properties
 /pom.xml.releaseBackup
 SPDXParser.spdx
+maven-eclipse.xml

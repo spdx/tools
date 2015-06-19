@@ -21,14 +21,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.spdx.rdfparser.license.LicenseException;
 
-import com.github.mustachejava.Mustache;
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
 
 /**
  * Generates the HTML Table of Contents for License Exceptions
@@ -140,7 +141,7 @@ public class ExceptionHtmlToc {
 	 */
 	public void writeToFile(File exceptionTocFile, String version) throws MustacheException, IOException {
 
-		HashMap<String, Object> mustacheMap = new HashMap<String, Object>();
+		Map<String, Object> mustacheMap = Maps.newHashMap();
 		mustacheMap.put("version", StringEscapeUtils.escapeHtml4(version));
 		mustacheMap.put("listedExceptions", exceptions);
 		FileOutputStream stream = null;

@@ -18,12 +18,14 @@ package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
+
+import com.google.common.collect.Maps;
 
 /**
  * A parser for the SPDX License EXpressions as documented in the SPDX appendix.
@@ -40,7 +42,8 @@ public class LicenseExpressionParser {
 	};
 	static final String LEFT_PAREN = "(";
 	static final String RIGHT_PAREN = ")";
-	static final HashMap<String, Operator> OPERATOR_MAP = new HashMap<String,Operator>();
+	static final Map<String, Operator> OPERATOR_MAP = Maps.newHashMap();
+	
 	static {
 		OPERATOR_MAP.put("+", Operator.OR_LATER);
 		OPERATOR_MAP.put("AND", Operator.AND);

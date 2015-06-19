@@ -17,8 +17,9 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -34,8 +35,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SPDXChecksum {
 
 	// Supported algorithms
-	public static final HashMap<String, String> ALGORITHM_TO_URI = new HashMap<String, String>();
-	public static final HashMap<String, String> URI_TO_ALGORITHM = new HashMap<String, String>();
+	public static final Map<String, String> ALGORITHM_TO_URI = Maps.newHashMap();
+	public static final Map<String, String> URI_TO_ALGORITHM = Maps.newHashMap();
 	static {
 		ALGORITHM_TO_URI.put(SpdxRdfConstants.ALGORITHM_SHA1, 
 				SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM_SHA1);
@@ -280,7 +281,8 @@ public class SPDXChecksum {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */
-	public SPDXChecksum clone() {
+	@Override
+    public SPDXChecksum clone() {
 		return new SPDXChecksum(this.algorithm, this.value);
 	}
 }

@@ -16,7 +16,7 @@
 */
 package org.spdx.html;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
@@ -37,7 +37,7 @@ public class RelationshipContext {
 		
 	}
 	
-	public RelationshipContext(Relationship relationship, HashMap<String, String> idToUrlMap) {
+	public RelationshipContext(Relationship relationship, Map<String, String> idToUrlMap) {
 		if (relationship == null) {
 			return;
 		}
