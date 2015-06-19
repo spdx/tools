@@ -17,7 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -26,6 +26,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -41,10 +42,8 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 
 	public enum AnnotationType {annotationType_other, annotationType_review};
 	
-	public static final HashMap<AnnotationType, String> ANNOTATION_TYPE_TO_TAG = 
-			new HashMap<AnnotationType, String>();
-	public static final HashMap<String, AnnotationType> TAG_TO_ANNOTATION_TYPE = 
-			new HashMap<String, AnnotationType>();
+	public static final Map<AnnotationType, String> ANNOTATION_TYPE_TO_TAG = Maps.newHashMap();
+	public static final Map<String, AnnotationType> TAG_TO_ANNOTATION_TYPE = Maps.newHashMap();
 	static {
 		ANNOTATION_TYPE_TO_TAG.put(AnnotationType.annotationType_other, "OTHER");
 		TAG_TO_ANNOTATION_TYPE.put("OTHER", AnnotationType.annotationType_other);

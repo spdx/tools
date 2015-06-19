@@ -20,14 +20,17 @@ package org.spdx.compare;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
@@ -40,8 +43,8 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SpdxPackageVerificationCode;
+
+import com.google.common.collect.Maps;
 
 /**
  * Performs a comparison between two or more SPDX documents and holds the results of the comparison
@@ -176,14 +179,13 @@ public class SpdxComparer {
 	 * the comparison which do not contain some of the reviewers in the key document.  See the
 	 * implementation of compareReviewers for details
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SPDXReview[]>> uniqueReviews = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SPDXReview[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, SPDXReview[]>> uniqueReviews = Maps.newHashMap();
+	
 	/**
 	 * Holds a map of any SPDX documents which have reviewer differenes.  A reviewer difference
 	 * is an SPDXReview with the same reviewer name but a different reviewer date or comment
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SPDXReviewDifference[]>> reviewerDifferences = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SPDXReviewDifference[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, SPDXReviewDifference[]>> reviewerDifferences = Maps.newHashMap();
 	
 	// Extracted Licensing Info results
 	/**
@@ -192,23 +194,20 @@ public class SpdxComparer {
 	 * the comparison which do not contain some of the reviewers in the key document.  See the
 	 * implementation of compareReviewers for details
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, ExtractedLicenseInfo[]>> uniqueExtractedLicenses = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, ExtractedLicenseInfo[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, ExtractedLicenseInfo[]>> uniqueExtractedLicenses = Maps.newHashMap();
 	/**
 	 * Map of any SPDX documents that have extraced license infos with equivalent text but different comments, id's or other fields
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxLicenseDifference[]>> licenseDifferences = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxLicenseDifference[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, SpdxLicenseDifference[]>> licenseDifferences = Maps.newHashMap();
 	/**
 	 * Maps the license ID's for the extracted license infos of the documents being compared.  License ID's are mapped based on the text
 	 * being equivalent 
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>>();
+	private Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap = Maps.newHashMap();
 
 	private boolean creatorInformationEquals;
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, String[]>> uniqueCreators = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, String[]>>();
+	
+	private Map<SpdxDocument, Map<SpdxDocument, String[]>> uniqueCreators = Maps.newHashMap();
 	
 	// file compare results
 	/**
@@ -217,15 +216,13 @@ public class SpdxComparer {
 	 * the comparison which do not contain some of the files in the key document.  See the
 	 * implementation of compareFiles for details
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFile[]>> uniqueFiles = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFile[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, SpdxFile[]>> uniqueFiles = Maps.newHashMap();
 	
 	/**
 	 * Holds a map of any SPDX documents which have file differences.  A file difference
 	 * is an SPDXReview with the same filename name but a different file property
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFileDifference[]>> fileDifferences = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxFileDifference[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, SpdxFileDifference[]>> fileDifferences = Maps.newHashMap();
 
 	// Package compare results
 	/**
@@ -234,24 +231,21 @@ public class SpdxComparer {
 	 * the comparison which do not contain some of the packages in the key document.  See the
 	 * implementation of comparePackages for details
 	 */
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxPackage[]>> uniquePackages = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, SpdxPackage[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, SpdxPackage[]>> uniquePackages = Maps.newHashMap();
 	
 	/**
 	 * Map of package names to package comparisons
 	 */
-	private HashMap<String, SpdxPackageComparer> packageComparers = new HashMap<String, SpdxPackageComparer>();
+	private Map<String, SpdxPackageComparer> packageComparers = Maps.newHashMap();
+	
 	// Annotation comparison results
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, Annotation[]>> uniqueDocumentAnnotations = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, Annotation[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, Annotation[]>> uniqueDocumentAnnotations = Maps.newHashMap();
 
 	// Document Relationships comparison results
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, Relationship[]>> uniqueDocumentRelationships = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, Relationship[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, Relationship[]>> uniqueDocumentRelationships = Maps.newHashMap();
 
 	// External Document References comparison results
-	private HashMap<SpdxDocument, HashMap<SpdxDocument, ExternalDocumentRef[]>> uniqueExternalDocumentRefs = 
-		new HashMap<SpdxDocument, HashMap<SpdxDocument, ExternalDocumentRef[]>>();
+	private Map<SpdxDocument, Map<SpdxDocument, ExternalDocumentRef[]>> uniqueExternalDocumentRefs = Maps.newHashMap();
 	
 	public SpdxComparer() {
 		
@@ -311,9 +305,9 @@ public class SpdxComparer {
 		// hashmap uniqueExternalDocumentRefs
 		for (int i = 0; i < spdxDocs.length; i++) {
 			ExternalDocumentRef[] externalDocRefsA = spdxDocs[i].getExternalDocumentRefs();
-			HashMap<SpdxDocument, ExternalDocumentRef[]> uniqueAMap = uniqueExternalDocumentRefs.get(spdxDocs[i]);
+			Map<SpdxDocument, ExternalDocumentRef[]> uniqueAMap = uniqueExternalDocumentRefs.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, ExternalDocumentRef[]>();
+				uniqueAMap = Maps.newHashMap();
 				// We will put this into the hashmap at the end of this method if it is not empty
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
@@ -345,9 +339,9 @@ public class SpdxComparer {
 		// hashmap uniqueDocumentRelationships
 		for (int i = 0; i < spdxDocs.length; i++) {
 			Relationship[] relationshipsA = spdxDocs[i].getRelationships();
-			HashMap<SpdxDocument, Relationship[]> uniqueAMap = uniqueDocumentRelationships.get(spdxDocs[i]);
+			Map<SpdxDocument, Relationship[]> uniqueAMap = uniqueDocumentRelationships.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, Relationship[]>();
+				uniqueAMap = Maps.newHashMap();
 				// We will put this into the hashmap at the end of this method if it is not empty
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
@@ -379,9 +373,9 @@ public class SpdxComparer {
 		// hashmap uniqueAnnotations
 		for (int i = 0; i < spdxDocs.length; i++) {
 			Annotation[] annotationsA = spdxDocs[i].getAnnotations();
-			HashMap<SpdxDocument, Annotation[]> uniqueAMap = uniqueDocumentAnnotations.get(spdxDocs[i]);
+			Map<SpdxDocument, Annotation[]> uniqueAMap = uniqueDocumentAnnotations.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, Annotation[]>();
+				uniqueAMap = Maps.newHashMap();
 				// We will put this into the hashmap at the end of this method if it is not empty
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
@@ -418,16 +412,14 @@ public class SpdxComparer {
 			SpdxFile[] filesA = collectAllFiles(spdxDocs[i]);
 			// note - the file arrays MUST be sorted for the comparator methods to work
 			Arrays.sort(filesA);
-			HashMap<SpdxDocument, SpdxFile[]> uniqueAMap = 
-				this.uniqueFiles.get(spdxDocs[i]);
+			Map<SpdxDocument, SpdxFile[]> uniqueAMap = this.uniqueFiles.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, SpdxFile[]>();
+				uniqueAMap = Maps.newHashMap();
 			}
 			// this map will be added to uniqueFiles at the end if we find anything
-			HashMap<SpdxDocument, SpdxFileDifference[]> diffMap = 
-				this.fileDifferences.get(spdxDocs[i]);
+			Map<SpdxDocument, SpdxFileDifference[]> diffMap = this.fileDifferences.get(spdxDocs[i]);
 			if (diffMap == null) {
-				diffMap = new HashMap<SpdxDocument, SpdxFileDifference[]>();
+				diffMap = Maps.newHashMap();
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
 				if (j == i) {
@@ -572,9 +564,9 @@ public class SpdxComparer {
 	 */
 	static SpdxFileDifference[] findFileDifferences(SpdxDocument docA, SpdxDocument docB,
 			SpdxFile[] filesA, SpdxFile[] filesB, 
-			HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> licenseIdXlationMap) throws SpdxCompareException {
+			Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> licenseIdXlationMap) throws SpdxCompareException {
 		
-		ArrayList<SpdxFileDifference> alRetval = new ArrayList<SpdxFileDifference>();
+		List<SpdxFileDifference> alRetval = new ArrayList<SpdxFileDifference>();
 		int aIndex = 0;
 		int bIndex = 0;
 		while (aIndex < filesA.length && bIndex < filesB.length) {
@@ -681,9 +673,9 @@ public class SpdxComparer {
 		for (int i = 0; i < spdxDocs.length; i++) {
 			SPDXCreatorInformation creatorInfoA = spdxDocs[i].getCreationInfo();
 			String[] creatorsA = creatorInfoA.getCreators();
-			HashMap<SpdxDocument, String[]> uniqueAMap = uniqueCreators.get(spdxDocs[i]);
+			Map<SpdxDocument, String[]> uniqueAMap = uniqueCreators.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, String[]>();
+				uniqueAMap = Maps.newHashMap();
 				// We will put this into the hashmap at the end of this method if it is not empty
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
@@ -772,10 +764,9 @@ public class SpdxComparer {
 			// note - the package arrays MUST be sorted for the comparator methods to work
 			Arrays.sort(pkgsA);
 			addPackageComparers(spdxDocs[i], pkgsA, this.extractedLicenseIdMap);
-			HashMap<SpdxDocument, SpdxPackage[]> uniqueAMap = 
-				this.uniquePackages.get(spdxDocs[i]);
+			Map<SpdxDocument, SpdxPackage[]> uniqueAMap = this.uniquePackages.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, SpdxPackage[]>();
+				uniqueAMap = Maps.newHashMap();
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
 				if (j == i) {
@@ -811,7 +802,7 @@ public class SpdxComparer {
 	 * @throws SpdxCompareException 
 	 */
 	private void addPackageComparers(SpdxDocument spdxDocument,
-			SpdxPackage[] pkgs, HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> extractedLicenseIdMap) throws SpdxCompareException {
+			SpdxPackage[] pkgs, Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap) throws SpdxCompareException {
 		for (int i = 0; i < pkgs.length; i++) {
 			SpdxPackageComparer mpc = this.packageComparers.get(pkgs[i].getName());
 			if (mpc == null) {
@@ -838,11 +829,11 @@ public class SpdxComparer {
 			AnyLicenseInfo license2) throws SpdxCompareException {
 		this.checkDocsIndex(doc1);
 		this.checkDocsIndex(doc2);
-		HashMap<SpdxDocument, HashMap<String, String>> hm = this.extractedLicenseIdMap.get(this.spdxDocs[doc1]);
+		Map<SpdxDocument, Map<String, String>> hm = this.extractedLicenseIdMap.get(this.spdxDocs[doc1]);
 		if (hm == null) {
 			throw(new SpdxCompareException("Compare License Error - Extracted license id map has not been initialized."));
 		}
-		HashMap<String, String> xlationMap = hm.get(this.spdxDocs[doc2]);
+		Map<String, String> xlationMap = hm.get(this.spdxDocs[doc2]);
 		if (xlationMap == null) {
 			throw(new SpdxCompareException("Compare License Exception - Extracted license id map has not been initialized."));
 		}
@@ -961,21 +952,18 @@ public class SpdxComparer {
 	private void compareExtractedLicenseInfos() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		for (int i = 0; i < spdxDocs.length; i++) {
 			ExtractedLicenseInfo[] extractedLicensesA = spdxDocs[i].getExtractedLicenseInfos();
-			HashMap<SpdxDocument, ExtractedLicenseInfo[]> uniqueMap = 
-				new HashMap<SpdxDocument, ExtractedLicenseInfo[]>();
-			HashMap<SpdxDocument, SpdxLicenseDifference[]> differenceMap = 
-				new HashMap<SpdxDocument, SpdxLicenseDifference[]>();
-			HashMap<SpdxDocument, HashMap<String, String>> licenseIdMap = 
-				new HashMap<SpdxDocument, HashMap<String, String>>();
+			Map<SpdxDocument, ExtractedLicenseInfo[]> uniqueMap = Maps.newHashMap();
+				Map<SpdxDocument, SpdxLicenseDifference[]> differenceMap = Maps.newHashMap();
+				Map<SpdxDocument, Map<String, String>> licenseIdMap = Maps.newHashMap();
 
 			for (int j = 0; j < spdxDocs.length; j++) {
 				if (i == j) {
 					continue;	// no need to compare to ourself;
 				}
-				HashMap<String, String> idMap = new HashMap<String, String>();
-				ArrayList<SpdxLicenseDifference> alDifferences = new ArrayList<SpdxLicenseDifference>();
+				Map<String, String> idMap = Maps.newHashMap();
+				List<SpdxLicenseDifference> alDifferences = new ArrayList<SpdxLicenseDifference>();
 				ExtractedLicenseInfo[] extractedLicensesB = spdxDocs[j].getExtractedLicenseInfos();
-				ArrayList<ExtractedLicenseInfo> uniqueLicenses = new ArrayList<ExtractedLicenseInfo>();
+				List<ExtractedLicenseInfo> uniqueLicenses = new ArrayList<ExtractedLicenseInfo>();
 				compareLicenses(extractedLicensesA, extractedLicensesB,
 						idMap, alDifferences, uniqueLicenses);
 				// unique
@@ -1014,9 +1002,9 @@ public class SpdxComparer {
 	 */
 	private void compareLicenses(ExtractedLicenseInfo[] extractedLicensesA,
 			ExtractedLicenseInfo[] extractedLicensesB,
-			HashMap<String, String> idMap,
-			ArrayList<SpdxLicenseDifference> alDifferences,
-			ArrayList<ExtractedLicenseInfo> uniqueLicenses) {
+			Map<String, String> idMap,
+			List<SpdxLicenseDifference> alDifferences,
+			List<ExtractedLicenseInfo> uniqueLicenses) {
 		idMap.clear();
 		alDifferences.clear();
 		uniqueLicenses.clear();
@@ -1225,14 +1213,14 @@ public class SpdxComparer {
 		for (int i = 0; i < spdxDocs.length; i++) {
 			@SuppressWarnings("deprecation")
 			SPDXReview[] reviewA = spdxDocs[i].getReviewers();
-			HashMap<SpdxDocument, SPDXReview[]> uniqueAMap = uniqueReviews.get(spdxDocs[i]);
+			Map<SpdxDocument, SPDXReview[]> uniqueAMap = uniqueReviews.get(spdxDocs[i]);
 			if (uniqueAMap == null) {
-				uniqueAMap = new HashMap<SpdxDocument, SPDXReview[]>();
+				uniqueAMap = Maps.newHashMap();
 				// We will put this into the hashmap at the end of this method if it is not empty
 			}
-			HashMap<SpdxDocument, SPDXReviewDifference[]> diffMap = this.reviewerDifferences.get(this.spdxDocs[i]);
+			Map<SpdxDocument, SPDXReviewDifference[]> diffMap = this.reviewerDifferences.get(this.spdxDocs[i]);
 			if (diffMap == null) {
-				diffMap = new HashMap<SpdxDocument, SPDXReviewDifference[]>();
+				diffMap = Maps.newHashMap();
 				// We will put this into the hashmap at the end of this method if it is not empty
 			}
 			for (int j = 0; j < spdxDocs.length; j++) {
@@ -1447,10 +1435,10 @@ public class SpdxComparer {
 	 */
 	private boolean _isReviewersEqualNoCheck() {
 		// check for unique reviewers
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, SPDXReview[]>>> uniqueIter =
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, SPDXReview[]>>> uniqueIter =
 			this.uniqueReviews.entrySet().iterator();
 		while (uniqueIter.hasNext()) {
-			Entry <SpdxDocument, HashMap<SpdxDocument, SPDXReview[]>> entry = uniqueIter.next();
+			Entry <SpdxDocument, Map<SpdxDocument, SPDXReview[]>> entry = uniqueIter.next();
 			Iterator<Entry<SpdxDocument, SPDXReview[]>> entryIter = entry.getValue().entrySet().iterator();
 			while (entryIter.hasNext()) {
 				SPDXReview[] val = entryIter.next().getValue();
@@ -1460,7 +1448,7 @@ public class SpdxComparer {
 			}
 		}
 		// check differences
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, SPDXReviewDifference[]>>> diffIter = this.reviewerDifferences.entrySet().iterator();
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, SPDXReviewDifference[]>>> diffIter = this.reviewerDifferences.entrySet().iterator();
 		while (diffIter.hasNext()) {
 			Iterator<Entry<SpdxDocument, SPDXReviewDifference[]>> entryIter = diffIter.next().getValue().entrySet().iterator();
 			while(entryIter.hasNext()) {
@@ -1475,8 +1463,7 @@ public class SpdxComparer {
 	}
 	
 	private boolean _isExternalDcoumentRefsEqualsNoCheck() {
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, ExternalDocumentRef[]>>> iter = 
-				this.uniqueExternalDocumentRefs.entrySet().iterator();
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, ExternalDocumentRef[]>>> iter = this.uniqueExternalDocumentRefs.entrySet().iterator();
 		while (iter.hasNext()) {
 			Iterator<ExternalDocumentRef[]> docIterator = iter.next().getValue().values().iterator();
 			while (docIterator.hasNext()) {
@@ -1507,10 +1494,10 @@ public class SpdxComparer {
 	 */
 	private boolean _isExtractedLicensingInfoEqualsNoCheck() {
 		// check for unique extraced license infos
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, ExtractedLicenseInfo[]>>> uniqueIter = 
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, ExtractedLicenseInfo[]>>> uniqueIter = 
 			this.uniqueExtractedLicenses.entrySet().iterator();
 		while (uniqueIter.hasNext()) {
-			Entry<SpdxDocument, HashMap<SpdxDocument, ExtractedLicenseInfo[]>> entry = uniqueIter.next();
+			Entry<SpdxDocument, Map<SpdxDocument, ExtractedLicenseInfo[]>> entry = uniqueIter.next();
 			Iterator<Entry<SpdxDocument, ExtractedLicenseInfo[]>> entryIter = entry.getValue().entrySet().iterator();
 			while(entryIter.hasNext()) {
 				ExtractedLicenseInfo[] licenses = entryIter.next().getValue();
@@ -1520,7 +1507,7 @@ public class SpdxComparer {
 			}
 		}
 		// check differences
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument,SpdxLicenseDifference[]>>> diffIterator = this.licenseDifferences.entrySet().iterator();
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument,SpdxLicenseDifference[]>>> diffIterator = this.licenseDifferences.entrySet().iterator();
 		while (diffIterator.hasNext()) {
 			Iterator<Entry<SpdxDocument,SpdxLicenseDifference[]>> entryIter = diffIterator.next().getValue().entrySet().iterator();
 			while (entryIter.hasNext()) {
@@ -1546,7 +1533,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		checkDocsIndex(docindex1);
 		checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, SPDXReview[]> uniques = this.uniqueReviews.get(spdxDocs[docindex1]);
+		Map<SpdxDocument, SPDXReview[]> uniques = this.uniqueReviews.get(spdxDocs[docindex1]);
 		if (uniques != null) {
 			SPDXReview[] retval = uniques.get(spdxDocs[docindex2]);
 			if (retval != null) {
@@ -1573,7 +1560,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		checkDocsIndex(docindex1);
 		checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, SPDXReviewDifference[]> doc1Differences =
+		Map<SpdxDocument, SPDXReviewDifference[]> doc1Differences =
 			this.reviewerDifferences.get(spdxDocs[docindex1]);
 		if (doc1Differences == null) {
 			return new SPDXReviewDifference[0];
@@ -1598,7 +1585,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		checkDocsIndex(docIndexA);
 		checkDocsIndex(docIndexB);
-		HashMap<SpdxDocument, ExtractedLicenseInfo[]> uniques = this.uniqueExtractedLicenses.get(spdxDocs[docIndexA]);
+		Map<SpdxDocument, ExtractedLicenseInfo[]> uniques = this.uniqueExtractedLicenses.get(spdxDocs[docIndexA]);
 		if (uniques != null) {
 			ExtractedLicenseInfo[] retval = uniques.get(spdxDocs[docIndexB]);
 			if (retval != null) {
@@ -1624,7 +1611,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		checkDocsIndex(docIndexA);
 		checkDocsIndex(docIndexB);
-		HashMap<SpdxDocument, SpdxLicenseDifference[]> differences = this.licenseDifferences.get(spdxDocs[docIndexA]);
+		Map<SpdxDocument, SpdxLicenseDifference[]> differences = this.licenseDifferences.get(spdxDocs[docIndexA]);
 		if (differences != null) {
 			SpdxLicenseDifference[] retval = differences.get(spdxDocs[docIndexB]);
 			if (retval != null) {
@@ -1657,7 +1644,7 @@ public class SpdxComparer {
 	public String[] getUniqueCreators(int doc1index, int doc2index) throws SpdxCompareException {
 		this.checkDocsField();
 		this.checkInProgress();
-		HashMap<SpdxDocument, String[]> uniques = this.uniqueCreators.get(this.getSpdxDoc(doc1index));
+		Map<SpdxDocument, String[]> uniques = this.uniqueCreators.get(this.getSpdxDoc(doc1index));
 		if (uniques == null) {
 			return new String[0];
 		}
@@ -1702,8 +1689,7 @@ public class SpdxComparer {
 	 * @return
 	 */
 	private boolean _isDocumentAnnotationsEqualsNoCheck() {
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, Annotation[]>>> iter = 
-				this.uniqueDocumentAnnotations.entrySet().iterator();
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, Annotation[]>>> iter = this.uniqueDocumentAnnotations.entrySet().iterator();
 		while (iter.hasNext()) {
 			Iterator<Annotation[]> docIterator = iter.next().getValue().values().iterator();
 			while (docIterator.hasNext()) {
@@ -1728,8 +1714,7 @@ public class SpdxComparer {
 	 * @return
 	 */
 	private boolean _isDocumentRelationshipsEqualsNoCheck() {
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, Relationship[]>>> iter = 
-				this.uniqueDocumentRelationships.entrySet().iterator();
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, Relationship[]>>> iter = this.uniqueDocumentRelationships.entrySet().iterator();
 		while (iter.hasNext()) {
 			Iterator<Relationship[]> docIterator = iter.next().getValue().values().iterator();
 			while (docIterator.hasNext()) {
@@ -1759,8 +1744,7 @@ public class SpdxComparer {
 	 * @throws SpdxCompareException 
 	 */
 	private boolean _isPackagesEqualsNoCheck() throws SpdxCompareException {
-		Iterator<Entry<SpdxDocument, HashMap<SpdxDocument, SpdxPackage[]>>> iter = 
-				this.uniquePackages.entrySet().iterator();
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, SpdxPackage[]>>> iter = this.uniquePackages.entrySet().iterator();
 		while (iter.hasNext()) {
 			Iterator<SpdxPackage[]> docIterator = iter.next().getValue().values().iterator();
 			while (docIterator.hasNext()) {
@@ -1789,7 +1773,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		this.checkDocsIndex(docindex1);
 		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, SpdxFile[]> uniqueMap = this.uniqueFiles.get(this.spdxDocs[docindex1]);
+		Map<SpdxDocument, SpdxFile[]> uniqueMap = this.uniqueFiles.get(this.spdxDocs[docindex1]);
 		if (uniqueMap == null) {
 			return new SpdxFile[0];
 		}
@@ -1813,7 +1797,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		this.checkDocsIndex(docindex1);
 		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, SpdxFileDifference[]> uniqueMap = this.fileDifferences.get(this.spdxDocs[docindex1]);
+		Map<SpdxDocument, SpdxFileDifference[]> uniqueMap = this.fileDifferences.get(this.spdxDocs[docindex1]);
 		if (uniqueMap == null) {
 			return new SpdxFileDifference[0];
 		}
@@ -1836,7 +1820,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		this.checkDocsIndex(docindex1);
 		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, SpdxPackage[]> uniqueMap = this.uniquePackages.get(this.spdxDocs[docindex1]);
+		Map<SpdxDocument, SpdxPackage[]> uniqueMap = this.uniquePackages.get(this.spdxDocs[docindex1]);
 		if (uniqueMap == null) {
 			return new SpdxPackage[0];
 		}
@@ -1859,7 +1843,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		this.checkDocsIndex(docindex1);
 		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, ExternalDocumentRef[]> uniqueMap = this.uniqueExternalDocumentRefs.get(this.spdxDocs[docindex1]);
+		Map<SpdxDocument, ExternalDocumentRef[]> uniqueMap = this.uniqueExternalDocumentRefs.get(this.spdxDocs[docindex1]);
 		if (uniqueMap == null) {
 			return new ExternalDocumentRef[0];
 		}
@@ -1882,7 +1866,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		this.checkDocsIndex(docindex1);
 		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, Annotation[]> uniqueMap = this.uniqueDocumentAnnotations.get(this.spdxDocs[docindex1]);
+		Map<SpdxDocument, Annotation[]> uniqueMap = this.uniqueDocumentAnnotations.get(this.spdxDocs[docindex1]);
 		if (uniqueMap == null) {
 			return new Annotation[0];
 		}
@@ -1905,7 +1889,7 @@ public class SpdxComparer {
 		this.checkInProgress();
 		this.checkDocsIndex(docindex1);
 		this.checkDocsIndex(docindex2);
-		HashMap<SpdxDocument, Relationship[]> uniqueMap = this.uniqueDocumentRelationships.get(this.spdxDocs[docindex1]);
+		Map<SpdxDocument, Relationship[]> uniqueMap = this.uniqueDocumentRelationships.get(this.spdxDocs[docindex1]);
 		if (uniqueMap == null) {
 			return new Relationship[0];
 		}

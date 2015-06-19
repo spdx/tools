@@ -19,8 +19,8 @@ package org.spdx.html;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXReview;
@@ -35,6 +35,8 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 
+import com.google.common.collect.Maps;
+
 /**
  * Provides a hashmap which maps the Mustache template strings to SPDX Document
  * methods and strings.  The constants are used in the SpdxHTMLTemplate.html file
@@ -47,9 +49,9 @@ import org.spdx.rdfparser.model.SpdxPackage;
  */
 public class MustacheMap {
 
-	public static HashMap<String, Object> buildDocMustachMap(SpdxDocument doc,
-			HashMap<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
-		HashMap<String, Object>  retval = new HashMap<String, Object>();
+	public static Map<String, Object> buildDocMustachMap(SpdxDocument doc,
+			Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+		Map<String, Object>  retval = Maps.newHashMap();
 		// Document level information
 		retval.put("documentName", doc.getName());
 		retval.put("documentNamespace", doc.getDocumentNamespace());
@@ -108,7 +110,7 @@ public class MustacheMap {
 	 * @return
 	 */
 	private static List<RelationshipContext> getRelationshipContexts(
-			Relationship[] relationships, HashMap<String, String> spdxIdToUrl) {
+			Relationship[] relationships, Map<String, String> spdxIdToUrl) {
 		Arrays.sort(relationships);
 		ArrayList<RelationshipContext> retval = new ArrayList<RelationshipContext>();
 		if (relationships == null) {
@@ -127,10 +129,9 @@ public class MustacheMap {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public static HashMap<String, Object> buildDocFileMustacheMap(
-			SpdxDocument doc, SpdxFile[] files,
-			HashMap<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
-		HashMap<String, Object> retval = new HashMap<String, Object>();
+	public static Map<String, Object> buildDocFileMustacheMap(SpdxDocument doc, SpdxFile[] files,
+			Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+		Map<String, Object> retval = Maps.newHashMap();
 		retval.put("about", "SPDX Document "+doc.getName());
 		SpdxItem[] describedItems = doc.getDocumentDescribes();
 		Arrays.sort(describedItems, new Comparator<SpdxItem>() {
@@ -159,8 +160,7 @@ public class MustacheMap {
 		return retval;
 	}
 	
-	private static ArrayList<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SpdxDocument doc,
-			HashMap<String, String> spdxIdToUrl) {
+	private static ArrayList<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SpdxDocument doc, Map<String, String> spdxIdToUrl) {
 		ArrayList<ExtractedLicensingInfoContext> retval = new ArrayList<ExtractedLicensingInfoContext>();
 		try {
 			ExtractedLicenseInfo[] extractedLicenseInfos = doc.getExtractedLicenseInfos();
@@ -235,9 +235,8 @@ public class MustacheMap {
 	 * @param spdxIdToUrl
 	 * @return
 	 */
-	public static HashMap<String, Object> buildExtractedLicMustachMap(
-			SpdxDocument doc, HashMap<String, String> spdxIdToUrl) {
-		HashMap<String, Object> retval = new HashMap<String, Object>();
+	public static Map<String, Object> buildExtractedLicMustachMap(SpdxDocument doc, Map<String, String> spdxIdToUrl) {
+		Map<String, Object> retval = Maps.newHashMap();
 		retval.put("hasExtractedLicensingInfo", getExtractedLicensingInfo(doc, spdxIdToUrl));
 		return retval;
 	}
@@ -248,9 +247,9 @@ public class MustacheMap {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public static HashMap<String, Object> buildPkgFileMap(SpdxPackage pkg,
-			HashMap<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
-		HashMap<String, Object> retval = new HashMap<String, Object>();
+	public static Map<String, Object> buildPkgFileMap(SpdxPackage pkg,
+			Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+		Map<String, Object> retval = Maps.newHashMap();
 		retval.put("about", "SPDX Package "+pkg.getName());
 		SpdxFile[] files = pkg.getFiles();
 		Arrays.sort(files, new Comparator<SpdxFile>() {
@@ -272,7 +271,7 @@ public class MustacheMap {
 		ArrayList<FileContext> alFiles = new ArrayList<FileContext>();
 		for (int i = 0; i < files.length; i++) {
 			if (files[i] instanceof SpdxFile) {
-				alFiles.add(new FileContext((SpdxFile)files[i]));
+				alFiles.add(new FileContext(files[i]));
 			}
 		}
 		retval.put("hasFile", alFiles);

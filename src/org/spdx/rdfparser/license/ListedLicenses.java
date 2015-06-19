@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -31,6 +31,7 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -60,8 +61,8 @@ public class ListedLicenses implements IModelContainer {
 	
 	HashSet<String> listdLicenseIds = null;
 	
-	HashMap<String, SpdxListedLicense> listedLicenseCache = null;
-	HashMap<Node, SpdxListedLicense> listedLicenseNodeCache = new HashMap<Node, SpdxListedLicense>();
+	Map<String, SpdxListedLicense> listedLicenseCache = null;
+	Map<Node, SpdxListedLicense> listedLicenseNodeCache = Maps.newHashMap();
 	
 
     
@@ -382,7 +383,7 @@ public class ListedLicenses implements IModelContainer {
     private void loadListedLicenseIDs() {
         listedLicenseModificationLock.writeLock().lock();
         try {
-            listedLicenseCache = new HashMap<String, SpdxListedLicense>(); // clear the cache
+            listedLicenseCache = Maps.newHashMap(); // clear the cache
             listdLicenseIds = new HashSet<String>(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
             Model stdLicenseModel = getListedLicenseModel();

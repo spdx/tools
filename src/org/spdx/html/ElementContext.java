@@ -16,7 +16,7 @@
 */
 package org.spdx.html;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.SpdxElement;
@@ -35,8 +35,7 @@ public class ElementContext {
 	public ElementContext(InvalidSPDXAnalysisException e) {
 		this.error = e.getMessage();
 	}
-	public ElementContext(SpdxElement element, 
-			HashMap<String, String> spdxIdToUrl) {
+	public ElementContext(SpdxElement element, Map<String, String> spdxIdToUrl) {
 		if (element == null) {
 			return;
 		}

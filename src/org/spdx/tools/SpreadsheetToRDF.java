@@ -24,11 +24,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
+import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxDocumentContainer;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.SpdxVerificationHelper;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.Relationship;
@@ -36,23 +43,18 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.SpdxDocumentContainer;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SpdxRdfConstants;
-import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.spdxspreadsheet.AnnotationsSheet;
+import org.spdx.spdxspreadsheet.DocumentInfoSheet;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
-import org.spdx.spdxspreadsheet.DocumentInfoSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.RelationshipsSheet;
 import org.spdx.spdxspreadsheet.ReviewersSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
+
+import com.google.common.collect.Maps;
 
 /**
  * Converts a spreadsheet to an SPDX RDF Analysis file
@@ -169,7 +171,7 @@ public class SpreadsheetToRDF {
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
 		// note - non std licenses must be added first so that the text is available
-		HashMap<String, SpdxPackage> pkgIdToPackage = copyPackageInfo(ss.getPackageInfoSheet(), analysis);
+		Map<String, SpdxPackage> pkgIdToPackage = copyPackageInfo(ss.getPackageInfoSheet(), analysis);
 		// note - packages need to be added before the files so that the files can be added to the packages
 		copyPerFileInfo(ss.getPerFileSheet(), analysis, pkgIdToPackage);
 		copyAnnotationInfo(ss.getAnnotationsSheet(), analysis);
@@ -233,7 +235,7 @@ public class SpreadsheetToRDF {
 	}
 
 	private static void copyPerFileInfo(PerFileSheet perFileSheet,
-			SpdxDocument analysis, HashMap<String, SpdxPackage> pkgIdToPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
+			SpdxDocument analysis, Map<String, SpdxPackage> pkgIdToPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		int firstRow = perFileSheet.getFirstDataRow();
 		int numFiles = perFileSheet.getNumDataRows();
 		for (int i = 0; i < numFiles; i++) {
@@ -270,10 +272,10 @@ public class SpreadsheetToRDF {
 		analysis.setExtractedLicenseInfos(nonStdLicenses);
 	}
 
-	private static HashMap<String, SpdxPackage> copyPackageInfo(PackageInfoSheet packageInfoSheet,
+	private static Map<String, SpdxPackage> copyPackageInfo(PackageInfoSheet packageInfoSheet,
 			SpdxDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		SpdxPackage[] packages = packageInfoSheet.getPackages(analysis.getDocumentContainer());
-		HashMap<String, SpdxPackage> pkgIdToPackage = new HashMap<String, SpdxPackage>();
+		Map<String, SpdxPackage> pkgIdToPackage = Maps.newHashMap();
 		for (int i = 0; i < packages.length; i++) {
 			pkgIdToPackage.put(packages[i].getId(), packages[i]);
 			analysis.getDocumentContainer().addElement(packages[i]);

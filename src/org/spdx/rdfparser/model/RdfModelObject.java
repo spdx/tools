@@ -17,7 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -28,6 +28,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -79,8 +80,8 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	// the following hashmaps translate between pre-defined 
 	// property values and their URI's used to uniquely identify them
 	// in the RDF model
-	static final HashMap<String, String> PRE_DEFINED_VALUE_URI = new HashMap<String, String>();
-	static final HashMap<String, String> PRE_DEFINED_URI_VALUE = new HashMap<String, String>();
+	static final Map<String, String> PRE_DEFINED_VALUE_URI = Maps.newHashMap();
+	static final Map<String, String> PRE_DEFINED_URI_VALUE = Maps.newHashMap();
 	
 	static {
 		PRE_DEFINED_VALUE_URI.put(SpdxRdfConstants.NOASSERTION_VALUE, SpdxRdfConstants.URI_VALUE_NOASSERTION);

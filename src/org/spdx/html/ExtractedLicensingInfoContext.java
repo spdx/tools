@@ -17,8 +17,8 @@
 package org.spdx.html;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
@@ -44,8 +44,7 @@ public class ExtractedLicensingInfoContext {
 	 * @param spdxNonStandardLicense
 	 * @param spdxIdToUrl 
 	 */
-	public ExtractedLicensingInfoContext(
-			ExtractedLicenseInfo spdxNonStandardLicense, HashMap<String, String> spdxIdToUrl) {
+	public ExtractedLicensingInfoContext(ExtractedLicenseInfo spdxNonStandardLicense, Map<String, String> spdxIdToUrl) {
 		this.license = spdxNonStandardLicense;
 		if (this.license != null) {
 			this.licenseLink = spdxIdToUrl.get(this.license.getLicenseId());

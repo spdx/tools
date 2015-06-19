@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import org.spdx.rdfparser.model.SpdxFile;
@@ -136,7 +137,7 @@ public class VerificationCodeGenerator {
 		return generatePackageVerificationCode(fileChecksums, skippedFileNames);
 	}
 	
-	protected SpdxPackageVerificationCode generatePackageVerificationCode(ArrayList<String> fileChecksums,
+	protected SpdxPackageVerificationCode generatePackageVerificationCode(List<String> fileChecksums,
 			String[] skippedFilePaths) throws NoSuchAlgorithmException {
 		Collections.sort(fileChecksums);
 		MessageDigest verificationCodeDigest = MessageDigest.getInstance("SHA-1");

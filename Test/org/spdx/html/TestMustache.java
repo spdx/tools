@@ -17,21 +17,21 @@
 package org.spdx.html;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.mustachejava.Mustache;
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Maps;
 
 /**
  * @author Gary O'Neall
@@ -59,7 +59,7 @@ public class TestMustache {
 	public void testMustache() throws MustacheException, IOException {
 		File root = new File("TestFiles");
 		DefaultMustacheFactory builder = new DefaultMustacheFactory(root);
-		Map<String, Object> context = new HashMap<String, Object>();
+		Map<String, Object> context = Maps.newHashMap();
 		context.put(TEST_FIELD1, TEST_RESULT1);
 		Mustache m = builder.compile("testSimpleTemplate.txt");
 		StringWriter writer = new StringWriter();
