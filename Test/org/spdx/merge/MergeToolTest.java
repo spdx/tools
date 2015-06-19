@@ -16,12 +16,12 @@
 */
 package org.spdx.merge;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -30,13 +30,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.model.SpdxDocument;
-import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.tools.MergeSpdxDocs;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
 
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 /**
@@ -129,10 +128,10 @@ public class MergeToolTest {
 	 * @param toLicenses
 	 * @return
 	 */
-	private HashMap<String, String> mapLicenseIds(
+	private Map<String, String> mapLicenseIds(
 			AnyLicenseInfo[] fromLicenses,
 			AnyLicenseInfo[] toLicenses) {
-		HashMap<String, String> retval = new HashMap<String, String>();
+		Map<String, String> retval = Maps.newHashMap();
 		for (AnyLicenseInfo fromLicense : fromLicenses) {
 			if (fromLicense instanceof ExtractedLicenseInfo) {
 				ExtractedLicenseInfo fromNonStdLicense = (ExtractedLicenseInfo)fromLicense;

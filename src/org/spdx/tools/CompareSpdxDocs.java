@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.compare.SpdxComparer;
@@ -34,22 +35,22 @@ import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
 import org.spdx.compare.SpdxFileDifference;
 import org.spdx.compare.SpdxLicenseDifference;
 import org.spdx.compare.SpdxPackageComparer;
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.model.Annotation;
-import org.spdx.rdfparser.model.Checksum;
-import org.spdx.rdfparser.model.ExternalDocumentRef;
-import org.spdx.rdfparser.model.Relationship;
-import org.spdx.rdfparser.model.SpdxFile;
-import org.spdx.rdfparser.model.SpdxFile.FileType;
-import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.DoapProject;
+import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.model.SpdxPackage;
 
 /**
  * Command line application to compare two SPDX documents
@@ -181,12 +182,11 @@ public class CompareSpdxDocs {
 	}
 
 	/**
-	 * Prints an array list of strings
+	 * Prints a list of strings
 	 * @param list
 	 * @param output
 	 */
-	private static void printList(ArrayList<String> list,
-			PrintStream output) {
+	private static void printList(List<String> list, PrintStream output) {
 		for(int i = 0;i < list.size(); i++) {
 			output.println(list.get(i));
 		}

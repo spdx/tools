@@ -16,13 +16,14 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -42,9 +43,9 @@ public class SpdxElementFactory {
 	 */
 	static void addToCreatedElements(IModelContainer modelContainer,
 			Node node, SpdxElement element) {
-		HashMap<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
+		Map<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
 		if (containerNodes == null) {
-			containerNodes = new HashMap<Node, SpdxElement>();
+			containerNodes = Maps.newHashMap();
 			createdElements.put(modelContainer, containerNodes);
 		}
 		containerNodes.put(node, element);
@@ -53,14 +54,13 @@ public class SpdxElementFactory {
 	 * Keep track of all nodes created both for performance and to prevent
 	 * an infinite recursion from continually creating the same objects.
 	 */
-	private static HashMap<IModelContainer, HashMap<Node, SpdxElement>> createdElements = 
-			new HashMap<IModelContainer, HashMap<Node, SpdxElement>>();
+	private static Map<IModelContainer, Map<Node, SpdxElement>> createdElements = Maps.newHashMap();
 
 	public static SpdxElement createElementFromModel(IModelContainer modelContainer,
 			Node node) throws InvalidSPDXAnalysisException {
-		HashMap<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
+		Map<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
 		if (containerNodes == null) {
-			containerNodes = new HashMap<Node, SpdxElement>();
+			containerNodes = Maps.newHashMap();
 			createdElements.put(modelContainer, containerNodes);
 		}
 		SpdxElement retval = containerNodes.get(node);

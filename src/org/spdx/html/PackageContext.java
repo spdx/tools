@@ -19,15 +19,15 @@ package org.spdx.html;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.model.Checksum;
-import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
 
 /**
  * Context for SPDX Package
@@ -37,13 +37,13 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
 public class PackageContext {
 	
 	private SpdxPackage pkg = null;
-	private HashMap<String, String> spdxIdToUrl;
+	private Map<String, String> spdxIdToUrl;
 
 	/**
 	 * @param doc
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public PackageContext(SpdxPackage pkg, HashMap<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+	public PackageContext(SpdxPackage pkg, Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
 		this.pkg = pkg;
 		this.spdxIdToUrl = spdxIdToUrl;
 	}

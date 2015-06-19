@@ -17,13 +17,14 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -55,8 +56,8 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	private String[] contributors;
 	private String noticeText;
 	
-	public static HashMap<String, String> FILE_TYPE_TO_RESOURCE = new HashMap<String, String>();
-	public static HashMap<String, String> RESOURCE_TO_FILE_TYPE = new HashMap<String, String>();
+	public static Map<String, String> FILE_TYPE_TO_RESOURCE = Maps.newHashMap();
+	public static Map<String, String> RESOURCE_TO_FILE_TYPE = Maps.newHashMap();
 
 	static {
 		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_SOURCE, 
@@ -1194,6 +1195,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
      * @see java.lang.Object#clone()
      * Creates a deep copy including clones of the files and artifactOfs referenced in the fileDependencies
      */
+    @Override
     public SPDXFile clone() {
     	SPDXFile[] cloneFileDependencies;
     	if (this.fileDependencies == null) {

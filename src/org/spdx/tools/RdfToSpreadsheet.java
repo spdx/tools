@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,25 +32,27 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXDocumentFactory;
+import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
-import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxFile;
-import org.spdx.rdfparser.SPDXReview;
-import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AnnotationsSheet;
-import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
 import org.spdx.spdxspreadsheet.DocumentInfoSheet;
+import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.RelationshipsSheet;
 import org.spdx.spdxspreadsheet.ReviewersSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
+
+import com.google.common.collect.Maps;
 
 /**
  * Translates an RDF XML file to a SPDX Spreadsheet format
@@ -134,7 +135,7 @@ public class RdfToSpreadsheet {
 			return;
 		}
 		copyOrigins(doc, ss.getOriginsSheet());
-		HashMap<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(), ss.getPackageInfoSheet());
+		Map<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(), ss.getPackageInfoSheet());
 		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
 		copyPerFileInfo(doc.getDocumentContainer().findAllFiles(), ss.getPerFileSheet(), fileIdToPackageId);
 		Map<String, Relationship[]> allRelationships = new TreeMap<String, Relationship[]>();
@@ -203,7 +204,7 @@ public class RdfToSpreadsheet {
 	}
 
 	private static void copyPerFileInfo(List<SpdxFile> fileList,
-			PerFileSheet perFileSheet, HashMap<String, String> fileIdToPackageId) {            
+			PerFileSheet perFileSheet, Map<String, String> fileIdToPackageId) {            
             Collections.sort(fileList);
             /* Print out sorted files */            
 		for (SpdxFile file : fileList) {
@@ -221,9 +222,9 @@ public class RdfToSpreadsheet {
 		}
 	}
 
-	private static HashMap<String, String> copyPackageInfo(List<SpdxPackage> packages,
+	private static Map<String, String> copyPackageInfo(List<SpdxPackage> packages,
 			PackageInfoSheet packageInfoSheet) throws InvalidSPDXAnalysisException {
-		HashMap<String, String> fileIdToPkgId = new HashMap<String, String>();
+		Map<String, String> fileIdToPkgId = Maps.newHashMap();
 		Collections.sort(packages);
 		Iterator<SpdxPackage> iter = packages.iterator();
 		while (iter.hasNext()) {

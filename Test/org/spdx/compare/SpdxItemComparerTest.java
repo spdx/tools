@@ -16,9 +16,11 @@
 */
 package org.spdx.compare;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -30,11 +32,13 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
-import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.Relationship;
+import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxItem;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author Gary
@@ -58,7 +62,7 @@ public class SpdxItemComparerTest {
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDA = LICENSEA1;
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDB = LICENSEB1;
 	private static final String NAMEA = "NameA";
-	private static final HashMap<String, String> LICENSE_XLATION_MAPAB = new HashMap<String, String>();
+	private static final Map<String, String> LICENSE_XLATION_MAPAB = Maps.newHashMap();
 	
 	static {
 		LICENSE_XLATION_MAPAB.put("LicenseRef-1", "LicenseRef-4");
@@ -66,7 +70,7 @@ public class SpdxItemComparerTest {
 		LICENSE_XLATION_MAPAB.put("LicenseRef-3", "LicenseRef-6");
 	}
 	
-	private static final HashMap<String, String> LICENSE_XLATION_MAPBA = new HashMap<String, String>();
+	private static final Map<String, String> LICENSE_XLATION_MAPBA = Maps.newHashMap();
 	
 	static {
 		LICENSE_XLATION_MAPBA.put("LicenseRef-4", "LicenseRef-1");
@@ -74,8 +78,7 @@ public class SpdxItemComparerTest {
 		LICENSE_XLATION_MAPBA.put("LicenseRef-6", "LicenseRef-3");
 	}
 	
-	private final HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> LICENSE_XLATION_MAP = 
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>>();
+	private final Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> LICENSE_XLATION_MAP = Maps.newHashMap();
 
 	private SpdxDocument DOCA;
 	private SpdxDocument DOCB;
@@ -153,12 +156,10 @@ public class SpdxItemComparerTest {
 		String uri2 = "http://doc/uri2";
 		SpdxDocumentContainer containerB = new SpdxDocumentContainer(uri2);
 		DOCB = containerB.getSpdxDocument();
-		HashMap<SpdxDocument, HashMap<String, String>> bmap = 
-				new HashMap<SpdxDocument, HashMap<String, String>>();
+		Map<SpdxDocument, Map<String, String>> bmap = Maps.newHashMap();
 		bmap.put(DOCB, LICENSE_XLATION_MAPAB);
 		LICENSE_XLATION_MAP.put(DOCA, bmap);
-		HashMap<SpdxDocument, HashMap<String, String>> amap = 
-				new HashMap<SpdxDocument, HashMap<String, String>>();
+		Map<SpdxDocument, Map<String, String>> amap = Maps.newHashMap();
 		amap.put(DOCA, LICENSE_XLATION_MAPBA);
 		LICENSE_XLATION_MAP.put(DOCB, amap);
 	}

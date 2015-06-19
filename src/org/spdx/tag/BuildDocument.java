@@ -22,10 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
@@ -55,6 +55,8 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
+
+import com.google.common.collect.Maps;
 
 /**
  * Translates an tag-value file to a an SPDX Document.
@@ -159,8 +161,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     private DoapProject lastProject = null;
     // Keep track of all file dependencies since these need to be added after all of the files
     // have been parsed.  Map of file dependency file name to the SPDX files which depends on it
-    private HashMap<String, ArrayList<SpdxFile>> fileDependencyMap =
-            new HashMap<String, ArrayList<SpdxFile>>();
+    private Map<String, ArrayList<SpdxFile>> fileDependencyMap = Maps.newHashMap();
     /**
      * Keep track of the last relationship for any following relationship related tags
      */
@@ -960,8 +961,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         // a new HashMap of files (as the key) and the dependency files (arraylist) as the values
         // Once that hashmap is built, the actual dependencies are then added.
         // the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
-        HashMap<SpdxFile, ArrayList<SpdxFile>> filesWithDependencies =
-                new HashMap<SpdxFile, ArrayList<SpdxFile>>();
+        Map<SpdxFile, ArrayList<SpdxFile>> filesWithDependencies = Maps.newHashMap();
         SpdxFile[] allFiles = analysis.getDocumentContainer().getFileReferences();
         // fill in the filesWithDependencies map
         for (int i = 0;i < allFiles.length; i++) {

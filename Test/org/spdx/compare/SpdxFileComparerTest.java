@@ -17,15 +17,16 @@
 */
 package org.spdx.compare;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -34,11 +35,14 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author Gary O'Neall
@@ -49,8 +53,7 @@ public class SpdxFileComparerTest {
 	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample.rdf";
 	private static final String STD_LIC_ID_CC0 = "CC-BY-1.0";
 	private static final String STD_LIC_ID_MPL11 = "MPL-1.1";
-	HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>> LICENSE_XLATION = 
-			new HashMap<SpdxDocument, HashMap<SpdxDocument, HashMap<String, String>>>();
+	Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> LICENSE_XLATION = Maps.newHashMap();
 	File testRDFFile;
 	SpdxDocument DOCA;
 	SpdxDocument DOCB;
@@ -67,13 +70,11 @@ public class SpdxFileComparerTest {
 		String uri2 = "http://doc/uri2";
 		SpdxDocumentContainer containerB = new SpdxDocumentContainer(uri2);
 		DOCB = containerB.getSpdxDocument();
-		HashMap<SpdxDocument, HashMap<String, String>> bmap = 
-				new HashMap<SpdxDocument, HashMap<String, String>>();
-		bmap.put(DOCB, new HashMap<String, String>());
+		Map<SpdxDocument, Map<String, String>> bmap = Maps.newHashMap();
+		bmap.put(DOCB, Maps.<String, String>newHashMap());
 		LICENSE_XLATION.put(DOCA, bmap);
-		HashMap<SpdxDocument, HashMap<String, String>> amap = 
-				new HashMap<SpdxDocument, HashMap<String, String>>();
-		amap.put(DOCA, new HashMap<String, String>());
+		Map<SpdxDocument, Map<String, String>> amap = Maps.newHashMap();
+		amap.put(DOCA, Maps.<String, String>newHashMap());
 		LICENSE_XLATION.put(DOCB, amap);
 	}
 	/**

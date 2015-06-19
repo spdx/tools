@@ -18,7 +18,8 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -27,6 +28,7 @@ import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -146,10 +148,10 @@ public class SpdxElement extends RdfModelObject {
 	}
 	
 	/**
-	 * Add the name of the element to all strings in the arraylist
+	 * Add the name of the element to all strings in the list
 	 * @param warnings
 	 */
-	protected void addNameToWarnings(ArrayList<String> warnings) {
+	protected void addNameToWarnings(List<String> warnings) {
 		if (warnings == null) {
 			return;
 		}
@@ -347,7 +349,7 @@ public class SpdxElement extends RdfModelObject {
 		return clonedAnnotations;
 	}
 	
-	protected Relationship[] cloneRelationships(HashMap<String, SpdxElement> clonedElementIds) {
+	protected Relationship[] cloneRelationships(Map<String, SpdxElement> clonedElementIds) {
 		if (this.relationships == null) {
 			return null;
 		}
@@ -360,7 +362,7 @@ public class SpdxElement extends RdfModelObject {
 	
 	@Override
 	public SpdxElement clone() {
-		return clone(new HashMap<String, SpdxElement>());
+		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
 	
 	/**
@@ -369,7 +371,7 @@ public class SpdxElement extends RdfModelObject {
 	 * @param clonedElementIds element ID's fo all elements which have been cloned
 	 * @return
 	 */
-	public SpdxElement clone(HashMap<String, SpdxElement> clonedElementIds) {
+	public SpdxElement clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return clonedElementIds.get(this.getId());
 		}
