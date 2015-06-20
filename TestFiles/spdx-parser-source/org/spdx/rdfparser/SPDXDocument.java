@@ -19,6 +19,7 @@ package org.spdx.rdfparser;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -57,7 +58,7 @@ public class SPDXDocument implements SpdxRdfConstants {
 	public static final String CURRENT_SPDX_VERSION = "SPDX-1.0";
 	public static final String CURRENT_IMPLEMENTATION_VERSION = "0.9.4";
 	
-	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
+	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);

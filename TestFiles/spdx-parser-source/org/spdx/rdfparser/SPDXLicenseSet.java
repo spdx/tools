@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -35,7 +36,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 	
-	protected HashSet<SPDXLicenseInfo> licenseInfos = new HashSet<SPDXLicenseInfo>();
+	protected Set<SPDXLicenseInfo> licenseInfos = Sets.newHashSet();
 
 	/**
 	 * @param model
