@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
 
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.iri.IRIFactory;
 
 /**
@@ -31,7 +32,7 @@ public class SpdxVerificationHelper {
 	
 	static IRIFactory iriFactory = IRIFactory.semanticWebImplementation();
 
-	static HashSet<String> VALID_FILE_TYPES = new HashSet<String>();
+	static Set<String> VALID_FILE_TYPES = Sets.newHashSet();
 	
 	static {
 		VALID_FILE_TYPES.add("SOURCE");		VALID_FILE_TYPES.add("BINARY");

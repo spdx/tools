@@ -40,7 +40,7 @@ public class VerificationCodeGeneratorTest {
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"DOAPProject.java",
 		"TestFiles"+File.separator+"spdx-parser-source"+File.separator+"org"+File.separator+"spdx"+File.separator+"rdfparser"+File.separator+"SPDXFile.java"
 	};
-	private static final Object SHA1_RESULT = "8615f031775407c75a5153e9377fdd3faf163e1a";
+	private static final Object SHA1_RESULT = "55673bd604a263fdb100ad9c6140105a0a0a5e37";
 	
 	private static String[] SPDX_FILE_NAMES = new String[] {
 		"file/path/abc-not-skipped.java", "file/path/skipped.spdx", "file/path/not-skipped"

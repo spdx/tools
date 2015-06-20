@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -32,6 +32,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -59,7 +60,7 @@ public class ListedLicenses implements IModelContainer {
 	
 	private Model listedLicenseModel = null;
 	
-	HashSet<String> listdLicenseIds = null;
+	Set<String> listdLicenseIds = null;
 	
 	Map<String, SpdxListedLicense> listedLicenseCache = null;
 	Map<Node, SpdxListedLicense> listedLicenseNodeCache = Maps.newHashMap();
@@ -384,7 +385,7 @@ public class ListedLicenses implements IModelContainer {
         listedLicenseModificationLock.writeLock().lock();
         try {
             listedLicenseCache = Maps.newHashMap(); // clear the cache
-            listdLicenseIds = new HashSet<String>(); //Clear the listed license IDs to avoid stale licenses.
+            listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
             Model stdLicenseModel = getListedLicenseModel();
             Node p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();

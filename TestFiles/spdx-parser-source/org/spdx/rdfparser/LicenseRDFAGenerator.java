@@ -28,6 +28,8 @@ import java.util.Iterator;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
+import com.google.common.collect.Sets;
+
 /**
  * Converts a spreadsheet containing SPDX License information into RDFA 
  * HTML pages describing the licenses.
@@ -35,7 +37,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  *
  */
 public class LicenseRDFAGenerator {
-	static final HashSet<Character> INVALID_FILE_CHARS = new HashSet<Character>();
+	static final Set<Character> INVALID_FILE_CHARS = Sets.newHashSet();
 
 	static { 	
 
@@ -45,7 +47,7 @@ public class LicenseRDFAGenerator {
 		INVALID_FILE_CHARS.add(';'); INVALID_FILE_CHARS.add(':');
 		INVALID_FILE_CHARS.add('\''); INVALID_FILE_CHARS.add('"'); INVALID_FILE_CHARS.add('|');
 		INVALID_FILE_CHARS.add('\t'); INVALID_FILE_CHARS.add('?'); INVALID_FILE_CHARS.add('&');
-		INVALID_FILE_CHARS.add('³');
+		INVALID_FILE_CHARS.add('ï¿½');
 	}
 	static int MIN_ARGS = 2;
 	static int MAX_ARGS = 2;
