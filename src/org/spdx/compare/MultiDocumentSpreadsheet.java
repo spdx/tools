@@ -20,9 +20,9 @@ package org.spdx.compare;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -387,7 +387,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	 * @throws SpreadsheetException 
 	 */
 	public void importVerificationErrors(
-			ArrayList<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {
+			List<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {
 		this.verificationSheet.importVerificationErrors(verificationErrors, docNames);
 		this.verificationSheet.resizeRows();
 	}

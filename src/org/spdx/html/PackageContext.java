@@ -16,7 +16,6 @@
 */
 package org.spdx.html;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,6 +27,8 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
+
+import com.google.common.collect.Lists;
 
 /**
  * Context for SPDX Package
@@ -139,7 +140,7 @@ public class PackageContext {
 	
 	public List<String> checksum() {
 		if (pkg != null) {
-			ArrayList<String> retval = new ArrayList<String>();
+			List<String> retval = Lists.newArrayList();
 
 			try {
 				Checksum[] checksums = pkg.getChecksums();
@@ -215,7 +216,7 @@ public class PackageContext {
 	}
 	
 	public List<String> licenseInfoFromFiles() {
-		ArrayList<String> retval = new ArrayList<String>();
+		List<String> retval = Lists.newArrayList();
 		if (pkg != null) {
 			AnyLicenseInfo[] licenseInfos = null;
 			licenseInfos = pkg.getLicenseInfoFromFiles();
@@ -237,7 +238,7 @@ public class PackageContext {
 	}
 	
 	public List<ElementContext> hasFile() {
-		ArrayList<ElementContext> retval = new ArrayList<ElementContext>();
+		List<ElementContext> retval = Lists.newArrayList();
 		if (pkg != null) {
 			SpdxFile[] files;
 			try {
