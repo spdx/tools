@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -341,7 +340,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return null;
 		}
-		ArrayList<String> retval = new ArrayList<String>();
+		List<String> retval = Lists.newArrayList();
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -509,7 +508,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return null;
 		}
-		ArrayList<Annotation> retval = new ArrayList<Annotation>();
+		List<Annotation> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -532,7 +531,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return null;
 		}
-		ArrayList<Relationship> retval = new ArrayList<Relationship>();
+		List<Relationship> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -665,7 +664,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return new AnyLicenseInfo[0];
 		}
-		ArrayList<AnyLicenseInfo> retval = new ArrayList<AnyLicenseInfo>();
+		List<AnyLicenseInfo> retval = Lists.newArrayList();
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -703,7 +702,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return new Checksum[0];
 		}
-		ArrayList<Checksum> retval = new ArrayList<Checksum>();
+		List<Checksum> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -794,7 +793,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return new DoapProject[0];
 		}
-		ArrayList<DoapProject> retval = new ArrayList<DoapProject>();
+		List<DoapProject> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -854,7 +853,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		ArrayList<String> retval = new ArrayList<String>();
+		List<String> retval = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().isURI()) {				
@@ -971,7 +970,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return new ExternalDocumentRef[0];
 		}
 		Model model = extDocModelContainer.getModel();
-		ArrayList<ExternalDocumentRef> retval = new ArrayList<ExternalDocumentRef>();
+		List<ExternalDocumentRef> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(nodeContainingExternalRefs, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -1032,7 +1031,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return new SPDXReview[0];
 		}
-		ArrayList<SPDXReview> retval = new ArrayList<SPDXReview>();
+		List<SPDXReview> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	

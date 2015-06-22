@@ -16,11 +16,13 @@
 */
 package org.spdx.rdfparser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -202,7 +204,7 @@ public class TestSPDXFile {
 		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
 				COMPLEX_LICENSE, seenLic, "License comments", 
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
-		ArrayList<String> verify = file.verify();
+		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
 		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		pkgResource.addProperty(p, fileResource);
@@ -455,7 +457,7 @@ public class TestSPDXFile {
 		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
 				COMPLEX_LICENSE, seenLic, "License comments", 
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
-		ArrayList<String> verify = file.verify();
+		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
 
 		// clone without a model assigned to the original file
@@ -502,7 +504,7 @@ public class TestSPDXFile {
 		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
 				COMPLEX_LICENSE, seenLic, "License comments", 
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
-		ArrayList<String> verify = file.verify();
+		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
 		
 		model = ModelFactory.createDefaultModel();

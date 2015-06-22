@@ -16,8 +16,9 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -244,8 +245,8 @@ public class SPDXReview {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		String reviewer = this.getReviewer();
 		if (reviewer == null || reviewer.isEmpty()) {
 			retval.add("Missing required reviewer");

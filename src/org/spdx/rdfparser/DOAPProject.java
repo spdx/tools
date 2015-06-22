@@ -16,8 +16,9 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -191,8 +192,8 @@ public class DOAPProject implements Cloneable {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> verify() {
-		return new ArrayList<String>();	// anything to verify?
+	public List<String> verify() {
+		return Lists.newArrayList();	// anything to verify?
 	}
 
 	/**

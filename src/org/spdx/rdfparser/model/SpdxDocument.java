@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
@@ -367,7 +366,7 @@ public class SpdxDocument extends SpdxElement {
 			if (creator == null) {
 				retval.add("Missing required Creator");
 			} else {
-				ArrayList<String> creatorVerification = creator.verify();
+				List<String> creatorVerification = creator.verify();
 				retval.addAll(creatorVerification);
 			}
 		} catch (InvalidSPDXAnalysisException e) {
@@ -378,7 +377,7 @@ public class SpdxDocument extends SpdxElement {
 			SPDXReview[] reviews = this.getReviewers();
 			if (reviews != null) {
 				for (int i = 0; i < reviews.length; i++) {
-					ArrayList<String> reviewerVerification = reviews[i].verify();
+					List<String> reviewerVerification = reviews[i].verify();
 					retval.addAll(reviewerVerification);
 				}
 			}

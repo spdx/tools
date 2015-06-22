@@ -16,12 +16,12 @@
 */
 package org.spdx.rdfparser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -79,7 +79,7 @@ public class TestSPDXReview {
 			assertEquals(TEST_REVIEWS[i].getReviewer(), comp.getReviewer());
 			assertEquals(TEST_REVIEWS[i].getReviewDate(), comp.getReviewDate());
 			assertEquals(TEST_REVIEWS[i].getComment(), comp.getComment());
-			ArrayList<String> verify = comp.verify();
+			List<String> verify = comp.verify();
 			assertEquals(0, verify.size());
 		}
 	}
@@ -104,7 +104,7 @@ public class TestSPDXReview {
 			assertEquals(newReviewers[i], comp.getReviewer());
 			assertEquals(TEST_REVIEWS[i].getReviewDate(), comp.getReviewDate());
 			assertEquals(TEST_REVIEWS[i].getComment(), comp.getComment());
-			ArrayList<String> verify = comp.verify();
+			List<String> verify = comp.verify();
 			assertEquals(0, verify.size());
 		}
 	}
@@ -129,7 +129,7 @@ public class TestSPDXReview {
 			assertEquals(TEST_REVIEWS[i].getReviewer(), comp.getReviewer());
 			assertEquals(newReviewDates[i], comp.getReviewDate());
 			assertEquals(TEST_REVIEWS[i].getComment(), comp.getComment());
-			ArrayList<String> verify = comp.verify();
+			List<String> verify = comp.verify();
 			assertEquals(0, verify.size());
 		}
 	}
@@ -155,7 +155,7 @@ public class TestSPDXReview {
 			assertEquals(TEST_REVIEWS[i].getReviewer(), comp.getReviewer());
 			assertEquals(TEST_REVIEWS[i].getReviewDate(), comp.getReviewDate());
 			assertEquals(newComments[i], comp.getComment());
-			ArrayList<String> verify = comp.verify();
+			List<String> verify = comp.verify();
 			assertEquals(0, verify.size());
 		}
 	}

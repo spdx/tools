@@ -16,9 +16,10 @@
 */
 package org.spdx.rdfparser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -168,7 +169,7 @@ public class TestDOAPProject {
 	
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
-		ArrayList<String> verify;
+		List<String> verify;
 		for (int i = 0; i < TEST_PROJECTS.length; i++) {
 			verify = TEST_PROJECTS[i].verify();
 			assertEquals(0, verify.size());

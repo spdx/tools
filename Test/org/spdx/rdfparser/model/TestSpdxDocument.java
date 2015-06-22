@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -44,6 +43,7 @@ import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -232,7 +232,7 @@ public class TestSpdxDocument {
 		doc.setExternalDocumentRefs(externalDocumentRefs);
 		doc.setExtractedLicenseInfos(extractedLicenseInfos);
 		doc.setName(DOC_NAME1);
-		ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+		List<Relationship> relationships = Lists.newArrayList();
 		relationships.add(RELATIONSHIP1);
 		relationships.add(RELATIONSHIP2);
 		doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
@@ -301,7 +301,7 @@ public class TestSpdxDocument {
 			doc.setExtractedLicenseInfos(extractedLicenseInfos);
 			doc.setName(DOC_NAME1);
 
-			ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+			List<Relationship> relationships = Lists.newArrayList();
 			relationships.add(RELATIONSHIP1);
 			relationships.add(RELATIONSHIP2);
 			doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));

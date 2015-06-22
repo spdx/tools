@@ -17,12 +17,14 @@
 package org.spdx.tools;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.VerificationCodeGenerator;
+
+import com.google.common.collect.Lists;
 
 /**
  * Generates a verification code for a specific directory
@@ -75,7 +77,7 @@ public class GenerateVerificationCode {
 	 */
 	private static File[] collectSkippedFiles(String skippedRegex, File dir) {
 		Pattern skippedPattern = Pattern.compile(skippedRegex);
-		ArrayList<File> skippedFiles = new ArrayList<File>();
+		List<File> skippedFiles = Lists.newArrayList();
 		collectSkippedFiles(skippedPattern, skippedFiles, dir.getPath(), dir);
 		File[] retval = new File[skippedFiles.size()];
 		retval = skippedFiles.toArray(retval);
@@ -91,7 +93,7 @@ public class GenerateVerificationCode {
 	 * @return
 	 */
 	private static void collectSkippedFiles(Pattern skippedPattern,
-			ArrayList<File> skippedFiles, String rootPath, File dir) {
+			List<File> skippedFiles, String rootPath, File dir) {
 		if (dir.isFile()) {
 			String relativePath = dir.getPath().substring(rootPath.length()+1);
 			if (skippedPattern.matcher(relativePath).matches()) {

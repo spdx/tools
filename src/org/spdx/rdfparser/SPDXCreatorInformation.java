@@ -16,8 +16,9 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -127,7 +128,7 @@ public class SPDXCreatorInformation {
 		Node p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CREATION_CREATOR).asNode();
 		Triple m = Triple.createMatch(creatorNode, p, null);
 		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
-		ArrayList<String> alCreators = new ArrayList<String>();
+		List<String> alCreators = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			alCreators.add(t.getObject().toString(false));
@@ -321,8 +322,8 @@ public class SPDXCreatorInformation {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		String[] creators = this.getCreators();
 		if (creators == null || creators.length == 0) {
 			retval.add("Missing required creators");

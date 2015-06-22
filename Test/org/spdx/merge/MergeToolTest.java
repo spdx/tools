@@ -20,7 +20,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -35,6 +35,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
@@ -156,7 +157,7 @@ public class MergeToolTest {
 	
 	private SpdxFile[] createExpectedFiles(
 			SpdxDocument masterDoc, SpdxDocument firstMergeDoc, SpdxDocument secondMergeDoc) throws InvalidSPDXAnalysisException{
-		ArrayList<SpdxFile> retval = new ArrayList<SpdxFile>();
+		List<SpdxFile> retval = Lists.newArrayList();
 		SpdxFile[] masterFiles = masterDoc.getSpdxPackage().getFiles();
 		SpdxFile[] firstDocFiles = firstMergeDoc.getSpdxPackage().getFiles();
 		SpdxFile[] secondDocFiles = secondMergeDoc.getSpdxPackage().getFiles();

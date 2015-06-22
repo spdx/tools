@@ -16,8 +16,9 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -35,7 +36,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SpdxPackageVerificationCode {
 
 	private String value;
-	private ArrayList<String> excludedFileNames = new ArrayList<String>();
+	private List<String> excludedFileNames = Lists.newArrayList();
 	private Model model;
 	private Node verificationCodeNode;
 	private Resource verificationCodeResource;
@@ -151,8 +152,8 @@ public class SpdxPackageVerificationCode {
 		}
 	}
 	
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		String value = this.getValue();
 		if (value == null || value.isEmpty()) {
 			retval.add("Missing required verification code value");
