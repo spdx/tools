@@ -18,20 +18,21 @@ package org.spdx.merge;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.JavaSha1ChecksumGenerator;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.VerificationCodeGenerator;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.SpdxPackageVerificationCode;
-import org.spdx.rdfparser.VerificationCodeGenerator;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
+import com.google.common.collect.Lists;
 
 /**
  * Application to merge package information from input SPDX documents and file information merging result.
@@ -67,7 +68,7 @@ public class SpdxPackageInfoMerger {
 		public List <SpdxPackage> mergePackagesInfo(SpdxFile[] fileMergeResult)
 				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
 			
-			List<SpdxPackage> retval = new ArrayList<SpdxPackage>(clonePackages(packagesResult));
+			List<SpdxPackage> retval = Lists.newArrayList(clonePackages(packagesResult));
 			
 			for(int i = 0; i < subDocs.length; i++){				
 				List<SpdxPackage> subPackagesInfo = subDocs[i].getDocumentContainer().findAllPackages();
@@ -80,8 +81,9 @@ public class SpdxPackageInfoMerger {
 	                tempPackage = subPackagesInfo.get(p);
 	                
 	                for(int q = 0; q < retval.size(); q++){
-	                	if(retval.get(q).getName().equalsIgnoreCase(tempPackage.getName()))
-	                		foundNameMatch = true;
+	                	if(retval.get(q).getName().equalsIgnoreCase(tempPackage.getName())) {
+                            foundNameMatch = true;
+                        }
 	                	if(retval.get(q).getSha1().equals(tempPackage.getSha1())){
 	                		foundSha1Match = true;
 	                		masterPackage = retval.get(q);
@@ -98,13 +100,14 @@ public class SpdxPackageInfoMerger {
 	                	//process to merge license info from file
 	                	 AnyLicenseInfo[] masterLicFromFile = masterPackage.getLicenseInfoFromFiles();
 	                	 AnyLicenseInfo[] licFromFile = checkLicenseFromFile(subDocs[i],tempPackage);
-	                	 ArrayList <AnyLicenseInfo> licList = new ArrayList<AnyLicenseInfo> (Arrays.asList(masterLicFromFile));
+	                	 ArrayList <AnyLicenseInfo> licList = Lists.newArrayList(masterLicFromFile);
 	                	 for(int g = 0; g < licFromFile.length; g++){
 	                		 for(int d = 0; d < licList.size(); d++){
-	                			 if(licList.get(d).equals(licFromFile[g]))
-	                				 break;
-	                			 else
-	                				 licList.add(licFromFile[g]);
+	                			 if(licList.get(d).equals(licFromFile[g])) {
+                                    break;
+                                } else {
+                                    licList.add(licFromFile[g]);
+                                }
 	                		 }
 	                	 }
 	                	 AnyLicenseInfo[] mergedLicFromFile = licList.toArray(new AnyLicenseInfo[licList.size()]);
@@ -197,7 +200,7 @@ public class SpdxPackageInfoMerger {
 		 * @return clonedPackagesArray
 		 */
 		public List<SpdxPackage> clonePackages(List<SpdxPackage> packagesList){
-			List<SpdxPackage> clonedPackagesList = new ArrayList<SpdxPackage>();
+			List<SpdxPackage> clonedPackagesList = Lists.newArrayList();
 			for(int h = 0; h < packagesList.size(); h++){
 				clonedPackagesList.add(packagesList.get(h).clone());
 			}
@@ -249,7 +252,7 @@ public class SpdxPackageInfoMerger {
 		 * @throws InvalidSPDXAnalysisException
 		 */
 		public String[] collectSkippedFiles(SpdxPackage main, SpdxPackage sub ) throws InvalidSPDXAnalysisException{
-			ArrayList<String> excludedFileNamesList = new ArrayList<String>();
+			List<String> excludedFileNamesList = Lists.newArrayList();
 			String[] retval = sub.getPackageVerificationCode().getExcludedFileNames();
 			String[] skippedFileInMain = main.getPackageVerificationCode().getExcludedFileNames();
 			
@@ -258,10 +261,10 @@ public class SpdxPackageInfoMerger {
 				return excludedFileNamesArray;
 			}
 			else if(skippedFileInMain.length != 0){
-				excludedFileNamesList = new ArrayList<String>(Arrays.asList(skippedFileInMain));
+				excludedFileNamesList = Lists.newArrayList(skippedFileInMain);
 			}
 			else if(excludedFileNamesList.isEmpty() && retval.length != 0){
-				excludedFileNamesList = new ArrayList<String>(Arrays.asList(retval));
+				excludedFileNamesList = Lists.newArrayList(retval);
 			}
 			else{
 					for(int k = 0; k < retval.length; k++){

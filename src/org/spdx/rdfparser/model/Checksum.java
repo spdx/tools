@@ -16,8 +16,8 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -27,6 +27,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -202,8 +203,8 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		if (this.algorithm == null) {
 			retval.add("Missing required algorithm");
 		}

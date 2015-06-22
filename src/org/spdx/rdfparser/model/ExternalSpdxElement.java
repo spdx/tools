@@ -17,7 +17,7 @@
 package org.spdx.rdfparser.model;
 
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.IModelContainer;
@@ -25,6 +25,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 /**
  * This is an SPDX element which is in an external document.
@@ -117,9 +118,9 @@ public class ExternalSpdxElement extends SpdxElement {
 	}
 	
 	@Override
-	public ArrayList<String> verify() {
+	public List<String> verify() {
 		// we don't want to call super.verify since we really don't require those fields
-		ArrayList<String> retval = new ArrayList<String>();
+		List<String> retval = Lists.newArrayList();
 		String id = this.getId();
 		if (id == null) {
 			retval.add("Missing required ID for external SPDX element");

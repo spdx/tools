@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -24,6 +24,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -165,8 +166,8 @@ public class DoapProject extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();	
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();	
 		if (this.homePage != null && !this.homePage.isEmpty()) {
 			if (!SpdxVerificationHelper.isValidUri(homePage)) {
 				retval.add("Invalid project home page - not a URL");

@@ -18,6 +18,14 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.regex.Matcher;
+
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -26,14 +34,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-
-import java.util.regex.Matcher;
-
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 
 /**
@@ -1103,7 +1103,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			SPDXReview[] reviews = this.getReviewers();
 			if (reviews != null) {
 				for (int i = 0; i < reviews.length; i++) {
-					ArrayList<String> reviewerVerification = reviews[i].verify();
+					List<String> reviewerVerification = reviews[i].verify();
 					retval.addAll(reviewerVerification);
 				}
 			}
@@ -1115,7 +1115,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			ExtractedLicenseInfo[] extractedLicInfos = this.getExtractedLicenseInfos();
 			if (extractedLicInfos != null) {
 				for (int i = 0; i < extractedLicInfos.length; i++) {
-					ArrayList<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
+					List<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
 					retval.addAll(extractedLicInfoVerification);
 				}
 			}
@@ -1731,7 +1731,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return the model
 	 */
-	public Model getModel() {
+	@Override
+    public Model getModel() {
 		return model;
 	}
 
@@ -1851,7 +1852,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return Document namespace
 	 */
-	public String getDocumentNamespace() {
+	@Override
+    public String getDocumentNamespace() {
 		return this.documentNamespace;
 	}
 	

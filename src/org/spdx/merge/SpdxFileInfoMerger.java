@@ -17,13 +17,14 @@
 package org.spdx.merge;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
+
+import com.google.common.collect.Lists;
 
 /**
  * Application to merge SPDX files information into one unique result. 
@@ -57,7 +58,7 @@ public class SpdxFileInfoMerger{
 			List <SpdxFile> masterFileInfo = master.getDocumentContainer().findAllFiles();
 			
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
-			List<SpdxFile> retval = new ArrayList<SpdxFile>((cloneFiles(masterFileInfo)));
+			List<SpdxFile> retval = Lists.newArrayList((cloneFiles(masterFileInfo)));
 			
 			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
@@ -143,7 +144,7 @@ public class SpdxFileInfoMerger{
 	 * @return
 	 */
 	public DoapProject[] mergeDOAPInfo(DoapProject[] masterArtifactOf, DoapProject[] subArtifactOf){
-		ArrayList<DoapProject> retval = new ArrayList<DoapProject>(Arrays.asList(masterArtifactOf));
+		List<DoapProject> retval = Lists.newArrayList(masterArtifactOf);
 		
 		for(int l = 0; l < subArtifactOf.length; l++){
 			boolean foundMatch = false;
@@ -182,7 +183,7 @@ public class SpdxFileInfoMerger{
 	 * @return clonedFilesArray
 	 */
 	public SpdxFile[] cloneList(List<SpdxFile> filesList){
-		List<SpdxFile> clonedFilesList = new ArrayList<SpdxFile>();
+		List<SpdxFile> clonedFilesList = Lists.newArrayList();
 		for(int h = 0; h < filesList.size(); h++){
 			clonedFilesList.add(filesList.get(h));
 		}

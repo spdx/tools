@@ -16,8 +16,8 @@
 */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -25,6 +25,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -79,7 +80,7 @@ public class LicenseExpressionParser {
 	 */
 	private static String[] tokenizeExpression(String expression) {
 		String[] startTokens = expression.split("\\s");
-		ArrayList<String> endTokens = new ArrayList<String>();
+		List<String> endTokens = Lists.newArrayList();
 		for (int i = 0; i < startTokens.length; i++) {
 			if (!startTokens[i].isEmpty()) {
 				processPreToken(startTokens[i], endTokens);
@@ -93,7 +94,7 @@ public class LicenseExpressionParser {
 	 * @param tokenList
 	 */
 	private static void processPreToken(String preToken,
-			ArrayList<String> tokenList) {
+			List<String> tokenList) {
 		if (preToken.isEmpty()) {
 			return;
 		} else if (preToken.startsWith("(")) {

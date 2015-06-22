@@ -18,7 +18,7 @@
 package org.spdx.tools;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.compare.MultiDocumentSpreadsheet;
 import org.spdx.compare.SpdxCompareException;
@@ -65,7 +65,7 @@ public class CompareMultpleSpdxDocs {
 		SpdxDocument[] compareDocs = new SpdxDocument[args.length-1];
 		String[] docNames = new String[args.length-1];
 		@SuppressWarnings("unchecked")
-		ArrayList<String>[] verificationErrors = new ArrayList[args.length-1];
+		List<String>[] verificationErrors = new List[args.length-1];
 		for (int i = 1; i < args.length; i++) {
 			try {
 				compareDocs[i-1] = CompareSpdxDocs.openRdfOrTagDoc(args[i]);
