@@ -17,9 +17,9 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -37,6 +37,7 @@ import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -68,12 +69,12 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	
 	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.0";
 	
-	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
+	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 	
 	/**
 	 * Keep track of all existing SPDX element references
 	 */
-	HashSet<String> spdxRefs = new HashSet<String>();
+	Set<String> spdxRefs = Sets.newHashSet();
 	
 	/**
 	 * Map of license ID to extracted license info

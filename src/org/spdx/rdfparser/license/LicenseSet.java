@@ -17,8 +17,8 @@
 package org.spdx.rdfparser.license;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -26,6 +26,7 @@ import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -40,7 +41,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  */
 public abstract class LicenseSet extends AnyLicenseInfo {
 	
-	protected HashSet<AnyLicenseInfo> licenseInfos = new HashSet<AnyLicenseInfo>();
+	protected Set<AnyLicenseInfo> licenseInfos = Sets.newHashSet();
 
 	/**
 	 * @param modelContainer container which includes the license

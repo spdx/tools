@@ -20,10 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.html.ExceptionHtml;
@@ -44,6 +44,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.github.mustachejava.MustacheException;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 /**
@@ -55,7 +56,7 @@ import com.google.common.io.Files;
  *
  */
 public class LicenseRDFAGenerator {
-	static final HashSet<Character> INVALID_FILENAME_CHARS = new HashSet<Character>();
+	static final Set<Character> INVALID_FILENAME_CHARS = Sets.newHashSet();
 
 	static { 	
 
@@ -68,7 +69,7 @@ public class LicenseRDFAGenerator {
 		INVALID_FILENAME_CHARS.add('³');
 	}
 	
-	static final HashSet<Character> INVALID_TEXT_CHARS = new HashSet<Character>();
+	static final Set<Character> INVALID_TEXT_CHARS = Sets.newHashSet();
 	
 	static {
 		INVALID_TEXT_CHARS.add('\uFFFD');
@@ -218,7 +219,7 @@ public class LicenseRDFAGenerator {
 			File htmlFolder, File templateFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
-		HashSet<String> licenseIds = new HashSet<String>();
+		Set<String> licenseIds = Sets.newHashSet();
 		try {
 			Iterator<SpdxListedLicense> licIter = licenseProvider.getLicenseIterator();
 			while (licIter.hasNext()) {

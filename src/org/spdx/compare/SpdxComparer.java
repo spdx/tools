@@ -20,11 +20,11 @@ package org.spdx.compare;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
@@ -45,6 +45,7 @@ import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Performs a comparison between two or more SPDX documents and holds the results of the comparison
@@ -455,8 +456,8 @@ public class SpdxComparer {
 	 * @param files
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private void addAllRelatedFiles(SpdxElement element, HashSet<SpdxFile> files,
-			HashSet<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
+	private void addAllRelatedFiles(SpdxElement element, Set<SpdxFile> files,
+			Set<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
 		if (element == null || visitedElements.contains(element)) {
 			return;
 		}
@@ -490,8 +491,8 @@ public class SpdxComparer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private void addAllRelatedPackages(SpdxElement element, 
-			HashSet<SpdxPackage> pkgs,
-			HashSet<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
+			Set<SpdxPackage> pkgs,
+			Set<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
 		if (element == null || visitedElements.contains(element)) {
 			return;
 		}
@@ -519,13 +520,13 @@ public class SpdxComparer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected SpdxPackage[] collectAllPackages(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
-		HashSet<SpdxPackage> retval = new HashSet<SpdxPackage>();
+		Set<SpdxPackage> retval = Sets.newHashSet();
 		SpdxItem[] items = spdxDocument.getDocumentDescribes();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] instanceof SpdxPackage) {
 				retval.add((SpdxPackage)items[i]);
 			}
-			addAllRelatedPackages(items[i], retval, new HashSet<SpdxElement>());
+			addAllRelatedPackages(items[i], retval, Sets.<SpdxElement>newHashSet());
 		}	
 		return retval.toArray(new SpdxPackage[retval.size()]);
 	}
@@ -538,7 +539,7 @@ public class SpdxComparer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected SpdxFile[] collectAllFiles(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
-		HashSet<SpdxFile> retval = new HashSet<SpdxFile>();
+		Set<SpdxFile> retval = Sets.newHashSet();
 		SpdxItem[] items = spdxDocument.getDocumentDescribes();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] instanceof SpdxFile) {
@@ -549,7 +550,7 @@ public class SpdxComparer {
 					retval.add(pkgFiles[j]);
 				}
 			}
-			addAllRelatedFiles(items[i], retval, new HashSet<SpdxElement>());
+			addAllRelatedFiles(items[i], retval, Sets.<SpdxElement>newHashSet());
 		}	
 		return retval.toArray(new SpdxFile[retval.size()]);
 	}
@@ -1084,7 +1085,7 @@ public class SpdxComparer {
 			if (stringsA.length != stringsB.length) {
 				return false;
 			}
-			HashSet<Integer> foundIndexes = new HashSet<Integer>();
+			Set<Integer> foundIndexes = Sets.newHashSet();
 			for (int i = 0; i < stringsA.length; i++) {
 				boolean found = false;
 				for (int j = 0; j < stringsB.length; j++) {
@@ -2029,7 +2030,7 @@ public class SpdxComparer {
 		if (elementsA.length != elementsB.length) {
 			return false;
 		}
-		HashSet<Integer> matchedIndexes = new HashSet<Integer>();
+		Set<Integer> matchedIndexes = Sets.newHashSet();
 		for (int i = 0; i < elementsA.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < elementsB.length; j++) {
