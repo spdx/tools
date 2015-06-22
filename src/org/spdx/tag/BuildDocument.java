@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +56,7 @@ import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Translates an tag-value file to a an SPDX Document.
@@ -133,12 +133,12 @@ public class BuildDocument implements TagValueBehavior, Serializable {
      * Tags used in the definition of an annotation
      * Note: does not include the annotator tag since that is the tag that starts the definition
      */
-    private HashSet<String> ANNOTATION_TAGS = new HashSet<String>();
+    private Set<String> ANNOTATION_TAGS = Sets.newHashSet();
     /**
      * Tags used in the definition of a file
      * Note: does not include the annotator tag since that is the tag that starts the definition
      */
-    private HashSet<String> FILE_TAGS = new HashSet<String>();
+    private Set<String> FILE_TAGS = Sets.newHashSet();
     /**
      * Tags used in the definition of a package
      * Note: does not include the annotator tag since that is the tag that starts the definition
@@ -147,8 +147,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
      * Tags used in the definition of an extracted license
      * Note: does not include the annotator tag since that is the tag that starts the definition
      */
-    private HashSet<String> EXTRACTED_LICENSE_TAGS = new HashSet<String>();
-    private HashSet<String> PACKAGE_TAGS = new HashSet<String>();
+    private Set<String> EXTRACTED_LICENSE_TAGS = Sets.newHashSet();
+    private Set<String> PACKAGE_TAGS = Sets.newHashSet();
     private Properties constants;
     private SpdxDocument analysis;
     private DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -34,19 +35,19 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
-	
-	protected HashSet<SPDXLicenseInfo> licenseInfos = new HashSet<SPDXLicenseInfo>();
+
+	protected Set<SPDXLicenseInfo> licenseInfos = Sets.newHashSet();
 
 	/**
 	 * @param model
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXLicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.licenseInfos.add(SPDXLicenseInfoFactory.getLicenseInfoFromModel(model, t.getObject()));
@@ -74,7 +75,7 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 		}
 		return r;
 	}
-	
+
 	public void setSPDXLicenseInfos(SPDXLicenseInfo[] licenseInfos) {
 		this.licenseInfos.clear();
 		if (licenseInfos != null) {
@@ -94,13 +95,13 @@ public abstract class SPDXLicenseSet extends SPDXLicenseInfo {
 			}
 		}
 	}
-	
+
 	public SPDXLicenseInfo[] getSPDXLicenseInfos() {
 		SPDXLicenseInfo[] retval = new SPDXLicenseInfo[this.licenseInfos.size()];
 		retval = this.licenseInfos.toArray(retval);
 		return retval;
-	}	
-	
+	}
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#verify()
 	 */

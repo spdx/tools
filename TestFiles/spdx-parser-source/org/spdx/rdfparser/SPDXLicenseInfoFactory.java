@@ -27,6 +27,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -86,7 +87,7 @@ public class SPDXLicenseInfoFactory {
 	
 	private static Model standardLicenseModel = null;
 	
-static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
+static final Set<String> STANDARD_LICENSE_ID_SET = Sets.newHashSet();
 	
 	static Map<String, SPDXStandardLicense> STANDARD_LICENSES = null;
 	
@@ -94,7 +95,7 @@ static final HashSet<String> STANDARD_LICENSE_ID_SET = new HashSet<String>();
 		loadStdLicenseIDs();		
 	}
 	
-	static final HashSet<String> STANDARD_LICENSE_ID_URLS_SET = new HashSet<String>();
+	static final Set<String> STANDARD_LICENSE_ID_URLS_SET = Sets.newHashSet();
 	
 	static {
 		for (int i = 0; i < STANDARD_LICENSE_IDS.length; i++) {

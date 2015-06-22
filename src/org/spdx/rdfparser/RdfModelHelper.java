@@ -16,11 +16,12 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 /**
  * Static class containing helper methods for implementations of IRdfModel
@@ -53,7 +54,7 @@ public final class RdfModelHelper {
 		if (array1.length != array2.length) {
 			return false;
 		}
-		HashSet<Integer> foundIndexes = new HashSet<Integer>();
+		Set<Integer> foundIndexes = Sets.newHashSet();
 		for (int i = 0; i < array1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < array2.length; j++) {
@@ -117,7 +118,7 @@ public final class RdfModelHelper {
 		if (array1.length != array2.length) {
 			return false;
 		}
-		HashSet<Integer> foundIndexes = new HashSet<Integer>();
+		Set<Integer> foundIndexes = Sets.newHashSet();
 		for (int i = 0; i < array1.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < array2.length; j++) {

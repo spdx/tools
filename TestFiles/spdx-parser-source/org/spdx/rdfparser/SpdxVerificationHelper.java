@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
 
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.iri.IRIFactory;
 
 /**
@@ -28,16 +29,16 @@ import com.hp.hpl.jena.iri.IRIFactory;
  *
  */
 public class SpdxVerificationHelper {
-	
+
 	static IRIFactory iriFactory = IRIFactory.semanticWebImplementation();
 
-	static HashSet<String> VALID_FILE_TYPES = new HashSet<String>();
-	
+	static Set<String> VALID_FILE_TYPES = Sets.newHashSet();
+
 	static {
 		VALID_FILE_TYPES.add("SOURCE");		VALID_FILE_TYPES.add("BINARY");
 		VALID_FILE_TYPES.add("ARCHIVE");	VALID_FILE_TYPES.add("OTHER");
 	}
-	
+
 	static final String[] VALID_CREATOR_PREFIXES = new String[] {"Person:", "Organization:", "Tool:"};
 	static final String[] VALID_ORIGINATOR_SUPPLIER_PREFIXES = new String[] {SpdxRdfConstants.NOASSERTION_VALUE, "Person:", "Organization:"};
 
@@ -45,7 +46,7 @@ public class SpdxVerificationHelper {
 		if (checksum.length() != 40) {
 			return "Invalid number of characters for checksum";
 		}
-		
+
 		for (int i = 0; i < checksum.length(); i++) {
 			char c = checksum.charAt(i);
 			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
@@ -92,7 +93,7 @@ public class SpdxVerificationHelper {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Verifies the originator string
 	 * @param originator
@@ -101,7 +102,7 @@ public class SpdxVerificationHelper {
 	public static String verifyOriginator(String originator) {
 		return verifyOriginatorOrSupplier(originator);
 	}
-	
+
 	/**
 	 * Verifies the supplier String
 	 * @param supplier
@@ -136,7 +137,7 @@ public class SpdxVerificationHelper {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @param creationDate
 	 * @return

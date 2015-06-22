@@ -28,16 +28,18 @@ import java.util.Iterator;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
+import com.google.common.collect.Sets;
+
 /**
- * Converts a spreadsheet containing SPDX License information into RDFA 
+ * Converts a spreadsheet containing SPDX License information into RDFA
  * HTML pages describing the licenses.
  * @author Gary O'Neall
  *
  */
 public class LicenseRDFAGenerator {
-	static final HashSet<Character> INVALID_FILE_CHARS = new HashSet<Character>();
+	static final Set<Character> INVALID_FILE_CHARS = Sets.newHashSet();
 
-	static { 	
+	static {
 
 		INVALID_FILE_CHARS.add('\\'); INVALID_FILE_CHARS.add('/'); INVALID_FILE_CHARS.add('*');
 		INVALID_FILE_CHARS.add('<'); INVALID_FILE_CHARS.add('>'); INVALID_FILE_CHARS.add('[');
@@ -45,11 +47,11 @@ public class LicenseRDFAGenerator {
 		INVALID_FILE_CHARS.add(';'); INVALID_FILE_CHARS.add(':');
 		INVALID_FILE_CHARS.add('\''); INVALID_FILE_CHARS.add('"'); INVALID_FILE_CHARS.add('|');
 		INVALID_FILE_CHARS.add('\t'); INVALID_FILE_CHARS.add('?'); INVALID_FILE_CHARS.add('&');
-		INVALID_FILE_CHARS.add('³');
+		INVALID_FILE_CHARS.add('ï¿½');
 	}
 	static int MIN_ARGS = 2;
 	static int MAX_ARGS = 2;
-	
+
 	static final String CSS_FILE_TEXT = "body { font-family: Tahoma, Verdana, sans-serif; }\n\n.license-text {\n"+
 		"background-color: WhiteSmoke;\nborder: 1px dashed Black;\npadding: 1ex;\n}\n\nh2 {\n"+
 		"border-bottom: 1px solid Gray;\n}\ndt {\nfont-weight: bold;\n}\n\nul {\n"+
@@ -179,7 +181,7 @@ public class LicenseRDFAGenerator {
 				} catch (IOException e) {
 					System.out.println("Warning - error closing HTML template file.  Processing will continue.  Error: "+e.getMessage());
 				}
-			} 
+			}
 			if (reader != null) {
 				try {
 					reader.close();
@@ -209,7 +211,7 @@ public class LicenseRDFAGenerator {
 				stream.close();
 			}
 		}
-		
+
 	}
 	private static String formLicenseHTMLFileName(SPDXStandardLicense license) {
 		StringBuilder sb = new StringBuilder();

@@ -25,8 +25,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -66,6 +66,7 @@ import org.spdx.rdfparser.model.UnitTestHelper;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 
 /**
@@ -903,10 +904,10 @@ public class SpdxComparerTest {
 		SPDXReview[] reviewers3 = new SPDXReview[] {review1, review2, review3};
 		SPDXReview[] reviewers2 = new SPDXReview[] {review2, review3};
 		SPDXReview[] reviewers1 = new SPDXReview[] {review1};
-		HashSet<SPDXReview> in3not1 = new HashSet<SPDXReview>();
+		Set<SPDXReview> in3not1 = Sets.newHashSet();
 		in3not1.add(review2);
 		in3not1.add(review3);
-		HashSet<SPDXReview> in3 = new HashSet<SPDXReview>();
+		Set<SPDXReview> in3 = Sets.newHashSet();
 		for (int i = 0; i < reviewers3.length; i++) {
 			in3.add(reviewers3[i]);
 		}
@@ -1168,7 +1169,7 @@ public class SpdxComparerTest {
 		exLicenses2 = Arrays.copyOf(orig2, orig2.length+2);
 		exLicenses2[orig2.length+0] = lic3_2;
 		exLicenses2[orig2.length+1] = lic1_2;
-		HashSet<String> uniqueLicIds = new HashSet<String>();
+		Set<String> uniqueLicIds = Sets.newHashSet();
 		uniqueLicIds.add(lic2_1.getLicenseId());
 		uniqueLicIds.add(lic4_1.getLicenseId());
 
@@ -1418,7 +1419,7 @@ public class SpdxComparerTest {
 		if (stringsA.length != stringsB.length) {
 			return false;
 		}
-		HashSet<String> sset = new HashSet<String>();
+		Set<String> sset = Sets.newHashSet();
 		for (int i = 0; i < stringsA.length; i++) {
 			sset.add(stringsA[i]);
 		}
@@ -1557,7 +1558,7 @@ public class SpdxComparerTest {
 				creators2, createdDate, creatorComment, licenseListVersion);
 		doc1.setCreationInfo(creationInfo1);
 		doc2.setCreationInfo(creationInfo2);
-		HashSet<String> additionalCreators = new HashSet<String>();
+		Set<String> additionalCreators = Sets.newHashSet();
 		additionalCreators.add(creator2);
 		additionalCreators.add(creator3);
 		comparer.compare(doc1, doc2);

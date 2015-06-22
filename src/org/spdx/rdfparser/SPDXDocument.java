@@ -17,8 +17,16 @@
 package org.spdx.rdfparser;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
 
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
+
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -26,14 +34,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-
-import java.util.regex.Matcher;
-
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 
 /**
@@ -68,7 +68,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.1";
 	
-	static HashSet<String> SUPPORTED_SPDX_VERSIONS = new HashSet<String>();	
+	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
@@ -1731,7 +1731,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return the model
 	 */
-	public Model getModel() {
+	@Override
+    public Model getModel() {
 		return model;
 	}
 
@@ -1851,7 +1852,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return Document namespace
 	 */
-	public String getDocumentNamespace() {
+	@Override
+    public String getDocumentNamespace() {
 		return this.documentNamespace;
 	}
 	

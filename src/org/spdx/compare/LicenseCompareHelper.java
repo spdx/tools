@@ -18,8 +18,8 @@
 package org.spdx.compare;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +35,7 @@ import org.spdx.rdfparser.license.LicenseSet;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Primarily a static class of helper functions for comparing two SPDX licenses
@@ -44,7 +45,7 @@ import com.google.common.collect.Maps;
 public class LicenseCompareHelper {
 	
 	protected static final String TOKEN_DELIM = "\\s";	// white space
-	protected static final HashSet<String> SKIPPABLE_TOKENS = new HashSet<String>();
+	protected static final Set<String> SKIPPABLE_TOKENS = Sets.newHashSet();
 	static {
 		// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 		SKIPPABLE_TOKENS.add("//");		SKIPPABLE_TOKENS.add("/*");
