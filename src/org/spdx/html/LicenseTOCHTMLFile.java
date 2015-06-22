@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.spdx.rdfparser.license.SpdxListedLicense;
@@ -29,6 +29,7 @@ import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -228,8 +229,8 @@ public class LicenseTOCHTMLFile {
 		}
 	}
 	
-	ArrayList<ListedSpdxLicense> listedLicenses = new ArrayList<ListedSpdxLicense>();
-	ArrayList<DeprecatedLicense> deprecatedLicenses = new ArrayList<DeprecatedLicense>();
+	List<ListedSpdxLicense> listedLicenses = Lists.newArrayList();
+	List<DeprecatedLicense> deprecatedLicenses = Lists.newArrayList();
 	
       private int currentRefNumber = 1;
       

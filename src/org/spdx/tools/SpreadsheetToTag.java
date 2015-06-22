@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -30,7 +30,6 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
-import org.spdx.tools.SpreadsheetToRDF;
 import org.spdx.tag.CommonCode;
 
 
@@ -105,7 +104,7 @@ public class SpreadsheetToTag {
 			try {
 				ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
 				SpdxDocument analysis = SpreadsheetToRDF.copySpreadsheetToSPDXAnalysis(ss);
-				ArrayList<String> verify = analysis.verify();
+				List<String> verify = analysis.verify();
 				if (verify.size() > 0) {
 					System.out
 							.println("Warning: The following verification errors were found in the resultant SPDX Document:");

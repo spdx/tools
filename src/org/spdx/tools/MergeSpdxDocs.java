@@ -21,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.compare.SpdxCompareException;
@@ -30,13 +29,12 @@ import org.spdx.merge.SpdxLicenseInfoMerger;
 import org.spdx.merge.SpdxLicenseMapper;
 import org.spdx.merge.SpdxPackageInfoMerger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.model.SpdxDocument;
-import org.spdx.rdfparser.model.SpdxFile;
-import org.spdx.rdfparser.model.SpdxItem;
-import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxDocumentContainer;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
+import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -78,7 +76,7 @@ public class MergeSpdxDocs {
 
 			String[] docNames = new String[args.length-1];
 			@SuppressWarnings("unchecked")
-			ArrayList<String>[] verficationError = new ArrayList[args.length-1];
+			List<String>[] verficationError = new List[args.length-1];
 			
 			for(int i = 0; i < args.length-1; i++){
 				try{

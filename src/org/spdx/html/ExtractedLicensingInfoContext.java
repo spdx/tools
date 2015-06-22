@@ -16,12 +16,13 @@
 */
 package org.spdx.html;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author Source Auditor
@@ -96,7 +97,7 @@ public class ExtractedLicensingInfoContext {
 	}
 	
 	public List<String> crossReferenceUrls() {
-		ArrayList<String> retval = new ArrayList<String>();
+		List<String> retval = Lists.newArrayList();
 		if (this.license != null) {
 			String[] crossRefUrls = this.license.getSeeAlso();
 			if (crossRefUrls != null) {

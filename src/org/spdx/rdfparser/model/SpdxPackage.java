@@ -16,8 +16,8 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
@@ -732,12 +732,12 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	}
 	
 	@Override
-	public ArrayList<String> verify() {
+	public List<String> verify() {
 		String pkgName = name;
 		if (pkgName == null ) {
 			pkgName = "UNKNOWN PACKAGE";
 		}
-		ArrayList<String> retval = super.verify();
+		List<String> retval = super.verify();
 		// summary - nothing really to check
 	
 		// description - nothing really to check
@@ -751,7 +751,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 		// checksum
 		for (int i = 0; i < checksums.length; i++) {
-			ArrayList<String> checksumVerify = checksums[i].verify();
+			List<String> checksumVerify = checksums[i].verify();
 			addNameToWarnings(checksumVerify);
 			retval.addAll(checksumVerify);
 		}
@@ -764,7 +764,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			if (declaredLicense == null) {
 				retval.add("Missing required declared license for package "+pkgName);
 			} else {
-				ArrayList<String> verify = declaredLicense.verify();
+				List<String> verify = declaredLicense.verify();
 				addNameToWarnings(verify);
 				retval.addAll(verify);
 			}				
@@ -778,7 +778,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				retval.add("Missing required package files for "+pkgName);
 			} else {
 				for (int i = 0; i < files.length; i++) {
-					ArrayList<String> verify = files[i].verify();
+					List<String> verify = files[i].verify();
 					addNameToWarnings(verify);
 					retval.addAll(verify);
 				}
@@ -794,7 +794,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			if (verificationCode == null) {
 				retval.add("Missing required package verification code for package "+pkgName);
 			} else {
-				ArrayList<String> verify = verificationCode.verify();
+				List<String> verify = verificationCode.verify();
 				addNameToWarnings(verify);
 				retval.addAll(verify);
 			}

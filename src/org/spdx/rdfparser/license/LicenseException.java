@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.IModelContainer;
@@ -27,6 +27,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -85,7 +86,7 @@ public class LicenseException implements IRdfModel  {
 			this.licenseExceptionText = t.getObject().toString(false);
 		}
 		// seeAlso
-		ArrayList<String> alsourceUrls = new ArrayList<String>();
+		List<String> alsourceUrls = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
 		tripleIter = model.getGraph().find(m);	
@@ -476,8 +477,8 @@ public class LicenseException implements IRdfModel  {
 	}
 
 	@Override
-    public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+    public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		if (this.getLicenseExceptionId() == null || this.getLicenseExceptionId().trim().isEmpty()) {
 			retval.add("Missing required license exception ID");
 		}

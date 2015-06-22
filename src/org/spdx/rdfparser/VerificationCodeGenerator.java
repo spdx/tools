@@ -21,13 +21,14 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
 import org.spdx.rdfparser.model.SpdxFile;
+
+import com.google.common.collect.Lists;
 
 /**
  * Generates a package verification code from a directory of source code or an array of <code>SPDXFile</code>s.  
@@ -68,7 +69,7 @@ public class VerificationCodeGenerator {
 				}
 			}
 		}
-		ArrayList<String> fileChecksums = new ArrayList<String>();
+		List<String> fileChecksums = Lists.newArrayList();
 		for (int i = 0; i < spdxFiles.length; i++) {
 			if (spdxFiles[i] != null && spdxFiles[i].getName() != null && 
 					!skippedFilePathSet.contains(spdxFiles[i].getName())) {
@@ -98,7 +99,7 @@ public class VerificationCodeGenerator {
 				}
 			}
 		}
-		ArrayList<String> fileChecksums = new ArrayList<String>();
+		List<String> fileChecksums = Lists.newArrayList();
 		for (int i = 0; i < spdxFiles.length; i++) {
 			if (spdxFiles[i] != null && spdxFiles[i].getName() != null && 
 					!skippedFilePathSet.contains(spdxFiles[i].getName())) {
@@ -126,7 +127,7 @@ public class VerificationCodeGenerator {
 			String skippedPath = normalizeFilePath(skippedFiles[i].getAbsolutePath().substring(rootLen));
 			skippedFilesPath.add(skippedPath);
 		}
-		ArrayList<String> fileChecksums = new ArrayList<String>();
+		List<String> fileChecksums = Lists.newArrayList();
 		collectFileData(rootOfDirectory, sourceDirectory, fileChecksums, skippedFilesPath);
 		String[] skippedFileNames = new String[skippedFilesPath.size()];
 		Iterator<String> iter = skippedFilesPath.iterator();
@@ -158,7 +159,7 @@ public class VerificationCodeGenerator {
 	 * @throws IOException 
 	 */
 	private void collectFileData(String prefixForRelative, File sourceDirectory,
-			ArrayList<String> fileNameAndChecksums, TreeSet<String> skippedFiles) throws IOException {
+			List<String> fileNameAndChecksums, TreeSet<String> skippedFiles) throws IOException {
 		if (!sourceDirectory.isDirectory()) {
 			return;
 		}

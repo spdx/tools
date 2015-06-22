@@ -16,13 +16,16 @@
 */
 package org.spdx.rdfparser.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -275,7 +278,7 @@ public class TestSpdxFile {
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "0123456789abcdef0123456789abcdef01234567")}, 
 				contributors, fileNotice, artifactOfs);
 		file.setFileDependencies(fileDependencies);
-		ArrayList<String> verify = file.verify();
+		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
 		assertTrue(UnitTestHelper.isArraysEquivalent(fileDependencies, file.getFileDependencies()));
 		Resource fileResource = file.createResource(modelContainer);
@@ -338,7 +341,7 @@ public class TestSpdxFile {
 				COMPLEX_LICENSE, seenLic, copyright, licenseComment,
 				filetypes, checksum, contributors, fileNotice, artifactOfs);
 		file.setFileDependencies(fileDependencies);
-		ArrayList<String> verify = file.verify();
+		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
 		// assign a model to the original, then clone
 		final Model fromModel = ModelFactory.createDefaultModel();

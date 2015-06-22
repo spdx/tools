@@ -16,12 +16,13 @@
 */
 package org.spdx.html;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.model.SpdxDocument;
+
+import com.google.common.collect.Lists;
 
 /**
  * Mustache Context for converting an SPDX Document for use in the SpdxHTMLTemplate
@@ -62,7 +63,7 @@ public class CreatorInfoContext {
 	}
 	
 	public List<String> creator() {
-		ArrayList<String> creators = new ArrayList<String>();
+		List<String> creators = Lists.newArrayList();
 		try {
 			SPDXCreatorInformation creatorInfo = doc.getCreationInfo();
 			if (creatorInfo != null) {

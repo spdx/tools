@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -348,7 +347,7 @@ public class TestLicenseInfoFactory {
 		if (!(li instanceof SpdxListedLicense)) {
 			fail ("Wrong type for standard license");
 		}
-		ArrayList<String> verify = li.verify();
+		List<String> verify = li.verify();
 		assertEquals(0, verify.size());
 		SpdxListedLicense sli = (SpdxListedLicense)li;
 		assertEquals(STD_IDS[0], sli.getLicenseId());
@@ -409,7 +408,7 @@ public class TestLicenseInfoFactory {
 		Resource r = none.createResource(modelContainer);
 		AnyLicenseInfo comp = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, r.asNode());
 		assertEquals(none, comp);
-		ArrayList<String> verify = comp.verify();
+		List<String> verify = comp.verify();
 		assertEquals(0, verify.size());
 		// NOASSERTION_NAME
 		AnyLicenseInfo noAssertion = LicenseInfoFactory.parseSPDXLicenseString(LicenseInfoFactory.NOASSERTION_LICENSE_NAME);

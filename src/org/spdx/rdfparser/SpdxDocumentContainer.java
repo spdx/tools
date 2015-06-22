@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -148,7 +148,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_PACKAGE).asNode();
 		Triple m = Triple.createMatch(this.documentNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		ArrayList<SpdxPackage> describedPackages = new ArrayList<SpdxPackage>();
+		List<SpdxPackage> describedPackages = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			describedPackages.add(new SpdxPackage(this, t.getObject()));
@@ -614,7 +614,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public SpdxFile[] getFileReferences() throws InvalidSPDXAnalysisException {
-		ArrayList<SpdxFile> alFiles = new ArrayList<SpdxFile>();
+		List<SpdxFile> alFiles = Lists.newArrayList();
 		Node rdfTypeNode = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
 		String fileTypeUri = SPDX_NAMESPACE + CLASS_SPDX_FILE;
@@ -699,7 +699,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
 		Node packageTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_PACKAGE).asNode();
 		Triple m = Triple.createMatch(null, rdfTypePredicate, packageTypeObject);
-		ArrayList<SpdxPackage> retval = new ArrayList<SpdxPackage>();
+		List<SpdxPackage> retval = Lists.newArrayList();
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			retval.add((SpdxPackage)SpdxElementFactory.createElementFromModel(this, tripleIter.next().getSubject()));
@@ -712,7 +712,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
 		Node packageTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_FILE).asNode();
 		Triple m = Triple.createMatch(null, rdfTypePredicate, packageTypeObject);
-		ArrayList<SpdxFile> retval = new ArrayList<SpdxFile>();
+		List<SpdxFile> retval = Lists.newArrayList();
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			retval.add((SpdxFile)SpdxElementFactory.createElementFromModel(this, tripleIter.next().getSubject()));
@@ -736,7 +736,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 */
 	public List<SpdxElement> findAllElements() throws InvalidSPDXAnalysisException {
 		// NOTE: This needs to be updated for any new types
-		List<SpdxElement> retval = new ArrayList<SpdxElement>();
+		List<SpdxElement> retval = Lists.newArrayList();
 		retval.add(this.spdxDocument);
 		retval.addAll(this.findAllFiles());
 		retval.addAll(this.findAllPackages());

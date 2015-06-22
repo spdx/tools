@@ -16,34 +16,36 @@
 */
 package org.spdx.rdfparser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-
-import org.spdx.rdfparser.SPDXDocument.SPDXPackage;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxNoneLicense;
-import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
-import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
  * @author Source Auditor
@@ -174,7 +176,7 @@ public class TestSPDXDocument {
 		String createdDate = format.format(new Date());
 		String licenseListVersion = "1.18";
 		SPDXCreatorInformation creator = new SPDXCreatorInformation(testCreatedBy, createdDate, testComment, licenseListVersion);
-		ArrayList<String> verify = creator.verify();
+		List<String> verify = creator.verify();
 		assertEquals(0, verify.size());
 		doc.setCreationInfo(creator);
 		SPDXCreatorInformation result = doc.getCreatorInfo();
@@ -237,7 +239,7 @@ public class TestSPDXDocument {
 		SimpleDateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		String date1 = format.format(new Date());
 		SPDXReview[] testreviewedBy = new SPDXReview[] {new SPDXReview("Person: reviewed By Me", date1, "comment1")};
-		ArrayList<String> verify = testreviewedBy[0].verify();
+		List<String> verify = testreviewedBy[0].verify();
 		assertEquals(0, verify.size());
 		doc.setReviewers(testreviewedBy);
 		SPDXReview[] resultreviewedBy = doc.getReviewers();
@@ -284,7 +286,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -338,7 +340,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -382,7 +384,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoAssertionLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -473,7 +475,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile1 = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				stdLic1, new AnyLicenseInfo[] {nonStdLic1}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile1.verify();
+		List<String> verify = testFile1.verify();
 		assertEquals(0, verify.size());
 		SPDXFile testFile2 = new SPDXFile("filename2", "SOURCE", "1023456789abcdef0123456789abcdef01234567",
 				nonStdLic1, new AnyLicenseInfo[] {nonStdLic1}, "license comment2",
@@ -671,7 +673,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -730,7 +732,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -936,7 +938,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(new SPDXFile[]{testFile});
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -1072,7 +1074,7 @@ public class TestSPDXDocument {
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(testFiles);
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});
@@ -1127,7 +1129,7 @@ public class TestSPDXDocument {
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.addFile(testFiles[0]);
 		pkg.addFile(testFiles[1]);
@@ -1182,7 +1184,7 @@ public class TestSPDXDocument {
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
 		SPDXFile[] testFiles = new SPDXFile[] {testFile, testFile2};
-		ArrayList<String> verify = testFile.verify();
+		List<String> verify = testFile.verify();
 		assertEquals(0, verify.size());
 		pkg.setFiles(testFiles);
 		pkg.setLicenseInfoFromFiles(new AnyLicenseInfo[] {new SpdxNoneLicense()});

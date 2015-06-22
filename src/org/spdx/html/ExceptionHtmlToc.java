@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -29,6 +29,7 @@ import org.spdx.rdfparser.license.LicenseException;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -117,7 +118,7 @@ public class ExceptionHtmlToc {
 		}
 	}
 	
-	ArrayList<ExceptionRow> exceptions = new ArrayList<ExceptionRow>();
+	List<ExceptionRow> exceptions = Lists.newArrayList();
 
 	/**
 	 * Add an exception to the table of contents

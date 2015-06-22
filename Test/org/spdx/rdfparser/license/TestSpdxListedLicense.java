@@ -17,17 +17,18 @@
 package org.spdx.rdfparser.license;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -103,7 +104,7 @@ public class TestSpdxListedLicense {
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(id, compLic.getLicenseId());
 		assertEquals(text, compLic.getLicenseText());
-		ArrayList<String> verify = stdl.verify();
+		List<String> verify = stdl.verify();
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
@@ -141,7 +142,7 @@ public class TestSpdxListedLicense {
 		@SuppressWarnings("unused")
 		String rdfstring = writer.toString();
 
-		ArrayList<String> verify = stdl.verify();
+		List<String> verify = stdl.verify();
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
@@ -173,7 +174,7 @@ public class TestSpdxListedLicense {
 		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(newID, compLic2.getLicenseId());
 		assertEquals(newText, compLic2.getLicenseText());
-		ArrayList<String> verify = stdl.verify();
+		List<String> verify = stdl.verify();
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
 		assertEquals(1, verify.size());	// verify will fail since this is not a valid listed license ID

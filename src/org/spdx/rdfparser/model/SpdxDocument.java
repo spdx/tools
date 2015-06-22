@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -346,8 +346,8 @@ public class SpdxDocument extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = super.verify();
+	public List<String> verify() {
+		List<String> retval = super.verify();
 		// specVersion
 		String docSpecVersion = "";	// note - this is used later in verify to verify version specific info
 		if (this.specVersion == null || this.specVersion.isEmpty()) {
@@ -366,7 +366,7 @@ public class SpdxDocument extends SpdxElement {
 			if (creator == null) {
 				retval.add("Missing required Creator");
 			} else {
-				ArrayList<String> creatorVerification = creator.verify();
+				List<String> creatorVerification = creator.verify();
 				retval.addAll(creatorVerification);
 			}
 		} catch (InvalidSPDXAnalysisException e) {
@@ -377,7 +377,7 @@ public class SpdxDocument extends SpdxElement {
 			SPDXReview[] reviews = this.getReviewers();
 			if (reviews != null) {
 				for (int i = 0; i < reviews.length; i++) {
-					ArrayList<String> reviewerVerification = reviews[i].verify();
+					List<String> reviewerVerification = reviews[i].verify();
 					retval.addAll(reviewerVerification);
 				}
 			}
@@ -389,7 +389,7 @@ public class SpdxDocument extends SpdxElement {
 			ExtractedLicenseInfo[] extractedLicInfos = this.getExtractedLicenseInfos();
 			if (extractedLicInfos != null) {
 				for (int i = 0; i < extractedLicInfos.length; i++) {
-					ArrayList<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
+					List<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
 					retval.addAll(extractedLicInfoVerification);
 				}
 			}

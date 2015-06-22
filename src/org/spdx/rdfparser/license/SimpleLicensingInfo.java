@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -25,6 +25,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -82,7 +83,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			}
 		}
 		// SourceUrl/seeAlso
-		ArrayList<String> alsourceUrls = new ArrayList<String>();
+		List<String> alsourceUrls = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
 		m = Triple.createMatch(licenseInfoNode, p, null);
 		tripleIter = model.getGraph().find(m);	
