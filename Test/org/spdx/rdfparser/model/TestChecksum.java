@@ -16,9 +16,11 @@
 */
 package org.spdx.rdfparser.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -183,7 +185,7 @@ public class TestChecksum {
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
 		Checksum checksum = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "0123456789abcdef0123456789abcdef01234567");
-		ArrayList<String> verify = checksum.verify();
+		List<String> verify = checksum.verify();
 		assertEquals(0, verify.size());
 		Resource chcksumResource = checksum.createResource(modelContainer);
 		Checksum comp = new Checksum(modelContainer, chcksumResource.asNode());

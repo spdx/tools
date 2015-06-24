@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -174,8 +175,8 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval;
+	public List<String> verify() {
+		List<String> retval;
 		if (this.relatedSpdxElement == null) {
 			retval = new ArrayList<String>();
 			retval.add("Missing related SPDX element");

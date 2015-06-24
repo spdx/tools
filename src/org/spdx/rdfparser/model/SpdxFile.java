@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -642,8 +643,8 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = super.verify();
+	public List<String> verify() {
+		List<String> retval = super.verify();
 		String fileName = this.getName();
 		if (fileName == null) {
 			fileName = "UNKNOWN";
@@ -652,7 +653,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			retval.add("Missing required checksum for file "+fileName);
 		} else {
 			for (int i = 0; i < checksums.length; i++) {
-				ArrayList<String> verify = checksums[i].verify();
+				List<String> verify = checksums[i].verify();
 				addNameToWarnings(verify);
 				retval.addAll(verify);
 			}			
@@ -670,7 +671,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// fileDependencies
 		if (fileDependencies != null) {
 			for (int i = 0; i < fileDependencies.length; i++) {
-				ArrayList<String> verifyFileDependency = fileDependencies[i].verify();
+				List<String> verifyFileDependency = fileDependencies[i].verify();
 				for (int j = 0; j < verifyFileDependency.size(); j++) {
 					retval.add("Invalid file dependency for file named "+
 							fileDependencies[i].getName()+": "+verifyFileDependency.get(j));

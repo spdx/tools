@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
@@ -28,6 +29,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -276,7 +278,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		ArrayList<SpdxElement> retval = new ArrayList<SpdxElement>();
+		List<SpdxElement> retval = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(SpdxElementFactory.createElementFromModel(modelContainer, 

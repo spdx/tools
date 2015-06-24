@@ -17,18 +17,16 @@
 package org.spdx.rdfparser.license;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
-import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -107,7 +105,7 @@ public class TestConjunctiveLicenseSet {
 		Resource clsResource = cls.createResource(modelContainer);
 		ConjunctiveLicenseSet cls2 = new ConjunctiveLicenseSet(modelContainer, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
-		ArrayList<String> verify = cls2.verify();
+		List<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
 		verify = cls.verify();
 		assertEquals(0, verify.size());
@@ -119,7 +117,7 @@ public class TestConjunctiveLicenseSet {
 		Resource clsResource = cls.createResource(modelContainer);
 		DisjunctiveLicenseSet cls2 = new DisjunctiveLicenseSet(modelContainer, clsResource.asNode());
 		assertTrue(cls.equals(cls2));
-		ArrayList<String> verify = cls2.verify();
+		List<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
 		verify = cls.verify();
 		assertEquals(0, verify.size());
@@ -132,7 +130,7 @@ public class TestConjunctiveLicenseSet {
 		Resource clsResource = cls.createResource(modelContainer);
 		ConjunctiveLicenseSet cls2 = (ConjunctiveLicenseSet)cls.clone();
 		assertTrue(cls.equals(cls2));
-		ArrayList<String> verify = cls2.verify();
+		List<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
 		verify = cls.verify();
 		assertEquals(0, verify.size());
@@ -146,7 +144,7 @@ public class TestConjunctiveLicenseSet {
 		Resource clsResource = cls.createResource(modelContainer);
 		DisjunctiveLicenseSet cls2 = (DisjunctiveLicenseSet)cls.clone();
 		assertTrue(cls.equals(cls2));
-		ArrayList<String> verify = cls2.verify();
+		List<String> verify = cls2.verify();
 		assertEquals(0, verify.size());
 		verify = cls.verify();
 		assertEquals(0, verify.size());

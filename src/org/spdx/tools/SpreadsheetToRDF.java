@@ -22,8 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -120,7 +120,7 @@ public class SpreadsheetToRDF {
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
 			SpdxDocument analysis = copySpreadsheetToSPDXAnalysis(ss);
-			ArrayList<String> verify = analysis.verify();
+			List<String> verify = analysis.verify();
 			if (verify.size() > 0) {
 				System.out.println("Warning: The following verification errors were found in the resultant SPDX Document:");
 				for (int i = 0; i < verify.size(); i++) {

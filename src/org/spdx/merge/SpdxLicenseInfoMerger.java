@@ -16,12 +16,14 @@
 */
 package org.spdx.merge;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
+
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.model.SpdxDocument;
+
+import com.google.common.collect.Lists;
 
 /**
  * Application to merge SPDX documents' non-standard license information and return the results to the merge main class
@@ -54,7 +56,7 @@ public class SpdxLicenseInfoMerger {
 		ExtractedLicenseInfo[] masterNonStdLicInfo = output.getExtractedLicenseInfos();
 		
 		//an arrayList to hold the final result 
-		ArrayList<ExtractedLicenseInfo> retval = new ArrayList<ExtractedLicenseInfo>(Arrays.asList(masterNonStdLicInfo));
+		List<ExtractedLicenseInfo> retval = Lists.newArrayList(masterNonStdLicInfo);
 		
 		//read each child SPDX document
 		for(int i = 0; i < subDocs.length; i++){

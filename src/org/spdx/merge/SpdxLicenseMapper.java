@@ -16,7 +16,7 @@
 */
 package org.spdx.merge;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +28,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -106,7 +107,7 @@ public class SpdxLicenseMapper {
 			Map<AnyLicenseInfo, AnyLicenseInfo> idMap = foundInterMap(spdxDoc);
 			Set <AnyLicenseInfo> keys = idMap.keySet();
 			AnyLicenseInfo[] orgNonStdLics = keys.toArray(new AnyLicenseInfo[idMap.keySet().size()]);
-			ArrayList <AnyLicenseInfo> retval = new ArrayList<AnyLicenseInfo>();
+			List<AnyLicenseInfo> retval = Lists.newArrayList();
 			for(int i = 0; i < subLicInfoInFile.length; i++){
 				boolean foundLicId = false;
 				for(int q = 0; q < orgNonStdLics.length; q++){
