@@ -19,7 +19,6 @@ package org.spdx.tag;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -55,6 +54,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -161,7 +161,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     private DoapProject lastProject = null;
     // Keep track of all file dependencies since these need to be added after all of the files
     // have been parsed.  Map of file dependency file name to the SPDX files which depends on it
-    private Map<String, ArrayList<SpdxFile>> fileDependencyMap = Maps.newHashMap();
+    private Map<String, List<SpdxFile>> fileDependencyMap = Maps.newHashMap();
     /**
      * Keep track of the last relationship for any following relationship related tags
      */
@@ -169,7 +169,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     /**
      * Keep track of all relationships and add them at the end of the parsing
      */
-    private ArrayList<RelationshipWithId> relationships = new ArrayList<RelationshipWithId>();
+    private List<RelationshipWithId> relationships = Lists.newArrayList();
     /**
      * Keep track of the last annotation for any following annotation related tags
      */
@@ -177,7 +177,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     /**
      * Keep track of all annotations and add them at the end of the parsing
      */
-    private ArrayList<AnnotationWithId> annotations = new ArrayList<AnnotationWithId>();
+    private List<AnnotationWithId> annotations = Lists.newArrayList();
     private SpdxDocumentContainer[] result = null;
 
     private String specVersion;
@@ -186,7 +186,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 
     private String documentName;
 
-    ArrayList<String> warningMessages = new ArrayList<String>();
+    List<String> warningMessages = Lists.newArrayList();
 
     /**
      * True if we have started defining a package in the tag/value file
@@ -420,7 +420,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
                 SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "", "");
                 analysis.setCreationInfo(creator);
             } else {
-                List<String> creators = new ArrayList<String>(Arrays.asList(analysis.getCreationInfo().getCreators()));
+                List<String> creators = Lists.newArrayList(analysis.getCreationInfo().getCreators());
                 creators.add(value);
                 analysis.getCreationInfo().setCreators(creators.toArray(new String[0]));
             }
@@ -451,7 +451,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         } else if (tag.equals(constants.getProperty("PROP_REVIEW_REVIEWER"))) {
             checkAnalysisNull();
             lastReviewer = new SPDXReview(value, format.format(new Date()), ""); // update date later
-            List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));
+            List<SPDXReview> reviewers = Lists.newArrayList(analysis.getReviewers());
             reviewers.add(lastReviewer);
             analysis.setReviewers(reviewers.toArray(new SPDXReview[0]));
         } else if (tag.equals(constants.getProperty("PROP_REVIEW_DATE"))) {
@@ -660,7 +660,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             pkg.setLicenseConcluded(licenseSet);
         } else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_INFO_FROM_FILES"))) {
             AnyLicenseInfo license = LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer());
-            List<AnyLicenseInfo> licenses = new ArrayList<AnyLicenseInfo>(Arrays.asList(pkg.getLicenseInfoFromFiles()));
+            List<AnyLicenseInfo> licenses = Lists.newArrayList(pkg.getLicenseInfoFromFiles());
             licenses.add(license);
             pkg.setLicenseInfosFromFiles(licenses.toArray(new AnyLicenseInfo[0]));
         } else if (tag.equals(constants.getProperty("PROP_PACKAGE_DECLARED_LICENSE"))) {
@@ -751,7 +751,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             file.setLicenseConcluded(licenseSet);
         } else if (tag.equals(constants.getProperty("PROP_FILE_SEEN_LICENSE"))) {
             AnyLicenseInfo fileLicense = (LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer()));
-            List<AnyLicenseInfo> seenLicenses = new ArrayList<AnyLicenseInfo>(Arrays.asList(file.getLicenseInfoFromFiles()));
+            List<AnyLicenseInfo> seenLicenses = Lists.newArrayList(file.getLicenseInfoFromFiles());
             seenLicenses.add(fileLicense);
             file.setLicenseInfosFromFiles(seenLicenses.toArray(new AnyLicenseInfo[0]));
         } else if (tag.equals(constants.getProperty("PROP_FILE_LIC_COMMENTS"))) {
@@ -812,9 +812,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     private void addFileDependency(SpdxFile file, String dependentFileName) {
         // Since the files have not all been parsed, we just keep track of the
         // dependencies in a hashmap until we finish all processing and are building the package
-        ArrayList<SpdxFile> filesWithThisAsADependency = this.fileDependencyMap.get(dependentFileName);
+        List<SpdxFile> filesWithThisAsADependency = this.fileDependencyMap.get(dependentFileName);
         if (filesWithThisAsADependency == null) {
-            filesWithThisAsADependency = new ArrayList<SpdxFile>();
+            filesWithThisAsADependency = Lists.newArrayList();
             this.fileDependencyMap.put(dependentFileName, filesWithThisAsADependency);
         }
         filesWithThisAsADependency.add(file);
@@ -827,7 +827,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             throws Exception {
         if (tag.equals(constants.getProperty("PROP_PROJECT_NAME"))) {
             lastProject = new DoapProject(value, null);
-            List<DoapProject> projects = new ArrayList<DoapProject>(Arrays.asList(file.getArtifactOf()));
+            List<DoapProject> projects = Lists.newArrayList(file.getArtifactOf());
             projects.add(lastProject);
             file.setArtifactOf(projects.toArray(new DoapProject[0]));
         } else {
@@ -887,7 +887,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     private void checkSinglePackageDefault() throws InvalidSPDXAnalysisException {
         List<SpdxPackage> pkgs = this.analysis.getDocumentContainer().findAllPackages();
         Relationship[] documentRelationships = this.analysis.getRelationships();
-        List<String> describedElementIds = new ArrayList<String>();
+        List<String> describedElementIds = Lists.newArrayList();
         for (int i = 0; i < documentRelationships.length; i++) {
             if (documentRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes) {
                 if (pkgs.contains(documentRelationships[i])) {
@@ -961,17 +961,17 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         // a new HashMap of files (as the key) and the dependency files (arraylist) as the values
         // Once that hashmap is built, the actual dependencies are then added.
         // the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
-        Map<SpdxFile, ArrayList<SpdxFile>> filesWithDependencies = Maps.newHashMap();
+        Map<SpdxFile, List<SpdxFile>> filesWithDependencies = Maps.newHashMap();
         SpdxFile[] allFiles = analysis.getDocumentContainer().getFileReferences();
         // fill in the filesWithDependencies map
         for (int i = 0;i < allFiles.length; i++) {
-            ArrayList<SpdxFile> alFilesHavingThisDependency = this.fileDependencyMap.get(allFiles[i].getName());
+            List<SpdxFile> alFilesHavingThisDependency = this.fileDependencyMap.get(allFiles[i].getName());
             if (alFilesHavingThisDependency != null) {
                 for (int j = 0; j < alFilesHavingThisDependency.size(); j++) {
                     SpdxFile fileWithDependency = alFilesHavingThisDependency.get(j);
-                    ArrayList<SpdxFile> alDepdenciesForThisFile = filesWithDependencies.get(fileWithDependency);
+                    List<SpdxFile> alDepdenciesForThisFile = filesWithDependencies.get(fileWithDependency);
                     if (alDepdenciesForThisFile == null) {
-                        alDepdenciesForThisFile = new ArrayList<SpdxFile>();
+                        alDepdenciesForThisFile = Lists.newArrayList();
                         filesWithDependencies.put(fileWithDependency, alDepdenciesForThisFile);
                     }
                     alDepdenciesForThisFile.add(allFiles[i]);
@@ -982,10 +982,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             }
         }
         // Go through the hashmap we just created and add the dependent files
-        Iterator<Entry<SpdxFile, ArrayList<SpdxFile>>> iter = filesWithDependencies.entrySet().iterator();
+        Iterator<Entry<SpdxFile, List<SpdxFile>>> iter = filesWithDependencies.entrySet().iterator();
         while (iter.hasNext()) {
-            Entry<SpdxFile, ArrayList<SpdxFile>> entry = iter.next();
-            ArrayList<SpdxFile> alDependencies = entry.getValue();
+            Entry<SpdxFile, List<SpdxFile>> entry = iter.next();
+            List<SpdxFile> alDependencies = entry.getValue();
             if (alDependencies != null && alDependencies.size() > 0) {
                 entry.getKey().setFileDependencies(alDependencies.toArray(new SpdxFile[alDependencies.size()]));
             }
@@ -1005,7 +1005,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 
 
     private static void assertEquals(String name, int expected,
-            ArrayList<String> verify) {
+            List<String> verify) {
         if (verify.size() > expected) {
             System.out.println("The following verifications failed for the " + name + ":");
             for (int x = 0; x < verify.size(); x++) {

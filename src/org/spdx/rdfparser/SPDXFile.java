@@ -16,7 +16,7 @@
  */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -24,6 +24,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -122,7 +123,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			}			
 		}
 		// concluded License
-		ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
+		List<AnyLicenseInfo> alLic = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_CONCLUDED).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
@@ -151,7 +152,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		// fileDependencies
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY).asNode();
 		m = Triple.createMatch(fileNode, p, null);
-		ArrayList<SPDXFile> alDependencies = new ArrayList<SPDXFile>();
+		List<SPDXFile> alDependencies = Lists.newArrayList();
 		tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
@@ -194,7 +195,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			this.comment = tripleIter.next().getObject().toString(false);
 		}
 		// contributors
-		ArrayList<String> alContributors = new ArrayList<String>();
+		List<String> alContributors = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CONTRIBUTOR).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
@@ -204,7 +205,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		}
 		this.contributors = alContributors.toArray(new String[alContributors.size()]);
 		//artifactOf
-		ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
+		List<DOAPProject> alProjects = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF).asNode();
 		m = Triple.createMatch(fileNode, p, null);
 		tripleIter = model.getGraph().find(m);	
@@ -443,7 +444,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	public AnyLicenseInfo[] getSeenLicenses() {
 		if (this.model != null && this.resource != null) {
 			try {
-				ArrayList<Node> alLicNode = new ArrayList<Node>();		
+				List<Node> alLicNode = Lists.newArrayList();	
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_SEEN_LICENSE).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator <Triple> tripleIter = model.getGraph().find(m);	
@@ -832,7 +833,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	public DOAPProject[] getArtifactOf()  {
 		if (this.model != null && this.resource != null) {
 			try {
-				ArrayList<Node> alProjectNodes = new ArrayList<Node>();
+				List<Node> alProjectNodes = Lists.newArrayList();
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_ARTIFACTOF).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -840,7 +841,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 					Triple t = tripleIter.next();
 					alProjectNodes.add(t.getObject());					
 				}
-				ArrayList<DOAPProject> alProjects = new ArrayList<DOAPProject>();
+				List<DOAPProject> alProjects = Lists.newArrayList();
 				boolean projectsDifferent = this.artifactOf.length != alProjectNodes.size();
 				for (int i = 0; i < this.artifactOf.length; i++) {
 					Resource projectResource = this.artifactOf[i].getResource();
@@ -900,8 +901,8 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		// fileName
 		String fileName = this.getName();
 		if (fileName == null || fileName.isEmpty()) {
@@ -946,7 +947,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		// fileDependencies
 		if (fileDependencies != null) {
 			for (int i = 0; i < fileDependencies.length; i++) {
-				ArrayList<String> verifyFileDependency = fileDependencies[i].verify();
+				List<String> verifyFileDependency = fileDependencies[i].verify();
 				for (int j = 0; j < verifyFileDependency.size(); j++) {
 					retval.add("Invalid file dependency for file named "+
 							fileDependencies[i].getName()+": "+verifyFileDependency.get(j));
@@ -1009,7 +1010,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			try {
 				Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY).asNode();
 				Triple m = Triple.createMatch(this.resource.asNode(), p, null);
-				ArrayList<Node> alDependencyNodes = new ArrayList<Node>();
+				List<Node> alDependencyNodes = Lists.newArrayList();
 				ExtendedIterator<Triple >tripleIter = model.getGraph().find(m);	
 				while (tripleIter.hasNext()) {
 					Triple t = tripleIter.next();
@@ -1131,7 +1132,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	 */
 	public String[] getContributors() {
 		if (this.model != null && this.resource != null) {
-			ArrayList<String> alContributors = new ArrayList<String>();
+			List<String> alContributors = Lists.newArrayList();
 			Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_CONTRIBUTOR).asNode();
 			Triple m = Triple.createMatch(this.resource.asNode(), p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	

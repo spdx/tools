@@ -23,7 +23,6 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +40,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -191,8 +191,8 @@ public class SpdxLicenseMapperTest {
 		mapper.mappingNewNonStdLic(doc1, doc3, clonedNonStdLic);//new clonedNonStdLic id = 5		
 		
 		List<SpdxPackage> packageList = doc3.getDocumentContainer().findAllPackages();
-		List<AnyLicenseInfo> mappedLicenseList = new ArrayList<AnyLicenseInfo>();
-		List<AnyLicenseInfo> expectedLicenseList = new ArrayList<AnyLicenseInfo>();
+		List<AnyLicenseInfo> mappedLicenseList = Lists.newArrayList();
+		List<AnyLicenseInfo> expectedLicenseList = Lists.newArrayList();
 		
 		for(int i = 0; i < packageList.size(); i++){
 			mappedLicenseList.add(mapper.mapLicenseInfo(doc3, packageList.get(i).getLicenseDeclared().clone()));

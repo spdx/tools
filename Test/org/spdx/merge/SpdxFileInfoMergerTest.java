@@ -16,23 +16,17 @@
 */
 package org.spdx.merge;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxPackage;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.SPDXDocumentFactory;
-import org.spdx.rdfparser.model.SpdxFile;
 
 /**
  * @author Gang Ling
@@ -135,7 +129,7 @@ public class SpdxFileInfoMergerTest {
 		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
 		SpdxFile[] testFiles = packageInfo.getFiles();
-		ArrayList<DoapProject> testProjects = new ArrayList<DoapProject>();
+		List<DoapProject> testProjects = Lists.newArrayList();
 		for(int i = 0; i < testFiles.length; i++){
 			if(fileMerger.checkDoapProject(testFiles[i])){
 				DoapProject[] retval = testFiles[i].getArtifactOf();
@@ -189,7 +183,7 @@ public class SpdxFileInfoMergerTest {
 		SpdxPackage packageInfo = doc1.getSpdxPackage();
 		SpdxFileInfoMerger fileMerger = new SpdxFileInfoMerger(packageInfo, new SpdxLicenseMapper());
 		SpdxFile[] testFiles = packageInfo.getFiles();
-		ArrayList<DoapProject> testProjects = new ArrayList<DoapProject>(); 
+		List<DoapProject> testProjects = Lists.newArrayList();
 		for(int i = 0; i < testFiles.length; i++){
 			if(fileMerger.checkDoapProject(testFiles[i])){
 				DoapProject[] projects = testFiles[i].getArtifactOf();
