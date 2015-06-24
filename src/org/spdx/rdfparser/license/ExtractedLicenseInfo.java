@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.rdfparser.IModelContainer;
@@ -25,6 +25,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.model.IRdfModel;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -189,8 +190,9 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	/**
 	 * @return
 	 */
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	@Override
+    public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		String id = this.getLicenseId();
 		if (id == null || id.isEmpty()) {
 			retval.add("Missing required license ID");

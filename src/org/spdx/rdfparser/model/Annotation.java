@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -26,6 +26,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -127,8 +128,8 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		if (annotationType == null) {
 			retval.add("Missing annotationtype for Annotation");
 		}

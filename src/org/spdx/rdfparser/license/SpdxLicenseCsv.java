@@ -19,14 +19,16 @@ package org.spdx.rdfparser.license;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
 import au.com.bytecode.opencsv.CSVReader;
+
+import com.google.common.collect.Lists;
 
 /**
  * A CSV file reader for SPDX Standard Licenses.
@@ -171,7 +173,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 
 	private File csvFile = null;
 	private CSVReader reader = null;
-	private ArrayList<CsvLicenseIterator> openIterators = new ArrayList<CsvLicenseIterator>();
+	private List<CsvLicenseIterator> openIterators = Lists.newArrayList();
 	/**
 	 * @param csvFile
 	 * @throws IOException 

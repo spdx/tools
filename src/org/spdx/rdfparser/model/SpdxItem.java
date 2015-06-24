@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
@@ -306,8 +306,8 @@ public class SpdxItem extends SpdxElement {
 	}
 	
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = super.verify();
+	public List<String> verify() {
+		List<String> retval = super.verify();
 		String name = "UNKNOWN";
 		if (this.name != null) {
 			name = this.name;

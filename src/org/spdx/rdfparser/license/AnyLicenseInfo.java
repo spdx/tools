@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -73,7 +73,8 @@ public abstract class AnyLicenseInfo implements Cloneable, IRdfModel {
 	 * @return resource created from the model
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
+	@Override
+    public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		if (this.model != null &&
 				(this.modelContainer.equals(modelContainer)) 
 //						|| (this.licenseInfoNode.isURI()))	// Remove this line to cause the spdx listed license 
@@ -99,18 +100,22 @@ public abstract class AnyLicenseInfo implements Cloneable, IRdfModel {
 	protected abstract Resource _createResource() throws InvalidSPDXAnalysisException;
 	
 	// force subclasses to implement toString
-	public abstract String toString();
+	@Override
+    public abstract String toString();
 	
 	// force subclasses to implement equals
-	public abstract boolean equals(Object o);
+	@Override
+    public abstract boolean equals(Object o);
 	
 	// force subclasses to implement hashcode
-	public abstract int hashCode();
+	@Override
+    public abstract int hashCode();
 
 	/**
 	 * @return
 	 */
-	public abstract ArrayList<String> verify();
+	@Override
+    public abstract List<String> verify();
 
 	/**
 	 * @return
@@ -119,5 +124,6 @@ public abstract class AnyLicenseInfo implements Cloneable, IRdfModel {
 		return this.resource;
 	}
 	
-	public abstract AnyLicenseInfo clone();
+	@Override
+    public abstract AnyLicenseInfo clone();
 }

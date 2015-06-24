@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -42,7 +42,7 @@ public interface IRdfModel {
 	/**
 	 * @return List of validation errors for any non SPDX compliant properties.
 	 */
-	public ArrayList<String> verify();
+	public List<String> verify();
 	
 	/**
 	 * Returns true if the compare object contains properties which would be equal if they were contained in the same RDF Model

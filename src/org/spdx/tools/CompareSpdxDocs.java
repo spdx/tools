@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -125,12 +124,12 @@ public class CompareSpdxDocs {
 			output = System.out;
 		}
 		try {
-			ArrayList<String> doc1VerificationErrors = spdxDoc1.verify();
+			List<String> doc1VerificationErrors = spdxDoc1.verify();
 			if (doc1VerificationErrors.size() > 0) {
 				output.println("Warning - The SPDX document "+args[0].trim()+" contains the following verification errors:");
 				printList(doc1VerificationErrors, output);
 			}
-			ArrayList<String> doc2VerificationErrors = spdxDoc2.verify();
+			List<String> doc2VerificationErrors = spdxDoc2.verify();
 			if (doc2VerificationErrors.size() > 0) {
 				output.println("Warning - The SPDX document "+args[1].trim()+" contains the following verification errors:");
 				printList(doc2VerificationErrors, output);

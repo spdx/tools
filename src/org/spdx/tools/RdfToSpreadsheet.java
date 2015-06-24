@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -103,7 +102,7 @@ public class RdfToSpreadsheet {
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
 			copyRdfXmlToSpreadsheet(doc, ss);
-			ArrayList<String> verify = doc.verify();
+			List<String> verify = doc.verify();
 			if (verify.size() > 0) {
 				System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
 				for (int i = 0; i < verify.size(); i++) {

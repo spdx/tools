@@ -18,6 +18,7 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -1103,7 +1104,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			SPDXReview[] reviews = this.getReviewers();
 			if (reviews != null) {
 				for (int i = 0; i < reviews.length; i++) {
-					ArrayList<String> reviewerVerification = reviews[i].verify();
+					List<String> reviewerVerification = reviews[i].verify();
 					retval.addAll(reviewerVerification);
 				}
 			}
@@ -1115,7 +1116,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			ExtractedLicenseInfo[] extractedLicInfos = this.getExtractedLicenseInfos();
 			if (extractedLicInfos != null) {
 				for (int i = 0; i < extractedLicInfos.length; i++) {
-					ArrayList<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
+					List<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
 					retval.addAll(extractedLicInfoVerification);
 				}
 			}

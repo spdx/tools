@@ -16,7 +16,7 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -27,6 +27,7 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -124,8 +125,8 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		String uri = "UNKNOWN";
 		if (this.spdxDocumentNamespace == null) {
 			retval.add("Missing required external document URI");

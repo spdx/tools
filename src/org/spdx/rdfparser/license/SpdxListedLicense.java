@@ -16,7 +16,7 @@
  */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -50,8 +50,9 @@ public class SpdxListedLicense extends License {
 		super(modelContainer, licenseNode);
 	}
 	
-	@Override public ArrayList<String> verify() {
-		ArrayList<String> retval = super.verify();
+	@Override 
+	public List<String> verify() {
+		List<String> retval = super.verify();
 		if (!LicenseInfoFactory.isSpdxListedLicenseID(this.getLicenseId())) {
 			retval.add("License "+this.getLicenseId()+" is not a listed license at spdx.org/licenses");
 		}

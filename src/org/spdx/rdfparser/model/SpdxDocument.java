@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -346,8 +347,8 @@ public class SpdxDocument extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = super.verify();
+	public List<String> verify() {
+		List<String> retval = super.verify();
 		// specVersion
 		String docSpecVersion = "";	// note - this is used later in verify to verify version specific info
 		if (this.specVersion == null || this.specVersion.isEmpty()) {
@@ -389,7 +390,7 @@ public class SpdxDocument extends SpdxElement {
 			ExtractedLicenseInfo[] extractedLicInfos = this.getExtractedLicenseInfos();
 			if (extractedLicInfos != null) {
 				for (int i = 0; i < extractedLicInfos.length; i++) {
-					ArrayList<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
+					List<String> extractedLicInfoVerification = extractedLicInfos[i].verify();
 					retval.addAll(extractedLicInfoVerification);
 				}
 			}

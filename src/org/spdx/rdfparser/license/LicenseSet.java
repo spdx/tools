@@ -16,9 +16,10 @@
 */
 package org.spdx.rdfparser.license;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.Set;
+import java.util.Iterator;
+import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -27,6 +28,8 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -128,8 +131,8 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#verify()
 	 */
 	@Override
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		Iterator<AnyLicenseInfo> iter = licenseInfos.iterator();
 		while (iter.hasNext()) {
 			retval.addAll(iter.next().verify());
