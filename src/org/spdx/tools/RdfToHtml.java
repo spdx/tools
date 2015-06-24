@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import org.spdx.rdfparser.model.SpdxPackage;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -116,7 +116,7 @@ public class RdfToHtml {
 			System.exit(ERROR);
 		}
 		String documentName = doc.getName();
-		ArrayList<File> filesToCreate = new ArrayList<File>();
+		List<File> filesToCreate = Lists.newArrayList();
 		String docHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + DOC_HTML_FILE_POSTFIX;
 		File docHtmlFile = new File(docHtmlFilePath);
 		filesToCreate.add(docHtmlFile);

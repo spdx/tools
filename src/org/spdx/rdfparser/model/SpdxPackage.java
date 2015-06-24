@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -795,7 +794,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			if (verificationCode == null) {
 				retval.add("Missing required package verification code for package "+pkgName);
 			} else {
-				ArrayList<String> verify = verificationCode.verify();
+				List<String> verify = verificationCode.verify();
 				addNameToWarnings(verify);
 				retval.addAll(verify);
 			}

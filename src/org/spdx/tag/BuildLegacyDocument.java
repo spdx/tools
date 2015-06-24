@@ -19,7 +19,6 @@ package org.spdx.tag;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -43,6 +42,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -73,7 +73,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 	private DOAPProject lastProject = null;
 	// Keep track of all file dependencies since these need to be added after all of the files
 	// have been parsed.  Map of file dependency file name to the SPDX files which depends on it
-	private Map<String, ArrayList<SPDXFile>> fileDependencyMap = Maps.newHashMap();
+	private Map<String, List<SPDXFile>> fileDependencyMap = Maps.newHashMap();
 
 	public BuildLegacyDocument(Model model, SPDXDocument spdxDocument, Properties constants) {
 		this.constants = constants;
@@ -107,7 +107,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 				SPDXCreatorInformation creator = new SPDXCreatorInformation(new String[] { value }, "", "", "");
 				analysis.setCreationInfo(creator);
 			} else {
-				List<String> creators = new ArrayList<String>(Arrays.asList(analysis.getCreatorInfo().getCreators()));
+				List<String> creators = Lists.newArrayList(analysis.getCreatorInfo().getCreators());
 				creators.add(value);
 				analysis.getCreatorInfo().setCreators(creators.toArray(new String[0]));
 			}
@@ -133,7 +133,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 			analysis.setDocumentComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_REVIEWER"))) {
 			lastReviewer = new SPDXReview(value, format.format(new Date()), ""); // update date later
-			List<SPDXReview> reviewers = new ArrayList<SPDXReview>(Arrays.asList(analysis.getReviewers()));
+			List<SPDXReview> reviewers = Lists.newArrayList(analysis.getReviewers());
 			reviewers.add(lastReviewer);
 			analysis.setReviewers(reviewers.toArray(new SPDXReview[0]));
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_DATE"))) {
@@ -149,7 +149,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_ID"))) {
 			lastExtractedLicense = new ExtractedLicenseInfo(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
 			ExtractedLicenseInfo[] currentNonStdLicenses = analysis.getExtractedLicenseInfos();
-			List<ExtractedLicenseInfo> licenses = new ArrayList<ExtractedLicenseInfo>(Arrays.asList(currentNonStdLicenses));
+			List<ExtractedLicenseInfo> licenses = Lists.newArrayList(currentNonStdLicenses);
 			licenses.add(lastExtractedLicense);
 			analysis.setExtractedLicenseInfos(licenses.toArray(new ExtractedLicenseInfo[0]));
 		} else if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
@@ -236,7 +236,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 			pkg.setLicenseComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_INFO_FROM_FILES"))) {
 			AnyLicenseInfo license = LicenseInfoFactory.parseSPDXLicenseString(value);
-			List<AnyLicenseInfo> licenses = new ArrayList<AnyLicenseInfo>(Arrays.asList(pkg.getLicenseInfoFromFiles()));
+			List<AnyLicenseInfo> licenses = Lists.newArrayList(pkg.getLicenseInfoFromFiles());
 			licenses.add(license);
 			pkg.setLicenseInfoFromFiles(licenses.toArray(new AnyLicenseInfo[0]));
 		} else {
@@ -272,7 +272,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 				lastFile.setConcludedLicenses(licenseSet);
 			} else if (tag.equals(constants.getProperty("PROP_FILE_SEEN_LICENSE"))) {
 				AnyLicenseInfo fileLicense = (LicenseInfoFactory.parseSPDXLicenseString(value));
-				List<AnyLicenseInfo> seenLicenses = new ArrayList<AnyLicenseInfo>(Arrays.asList(lastFile.getSeenLicenses()));
+				List<AnyLicenseInfo> seenLicenses = Lists.newArrayList(lastFile.getSeenLicenses());
 				seenLicenses.add(fileLicense);
 				lastFile.setSeenLicenses(seenLicenses.toArray(new AnyLicenseInfo[0]));
 			} else if (tag.equals(constants.getProperty("PROP_FILE_LIC_COMMENTS"))) {
@@ -318,9 +318,9 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 	private void addFileDependency(SPDXFile file, String dependentFileName) {
 		// Since the files have not all been parsed, we just keep track of the
 		// dependencies in a hashmap until we finish all processing and are building the package
-		ArrayList<SPDXFile> filesWithThisAsADependency = this.fileDependencyMap.get(dependentFileName);
+		List<SPDXFile> filesWithThisAsADependency = this.fileDependencyMap.get(dependentFileName);
 		if (filesWithThisAsADependency == null) {
-			filesWithThisAsADependency = new ArrayList<SPDXFile>();
+			filesWithThisAsADependency = Lists.newArrayList();
 			this.fileDependencyMap.put(dependentFileName, filesWithThisAsADependency);
 		}
 		filesWithThisAsADependency.add(file);
@@ -333,7 +333,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_PROJECT_NAME"))) {
 			lastProject = new DOAPProject(value, null);
-			List<DOAPProject> projects = new ArrayList<DOAPProject>(Arrays.asList(file.getArtifactOf()));
+			List<DOAPProject> projects = Lists.newArrayList(file.getArtifactOf());
 			projects.add(lastProject);
 			file.setArtifactOf(projects.toArray(new DOAPProject[0]));			
 		} else {
@@ -375,7 +375,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 	@Override
     public void exit() throws Exception {
 		fixFileDependencies();
-		ArrayList<String> warningMessages = analysis.verify();
+		List<String> warningMessages = analysis.verify();
 		assertEquals("SPDXDocument", 0, warningMessages);
 	}
 	
@@ -391,17 +391,17 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 		// a new HashMap of files (as the key) and the dependency files (arraylist) as the values
 		// Once that hashmap is built, the actual dependencies are then added.
 		// the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
-		Map<SPDXFile, ArrayList<SPDXFile>> filesWithDependencies = Maps.newHashMap();
+		Map<SPDXFile, List<SPDXFile>> filesWithDependencies = Maps.newHashMap();
 		SPDXFile[] allFiles = analysis.getFileReferences();
 		// fill in the filesWithDependencies map
 		for (int i = 0;i < allFiles.length; i++) {
-			ArrayList<SPDXFile> alFilesHavingThisDependency = this.fileDependencyMap.get(allFiles[i].getName());
+			List<SPDXFile> alFilesHavingThisDependency = this.fileDependencyMap.get(allFiles[i].getName());
 			if (alFilesHavingThisDependency != null) {
 				for (int j = 0; j < alFilesHavingThisDependency.size(); j++) {
 					SPDXFile fileWithDependency = alFilesHavingThisDependency.get(j);
-					ArrayList<SPDXFile> alDepdenciesForThisFile = filesWithDependencies.get(fileWithDependency);
+					List<SPDXFile> alDepdenciesForThisFile = filesWithDependencies.get(fileWithDependency);
 					if (alDepdenciesForThisFile == null) {
-						alDepdenciesForThisFile = new ArrayList<SPDXFile>();
+						alDepdenciesForThisFile = Lists.newArrayList();
 						filesWithDependencies.put(fileWithDependency, alDepdenciesForThisFile);
 					}
 					alDepdenciesForThisFile.add(allFiles[i]);
@@ -412,10 +412,10 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 			}
 		}
 		// Go through the hashmap we just created and add the dependent files
-		Iterator<Entry<SPDXFile, ArrayList<SPDXFile>>> iter = filesWithDependencies.entrySet().iterator();
+		Iterator<Entry<SPDXFile, List<SPDXFile>>> iter = filesWithDependencies.entrySet().iterator();
 		while (iter.hasNext()) {
-			Entry<SPDXFile, ArrayList<SPDXFile>> entry = iter.next();
-			ArrayList<SPDXFile> alDependencies = entry.getValue();
+			Entry<SPDXFile, List<SPDXFile>> entry = iter.next();
+			List<SPDXFile> alDependencies = entry.getValue();
 			if (alDependencies != null && alDependencies.size() > 0) {
 				entry.getKey().setFileDependencies(alDependencies.toArray(new SPDXFile[alDependencies.size()]), this.analysis);
 			}
@@ -435,7 +435,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 
 	
 	private static void assertEquals(String name, int expected,
-			ArrayList<String> verify) {
+			List<String> verify) {
 		if (verify.size() > expected) {
 			System.out.println("The following verifications failed for the " + name + ":");
 			for (int x = 0; x < verify.size(); x++) {

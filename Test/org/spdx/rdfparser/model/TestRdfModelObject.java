@@ -16,12 +16,15 @@
 */
 package org.spdx.rdfparser.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,6 +45,7 @@ import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -83,8 +87,8 @@ public class TestRdfModelObject {
 		 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 		 */
 		@Override
-		public ArrayList<String> verify() {
-			ArrayList<String> retval = new ArrayList<String>();
+		public List<String> verify() {
+			List<String> retval = Lists.newArrayList();
 			retval.add(TEST_VERIFY);
 			return retval;
 		}
@@ -106,20 +110,24 @@ public class TestRdfModelObject {
 			this.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, TEST_PROPVALUE1);
 		}
 		
-		public String findSinglePropertyValue(String namespace, String propertyName) {
+		@Override
+        public String findSinglePropertyValue(String namespace, String propertyName) {
 			return super.findSinglePropertyValue(namespace, propertyName);
 		}
 		
-		public String[] findMultiplePropertyValues(String namespace,String propertyName) {
+		@Override
+        public String[] findMultiplePropertyValues(String namespace,String propertyName) {
 			return super.findMultiplePropertyValues(namespace, propertyName);
 		}
 		
-		public void setPropertyValue(String nameSpace, String propertyName,
+		@Override
+        public void setPropertyValue(String nameSpace, String propertyName,
 				String[] values) {
 			super.setPropertyValue(nameSpace, propertyName, values);
 		}
 		
-		public void setPropertyValue(String nameSpace, String propertyName,
+		@Override
+        public void setPropertyValue(String nameSpace, String propertyName,
 				String value) {
 			super.setPropertyValue(nameSpace, propertyName, value);
 		}

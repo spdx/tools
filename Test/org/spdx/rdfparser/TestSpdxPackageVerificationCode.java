@@ -16,9 +16,10 @@
 */
 package org.spdx.rdfparser;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -149,7 +150,7 @@ public class TestSpdxPackageVerificationCode {
 	
 	@Test
 	public void testVerify() {
-		ArrayList<String> verify = VERIFICATION_CODES[0].verify();
+		List<String> verify = VERIFICATION_CODES[0].verify();
 		assertEquals(0, verify.size());
 		verify = VERIFICATION_CODES[1].verify();
 		assertEquals(0, verify.size());

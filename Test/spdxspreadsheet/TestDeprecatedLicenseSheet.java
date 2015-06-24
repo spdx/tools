@@ -16,12 +16,13 @@
 */
 package spdxspreadsheet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,6 +32,8 @@ import org.junit.Test;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author Gary
@@ -84,7 +87,7 @@ public class TestDeprecatedLicenseSheet {
 		}
 		try {
 			// create a copy of the spreadsheet then compare
-			ArrayList<DeprecatedLicenseInfo> licenses = new ArrayList<DeprecatedLicenseInfo>();
+			List<DeprecatedLicenseInfo> licenses = Lists.newArrayList();
 			File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
 			SPDXLicenseSpreadsheet spreadsheet = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");

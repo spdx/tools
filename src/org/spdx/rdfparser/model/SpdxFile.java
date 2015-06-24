@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -271,7 +271,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	private FileType[] urisToFileType(String[] uris, boolean ignoreErrors) throws InvalidSPDXAnalysisException {
-		ArrayList<FileType> retval = new ArrayList<FileType>();
+		List<FileType> retval = Lists.newArrayList();
 		for (int i = 0; i < uris.length; i++) {
 			if (uris[i] != null && !uris[i].isEmpty()) {
 				if (!uris[i].startsWith(SpdxRdfConstants.SPDX_NAMESPACE)) {

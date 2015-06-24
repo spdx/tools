@@ -16,7 +16,6 @@
  */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,6 +27,8 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -249,7 +250,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		 * @throws InvalidSPDXAnalysisException 
 		 */
 		public AnyLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
-			ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
+			List<AnyLicenseInfo> alLic = Lists.newArrayList();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_DECLARED_LICENSE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -286,7 +287,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		 * @throws InvalidSPDXAnalysisException 
 		 */
 		public AnyLicenseInfo getConcludedLicenses() throws InvalidSPDXAnalysisException {
-			ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
+			List<AnyLicenseInfo> alLic = Lists.newArrayList();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_CONCLUDED_LICENSE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -476,7 +477,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		 */
 		public SPDXFile[] getFiles() throws InvalidSPDXAnalysisException {
 			// files
-			ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
+			List<SPDXFile> alFiles = Lists.newArrayList();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -494,7 +495,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		@SuppressWarnings("deprecation")
 		public void setFiles(SPDXFile[] files) throws InvalidSPDXAnalysisException {
 			// Delete all existing files
-			ArrayList<Node> alFileNodes = new ArrayList<Node>();
+			List<Node> alFileNodes = Lists.newArrayList();
 			Node n = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_FILE).asNode();
 			Triple m = Triple.createMatch(this.node, n, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -542,7 +543,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		 * @throws InvalidSPDXAnalysisException 
 		 */
 		public void removeFile(String fileName) throws InvalidSPDXAnalysisException {
-			ArrayList<Node> filesToRemove = new ArrayList<Node>();
+			List<Node> filesToRemove = Lists.newArrayList();
 			Node fileNameProperty = model.getProperty(SPDX_NAMESPACE, PROP_FILE_NAME).asNode();
 			@SuppressWarnings("deprecation")
 			Property docFileProperty = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE);
@@ -653,7 +654,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		}
 		
 		public AnyLicenseInfo[] getLicenseInfoFromFiles() throws InvalidSPDXAnalysisException {
-			ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
+			List<AnyLicenseInfo> alLic = Lists.newArrayList();
 			Node p = model.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_LICENSE_INFO_FROM_FILES).asNode();
 			Triple m = Triple.createMatch(this.node, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -729,8 +730,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		/**
 		 * @return Array list of any error messages found in verifying the package model
 		 */
-		public ArrayList<String> verify() {
-			ArrayList<String> retval = new ArrayList<String>();
+		public List<String> verify() {
+			List<String> retval = Lists.newArrayList();
 			// name
 			try {
 				String name = this.getDeclaredName();
@@ -916,7 +917,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * @return any verification errors encountered
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private ArrayList<String> initialize() throws InvalidSPDXAnalysisException {
+	private List<String> initialize() throws InvalidSPDXAnalysisException {
 		Node spdxDocNode = getSpdxDocNode();
 		if (spdxDocNode != null) {	// not empty - we should verify
 			if (!spdxDocNode.isURI()) {
@@ -924,12 +925,12 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			}
 			String docUri = spdxDocNode.getURI();
 			this.documentNamespace = this.formDocNamespace(docUri);
-			ArrayList<String> errors = verify();
+			List<String> errors = verify();
 			initializeNextLicenseRef();
 			initializeNextElementRef();
 			return errors;
 		} else {
-			return new ArrayList<String>();
+			return Lists.newArrayList();
 		}
 	}
 
@@ -1054,8 +1055,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * Verifies the spdx document
 	 * @return error messages for any fields which do not match the spec.  Return an empty array list if no issues.
 	 */
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		// specVersion
 		String docSpecVersion = "";	// note - this is used later in verify to verify version specific info
 		try {
@@ -1081,7 +1082,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			if (creator == null) {
 				retval.add("Missing required Creator");
 			} else {
-				ArrayList<String> creatorVerification = creator.verify();
+				List<String> creatorVerification = creator.verify();
 				retval.addAll(creatorVerification);
 			}
 		} catch (InvalidSPDXAnalysisException e) {
@@ -1093,7 +1094,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			if (sPkg == null) {
 				retval.add("Missing required SPDX Package");
 			} else {
-				ArrayList<String> packageVerification = sPkg.verify();
+				List<String> packageVerification = sPkg.verify();
 				retval.addAll(packageVerification);
 			}
 		} catch (InvalidSPDXAnalysisException e) {
@@ -1178,7 +1179,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		if (subject == null || propertyName == null) {
 			return null;
 		}
-		ArrayList<String> alResult = new ArrayList<String>();
+		List<String> alResult = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(subject, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -1332,7 +1333,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	}
 	
 	public SpdxListedLicense getDataLicense() throws InvalidSPDXAnalysisException {
-		ArrayList<AnyLicenseInfo> alLic = new ArrayList<AnyLicenseInfo>();
+		List<AnyLicenseInfo> alLic = Lists.newArrayList();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_DATA_LICENSE).asNode();
 		Triple m = Triple.createMatch(getSpdxDocNode(), p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -1377,7 +1378,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	@SuppressWarnings("deprecation")
 	public SPDXFile[] getFileReferences() throws InvalidSPDXAnalysisException {
-		ArrayList<SPDXFile> alFiles = new ArrayList<SPDXFile>();
+		List<SPDXFile> alFiles = Lists.newArrayList();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_FILE_REFERENCE).asNode();
 		Triple m = Triple.createMatch(getSpdxDocNode(), p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -1409,7 +1410,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("No SPDX Document was found.  Can not access the creator information"));
 		}
-		ArrayList<SPDXCreatorInformation> als = new ArrayList<SPDXCreatorInformation>();
+		List<SPDXCreatorInformation> als = Lists.newArrayList();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_CREATION_INFO).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -1469,7 +1470,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("Must have an SPDX document to get reviewers"));
 		}
-		ArrayList<SPDXReview> als = new ArrayList<SPDXReview>();
+		List<SPDXReview> als = Lists.newArrayList();
 		als.clear();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_REVIEWED_BY).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
@@ -1489,7 +1490,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 */
 	public void setReviewers(SPDXReview[] reviewers) throws InvalidSPDXAnalysisException {
 		if (reviewers.length > 0) {
-			ArrayList<String> errors = new ArrayList<String>();
+			List<String> errors = Lists.newArrayList();
 			for (int i = 0;i < reviewers.length; i++) {
 				errors.addAll(reviewers[i].verify());
 			}
@@ -1597,7 +1598,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		if (spdxDocNode == null) {
 			throw(new InvalidSPDXAnalysisException("No SPDX Document - can not get the Non Standard Licenses"));
 		}
-		ArrayList<ExtractedLicenseInfo> alLic = new ArrayList<ExtractedLicenseInfo>();
+		List<ExtractedLicenseInfo> alLic = Lists.newArrayList();
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES).asNode();
 		Triple m = Triple.createMatch(spdxDocNode, p, null);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
@@ -1617,7 +1618,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void setExtractedLicenseInfos(ExtractedLicenseInfo[] nonStandardLicenses) throws InvalidSPDXAnalysisException {
-		ArrayList<String> errors = new ArrayList<String>();
+		List<String> errors = Lists.newArrayList();
 		// verify the licenses
 		for (int i = 0;i < nonStandardLicenses.length; i++) {
 			errors.addAll(nonStandardLicenses[i].verify());
@@ -1745,7 +1746,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		Model oldModel = this.model;
 		this.model = model;
 		try {
-			ArrayList<String> errors = initialize();
+			List<String> errors = initialize();
 			if (errors != null && errors.size() > 0) {
 				this.model = oldModel;
 				throw(new InvalidSPDXAnalysisException("New model contains verification errors"));

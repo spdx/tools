@@ -16,9 +16,10 @@
 */
 package org.spdx.rdfparser;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -237,8 +238,8 @@ public class SPDXChecksum {
 		return r;
 	}
 	
-	public ArrayList<String> verify() {
-		ArrayList<String> retval = new ArrayList<String>();
+	public List<String> verify() {
+		List<String> retval = Lists.newArrayList();
 		String algorithm = this.getAlgorithm();
 		if (algorithm == null || algorithm.isEmpty()) {
 			retval.add("Missing required algorithm");

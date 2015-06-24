@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +25,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -178,7 +178,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	public List<String> verify() {
 		List<String> retval;
 		if (this.relatedSpdxElement == null) {
-			retval = new ArrayList<String>();
+			retval = Lists.newArrayList();
 			retval.add("Missing related SPDX element");
 		} else {
 			retval = this.relatedSpdxElement.verify();

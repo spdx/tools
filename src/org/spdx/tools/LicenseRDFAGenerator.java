@@ -19,8 +19,10 @@ package org.spdx.tools;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -43,6 +45,7 @@ import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
@@ -125,7 +128,7 @@ public class LicenseRDFAGenerator {
 		}
 
 
-		ArrayList<String> warnings = new ArrayList<String>();
+		List<String> warnings = Lists.newArrayList();
 		ISpdxListedLicenseProvider licenseProvider = null;
 		try {
 			if (ssFile.getName().toLowerCase().endsWith(".xls")) {
@@ -215,7 +218,7 @@ public class LicenseRDFAGenerator {
 	*/
 	private static void writeExceptionList(String version,
 			ISpdxListedLicenseProvider licenseProvider,
-			ArrayList<String> warnings, File dir, File textFolder,
+			List<String> warnings, File dir, File textFolder,
 			File htmlFolder, File templateFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
@@ -273,7 +276,7 @@ public class LicenseRDFAGenerator {
 	 * @param warnings Array list of warnings to add to if an problem is found with the text
 	 */
 	private static void checkText(String text, String textDescription,
-			ArrayList<String> warnings) {
+			List<String> warnings) {
 		for (int i = 0; i < text.length(); i++) {
 			if (INVALID_TEXT_CHARS.contains(text.charAt(i))) {
 				warnings.add("Invalid character in " + textDescription +
@@ -299,7 +302,7 @@ public class LicenseRDFAGenerator {
 	 * 
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
-			ISpdxListedLicenseProvider licenseProvider, ArrayList<String> warnings,
+			ISpdxListedLicenseProvider licenseProvider, List<String> warnings,
 			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, LicenseTemplateRuleException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
