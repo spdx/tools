@@ -17,7 +17,7 @@
 */
 package org.spdx.compare;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -82,7 +82,7 @@ public class VerificationSheet extends AbstractSheet {
 	 * @throws SpreadsheetException 
 	 */
 	public void importVerificationErrors(
-			ArrayList<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {
+			List<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {
 		if (verificationErrors == null) {
 			throw(new SpreadsheetException("Verification errors not specified on import (null value)."));
 		}
@@ -100,7 +100,7 @@ public class VerificationSheet extends AbstractSheet {
 		for (int i = 0; i < docNames.length; i++) {
 			Cell hCell = header.getCell(i);
 			hCell.setCellValue(docNames[i]);
-			ArrayList<String> errors = verificationErrors[i];
+			List<String> errors = verificationErrors[i];
 			if (errors != null) {
 				for (int j = 0; j < errors.size(); j++) {
 					Row errorRow;

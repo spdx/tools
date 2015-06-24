@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +32,7 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -196,7 +197,7 @@ public class LicenseHTMLFile {
 				}
 				retval.put("notes", notes);
 				retval.put("osiApproved", license.isOsiApproved());
-				ArrayList<FormattedUrl> otherWebPages = new ArrayList<FormattedUrl>();
+				List<FormattedUrl> otherWebPages = Lists.newArrayList();
 				if (license.getSeeAlso() != null && license.getSeeAlso().length > 0) {
 					for (String sourceUrl : license.getSeeAlso()) {
 						if (sourceUrl != null && !sourceUrl.isEmpty()) {

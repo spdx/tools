@@ -17,10 +17,10 @@
 */
 package org.spdx.compare;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,6 +34,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 
@@ -322,8 +323,8 @@ public class SpdxFileComparer extends SpdxItemComparer {
 				uniqueCompareArtifactOf = Maps.newHashMap();
 				this.uniqueArtifactOfs.put(entry.getKey(), uniqueCompareArtifactOf);
 			}
-			ArrayList<DoapProject> alDocUnique = new ArrayList<DoapProject>();
-			ArrayList<DoapProject> alCompareUnique = new ArrayList<DoapProject>();
+			List<DoapProject> alDocUnique = Lists.newArrayList();
+			List<DoapProject> alCompareUnique = Lists.newArrayList();
 			compareArtifactOf(artifactOfs, compareArtifactOf, alDocUnique, alCompareUnique);
 			if (alDocUnique.size() > 0 || alCompareUnique.size() > 0) {
 				this.differenceFound = true;
@@ -337,8 +338,8 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	}
 	
 	private void compareArtifactOf(DoapProject[] artifactOfA,
-			DoapProject[] artifactOfB, ArrayList<DoapProject> alUniqueA,
-			ArrayList<DoapProject> alUniqueB) {
+			DoapProject[] artifactOfB, List<DoapProject> alUniqueA,
+			List<DoapProject> alUniqueB) {
 		Arrays.sort(artifactOfA, doapComparer);
 		Arrays.sort(artifactOfB, doapComparer);
 		int aIndex = 0;

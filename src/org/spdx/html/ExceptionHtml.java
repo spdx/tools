@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
@@ -29,6 +29,7 @@ import org.spdx.rdfparser.license.LicenseException;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 
@@ -49,7 +50,7 @@ public class ExceptionHtml {
 	 * @param exception
 	 */
 	public ExceptionHtml(LicenseException exception) {
-		ArrayList<String> alSourceUrls = new ArrayList<String>();
+		List<String> alSourceUrls = Lists.newArrayList();
 		String[] sourceUrls = exception.getSeeAlso();
 		if (sourceUrls != null) {
 			for (String sourceUrl: sourceUrls) {

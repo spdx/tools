@@ -19,13 +19,14 @@ package org.spdx.html;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import org.spdx.rdfparser.SpdxRdfConstants;
-import org.spdx.rdfparser.license.SpdxListedLicense;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class holds a JSON file for a license table of contents
@@ -99,7 +100,7 @@ public class LicenseTOCJSONFile {
 		}
 	}
 	
-	ArrayList<ListedSpdxLicense> listedLicenses = new ArrayList<ListedSpdxLicense>();
+	List<ListedSpdxLicense> listedLicenses = Lists.newArrayList();
 	
 	private int currentRefNumber = 1;
 

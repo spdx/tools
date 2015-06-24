@@ -16,7 +16,6 @@
 */
 package org.spdx.html;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +34,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -89,8 +89,8 @@ public class MustacheMap {
 			}
 			
 		});
-		ArrayList<ElementContext> describedPkgs = new ArrayList<ElementContext>();
-		ArrayList<ElementContext> describedFiles = new ArrayList<ElementContext>();
+		List<ElementContext> describedPkgs = Lists.newArrayList();
+		List<ElementContext> describedFiles = Lists.newArrayList();
 		for (int i = 0; i < describedItems.length; i++) {
 			if (describedItems[i] instanceof SpdxPackage) {
 				describedPkgs.add(new ElementContext(describedItems[i], spdxIdToUrl));
@@ -112,7 +112,7 @@ public class MustacheMap {
 	private static List<RelationshipContext> getRelationshipContexts(
 			Relationship[] relationships, Map<String, String> spdxIdToUrl) {
 		Arrays.sort(relationships);
-		ArrayList<RelationshipContext> retval = new ArrayList<RelationshipContext>();
+		List<RelationshipContext> retval = Lists.newArrayList();
 		if (relationships == null) {
 			return retval;
 		}
@@ -150,7 +150,7 @@ public class MustacheMap {
 			}
 			
 		});
-		ArrayList<FileContext> describedFiles = new ArrayList<FileContext>();
+		List<FileContext> describedFiles = Lists.newArrayList();
 		for (int i = 0; i < describedItems.length; i++) {
 			if (describedItems[i] instanceof SpdxFile) {
 				describedFiles.add(new FileContext((SpdxFile)describedItems[i]));
@@ -160,8 +160,8 @@ public class MustacheMap {
 		return retval;
 	}
 	
-	private static ArrayList<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SpdxDocument doc, Map<String, String> spdxIdToUrl) {
-		ArrayList<ExtractedLicensingInfoContext> retval = new ArrayList<ExtractedLicensingInfoContext>();
+	private static List<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SpdxDocument doc, Map<String, String> spdxIdToUrl) {
+		List<ExtractedLicensingInfoContext> retval = Lists.newArrayList();
 		try {
 			ExtractedLicenseInfo[] extractedLicenseInfos = doc.getExtractedLicenseInfos();
 			Arrays.sort(extractedLicenseInfos, new Comparator<ExtractedLicenseInfo>() {
@@ -195,8 +195,8 @@ public class MustacheMap {
 	 * @param doc
 	 * @return
 	 */
-	private static ArrayList<ReviewerContext> getReviewers(SpdxDocument doc) {
-		ArrayList<ReviewerContext> retval = new ArrayList<ReviewerContext>();
+	private static List<ReviewerContext> getReviewers(SpdxDocument doc) {
+		List<ReviewerContext> retval = Lists.newArrayList();
 		try {
 			@SuppressWarnings("deprecation")
 			SPDXReview[] reviewers = doc.getReviewers();
@@ -268,7 +268,7 @@ public class MustacheMap {
 			}
 			
 		});
-		ArrayList<FileContext> alFiles = new ArrayList<FileContext>();
+		List<FileContext> alFiles = Lists.newArrayList();
 		for (int i = 0; i < files.length; i++) {
 			if (files[i] instanceof SpdxFile) {
 				alFiles.add(new FileContext(files[i]));

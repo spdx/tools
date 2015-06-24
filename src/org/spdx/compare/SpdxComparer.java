@@ -17,7 +17,6 @@
 */
 package org.spdx.compare;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -44,6 +43,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -567,7 +567,7 @@ public class SpdxComparer {
 			SpdxFile[] filesA, SpdxFile[] filesB, 
 			Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> licenseIdXlationMap) throws SpdxCompareException {
 		
-		List<SpdxFileDifference> alRetval = new ArrayList<SpdxFileDifference>();
+		List<SpdxFileDifference> alRetval = Lists.newArrayList();
 		int aIndex = 0;
 		int bIndex = 0;
 		while (aIndex < filesA.length && bIndex < filesB.length) {
@@ -604,7 +604,7 @@ public class SpdxComparer {
 	static SpdxPackage[] findUniquePackages(SpdxPackage[] pkgsA, SpdxPackage[] pkgsB) {
 		int bIndex = 0;
 		int aIndex = 0;
-		ArrayList<SpdxPackage> alRetval = new ArrayList<SpdxPackage>();
+		List<SpdxPackage> alRetval = Lists.newArrayList();
 		while (aIndex < pkgsA.length) {
 			if (bIndex >= pkgsB.length) {
 				alRetval.add(pkgsA[aIndex]);
@@ -637,7 +637,7 @@ public class SpdxComparer {
 	static SpdxFile[] findUniqueFiles(SpdxFile[] filesA, SpdxFile[] filesB) {
 		int bIndex = 0;
 		int aIndex = 0;
-		ArrayList<SpdxFile> alRetval = new ArrayList<SpdxFile>();
+		List<SpdxFile> alRetval = Lists.newArrayList();
 		while (aIndex < filesA.length) {
 			if (bIndex >= filesB.length) {
 				alRetval.add(filesA[aIndex]);
@@ -728,7 +728,7 @@ public class SpdxComparer {
 		if (stringsB == null) {	
 			return Arrays.copyOf(stringsA, stringsA.length);	
 		}
-		ArrayList<String> al = new ArrayList<String>();
+		List<String> al = Lists.newArrayList();
 		for (int i = 0; i < stringsA.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < stringsB.length; j++) {
@@ -962,9 +962,9 @@ public class SpdxComparer {
 					continue;	// no need to compare to ourself;
 				}
 				Map<String, String> idMap = Maps.newHashMap();
-				List<SpdxLicenseDifference> alDifferences = new ArrayList<SpdxLicenseDifference>();
+				List<SpdxLicenseDifference> alDifferences = Lists.newArrayList();
 				ExtractedLicenseInfo[] extractedLicensesB = spdxDocs[j].getExtractedLicenseInfos();
-				List<ExtractedLicenseInfo> uniqueLicenses = new ArrayList<ExtractedLicenseInfo>();
+				List<ExtractedLicenseInfo> uniqueLicenses = Lists.newArrayList();
 				compareLicenses(extractedLicensesA, extractedLicensesB,
 						idMap, alDifferences, uniqueLicenses);
 				// unique
@@ -1264,7 +1264,7 @@ public class SpdxComparer {
 			SPDXReview[] reviewA, SPDXReview[] reviewB) {
 		//Note that we need to take into account the possibility of two SPDXReviews in the
 		//same array with the same reviewer name
-		ArrayList<SPDXReviewDifference> retval = new ArrayList<SPDXReviewDifference>();
+		List<SPDXReviewDifference> retval = Lists.newArrayList();
 		for (int i = 0; i < reviewA.length; i++) {
 			boolean reviewDifferent = false;
 			int differentReviewerIndex = -1;
@@ -1299,7 +1299,7 @@ public class SpdxComparer {
 	 */
 	private SPDXReview[] findUniqueReviewers(SPDXReview[] reviewA,
 			SPDXReview[] reviewB) {
-		ArrayList<SPDXReview> retval = new ArrayList<SPDXReview>();
+		List<SPDXReview> retval = Lists.newArrayList();
 		for (int i = 0; i < reviewA.length; i++) {
 			boolean found = false;
 			for (int j = 0; j < reviewB.length; j++) {
@@ -1959,7 +1959,7 @@ public class SpdxComparer {
 	 */
 	public static Checksum[] findUniqueChecksums(Checksum[] checksumsA,
 			Checksum[] checksumsB) {
-		ArrayList<Checksum> retval = new ArrayList<Checksum>();
+		List<Checksum> retval = Lists.newArrayList();
 		if (checksumsA != null) {
 			for (int i = 0; i < checksumsA.length; i++) {
 				if (checksumsA[i] == null) {
@@ -1990,7 +1990,7 @@ public class SpdxComparer {
 	 */
 	public static Annotation[] findUniqueAnnotations(Annotation[] annotationsA,
 			Annotation[] annotationsB) {
-		ArrayList<Annotation> retval = new ArrayList<Annotation>();
+		List<Annotation> retval = Lists.newArrayList();
 		if (annotationsA != null) {
 			for (int i = 0; i < annotationsA.length; i++) {
 				if (annotationsA[i] == null) {
@@ -2056,7 +2056,7 @@ public class SpdxComparer {
 	 */
 	public static Relationship[] findUniqueRelationships(
 			Relationship[] relationshipsA, Relationship[] relationshipsB) {
-		ArrayList<Relationship> retval = new ArrayList<Relationship>();
+		List<Relationship> retval = Lists.newArrayList();
 		if (relationshipsA == null) {
 			return new Relationship[0];
 		}
@@ -2089,7 +2089,7 @@ public class SpdxComparer {
 	 */
 	public static ExternalDocumentRef[] findUniqueExternalDocumentRefs(
 			ExternalDocumentRef[] externalDocRefsA, ExternalDocumentRef[] externalDocRefsB) throws InvalidSPDXAnalysisException {
-		ArrayList<ExternalDocumentRef> retval = new ArrayList<ExternalDocumentRef>();
+		List<ExternalDocumentRef> retval = Lists.newArrayList();
 		if (externalDocRefsA == null) {
 			return new ExternalDocumentRef[0];
 		}
