@@ -18,6 +18,13 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.regex.Matcher;
+
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -26,14 +33,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-
-import java.util.regex.Matcher;
-
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 
 /**
@@ -1128,9 +1127,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 				SpdxListedLicense dataLicense = this.getDataLicense();
 				if (dataLicense == null) {
 					retval.add("Missing required data license");
-				}
-				if (docSpecVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
-					{ 
+				}else if (docSpecVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) { 
 					if (!dataLicense.getLicenseId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
 						retval.add("Incorrect data license for SPDX version 1.0 document - found "+dataLicense.getLicenseId()+", expected "+SPDX_DATA_LICENSE_ID_VERSION_1_0);
 					}
@@ -1731,7 +1728,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return the model
 	 */
-	public Model getModel() {
+	@Override
+    public Model getModel() {
 		return model;
 	}
 
@@ -1851,7 +1849,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	/**
 	 * @return Document namespace
 	 */
-	public String getDocumentNamespace() {
+	@Override
+    public String getDocumentNamespace() {
 		return this.documentNamespace;
 	}
 	
