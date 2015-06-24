@@ -16,11 +16,12 @@
 */
 package org.spdx.html;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
+
+import com.google.common.collect.Lists;
 
 /**
  * Context for a Package Verification Code
@@ -59,7 +60,7 @@ public class VerificationCodeContext {
 	}
 	
 	public List<String> packageVerificationCodeExcludedFile() {
-		ArrayList<String> retval = new ArrayList<String>();
+		List<String> retval = Lists.newArrayList();
 		if (code != null) {
 			String[] skippedFiles = code.getExcludedFileNames();
 			if (skippedFiles != null) {

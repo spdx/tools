@@ -16,7 +16,6 @@
 */
 package org.spdx.compare;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,7 @@ import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxItem;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -237,8 +237,8 @@ public class SpdxItemComparer {
 				this.uniqueLicenseInfosInFiles.put(entry.getKey(), uniqueCompareLicenses);
 			}
 			AnyLicenseInfo[] compareLicenses = entry.getValue().getLicenseInfoFromFiles();
-			ArrayList<AnyLicenseInfo> uniqueInDoc = new ArrayList<AnyLicenseInfo>();
-			ArrayList<AnyLicenseInfo> uniqueInCompare = new ArrayList<AnyLicenseInfo>();
+			List<AnyLicenseInfo> uniqueInDoc = Lists.newArrayList();
+			List<AnyLicenseInfo> uniqueInCompare = Lists.newArrayList();
 			Map<String, String> licenseXlationMap = this.extractedLicenseIdMap.get(spdxDocument).get(entry.getKey());
 			compareLicenseArrays(licenses, compareLicenses, uniqueInDoc, uniqueInCompare, licenseXlationMap);
 			if (uniqueInDoc.size() > 0 || uniqueInCompare.size() > 0) {

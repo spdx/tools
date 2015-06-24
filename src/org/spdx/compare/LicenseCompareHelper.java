@@ -17,7 +17,8 @@
 */
 package org.spdx.compare;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -34,6 +35,7 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.LicenseSet;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -355,7 +357,7 @@ public class LicenseCompareHelper {
 	 */
 	public static String[] matchingStandardLicenseIds(String licenseText) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		String[] stdLicenseIds = LicenseInfoFactory.getSpdxListedLicenseIds();
-		ArrayList<String> matchingIds  = new ArrayList<String>();
+		List<String> matchingIds  = Lists.newArrayList();
 		for (String stdLicId : stdLicenseIds) {
 			SpdxListedLicense license = LicenseInfoFactory.getListedLicenseById(stdLicId);
 			if (isTextStandardLicense(license, licenseText)) {
