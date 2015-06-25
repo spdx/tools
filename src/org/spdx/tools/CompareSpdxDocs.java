@@ -51,6 +51,8 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
 
+import com.google.common.base.Joiner;
+
 /**
  * Command line application to compare two SPDX documents
  * Usage: CompareSpdxDoc doc1 doc2 [output]
@@ -884,22 +886,15 @@ public class CompareSpdxDocs {
 			AnyLicenseInfo[] fromFiles1 = spdxPackageComparer.getDocPackage(spdxDoc1).getLicenseInfoFromFiles();
 			StringBuilder sb = new StringBuilder();
 			if (fromFiles1 != null && fromFiles1.length > 0) {
-				sb.append(fromFiles1[0]);
-			}
-			for (int i = 1; i < fromFiles1.length; i++) {
-				sb.append(", ");
-				sb.append(fromFiles1[i]);
+				sb.append(Joiner.on(", ").skipNulls().join(fromFiles1));
 			}
 			output.println("\t"+doc1Name+": "+sb.toString());
 			sb = new StringBuilder();
 			AnyLicenseInfo[] fromFiles2 = spdxPackageComparer.getDocPackage(spdxDoc2).getLicenseInfoFromFiles();
 			if (fromFiles2 != null && fromFiles2.length > 0) {
-				sb.append(fromFiles2[0]);
+				sb.append(Joiner.on(", ").skipNulls().join(fromFiles2));
 			}
-			for (int i = 1; i < fromFiles2.length; i++) {
-				sb.append(", ");
-				sb.append(fromFiles2[i]);
-			}
+			
 			output.println("\t"+doc2Name+": "+sb.toString());
 		}
 		// comments on license
