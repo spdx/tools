@@ -344,9 +344,7 @@ public class SPDXCreatorInformation {
 				retval.add(verify);
 			}
 		}
-		@SuppressWarnings("unused")
-		String createdComments = this.getComment();
-		// anything to verify for comments?
+
 		// ListList Verions
 		String licenseListVersion = this.getLicenseListVersion();
 		if (licenseListVersion != null) {
