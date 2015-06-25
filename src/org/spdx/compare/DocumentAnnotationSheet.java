@@ -42,10 +42,10 @@ public class DocumentAnnotationSheet extends AbstractSheet {
 		 */
 		@Override
 		public int compare(Annotation o1, Annotation o2) {
-			if (o1 instanceof Annotation) {
-				if (o2 instanceof Annotation) {
-					Annotation a1 = (Annotation)o1;
-					Annotation a2 = (Annotation)o2;
+			if (o1 != null) {
+				if (o2 != null) {
+					Annotation a1 = o1;
+					Annotation a2 = o2;
 					int retval = a1.getAnnotator().compareTo(a2.getAnnotator());
 					if (retval != 0) {
 						return retval;
