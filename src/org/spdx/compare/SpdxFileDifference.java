@@ -26,6 +26,8 @@ import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 
+import com.google.common.base.Joiner;
+
 /**
  * Contains the results of a comparison between two SPDX files with the same name
  * @author Gary O'Neall
@@ -203,11 +205,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	static String stringArrayToString(String[] s) {
 		StringBuilder sb = new StringBuilder();
 		if (s != null && s.length > 0) {
-			sb.append(s[0]);
-		}
-		for (int i = 1; i < s.length; i++) {
-			sb.append(", ");
-			sb.append(s[i]);
+			sb.append(Joiner.on(", ").skipNulls().join(s));
 		}
 		return sb.toString();
 	}
