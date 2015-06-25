@@ -206,7 +206,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			VerificationSheet.create(wb, VERIFICATION_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
-			excelOut.close();
+		    if(excelOut != null){
+		        excelOut.close();
+		    }
 		}
 	}
 	
