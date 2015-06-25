@@ -270,7 +270,7 @@ public class MustacheMap {
 		});
 		List<FileContext> alFiles = Lists.newArrayList();
 		for (int i = 0; i < files.length; i++) {
-			if (files[i] instanceof SpdxFile) {
+			if (files[i] != null) {
 				alFiles.add(new FileContext(files[i]));
 			}
 		}

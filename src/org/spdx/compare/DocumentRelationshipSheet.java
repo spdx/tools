@@ -42,10 +42,10 @@ public class DocumentRelationshipSheet extends AbstractSheet {
 		 */
 		@Override
 		public int compare(Relationship o1, Relationship o2) {
-			if (o1 instanceof Relationship) {
-				if (o2 instanceof Relationship) {
-					Relationship r1 = (Relationship)o1;
-					Relationship r2 = (Relationship)o2;
+			if (o1 != null) {
+				if (o2 != null) {
+					Relationship r1 = o1;
+					Relationship r2 = o2;
 					int retval = r1.getRelationshipType().toString().compareTo(r2.getRelationshipType().toString());
 					if (retval != 0) {
 						return retval;
