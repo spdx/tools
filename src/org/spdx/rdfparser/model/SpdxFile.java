@@ -622,17 +622,19 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			retval = null;
 		}
 		clonedElementIds.put(this.getId(), retval);
-		try {
-			retval.setRelationships(cloneRelationships(clonedElementIds));
-		} catch (InvalidSPDXAnalysisException e) {
-			logger.error("Unexected error setting relationships during clone",e);
-		}
-		if (this.fileDependencies != null) {
-			try {
-				retval.setFileDependencies(cloneFileDependencies(clonedElementIds));
-			} catch (InvalidSPDXAnalysisException e1) {
-				logger.warn("Error setting file dependencies on clone", e1);
-			}
+		if(retval != null){
+    		try {
+    			retval.setRelationships(cloneRelationships(clonedElementIds));
+    		} catch (InvalidSPDXAnalysisException e) {
+    			logger.error("Unexected error setting relationships during clone",e);
+    		}
+    		if (this.fileDependencies != null) {
+    			try {
+    				retval.setFileDependencies(cloneFileDependencies(clonedElementIds));
+    			} catch (InvalidSPDXAnalysisException e1) {
+    				logger.warn("Error setting file dependencies on clone", e1);
+    			}
+    		}
 		}
 		return retval;
 	}

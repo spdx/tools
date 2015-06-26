@@ -56,7 +56,7 @@ public class FileContext {
 	
 	public String fileName() {
 		if (spdxFile == null && error != null) {
-			return "Error getting SPDX file information: "+error.getMessage();
+			return "Error getting SPDX file information: "+ error.getMessage();
 		}
 		if (spdxFile != null) {
 			return spdxFile.getName();
@@ -67,15 +67,15 @@ public class FileContext {
 	
 	public String spdxId() {
 		if (spdxFile == null && error != null) {
-			return "Error getting SPDX file information: "+error.getMessage();
+			return "Error getting SPDX file information: "+ (error != null ? error.getMessage() : "null");
 		}
 		return spdxFile.getId();
 	}
 	
 	public List<String> checksums() {
-		if (spdxFile == null && error != null) {
+		if (spdxFile == null) {
 			List<String> retval = Lists.newArrayList();
-			retval.add("Error getting SPDX file information: "+error.getMessage());
+			retval.add("Error getting SPDX file information: "+ (error != null ? error.getMessage() : "null"));
 			return retval;
 		}
 		Checksum[] fileChecksums = this.spdxFile.getChecksums();
