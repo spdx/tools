@@ -265,9 +265,7 @@ public class SPDXReview {
 				retval.add(verify);
 			}
 		}
-		@SuppressWarnings("unused")
-		String reviewerComment = this.getComment();
-		// anything to verify for comment?
+
 		return retval;
 	}
 }
