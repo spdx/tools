@@ -45,8 +45,8 @@ public class ExternalReferencesSheet extends AbstractSheet {
 		 */
 		@Override
 		public int compare(ExternalDocumentRef o1, ExternalDocumentRef o2) {
-			if (o1 instanceof ExternalDocumentRef) {
-				if (o2 instanceof ExternalDocumentRef) {
+			if (o1 != null) {
+				if (o2 != null) {
 					ExternalDocumentRef r1 = o1;
 					ExternalDocumentRef r2 = o2;
 					int retval = r1.getSpdxDocumentNamespace().compareTo((r2.getSpdxDocumentNamespace()));

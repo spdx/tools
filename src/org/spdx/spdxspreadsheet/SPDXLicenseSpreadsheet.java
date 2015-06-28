@@ -25,9 +25,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
+import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.rdfparser.license.LicenseException;
 
 /**
  * A spreadhseet containing license information
@@ -217,7 +217,9 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 			DeprecatedLicenseSheet.create(wb, DEPRECATED_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
-			excelOut.close();
+		    if(excelOut != null){
+		        excelOut.close();
+		    }
 		}
 	}
 
@@ -254,7 +256,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 		return licenseSheet;
 	}
 
-	public Iterator<SpdxListedLicense> getLicenseIterator() {
+	@Override
+    public Iterator<SpdxListedLicense> getLicenseIterator() {
 		try {
             return new LicenseIterator();
         } catch (SpreadsheetException e) {
@@ -262,7 +265,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
         }
 	}
 	
-	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator() {
+	@Override
+    public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator() {
 		try {
             return new DeprecatedLicenseIterator();
         } catch (SpreadsheetException e) {

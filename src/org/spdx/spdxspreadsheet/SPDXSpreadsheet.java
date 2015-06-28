@@ -168,7 +168,9 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
-			excelOut.close();
+		    if(excelOut != null){
+		        excelOut.close();
+		    }
 		}
 	}
 
