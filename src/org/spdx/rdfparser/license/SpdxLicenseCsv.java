@@ -72,8 +72,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 		 */
 		public CsvLicenseIterator(File csvFile) throws IOException, LicenseCsvException {
 			iterReader = new CSVReader(new FileReader(csvFile), DELIM, STRING_DELIM);
-			@SuppressWarnings("unused")
-			String[] tempHeaderRecord = iterReader.readNext();
+			iterReader.readNext();
 			readNextStandardLicense();
 		}
 
