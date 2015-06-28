@@ -103,7 +103,7 @@ public class RdfToSpreadsheet {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
 			copyRdfXmlToSpreadsheet(doc, ss);
 			List<String> verify = doc.verify();
-			if (verify.size() > 0) {
+			if (verify != null && verify.size() > 0) {
 				System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
 				for (int i = 0; i < verify.size(); i++) {
 					System.out.println("\t"+verify.get(i));

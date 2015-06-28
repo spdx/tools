@@ -24,11 +24,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.Set;
 
 import org.spdx.rdfparser.model.SpdxFile;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Generates a package verification code from a directory of source code or an array of <code>SPDXFile</code>s.  
@@ -61,7 +62,7 @@ public class VerificationCodeGenerator {
 		if (spdxFiles == null) {
 			return null;
 		}
-		TreeSet<String> skippedFilePathSet = new TreeSet<String>();
+		Set<String> skippedFilePathSet = Sets.newTreeSet();
 		if (skippedFilePaths != null) {
 			for (int i = 0; i < skippedFilePaths.length; i++) {
 				if (skippedFilePaths[i] != null) {
@@ -91,7 +92,7 @@ public class VerificationCodeGenerator {
 		if (spdxFiles == null) {
 			return null;
 		}
-		TreeSet<String> skippedFilePathSet = new TreeSet<String>();
+		Set<String> skippedFilePathSet = Sets.newTreeSet();
 		if (skippedFilePaths != null) {
 			for (int i = 0; i < skippedFilePaths.length; i++) {
 				if (skippedFilePaths[i] != null) {
@@ -120,7 +121,7 @@ public class VerificationCodeGenerator {
 	 */
 	public SpdxPackageVerificationCode generatePackageVerificationCode(File sourceDirectory, File[] skippedFiles) throws NoSuchAlgorithmException, IOException {
 		// create a sorted list of file paths
-		TreeSet<String> skippedFilesPath = new TreeSet<String>();
+		Set<String> skippedFilesPath = Sets.newTreeSet();
 		String rootOfDirectory = sourceDirectory.getAbsolutePath();
 		int rootLen = rootOfDirectory.length()+1;
 		for (int i = 0; i < skippedFiles.length; i++) {
@@ -159,7 +160,7 @@ public class VerificationCodeGenerator {
 	 * @throws IOException 
 	 */
 	private void collectFileData(String prefixForRelative, File sourceDirectory,
-			List<String> fileNameAndChecksums, TreeSet<String> skippedFiles) throws IOException {
+			List<String> fileNameAndChecksums, Set<String> skippedFiles) throws IOException {
 		if (!sourceDirectory.isDirectory()) {
 			return;
 		}
