@@ -16,8 +16,8 @@
  */
 package org.spdx.rdfparser;
 
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -26,9 +26,8 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
-import com.google.common.collect.Sets;
 import com.google.common.collect.Lists;
-
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -1130,9 +1129,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 				SpdxListedLicense dataLicense = this.getDataLicense();
 				if (dataLicense == null) {
 					retval.add("Missing required data license");
-				}
-				if (docSpecVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
-					{ 
+				}else if (docSpecVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) { 
 					if (!dataLicense.getLicenseId().equals(SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
 						retval.add("Incorrect data license for SPDX version 1.0 document - found "+dataLicense.getLicenseId()+", expected "+SPDX_DATA_LICENSE_ID_VERSION_1_0);
 					}
