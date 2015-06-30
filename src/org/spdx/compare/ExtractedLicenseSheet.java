@@ -39,7 +39,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class ExtractedLicenseSheet extends AbstractSheet {
 	
-	class ExtractedLicenseComparator implements Comparator<AnyLicenseInfo> {
+	private static final class ExtractedLicenseComparator implements Comparator<AnyLicenseInfo> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

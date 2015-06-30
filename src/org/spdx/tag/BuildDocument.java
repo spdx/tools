@@ -69,7 +69,7 @@ import com.google.common.collect.Sets;
  */
 public class BuildDocument implements TagValueBehavior, Serializable {
 
-    class AnnotationWithId {
+    private static class AnnotationWithId {
         private Annotation annotation;
         private String id;
         private AnnotationWithId(String annotator) {
@@ -97,7 +97,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             return this.annotation;
         }
     }
-    class RelationshipWithId {
+    private static class RelationshipWithId {
         private String id;
         private String relatedId;
         private RelationshipType relationshipType;

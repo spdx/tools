@@ -35,7 +35,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class DocumentAnnotationSheet extends AbstractSheet {
 	
-	class AnnotationComparator implements Comparator<Annotation> {
+	private static class AnnotationComparator implements Comparator<Annotation> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

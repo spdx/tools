@@ -60,7 +60,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 	private static final int NUM_COLS = HEADER_ROW.length;
 
 	
-	class CsvLicenseIterator implements Iterator<SpdxListedLicense> {
+	private static class CsvLicenseIterator implements Iterator<SpdxListedLicense> {
 		
 		private CSVReader iterReader = null;
 		SpdxListedLicense nextStandardLicense = null;

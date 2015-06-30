@@ -56,7 +56,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  */
 public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	
-	class SpdxFileComparator implements Comparator<SpdxFile> {
+	private static final class SpdxFileComparator implements Comparator<SpdxFile> {
 		
 		private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 

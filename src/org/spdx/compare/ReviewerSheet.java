@@ -39,7 +39,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class ReviewerSheet extends AbstractSheet {
 	
-	class ReviewerComparator implements Comparator<SPDXReview> {
+	private static final class ReviewerComparator implements Comparator<SPDXReview> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
