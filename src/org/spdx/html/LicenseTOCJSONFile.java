@@ -35,20 +35,12 @@ import com.google.common.collect.Lists;
  */
 public class LicenseTOCJSONFile {
 	
-	public class ListedSpdxLicense {
-		private String reference;
-		private String refNumber;
-		private String licenseId;
-		private boolean osiApproved;
-		private String licenseName;
-		
-		public ListedSpdxLicense() {
-			reference = null;
-			refNumber = null;
-			licenseId = null;
-			osiApproved = false;
-			licenseName = null;
-		}
+	private static class ListedSpdxLicense {
+		private final String reference;
+		private final String refNumber;
+		private final String licenseId;
+		private final boolean osiApproved;
+		private final String licenseName;
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
 				String licenseId, boolean osiApproved, String licenseName) {
@@ -63,41 +55,22 @@ public class LicenseTOCJSONFile {
 			return reference;
 		}
 
-		public void setReference(String reference) {
-			this.reference = reference;
-		}
-
 		public String getRefNumber() {
 			return refNumber;
-		}
-
-		public void setRefNumber(String refNumber) {
-			this.refNumber = refNumber;
 		}
 
 		public String getLicenseId() {
 			return licenseId;
 		}
 
-		public void setLicenseId(String licenseId) {
-			this.licenseId = licenseId;
-		}
-
 		public boolean getOsiApproved() {
 			return osiApproved;
-		}
-
-		public void setOsiApproved(boolean osiApproved) {
-			this.osiApproved = osiApproved;
 		}
 
 		public String getLicenseName() {
 			return licenseName;
 		}
 
-		public void setLicenseName(String licenseName) {
-			this.licenseName = licenseName;
-		}
 	}
 	
 	List<ListedSpdxLicense> listedLicenses = Lists.newArrayList();

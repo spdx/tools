@@ -43,7 +43,7 @@ public class LicenseTOCHTMLFile {
 	static final String TEMPLATE_ROOT_PATH = "resources" + File.separator + "htmlTemplate";
 	static final String HTML_TEMPLATE = "TocHTMLTemplate.html";
 
-	public class DeprecatedLicense {
+	public static class DeprecatedLicense {
 		private String reference;
 		private String refNumber;
 		private String licenseId;
