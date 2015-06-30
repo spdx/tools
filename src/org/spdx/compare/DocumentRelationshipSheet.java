@@ -35,7 +35,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class DocumentRelationshipSheet extends AbstractSheet {
 
-	class RelationshipComparator implements Comparator<Relationship> {
+	private static class RelationshipComparator implements Comparator<Relationship> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

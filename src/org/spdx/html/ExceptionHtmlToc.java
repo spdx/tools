@@ -47,7 +47,7 @@ public class ExceptionHtmlToc {
 	 * @author Gary O'Neall
 	 *
 	 */
-	public class ExceptionRow {
+	public static class ExceptionRow {
 		private int refNumber;
 		private String reference;
 		private String exceptionName;

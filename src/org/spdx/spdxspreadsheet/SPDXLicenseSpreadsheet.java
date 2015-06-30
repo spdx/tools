@@ -99,7 +99,7 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 		}		
 	}
 	
-	public class DeprecatedLicenseInfo {
+	public static class DeprecatedLicenseInfo {
 		private SpdxListedLicense license;
 		private String deprecatedVersion;
 		public DeprecatedLicenseInfo(SpdxListedLicense license, String deprecatedVersion) {

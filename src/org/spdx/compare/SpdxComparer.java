@@ -80,7 +80,7 @@ public class SpdxComparer {
 	 * @author Gary O'Neall
 	 *
 	 */
-	public class SPDXReviewDifference {
+	public static class SPDXReviewDifference {
 		
 		boolean commentsEqual;
 		boolean datesEqual;

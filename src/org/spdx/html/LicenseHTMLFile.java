@@ -58,7 +58,7 @@ public class LicenseHTMLFile {
 	 * @author Gary O'Neall
 	 *
 	 */
-	public class FormattedUrl {
+	public static class FormattedUrl {
 		String url;
 		public FormattedUrl(String url) {
 			this.url = url;
