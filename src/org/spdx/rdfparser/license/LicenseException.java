@@ -173,7 +173,7 @@ public class LicenseException implements IRdfModel  {
 		if (this.model != null &&
 				this.exceptionNode != null &&
 				this.resource != null &&
-				(this.model.equals(model) || (this.exceptionNode.isURI()))) {
+				(this.model.equals(modelContainer.getModel()) || (this.exceptionNode.isURI()))) {
 			return resource;
 		} else {
 			this.model = modelContainer.getModel();
