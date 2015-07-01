@@ -242,8 +242,8 @@ public class SPDXCreatorInformation {
 			}
 		} else if (this.createdDate == null) {
 			return false;
-		}
-			else if (!compCreator.getCreated().equals(this.createdDate)) {
+		} else if (!compCreator.getCreated().equals(this.createdDate)) {
+			    return false;
 		}
 		if (compCreator.getComment() == null) {
 			if (this.getComment() != null) {
