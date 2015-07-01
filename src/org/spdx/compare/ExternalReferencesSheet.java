@@ -38,7 +38,7 @@ import com.google.common.base.Objects;
  */
 public class ExternalReferencesSheet extends AbstractSheet {
 	
-	class ExternalDocRefComparator implements Comparator<ExternalDocumentRef> {
+	private static class ExternalDocRefComparator implements Comparator<ExternalDocumentRef> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

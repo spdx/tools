@@ -70,7 +70,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 * @author Gary O'Neall
 	 *
 	 */
-	class DoapComparator implements Comparator<DoapProject> {
+	private static class DoapComparator implements Comparator<DoapProject> {
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
