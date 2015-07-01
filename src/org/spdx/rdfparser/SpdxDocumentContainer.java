@@ -206,12 +206,12 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		// add the default data license
 		if (!spdxVersion.equals(POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
 			try {
-				SpdxListedLicense dataLicense;
+				AnyLicenseInfo dataLicense;
 				if (spdxVersion.equals(ONE_DOT_ZERO_SPDX_VERSION)) 
 					{ 
-					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0, this));
+					dataLicense = LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID_VERSION_1_0, this);
 				} else {
-					dataLicense = (SpdxListedLicense)(LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID, this));				
+					dataLicense = LicenseInfoFactory.parseSPDXLicenseString(SPDX_DATA_LICENSE_ID, this);				
 				}
 				spdxDocument.setDataLicense(dataLicense);
 			} catch (InvalidLicenseStringException e) {
