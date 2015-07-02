@@ -45,6 +45,8 @@ public class Main {
 			CompareSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("LicenseRDFAGenerator")) {
 			LicenseRDFAGenerator.main(args);
+		} else if (spdxTool.equalsIgnoreCase("Verify")) {
+			Verify.main(args);
 		} else if (spdxTool.equalsIgnoreCase("GenerateVerificationCode")) {
 			GenerateVerificationCode.main(args);
 		} else if (spdxTool.equalsIgnoreCase("MergeSpdxDocs")) {
@@ -72,6 +74,7 @@ public class Main {
 						+ "SpreadsheetToRDF         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToRDF.rdf \n"
 						+ "SpreadsheetToTag         inputFile outputFile              Examples/SPDXSpreadsheetExample.xls SpreadsheetToTag.tag \n"
 						+ "SPDXViewer               inputFile                         TestFiles/SPDXRdfExample.rdf \n"
+						+ "Verify                   inputFile                         TestFiles/SPDXRdfExample.rdf \n"
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
 						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] \n"
