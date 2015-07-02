@@ -18,6 +18,7 @@ package org.spdx.rdfparser;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -85,7 +86,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * Keeps tract of the next license reference number when generating the license ID's for
 	 * non-standard licenses
 	 */
-	protected int nextLicenseRef = 1;
+	private AtomicInteger nextLicenseRef = new AtomicInteger(1);
 	
 	/**
 	 * Simple class representing an SPDX Package.  This is stored in an RDF
@@ -903,7 +904,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * Namespace for all SPDX document elements
 	 */
 	private String documentNamespace;
-	private int nextElementRef;
+	private AtomicInteger nextElementRef = new AtomicInteger(0);
 	
 	public SPDXDocument(Model model) throws InvalidSPDXAnalysisException {
 		this.model = model;
@@ -969,7 +970,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 			}
 		}
 		
-		this.nextElementRef = highestElementRef + 1;
+		this.nextElementRef.set(highestElementRef + 1);
 	}
 
 	/**
@@ -1006,7 +1007,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 				// just continue
 			}
 		}	
-		this.nextLicenseRef = highestNonStdLicense + 1;
+		this.nextLicenseRef.set(highestNonStdLicense + 1);
 	}
 	
 	/**
@@ -1032,12 +1033,6 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public static String formNonStandardLicenseID(int idNum) {
 		return NON_STD_LICENSE_ID_PRENUM + String.valueOf(idNum);
-	}
-	
-	synchronized int getAndIncrementNextLicenseRef() {
-		int retval = this.nextLicenseRef;
-		this.nextLicenseRef++;
-		return retval;
 	}
 
 	public String verifySpdxVersion(String spdxVersion) {
@@ -1689,7 +1684,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * @return next available license ID for an ExtractedLicenseInfo
 	 */
 	public synchronized String getNextLicenseRef() {
-		int nextLicNum = this.getAndIncrementNextLicenseRef();
+		int nextLicNum = this.nextLicenseRef.getAndIncrement();
 		return formNonStandardLicenseID(nextLicNum);
 	}
 	
@@ -1698,21 +1693,12 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 */
 	@Override
 	public String getNextSpdxElementRef() {
-		int nextSpdxElementNum = this.getAndIncrementNextElementRef();
+		int nextSpdxElementNum = this.nextElementRef.getAndIncrement();
 		return formSpdxElementRef(nextSpdxElementNum);
 	}
 
 	public static String formSpdxElementRef(int refNum) {
 		return SPDX_ELEMENT_REF_PRENUM + String.valueOf(refNum);
-	}
-	
-	/**
-	 * @return
-	 */
-	synchronized int getAndIncrementNextElementRef() {
-		int retval = this.nextElementRef;
-		this.nextElementRef++;
-		return retval;
 	}
 
 	/**
@@ -1798,8 +1784,8 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		// add the version
 		this.setSpdxVersion(spdxVersion);
 		// reset the next license number and next spdx element num
-		this.nextElementRef = 1;
-		this.nextLicenseRef = 1;
+		this.nextElementRef.set(1);
+		this.nextLicenseRef.set(1);
 		// add the default data license
 		if (!spdxVersion.equals(POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
 			try {
