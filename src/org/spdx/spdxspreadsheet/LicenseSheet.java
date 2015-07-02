@@ -59,7 +59,6 @@ public class LicenseSheet extends AbstractSheet {
 	static final int COL_TEMPLATE = COL_STANDARD_LICENSE_HEADER + 1;
 	static final int COL_VERSION = COL_TEMPLATE + 1;
 	static final int COL_RELEASE_DATE = COL_VERSION + 1;
-	static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		false, false, true, false, false, false};
@@ -91,6 +90,7 @@ public class LicenseSheet extends AbstractSheet {
 				if (releaseDateCell.getCellType() == Cell.CELL_TYPE_STRING) {
 					this.releaseDate = releaseDateCell.getStringCellValue();
 				} else if (releaseDateCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+				    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 					this.releaseDate = dateFormat.format(releaseDateCell.getDateCellValue());
 				}
 			}
