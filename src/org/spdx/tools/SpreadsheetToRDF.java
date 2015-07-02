@@ -69,7 +69,13 @@ public class SpreadsheetToRDF {
 	static final Logger logger = Logger.getLogger(SpreadsheetToRDF.class.getName());
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
-	static DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+	
+	private static final ThreadLocal<DateFormat> format = new ThreadLocal<DateFormat>(){
+	    @Override
+	    protected DateFormat initialValue() {
+	        return new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+	    }
+	  };
 	
 	/**
 	 * @param args
@@ -228,7 +234,7 @@ public class SpreadsheetToRDF {
 		int firstRow = reviewersSheet.getFirstDataRow();
 		SPDXReview[] reviewers = new SPDXReview[numReviewers];
 		for (int i = 0; i < reviewers.length; i++) {
-			reviewers[i] = new SPDXReview(reviewersSheet.getReviewer(firstRow+i), format.format(reviewersSheet.getReviewerTimestamp(firstRow+i)),
+			reviewers[i] = new SPDXReview(reviewersSheet.getReviewer(firstRow+i), format.get().format(reviewersSheet.getReviewerTimestamp(firstRow+i)),
 					reviewersSheet.getReviewerComment(firstRow + i));
 		}
 		analysis.setReviewers(reviewers);
@@ -285,7 +291,7 @@ public class SpreadsheetToRDF {
 
 	private static void copyOrigins(DocumentInfoSheet originsSheet, SpdxDocument analysis) throws InvalidSPDXAnalysisException, SpreadsheetException {
 		Date createdDate = originsSheet.getCreated();
-		String created  = format.format(createdDate);
+		String created  = format.get().format(createdDate);
 		String[] createdBys = originsSheet.getCreatedBy();
 		String creatorComment = originsSheet.getAuthorComments();
 		String licenseListVersion = originsSheet.getLicenseListVersion();
