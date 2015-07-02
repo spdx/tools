@@ -74,12 +74,16 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	}
 
 	@Deprecated
+	/**
+	 * Use {@link RelationshipType#getTag()} instead.
+	 * @deprecated
+	 */
 	public static final Map<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG;
 
 	@Deprecated
 	/**
-	 * @deprecated Use {@link #RelationshipType.fromTag}.
-	 * @see {@link org.spdx.rdfparser.model.Relationship.RelationshipType.}
+	 * Use {@link #RelationshipType.fromTag} instead.
+	 * @deprecated
 	 */
 	public static final Map<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE;
 
