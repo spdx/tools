@@ -310,11 +310,11 @@ public class CompareSpdxDocs {
 		if (relationship.getRelatedSpdxElement() != null) {
 			relatedElementId = relationship.getRelatedSpdxElement().getId();
 		}
-		output.println("\tRelationship: "+
-			elementId+Relationship.RELATIONSHIP_TYPE_TO_TAG.get(relationship.getRelationshipType()+
-					" "+relatedElementId));
+		output.println("\tRelationship: " +
+				elementId + relationship.getRelationshipType().getTag() +
+				" " + relatedElementId);
 		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
-			output.println("\tRelationshipComment: "+relationship.getComment());
+			output.println("\tRelationshipComment: " + relationship.getComment());
 		}
 	}
 

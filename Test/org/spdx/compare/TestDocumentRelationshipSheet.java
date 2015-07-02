@@ -135,7 +135,7 @@ public class TestDocumentRelationshipSheet {
 
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+0);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(TYPE1), typeCell.getStringCellValue());
+		assertEquals(TYPE1.getTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertEquals(CompareHelper.relationshipToString(rel1_1), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);
@@ -145,7 +145,7 @@ public class TestDocumentRelationshipSheet {
 		
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+1);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(TYPE1), typeCell.getStringCellValue());
+		assertEquals(TYPE1.getTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertEquals(CompareHelper.relationshipToString(rel1_2), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);
@@ -155,7 +155,7 @@ public class TestDocumentRelationshipSheet {
 		
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+2);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(TYPE2), typeCell.getStringCellValue());
+		assertEquals(TYPE2.getTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertEquals(CompareHelper.relationshipToString(rel1_3), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);
@@ -165,7 +165,7 @@ public class TestDocumentRelationshipSheet {
 		
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+3);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(TYPE2), typeCell.getStringCellValue());
+		assertEquals(TYPE2.getTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertTrue(cellEmpty(relationshipCell));
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);

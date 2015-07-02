@@ -19,6 +19,9 @@ package org.spdx.rdfparser.model;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -55,72 +58,95 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		 relationshipType_patchApplied, relationshipType_patchFor,
 		 relationshipType_amends, relationshipType_staticLink,
 		 relationshipType_testcaseOf, relationshipType_prerequisiteFor,
-		 relationshipType_hasPrerequisite
+		 relationshipType_hasPrerequisite;
+
+		@SuppressWarnings( "deprecation" )
+		/** @return Returns the tag value for this relationship type */
+		public String getTag(){
+			return RELATIONSHIP_TYPE_TO_TAG.get(this);
+		}
+
+		/** @return  The relationship type corresponding to the provided tag */
+		@SuppressWarnings( "deprecation" )
+		public static RelationshipType fromTag(String tag){
+			return TAG_TO_RELATIONSHIP_TYPE.get(tag);
+		}
 	}
-	
-	public static Map<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG = Maps.newHashMap();
-	public static Map<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE = Maps.newHashMap();
+
+	@Deprecated
+	public static final Map<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG;
+
+	@Deprecated
+	/**
+	 * @deprecated Use {@link #RelationshipType.fromTag}.
+	 * @see {@link org.spdx.rdfparser.model.Relationship.RelationshipType.}
+	 */
+	public static final Map<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE;
 
 	static {
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_describes, "DESCRIBES");
-		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBES", RelationshipType.relationshipType_describes);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_describedBy, "DESCRIBED_BY");
-		TAG_TO_RELATIONSHIP_TYPE.put("DESCRIBED_BY", RelationshipType.relationshipType_describedBy);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_hasPrerequisite, "HAS_PREQUISITE");
-		TAG_TO_RELATIONSHIP_TYPE.put("HAS_PREQUISITE", RelationshipType.relationshipType_hasPrerequisite);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_prerequisiteFor, "PREQUISITE_FOR");
-		TAG_TO_RELATIONSHIP_TYPE.put("PREQUISITE_FOR", RelationshipType.relationshipType_prerequisiteFor);
+		ImmutableMap.Builder<RelationshipType, String> relationshipTypeToTagBuilder = new ImmutableBiMap.Builder<RelationshipType, String>();
+		ImmutableMap.Builder<String, RelationshipType> tagToRelationshipTypeBuilder = new ImmutableMap.Builder<String, RelationshipType>();
 		
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_buildToolOf, "BUILD_TOOL_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("BUILD_TOOL_OF",RelationshipType.relationshipType_buildToolOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_containedBy, "CONTAINED_BY");
-		TAG_TO_RELATIONSHIP_TYPE.put("CONTAINED_BY", RelationshipType.relationshipType_containedBy);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_contains, "CONTAINS");
-		TAG_TO_RELATIONSHIP_TYPE.put("CONTAINS", RelationshipType.relationshipType_contains);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_copyOf, "COPY_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("COPY_OF", RelationshipType.relationshipType_copyOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_dataFile, "DATA_FILE_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("DATA_FILE_OF", RelationshipType.relationshipType_dataFile);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_descendantOf, "DESCENDANT_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("DESCENDANT_OF", RelationshipType.relationshipType_descendantOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_distributionArtifact, "DISTRIBUTION_ARTIFACT");
-		TAG_TO_RELATIONSHIP_TYPE.put("DISTRIBUTION_ARTIFACT", RelationshipType.relationshipType_distributionArtifact);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_documentation, "DOCUMENTATION_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("DOCUMENTATION_OF", RelationshipType.relationshipType_documentation);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_dynamicLink, "DYNAMIC_LINK");
-		TAG_TO_RELATIONSHIP_TYPE.put("DYNAMIC_LINK", RelationshipType.relationshipType_dynamicLink);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_expandedFromArchive, "EXPANDED_FROM_ARCHIVE");
-		TAG_TO_RELATIONSHIP_TYPE.put("EXPANDED_FROM_ARCHIVE", RelationshipType.relationshipType_expandedFromArchive);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_fileAdded, "FILE_ADDED");
-		TAG_TO_RELATIONSHIP_TYPE.put("FILE_ADDED", RelationshipType.relationshipType_fileAdded);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_fileDeleted, "FILE_DELETED");
-		TAG_TO_RELATIONSHIP_TYPE.put("FILE_DELETED", RelationshipType.relationshipType_fileDeleted);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_fileModified, "FILE_MODIFIED");
-		TAG_TO_RELATIONSHIP_TYPE.put("FILE_MODIFIED", RelationshipType.relationshipType_fileModified);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_generatedFrom, "GENERATED_FROM");
-		TAG_TO_RELATIONSHIP_TYPE.put("GENERATED_FROM", RelationshipType.relationshipType_generatedFrom);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_generates, "GENERATES");
-		TAG_TO_RELATIONSHIP_TYPE.put("GENERATES", RelationshipType.relationshipType_generates);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_metafileOf, "METAFILE_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("METAFILE_OF", RelationshipType.relationshipType_metafileOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_optionalComponentOf, "OPTIONAL_COMPONENT_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("OPTIONAL_COMPONENT_OF", RelationshipType.relationshipType_optionalComponentOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_other, "OTHER");
-		TAG_TO_RELATIONSHIP_TYPE.put("OTHER",RelationshipType.relationshipType_other);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_packageOf, "PACKAGE_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("PACKAGE_OF", RelationshipType.relationshipType_packageOf);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_patchApplied, "PATCH_APPLIED");
-		TAG_TO_RELATIONSHIP_TYPE.put("PATCH_APPLIED", RelationshipType.relationshipType_patchApplied);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_patchFor, "PATCH_FOR");
-		TAG_TO_RELATIONSHIP_TYPE.put("PATCH_FOR", RelationshipType.relationshipType_patchFor);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_amends, "AMENDS");
-		TAG_TO_RELATIONSHIP_TYPE.put("AMENDS", RelationshipType.relationshipType_amends);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_staticLink, "STATIC_LINK");
-		TAG_TO_RELATIONSHIP_TYPE.put("STATIC_LINK", RelationshipType.relationshipType_staticLink);
-		RELATIONSHIP_TYPE_TO_TAG.put(RelationshipType.relationshipType_testcaseOf, "TEST_CASE_OF");
-		TAG_TO_RELATIONSHIP_TYPE.put("TEST_CASE_OF", RelationshipType.relationshipType_testcaseOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_describes, "DESCRIBES");
+		tagToRelationshipTypeBuilder.put("DESCRIBES", RelationshipType.relationshipType_describes);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_describedBy, "DESCRIBED_BY");
+		tagToRelationshipTypeBuilder.put("DESCRIBED_BY", RelationshipType.relationshipType_describedBy);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_hasPrerequisite, "HAS_PREQUISITE");
+		tagToRelationshipTypeBuilder.put("HAS_PREQUISITE", RelationshipType.relationshipType_hasPrerequisite);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_prerequisiteFor, "PREQUISITE_FOR");
+		tagToRelationshipTypeBuilder.put("PREQUISITE_FOR", RelationshipType.relationshipType_prerequisiteFor);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
+		tagToRelationshipTypeBuilder.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_buildToolOf, "BUILD_TOOL_OF");
+		tagToRelationshipTypeBuilder.put("BUILD_TOOL_OF",RelationshipType.relationshipType_buildToolOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_containedBy, "CONTAINED_BY");
+		tagToRelationshipTypeBuilder.put("CONTAINED_BY", RelationshipType.relationshipType_containedBy);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_contains, "CONTAINS");
+		tagToRelationshipTypeBuilder.put("CONTAINS", RelationshipType.relationshipType_contains);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_copyOf, "COPY_OF");
+		tagToRelationshipTypeBuilder.put("COPY_OF", RelationshipType.relationshipType_copyOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_dataFile, "DATA_FILE_OF");
+		tagToRelationshipTypeBuilder.put("DATA_FILE_OF", RelationshipType.relationshipType_dataFile);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_descendantOf, "DESCENDANT_OF");
+		tagToRelationshipTypeBuilder.put("DESCENDANT_OF", RelationshipType.relationshipType_descendantOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_distributionArtifact, "DISTRIBUTION_ARTIFACT");
+		tagToRelationshipTypeBuilder.put("DISTRIBUTION_ARTIFACT", RelationshipType.relationshipType_distributionArtifact);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_documentation, "DOCUMENTATION_OF");
+		tagToRelationshipTypeBuilder.put("DOCUMENTATION_OF", RelationshipType.relationshipType_documentation);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_dynamicLink, "DYNAMIC_LINK");
+		tagToRelationshipTypeBuilder.put("DYNAMIC_LINK", RelationshipType.relationshipType_dynamicLink);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_expandedFromArchive, "EXPANDED_FROM_ARCHIVE");
+		tagToRelationshipTypeBuilder.put("EXPANDED_FROM_ARCHIVE", RelationshipType.relationshipType_expandedFromArchive);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_fileAdded, "FILE_ADDED");
+		tagToRelationshipTypeBuilder.put("FILE_ADDED", RelationshipType.relationshipType_fileAdded);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_fileDeleted, "FILE_DELETED");
+		tagToRelationshipTypeBuilder.put("FILE_DELETED", RelationshipType.relationshipType_fileDeleted);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_fileModified, "FILE_MODIFIED");
+		tagToRelationshipTypeBuilder.put("FILE_MODIFIED", RelationshipType.relationshipType_fileModified);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_generatedFrom, "GENERATED_FROM");
+		tagToRelationshipTypeBuilder.put("GENERATED_FROM", RelationshipType.relationshipType_generatedFrom);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_generates, "GENERATES");
+		tagToRelationshipTypeBuilder.put("GENERATES", RelationshipType.relationshipType_generates);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_metafileOf, "METAFILE_OF");
+		tagToRelationshipTypeBuilder.put("METAFILE_OF", RelationshipType.relationshipType_metafileOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_optionalComponentOf, "OPTIONAL_COMPONENT_OF");
+		tagToRelationshipTypeBuilder.put("OPTIONAL_COMPONENT_OF", RelationshipType.relationshipType_optionalComponentOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_other, "OTHER");
+		tagToRelationshipTypeBuilder.put("OTHER",RelationshipType.relationshipType_other);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_packageOf, "PACKAGE_OF");
+		tagToRelationshipTypeBuilder.put("PACKAGE_OF", RelationshipType.relationshipType_packageOf);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_patchApplied, "PATCH_APPLIED");
+		tagToRelationshipTypeBuilder.put("PATCH_APPLIED", RelationshipType.relationshipType_patchApplied);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_patchFor, "PATCH_FOR");
+		tagToRelationshipTypeBuilder.put("PATCH_FOR", RelationshipType.relationshipType_patchFor);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_amends, "AMENDS");
+		tagToRelationshipTypeBuilder.put("AMENDS", RelationshipType.relationshipType_amends);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_staticLink, "STATIC_LINK");
+		tagToRelationshipTypeBuilder.put("STATIC_LINK", RelationshipType.relationshipType_staticLink);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_testcaseOf, "TEST_CASE_OF");
+
+		TAG_TO_RELATIONSHIP_TYPE = tagToRelationshipTypeBuilder.build();
+		RELATIONSHIP_TYPE_TO_TAG = relationshipTypeToTagBuilder.build();
 	}
 
 	private RelationshipType relationshipType;
