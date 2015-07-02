@@ -19,12 +19,12 @@ package org.spdx.rdfparser;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.rdfparser.model.RdfModelObject;
 import org.spdx.rdfparser.model.Relationship;
@@ -111,7 +111,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	/**
 	 * Keeps track of the next SPDX element reference
 	 */
-	private int nextElementRef = 0;
+	private AtomicInteger nextElementRef = new AtomicInteger(0);
 	
 	/**
 	 * Construct an SpdxDocumentContainer from an existing model which
@@ -197,7 +197,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		model.createResource(this.documentNamespace + SPDX_DOCUMENT_ID, spdxAnalysisType);
 		this.addSpdxElementRef(SPDX_DOCUMENT_ID);
 		// reset the next license number and next spdx element num
-		this.nextElementRef = 1;
+		this.nextElementRef.set(1);
 		this.nextLicenseRef = 1;
 		this.documentNode = getSpdxDocNode();
 		this.spdxDocument = new SpdxDocument(this, this.documentNode);
@@ -305,7 +305,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 			}
 		}
 		
-		this.nextElementRef = highestElementRef + 1;
+		this.nextElementRef.set(highestElementRef + 1);
 	}
 
 	/**
@@ -399,10 +399,8 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	/**
 	 * @return
 	 */
-	synchronized int getAndIncrementNextElementRef() {
-		int retval = this.nextElementRef;
-		this.nextElementRef++;
-		return retval;
+	private int getAndIncrementNextElementRef() {
+		return this.nextElementRef.getAndIncrement();
 	}
 	
 	/* (non-Javadoc)
