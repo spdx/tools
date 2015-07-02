@@ -1,3 +1,6 @@
+Implementation version 2.0.2
+- Thanks to Ryan O'Meara and Yev Bronshteyn for submitting several fixes and improving the overall code quality
+- Added command line utility Verify which takes both tag and RDF files as input
 Implementation version 2.0.1
 - Fix bug 1290 SPDXTools does not accept WITH operator in tag file
 - Updated Mustache version to be compatible with more recent versions per github pull request 11 from Yevster

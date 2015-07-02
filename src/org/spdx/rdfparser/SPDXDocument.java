@@ -67,7 +67,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public static final String CURRENT_SPDX_VERSION = "SPDX-2.0";
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.1";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.2";
 	
 	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 	

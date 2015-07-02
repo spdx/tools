@@ -51,6 +51,13 @@ Sample usage:
 
     java -jar spdx-tools-jar-with-dependencies.jar SPDXViewer TestFiles/SPDXRdfExample.rdf
 
+## Verifier
+  * Verify
+
+Sample usage:
+
+    java -jar spdx-tools-jar-with-dependencies.jar Verify TestFiles/SPDXRdfExample.rdf
+
 ## Generators
   * LicenseRDFAGenerator
 
