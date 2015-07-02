@@ -45,7 +45,7 @@ public class RelationshipContext {
 		if (relatedElement != null) {
 			relatedElementId = relatedElement.getId();
 		}
-		type = Relationship.RELATIONSHIP_TYPE_TO_TAG.get(relationship.getRelationshipType());
+		type = relationship.getRelationshipType().getTag();
 		comment = relationship.getComment();
 		elementLink = idToUrlMap.get(relatedElementId);
 	}

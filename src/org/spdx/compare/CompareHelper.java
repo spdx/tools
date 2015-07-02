@@ -130,8 +130,7 @@ public class CompareHelper {
 		if (relationship == null) {
 			return "";
 		}
-		StringBuilder sb = new StringBuilder(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(
-				relationship.getRelationshipType()));
+		StringBuilder sb = new StringBuilder(relationship.getRelationshipType().getTag());
 		sb.append(":");
 		sb.append(relationship.getRelatedSpdxElement().getId());
 		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
