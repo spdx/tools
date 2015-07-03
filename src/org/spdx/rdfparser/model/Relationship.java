@@ -19,15 +19,14 @@ package org.spdx.rdfparser.model;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableMap;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
@@ -60,14 +59,13 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		 relationshipType_testcaseOf, relationshipType_prerequisiteFor,
 		 relationshipType_hasPrerequisite;
 
-		@SuppressWarnings( "deprecation" )
+		
 		/** @return Returns the tag value for this relationship type */
 		public String getTag(){
 			return RELATIONSHIP_TYPE_TO_TAG.get(this);
 		}
 
 		/** @return  The relationship type corresponding to the provided tag */
-		@SuppressWarnings( "deprecation" )
 		public static RelationshipType fromTag(String tag){
 			return TAG_TO_RELATIONSHIP_TYPE.get(tag);
 		}
