@@ -66,7 +66,7 @@ public class FileContext {
 	}
 	
 	public String spdxId() {
-		if (spdxFile == null && error != null) {
+		if (spdxFile == null) {
 			return "Error getting SPDX file information: "+ (error != null ? error.getMessage() : "null");
 		}
 		return spdxFile.getId();
