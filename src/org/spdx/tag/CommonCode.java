@@ -402,15 +402,20 @@ public class CommonCode {
                 && pkg.getPackageVerificationCode().getValue() != null
                 && !pkg.getPackageVerificationCode().getValue().isEmpty()) {
           String code = constants.getProperty("PROP_PACKAGE_VERIFICATION_CODE") + pkg.getPackageVerificationCode().getValue();
-          String excludedFilesString = "";
           String[] excludedFiles = pkg.getPackageVerificationCode().getExcludedFileNames();
           if (excludedFiles.length != 0) {
-                excludedFilesString = " (" + excludedFiles[0];
-                for (int i=1; i<excludedFiles.length; i++ ) {
-                       excludedFilesString += ", " + excludedFiles[i];
+              StringBuilder excludedFilesBuilder = new StringBuilder("(");
+                
+              for (String excludedFile : excludedFiles) {
+                if(excludedFilesBuilder.length() > 0){
+                    excludedFilesBuilder.append(", ");
                 }
-                excludedFilesString += ")";
-                code += excludedFilesString;
+                
+                excludedFilesBuilder.append(excludedFile);
+              }
+              
+              excludedFilesBuilder.append(')');
+              code += excludedFilesBuilder.toString();
           }                    
           println(out, code);
         }
