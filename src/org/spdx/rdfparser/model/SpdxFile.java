@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -47,38 +48,75 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	
 	static final Logger logger = Logger.getLogger(SpdxFile.class.getName());
-	
+
 	public enum FileType {fileType_application, fileType_archive,
 		fileType_audio, fileType_binary, fileType_documentation,
 		fileType_image, fileType_other, fileType_source, fileType_spdx,
-		fileType_text, fileType_video};
-		
-	public static final Map<FileType, String> FILE_TYPE_TO_TAG = Maps.newHashMap();
-	public static final Map<String, FileType> TAG_TO_FILE_TYPE = Maps.newHashMap();
+		fileType_text, fileType_video;
+
+		@SuppressWarnings("deprecation")
+		/**
+		 * @return The tag for this file type.
+		 */
+		public String getTag(){
+			return FILE_TYPE_TO_TAG.get(this);
+		}
+
+		/**
+		 *
+		 * @param tag
+		 * @return The file type corresponding to the provided tag.
+		 */
+		@SuppressWarnings("deprecation")
+		public static FileType fromTag(String tag){
+			return TAG_TO_FILE_TYPE.get(tag);
+		}
+	}
+
+	@Deprecated
+	/**
+	 * Use {@link FileType#getTag()} instead.
+	 * @deprecated
+	 */
+	public static final Map<FileType, String> FILE_TYPE_TO_TAG;
+
+	@Deprecated
+	/**
+	 * Use {@link org.spdx.rdfparser.model.SpdxFile.FileType#fromTag(String)} instead
+	 * @deprecated
+	 */
+	public static final Map<String, FileType> TAG_TO_FILE_TYPE;
+
 	static {
-		FILE_TYPE_TO_TAG.put(FileType.fileType_application, "APPLICATION");
-		TAG_TO_FILE_TYPE.put("APPLICATION", FileType.fileType_application);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_archive, "ARCHIVE");
-		TAG_TO_FILE_TYPE.put("ARCHIVE", FileType.fileType_archive);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_audio, "AUDIO");
-		TAG_TO_FILE_TYPE.put("AUDIO", FileType.fileType_audio);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_binary, "BINARY");
-		TAG_TO_FILE_TYPE.put("BINARY", FileType.fileType_binary);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_documentation, "DOCUMENTATION");
-		TAG_TO_FILE_TYPE.put("DOCUMENTATION", FileType.fileType_documentation);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_image, "IMAGE");
-		TAG_TO_FILE_TYPE.put("IMAGE", FileType.fileType_image);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_other, "OTHER");
-		TAG_TO_FILE_TYPE.put("OTHER", FileType.fileType_other);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_source, "SOURCE");
-		TAG_TO_FILE_TYPE.put("SOURCE", FileType.fileType_source);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_spdx, "SPDX");
-		TAG_TO_FILE_TYPE.put("SPDX", FileType.fileType_spdx);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_text, "TEXT");
-		TAG_TO_FILE_TYPE.put("TEXT", FileType.fileType_text);
-		FILE_TYPE_TO_TAG.put(FileType.fileType_video, "VIDEO");
-		TAG_TO_FILE_TYPE.put("VIDEO", FileType.fileType_video);
+		ImmutableMap.Builder<FileType, String> fileTypeToTagBuilder = ImmutableMap.builder();
+		ImmutableMap.Builder<String, FileType> tagToFileTypeBuilder = ImmutableMap.builder();
 		
+		fileTypeToTagBuilder.put(FileType.fileType_application, "APPLICATION");
+		tagToFileTypeBuilder.put("APPLICATION", FileType.fileType_application);
+		fileTypeToTagBuilder.put(FileType.fileType_archive, "ARCHIVE");
+		tagToFileTypeBuilder.put("ARCHIVE", FileType.fileType_archive);
+		fileTypeToTagBuilder.put(FileType.fileType_audio, "AUDIO");
+		tagToFileTypeBuilder.put("AUDIO", FileType.fileType_audio);
+		fileTypeToTagBuilder.put(FileType.fileType_binary, "BINARY");
+		tagToFileTypeBuilder.put("BINARY", FileType.fileType_binary);
+		fileTypeToTagBuilder.put(FileType.fileType_documentation, "DOCUMENTATION");
+		tagToFileTypeBuilder.put("DOCUMENTATION", FileType.fileType_documentation);
+		fileTypeToTagBuilder.put(FileType.fileType_image, "IMAGE");
+		tagToFileTypeBuilder.put("IMAGE", FileType.fileType_image);
+		fileTypeToTagBuilder.put(FileType.fileType_other, "OTHER");
+		tagToFileTypeBuilder.put("OTHER", FileType.fileType_other);
+		fileTypeToTagBuilder.put(FileType.fileType_source, "SOURCE");
+		tagToFileTypeBuilder.put("SOURCE", FileType.fileType_source);
+		fileTypeToTagBuilder.put(FileType.fileType_spdx, "SPDX");
+		tagToFileTypeBuilder.put("SPDX", FileType.fileType_spdx);
+		fileTypeToTagBuilder.put(FileType.fileType_text, "TEXT");
+		tagToFileTypeBuilder.put("TEXT", FileType.fileType_text);
+		fileTypeToTagBuilder.put(FileType.fileType_video, "VIDEO");
+		tagToFileTypeBuilder.put("VIDEO", FileType.fileType_video);
+
+		FILE_TYPE_TO_TAG = fileTypeToTagBuilder.build();
+		TAG_TO_FILE_TYPE = tagToFileTypeBuilder.build();
+
 	}
 	FileType[] fileTypes = new FileType[0];
 	Checksum[] checksums;

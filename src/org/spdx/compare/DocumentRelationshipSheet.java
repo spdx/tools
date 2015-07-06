@@ -133,7 +133,7 @@ public class DocumentRelationshipSheet extends AbstractSheet {
 			Row currentRow = this.addRow();
 			Relationship nextRelationship = getNexRelationship(relationships, relationshipsIndexes);
 			Cell typeCell = currentRow.createCell(TYPE_COL);
-			typeCell.setCellValue(Relationship.RELATIONSHIP_TYPE_TO_TAG.get(nextRelationship.getRelationshipType()));
+			typeCell.setCellValue(nextRelationship.getRelationshipType().getTag());
 			for (int i = 0; i < relationships.length; i++) {
 				if (relationships[i].length > relationshipsIndexes[i]) {
 					Relationship compareRelationship = relationships[i][relationshipsIndexes[i]];
