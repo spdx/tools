@@ -561,7 +561,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         if (!matcher.find()) {
             throw(new InvalidSpdxTagFileException("Invalid relationship: "+value));
         }
-        RelationshipType relationshipType = Relationship.TAG_TO_RELATIONSHIP_TYPE.get(matcher.group(2));
+        RelationshipType relationshipType = RelationshipType.fromTag(matcher.group(2));
         if (relationshipType == null) {
             throw(new InvalidSpdxTagFileException("Invalid relationship type: "+value));
         }

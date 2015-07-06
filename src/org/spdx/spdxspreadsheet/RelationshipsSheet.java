@@ -100,9 +100,9 @@ public class RelationshipsSheet extends AbstractSheet {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in relationships sheet";
 			} 
 			if (i == RELATIONSHIP_COL && cell.getStringCellValue() != null) {
-				RelationshipType rt = Relationship.TAG_TO_RELATIONSHIP_TYPE.get(cell.getStringCellValue());
+				RelationshipType rt = RelationshipType.fromTag(cell.getStringCellValue());
 				if (rt == null) {
-					return "Invalid relationship type in row "+String.valueOf(row)+": "+cell.getStringCellValue();
+					return "Invalid relationship type in row "+String.valueOf(row) + ": " + cell.getStringCellValue();
 				}
 			}
 		}
@@ -143,8 +143,7 @@ public class RelationshipsSheet extends AbstractSheet {
 		}	
 		if (relationship.getRelationshipType() != null) {
 			Cell relationshipCell = row.createCell(RELATIONSHIP_COL, Cell.CELL_TYPE_STRING);
-			relationshipCell.setCellValue(
-					Relationship.RELATIONSHIP_TYPE_TO_TAG.get(relationship.getRelationshipType()));
+			relationshipCell.setCellValue(relationship.getRelationshipType().getTag());
 		}
 		if (relationship.getRelatedSpdxElement() != null) {
 			Cell relatedIdCell = row.createCell(RELATED_ID_COL, Cell.CELL_TYPE_STRING);
@@ -176,7 +175,7 @@ public class RelationshipsSheet extends AbstractSheet {
 		RelationshipType type = null;
 		Cell relationshipCell = row.getCell(RELATIONSHIP_COL);
 		if (relationshipCell != null && relationshipCell.getStringCellValue() != null) {
-			type = Relationship.TAG_TO_RELATIONSHIP_TYPE.get(relationshipCell.getStringCellValue().trim());
+			type = RelationshipType.fromTag(relationshipCell.getStringCellValue().trim());
 		}
 		Cell commentCell = row.getCell(COMMENT_COL);
 		String comment = null;
