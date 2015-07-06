@@ -244,7 +244,7 @@ public class SpdxVerificationHelper {
 	public static String verifyAnnotator(String annotator) {
 		if (!annotator.startsWith("Person:") && !annotator.startsWith("Tool:") &&
 				!annotator.startsWith("Organization:")) {
-			return "Reviewer does not start with Person:, Organization:, or Tool:";
+			return "Annotator does not start with Person:, Organization:, or Tool";
 		} else {
 			return null;
 		}

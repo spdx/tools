@@ -71,9 +71,9 @@ public class TestSpdxPackage {
 	static final String VERSION2 = "V2";
 	
 	static final String DATE_NOW = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT).format(new Date());
-	static final Annotation ANNOTATION1 = new Annotation("Annotator1", 
+	static final Annotation ANNOTATION1 = new Annotation("Person: Annotator1", 
 			AnnotationType.annotationType_other, DATE_NOW, "Comment1");
-	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
+	static final Annotation ANNOTATION2 = new Annotation("Tool: Annotator2", 
 			AnnotationType.annotationType_review, DATE_NOW, "Comment2");
 	SpdxElement RELATED_ELEMENT1;
 	SpdxElement RELATED_ELEMENT2;
