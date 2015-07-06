@@ -69,11 +69,11 @@ public class TestSpdxFile {
 	
 	static DateFormat DATEFORMAT = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 	static String DATE_NOW = DATEFORMAT.format(new Date());
-	static final Annotation ANNOTATION1 = new Annotation("Annotator1", 
+	static final Annotation ANNOTATION1 = new Annotation("Organization: Annotator1", 
 			AnnotationType.annotationType_other, DATE_NOW, "Comment 1");
-	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
+	static final Annotation ANNOTATION2 = new Annotation("Tool: Annotator2", 
 			AnnotationType.annotationType_review, DATE_NOW, "Comment 2");
-	static final Annotation ANNOTATION3 = new Annotation("Annotator3", 
+	static final Annotation ANNOTATION3 = new Annotation("Person: Annotator3", 
 			AnnotationType.annotationType_other, DATE_NOW, "Comment 3");
 	
 	ExtractedLicenseInfo[] NON_STD_LICENSES;

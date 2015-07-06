@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,7 +86,17 @@ public class CompareSpdxDocs {
 		}
 		SpdxDocument spdxDoc1 = null;
 		try {
-			spdxDoc1 = openRdfOrTagDoc(args[0].trim());
+			List<String> warnings = new ArrayList<String>();
+			spdxDoc1 = openRdfOrTagDoc(args[0].trim(), warnings);
+			if (!warnings.isEmpty()) {
+				System.out.println("Verification errors were found in "+args[0].trim()+":");
+				if (!warnings.isEmpty()) {
+					System.out.println("The following warnings and or verification errors were found:");
+					for (String warning:warnings) {
+						System.out.println("\t"+warning);
+					}
+				}
+			}
 		} catch (SpdxCompareException e) {
 			System.out.println("Error opening "+args[0].trim()+":"+e.getMessage());
 			usage();
@@ -93,7 +104,17 @@ public class CompareSpdxDocs {
 		}
 		SpdxDocument spdxDoc2 = null;
 		try {
-			spdxDoc2 = openRdfOrTagDoc(args[1].trim());
+			List<String> warnings = new ArrayList<String>();
+			spdxDoc2 = openRdfOrTagDoc(args[1].trim(), warnings);
+			if (!warnings.isEmpty()) {
+				System.out.println("Verification errors were found in "+args[0].trim()+":");
+				if (!warnings.isEmpty()) {
+					System.out.println("The following warnings and or verification errors were found:");
+					for (String warning:warnings) {
+						System.out.println("\t"+warning);
+					}
+				}
+			}
 		} catch (SpdxCompareException e) {
 			System.out.println("Error opening "+args[1].trim()+":"+e.getMessage());
 			usage();
@@ -1105,7 +1126,7 @@ public class CompareSpdxDocs {
 	 * @param spdxDocFileName File name of either an RDF or Tag formated SPDX file
 	 * @return
 	 */
-	protected static SpdxDocument openRdfOrTagDoc(String spdxDocFileName) throws SpdxCompareException {
+	protected static SpdxDocument openRdfOrTagDoc(String spdxDocFileName, List<String> warnings) throws SpdxCompareException {
 		File spdxDocFile = new File(spdxDocFileName);
 		if (!spdxDocFile.exists()) {
 			throw(new SpdxCompareException("SPDX File "+spdxDocFileName+" does not exist."));
@@ -1132,7 +1153,7 @@ public class CompareSpdxDocs {
 				throw(new SpdxCompareException("Unable to create temporary file for tag/value to rdf conversion",e));
 			}
 			try {
-				convertTagValueToRdf(spdxDocFile, tempRdfFile);
+				convertTagValueToRdf(spdxDocFile, tempRdfFile, warnings);
 				retval = SPDXDocumentFactory.createSpdxDocument(tempRdfFile.getPath());
 			} catch (SpdxCompareException e) {
 				throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: "+e.getMessage()));
@@ -1157,7 +1178,7 @@ public class CompareSpdxDocs {
 	 * @param tagValueFile Input file in tag/value format
 	 * @param tempRdfFile File to output the generated RDF file (must already exist - file is overwritten)
 	 */
-	private static void convertTagValueToRdf(File tagValueFile, File rdfFile) throws SpdxCompareException {
+	private static void convertTagValueToRdf(File tagValueFile, File rdfFile, List<String> warnings) throws SpdxCompareException {
 		if (!rdfFile.canWrite()) {
 			throw(new SpdxCompareException("Can not write to output file"));
 		}
@@ -1166,7 +1187,7 @@ public class CompareSpdxDocs {
 		try {
 			out = new FileOutputStream(rdfFile);
 			in = new FileInputStream(tagValueFile);
-			TagToRDF.convertTagFileToRdf(in, out, TagToRDF.DEFAULT_OUTPUT_FORMAT);
+			TagToRDF.convertTagFileToRdf(in, out, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings);
 		} catch (Exception e) {
 			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
 		} finally {

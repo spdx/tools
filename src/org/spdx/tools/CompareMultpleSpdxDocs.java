@@ -18,6 +18,7 @@
 package org.spdx.tools;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.compare.MultiDocumentSpreadsheet;
@@ -68,7 +69,11 @@ public class CompareMultpleSpdxDocs {
 		List<String>[] verificationErrors = new List[args.length-1];
 		for (int i = 1; i < args.length; i++) {
 			try {
-				compareDocs[i-1] = CompareSpdxDocs.openRdfOrTagDoc(args[i]);
+				List<String> warnings = new ArrayList<String>();	
+				compareDocs[i-1] = CompareSpdxDocs.openRdfOrTagDoc(args[i], warnings);
+				if (!warnings.isEmpty()) {
+					System.out.println("Verification errors were found in "+args[i].trim()+".  See verification errors sheet for details.");
+				}
 				docNames[i-1]  = CompareSpdxDocs.convertDocName(args[i]);
 				verificationErrors[i-1] = compareDocs[i-1].verify();
 				if (verificationErrors[i-1] != null && verificationErrors[i-1].size() > 0) {
