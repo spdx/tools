@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.compare.SpdxCompareException;
@@ -80,7 +81,17 @@ public class MergeSpdxDocs {
 			
 			for(int i = 0; i < args.length-1; i++){
 				try{
-					mergeDocs[i] = CompareSpdxDocs.openRdfOrTagDoc(args[i]);
+					List<String> warnings = new ArrayList<String>();
+					mergeDocs[i] = CompareSpdxDocs.openRdfOrTagDoc(args[i], warnings);
+					if (!warnings.isEmpty()) {
+						System.out.println("Verification errors were found in "+args[i].trim()+":");
+						if (!warnings.isEmpty()) {
+							System.out.println("The following warnings and or verification errors were found:");
+							for (String warning:warnings) {
+								System.out.println("\t"+warning);
+							}
+						}
+					}
 					docNames[i] = CompareSpdxDocs.convertDocName(args[i]);
 					verficationError[i] = mergeDocs[i].verify();
 					if(verficationError[i] != null && verficationError[i].size() > 0){

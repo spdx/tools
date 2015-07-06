@@ -140,9 +140,20 @@ public class SpdxElement extends RdfModelObject {
 	 */
 	@Override
 	public List<String> verify() {
+		String localName = name;
 		List<String> retval = Lists.newArrayList();
 		if (this.name == null) {
 			retval.add("Missing required name for type "+this.getClass().getName());
+			localName = "UNKNOWN";
+		}
+		if (this.annotations != null) {
+			for (Annotation annotation:annotations) {
+				List<String> annotationErrors = annotation.verify();
+				for (String annotationError:annotationErrors) {
+					retval.add("Annotation error for SPDX element "+localName+": "+annotationError);
+				}
+				
+			}
 		}
 		return retval;
 	}
