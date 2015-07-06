@@ -138,7 +138,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		} else {
 			String v = SpdxVerificationHelper.verifyAnnotator(this.annotator);
 			if (v != null && !v.isEmpty()) {
-				retval.add(v);
+				retval.add(v + ":" + this.annotator);
 			}
 		}
 		if (comment == null) {

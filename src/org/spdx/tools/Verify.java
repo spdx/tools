@@ -16,6 +16,7 @@
 */
 package org.spdx.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.compare.SpdxCompareException;
@@ -45,8 +46,9 @@ public class Verify {
 			System.out.printf("Warning: Extra arguments will be ignored");
 		}
 		SpdxDocument doc = null;
+		List<String> parserWarnings = new ArrayList<String>();
 		try {
-			doc = CompareSpdxDocs.openRdfOrTagDoc(args[0]);
+			doc = CompareSpdxDocs.openRdfOrTagDoc(args[0], parserWarnings);
 		} catch (SpdxCompareException e) {
 			System.console()
 				.printf("Unable to open the SPDX file file: "+e.getMessage());
@@ -57,6 +59,13 @@ public class Verify {
 			System.out.println("This SPDX Document is not valid due to:");
 			for (int i = 0; i < verify.size(); i++) {
 				System.out.print("\t" + verify.get(i)+"\n");
+				parserWarnings.remove(verify.get(i));
+			}
+			if (!parserWarnings.isEmpty()) {
+				System.out.println("The following parser warnings were found:");
+				for (String warning:parserWarnings) {
+					System.out.print("\t" + warning+"\n");
+				}
 			}
 		} else {
 			System.out.println("This SPDX Document is valid.");

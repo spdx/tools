@@ -186,7 +186,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 
     private String documentName;
 
-    List<String> warningMessages = Lists.newArrayList();
+    List<String> warningMessages;
 
     /**
      * True if we have started defining a package in the tag/value file
@@ -214,8 +214,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
      * The last (or current) package being defined by the tag/value file
      */
     private SpdxPackage lastPackage = null;
-    public BuildDocument(SpdxDocumentContainer[] result, Properties constants) {
+    public BuildDocument(SpdxDocumentContainer[] result, Properties constants, List<String> warnings) {
         this.constants = constants;
+        this.warningMessages = warnings;
         this.result = result;
         this.ANNOTATION_TAGS.add(constants.getProperty("PROP_ANNOTATION_DATE").trim()+" ");
         this.ANNOTATION_TAGS.add(constants.getProperty("PROP_ANNOTATION_COMMENT").trim()+" ");
@@ -876,7 +877,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         checkSinglePackageDefault();
         addAnnotations();
         warningMessages.addAll(analysis.verify());
-        assertEquals("SpdxDocument", 0, warningMessages);
+//        assertEquals("SpdxDocument", 0, warningMessages);
+        // Moved the responsibility for printing warnings to the caller
+        // The warnings is now passed in as a parameter to the constructor
+        // leaving the commented out code in place until we have tested the change
+        // in the interface - can be removed after Sept. 2015
     }
 
     /**
@@ -1002,15 +1007,16 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         }
 
     }
-
-
-    private static void assertEquals(String name, int expected,
-            List<String> verify) {
-        if (verify.size() > expected) {
-            System.out.println("Converting the tag/value document to RDF resulted in the following verification errors for " + name + ":");
-            for (int x = 0; x < verify.size(); x++) {
-                System.out.println("\t" + verify.get(x));
-            }
-        }
-    }
+//
+//		The following can be removed after the interface changes to the
+//		build document for warning message has been tested.  Can be removed after Sept. 2015
+//    private static void assertEquals(String name, int expected,
+//            List<String> verify) {
+//        if (verify.size() > expected) {
+//            System.out.println("Converting the tag/value document to RDF resulted in the following verification errors for " + name + ":");
+//            for (int x = 0; x < verify.size(); x++) {
+//                System.out.println("\t" + verify.get(x));
+//            }
+//        }
+//    }
 }

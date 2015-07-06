@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -81,8 +83,15 @@ public class TagToSpreadsheet {
 			Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 			NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
 			HandBuiltParser parser = new HandBuiltParser(new DataInputStream(nci));
-			parser.setBehavior(new BuildDocument(result, constants));
+			List<String> warnings = new ArrayList<String>();
+			parser.setBehavior(new BuildDocument(result, constants, warnings));
 			parser.data();
+			if (!warnings.isEmpty()) {
+				System.out.println("The following warnings and or verification errors were found:");
+				for (String warning:warnings) {
+					System.out.println("\t"+warning);
+				}
+			}
 		} catch (Exception e) {
 			System.err.println("Error creating SPDX Analysis: " + e);
 		}
