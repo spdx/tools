@@ -151,7 +151,7 @@ public class DocumentAnnotationSheet extends AbstractSheet {
 			Cell annotatorCell = currentRow.createCell(ANNOTATOR_COL);
 			annotatorCell.setCellValue(nextAnnotation.getAnnotator());
 			Cell typeCell = currentRow.createCell(TYPE_COL);
-			typeCell.setCellValue(Annotation.ANNOTATION_TYPE_TO_TAG.get(nextAnnotation.getAnnotationType()));
+			typeCell.setCellValue(nextAnnotation.getAnnotationType().getTag());
 			Cell commentCell = currentRow.createCell(COMMENT_COL);
 			commentCell.setCellValue(nextAnnotation.getComment());
 			for (int i = 0; i < annotations.length; i++) {

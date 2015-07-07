@@ -149,8 +149,7 @@ public class AnnotationsSheet extends AbstractSheet {
 			row.createCell(ANNOTATOR_COL).setCellValue(annotation.getAnnotator());
 		}
 		if (annotation.getAnnotationType() != null) {
-			row.createCell(TYPE_COL).setCellValue(
-					Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
+			row.createCell(TYPE_COL).setCellValue(annotation.getAnnotationType().getTag());
 		}
 	}
 	
