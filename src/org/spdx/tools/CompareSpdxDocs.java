@@ -344,11 +344,11 @@ public class CompareSpdxDocs {
 	 * @param output
 	 */
 	private static void printAnnotation(Annotation annotation,
-			PrintStream output) {
-		output.println("\tAnnotator: "+annotation.getAnnotator());
-		output.println("\tAnnotationDate: "+annotation.getAnnotationDate());
-		output.println("\tAnnotationType: "+Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
-		output.println("\tAnnotationComment: "+annotation.getComment());
+										PrintStream output) {
+		output.println("\tAnnotator: " + annotation.getAnnotator());
+		output.println("\tAnnotationDate: " + annotation.getAnnotationDate());
+		output.println("\tAnnotationType: " + annotation.getAnnotationType().getTag());
+		output.println("\tAnnotationComment: " + annotation.getComment());
 	}
 
 	/**

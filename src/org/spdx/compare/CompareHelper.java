@@ -56,7 +56,7 @@ public class CompareHelper {
 		sb.append(": ");
 		sb.append(annotation.getComment());
 		sb.append("[");
-		sb.append(Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
+		sb.append(annotation.getAnnotationType().getTag());
 		sb.append("]");
 		return sb.toString();
 	}

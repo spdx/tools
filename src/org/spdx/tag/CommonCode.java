@@ -316,7 +316,7 @@ public class CommonCode {
 				+ annotation.getComment()
 				+ constants.getProperty("PROP_END_TEXT"));
 		out.println(constants.getProperty("PROP_ANNOTATION_TYPE")+
-				Annotation.ANNOTATION_TYPE_TO_TAG.get(annotation.getAnnotationType()));
+				(annotation.getAnnotationType().getTag()));
 		out.println(constants.getProperty("PROP_ANNOTATION_ID")+id);
 	}
 

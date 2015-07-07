@@ -19,6 +19,7 @@ package org.spdx.rdfparser.model;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -41,15 +42,40 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	
 	static final Logger logger = Logger.getLogger(RdfModelObject.class.getName());
 
-	public enum AnnotationType {annotationType_other, annotationType_review};
-	
-	public static final Map<AnnotationType, String> ANNOTATION_TYPE_TO_TAG = Maps.newHashMap();
-	public static final Map<String, AnnotationType> TAG_TO_ANNOTATION_TYPE = Maps.newHashMap();
+	public enum AnnotationType {
+		annotationType_other,
+		annotationType_review;
+
+		@SuppressWarnings("deprecation")
+		public String getTag(){
+			return ANNOTATION_TYPE_TO_TAG.get(this);
+		}
+
+		@SuppressWarnings("deprecation")
+		public static AnnotationType fromTag(String tag){
+			return TAG_TO_ANNOTATION_TYPE.get(tag);
+		}
+
+	};
+
+	@Deprecated
+	public static final Map<AnnotationType, String> ANNOTATION_TYPE_TO_TAG;
+
+	@Deprecated
+	public static final Map<String, AnnotationType> TAG_TO_ANNOTATION_TYPE;
+
 	static {
-		ANNOTATION_TYPE_TO_TAG.put(AnnotationType.annotationType_other, "OTHER");
-		TAG_TO_ANNOTATION_TYPE.put("OTHER", AnnotationType.annotationType_other);
-		ANNOTATION_TYPE_TO_TAG.put(AnnotationType.annotationType_review, "REVIEW");
-		TAG_TO_ANNOTATION_TYPE.put("REVIEW", AnnotationType.annotationType_review);
+		ImmutableMap.Builder<String, AnnotationType> tagToAnnotationTypeBuilder = ImmutableMap.builder();
+		ImmutableMap.Builder<AnnotationType, String> annoationTypeToTagBuilder = ImmutableMap.builder();
+
+
+		annoationTypeToTagBuilder.put(AnnotationType.annotationType_other, "OTHER");
+		tagToAnnotationTypeBuilder.put("OTHER", AnnotationType.annotationType_other);
+		annoationTypeToTagBuilder.put(AnnotationType.annotationType_review, "REVIEW");
+		tagToAnnotationTypeBuilder.put("REVIEW", AnnotationType.annotationType_review);
+
+		TAG_TO_ANNOTATION_TYPE = tagToAnnotationTypeBuilder.build();
+		ANNOTATION_TYPE_TO_TAG = annoationTypeToTagBuilder.build();
 	}
 	AnnotationType annotationType;
 	String annotator;
@@ -285,7 +311,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 * @return The tag value of the annotation type
 	 */
 	public String getAnnotationTypeTag() {
-		return ANNOTATION_TYPE_TO_TAG.get(this.annotationType);
+		return this.annotationType.getTag();
 	}
 
 	/* (non-Javadoc)
