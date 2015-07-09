@@ -112,7 +112,7 @@ public class DeprecatedLicenseSheet extends AbstractSheet {
 		if (templateText == null || templateText.trim().isEmpty()) {
 			templateText = license.getLicenseText();
 		}
-		LicenseSheet.setTemplateText(templateCell, license.getStandardLicenseTemplate(), license.getLicenseId(), workbookPath);
+		LicenseSheet.setTemplateText(templateCell, templateText, license.getLicenseId(), workbookPath);
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
