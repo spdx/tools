@@ -158,7 +158,7 @@ public class LicenseSheet extends AbstractSheet {
 		if (templateText == null || templateText.trim().isEmpty()) {
 			templateText = license.getLicenseText();
 		}
-		setTemplateText(templateCell, license.getStandardLicenseTemplate(), license.getLicenseId(), workbookPath);
+		setTemplateText(templateCell, templateText, license.getLicenseId(), workbookPath);
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
