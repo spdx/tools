@@ -944,10 +944,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             RelationshipWithId relationship = relationships.get(i);
             SpdxElement element = this.analysis.getDocumentContainer().findElementById(relationship.getId());
             SpdxElement relatedElement = this.analysis.getDocumentContainer().findElementById(relationship.getRelatedId());
-            Relationship[] elementRelationships = element.getRelationships();
-            if (elementRelationships == null) {
-                elementRelationships = new Relationship[0];
-            }
+            //Invoked for processing
+            element.getRelationships();
             element.addRelationship(new Relationship(relatedElement,
                     relationships.get(i).getRelationshipType(), relationships.get(i).getComment()));
         }
