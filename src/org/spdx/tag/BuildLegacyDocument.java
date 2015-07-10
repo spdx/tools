@@ -366,7 +366,7 @@ public class BuildLegacyDocument implements TagValueBehavior, Serializable {
 	}
 
 	private static String trim(String value) {
-		value.trim();
+	    value = value.trim();
 		value = value.replaceAll("<text>", "").replaceAll("</text>", "")
 				.replaceAll("SHA1: ", "");
 		return value;
