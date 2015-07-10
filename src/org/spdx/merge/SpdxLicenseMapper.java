@@ -170,17 +170,16 @@ public class SpdxLicenseMapper {
 			for(int i = 0; i < members.length; i++){
 				mappedMembers[i] = mapLicenseInfo(spdxDoc, members[i]);
 			}
-			return new ConjunctiveLicenseSet(mappedMembers);
-		}
-		else if(license instanceof DisjunctiveLicenseSet){
+			license = new ConjunctiveLicenseSet(mappedMembers);
+		}else if(license instanceof DisjunctiveLicenseSet){
 			AnyLicenseInfo[] members = ((DisjunctiveLicenseSet) license).getMembers();
 			AnyLicenseInfo[] mappedMembers = new AnyLicenseInfo[members.length];
 			for(int q = 0; q < members.length; q++ ){
 				mappedMembers[q] = mapLicenseInfo(spdxDoc, members[q]);
 			}
-			return new DisjunctiveLicenseSet(mappedMembers);
+			license = new DisjunctiveLicenseSet(mappedMembers);
 		}else if(license instanceof ExtractedLicenseInfo){
-			return license = mapNonStdLicInMap(spdxDoc,license);
+			license = mapNonStdLicInMap(spdxDoc,license);
 		}
 		return license;	
 	}
