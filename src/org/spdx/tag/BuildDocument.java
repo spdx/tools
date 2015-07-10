@@ -861,7 +861,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
     }
 
     private static String trim(String value) {
-        value.trim();
+        value = value.trim();
         value = value.replaceAll("<text>", "").replaceAll("</text>", "");
         return value;
     }

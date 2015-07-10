@@ -321,7 +321,7 @@ public class SpreadsheetToRDF {
 		analysis.setCreationInfo(creator);
 		String docComment = originsSheet.getDocumentComment();
 		if (docComment != null) {
-			docComment.trim();
+		    docComment = docComment.trim();
 			if (!docComment.isEmpty()) {
 				analysis.setComment(docComment);
 			}
