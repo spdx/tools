@@ -925,9 +925,8 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			retval.add("Missing required copyright text for file "+fileName);
 		}
 		// contributors - nothing to verify
-		// license comments
-		@SuppressWarnings("unused")
-		String comments = this.getLicenseComments();
+		// license comments - invoked for processing
+		getLicenseComments();
 		// license concluded
 		AnyLicenseInfo concludedLicense = this.getConcludedLicenses();
 		if (concludedLicense == null) {
