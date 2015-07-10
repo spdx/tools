@@ -111,15 +111,17 @@ public class MustacheMap {
 	 */
 	private static List<RelationshipContext> getRelationshipContexts(
 			Relationship[] relationships, Map<String, String> spdxIdToUrl) {
-		Arrays.sort(relationships);
-		List<RelationshipContext> retval = Lists.newArrayList();
-		if (relationships == null) {
-			return retval;
-		}
-		 for (int i = 0; i < relationships.length; i++) {
-			 retval.add(new RelationshipContext(relationships[i], spdxIdToUrl));
-		 }
-		 return retval;
+	    List<RelationshipContext> retval = Lists.newArrayList();
+	    
+	    if (relationships != null) {
+	        Arrays.sort(relationships);
+		
+    		for (Relationship relationship : relationships) {
+    		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
+    		}
+	    }
+	    
+		return retval;
 	}
 
 	/**
