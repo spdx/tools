@@ -77,7 +77,6 @@ public class CommonCode {
 	 * @param constants
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	@SuppressWarnings("deprecation")
 	public static void printDoc(SpdxDocument doc, PrintWriter out,
 			Properties constants) throws InvalidSPDXAnalysisException {
 		if (doc == null) {
@@ -202,9 +201,10 @@ public class CommonCode {
 			}
 		}
 		// Reviewers
-		if (doc.getReviewers() != null && doc.getReviewers().length > 0) {
+		SPDXReview[] reviewedBy = doc.getReviewers();
+		
+		if (reviewedBy != null && reviewedBy.length > 0) {
 			println(out, constants.getProperty("REVIEW_INFO_HEADER"));
-			SPDXReview[] reviewedBy = doc.getReviewers();
 			for (int i = 0; i < reviewedBy.length; i++) {
 				println(out, constants.getProperty("PROP_REVIEW_REVIEWER")
 						+ reviewedBy[i].getReviewer());
@@ -524,7 +524,6 @@ public class CommonCode {
 	/**
 	 * @param file
 	 */
-	@SuppressWarnings("deprecation")
 	private static void printFile(SpdxFile file, PrintWriter out,
 			Properties constants) {
 		printElementProperties(file, out, constants, "PROP_FILE_NAME", 
@@ -590,10 +589,10 @@ public class CommonCode {
 			}
 		}
 		// file dependencies
-		if (file.getFileDependencies() != null && file.getFileDependencies().length > 0) {
-			for (int i = 0; i < file.getFileDependencies().length; i++) {
-				println(out, constants.getProperty("PROP_FILE_DEPENDENCY") + 
-						file.getFileDependencies()[i].getName());
+		SpdxFile[] fileDependencies = file.getFileDependencies();
+		if (fileDependencies != null && fileDependencies.length > 0) {
+			for (SpdxFile fileDepdency : fileDependencies) {
+				println(out, constants.getProperty("PROP_FILE_DEPENDENCY") + fileDepdency.getName());
 			}
 		}
 		printElementAnnotationsRelationships(file, out, constants, "PROP_FILE_NAME", 
