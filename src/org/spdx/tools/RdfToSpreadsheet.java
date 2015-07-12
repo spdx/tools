@@ -98,6 +98,7 @@ public class RdfToSpreadsheet {
 		} catch (IOException e) {
 			System.out.print("Unable to open file :"+args[0]+", "+e.getMessage());
 		}
+		if(doc != null){
 		SPDXSpreadsheet ss = null;
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
@@ -123,6 +124,7 @@ public class RdfToSpreadsheet {
 					System.out.println("Error closing spreadsheet: "+e.getMessage());
 				}
 			}
+		}
 		}
 	}
 
