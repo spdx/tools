@@ -98,35 +98,37 @@ public class RdfToSpreadsheet {
 		} catch (IOException e) {
 			System.out.print("Unable to open file :"+args[0]+", "+e.getMessage());
 		}
-		if(doc != null){
-		SPDXSpreadsheet ss = null;
-		try {
-			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
-			copyRdfXmlToSpreadsheet(doc, ss);
-			List<String> verify = doc.verify();
-			if (verify != null && verify.size() > 0) {
-				System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
-				for (int i = 0; i < verify.size(); i++) {
-					System.out.println("\t"+verify.get(i));
-				}
-			}
-		} catch (SpreadsheetException e) {
-			System.out.println("Error opening or writing to spreadsheet: "+e.getMessage());
-		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Error translating the RDF file: "+e.getMessage());
-		} catch (Exception ex) {
-			System.out.println("Unexpected error translating the RDF to spreadsheet: "+ex.getMessage());
-		} finally {
-			if (ss != null) {
-				try {
-					ss.close();
-				} catch (SpreadsheetException e) {
-					System.out.println("Error closing spreadsheet: "+e.getMessage());
-				}
-			}
-		}
-		}
-	}
+        if (doc != null) {
+            SPDXSpreadsheet ss = null;
+            try {
+                ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
+                copyRdfXmlToSpreadsheet(doc, ss);
+                List<String> verify = doc.verify();
+                if (verify != null && verify.size() > 0) {
+                    System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
+                    for (int i = 0; i < verify.size(); i++) {
+                        System.out.println("\t" + verify.get(i));
+                    }
+                }
+            } catch (SpreadsheetException e) {
+                System.out.println("Error opening or writing to spreadsheet: " + e.getMessage());
+            } catch (InvalidSPDXAnalysisException e) {
+                System.out.println("Error translating the RDF file: " + e.getMessage());
+            } catch (Exception ex) {
+                System.out.println("Unexpected error translating the RDF to spreadsheet: " + ex.getMessage());
+            } finally {
+                if (ss != null) {
+                    try {
+                        ss.close();
+                    } catch (SpreadsheetException e) {
+                        System.out.println("Error closing spreadsheet: " + e.getMessage());
+                    }
+                }
+            }
+        }else{
+            System.out.println("Error creating SPDX docuement reference, null reference returned");
+        }
+    }
 
 	@SuppressWarnings("deprecation")
 	public static void copyRdfXmlToSpreadsheet(SpdxDocument doc,
