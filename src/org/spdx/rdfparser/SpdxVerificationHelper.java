@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.SpdxFile.FileType;
 
 
 import com.hp.hpl.jena.iri.IRIFactory;
@@ -76,7 +77,7 @@ public class SpdxVerificationHelper {
 	 * @return
 	 */
 	public static String verifyFileType(String fileType) {
-		if (!SPDXFile.FILE_TYPE_TO_RESOURCE.containsKey(fileType)) {
+		if (FileType.fromTag(fileType) == null) {
 			return "Unrecognized file type";
 		} else {
 			return null;

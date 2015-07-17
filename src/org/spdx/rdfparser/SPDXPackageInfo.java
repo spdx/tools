@@ -21,9 +21,11 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 
 /**
+ * This class is no longer used in the SPDX 2.0 version - it is provided for compatibility only
  * @author Gary O'Neall
  *
  */
+@Deprecated
 public class SPDXPackageInfo {
 	private String declaredName;
 	private String fileName;
