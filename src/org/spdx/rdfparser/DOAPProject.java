@@ -29,9 +29,13 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 /**
  * Contains a DOAP project
  * Currently, only the home page and name properties are supported
+ * 
+ * This class is provided for compatibility with the 1.2 version of the library
+ * and is no longer used in version 2.0 and above (replaced by model.DoapProject)
  * @author Gary O'Neall
  *
  */
+@Deprecated
 public class DOAPProject implements Cloneable {
 	
 	public static final String UNKNOWN_URI = "UNKNOWN";

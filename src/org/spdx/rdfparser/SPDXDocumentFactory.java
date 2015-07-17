@@ -60,6 +60,7 @@ public class SPDXDocumentFactory {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
+	@SuppressWarnings("deprecation")
 	public static SPDXDocument createLegacySpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
 	}
@@ -71,6 +72,7 @@ public class SPDXDocumentFactory {
 	 * @throws IOException
 	 * @throws InvalidSPDXAnalysisException
 	 */
+	@SuppressWarnings("deprecation")
 	public static SPDXDocument createLegacySpdxDocument(String fileNameOrUrl) throws IOException, InvalidSPDXAnalysisException {
 		try {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
@@ -113,6 +115,7 @@ public class SPDXDocumentFactory {
 		return docContainer.getSpdxDocument();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static SPDXDocument createLegacySpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		model.read(input, baseUri, fileType);

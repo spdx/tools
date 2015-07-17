@@ -536,10 +536,10 @@ public class CompareSpdxDocs {
 			return "";
 		}
 		Arrays.sort(fileTypes);
-		StringBuilder sb = new StringBuilder(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[0]));
+		StringBuilder sb = new StringBuilder(fileTypes[0].getTag());
 		for (int i = 1; i < fileTypes.length; i++) {
 			sb.append(", ");
-			sb.append(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]));
+			sb.append(fileTypes[i].getTag());
 		}
 		return sb.toString();
 	}

@@ -54,9 +54,13 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * unique number.  The method <code>addNonStandardLicense(licenseText)</code> can be called to 
  * create a new unique Non-Standard License.
  * 
+ * This class is provided for compatibility with version 1.2 of the libraries - it has been
+ * replaced with SpdxDocumentContainer in version 2.0 and above.
+ * 
  * @author Gary O'Neall
  *
  */
+@Deprecated
 public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	
 	public static final String POINT_EIGHT_SPDX_VERSION = "SPDX-0.8";
@@ -94,12 +98,15 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 * 
 	 * This package is initialized using an existing SPDXPackage in an 
 	 * RDF document by constructing the package with the node representing the
-	 * SPDX package.
-
+	 * SPDX package. 
+	 * 
+	 * This class is provided for compatibility with version 1.2 of the library.  
+	 * This class is replaced by model.SpdxPackage in version 2.0 and above.
 	 * 
 	 * @author Gary O'Neall
 	 *
 	 */
+	@Deprecated
 	public class SPDXPackage {
 		private SPDXDocument enclosingSpdxDocument;
 		private Node node = null;

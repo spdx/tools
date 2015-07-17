@@ -35,9 +35,13 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * Contains and SPDXFile object and updates the RDF model.
+ * 
+ * This class is for compatibility with the 1.2 version of the SPDX library
+ * and is no longer used for version 2.0 and above.
  * @author Gary O'Neall
  *
  */
+@Deprecated
 public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	
 	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());

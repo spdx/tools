@@ -98,7 +98,7 @@ public class AnnotationsSheet extends AbstractSheet {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in annotation sheet";
 			} 
 			if (i == TYPE_COL && cell.getStringCellValue() != null) {
-				AnnotationType type = Annotation.TAG_TO_ANNOTATION_TYPE.get(cell.getStringCellValue());
+				AnnotationType type = AnnotationType.fromTag(cell.getStringCellValue());
 				if (type == null) {
 					return "Invalid annotation type in row "+String.valueOf(row)+": "+cell.getStringCellValue();
 				}
@@ -183,7 +183,7 @@ public class AnnotationsSheet extends AbstractSheet {
 		AnnotationType type = null;
 		Cell typeCell = row.getCell(TYPE_COL);
 		if (typeCell != null) {
-			type = Annotation.TAG_TO_ANNOTATION_TYPE.get(typeCell.getStringCellValue().trim());
+			type = AnnotationType.fromTag(typeCell.getStringCellValue().trim());
 		}
 		return new Annotation(annotator, type, date, comment);
 	}
