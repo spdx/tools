@@ -1,3 +1,6 @@
+Implementation version 2.0.3
+- Fixed a critical bug in the spreadsheet verification - throws an error when more than one licenseinfo in file is present
+- Added seeAlso to to the JSON output of the licenseRDFA generator
 Implementation version 2.0.2
 - Thanks to Ryan O'Meara and Yev Bronshteyn for submitting several fixes and improving the overall code quality
 - Added command line utility Verify which takes both tag and RDF files as input
