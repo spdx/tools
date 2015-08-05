@@ -32,7 +32,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * SPDX Checksum class for packages and files
  * 
  * This class is provided for compatibility with version 1.2 of the library and
- * is no longer used by version 2.0 or above
+ * is no longer used by version 2.0 or above.  It has been replaced by model.Checksum
  * @author Gary O'Neall
  *
  */

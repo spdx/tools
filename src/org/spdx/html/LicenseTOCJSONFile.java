@@ -41,14 +41,16 @@ public class LicenseTOCJSONFile {
 		private final String licenseId;
 		private final boolean osiApproved;
 		private final String licenseName;
+		private final String[] seeAlso;
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean osiApproved, String licenseName) {
+				String licenseId, boolean osiApproved, String licenseName, String[] seeAlso) {
 			this.reference = reference;
 			this.refNumber = refNumber;
 			this.licenseId = licenseId;
 			this.osiApproved = osiApproved;
 			this.licenseName = licenseName;
+			this.seeAlso = seeAlso;
 		}
 
 		public String getReference() {
@@ -70,6 +72,10 @@ public class LicenseTOCJSONFile {
 		public String getLicenseName() {
 			return licenseName;
 		}
+		
+		public String[] getSeeAlso() {
+			return this.seeAlso;
+		}
 
 	}
 	
@@ -87,7 +93,7 @@ public class LicenseTOCJSONFile {
 
 	public void addLicense(SpdxListedLicense license, String licHTMLReference) {
 		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				license.getLicenseId(), license.isOsiApproved(), license.getName()));
+				license.getLicenseId(), license.isOsiApproved(), license.getName(), license.getSeeAlso()));
 		currentRefNumber++;
 	}
 
@@ -111,6 +117,14 @@ public class LicenseTOCJSONFile {
 				licenseJSON.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
 				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.getOsiApproved());
 				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getLicenseName());
+				String[] seeAlsos = license.getSeeAlso();
+				if (seeAlsos != null && seeAlsos.length > 0) {
+					JSONArray seeAlsoArray = new JSONArray();
+					for (String seeAlso:seeAlsos) {
+						seeAlsoArray.add(seeAlso);
+					}
+					licenseJSON.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
+				}				
 				licensesList.add(licenseJSON);
 			}
 			jsonObject.put("licenses", licensesList);

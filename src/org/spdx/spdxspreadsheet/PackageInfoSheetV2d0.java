@@ -122,7 +122,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			}
 			return null;
 		} catch (Exception ex) {
-			return "Error in verifying SPDX Package Info work sheet: "+ex.getMessage();
+			return "Unexpected error in verifying SPDX Package Info work sheet: "+ex.getMessage();
 		}
 	}
 
@@ -151,7 +151,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 					}
 					for (int j = 0; j < licenses.length; j++) {
 						try {
-							LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue().trim(), null);
+							LicenseInfoFactory.parseSPDXLicenseString(licenses[j], null);
 						} catch(SpreadsheetException ex) {
 							return "Invalid license information in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
 						}
