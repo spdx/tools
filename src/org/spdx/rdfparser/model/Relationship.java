@@ -146,7 +146,8 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_staticLink, "STATIC_LINK");
 		tagToRelationshipTypeBuilder.put("STATIC_LINK", RelationshipType.relationshipType_staticLink);
 		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_testcaseOf, "TEST_CASE_OF");
-
+		tagToRelationshipTypeBuilder.put("TEST_CASE_OF", RelationshipType.relationshipType_testcaseOf);
+		
 		TAG_TO_RELATIONSHIP_TYPE = tagToRelationshipTypeBuilder.build();
 		RELATIONSHIP_TYPE_TO_TAG = relationshipTypeToTagBuilder.build();
 	}
