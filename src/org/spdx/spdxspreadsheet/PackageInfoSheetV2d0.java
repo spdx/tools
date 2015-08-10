@@ -64,7 +64,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 	int NUM_COLS = USER_DEFINED_COL;
 
 	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, true, false, false, false, true, 
+	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false, false, true, 
 		true, true, false, false, true, true, true, false, true, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package Name", "SPDX Identifier", "Package Version", 
 		"Package FileName", "Package Supplier", "Package Originator", "Home Page",
@@ -131,7 +131,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			Cell cell = row.getCell(i);
 			if (cell == null) {
 				if (REQUIRED[i]) {
-					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum());
+					return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum() + " in PackageInfo sheet.");
 				}
 			} else {
 				if (i == DECLARED_LICENSE_COL || i == CONCLUDED_LICENSE_COL) {
@@ -139,21 +139,21 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 						LicenseInfoFactory.parseSPDXLicenseString(cell.getStringCellValue(), null);
 					} catch(SpreadsheetException ex) {
 						if (i == DECLARED_LICENSE_COL) {
-							return "Invalid declared license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
+							return "Invalid declared license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage() + " in PackageInfo sheet.";
 						} else {
-							return "Invalid seen license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
+							return "Invalid seen license in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage() + " in PackageInfo sheet.";
 						}
 					}
 				} else if (i == LICENSE_INFO_IN_FILES_COL) {
 					String[] licenses = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
 					if (licenses.length < 1) {
-						return "Missing licenss information in files";
+						return "Missing licenss information in files in PackageInfo sheet.";
 					}
 					for (int j = 0; j < licenses.length; j++) {
 						try {
 							LicenseInfoFactory.parseSPDXLicenseString(licenses[j], null);
 						} catch(SpreadsheetException ex) {
-							return "Invalid license information in row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage();
+							return "Invalid license information in in files for license "+licenses[j]+ " row "+String.valueOf(row.getRowNum())+" detail: "+ex.getMessage() + " in PackageInfo sheet.";
 						}
 					}
 				} else if (i == ORIGINATOR_COL) {
@@ -163,7 +163,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 						if (originator != null && !originator.isEmpty()) {
 							String error = SpdxVerificationHelper.verifyOriginator(originator);
 							if (error != null && !error.isEmpty()) {
-								return "Invalid originator in row "+String.valueOf(row.getRowNum()) + ": "+error;
+								return "Invalid originator in row "+String.valueOf(row.getRowNum()) + ": "+error + " in PackageInfo sheet.";
 							}
 						}
 					}
@@ -174,7 +174,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 						if (supplier != null && !supplier.isEmpty()) {
 							String error = SpdxVerificationHelper.verifySupplier(supplier);
 							if (error != null && !error.isEmpty()) {
-								return "Invalid supplier in row "+String.valueOf(row.getRowNum()) + ": "+error;
+								return "Invalid supplier in row "+String.valueOf(row.getRowNum()) + ": "+error + " in PackageInfo sheet.";
 							}
 						}
 					}
@@ -306,7 +306,12 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		}
 		String declaredName = nameCell.getStringCellValue();
 		String id = row.getCell(ID_COL).getStringCellValue();
-		String machineName = row.getCell(MACHINE_NAME_COL).getStringCellValue();
+		Cell machineNameCell = row.getCell(MACHINE_NAME_COL);
+		
+		String machineName = null;
+		if (machineNameCell != null) {
+			machineName = row.getCell(MACHINE_NAME_COL).getStringCellValue();
+		}
 		Cell checksumsCell = row.getCell(PACKAGE_CHECKSUMS_COL);
 		Checksum[] checksums = new Checksum[0];
 		if (checksumsCell != null) {

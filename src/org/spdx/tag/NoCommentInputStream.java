@@ -52,7 +52,7 @@ public class NoCommentInputStream extends InputStream {
 	 */
 	public NoCommentInputStream(InputStream in) throws IOException {
 		this.inputStream = in;
-		this.reader = new InputStreamReader(inputStream);
+		this.reader = new InputStreamReader(inputStream, "UTF-8");
 		this.bufferedReader = new BufferedReader(reader);
 		readNextLine();
 	}

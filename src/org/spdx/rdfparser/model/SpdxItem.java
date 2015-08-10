@@ -28,6 +28,7 @@ import org.spdx.rdfparser.license.OrLaterOperator;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.WithExceptionOperator;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
@@ -327,7 +328,8 @@ public class SpdxItem extends SpdxElement {
 				if (!(lic instanceof SimpleLicensingInfo ||
 						lic instanceof SpdxNoAssertionLicense ||
 						lic instanceof SpdxNoneLicense ||
-						lic instanceof OrLaterOperator)) {
+						lic instanceof OrLaterOperator ||
+						lic instanceof WithExceptionOperator)) {
 					foundNonSimpleLic = true;
 					break;
 				}

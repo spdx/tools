@@ -165,7 +165,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		if (license == null || exception == null) {
 			return "UNDEFINED WITH EXCEPTION";
 		}
-		return license.toString() + " WITH " + exception.toString();
+		return license.toString() +" "+ exception.toString();
 	}
 
 	/* (non-Javadoc)

@@ -43,6 +43,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 	static final int[] COLUMN_WIDTHS = new int[] {15, 120, 50, 80, 80, 50};
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, true, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, false, true, false, false, false};
+	private static final int MAX_CELL_CONTENT_SIZE = 32700;
 
 	
 	/**
@@ -144,6 +145,9 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 		Cell idCell = row.createCell(IDENTIFIER_COL);
 		idCell.setCellValue(identifier);
 		Cell extractedTextCell = row.createCell(EXTRACTED_TEXT_COL);
+		if (extractedText.length() > MAX_CELL_CONTENT_SIZE) {
+			extractedText = "[WARNING: TRUNCATED]" + extractedText.substring(0, MAX_CELL_CONTENT_SIZE -20);
+		}
 		extractedTextCell.setCellValue(extractedText);
 		if (licenseName != null && !licenseName.isEmpty()) {
 			Cell licenseNameCell = row.createCell(LICENSE_NAME_COL);
