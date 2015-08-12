@@ -145,6 +145,9 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 	 */
 	@Override
 	public boolean equivalent(IRdfModel compare) {
+		if (compare == this) {
+			return true;
+		}
 		if (!(compare instanceof LicenseSet)) {
 			return false;
 		}

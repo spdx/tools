@@ -36,71 +36,7 @@ public final class RdfModelHelper {
 	private RdfModelHelper() {
 		// This is a static class, it should not be instantiated
 	}
-
-	/**
-	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
-	 * order and considering nulls
-	 * @param array1
-	 * @param array2
-	 * @return
-	 */
-	public static boolean arraysEquivalent(IRdfModel[] array1, IRdfModel[] array2) {
-		if (array1 == null) {
-			return array2 == null;
-		}
-		if (array2 == null) {
-			return false;
-		}
-		if (array1.length != array2.length) {
-			return false;
-		}
-		Set<Integer> foundIndexes = Sets.newHashSet();
-		for (int i = 0; i < array1.length; i++) {
-			boolean found = false;
-			for (int j = 0; j < array2.length; j++) {
-				if (!foundIndexes.contains(j) &&
-						RdfModelHelper.equivalentConsideringNull(array1[i],array2[j])) {
-					found = true;
-					foundIndexes.add(j);
-					break;
-				}
-			}
-			if (!found) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Compares the properties of two RdfModelObjects considering possible null values
-	 * @param o1
-	 * @param o2
-	 * @return
-	 */
-	public static boolean equivalentConsideringNull(IRdfModel o1, IRdfModel o2) {
-		if (o1 == null) {
-			return (o2 == null);
-		} else {
-			return o1.equivalent(o2);
-		}
-	}
-
-	        /**
-     * Compares to objects considering possible null values
-     * 
-     * @param o1
-     *            The first object to compare
-     * @param o2
-     *            The second object to compare
-     * @return True if the objects are equal, false otherwise
-     * @deprecated Use {@link com.google.common.base.Objects#equal(Object, Object)} instead
-     */
-	@Deprecated
-    public static boolean equalsConsideringNull(Object o1, Object o2) {
-        return Objects.equal(o1, o2);
-	}
-
+	
 	/**
 	 * Compares 2 arrays to see if thier content is the same independent of
 	 * order and considering nulls
@@ -134,7 +70,73 @@ public final class RdfModelHelper {
 		}
 		return true;
 	}
+
+	/**
+	 * Strings are considered equivalent if they are equal, or if they are null and/or empty (null and empty strings are considered equivalent)
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
+	public static boolean stringsEquivalent(String s1, String s2) {
+		if (Objects.equal(s1, s2)) {
+			return true;
+		} else if (s1 == null && s2.isEmpty()) {
+			return true;
+		} else if (s2 == null && s1.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	/**
+	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
+	 * order and considering nulls
+	 * @param array1
+	 * @param array2
+	 * @return
+	 */
+	public static boolean arraysEquivalent(IRdfModel[] array1, IRdfModel[] array2) {
+		if (array1 == null) {
+			return array2 == null;
+		}
+		if (array2 == null) {
+			return false;
+		}
+		if (array1.length != array2.length) {
+			return false;
+		}
+		Set<Integer> foundIndexes = Sets.newHashSet();
+		for (int i = 0; i < array1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < array2.length; j++) {
+				if (!foundIndexes.contains(j) &&
+						equivalentConsideringNull(array1[i],array2[j])) {
+					found = true;
+					foundIndexes.add(j);
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	
+	/**
+	 * Compares the properties of two RdfModelObjects considering possible null values
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
+	public static boolean equivalentConsideringNull(IRdfModel o1, IRdfModel o2) {
+		if (o1 == null) {
+			return (o2 == null);
+		} else {
+			return o1.equivalent(o2);
+		}
+	}
 
 }

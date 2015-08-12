@@ -21,7 +21,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
@@ -268,13 +267,16 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 */
 	@Override
 	public boolean equivalent(IRdfModel compare) {
+		if (compare == this) {
+			return true;
+		}
 		if (!(compare instanceof ExternalDocumentRef)) {
 			return false;
 		}
 		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
 		try {
             return (Objects.equal(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace()) &&
-                    RdfModelHelper.equivalentConsideringNull(this.checksum, compref.getChecksum()) && Objects.equal(this.externalDocumentId,
+                    equivalentConsideringNull(this.checksum, compref.getChecksum()) && Objects.equal(this.externalDocumentId,
                     compref.getExternalDocumentId()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invald SPDX Analysis exception comparing external document references: "+e.getMessage(),e);

@@ -25,7 +25,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 
@@ -160,7 +159,7 @@ public class ExternalReferencesSheet extends AbstractSheet {
 					ExternalDocumentRef compareRef = externalRefs[i][refIndexes[i]];
                     if (Objects.equal(nextRef.getSpdxDocumentNamespace(),
 							compareRef.getSpdxDocumentNamespace()) &&
-							RdfModelHelper.equivalentConsideringNull(nextRef.getChecksum(), 
+							nextRef.equivalentConsideringNull(nextRef.getChecksum(), 
 									compareRef.getChecksum())) {
 						Cell docIdCell = currentRow.createCell(FIRST_DOC_ID_COL+i);
 						docIdCell.setCellValue(externalRefs[i][refIndexes[i]].getExternalDocumentId());

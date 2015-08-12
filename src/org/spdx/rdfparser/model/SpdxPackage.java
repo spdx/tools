@@ -30,7 +30,6 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -323,7 +322,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (this.resource != null && refreshOnGet) {
 			Checksum[] refresh = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
 					PROP_PACKAGE_CHECKSUM);
-			if (!RdfModelHelper.arraysEquivalent(refresh, this.checksums)) {
+			if (!arraysEquivalent(refresh, this.checksums, true)) {
 				this.checksums = refresh;
 			}
 		}
@@ -563,13 +562,21 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @return the files
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxFile[] getFiles() throws InvalidSPDXAnalysisException {
+		return this.getFiles(true);
+	}
+	/**
+	 * @return the files
+	 * @param checkRelationships - if true, compare relationships when determining if the files need to be loaded
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public SpdxFile[] getFiles(boolean checkRelationships) throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
 			SpdxElement[] filesE = findMultipleElementPropertyValues(SPDX_NAMESPACE,
 					PROP_PACKAGE_FILE);
-			if (!RdfModelHelper.arraysEquivalent(filesE, this.files)) {
+			if (!arraysEquivalent(filesE, this.files, checkRelationships)) {
 				this.files = new SpdxFile[filesE.length];
 				for (int i = 0; i < filesE.length; i++) {
 					if (!(filesE[i] instanceof SpdxFile)) {
@@ -613,10 +620,18 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		return this.equivalent(o, true);
+	}
+	
+	@Override
+	public boolean equivalent(IRdfModel o, boolean testRelationships) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SpdxPackage)) {
 			return false;
 		}
-		if (!super.equivalent(o)) {
+		if (!super.equivalent(o, testRelationships)) {
 			return false;
 		}
 		SpdxPackage comp = (SpdxPackage)o;
@@ -630,24 +645,24 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 					return false;
 				}
 			}
-		return (RdfModelHelper.equivalentConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
-				RdfModelHelper.arraysEquivalent(this.checksums, comp.getChecksums()) &&
-				Objects.equal(this.description, comp.getDescription()) &&
-				Objects.equal(this.downloadLocation, comp.getDownloadLocation()) &&
-				RdfModelHelper.arraysEquivalent(this.files, comp.getFiles()) &&
-				Objects.equal(this.homepage, comp.getHomepage()) &&
-				Objects.equal(this.originator, comp.getOriginator()) &&
-				Objects.equal(this.packageFileName, comp.getPackageFileName()) &&
-				Objects.equal(this.sourceInfo, comp.getSourceInfo()) &&
-				Objects.equal(this.summary, comp.getSummary()) &&
-				Objects.equal(this.supplier, comp.getSupplier()) &&
-				Objects.equal(this.versionInfo, comp.getVersionInfo()));
+		return (equivalentConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
+				arraysEquivalent(this.checksums, comp.getChecksums(), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.description, comp.getDescription()) &&
+				RdfModelHelper.stringsEquivalent(this.downloadLocation, comp.getDownloadLocation()) &&
+				arraysEquivalent(this.files, comp.getFiles(false), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.homepage, comp.getHomepage()) &&
+				RdfModelHelper.stringsEquivalent(this.originator, comp.getOriginator()) &&
+				RdfModelHelper.stringsEquivalent(this.packageFileName, comp.getPackageFileName()) &&
+				RdfModelHelper.stringsEquivalent(this.sourceInfo, comp.getSourceInfo()) &&
+				RdfModelHelper.stringsEquivalent(this.summary, comp.getSummary()) &&
+				RdfModelHelper.stringsEquivalent(this.supplier, comp.getSupplier()) &&
+				RdfModelHelper.stringsEquivalent(this.versionInfo, comp.getVersionInfo()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invalid analysis exception on comparing equivalent: "+e.getMessage(),e);
 			return false;
 		}
 	}
-	
+
 	@Override
     public SpdxPackage clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {

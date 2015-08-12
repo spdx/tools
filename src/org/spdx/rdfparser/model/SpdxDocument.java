@@ -452,20 +452,28 @@ public class SpdxDocument extends SpdxElement {
 		}
 		return retval;
 	} 
-
+	
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		return this.equivalent(o, true);
+	}
+
+	@Override
+	public boolean equivalent(IRdfModel o, boolean testRelationships) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SpdxDocument)) {
 			return false;
 		}
-		if (!(super.equivalent(o))) {
+		if (!(super.equivalent(o, testRelationships))) {
 			return false;
 		}
 		SpdxDocument comp = (SpdxDocument)o;
 		try {
             return (Objects.equal(this.creationInfo, comp.getCreationInfo()) &&
                     Objects.equal(this.dataLicense, comp.getDataLicense()) &&
-				RdfModelHelper.arraysEquivalent(this.getExternalDocumentRefs(), comp.getExternalDocumentRefs()) &&
+				arraysEquivalent(this.getExternalDocumentRefs(), comp.getExternalDocumentRefs(), testRelationships) &&
 				RdfModelHelper.arraysEqual(this.getExtractedLicenseInfos(), comp.getExtractedLicenseInfos()) &&
                     RdfModelHelper.arraysEqual(this.reviewers, comp.getReviewers()) && Objects.equal(this.specVersion, comp.getSpecVersion()));
 		} catch (InvalidSPDXAnalysisException ex) {

@@ -98,11 +98,19 @@ public class ExternalSpdxElement extends SpdxElement {
 	
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		return this.equivalent(o, true);
+	}
+	
+	@Override
+	public boolean equivalent(IRdfModel o, boolean testRelationships) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof ExternalSpdxElement)) {
 			return false;
 		}
 		ExternalSpdxElement comp = (ExternalSpdxElement)o;
-		if (!super.equivalent(comp)) {
+		if (!super.equivalent(comp, testRelationships)) {
 			return false;
 		}
         return (Objects.equal(this.getId(), comp.getId()));

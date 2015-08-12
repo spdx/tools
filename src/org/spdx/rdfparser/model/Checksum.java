@@ -273,6 +273,9 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 */
 	@Override
 	public boolean equivalent(IRdfModel compare) {
+		if (compare == this) {
+			return true;
+		}
 		if (!(compare instanceof Checksum)) {
 			return false;
 		}

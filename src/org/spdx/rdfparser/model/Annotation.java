@@ -297,6 +297,9 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 */
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof Annotation)) {
 			return false;
 		}

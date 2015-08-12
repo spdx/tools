@@ -63,7 +63,7 @@ public class ListedLicenses implements IModelContainer {
 	Set<String> listdLicenseIds = null;
 	
 	Map<String, SpdxListedLicense> listedLicenseCache = null;
-	Map<Node, SpdxListedLicense> listedLicenseNodeCache = Maps.newHashMap();
+	Map<IModelContainer, Map<Node, SpdxListedLicense>> listedLicenseNodeCache = Maps.newHashMap();
 	
 
     
@@ -493,13 +493,16 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	public AnyLicenseInfo getLicenseFromStdLicModel(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
-		if (this.equals(modelContainer) && this.listedLicenseNodeCache.containsKey(node)) {
-			return this.listedLicenseNodeCache.get(node);
+		Map<Node, SpdxListedLicense> modelNodeCache = this.listedLicenseNodeCache.get(modelContainer);
+		if (modelNodeCache == null) {
+			modelNodeCache = Maps.newHashMap();
+			this.listedLicenseNodeCache.put(modelContainer, modelNodeCache);
+		}
+		if (modelNodeCache.containsKey(node)) {
+			return modelNodeCache.get(node);
 		}
 		SpdxListedLicense retval = new SpdxListedLicense(modelContainer, node);
-		if (this.equals(modelContainer)) {
-			this.listedLicenseNodeCache.put(node, retval);
-		} else {
+		if (!this.equals(modelContainer)) {
 			String licenseId = retval.getLicenseId();
 			if (licenseId == null) {
 				URL licenseUrl;
@@ -517,6 +520,7 @@ public class ListedLicenses implements IModelContainer {
 				// ignore any errors - just don't copy from the license model
 			}
 		}
+		modelNodeCache.put(node, retval);
 		return retval;
 	}
 

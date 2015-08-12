@@ -252,16 +252,24 @@ public class SpdxItem extends SpdxElement {
 	
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		return this.equivalent(o, true);
+	}
+	
+	@Override
+	public boolean equivalent(IRdfModel o, boolean testRelationships) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SpdxItem)) {
 			return false;
 		}
 		SpdxItem comp = (SpdxItem)o;
-		if (!super.equivalent(comp)) {
+		if (!super.equivalent(comp, testRelationships)) {
 			return false;
 		}
-		return (Objects.equal(this.copyrightText, comp.getCopyrightText()) &&
-				RdfModelHelper.equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
-				RdfModelHelper.arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles()) &&
+		return (RdfModelHelper.stringsEquivalent(this.copyrightText, comp.getCopyrightText()) &&
+				equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
+				arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles(), testRelationships) &&
 				Objects.equal(this.licenseComments, comp.getLicenseComments()));
 	}
 	
