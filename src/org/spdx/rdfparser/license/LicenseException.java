@@ -493,6 +493,9 @@ public class LicenseException implements IRdfModel  {
 	 */
 	@Override
 	public boolean equivalent(IRdfModel compare) {
+		if (compare == this) {
+			return true;
+		}
 		if (!(compare instanceof LicenseException)) {
 			return false;
 		}

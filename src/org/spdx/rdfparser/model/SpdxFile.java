@@ -30,7 +30,6 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
@@ -427,7 +426,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			try {
 				Checksum[] refresh = findMultipleChecksumPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_FILE_CHECKSUM);
-				if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.checksums)) {
+				if (refresh == null || !arraysEquivalent(refresh, this.checksums, true)) {
 					this.checksums = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -514,7 +513,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			try {
 				DoapProject[] refresh = findMultipleDoapPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_FILE_ARTIFACTOF);
-				if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.artifactOf)) {
+				if (refresh == null || !arraysEquivalent(refresh, this.artifactOf, true)) {
 					this.artifactOf = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -548,7 +547,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 			try {
 				SpdxElement[] fileDependencyElements = findMultipleElementPropertyValues(
 						SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_FILE_DEPENDENCY);
-				if (!RdfModelHelper.arraysEquivalent(fileDependencyElements, this.fileDependencies)) {
+				if (!arraysEquivalent(fileDependencyElements, this.fileDependencies, false)) {
 					int count = 0;
 					if (fileDependencyElements != null) {
 						for (int i = 0; i < fileDependencyElements.length; i++) {
@@ -592,22 +591,29 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		return this.equivalent(o, true);
+	}
+	@Override
+	public boolean equivalent(IRdfModel o, boolean testRelationships) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SpdxFile)) {
 			return false;
 		}
 		SpdxFile comp = (SpdxFile)o;
-		if (!super.equivalent(comp)) {
+		if (!super.equivalent(comp, testRelationships)) {
 			return false;
 		}
 		// compare based on properties
 		// Note: We don't compare the ID's since they may be different if they come
 		// from different models
-		return (RdfModelHelper.arraysEquivalent(this.checksums, comp.getChecksums()) &&
+		return (arraysEquivalent(this.checksums, comp.getChecksums(), testRelationships) &&
 				RdfModelHelper.arraysEqual(this.fileTypes, comp.getFileTypes())&&
 				RdfModelHelper.arraysEqual(this.fileContributors, comp.getFileContributors()) &&
-				RdfModelHelper.arraysEquivalent(this.artifactOf, comp.getArtifactOf()) &&
-				RdfModelHelper.arraysEquivalent(this.fileDependencies, comp.getFileDependencies()) &&
-				Objects.equal(this.noticeText, comp.getNoticeText()));
+				arraysEquivalent(this.artifactOf, comp.getArtifactOf(), testRelationships) &&
+				arraysEquivalent(this.fileDependencies, comp.getFileDependencies(), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.noticeText, comp.getNoticeText()));
 	}
 	
 	protected Checksum[] cloneChecksum() {

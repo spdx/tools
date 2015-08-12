@@ -252,6 +252,9 @@ public class DoapProject extends RdfModelObject {
 	 */
 	@Override
 	public boolean equivalent(IRdfModel compare) {
+		if (compare == this) {
+			return true;
+		}
 		if (!(compare instanceof DoapProject)) {
 			return false;
 		}

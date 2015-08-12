@@ -166,6 +166,9 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 	 */
 	@Override
 	public boolean equivalent(IRdfModel compare) {
+		if (compare == this) {
+			return true;
+		}
 		if (!(compare instanceof DisjunctiveLicenseSet)) {
 			return false;
 		}

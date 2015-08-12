@@ -17,7 +17,6 @@
 package org.spdx.compare;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.model.SpdxFile;
 
 /**
@@ -43,7 +42,7 @@ public class FileAnnotationSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
-		return RdfModelHelper.arraysEquivalent(fileA.getAnnotations(), fileB.getAnnotations());
+		return fileA.arraysEquivalent(fileA.getAnnotations(), fileB.getAnnotations());
 	}
 
 	/* (non-Javadoc)

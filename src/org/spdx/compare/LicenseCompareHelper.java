@@ -17,7 +17,6 @@
 */
 package org.spdx.compare;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -132,7 +131,9 @@ public class LicenseCompareHelper {
 		if (licenseTextB == null) {
 			return false;
 		}
-		
+		if (licenseTextA.equals(licenseTextB)) {
+			return true;
+		}
 		String[] licenseATokens = replaceMultWord(licenseTextA).split(TOKEN_DELIM);
 		String[] licenseBTokens = replaceMultWord(licenseTextB).split(TOKEN_DELIM);
 		int bTokenCounter = 0;

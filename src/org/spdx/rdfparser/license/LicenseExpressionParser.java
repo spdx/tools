@@ -143,7 +143,7 @@ public class LicenseExpressionParser {
 				Operator operator = OPERATOR_MAP.get(token);
 				if (operator == Operator.WITH) {
 					// special processing here since With must be with an exception, not a licenseInfo
-					if (Operator.OR_LATER.equals(operatorStack.peek())) {
+					if (!operatorStack.isEmpty() && Operator.OR_LATER.equals(operatorStack.peek())) {
 						Operator tosOperator = operatorStack.pop();
 						evaluateExpression(tosOperator, operandStack);
 					}

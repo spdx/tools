@@ -19,6 +19,7 @@ package org.spdx.rdfparser.model;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -29,6 +30,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -184,7 +186,7 @@ public class SpdxElement extends RdfModelObject {
 			try {
 				Annotation[] refresh = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 						SpdxRdfConstants.PROP_ANNOTATION);
-				if (refresh == null || !RdfModelHelper.arraysEquivalent(refresh, this.annotations)) {
+				if (refresh == null || !arraysEquivalent(refresh, this.annotations, true)) {
 					this.annotations = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -264,7 +266,7 @@ public class SpdxElement extends RdfModelObject {
 			try {
 				Relationship[] refresh = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_RELATIONSHIP);
-				if (refresh == null && !RdfModelHelper.arraysEquivalent(refresh, this.relationships)) {
+				if (refresh == null && !arraysEquivalent(refresh, this.relationships, true)) {
 					this.relationships = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {
@@ -413,16 +415,19 @@ public class SpdxElement extends RdfModelObject {
 	 * @return
 	 */
 	public boolean equivalent(IRdfModel o, boolean testRelationships) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof SpdxElement)) {
 			return false;
 		}
 		SpdxElement comp = (SpdxElement)o;
 		
-		if (testRelationships && !RdfModelHelper.arraysEquivalent(comp.getRelationships(), this.getRelationships())) {
+		if (testRelationships && !arraysEquivalent(comp.getRelationships(), this.getRelationships(), false)) {
 			return false;
 		}
         return (Objects.equal(comp.getName(), this.getName()) &&
-                RdfModelHelper.arraysEquivalent(comp.getAnnotations(), this.getAnnotations()) && Objects.equal(comp.getComment(), this.getComment()));
+                arraysEquivalent(comp.getAnnotations(), this.getAnnotations(), testRelationships) && RdfModelHelper.stringsEquivalent(comp.getComment(), this.getComment()));
 	}
 	
 	
@@ -456,6 +461,95 @@ public class SpdxElement extends RdfModelObject {
 			this.annotations = Arrays.copyOf(this.annotations, this.annotations.length + 1);
 			this.annotations[this.annotations.length-1] = annotation;
 			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION, annotation);
+		}
+	}
+	
+	
+	/**
+	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
+	 * order and considering nulls
+	 * @param array1
+	 * @param array2
+	 * @param testRelationships If true, test relationships for an SpdxElement (used to manage infinite recursion on circular relationships)
+	 * @return
+	 */
+	@Override
+	public boolean arraysEquivalent(IRdfModel[] array1, IRdfModel[] array2) {
+		return arraysEquivalent(array1, array2, true);
+	}
+
+	/**
+	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
+	 * order and considering nulls
+	 * @param array1
+	 * @param array2
+	 * @param testRelationships If true, test relationships for an SpdxElement (used to manage infinite recursion on circular relationships)
+	 * @return
+	 */
+	public boolean arraysEquivalent(IRdfModel[] array1, IRdfModel[] array2, boolean testRelationships) {
+		if (array1 == null) {
+			return array2 == null;
+		}
+		if (array2 == null) {
+			return false;
+		}
+		if (array1.length != array2.length) {
+			return false;
+		}
+		Set<Integer> foundIndexes = Sets.newHashSet();
+		for (int i = 0; i < array1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < array2.length; j++) {
+				if (!foundIndexes.contains(j)) {
+					if (array1[i] instanceof SpdxElement && array2[j] instanceof SpdxElement) {
+						if (equivalentConsideringNull((SpdxElement)array1[i],(SpdxElement)array2[j], testRelationships)) {
+							found = true;
+							foundIndexes.add(j);
+							break;
+						}
+					} else {
+						if (equivalentConsideringNull(array1[i],array2[j])) {
+							found = true;
+							foundIndexes.add(j);
+							break;
+						}
+					}
+				}	
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Compares the properties of two RdfModelObjects considering possible null values
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
+	@Override
+	public boolean equivalentConsideringNull(IRdfModel o1, IRdfModel o2) {
+		if (!(o1 instanceof SpdxElement) || (o2 instanceof SpdxElement)) {
+			return super.equivalentConsideringNull(o1, o2);
+		} else {
+			return this.equivalentConsideringNull((SpdxElement)o1, (SpdxElement)o2, true);
+		}
+	}
+
+	/**
+	 * Compares the properties of two RdfModelObjects considering possible null values
+	 * @param o1
+	 * @param o2
+	 * @param testRelationships If true, test relationships for an SpdxElement (used to manage infinite recursion on circular relationships)
+	 * @return
+	 */
+	public boolean equivalentConsideringNull(SpdxElement o1, SpdxElement o2, boolean testRelationship) {
+		if (o1 == null) {
+			return (o2 == null);
+		} else {
+			return o1.equivalent(o2, testRelationship);
 		}
 	}
 }

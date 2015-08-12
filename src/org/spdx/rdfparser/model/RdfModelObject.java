@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
@@ -1080,4 +1081,28 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	/**
+	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
+	 * order and considering nulls
+	 * @param array1
+	 * @param array2
+	 * @return
+	 */
+	public boolean arraysEquivalent(IRdfModel[] array1, IRdfModel[] array2) {
+		return RdfModelHelper.arraysEquivalent(array1, array2);
+	}
+
+	
+	/**
+	 * Compares the properties of two RdfModelObjects considering possible null values
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
+	public boolean equivalentConsideringNull(IRdfModel o1, IRdfModel o2) {
+		if (o1 == o2) {
+			return true;
+		}
+		return RdfModelHelper.equivalentConsideringNull(o1, o2);
+	}
 }

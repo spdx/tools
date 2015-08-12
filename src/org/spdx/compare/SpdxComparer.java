@@ -26,7 +26,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
@@ -880,7 +879,7 @@ public class SpdxComparer {
 				SpdxItem[] itemsA = spdxDocs[i].getDocumentDescribes();
 				for (int j = i; j < spdxDocs.length; j++) {
 					SpdxItem[] itemsB = spdxDocs[j].getDocumentDescribes();
-					if (!RdfModelHelper.arraysEquivalent(itemsA, itemsB)) {
+					if (!spdxDocs[i].arraysEquivalent(itemsA, itemsB)) {
 						this.documentContentsEquals = false;
 						this.differenceFound = true;
 						return;

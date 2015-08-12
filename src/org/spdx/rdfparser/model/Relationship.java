@@ -338,6 +338,9 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	 */
 	@Override
 	public boolean equivalent(IRdfModel o) {
+		if (o == this) {
+			return true;
+		}
 		if (!(o instanceof Relationship)) {
 			return false;
 		}
