@@ -72,7 +72,9 @@ public final class RdfModelHelper {
 	}
 
 	/**
-	 * Strings are considered equivalent if they are equal, or if they are null and/or empty (null and empty strings are considered equivalent)
+	 * Strings are considered equivalent if they are equal, 
+	 * or if they are null and/or empty (null and empty strings are considered equivalent)
+	 * linefeeds are also normalized (e.g. \r\n is the same as \r)
 	 * @param s1
 	 * @param s2
 	 * @return
@@ -85,7 +87,14 @@ public final class RdfModelHelper {
 		} else if (s2 == null && s1.isEmpty()) {
 			return true;
 		} else {
-			return false;
+			String s1norm = s1.replace("\r\n", "\n").trim();
+			String s2norm = s2.replace("\r\n", "\n").trim();
+			boolean retval = s1norm.equals(s2norm);
+			if (!retval) {
+				int j = 1;
+				j = j + 1;
+			}
+			return retval;
 		}
 	}
 	

@@ -3,6 +3,9 @@ Implementation version 2.0.3
 - Added seeAlso to to the JSON output of the licenseRDFA generator
 - Fixed parser bug when a plus operator is followed by a with expression (e.g. GPL-2.0+ WITH Exception)
 - Added missing TEST_CASE_OF in tagToRelationshipTypeBuilder
+- Fixed bug where tests for equivalent RDF Objects were not always correct
+- Major performance improvement
+- Fixed another bug with a With operator (this time without the plus)
 - Fix compare equivalent
 Implementation version 2.0.2
 - Thanks to Ryan O'Meara and Yev Bronshteyn for submitting several fixes and improving the overall code quality

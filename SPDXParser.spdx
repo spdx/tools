@@ -12,6 +12,9 @@
     <checksumValue>feb43e2e7fd9e638a259c8325387fa2feb68f403</checksumValue>
   </Checksum>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>7086fea2d7a8a529f78bf971950d53fc8483d84f</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>52d73d248922946fd444a8d3593d08b203498d3c</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -141,9 +144,16 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>414549c415f7562ad23ef4a9e3a77e5fd31aa79d</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>043cd185de52b000e1ab2f8e831b177ed5b76519</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>58674a837c7f25af2313943b5f85bdbf72feaba4</checksumValue>
+  </Checksum>
+  <Checksum>
+    <checksumValue>55f4469caccfedabb8493dd502963e8594a00186</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -151,6 +161,9 @@
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>77f1130a5398ca2ab0ed735237a7af85acb206f9</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>11a865f18806b5f3b1b5ee5a87516e91798137fa</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -161,11 +174,22 @@
     <checksumValue>e22de1fd15e0d697d8c16e5b9253bf7efc53822f</checksumValue>
   </Checksum>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>de6c634406ae3931fda111f1df473cfe300842fd</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>14b43e1fec51d5bf071bae665be48dd5d219307f</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>5e9f4a3206f2420063d28ce099f1e3c9f48d75e1</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>7611e4ea4557bc0b8baf14fc403295b952b1887a</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <checksumValue>db2caeffb62e3e60e83ace23ea936635f1e224a4</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>a8f14f1cc820fc229c747f36c06482d20ccb3999</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -173,7 +197,13 @@
     <packageVerificationCodeValue>db79ecd2084e930b23d8972dfc7645413f007cd8</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>a65c0c42c7b68731bb0d82cf6580114c3ec25d90</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>42c15fb74b15d9ab9a20348ff2000143395c9835</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>05dfc9b456407402b15770ddc95c546e3fbcfbd8</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -191,6 +221,9 @@
     <packageVerificationCodeValue>c7cbf4f2827548ef1d474b79280598cfa37581a4</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>4fa2dd3cf0e804241dc46f4c61f9f4981e61d87d</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>895b1afc962788b543238d7d78a156e120d6a841</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -203,6 +236,14 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>f6ce0d4852bfc0eb88b7a5015e212187d7283c36</checksumValue>
   </Checksum>
+  <Checksum>
+    <checksumValue>dd3aa33b6e7e949a62fbcd6899373761271b5d80</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <checksumValue>a6b0e5d41923385719cfc4d5906668da19a0b69e</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>b97914da0aeb0ff2ddc3a3c5d07e2ef4bde14c8e</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -212,6 +253,9 @@
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>079d747dff81359065b7432aebc78fedc7df0f81</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>c0391f94bb0c9755bf603dfc82b21a24b6b68e08</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -346,6 +390,9 @@
     <packageVerificationCodeValue>2019f9b6c6d24c5cc34f5617adaa1f0a30f45bb8</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>31815696c40ea4a58754610336d54fdda2173511</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>e30ece4fa818e67753835396cb73875781280e05</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -370,12 +417,31 @@
     <packageVerificationCodeValue>dd017f04e636f28de0f37471dcf2744550e30edc</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
+    <checksumValue>8a19673d38f833cd3980fe90ca7d6a02ae1dfd62</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <checksumValue>e4e73b1e291dc075f2a05ff66348b1c590b3f338</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>38d188609c6c106fe0b6923944bc75ef71e2bf87</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>3a223e09f4ab4c7ffcc26f20ac7ba8c6e03b9c85</checksumValue>
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>578a036e445f45bde45412deda2b4f5245843305</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+    <checksumValue>deb699bb4d91a70242c1a27c0fea3c2ef2c80751</checksumValue>
+  </Checksum>
+  <Checksum>
+    <checksumValue>8d8aa46dedb32b461ea9bdeae5172e75ae5032d7</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>b34bdccafd8720b092459298f96d712e39cde636</checksumValue>
@@ -392,6 +458,9 @@
     <packageVerificationCodeValue>7bcba78164ef88db6489c48876e8374a3c302836</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>7d53e8c53c6964bbd7cdbaf7aaea14ca29d829fa</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>4a74f150926578fd2a30a1d6d48d6ea886150d24</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
@@ -403,6 +472,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>9e04d746730cbbdfcd82e98e7a27976c5673ad72</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>f5f28a8f7fce88729cf11f940004c7e71f7feed8</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <checksumValue>eba68455c59985f372e2fd608f9fe6181ebf8ba7</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -450,7 +523,18 @@
     <checksumValue>1b126d186b8adb946dc462c48abf5fd334fd5e1e</checksumValue>
   </Checksum>
   <Checksum>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+    <checksumValue>a576e6b81aa184044b54b9709adf375471845bea</checksumValue>
+  </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>dc5953871a6c68f224688cf84bdd65ce5acaae98</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <Checksum>
     <checksumValue>7624c5a8b1537bb0826fa366c100e6beb08e967b</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <checksumValue>a9155adff418aa595b9450f60449839eadff2e2e</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
   <Checksum>
@@ -580,6 +664,10 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>a1df8f2af2f5fc397c61d72d513307159d67b232</checksumValue>
   </Checksum>
+  <Checksum>
+    <checksumValue>1f06003dd91442aaae4a64f9a0bc5ed9cc885c00</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>f3a056d90966824128ae63c62e822d13e831d86a</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -593,10 +681,20 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>ca8b84afe1e8eea443b420e301ae733eceb67d9d</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>c146bac04be425f608af5d9a6beaa0fc89d7a7cb</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>19d4c95feec34c0c0c307c6a1fae02da005688b9</checksumValue>
   </Checksum>
+  <Checksum>
+    <checksumValue>afd6d88f298b168d0fe6a8a6252b052f89cd7f2b</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>d692dc45c807c469ebf235641f13bc01b4604508</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <checksumValue>1767b4e00bc7b0787d42ed889ef76bd5c74905ca</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -612,11 +710,18 @@
     <packageVerificationCodeValue>cda18baeb68dab6e599dff694575cb8a43381271</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
+    <checksumValue>3645ad5c36072083ec47ab3db8830d31cbd06a2d</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>54e42ace099507d50d2555db7d010cf87fc29d6b</checksumValue>
   </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>1993f88041fdb0739c03df7f350f1e4733a58c10</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>d692dc45c807c469ebf235641f13bc01b4604508</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
@@ -627,6 +732,14 @@
     <checksumValue>e19d20d4abaac256039db23a8e286d9d713e16dc</checksumValue>
   </Checksum>
   <Checksum>
+    <checksumValue>3645ad5c36072083ec47ab3db8830d31cbd06a2d</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
+  <Checksum>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+    <checksumValue>3d8d780ea7f4d1c4acc9b595f31e778568f423d6</checksumValue>
+  </Checksum>
+  <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>22afb55a57854d45583841fdac19b0cf4c91852a</checksumValue>
   </Checksum>
@@ -634,6 +747,9 @@
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>3f53caa5c2aa1c2c4d47925e603f4071445c6497</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>2313b67bbe303e27958787301308ed5f1caf4f47</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>20ef2045e292d68b973f4af88868a00682fc1fff</packageVerificationCodeValue>
   </PackageVerificationCode>
@@ -660,6 +776,10 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>84e6cdbf9ac26c7e52f3b813ad17c1419e41beb9</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+    <checksumValue>d5754c8685f21795b59e55c5521d79323a5cf4c6</checksumValue>
+  </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>38c5b79d067aa29449c743d21542092b2fc3b09e</checksumValue>
@@ -732,6 +852,9 @@
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>079d747dff81359065b7432aebc78fedc7df0f81</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>c3a6a52529ba19f974ebba0c0997a1350bc6ec79</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>fd1fcfef2978f0d53ce698ae56ead7c55615f5fb</packageVerificationCodeValue>
@@ -1099,6 +1222,7 @@
     </referencesFile>
     <referencesFile>
       <File rdf:nodeID="A12">
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -1112,19 +1236,18 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;
  *   See the License for the specific language governing permissions and&#xD;
  *   limitations under the License.</noticeText>
-        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <rdfs:comment></rdfs:comment>
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
-        <fileName>src/org/spdx/compare/SpdxComparer.java</fileName>
-        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <checksum>
           <Checksum>
+            <checksumValue>3423b0d78fbeb45ec7164b1e3f5b66483184a491</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-            <checksumValue>a576e6b81aa184044b54b9709adf375471845bea</checksumValue>
           </Checksum>
         </checksum>
+        <fileName>src/org/spdx/compare/SpdxComparer.java</fileName>
+        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
       </File>
     </referencesFile>
     <referencesFile>
@@ -2540,12 +2663,6 @@
     <referencesFile>
       <File rdf:nodeID="A60">
         <fileName>src/org/spdx/compare/CompareHelper.java</fileName>
-        <checksum>
-          <Checksum>
-            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-            <checksumValue>3d8d780ea7f4d1c4acc9b595f31e778568f423d6</checksumValue>
-          </Checksum>
-        </checksum>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -2563,8 +2680,14 @@
  *   See the License for the specific language governing permissions and&#xD;
  *   limitations under the License.</noticeText>
         <rdfs:comment></rdfs:comment>
-        <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+        <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <checksum>
+          <Checksum>
+            <checksumValue>2a5ee03482adfab0532d7fb953b23bedf907593c</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
       </File>
     </referencesFile>
     <referencesFile>
@@ -4117,15 +4240,15 @@
         <licenseComments></licenseComments>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-        <fileName>src/org/spdx/rdfparser/RdfModelHelper.java</fileName>
-        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-        <rdfs:comment></rdfs:comment>
         <checksum>
           <Checksum>
-            <checksumValue>e4e73b1e291dc075f2a05ff66348b1c590b3f338</checksumValue>
+            <checksumValue>20d2ecbacc9ede2fa5b599b60e326f92e9745f0c</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
           </Checksum>
         </checksum>
+        <fileName>src/org/spdx/rdfparser/RdfModelHelper.java</fileName>
+        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <rdfs:comment></rdfs:comment>
       </File>
     </referencesFile>
     <referencesFile>
@@ -7071,14 +7194,14 @@
     </referencesFile>
     <referencesFile>
       <File rdf:nodeID="A211">
-        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-        <fileName>src/org/spdx/tag/BuildDocument.java</fileName>
         <checksum>
           <Checksum>
+            <checksumValue>c8836f50ec5798d13782df215d2082eda3093805</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-            <checksumValue>dfbfd46685ffd4462e7df38a9378b96428e77612</checksumValue>
           </Checksum>
         </checksum>
+        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <fileName>src/org/spdx/tag/BuildDocument.java</fileName>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseComments></licenseComments>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
@@ -8400,14 +8523,14 @@
     </referencesFile>
     <referencesFile>
       <File rdf:nodeID="A255">
-        <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
-        <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <checksum>
           <Checksum>
+            <checksumValue>5ef02626a0e61fcfbf3ebd3978072d2db1e3b5bd</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-            <checksumValue>d5754c8685f21795b59e55c5521d79323a5cf4c6</checksumValue>
           </Checksum>
         </checksum>
+        <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
+        <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
  *&#xD;
  *   Licensed under the Apache License, Version 2.0 (the "License");&#xD;
@@ -10140,12 +10263,6 @@
     </referencesFile>
     <referencesFile>
       <File rdf:nodeID="A313">
-        <checksum>
-          <Checksum>
-            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-            <checksumValue>deb699bb4d91a70242c1a27c0fea3c2ef2c80751</checksumValue>
-          </Checksum>
-        </checksum>
         <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
         <noticeText>* Copyright (c) 2013 Source Auditor Inc.&#xD;
@@ -10162,6 +10279,12 @@
  *   See the License for the specific language governing permissions and&#xD;
  *   limitations under the License.</noticeText>
         <rdfs:comment></rdfs:comment>
+        <checksum>
+          <Checksum>
+            <checksumValue>34b07d95006437e8a2cd428017824a446e51b139</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
         <licenseComments></licenseComments>
         <fileName>src/org/spdx/tools/Verify.java</fileName>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -15435,6 +15558,11 @@
         <hasFile rdf:nodeID="A124"/>
         <hasFile rdf:nodeID="A114"/>
         <hasFile rdf:nodeID="A55"/>
+        <packageVerificationCode>
+          <PackageVerificationCode>
+            <packageVerificationCodeValue>1aa622a5c67369a20ac2a104a32a82af13a96d6c</packageVerificationCodeValue>
+          </PackageVerificationCode>
+        </packageVerificationCode>
         <hasFile rdf:nodeID="A125"/>
         <hasFile rdf:nodeID="A112"/>
         <hasFile rdf:nodeID="A105"/>
@@ -15586,13 +15714,13 @@
             <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <rdfs:comment></rdfs:comment>
             <copyrightText>Copyright (c) 2012, 2013, Source Auditor Inc.</copyrightText>
+            <licenseComments></licenseComments>
             <checksum>
               <Checksum>
-                <checksumValue>dd3aa33b6e7e949a62fbcd6899373761271b5d80</checksumValue>
+                <checksumValue>94930af3110bf536b149774ec0ae204fc1ca70e8</checksumValue>
                 <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
               </Checksum>
             </checksum>
-            <licenseComments></licenseComments>
             <fileName>src/org/spdx/rdfparser/model/SpdxItem.java</fileName>
           </File>
         </hasFile>
@@ -18231,11 +18359,6 @@
  *   limitations under the License.</noticeText>
           </File>
         </hasFile>
-        <packageVerificationCode>
-          <PackageVerificationCode>
-            <packageVerificationCodeValue>a65c0c42c7b68731bb0d82cf6580114c3ec25d90</packageVerificationCodeValue>
-          </PackageVerificationCode>
-        </packageVerificationCode>
         <hasFile rdf:nodeID="A220"/>
         <hasFile rdf:nodeID="A229"/>
         <hasFile rdf:nodeID="A250"/>
@@ -18755,13 +18878,24 @@
   <PackageVerificationCode>
     <packageVerificationCodeValue>0a21941431a36a85ad0505dab84e1516143ed6b3</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>678f723dd3390dafb4794c3d68265e43eb7095c4</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <PackageVerificationCode>
     <packageVerificationCodeValue>c866adf1e7e2ce286af769b5bf110e9da7f59570</packageVerificationCodeValue>
   </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+    <checksumValue>dfbfd46685ffd4462e7df38a9378b96428e77612</checksumValue>
+  </Checksum>
+  <Checksum>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>cd7a800cf2194973e45223849f71a37e93a89248</checksumValue>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>e44a7d90f1262d1fa3f8e2fc8418adc7d590dda0</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>fc129fe2e25a712acb1486f607cabd82cad744bc</checksumValue>
@@ -18794,11 +18928,18 @@
     <packageVerificationCodeValue>15fbfdd4ddb3f8f8bb2cae9a27af58170195b8e4</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
+    <packageVerificationCodeValue>9ff3ecbced6fd95767719f17f95eb3bef8cf0211</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
     <packageVerificationCodeValue>4af4d6a8fe7ec399f40b252aaa7b01377423a078</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>bfd9f1f2469ade9aab737442337c311b037eb28f</packageVerificationCodeValue>
   </PackageVerificationCode>
+  <Checksum>
+    <checksumValue>f14992f0c6a23ffd65f8043d5e700b1fea7e25e3</checksumValue>
+    <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+  </Checksum>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>ecfab49a74bf41d1e316b8eb37b8d91fff9f32e9</checksumValue>
@@ -18810,6 +18951,9 @@
     <checksumValue>4ad905033aa57af59767dc84af2ecd84c544b05e</checksumValue>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
   </Checksum>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>371062af389a80399c29ba4588a8edd7bc33bf9c</packageVerificationCodeValue>
+  </PackageVerificationCode>
   <Checksum>
     <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
     <checksumValue>1c691a0fcd6ce61d3729f4c1cafd41f34a508a37</checksumValue>
@@ -18830,6 +18974,9 @@
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>7e613e61eb72ecc8ea502f765bd55f2ec97a35d8</packageVerificationCodeValue>
+  </PackageVerificationCode>
+  <PackageVerificationCode>
+    <packageVerificationCodeValue>33fd15a8ab888ea357ff201800bc9cede609ef0e</packageVerificationCodeValue>
   </PackageVerificationCode>
   <PackageVerificationCode>
     <packageVerificationCodeValue>4c87dbba0940f41d5340fa83689728ad25848d14</packageVerificationCodeValue>

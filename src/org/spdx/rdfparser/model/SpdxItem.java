@@ -30,7 +30,6 @@ import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.license.WithExceptionOperator;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -270,7 +269,7 @@ public class SpdxItem extends SpdxElement {
 		return (RdfModelHelper.stringsEquivalent(this.copyrightText, comp.getCopyrightText()) &&
 				equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
 				arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles(), testRelationships) &&
-				Objects.equal(this.licenseComments, comp.getLicenseComments()));
+				RdfModelHelper.stringsEquivalent(this.licenseComments, comp.getLicenseComments()));
 	}
 	
 	protected AnyLicenseInfo cloneLicenseConcluded() {

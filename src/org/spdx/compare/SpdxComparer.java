@@ -1158,8 +1158,8 @@ public class SpdxComparer {
 	}
 	/**
 	 * Compares two strings returning true if they are equal
-	 * considering null values and trimming the strings.  Empty strings are
-	 * treated as the same as null values.
+	 * considering null values and trimming the strings. and normalizing
+	 * linefeeds.  Empty strings are treated as the same as null values.
 	 * @param stringA
 	 * @param stringB
 	 * @return
@@ -1170,12 +1170,12 @@ public class SpdxComparer {
 		if (stringA == null) {
 			compA = "";
 		} else {
-			compA = stringA.trim();
+			compA = stringA.replace("\r\n", "\n").trim();
 		}
 		if (stringB == null) {
 			compB = "";
 		} else {
-			compB = stringB.trim();
+			compB = stringB.replace("\r\n", "\n").trim();
 		}
 		return (compA.equals(compB));
 	}

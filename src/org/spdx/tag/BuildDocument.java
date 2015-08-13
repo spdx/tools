@@ -543,7 +543,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         } else if (tag.equals(constants.getProperty("PROP_ANNOTATION_ID"))) {
             annotation.setId(value);
         } else if (tag.equals(constants.getProperty("PROP_ANNOTATION_TYPE"))) {
-            AnnotationType annotationType = Annotation.TAG_TO_ANNOTATION_TYPE.get(value);
+            AnnotationType annotationType = AnnotationType.fromTag(value);
             if (annotationType == null) {
                 throw(new InvalidSPDXAnalysisException("Invalid annotation type: "+value));
             }
@@ -740,9 +740,14 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
             file.setId(value);
         } else if (tag.equals(constants.getProperty("PROP_FILE_TYPE"))) {
-            FileType fileType = SpdxFile.TAG_TO_FILE_TYPE.get(value.trim());
+            FileType fileType = FileType.fromTag(value.trim());
             if (fileType == null) {
-                throw(new InvalidSpdxTagFileException("Unknown file type: "+value));
+            	fileType = FileType.fromTag(value.trim().toUpperCase());
+            	if (fileType == null) {
+            		throw(new InvalidSpdxTagFileException("Unknown file type: "+value));
+            	} else {
+            		this.warningMessages.add("Invalid filetype - needs to be uppercased: "+value);
+            	}
             }
             file.addFileType(fileType);
         } else if (constants.getProperty("PROP_FILE_CHECKSUM").startsWith(tag)) {
@@ -921,13 +926,17 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         }
         for (int i = 0; i < annotations.size(); i++) {
             SpdxElement element = this.analysis.getDocumentContainer().findElementById(annotations.get(i).getId());
-            Annotation[] elementAnnotations = element.getAnnotations();
-            if (elementAnnotations == null) {
-                elementAnnotations = new Annotation[0];
+            if (element == null) {
+            	this.warningMessages.add("Invalid element reference in annotation: "+annotations.get(i).getId());
+            } else {
+	            Annotation[] elementAnnotations = element.getAnnotations();
+	            if (elementAnnotations == null) {
+	                elementAnnotations = new Annotation[0];
+	            }
+	            Annotation[] newAnnotations = Arrays.copyOf(elementAnnotations, elementAnnotations.length+1);
+	            newAnnotations[elementAnnotations.length] = annotations.get(i).getAnnotation();
+	            element.setAnnotations(newAnnotations);
             }
-            Annotation[] newAnnotations = Arrays.copyOf(elementAnnotations, elementAnnotations.length+1);
-            newAnnotations[elementAnnotations.length] = annotations.get(i).getAnnotation();
-            element.setAnnotations(newAnnotations);
         }
     }
 

@@ -50,7 +50,7 @@ public class Verify {
 		try {
 			doc = CompareSpdxDocs.openRdfOrTagDoc(args[0], parserWarnings);
 		} catch (SpdxCompareException e) {
-			System.console()
+			System.out
 				.printf("Unable to open the SPDX file file: "+e.getMessage());
 			System.exit(ERROR_STATUS);
 		}
