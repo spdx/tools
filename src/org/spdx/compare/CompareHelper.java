@@ -24,13 +24,13 @@ import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
-import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.tag.BuildDocument;
 import org.spdx.tag.InvalidSpdxTagFileException;
 
 /**
- * @author Gary
+ * Helper class for comparisons
+ * @author Gary O'Neall
  *
  */
 public class CompareHelper {
@@ -133,10 +133,15 @@ public class CompareHelper {
 		StringBuilder sb = new StringBuilder(relationship.getRelationshipType().getTag());
 		sb.append(":");
 		sb.append(relationship.getRelatedSpdxElement().getId());
+		if (relationship.getRelatedSpdxElement().getName() != null) {
+			sb.append('[');
+			sb.append(relationship.getRelatedSpdxElement().getName());
+			sb.append(']');
+		}
 		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
-			sb.append("(");
+			sb.append('(');
 			sb.append(relationship.getComment());
-			sb.append(")");
+			sb.append(')');
 		}
 		return sb.toString();
 	}
@@ -167,6 +172,11 @@ public class CompareHelper {
 			sb = new StringBuilder("[UNKNOWNID]");
 		} else {
 			sb = new StringBuilder(elements[0].getId());
+			if (elements[0].getName() != null) {
+				sb.append('(');
+				sb.append(elements[0].getName());
+				sb.append(')');
+			}
 		}
 		for (int i = 1; i < elements.length; i++) {
 			sb.append(", ");
@@ -175,6 +185,11 @@ public class CompareHelper {
 				sb.append("[UNKNOWNID]");
 			} else {
 				sb.append(elements[i].getId());
+				if (elements[0].getName() != null) {
+					sb.append('(');
+					sb.append(elements[0].getName());
+					sb.append(')');
+				}
 			}
 		}
 		return sb.toString();
@@ -188,10 +203,10 @@ public class CompareHelper {
 		if (fileTypes == null || fileTypes.length == 0) {
 			return "";
 		}
-		StringBuilder sb = new StringBuilder(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[0]));
+		StringBuilder sb = new StringBuilder(fileTypes[0].getTag());
 		for (int i = 1;i < fileTypes.length; i++) {
 			sb.append(", ");
-			sb.append(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]));
+			sb.append(fileTypes[i].getTag());
 		}
 		return sb.toString();
 	}
@@ -213,7 +228,7 @@ public class CompareHelper {
 				fileTypeStrs[i] = fileTypeStrs[i].substring(0, fileTypeStrs[i].length()-1);
 				fileTypeStrs[i] = fileTypeStrs[i].trim();
 			}
-			retval[i] = SpdxFile.TAG_TO_FILE_TYPE.get(fileTypeStrs[i]);
+			retval[i] = FileType.fromTag(fileTypeStrs[i]);
 			if (retval[i] == null) {
 				throw(new InvalidSPDXAnalysisException("Unrecognized file type "+fileTypeStrs[i]));
 			}
