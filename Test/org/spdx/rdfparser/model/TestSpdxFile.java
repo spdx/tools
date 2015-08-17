@@ -308,7 +308,9 @@ public class TestSpdxFile {
 	public void testCloneModelSimple() throws InvalidSPDXAnalysisException, IOException {
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
-		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject("Artifactof Project", "http://project.home.page/this")};
+		String artifactOfName = "Artifactof Project";
+		String artifaOfHomePage = "http://project.home.page/this";
+		DoapProject[] artifactOfs = new DoapProject[] {new DoapProject(artifactOfName, artifaOfHomePage)};
 		
 		SpdxFile fileDep1 = new SpdxFile("fileDep1", 
 				"Comment1", new Annotation[] {ANNOTATION1, ANNOTATION2}, null,
@@ -379,9 +381,32 @@ public class TestSpdxFile {
 			public String externalDocumentIdToNamespace(String docId) {
 				return null;
 			}
+			@Override
+			public Resource createResource(Resource duplicate, String uri,
+					Resource type, IRdfModel modelObject) {
+				if (duplicate != null) {
+					return duplicate;
+				} else if (uri == null) {			
+					return getModel().createResource(type);
+				} else {
+					return getModel().createResource(uri, type);
+				}
+			}
+			@Override
+			public boolean addCheckNodeObject(Node node,
+					IRdfModel rdfModelObject) {
+				// TODO Auto-generated method stub
+				return false;
+			}
 			
 		};
 		Resource fileResource = file.createResource(fromModelContainer);
+
+		DoapProject[] dResult = file.getArtifactOf();
+		assertEquals(1, dResult.length);
+		assertEquals(artifactOfName, dResult[0].getName());
+		assertEquals(artifaOfHomePage, dResult[0].getHomePage());
+		
 		assertTrue(fileResource.isURIResource());
 		assertEquals(fromFileUri, fileResource.getURI());
 		final Model toModel2 = ModelFactory.createDefaultModel();
@@ -418,10 +443,31 @@ public class TestSpdxFile {
 			public String externalDocumentIdToNamespace(String docId) {
 				return null;
 			}
+			@Override
+			public Resource createResource(Resource duplicate, String uri,
+					Resource type, IRdfModel modelObject) {
+				if (duplicate != null) {
+					return duplicate;
+				} else if (uri == null) {			
+					return getModel().createResource(type);
+				} else {
+					return getModel().createResource(uri, type);
+				}
+			}
+			@Override
+			public boolean addCheckNodeObject(Node node,
+					IRdfModel rdfModelObject) {
+				// TODO Auto-generated method stub
+				return false;
+			}
 			
 		};
 		SpdxFile toFile = file.clone();
 		Resource toFileResource = toFile.createResource(toModelContainer);
+		dResult = toFile.getArtifactOf();
+		assertEquals(1, dResult.length);
+		assertEquals(artifactOfName, dResult[0].getName());
+		assertEquals(artifaOfHomePage, dResult[0].getHomePage());
 		String toFileUri2 = testDocNamespace + "SpdxRef-1";
 		assertTrue(toFileResource.isURIResource());
 		assertEquals(toFileUri2, toFileResource.getURI());

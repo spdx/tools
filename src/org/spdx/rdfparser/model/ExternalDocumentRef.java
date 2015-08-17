@@ -73,7 +73,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.checksum = findChecksumPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
 		this.spdxDocumentNamespace = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
@@ -157,7 +157,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
-	String getUri(IModelContainer modelContainer) {
+	public String getUri(IModelContainer modelContainer) {
 		return null;	// these are always anonymous
 	}
 
@@ -165,7 +165,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	Resource getType(Model model) {
+	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + 
 				SpdxRdfConstants.CLASS_EXTERNAL_DOC_REF);
 	}
@@ -174,7 +174,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-	void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
 				this.spdxDocumentNamespace);

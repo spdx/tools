@@ -23,7 +23,9 @@ import org.spdx.rdfparser.IModelContainer;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Model container class used for testing
@@ -105,6 +107,31 @@ public class ModelContainerForTest implements IModelContainer {
 	public void addExternalDocReference(String docId, String docNamespace) {
 		this.externalIdToNamespace.put(docId, docNamespace);
 		this.externalNamespaceToId.put(docNamespace, docId);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public Resource createResource(Resource duplicate, String uri,
+			Resource type, IRdfModel modelObject) {
+		// Always set multiple to true
+		modelObject.setMultipleObjectsForSameNode();
+		if (duplicate != null) {
+			return duplicate;
+		} else if (uri == null) {			
+			return model.createResource(type);
+		} else {
+			return model.createResource(uri, type);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
+		return true;
 	}
 
 }

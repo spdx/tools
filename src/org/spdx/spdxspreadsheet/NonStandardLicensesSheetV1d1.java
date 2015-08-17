@@ -139,12 +139,16 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 		}
 	}
 	
-	public void add(String identifier, String extractedText, String licenseName,
+	public void add(String identifier, String extractedTextIn, String licenseName,
 			String[] crossRefUrls, String comment) {
 		Row row = addRow();
 		Cell idCell = row.createCell(IDENTIFIER_COL);
 		idCell.setCellValue(identifier);
 		Cell extractedTextCell = row.createCell(EXTRACTED_TEXT_COL);
+		String extractedText = extractedTextIn;
+		if (extractedText == null) {
+			extractedText = "";
+		}
 		if (extractedText.length() > MAX_CELL_CONTENT_SIZE) {
 			extractedText = "[WARNING: TRUNCATED]" + extractedText.substring(0, MAX_CELL_CONTENT_SIZE -20);
 		}

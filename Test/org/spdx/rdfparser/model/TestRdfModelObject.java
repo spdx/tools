@@ -97,7 +97,7 @@ public class TestRdfModelObject {
 		 * @see org.spdx.rdfparser.model.RdfModelObject#getType()
 		 */
 		@Override
-		Resource getType(Model model) {
+		public Resource getType(Model model) {
 			return model.createResource(TEST_NAMESPACE + TEST_TYPE);
 		}
 
@@ -105,7 +105,7 @@ public class TestRdfModelObject {
 		 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 		 */
 		@Override
-		void populateModel() {
+		public void populateModel() {
 			// Just populate one of the properties
 			this.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, TEST_PROPVALUE1);
 		}
@@ -135,7 +135,7 @@ public class TestRdfModelObject {
 		 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 		 */
 		@Override
-		String getUri(IModelContainer modelContainer) {
+		public String getUri(IModelContainer modelContainer) {
 			return uri;
 		}
 		/**
@@ -160,7 +160,7 @@ public class TestRdfModelObject {
 		 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 		 */
 		@Override
-		void getPropertiesFromModel() {
+		public void getPropertiesFromModel() {
 			
 		}
 		
@@ -807,5 +807,10 @@ public class TestRdfModelObject {
 		assertEquals(ver.getValue(), result.getValue());
 		assertTrue(UnitTestHelper.isArraysEqual(ver.getExcludedFileNames(), 
 				result.getExcludedFileNames()));
+	}
+	
+	@Test
+	public void testMultpleObjectsForTheSameNode() {
+		fail("Unimplemented");
 	}
 }

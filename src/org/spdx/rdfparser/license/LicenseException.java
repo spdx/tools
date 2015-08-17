@@ -507,4 +507,20 @@ public class LicenseException implements IRdfModel  {
                 Objects.equal(this.name, lCompare.getName()) &&
 				RdfModelHelper.arraysEqual(this.seeAlso, lCompare.getSeeAlso()));
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#setMultipleObjectsForSameNode()
+	 */
+	@Override
+	public void setMultipleObjectsForSameNode() {
+		// Do nothing
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#setSingleObjectForSameNode()
+	 */
+	@Override
+	public void setSingleObjectForSameNode() {
+		// ignore
+	}
 }

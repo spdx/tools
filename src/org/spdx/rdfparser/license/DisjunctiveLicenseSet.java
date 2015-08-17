@@ -26,6 +26,7 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -51,15 +52,6 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 		super(disjunctiveLicenses);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
-	 */
-	@Override
-	protected Resource _createResource() throws InvalidSPDXAnalysisException {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET);
-		return super._createResource(type);
-	}
-	
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#toString()
 	 */
@@ -173,5 +165,23 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 			return false;
 		}
 		return super.equivalent(compare);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	public String getUri(IModelContainer modelContainer)
+			throws InvalidSPDXAnalysisException {
+		// Use anonymous nodes
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 */
+	@Override
+	public Resource getType(Model model) {
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET);
 	}
 }

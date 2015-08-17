@@ -71,7 +71,7 @@ public class DoapProject extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// name
 		this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
 				SpdxRdfConstants.PROP_PROJECT_NAME);
@@ -92,7 +92,7 @@ public class DoapProject extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-	void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
 				SpdxRdfConstants.PROP_PROJECT_NAME, name);
 		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
@@ -180,7 +180,7 @@ public class DoapProject extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
-	String getUri(IModelContainer modelContainer) {
+	public String getUri(IModelContainer modelContainer) {
 		if (uri == UNKNOWN_URI) {
 			return null;
 		}
@@ -230,7 +230,7 @@ public class DoapProject extends RdfModelObject {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	Resource getType(Model model) {
+	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.DOAP_NAMESPACE + SpdxRdfConstants.CLASS_DOAP_PROJECT);
 	}
 

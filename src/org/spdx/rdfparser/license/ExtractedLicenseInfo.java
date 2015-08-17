@@ -29,7 +29,6 @@ import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
@@ -52,16 +51,18 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	 */
 	public ExtractedLicenseInfo(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
-		// Text
-		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT).asNode();
-		Triple m = Triple.createMatch(licenseInfoNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		if (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			this.extractedText = t.getObject().toString(false);
-		}
+		getPropertiesFromModel();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		super.getPropertiesFromModel();
+		// Text
+		this.extractedText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
+	}
 	/**
 	 * @param id licenseID
 	 * @param text license text
@@ -81,49 +82,31 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	public ExtractedLicenseInfo(String licenseID, String licenseText) {
 		this(licenseID, licenseText, null, null, null);
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-	protected Resource _createResource() throws InvalidSPDXAnalysisException {
-		if (this.licenseId == null || this.licenseId.isEmpty()) {
-			throw(new InvalidSPDXAnalysisException("Can not create a resource for an Extracted License without a license ID"));
-		}
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
-		Resource r = super._createResource(type, modelContainer.getDocumentNamespace() + this.licenseId);
-		// check to make sure we are not overwriting an existing license with the same ID
-		String existingLicenseText = getLicenseTextFromModel(model, r.asNode());
+	public void populateModel() throws InvalidSPDXAnalysisException {
+		super.populateModel();
+		// ExtractedText
+		String existingLicenseText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
 		if (existingLicenseText != null && this.extractedText != null) {
 			if (!LicenseCompareHelper.isLicenseTextEquivalent(existingLicenseText, this.extractedText)) {
 				throw(new DuplicateExtractedLicenseIdException("Non-standard license ID "+this.licenseId+" already exists.  Can not add a license with the same ID but different text."));
 			}
 		}
-		if (this.extractedText != null) {			
-			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_EXTRACTED_TEXT);
-			model.removeAll(r, textProperty, null);
-			r.addProperty(textProperty, this.extractedText);
-		}
-		return r;
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT, this.extractedText);
 	}
 	
-	/**
-	 * Get the license text from the model, returning null if no license text is found
-	 * @param model
-	 * @param licenseResource
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
-	public static String getLicenseTextFromModel(Model model, Node licenseResourceNode) {
-		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT).asNode();
-		Triple m = Triple.createMatch(licenseResourceNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		if (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			return t.getObject().toString(false);
-		}
-		return null;
+	@Override
+	public Resource getType(Model model) {
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#toString()
@@ -139,6 +122,9 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	 * @return the text
 	 */
 	public String getExtractedText() {
+		if (this.resource != null && this.refreshOnGet) {
+			this.extractedText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
+		}
 		return this.extractedText;
 	}
 
@@ -147,14 +133,7 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 	 */
 	public void setExtractedText(String text) {
 		this.extractedText = text;
-		if (this.licenseInfoNode != null) {
-			// delete any previous created
-			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
-			model.removeAll(resource, p, null);
-			// add the property
-			p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT);
-			resource.addProperty(p, text);
-		}
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT, text);
 	}
 	
 
@@ -209,9 +188,9 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 		// comment
 		// make sure there is not more than one comment
 		try {
-			if (licenseInfoNode != null) {
+			if (node != null) {
 				Node p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
-				Triple m = Triple.createMatch(licenseInfoNode, p, null);
+				Triple m = Triple.createMatch(node, p, null);
 				ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 				int count = 0;
 				while (tripleIter.hasNext()) {

@@ -925,6 +925,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
             lastAnnotation = null;
         }
         for (int i = 0; i < annotations.size(); i++) {
+        	if (annotations.get(i).getId() == null) {
+        		this.warningMessages.add("missing SPDXREF: tag in annotation " + annotations.get(i).getAnnotation().getComment());
+        	}
             SpdxElement element = this.analysis.getDocumentContainer().findElementById(annotations.get(i).getId());
             if (element == null) {
             	this.warningMessages.add("Invalid element reference in annotation: "+annotations.get(i).getId());
@@ -952,6 +955,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         for (int i = 0; i < relationships.size(); i++) {
             RelationshipWithId relationship = relationships.get(i);
             SpdxElement element = this.analysis.getDocumentContainer().findElementById(relationship.getId());
+            if (element == null) {
+            	this.warningMessages.add("Missing element for a relationship.  SPDX ID: "+relationship.getId());
+            	continue;
+            }
             SpdxElement relatedElement = this.analysis.getDocumentContainer().findElementById(relationship.getRelatedId());
             //Invoked for processing
             element.getRelationships();

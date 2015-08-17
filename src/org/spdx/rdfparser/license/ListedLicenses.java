@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -201,6 +202,20 @@ public class ListedLicenses implements IModelContainer {
 			public String externalDocumentIdToNamespace(String docId) {
 				//  Listed licenses do not support external documents
 				return null;
+			}
+
+			@Override
+			public Resource createResource(Resource duplicate, String uri,
+					Resource type, IRdfModel modelObject) {
+				// Not implemented
+				return null;
+			}
+
+			@Override
+			public boolean addCheckNodeObject(Node node,
+					IRdfModel rdfModelObject) {
+				// Not implemented
+				return true;
 			}
 			
 		};
@@ -573,5 +588,37 @@ public class ListedLicenses implements IModelContainer {
 	public String externalDocumentIdToNamespace(String docId) {
 		// Listed licenses do not support external documents
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public Resource createResource(Resource duplicate, String uri,
+			Resource type, IRdfModel modelObject) {
+		if (duplicate != null) {
+			return duplicate;
+		} else if (uri == null) {			
+			return listedLicenseModel.createResource(getType(listedLicenseModel));
+		} else {
+			return listedLicenseModel.createResource(uri, getType(listedLicenseModel));
+		}
+	}
+
+	/**
+	 * @param listedLicenseModel2
+	 * @return
+	 */
+	private Resource getType(Model model) {
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
+		// TODO Refactor and implement
+		return true;
 	}
 }

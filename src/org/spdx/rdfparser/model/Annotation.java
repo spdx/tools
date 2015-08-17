@@ -100,7 +100,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		//annotator
 		this.annotator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATOR);
 
@@ -132,7 +132,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Override
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		if (annotationType != null) {
 			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_ANNOTATION_TYPE, 
@@ -281,7 +281,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
-	String getUri(IModelContainer modelContainer) {
+	public String getUri(IModelContainer modelContainer) {
 		// We will just use anonymous nodes for Annotations
 		return null;
 	}

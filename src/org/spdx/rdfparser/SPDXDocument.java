@@ -25,6 +25,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Lists;
@@ -1892,5 +1893,29 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	public String externalDocumentIdToNamespace(String docId) {
 		// SPDXDocument does not support external document references
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public Resource createResource(Resource duplicate, String uri,
+			Resource type, IRdfModel modelObject) {
+		if (duplicate != null) {
+			return duplicate;
+		} else if (uri == null) {			
+			return model.createResource(type);
+		} else {
+			return model.createResource(uri, type);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

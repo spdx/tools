@@ -22,6 +22,8 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 /**
  * Static class containing helper methods for implementations of IRdfModel
@@ -86,6 +88,8 @@ public final class RdfModelHelper {
 			return true;
 		} else if (s2 == null && s1.isEmpty()) {
 			return true;
+		} else if (s1 == null || s2 == null) {
+			return false;
 		} else {
 			String s1norm = s1.replace("\r\n", "\n").trim();
 			String s2norm = s2.replace("\r\n", "\n").trim();
@@ -145,6 +149,28 @@ public final class RdfModelHelper {
 			return (o2 == null);
 		} else {
 			return o1.equivalent(o2);
+		}
+	}
+
+	/**
+	 * Search the model to see if there is a duplicate resource either based on the
+	 * URI or based on other information.  Subclasses may choose to override this
+	 * method to prevent duplicate resource from being created with the same properties.
+	 * @param modelContainer
+	 * @param uri
+	 * @return Any duplicate resource found.  Null if no duplicate resource was found.
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static Resource findDuplicateResource(
+			IModelContainer modelContainer, String uri) {
+		if (uri == null || uri.isEmpty()) {
+			return null;
+		}
+		Resource retval = ResourceFactory.createResource(uri);
+		if (modelContainer.getModel().containsResource(retval)) {
+			return modelContainer.getModel().getResource(uri);
+		} else {
+			return null;
 		}
 	}
 

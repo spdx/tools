@@ -29,7 +29,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.model.IRdfModel;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -71,6 +73,22 @@ public class TestSpdxListedLicense {
 		@Override
 		public String externalDocumentIdToNamespace(String docId) {
 			return null;
+		}
+		@Override
+		public Resource createResource(Resource duplicate, String uri,
+				Resource type, IRdfModel modelObject) {
+			if (duplicate != null) {
+				return duplicate;
+			} else if (uri == null) {			
+				return model.createResource(type);
+			} else {
+				return model.createResource(uri, type);
+			}
+		}
+		@Override
+		public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 		
 	};
@@ -175,7 +193,7 @@ public class TestSpdxListedLicense {
 		assertEquals(newID, compLic2.getLicenseId());
 		assertEquals(newText, compLic2.getLicenseText());
 		List<String> verify = stdl.verify();
-		assertEquals(0, verify.size());
+		assertEquals(1, verify.size());	// verify will fail since this is not a valid listed license ID
 		verify = compLic.verify();
 		assertEquals(1, verify.size());	// verify will fail since this is not a valid listed license ID
 	}

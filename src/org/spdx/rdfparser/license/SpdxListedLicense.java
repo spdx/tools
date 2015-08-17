@@ -25,7 +25,7 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -70,40 +70,22 @@ public class SpdxListedLicense extends License {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	protected Resource _createResource() {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
-		String uri = this.createStdLicenseUri(this.licenseId);
-		Resource r = super._createResource(type, uri);
-		//text
-		if (licenseText != null) {
-			Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_LICENSE_TEXT);
-			model.removeAll(r, textProperty, null);
-			r.addProperty(textProperty, this.licenseText);
-		}
-		//standard license header
-		if (this.standardLicenseHeader != null) {
-			Property standardLicenseHeaderPropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
-			r.addProperty(standardLicenseHeaderPropery, this.standardLicenseHeader);
-		}
-		//template
-		if (this.standardLicenseTemplate != null) {
-			Property templatePropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
-			r.addProperty(templatePropery, this.standardLicenseTemplate);
-		}
-		//Osi Approved
-		if (this.osiApproved) {
-			Property osiApprovedPropery = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
-			r.addProperty(osiApprovedPropery, String.valueOf(this.osiApproved));
-		}
-		return r;
+	public Resource getType(Model model) {
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	public String getUri(IModelContainer modelContainer)
+			throws InvalidSPDXAnalysisException {	
+		return this.createStdLicenseUri(this.licenseId);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
 	 */

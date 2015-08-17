@@ -119,7 +119,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// Algorithm
 		String algorithmUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
@@ -223,7 +223,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
-	String getUri(IModelContainer modelContainer) {
+	public String getUri(IModelContainer modelContainer) {
 		// Use anonomous nodes
 		return null;
 	}
@@ -232,12 +232,12 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	Resource getType(Model model) {
+	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_CHECKSUM);
 	}
 
 	@Override
-	protected Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
+	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
 		// see if we want to change what is considered a duplicate
 		// currently, a file is considered a duplicate if the checksum and filename
 		// are the same.
@@ -248,7 +248,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-	void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		// algorithm
 		if (algorithm == null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 

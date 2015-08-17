@@ -50,4 +50,14 @@ public interface IRdfModel {
 	 * @return
 	 */
 	public boolean equivalent(IRdfModel compare);
+
+	/**
+	 * Called to signal that there are multiple objects representing the same node
+	 */
+	public void setMultipleObjectsForSameNode();
+
+	/**
+	 * Called to signal that a newly created resource is only used for a single node
+	 */
+	public void setSingleObjectForSameNode();
 }

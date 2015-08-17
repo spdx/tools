@@ -16,7 +16,11 @@
 */
 package org.spdx.rdfparser;
 
+import org.spdx.rdfparser.model.IRdfModel;
+
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Interface for a a class that contains an RDF model
@@ -71,4 +75,23 @@ public interface IModelContainer {
 	 * @return
 	 */
 	String externalDocumentIdToNamespace(String docId);
+
+	/**
+	 * Create a resource in the model
+	 * @param duplicate A duplicate resource who's node and resource should be returned
+	 * @param uri If not null, the URI for the resource - if null, an anonomous resource will be used
+	 * @param type Type of the resource
+	 * @param modelObject the object representing this node
+	 * @return
+	 */
+	Resource createResource(Resource duplicate, String uri, Resource type, IRdfModel modelObject);
+
+	/**
+	 * Add a node object to the container.  This is for containers which keep track
+	 * of which object are related to which nodes
+	 * @return true if there are multiple objects for this node
+	 * @param node
+	 * @param rdfModelObject
+	 */
+	boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject);
 }

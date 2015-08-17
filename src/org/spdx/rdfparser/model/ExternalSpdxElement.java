@@ -144,7 +144,7 @@ public class ExternalSpdxElement extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// Do nothing
 	}
 	
@@ -152,7 +152,7 @@ public class ExternalSpdxElement extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-    protected void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		// Do nothing
 	}
 }
