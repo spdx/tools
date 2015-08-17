@@ -16,6 +16,7 @@
 */
 package org.spdx.rdfparser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.RdfModelObject;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
@@ -89,6 +91,11 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 * Map of external document namespaces to external document references
 	 */
 	Map<String, ExternalDocumentRef> externalDocNamespaceToRef = Maps.newHashMap();
+	/**
+	 * Map of nodes to RDF model objects - used to improve performance by keeping track of which 
+	 * nodes have more than one object associated with it.
+	 */
+	Map<Node, List<IRdfModel>> nodeModelMap = Maps.newHashMap();
 	
 	static {
 		SUPPORTED_SPDX_VERSIONS.add(CURRENT_SPDX_VERSION);
@@ -740,5 +747,86 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		retval.addAll(this.findAllFiles());
 		retval.addAll(this.findAllPackages());
 		return retval;
+	}
+	
+	// The following methods (createResource and ...
+	// must be synchronized since it interacts with a map of nodes and objects that represent the model
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource)
+	 */
+	@Override
+	public synchronized Resource createResource(Resource duplicate, String uri, Resource type, IRdfModel nodeObject) {
+		Resource retval;
+		if (duplicate != null) {
+			retval = duplicate;
+		} else if (uri == null) {			
+			retval = model.createResource(type);
+		} else {
+			retval = model.createResource(uri, type);
+		}
+		Node node = retval.asNode();
+		List<IRdfModel> existingModelObjects = this.nodeModelMap.get(node);
+		if (existingModelObjects == null) {
+			existingModelObjects = new ArrayList<IRdfModel>();
+			this.nodeModelMap.put(node, existingModelObjects);
+		}
+		boolean found = false;
+		for (IRdfModel existing:existingModelObjects) {
+			if (existing == nodeObject) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			existingModelObjects.add(nodeObject);
+		} 
+		if (existingModelObjects.size() == 1) {
+			nodeObject.setSingleObjectForSameNode();
+		} else {
+			for (IRdfModel allNodeObjects:existingModelObjects) {
+				allNodeObjects.setMultipleObjectsForSameNode();
+			}
+		}
+		return retval;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.IModelContainer#addNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 */
+	@Override
+	public synchronized boolean addCheckNodeObject(Node node, IRdfModel nodeObject) {
+		List<IRdfModel> existingModelObjects = this.nodeModelMap.get(node);
+		if (existingModelObjects == null) {
+			existingModelObjects = new ArrayList<IRdfModel>();
+			this.nodeModelMap.put(node, existingModelObjects);
+		}
+		boolean found = false;
+		for (IRdfModel existing:existingModelObjects) {
+			if (existing == nodeObject) {
+				found = true;
+				break;
+			}
+		}
+		if (found) {
+			if (existingModelObjects.size() == 1) {
+				// nothing we need to do
+				return false;
+			} else {
+				// multiple objects
+				return true;
+			}
+		} else {
+			if (existingModelObjects.size() > 0) {
+				for (IRdfModel existing:existingModelObjects) {
+					existing.setMultipleObjectsForSameNode();
+				}
+				existingModelObjects.add(nodeObject);
+				return true;
+			} else {
+				existingModelObjects.add(nodeObject);
+				return false;
+			}			
+		}
 	}
 }

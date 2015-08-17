@@ -75,7 +75,7 @@ public class SpdxItem extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
@@ -107,7 +107,7 @@ public class SpdxItem extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
-    protected void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
 		if (this.resource != null) {
 			if (this.licenseConcluded != null) {
@@ -245,7 +245,7 @@ public class SpdxItem extends SpdxElement {
 	 * @see org.spdx.rdfparser.model.SpdxElement#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	Resource getType(Model model) {
+	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_ITEM);
 	}
 	

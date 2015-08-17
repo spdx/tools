@@ -126,10 +126,10 @@ public class LicenseCompareHelper {
 		
 		// tokenize each of the strings
 		if (licenseTextA == null) {
-			return licenseTextB == null;
+			return (licenseTextB == null || licenseTextB.isEmpty());
 		}
 		if (licenseTextB == null) {
-			return false;
+			return licenseTextA.isEmpty();
 		}
 		if (licenseTextA.equals(licenseTextB)) {
 			return true;

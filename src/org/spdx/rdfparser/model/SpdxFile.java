@@ -190,7 +190,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
@@ -277,7 +277,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	@Override
-	protected Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
+	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
 		// see if we want to change what is considered a duplicate
 		// currently, a file is considered a duplicate if the checksum and filename
 		// are the same.
@@ -338,7 +338,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 
 
 	@Override
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
 		setPropertyUriValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 			SpdxRdfConstants.PROP_FILE_TYPE, 
@@ -369,7 +369,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	Resource getType(Model model) {
+	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_FILE);
 	}
 	

@@ -34,6 +34,8 @@ import org.spdx.tag.InvalidSpdxTagFileException;
  *
  */
 public class CompareHelper {
+	
+	static final int MAX_CHARACTERS_PER_CELL = 32000;
 
 	/**
 	 * 
@@ -74,7 +76,15 @@ public class CompareHelper {
 		StringBuilder sb = new StringBuilder(CompareHelper.checksumToString(checksums[0]));
 		for (int i = 1; i < checksums.length; i++) {
 			sb.append("\n");
-			sb.append(CompareHelper.checksumToString(checksums[i]));
+			String checksum = checksumToString(checksums[i]);
+			if (sb.length() + checksum.length() > MAX_CHARACTERS_PER_CELL) {
+				int numRemaing = checksums.length - i;
+				sb.append('[');
+				sb.append(numRemaing);
+				sb.append(" more...]");
+				break;
+			}
+			sb.append(checksum);
 		}
 		return sb.toString();
 	}
@@ -121,7 +131,15 @@ public class CompareHelper {
 		StringBuilder sb = new StringBuilder(annotationToString(annotations[0]));
 		for (int i = 1; i < annotations.length; i++) {
 			sb.append("\n");
-			sb.append(annotationToString(annotations[i]));
+			String annotation = annotationToString(annotations[i]);
+			if (sb.length() + annotation.length() > MAX_CHARACTERS_PER_CELL) {
+				int numRemaing = annotations.length - i;
+				sb.append('[');
+				sb.append(numRemaing);
+				sb.append(" more...]");
+				break;
+			}
+			sb.append(annotation);
 		}
 		return sb.toString();
 	}
@@ -130,9 +148,16 @@ public class CompareHelper {
 		if (relationship == null) {
 			return "";
 		}
+		if (relationship.getRelationshipType() == null) {
+			return "Unknown relationship type";
+		}
 		StringBuilder sb = new StringBuilder(relationship.getRelationshipType().getTag());
 		sb.append(":");
-		sb.append(relationship.getRelatedSpdxElement().getId());
+		if (relationship.getRelatedSpdxElement() == null) {
+			sb.append("?NULL");
+		} else {
+			sb.append(relationship.getRelatedSpdxElement().getId());
+		}
 		if (relationship.getRelatedSpdxElement().getName() != null) {
 			sb.append('[');
 			sb.append(relationship.getRelatedSpdxElement().getName());
@@ -157,7 +182,15 @@ public class CompareHelper {
 		StringBuilder sb = new StringBuilder(relationshipToString(relationships[0]));
 		for (int i = 1; i < relationships.length; i++) {
 			sb.append("\n");
-			sb.append(relationshipToString(relationships[i]));
+			String nextRelationship = relationshipToString(relationships[i]);
+			if (sb.length() + nextRelationship.length() > MAX_CHARACTERS_PER_CELL) {
+				int numRemaing = relationships.length - i;
+				sb.append('[');
+				sb.append(numRemaing);
+				sb.append(" more...]");
+				break;
+			}
+			sb.append(nextRelationship);
 		}
 		return sb.toString();
 	}
@@ -206,7 +239,15 @@ public class CompareHelper {
 		StringBuilder sb = new StringBuilder(fileTypes[0].getTag());
 		for (int i = 1;i < fileTypes.length; i++) {
 			sb.append(", ");
-			sb.append(fileTypes[i].getTag());
+			String fileType = fileTypes[i].getTag();
+			if (sb.length() + fileType.length() > MAX_CHARACTERS_PER_CELL) {
+				int numRemaing = fileTypes.length - i;
+				sb.append('[');
+				sb.append(numRemaing);
+				sb.append(" more...]");
+				break;
+			}
+			sb.append(fileType);
 		}
 		return sb.toString();
 	}

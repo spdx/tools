@@ -25,6 +25,7 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
@@ -47,14 +48,6 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	
 	public SpdxNoneLicense() {
 		super();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
-	 */
-	@Override
-	protected Resource _createResource() {
-		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE);
 	}
 
 	/* (non-Javadoc)
@@ -103,6 +96,41 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	@Override
 	public boolean equivalent(IRdfModel compare) {
 		return this.equals(compare);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#populateModel()
+	 */
+	@Override
+	public void populateModel() throws InvalidSPDXAnalysisException {
+		// Nothing to populate
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		// No properties to get
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	public String getUri(IModelContainer modelContainer)
+			throws InvalidSPDXAnalysisException {
+		return SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 */
+	@Override
+	public Resource getType(Model model) {
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NONE);
 	}
 
 }

@@ -20,7 +20,6 @@ package org.spdx.tools;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
@@ -1146,25 +1145,10 @@ public class CompareSpdxDocs {
 			// ignore this as well
 		}
 		if (retval == null) {
-			File tempRdfFile = null;
 			try {
-				tempRdfFile = File.createTempFile("SPDXTempFile", ".spdx");
-			} catch (IOException e) {
-				throw(new SpdxCompareException("Unable to create temporary file for tag/value to rdf conversion",e));
-			}
-			try {
-				convertTagValueToRdf(spdxDocFile, tempRdfFile, warnings);
-				retval = SPDXDocumentFactory.createSpdxDocument(tempRdfFile.getPath());
+				retval = convertTagValueToRdf(spdxDocFile, warnings);
 			} catch (SpdxCompareException e) {
 				throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: "+e.getMessage()));
-			} catch (IOException e) {
-				throw(new SpdxCompareException("IO Error reading the converted tag/value file "+spdxDocFileName,e));
-			} catch (InvalidSPDXAnalysisException e) {
-				throw(new SpdxCompareException("Invalid tag/value file "+spdxDocFileName,e));
-			} finally {
-				if (tempRdfFile != null) {
-					tempRdfFile.delete();
-				}
 			}
 		}
 		if (retval == null) {
@@ -1178,26 +1162,14 @@ public class CompareSpdxDocs {
 	 * @param tagValueFile Input file in tag/value format
 	 * @param tempRdfFile File to output the generated RDF file (must already exist - file is overwritten)
 	 */
-	private static void convertTagValueToRdf(File tagValueFile, File rdfFile, List<String> warnings) throws SpdxCompareException {
-		if (!rdfFile.canWrite()) {
-			throw(new SpdxCompareException("Can not write to output file"));
-		}
-		FileOutputStream out = null;
+	private static SpdxDocument convertTagValueToRdf(File tagValueFile, List<String> warnings) throws SpdxCompareException {
 		FileInputStream in = null;
 		try {
-			out = new FileOutputStream(rdfFile);
 			in = new FileInputStream(tagValueFile);
-			TagToRDF.convertTagFileToRdf(in, out, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings);
+			return TagToRDF.convertTatFileToRdf(in, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings).getSpdxDocument();
 		} catch (Exception e) {
 			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
 		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					System.out.println("Error closing RDF file: " + e.getMessage());
-				}
-			}
 			if (in != null) {
 				try {
 					in.close();

@@ -41,7 +41,7 @@ public class SpdxElementFactory {
 	 * @param node
 	 * @param element
 	 */
-	static void addToCreatedElements(IModelContainer modelContainer,
+	static synchronized void addToCreatedElements(IModelContainer modelContainer,
 			Node node, SpdxElement element) {
 		Map<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
 		if (containerNodes == null) {
@@ -56,7 +56,7 @@ public class SpdxElementFactory {
 	 */
 	private static Map<IModelContainer, Map<Node, SpdxElement>> createdElements = Maps.newHashMap();
 
-	public static SpdxElement createElementFromModel(IModelContainer modelContainer,
+	public static synchronized SpdxElement createElementFromModel(IModelContainer modelContainer,
 			Node node) throws InvalidSPDXAnalysisException {
 		Map<Node, SpdxElement> containerNodes = createdElements.get(modelContainer);
 		if (containerNodes == null) {

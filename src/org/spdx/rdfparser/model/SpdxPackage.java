@@ -127,7 +127,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
-	void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
@@ -201,8 +201,11 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#findDuplicateResource(org.spdx.rdfparser.IModelContainer, java.lang.String)
+	 */
 	@Override
-	protected Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
+	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
 		// A duplicate package has the same name and verification code
 		if (this.name == null || this.name.isEmpty()) {
 			return null;
@@ -243,8 +246,11 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		return null;	// if we got here, we didn't find a duplicate
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.SpdxItem#populateModel()
+	 */
 	@Override
-	protected void populateModel() throws InvalidSPDXAnalysisException {
+	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
 		 setPropertyValue(SPDX_NAMESPACE, 
 				PROP_PACKAGE_DECLARED_LICENSE, this.licenseDeclared);
@@ -283,7 +289,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	Resource getType(Model model) {
+	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_PACKAGE);
 	}
 	

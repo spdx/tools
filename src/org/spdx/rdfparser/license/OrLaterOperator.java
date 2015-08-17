@@ -27,6 +27,7 @@ import org.spdx.rdfparser.model.IRdfModel;
 import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -47,20 +48,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 	 */
 	public OrLaterOperator(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
-		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
-		Triple m = Triple.createMatch(licenseInfoNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			if (this.license != null) {
-				throw (new InvalidSPDXAnalysisException("More than one license for a license WITH expression"));
-			}
-			AnyLicenseInfo anyLicense = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject());
-			if (!(anyLicense instanceof SimpleLicensingInfo)) {
-				throw (new InvalidSPDXAnalysisException("The license for a WITH expression must be of type SimpleLicensingInfo"));
-			}
-			this.license = (SimpleLicensingInfo)anyLicense;
-		}
+		getPropertiesFromModel();
 	}
 	
 	public OrLaterOperator(SimpleLicensingInfo license) {
@@ -68,31 +56,19 @@ public class OrLaterOperator extends AnyLicenseInfo {
 		this.license = license;
 	}
 	
-	protected Resource _createResource(Resource type) throws InvalidSPDXAnalysisException {
-		Resource r = model.createResource(type);
-		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
-		Resource licResource = this.license.createResource(modelContainer);
-		r.addProperty(licProperty, licResource);
-		return r;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
-	 */
-	@Override
-	protected Resource _createResource()
-			throws InvalidSPDXAnalysisException {
-		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_OR_LATER_OPERATOR);
-		return _createResource(type);
-	}
-	
 	/**
 	 * @return the license
 	 */
 	public SimpleLicensingInfo getLicense() {
+		if (this.resource != null && this.refreshOnGet) {
+			try {
+				this.populateModel();
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.warn("Error getting license from model, using stored value", e);
+			}
+		}
 		return license;
 	}
-
 
 	/**
 	 * @param license the license to set
@@ -100,7 +76,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 	 */
 	public void setLicense(SimpleLicensingInfo license) throws InvalidSPDXAnalysisException {
 		this.license = license;
-		if (model != null && licenseInfoNode != null) {
+		if (model != null && node != null) {
 			// delete any previous created
 			Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 			model.removeAll(resource, licProperty, null);
@@ -189,5 +165,56 @@ public class OrLaterOperator extends AnyLicenseInfo {
 		}
 		return RdfModelHelper.equivalentConsideringNull(this.license, ((OrLaterOperator)compare).getLicense());
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#populateModel()
+	 */
+	@Override
+	public void populateModel() throws InvalidSPDXAnalysisException {
+		// delete any previous created
+		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
+		model.removeAll(resource, licProperty, null);
+		licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
+		Resource licResource = license.createResource(this.modelContainer);
+		resource.addProperty(licProperty, licResource);		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			if (this.license != null) {
+				throw (new InvalidSPDXAnalysisException("More than one license for a license WITH expression"));
+			}
+			AnyLicenseInfo anyLicense = LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject());
+			if (!(anyLicense instanceof SimpleLicensingInfo)) {
+				throw (new InvalidSPDXAnalysisException("The license for a WITH expression must be of type SimpleLicensingInfo"));
+			}
+			this.license = (SimpleLicensingInfo)anyLicense;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	public String getUri(IModelContainer modelContainer)
+			throws InvalidSPDXAnalysisException {
+		// Use anonymous node
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 */
+	@Override
+	public Resource getType(Model model) {
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_OR_LATER_OPERATOR);
+	}
 }

@@ -50,7 +50,17 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 				if (o2 instanceof ExtractedLicenseInfo) {
 					ExtractedLicenseInfo l1 = (ExtractedLicenseInfo)o1;
 					ExtractedLicenseInfo l2 = (ExtractedLicenseInfo)o2;
-					return l1.getExtractedText().compareTo(l2.getExtractedText());
+					String extracted1 = l1.getExtractedText();
+					String extracted2 = l2.getExtractedText();
+					if (extracted1 == null && extracted2 == null) {
+						return 0;
+					} else if (extracted1 == null) {
+						return -1;
+					} else if (extracted2 == null) {
+						return 1;
+					} else {
+						return extracted1.compareTo(extracted2);
+					}
 				} else {
 					return 1;
 				}
@@ -198,6 +208,9 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 				String extractedText = "";
 				if (licenseInfo instanceof ExtractedLicenseInfo) {
 					extractedText = ((ExtractedLicenseInfo)licenseInfo).getExtractedText();
+					if (extractedText == null) {
+						extractedText = "";
+					}
 				}
 				if (retval == null || retval.compareTo(extractedText) > 0) {
 					retval = extractedText;

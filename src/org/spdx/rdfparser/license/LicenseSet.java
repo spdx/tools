@@ -43,7 +43,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public abstract class LicenseSet extends AnyLicenseInfo {
-	
+		
 	protected Set<AnyLicenseInfo> licenseInfos = Sets.newHashSet();
 
 	/**
@@ -61,7 +61,21 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 			this.licenseInfos.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
 		}
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
+	 */
+	@Override
+	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
+		this.licenseInfos.clear();
+		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.licenseInfos.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
+		}
+	}
 
 	/**
 	 * @param licenseInfos Set of licenses
@@ -73,24 +87,6 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 				this.licenseInfos.add(licenseInfos[i]);
 			}
 		}
-	}
-
-
-	/**
-	 * Create a resource for the license set
-	 * @param type type of license set
-	 * @return
-	 * @throws InvalidSPDXAnalysisException
-	 */
-	protected Resource _createResource(Resource type) throws InvalidSPDXAnalysisException {
-		Resource r = model.createResource(type);
-		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
-		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
-		while (iter.hasNext()) {
-			Resource licResource = iter.next().createResource(modelContainer);
-			r.addProperty(licProperty, licResource);
-		}
-		return r;
 	}
 	
 	/**
@@ -105,7 +101,7 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 				this.licenseInfos.add(licenseInfos[i]);
 			}
 		}
-		if (model != null && licenseInfoNode != null) {
+		if (model != null && node != null) {
 			// delete any previous created
 			Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 			model.removeAll(resource, licProperty, null);
@@ -122,6 +118,13 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 	 * @return Members of the license set
 	 */
 	public AnyLicenseInfo[] getMembers() {
+		if (this.resource != null && this.refreshOnGet) {
+			try {
+				getPropertiesFromModel();
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.warn("Error getting properites from model, using stored values.",e);
+			}
+		}
 		AnyLicenseInfo[] retval = new AnyLicenseInfo[this.licenseInfos.size()];
 		retval = this.licenseInfos.toArray(retval);
 		return retval;
@@ -152,5 +155,21 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 			return false;
 		}
 		return RdfModelHelper.arraysEquivalent(this.getMembers(), ((LicenseSet)compare).getMembers());
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#populateModel()
+	 */
+	@Override
+	public void populateModel() throws InvalidSPDXAnalysisException {
+		// delete any previous created
+		Property licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
+		model.removeAll(resource, licProperty, null);
+
+		licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
+		for (AnyLicenseInfo licenseInfo:this.licenseInfos) {
+			Resource licResource = licenseInfo.createResource(this.modelContainer);
+			resource.addProperty(licProperty, licResource);
+		}
 	}
 }

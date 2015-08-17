@@ -30,8 +30,10 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.SpdxDocument;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -87,6 +89,24 @@ public class TestExtractedLicenseInfo {
 		@Override
 		public String externalDocumentIdToNamespace(String docId) {
 			return null;
+		}
+
+		@Override
+		public Resource createResource(Resource duplicate, String uri,
+				Resource type, IRdfModel modelObject) {
+			if (duplicate != null) {
+				return duplicate;
+			} else if (uri == null) {			
+				return model.createResource(type);
+			} else {
+				return model.createResource(uri, type);
+			}
+		}
+
+		@Override
+		public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 		
 	};

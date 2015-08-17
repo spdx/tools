@@ -36,7 +36,6 @@ import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
@@ -102,13 +101,25 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * Force a refresh for the model on every property get.  This is slower, but
 	 * will make sure that the correct value is returned if there happens to be
 	 * two Java objects using the same RDF properties.
+	 * 
+	 * The property should be set based on if there are more than two objects
+	 * for the same node in the container containing this model
 	 */
-	protected boolean refreshOnGet = true;	//TODO make this a configurable property
+	protected boolean refreshOnGet = true;
 	
+	/**
+	 * Create an RDF Model Object based on an existing Node
+	 * @param modelContainer Container containing the RDF Model
+	 * @param node Node describing this object
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	public RdfModelObject(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		this.modelContainer = modelContainer;
 		this.model = modelContainer.getModel();
 		this.node = node;
+		this.refreshOnGet = modelContainer.addCheckNodeObject(node, this);
+		// TODO Remove the line below once working Replace the above when fixed- remove
+//		this.refreshOnGet = true;
 		if (node.isBlank()) {
 			resource = model.createResource(node.getBlankNodeId());
 		} else if (node.isURI()) {
@@ -118,6 +129,10 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	/**
+	 * Create an Rdf Model Object without any associated nodes.  It is assumed that 
+	 * populate model will be called to intialize the model
+	 */
 	public RdfModelObject() {		
 	}
 	
@@ -150,13 +165,16 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		// by some of the setters
 		this.modelContainer = modelContainer;
 		this.model = modelContainer.getModel();	
-		if (duplicate != null) {
-			this.resource = duplicate;
-		} else if (uri == null) {			
-			this.resource = model.createResource(getType(model));
-		} else {
-			this.resource = model.createResource(uri, getType(model));
-		}
+		//TODO -  Remove commented out once working - re-enable once tested
+		this.resource = modelContainer.createResource(duplicate, uri, getType(model), this);
+//		if (duplicate != null) {
+//			this.resource = duplicate;
+//		} else if (uri == null) {			
+//			this.resource = model.createResource(getType(model));
+//		} else {
+//			this.resource = model.createResource(uri, getType(model));
+//		}
+// END OF REplace
 		this.node = this.resource.asNode();
 		if (duplicate == null || updateModel) {
 			populateModel();
@@ -170,7 +188,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * Fetch all of the properties from the model and populate the local Java properties
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	abstract void getPropertiesFromModel() throws InvalidSPDXAnalysisException;
+	public abstract void getPropertiesFromModel() throws InvalidSPDXAnalysisException;
 
 	/**
 	 * Search the model to see if there is a duplicate resource either based on the
@@ -181,16 +199,8 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @return Any duplicate resource found.  Null if no duplicate resource was found.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
-		if (uri == null || uri.isEmpty()) {
-			return null;
-		}
-		Resource retval = ResourceFactory.createResource(uri);
-		if (modelContainer.getModel().containsResource(retval)) {
-			return modelContainer.getModel().getResource(uri);
-		} else {
-			return null;
-		}
+	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
+		return RdfModelHelper.findDuplicateResource(modelContainer, uri);
 	}
 	
 	/**
@@ -199,18 +209,18 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	abstract String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException;
+	public abstract String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * @return the RDF class name for the object
 	 */
-	abstract Resource getType(Model model);
+	public abstract Resource getType(Model model);
 	
 	/**
 	 * Populate the RDF model from the Java properties
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	abstract void populateModel() throws InvalidSPDXAnalysisException;
+	public abstract void populateModel() throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * Returns true if the two resources represent the same node
@@ -1104,5 +1114,21 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return true;
 		}
 		return RdfModelHelper.equivalentConsideringNull(o1, o2);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#setMultipleObjectsForSameNode()
+	 */
+	@Override
+	public void setMultipleObjectsForSameNode() {
+		this.refreshOnGet = true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.model.IRdfModel#setSingleObjectForSameNode()
+	 */
+	@Override
+	public void setSingleObjectForSameNode() {
+		this.refreshOnGet = false;
 	}
 }

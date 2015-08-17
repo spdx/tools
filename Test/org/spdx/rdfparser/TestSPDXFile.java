@@ -32,6 +32,7 @@ import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.model.IRdfModel;
 
 import spdxspreadsheet.TestPackageInfoSheet;
 
@@ -99,6 +100,22 @@ public class TestSPDXFile {
 		@Override
 		public String externalDocumentIdToNamespace(String docId) {
 			return null;
+		}
+		@Override
+		public Resource createResource(Resource duplicate, String uri,
+				Resource type, IRdfModel modelObject) {
+			if (duplicate != null) {
+				return duplicate;
+			} else if (uri == null) {			
+				return model.createResource(type);
+			} else {
+				return model.createResource(uri, type);
+			}
+		}
+		@Override
+		public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 		
 	};
