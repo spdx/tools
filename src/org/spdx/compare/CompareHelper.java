@@ -156,12 +156,12 @@ public class CompareHelper {
 		if (relationship.getRelatedSpdxElement() == null) {
 			sb.append("?NULL");
 		} else {
+			if (relationship.getRelatedSpdxElement().getName() != null) {
+				sb.append('[');
+				sb.append(relationship.getRelatedSpdxElement().getName());
+				sb.append(']');
+			}
 			sb.append(relationship.getRelatedSpdxElement().getId());
-		}
-		if (relationship.getRelatedSpdxElement().getName() != null) {
-			sb.append('[');
-			sb.append(relationship.getRelatedSpdxElement().getName());
-			sb.append(']');
 		}
 		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
 			sb.append('(');
