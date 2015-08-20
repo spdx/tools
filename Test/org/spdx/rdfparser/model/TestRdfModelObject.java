@@ -808,9 +808,4 @@ public class TestRdfModelObject {
 		assertTrue(UnitTestHelper.isArraysEqual(ver.getExcludedFileNames(), 
 				result.getExcludedFileNames()));
 	}
-	
-	@Test
-	public void testMultpleObjectsForTheSameNode() {
-		fail("Unimplemented");
-	}
 }

@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.ModelContainerForTest;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
@@ -36,6 +37,7 @@ import org.spdx.rdfparser.model.UnitTestHelper;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 
 /**
@@ -469,5 +471,25 @@ public class TestSpdxDocumentContainer {
 		assertEquals(3, result.size());
 		SpdxFile[] resultArray = result.toArray(new SpdxFile[result.size()]);
 		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxFile[] {file1,  file2, file3}, resultArray));
+	}
+	
+	@Test
+	public void testMultipleObjectsForTheSameNode() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
+		String elementName = "element1";
+		String elementComment1 = "element comment 1";
+		SpdxElement element1 = new SpdxElement(elementName, elementComment1, null, null);
+		doc.addElement(element1);
+		assertFalse(element1.isRefreshOnGet());
+		SpdxElement element2 = new SpdxElement(modelContainer, element1.getNode());
+		assertTrue(element1.isRefreshOnGet());
+		assertTrue(element2.isRefreshOnGet());
+		String elementComment2 = "Different comment";
+		element2.setComment(elementComment2);
+		assertEquals(elementComment2, element1.getComment());
+		assertEquals(elementComment1, element1.getComment());
 	}
 }

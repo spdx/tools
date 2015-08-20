@@ -118,8 +118,6 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		this.model = modelContainer.getModel();
 		this.node = node;
 		this.refreshOnGet = modelContainer.addCheckNodeObject(node, this);
-		// TODO Remove the line below once working Replace the above when fixed- remove
-//		this.refreshOnGet = true;
 		if (node.isBlank()) {
 			resource = model.createResource(node.getBlankNodeId());
 		} else if (node.isURI()) {
@@ -165,16 +163,8 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		// by some of the setters
 		this.modelContainer = modelContainer;
 		this.model = modelContainer.getModel();	
-		//TODO -  Remove commented out once working - re-enable once tested
 		this.resource = modelContainer.createResource(duplicate, uri, getType(model), this);
-//		if (duplicate != null) {
-//			this.resource = duplicate;
-//		} else if (uri == null) {			
-//			this.resource = model.createResource(getType(model));
-//		} else {
-//			this.resource = model.createResource(uri, getType(model));
-//		}
-// END OF REplace
+
 		this.node = this.resource.asNode();
 		if (duplicate == null || updateModel) {
 			populateModel();
@@ -1130,5 +1120,19 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	@Override
 	public void setSingleObjectForSameNode() {
 		this.refreshOnGet = false;
+	}
+	
+	/**
+	 * @return true if every get of a property will be refreshsed from the RDF Model - primarily used for unit testing
+	 */
+	public boolean isRefreshOnGet() {
+		return this.refreshOnGet;
+	}
+	
+	/**
+	 * @return the RDF Node (null if not initialized)
+	 */
+	public Node getNode() {
+		return this.node;
 	}
 }
