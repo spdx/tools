@@ -22,11 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.apache.commons.lang3.StringUtils;
+
+import org.junit.*;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
@@ -202,6 +200,20 @@ public class TestSpdxDocument {
 		assertEquals(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DOCUMENT, result.getURI());
 	}
 
+
+	/**
+	 * Per 1309, if no creation info is available in the model, we'll assign a creation date, as one is mandatory,
+	 * and the License List Version (because we know what version we have).
+	 */
+	@Test
+	public void testDefaultCreationInfo() throws InvalidSPDXAnalysisException {
+		SpdxDocumentContainer container1 = new SpdxDocumentContainer("http://test/testy.mctestski", "SPDX-2.0");
+		SpdxDocument doc = container1.getSpdxDocument();
+		Assert.assertNotNull(doc.getCreationInfo());
+		Assert.assertFalse("Mandatory creation date missing from new SPDX Document.", StringUtils.isBlank(doc.getCreationInfo().getCreated()));
+
+	}
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#populateModel()}.
 	 * @throws InvalidSPDXAnalysisException 
@@ -270,7 +282,7 @@ public class TestSpdxDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#equivalent(org.spdx.rdfparser.model.RdfModelObject)}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#equivalent(IRdfModel)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@SuppressWarnings("deprecation")

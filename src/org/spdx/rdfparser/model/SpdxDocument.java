@@ -16,8 +16,12 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
@@ -27,6 +31,7 @@ import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.ListedLicenses;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.google.common.base.Objects;
@@ -54,7 +59,7 @@ public class SpdxDocument extends SpdxElement {
 	SPDXReview[] reviewers;			
 
 	/**
-	 * @param modelContainer
+	 * @param documentContainer
 	 * @param node
 	 * @throws InvalidSPDXAnalysisException
 	 */
@@ -63,6 +68,16 @@ public class SpdxDocument extends SpdxElement {
 		super(documentContainer, node);
 		this.documentContainer = documentContainer;
 		getMyPropertiesFromModel();
+		if (this.getCreationInfo() == null){
+			String licenseListVersion = ListedLicenses.getListedLicenses().getLicenseListVersion();
+			String creationDate = DateFormatUtils.ISO_DATE_TIME_ZONE_FORMAT.format(Calendar.getInstance());
+			SPDXCreatorInformation creationInfo = new SPDXCreatorInformation(null, creationDate, null, licenseListVersion);
+			setCreationInfo(creationInfo);
+		}
+		else if (StringUtils.isBlank(this.getCreationInfo().getLicenseListVersion())){
+			this.getCreationInfo().setLicenseListVersion(ListedLicenses.getListedLicenses().getLicenseListVersion());
+		}
+
 	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()

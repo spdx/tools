@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -415,8 +417,9 @@ public class ListedLicenses implements IModelContainer {
             tripleIter = stdLicenseModel.getGraph().find(m);
             if (tripleIter.hasNext()) {
                 Triple t = tripleIter.next();
-                licenseListVersion = t.getObject().toString(false);
-            }
+                String licenseListVersionPropertyValue = t.getObject().toString(false);
+				licenseListVersion = StringUtils.substringBefore(licenseListVersionPropertyValue, " "); //Omit any superfluous data, such as a date
+			}
         } catch (Exception ex) {
             logger.error("Error loading SPDX listed license ID's from model.");
         } finally {
@@ -478,12 +481,13 @@ public class ListedLicenses implements IModelContainer {
         try {
             return listdLicenseIds.toArray(new String[listdLicenseIds.size()]);
         } finally {
-            listedLicenseModificationLock.readLock().unlock();
+			listedLicenseModificationLock.readLock().unlock();
         }
     }
 	
 	/**
-	 * @return Version of the license list being used by the SPDXLicenseInfoFactory
+	 * @return The version of the loaded license list in the form M.N, where M is the major release and N is the minor release.
+	 * If no license list is loaded, returns {@Link DEFAULT_LICENSE_LIST_VERSION}.
 	 */
 	public String getLicenseListVersion() {
 		return licenseListVersion;
@@ -502,7 +506,7 @@ public class ListedLicenses implements IModelContainer {
 	 * Get or create a standard license in the model container copying any
 	 * relevant information from the standard model to the model in the modelContainer
 	 * @param modelContainer
-	 * @param uri
+	 * @param node
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
@@ -606,7 +610,7 @@ public class ListedLicenses implements IModelContainer {
 	}
 
 	/**
-	 * @param listedLicenseModel2
+	 * @param model
 	 * @return
 	 */
 	private Resource getType(Model model) {
