@@ -211,6 +211,8 @@ public class TestSpdxDocument {
 		SpdxDocument doc = container1.getSpdxDocument();
 		Assert.assertNotNull(doc.getCreationInfo());
 		Assert.assertFalse("Mandatory creation date missing from new SPDX Document.", StringUtils.isBlank(doc.getCreationInfo().getCreated()));
+		String licenseListVersion = doc.getCreationInfo().getLicenseListVersion();
+		Assert.assertTrue(StringUtils.isNotBlank(licenseListVersion));
 
 	}
 
