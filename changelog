@@ -1,3 +1,5 @@
+Implementation version 2.0.4
+
 Implementation version 2.0.3
 - Add default license list version if no license list version is supplied
 - Fixed bug 1309 - correctly form license list version
