@@ -1,4 +1,4 @@
-* text=auto
+* text eol=lf
 
 *.java text
 *.html text
