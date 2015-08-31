@@ -1,4 +1,8 @@
+Implementation version 2.0.4
+
 Implementation version 2.0.3
+- Add default license list version if no license list version is supplied
+- Fixed bug 1309 - correctly form license list version
 - Fixed a critical bug in the spreadsheet verification - throws an error when more than one licenseinfo in file is present
 - Added seeAlso to to the JSON output of the licenseRDFA generator
 - Fixed parser bug when a plus operator is followed by a with expression (e.g. GPL-2.0+ WITH Exception)
