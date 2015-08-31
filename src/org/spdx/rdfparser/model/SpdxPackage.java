@@ -108,7 +108,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			SpdxPackageVerificationCode packageVerificationCode) {
 		this(name, null, null, null, licenseConcluded, 
 				licenseInfosFromFiles, copyrightText, null, licenseDeclared,
-				null, null, null, files, null, null, null, packageVerificationCode,
+				null, null, downloadLocation, files, null, null, null, packageVerificationCode,
 				null, null, null, null);
 	}
 
