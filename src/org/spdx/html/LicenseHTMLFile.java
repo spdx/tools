@@ -187,7 +187,9 @@ public class LicenseHTMLFile {
 					licenseTextHtml = SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText());
 				}
 				retval.put("licenseText", licenseTextHtml);
-				retval.put("licenseTemplate", licenseTemplateHtml);
+				if (licenseTemplateHtml != null) {
+					retval.put("licenseTemplate", formatTemplateText(licenseTemplateHtml));
+				}
 				retval.put("licenseName", license.getName());
 				String notes;
 				if (license.getComment() != null && !license.getComment().isEmpty()) {
