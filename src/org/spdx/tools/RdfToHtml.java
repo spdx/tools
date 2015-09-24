@@ -206,7 +206,6 @@ public class RdfToHtml {
     public static void rdfToHtml(SpdxDocument doc, String templateDirName,
     		File docHtmlFile, File licenseHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
         String dirPath = docHtmlFile.getParent();
-        DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
 		DefaultMustacheFactory lineBreakEscapingBuilder = new DefaultMustacheFactory(templateDirName){
 			@Override
 			public void encode(String value, Writer writer) {
@@ -240,7 +239,7 @@ public class RdfToHtml {
         	} finally {
         		packageHtmlFileWriter.close();
         	}
-        	mustache = builder.compile(SPDX_FILE_HTML_TEMPLATE);
+        	mustache = lineBreakEscapingBuilder.compile(SPDX_FILE_HTML_TEMPLATE);
         	FileWriter filesHtmlFileWriter = new FileWriter(packageFilesHtmlFile);
         	try {
         		mustache.execute(filesHtmlFileWriter, pkgFileMap);
@@ -275,7 +274,7 @@ public class RdfToHtml {
         	}
         }
         Map<String, Object> extracteLicMustacheMap = MustacheMap.buildExtractedLicMustachMap(doc, spdxIdToUrl);
-        Mustache mustache = builder.compile(SPDX_LICENSE_HTML_TEMPLATE); //Do not escape line breaks in extracted licenses.
+        Mustache mustache = lineBreakEscapingBuilder.compile(SPDX_LICENSE_HTML_TEMPLATE);
         FileWriter licenseHtmlFileWriter = new FileWriter(licenseHtmlFile);
         try {
         	mustache.execute(licenseHtmlFileWriter, extracteLicMustacheMap);
