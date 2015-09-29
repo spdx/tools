@@ -3,7 +3,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
-<title>{{name}}</title>
+	<title>{{name}}</title>
+	<style>
+		.Table
+		{
+		display: table;
+		}
+		.Row
+		{
+		display: table-row;
+		}
+		.Cell
+		{
+		display: table-cell;
+		padding-right: 5px;
+		}
+	</style>
 </head>
 <body>
 <h2>SPDX Document Information</h2>
@@ -24,19 +39,25 @@
 	</ul>
 Created on: {{created}}<br />
 {{#comment}}
-Creator comment: {{comment}}
+<div class = table>
+	<div class="Row"><div class="Cell">Creator comment: </div><div class="Cell">{{comment}}</div></div>
+</div><br />
 {{/comment}} <br />
 {{#licenseListVersion}}
 License List Version: {{licenseListVersion}}
 {{/licenseListVersion}} <br />
 {{/creationInfo}}
 {{#docComment}}
-Document Comment: {{docComment}}<br />
+<div class="Table">
+	<div class="Row"><div class="Cell">Document Comment: </div><div class="Cell">{{docComment}}</div></div>
+</div><br />
 {{/docComment}}
 <h2>Annotations</h2>
 {{#annotations}}
 Annotator: {{annotator}}<br />
-Comment: {{comment}}<br />
+<div class="Table">
+	<div class="Row"><div class="Cell">Comment: </div><div class="Cell">{{comment}}</div></div>
+</div><br />
 Date: {{date}}<br />
 Annotation Type: {{annotationTypeTag}}<br />
 <br />

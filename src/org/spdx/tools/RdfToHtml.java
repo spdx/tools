@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.escape.Escaper;
+import com.google.common.escape.Escapers;
 import org.spdx.html.MustacheMap;
 import org.spdx.html.PackageContext;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -71,6 +73,17 @@ public class RdfToHtml {
 	static final String PACKAGE_HTML_FILE_POSTFIX = "-package.html";
 	static final String PACKAGE_FILE_HTML_FILE_POSTFIX = "-packagefiles.html";
 	static final String DOCUMENT_FILE_HTML_FILE_POSTFIX = "-documentfiles.html";
+
+	private static final Escaper HTML_LINEBREAK_ESCAPER = //A variation on Guava's HTML escaper
+			Escapers.builder()
+					.addEscape('"', "&quot;")
+							// Note: "&apos;" is not defined in HTML 4.01.
+					.addEscape('\'', "&#39;")
+					.addEscape('&', "&amp;")
+					.addEscape('<', "&lt;")
+					.addEscape('>', "&gt;")
+					.addEscape('\n', "<br />")
+					.build();
 	
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
@@ -189,11 +202,22 @@ public class RdfToHtml {
 				+ "where rdfxmlfile.rdf is a valid SPDX RDF XML file and htmlfile.html is\n"
 				+ "the output html file.");
 	}
-	
+
     public static void rdfToHtml(SpdxDocument doc, String templateDirName,
     		File docHtmlFile, File licenseHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
         String dirPath = docHtmlFile.getParent();
-        DefaultMustacheFactory builder = new DefaultMustacheFactory(templateDirName);
+		DefaultMustacheFactory lineBreakEscapingBuilder = new DefaultMustacheFactory(templateDirName){
+			@Override
+			public void encode(String value, Writer writer) {
+				try{
+					String escapedValue = HTML_LINEBREAK_ESCAPER.escape(value);
+					writer.append(escapedValue);
+				} catch (IOException ioe) { //Mimic the super's behavior
+					throw new MustacheException("Failed to encode value: " + value);
+				}
+
+			}
+		};
         Map<String, String> spdxIdToUrl = buildIdMap(doc, dirPath);
         List<SpdxPackage> allPackages = doc.getDocumentContainer().findAllPackages();
         Iterator<SpdxPackage> pkgIter = allPackages.iterator();
@@ -208,14 +232,14 @@ public class RdfToHtml {
 			File packageFilesHtmlFile = new File(packageFilesHtmlFilePath);
         	PackageContext pkgContext = new PackageContext(pkg, spdxIdToUrl);
         	Map<String, Object> pkgFileMap = MustacheMap.buildPkgFileMap(pkg, spdxIdToUrl);
-        	Mustache mustache = builder.compile(SPDX_PACKAGE_HTML_TEMPLATE);
+        	Mustache mustache = lineBreakEscapingBuilder.compile(SPDX_PACKAGE_HTML_TEMPLATE);
         	FileWriter packageHtmlFileWriter = new FileWriter(packageHtmlFile);
         	try {
         		mustache.execute(packageHtmlFileWriter, pkgContext);
         	} finally {
         		packageHtmlFileWriter.close();
         	}
-        	mustache = builder.compile(SPDX_FILE_HTML_TEMPLATE);
+        	mustache = lineBreakEscapingBuilder.compile(SPDX_FILE_HTML_TEMPLATE);
         	FileWriter filesHtmlFileWriter = new FileWriter(packageFilesHtmlFile);
         	try {
         		mustache.execute(filesHtmlFileWriter, pkgFileMap);
@@ -241,7 +265,7 @@ public class RdfToHtml {
         	}
         	Map<String, Object> docFileMap = MustacheMap.buildDocFileMustacheMap(
         			doc, files, spdxIdToUrl);
-        	Mustache mustache = builder.compile(SPDX_FILE_HTML_TEMPLATE);
+        	Mustache mustache = lineBreakEscapingBuilder.compile(SPDX_FILE_HTML_TEMPLATE);
         	FileWriter docFilesHtmlFileWriter = new FileWriter(docFilesHtmlFile);
         	try {
         		mustache.execute(docFilesHtmlFileWriter, docFileMap);
@@ -250,7 +274,7 @@ public class RdfToHtml {
         	}
         }
         Map<String, Object> extracteLicMustacheMap = MustacheMap.buildExtractedLicMustachMap(doc, spdxIdToUrl);
-        Mustache mustache = builder.compile(SPDX_LICENSE_HTML_TEMPLATE);
+        Mustache mustache = lineBreakEscapingBuilder.compile(SPDX_LICENSE_HTML_TEMPLATE);
         FileWriter licenseHtmlFileWriter = new FileWriter(licenseHtmlFile);
         try {
         	mustache.execute(licenseHtmlFileWriter, extracteLicMustacheMap);
@@ -258,7 +282,7 @@ public class RdfToHtml {
         	licenseHtmlFileWriter.close();
         }
         Map<String, Object> docMustacheMap = MustacheMap.buildDocMustachMap(doc, spdxIdToUrl);
-        mustache = builder.compile(SPDX_DOCUMENT_HTML_TEMPLATE);
+        mustache = lineBreakEscapingBuilder.compile(SPDX_DOCUMENT_HTML_TEMPLATE);
         FileWriter docHtmlFileWriter = new FileWriter(docHtmlFile);
         try {
         	mustache.execute(docHtmlFileWriter, docMustacheMap);
