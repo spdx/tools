@@ -4,6 +4,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
 <title>{{name}}</title>
+<style>
+	.Table
+	{
+	display: table;
+	}
+	.Row
+	{
+	display: table-row;
+	}
+	.Cell
+	{
+	display: table-cell;
+	padding-right: 5px;
+	}
+</style>
 </head>
 <body>
 <h2>SPDX Package Information for {{name}}</h2>
@@ -49,10 +64,17 @@ Concluded License: {{licenseConcluded}}<br />
 </ul>
 Declared License: {{licenseDeclared}}<br />
 {{#licenseComments}}
-License Comments: {{licenseComments}}
+<div class="Table">
+	<div class="Row"><div class="Cell"> License Comments: </div><div class="Cell">{{licenseComments}} </div></div>
+</div><br/>
 {{/licenseComments}}
-Copyright Text: {{copyrightText}}<br />
-Summary: {{summary}}<br />
+<div class="Table">
+	<div class="Row"><div class="Cell">Copyright Text: </div><div class="Cell">{{copyrightText}}</div></div>
+</div><br/>
+<div class="Table">
+	<div class="Row"><div class="Cell">Summary: </div><div>{{summary}}</div></div>
+</div><br />
+
 <h3>Description</h3>
 {{description}}<br />
 <h3>Files</h3>
