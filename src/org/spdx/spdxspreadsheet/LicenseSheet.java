@@ -297,6 +297,9 @@ public class LicenseSheet extends AbstractSheet {
 		if (idCell != null) {
 			id = idCell.getStringCellValue();
 		}
+		if (id == null || id.trim().isEmpty()) {
+			return null;
+		}
 		String name = null;
 		Cell nameCell = row.getCell(COL_NAME);
 		if (nameCell != null) {
