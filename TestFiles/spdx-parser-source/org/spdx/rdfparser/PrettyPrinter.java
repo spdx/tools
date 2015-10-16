@@ -1,34 +1,34 @@
-/**
- * Copyright (c) 2010 Source Auditor Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- */
-package org.spdx.rdfparser;import java.util.ArrayList;import org.spdx.rdfparser.SPDXDocument.SPDXPackage;/**
+/**
+ * Copyright (c) 2010 Source Auditor Inc.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+package org.spdx.rdfparser;import java.util.ArrayList;import org.spdx.rdfparser.SPDXDocument.SPDXPackage;/**
  * Simple pretty printer for SPDX RDF XML files.  Writes output to System.out.
  * Usage: PrettyPrinter SPDXRdfXMLFile > textFile
  * where SPDXRdfXMLFile is a valid SPDX RDF XML file
  * 
  * @author Gary O'Neall
  * @version 0.1
- */
-public class PrettyPrinter {	
+ */
+public class PrettyPrinter {	
 	static final int MIN_ARGS = 1;
-	static final int MAX_ARGS = 1;
+	static final int MAX_ARGS = 1;
 	/**
 	 * Pretty Printer for an SPDX Document
 	 * @param args Argument 0 is a the file path name of the SPDX RDF/XML file
-	 */
+	 */
 	public static void main(String[] args) {
 		if (args.length < MIN_ARGS) {
 			System.console().printf("Usage:\n PrettyPrinter file\nwhere file is the file path to a valid SPDX RDF XML file");
@@ -44,12 +44,12 @@ public class PrettyPrinter {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
 		}
-		try {			ArrayList<String> verify = doc.verify();			if (verify.size() > 0) {				System.out.println("This SPDX Document is not valid due to:");				for (int i = 0; i < verify.size(); i++) {					System.out.print("\t" + verify.get(i));				}			}
+		try {			ArrayList<String> verify = doc.verify();			if (verify.size() > 0) {				System.out.println("This SPDX Document is not valid due to:");				for (int i = 0; i < verify.size(); i++) {					System.out.print("\t" + verify.get(i));				}			}
 			prettyPrintDoc(doc);
 		} catch (InvalidSPDXAnalysisException e) {
 			System.out.print("Error pretty printing SPDX Document: "+e.getMessage());
 			return;
-		} catch (Exception e) {			System.out.print("Unexpected error displaying SPDX Document: "+e.getMessage());		}
+		} catch (Exception e) {			System.out.print("Unexpected error displaying SPDX Document: "+e.getMessage());		}
 	}
 
 	/**
@@ -63,17 +63,17 @@ public class PrettyPrinter {
 		}
 		if (doc.getSpdxDocUri() != null) {
 			System.out.printf("SPDX Document for %1s\n",doc.getSpdxDocUri());
-		}		String spdxVersion = "";
-		if (doc.getSpdxVersion() != null && doc.getCreatorInfo().getCreated() != null) {			spdxVersion = doc.getSpdxVersion();
+		}		String spdxVersion = "";
+		if (doc.getSpdxVersion() != null && doc.getCreatorInfo().getCreated() != null) {			spdxVersion = doc.getSpdxVersion();
 			System.out.printf("Version: %1s\tCreated: %2s\n", spdxVersion, doc.getCreatorInfo().getCreated());
-		}		if (!spdxVersion.equals(SPDXDocument.POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(SPDXDocument.POINT_NINE_SPDX_VERSION)) {			SPDXStandardLicense dataLicense = doc.getDataLicense();			if (dataLicense != null) {				System.out.printf("Data License: %1s\n", dataLicense.getName());			}		}
+		}		if (!spdxVersion.equals(SPDXDocument.POINT_EIGHT_SPDX_VERSION) && !spdxVersion.equals(SPDXDocument.POINT_NINE_SPDX_VERSION)) {			SPDXStandardLicense dataLicense = doc.getDataLicense();			if (dataLicense != null) {				System.out.printf("Data License: %1s\n", dataLicense.getName());			}		}
 		if (doc.getCreatorInfo().getCreators() != null && doc.getCreatorInfo().getCreators().length > 0) {
 			System.out.println("Created by:");
 			String[] creators = doc.getCreatorInfo().getCreators();
 			for (int i = 0; i < creators.length; i++) {
 				System.out.printf("\t%1s\n", creators[i]);
 			}
-		}		if (doc.getCreatorInfo().getCreated() != null && !doc.getCreatorInfo().getCreated().isEmpty()) {			System.out.printf("\t%1s\n", doc.getCreatorInfo().getCreated());		}
+		}		if (doc.getCreatorInfo().getCreated() != null && !doc.getCreatorInfo().getCreated().isEmpty()) {			System.out.printf("\t%1s\n", doc.getCreatorInfo().getCreated());		}
 		if (doc.getCreatorInfo().getComment() != null && !doc.getCreatorInfo().getComment().isEmpty()) {
 			System.out.println("Creator comment: "+doc.getCreatorInfo().getComment());
 		}
@@ -134,7 +134,7 @@ public class PrettyPrinter {
 		// File name
 		if (pkg.getFileName() != null && !pkg.getFileName().isEmpty()) {
 			System.out.printf("File name: %1s\n", pkg.getFileName());
-		}		// Supplier		if (pkg.getSupplier() != null && !pkg.getSupplier().isEmpty()) {			System.out.printf("Supplier: %1s\n", pkg.getSupplier());		}		// Originator		if (pkg.getOriginator() != null && !pkg.getOriginator().isEmpty()) {			System.out.printf("Originator: %1s\n", pkg.getOriginator());		}
+		}		// Supplier		if (pkg.getSupplier() != null && !pkg.getSupplier().isEmpty()) {			System.out.printf("Supplier: %1s\n", pkg.getSupplier());		}		// Originator		if (pkg.getOriginator() != null && !pkg.getOriginator().isEmpty()) {			System.out.printf("Originator: %1s\n", pkg.getOriginator());		}
 		// sha1
 		if (pkg.getSha1() != null && !pkg.getSha1().isEmpty()) {
 			System.out.printf("SHA1: %1s\n",pkg.getSha1());				
@@ -151,14 +151,14 @@ public class PrettyPrinter {
 		if (pkg.getDeclaredCopyright() != null && ! pkg.getDeclaredCopyright().isEmpty()) {
 			System.out.printf("Declared Copyright: %1s\n", pkg.getDeclaredCopyright());
 		}
-		// Declared licenses			if (pkg.getDeclaredLicense() != null) {			System.out.println("License declared: "+pkg.getDeclaredLicense());		}		// concluded license		if (pkg.getConcludedLicenses() != null) {			System.out.println("License concluded: "+pkg.getConcludedLicenses());		}		// file licenses
+		// Declared licenses			if (pkg.getDeclaredLicense() != null) {			System.out.println("License declared: "+pkg.getDeclaredLicense());		}		// concluded license		if (pkg.getConcludedLicenses() != null) {			System.out.println("License concluded: "+pkg.getConcludedLicenses());		}		// file licenses
 		if (pkg.getLicenseInfoFromFiles() != null && pkg.getLicenseInfoFromFiles().length > 0) {
 			SPDXLicenseInfo[] licenses = pkg.getLicenseInfoFromFiles();
 			System.out.println("Licenses from files:");
 			for (int i = 0; i < licenses.length; i++) {
 				System.out.printf("\t%1s\n", licenses[i].toString());
 			}
-		}		if (pkg.getLicenseComment() != null && !pkg.getLicenseComment().isEmpty()) {			System.out.println("License comments: "+pkg.getLicenseComment());		}
+		}		if (pkg.getLicenseComment() != null && !pkg.getLicenseComment().isEmpty()) {			System.out.println("License comments: "+pkg.getLicenseComment());		}
 		// Files
 		if (pkg.getFiles() != null && pkg.getFiles().length > 0) {
 			for (int i = 0; i < pkg.getFiles().length; i++) {
@@ -186,6 +186,6 @@ public class PrettyPrinter {
 		// concluded license
 		if (file.getConcludedLicenses() != null) {
 			System.out.println("\tConcluded license: "+file.getConcludedLicenses().toString());
-		}		// License info in file		if (file.getSeenLicenses() != null && file.getSeenLicenses().length > 0) {			System.out.print("\tLicense infos from file: ");			System.out.print(file.getSeenLicenses()[0].toString());			for (int i = 1; i < file.getSeenLicenses().length; i++) {				System.out.print(", "+file.getSeenLicenses()[i].toString());			}			System.out.println();		}		// license comments		if (file.getLicenseComments() != null && !file.getLicenseComments().isEmpty()) {			System.out.println("\tLicense comments: "+file.getLicenseComments());		}		// file copyright		if (file.getCopyright() != null && !file.getCopyright().isEmpty()) {			System.out.println("\tFile copyright: "+file.getCopyright());		}		// artifact of		if (file.getArtifactOf() != null && file.getArtifactOf().length > 0) {			for (int i = 0; i < file.getArtifactOf().length; i++) {				prettyPrintProject(file.getArtifactOf()[i]);			}		}
-	}	/**	 * @param doapProject	 */	private static void prettyPrintProject(DOAPProject doapProject) {		// project name 		if (doapProject.getName() != null && !doapProject.getName().isEmpty()) {			System.out.println("\t\tArtifact of Project: "+doapProject.getName());		}		// project homepage		if (doapProject.getHomePage() != null && !doapProject.getHomePage().isEmpty()) {			System.out.println("\t\tArtifact of home page: "+doapProject.getHomePage());		}		// DOAP file url		if (doapProject.getProjectUri() != null && !doapProject.getProjectUri().isEmpty()) {			System.out.println("\t\tArtifact of DOAP URI: "+doapProject.getProjectUri());		}	}
+		}		// License info in file		if (file.getSeenLicenses() != null && file.getSeenLicenses().length > 0) {			System.out.print("\tLicense infos from file: ");			System.out.print(file.getSeenLicenses()[0].toString());			for (int i = 1; i < file.getSeenLicenses().length; i++) {				System.out.print(", "+file.getSeenLicenses()[i].toString());			}			System.out.println();		}		// license comments		if (file.getLicenseComments() != null && !file.getLicenseComments().isEmpty()) {			System.out.println("\tLicense comments: "+file.getLicenseComments());		}		// file copyright		if (file.getCopyright() != null && !file.getCopyright().isEmpty()) {			System.out.println("\tFile copyright: "+file.getCopyright());		}		// artifact of		if (file.getArtifactOf() != null && file.getArtifactOf().length > 0) {			for (int i = 0; i < file.getArtifactOf().length; i++) {				prettyPrintProject(file.getArtifactOf()[i]);			}		}
+	}	/**	 * @param doapProject	 */	private static void prettyPrintProject(DOAPProject doapProject) {		// project name 		if (doapProject.getName() != null && !doapProject.getName().isEmpty()) {			System.out.println("\t\tArtifact of Project: "+doapProject.getName());		}		// project homepage		if (doapProject.getHomePage() != null && !doapProject.getHomePage().isEmpty()) {			System.out.println("\t\tArtifact of home page: "+doapProject.getHomePage());		}		// DOAP file url		if (doapProject.getProjectUri() != null && !doapProject.getProjectUri().isEmpty()) {			System.out.println("\t\tArtifact of DOAP URI: "+doapProject.getProjectUri());		}	}
 }
