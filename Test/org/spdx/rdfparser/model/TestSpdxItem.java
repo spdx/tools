@@ -43,25 +43,25 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class TestSpdxItem {
-	
+
 	static final String DOCUMENT_NAMESPACE = "http://doc/name/space#";
 	static final String ELEMENT_NAME1 = "element1";
 	static final String ELEMENT_NAME2 = "element2";
 	static final String ELEMENT_COMMENT1 = "comment1";
 	static final String ELEMENT_COMMENT2 = "comment2";
-	
+
 	static final String DATE_NOW = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT).format(new Date());
-	static final Annotation ANNOTATION1 = new Annotation("Annotator1", 
+	static final Annotation ANNOTATION1 = new Annotation("Annotator1",
 			AnnotationType.annotationType_other, DATE_NOW, "Comment1");
-	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
+	static final Annotation ANNOTATION2 = new Annotation("Annotator2",
 			AnnotationType.annotationType_review, DATE_NOW, "Comment2");
-	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 			"related element comment 1", null, null);
-	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 			"related element comment 2", null, null);
-	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
 			RelationshipType.relationshipType_contains, "Relationship Comment1");
-	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
 			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
 	static final ExtractedLicenseInfo LICENSE1 = new ExtractedLicenseInfo("LicenseRef-1", "License Text 1");
 	static final ExtractedLicenseInfo LICENSE2 = new ExtractedLicenseInfo("LicenseRef-2", "License Text 2");
@@ -71,8 +71,8 @@ public class TestSpdxItem {
 	static final String COPYRIGHT_TEXT2 = "copyright text 2";
 	static final String LICENSE_COMMENT1 = "License Comment 1";
 	static final String LICENSE_COMMENT2 = "License comment 2";
-	
-	
+
+
 	String documentNamespace;
 	Model model;
 	IModelContainer modelContainer;
@@ -115,28 +115,28 @@ public class TestSpdxItem {
 	public void testGetType() {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertTrue(item.getType(model).getURI().endsWith(SpdxRdfConstants.CLASS_SPDX_ITEM));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#equals(java.lang.Object)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEqualsEquivalent() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertTrue(item.equivalent(item));
 		item.createResource(modelContainer);
 		assertTrue(item.equivalent(item));
-		SpdxItem item2 = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item2 = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertTrue(item.equivalent(item2));
 		// Name
@@ -208,14 +208,14 @@ public class TestSpdxItem {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#SpdxItem(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSpdxItemIModelContainerNode() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -225,7 +225,7 @@ public class TestSpdxItem {
 		AnyLicenseInfo[] licenses = item.getLicenseInfoFromFiles();
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, licenses));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 		Resource r = item.createResource(modelContainer);
 		SpdxItem item2 = new SpdxItem(modelContainer, r.asNode());
 		assertEquals(item.getName(), item2.getName());
@@ -235,7 +235,7 @@ public class TestSpdxItem {
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(item.getLicenseInfoFromFiles(), item2.getLicenseInfoFromFiles()));
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());
-		assertEquals(item.getLicenseComments(), item2.getLicenseComments());	
+		assertEquals(item.getLicenseComments(), item2.getLicenseComments());
 	}
 
 	/**
@@ -245,8 +245,8 @@ public class TestSpdxItem {
 	public void testSpdxItemStringStringAnnotationArrayRelationshipArrayAnyLicenseInfoAnyLicenseInfoStringString() {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -260,14 +260,14 @@ public class TestSpdxItem {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#setLicenseConcluded(org.spdx.rdfparser.license.AnyLicenseInfo)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetLicenseConcluded() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -276,7 +276,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 		Resource r = item.createResource(modelContainer);
 		item.setLicenseConcluded(LICENSE2);
 		assertEquals(LICENSE2, item.getLicenseConcluded());
@@ -286,14 +286,14 @@ public class TestSpdxItem {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#setLicenseDeclared(org.spdx.rdfparser.license.AnyLicenseInfo)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetLicenseInfosFromFiles() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -302,7 +302,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 		Resource r = item.createResource(modelContainer);
 		AnyLicenseInfo[] newlicenses = new AnyLicenseInfo[] {LICENSE1};
 		item.setLicenseInfosFromFiles(newlicenses);
@@ -313,14 +313,14 @@ public class TestSpdxItem {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#setCopyrightText(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetCopyrightText() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -329,7 +329,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 		Resource r = item.createResource(modelContainer);
 		item.setCopyrightText(COPYRIGHT_TEXT2);
 		assertEquals(COPYRIGHT_TEXT2, item.getCopyrightText());
@@ -339,14 +339,14 @@ public class TestSpdxItem {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#setLicenseComments(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetLicenseComment() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -355,7 +355,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 		Resource r = item.createResource(modelContainer);
 		item.setLicenseComments(LICENSE_COMMENT2);
 		assertEquals(LICENSE_COMMENT2, item.getLicenseComments());
@@ -365,14 +365,14 @@ public class TestSpdxItem {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#clone()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships, LICENSE1, LICENSES, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		assertEquals(ELEMENT_NAME1, item.getName());
 		assertEquals(ELEMENT_COMMENT1, item.getComment());
@@ -381,7 +381,7 @@ public class TestSpdxItem {
 		assertEquals(LICENSE1, item.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
-		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());	
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
 		item.createResource(modelContainer);
 		SpdxItem item2 = item.clone();
 		assertEquals(item.getName(), item2.getName());
@@ -391,7 +391,7 @@ public class TestSpdxItem {
 		assertEquals(item.getLicenseConcluded(), item2.getLicenseConcluded());
 		assertTrue(UnitTestHelper.isArraysEqual(item.getLicenseInfoFromFiles(), item2.getLicenseInfoFromFiles()));
 		assertEquals(item.getCopyrightText(), item2.getCopyrightText());
-		assertEquals(item.getLicenseComments(), item2.getLicenseComments());	
+		assertEquals(item.getLicenseComments(), item2.getLicenseComments());
 		assertFalse(item.resource == item2.resource);
 	}
 

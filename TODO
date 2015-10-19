@@ -1,6 +1,5 @@
 - Add a new test file / example file with embedded packages
 - cleanup warnings
-- windows or Unix line endings?
 - use a spdx-licenselist artifact
 - use a spdx-testdata artifact?
   - define reference test data (e.g. u-boot-2013.10.tar.bz2)

@@ -29,18 +29,18 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class SPDXNonStandardLicense extends SPDXLicense {
-	
+
 	static final Pattern NON_STANDARD_LICENSE_PATTERN = Pattern.compile("[-+_.a-zA-Z0-9]{3,}");
 
 	/**
 	 * @param model
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXNonStandardLicense(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 	}
-	
+
 	public SPDXNonStandardLicense(String id, String text) {
 		super(id, text);
 	}
@@ -53,13 +53,13 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO);
 		return super._createResource(model, type);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#toString()
 	 */
 	@Override
 	public String toString() {
-		// must be only the ID if we are to use this to create 
+		// must be only the ID if we are to use this to create
 		// parseable license strings
 		return this.id;
 	}
@@ -77,7 +77,7 @@ public class SPDXNonStandardLicense extends SPDXLicense {
 		if (this.id == null) {
 			return (comp.getId() == null);
 		} else {
-			return (this.id.equals(comp.getId()));			
+			return (this.id.equals(comp.getId()));
 		}
 	}
 

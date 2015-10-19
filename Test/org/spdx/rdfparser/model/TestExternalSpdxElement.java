@@ -34,17 +34,17 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  *
  */
 public class TestExternalSpdxElement {
-	
+
 	static final String DOCID1 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "DOCID1";
 	static final String SPDXID1 = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "SPDXID1";
 	static final String DOCURI1 = "http://doc/uri/one";
 	static final String ID1 = DOCID1 + ":" + SPDXID1;
-	
+
 	static final String DOCID2 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "DOCID1";
 	static final String SPDXID2 = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "SPDXID2";
 	static final String DOCURI2 = "http://doc/uri/two";
 	static final String ID2 = DOCID2 + ":" + SPDXID2;
-	
+
 	static final String DOCID3 = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "DOCID3";
 	static final String SPDXID3 = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "SPDXID3";
 	static final String DOCURI3 = "http://doc/uri/three";
@@ -80,7 +80,7 @@ public class TestExternalSpdxElement {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalSpdxElement#getUri(org.spdx.rdfparser.IModelContainer)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetUri() throws InvalidSPDXAnalysisException {

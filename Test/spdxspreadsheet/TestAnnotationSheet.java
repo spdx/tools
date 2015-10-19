@@ -81,7 +81,7 @@ public class TestAnnotationSheet {
 
 	/**
 	 * Test method for {@link org.spdx.spdxspreadsheet.AnnotationsSheet#add(org.spdx.rdfparser.model.Annotation, java.lang.String)}.
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	@Test
 	public void testAdd() throws SpreadsheetException {

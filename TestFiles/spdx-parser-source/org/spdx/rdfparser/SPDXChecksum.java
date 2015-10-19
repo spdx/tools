@@ -33,19 +33,19 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 public class SPDXChecksum {
 
 	// Supported algorithms
-	
+
 	public static final String ALGORITHM_SHA1 = "SHA1";
 	private String algorithm;
 	private String value;
 	private Model model;
 	private Node checksumNode;
 	private Resource checksumResource;
-	
+
 	public SPDXChecksum(String algorithm, String value) {
 		this.algorithm = algorithm;
 		this.value = value;
 	}
-	
+
 	public SPDXChecksum(Model spdxModel, Node checksumNode) throws InvalidSPDXAnalysisException {
 		this.model = spdxModel;
 		this.checksumNode = checksumNode;
@@ -59,16 +59,16 @@ public class SPDXChecksum {
 		// Algorithm
 		Node p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM).asNode();
 		Triple m = Triple.createMatch(checksumNode, p, null);
-		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.algorithm = t.getObject().toString(false);
 		}
-		
+
 		// value
 		p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
 		m = Triple.createMatch(checksumNode, p, null);
-		tripleIter = spdxModel.getGraph().find(m);	
+		tripleIter = spdxModel.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.value = t.getObject().toString(false);
@@ -118,7 +118,7 @@ public class SPDXChecksum {
 			checksumResource.addProperty(p, value);
 		}
 	}
-	
+
 	/**
 	 * Creates a resource from this SPDX Checksum
 	 * @param model
@@ -130,7 +130,7 @@ public class SPDXChecksum {
 				SpdxRdfConstants.CLASS_SPDX_CHECKSUM);
 		Resource r = model.createResource(type);
 		if (algorithm != null) {
-			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			r.addProperty(algProperty, this.algorithm);
 		}
@@ -142,7 +142,7 @@ public class SPDXChecksum {
 		this.checksumResource = r;
 		return r;
 	}
-	
+
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		String algorithm = this.getAlgorithm();

@@ -50,7 +50,7 @@ public class TestLicenseException {
 	static final String EXCEPTION_EXAMPLE2 = "example2";
 	static final String TEST_NAMESPACE = "http://spdx.org/test/namespace";
 	ModelContainerForTest testContainer;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -80,7 +80,7 @@ public class TestLicenseException {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void testLicenseException() {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -93,7 +93,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le.getExample());
 	}
-	
+
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -108,7 +108,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -128,9 +128,9 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_TEXT1, le3.getLicenseExceptionText());
 		assertStringsEquals(EXCEPTION_SEEALSO1, le3.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le3.getComment());
-		assertEquals(EXCEPTION_EXAMPLE1, le3.getExample());	
+		assertEquals(EXCEPTION_EXAMPLE1, le3.getExample());
 	}
-	
+
 	@Test
 	public void testEquals() {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -145,7 +145,7 @@ public class TestLicenseException {
 		assertTrue(le.equals(le2));
 		assertFalse(le.equals(le3));
 	}
-	
+
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -180,7 +180,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testSetExample() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -215,7 +215,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testSetLicenseExceptionId() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -250,7 +250,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testSetLicenseExceptionText() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -285,7 +285,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testSetSeeAlso() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -320,7 +320,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testSetName() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -355,7 +355,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_EXAMPLE1, le2.getExample());
 	}
-	
+
 	@Test
 	public void testHashCode() {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -391,7 +391,7 @@ public class TestLicenseException {
 		le2.setLicenseExceptionText("  ");
 		assertEquals(2, le2.verify().size());
 	}
-	
+
 	/**
 	 * @param s1
 	 * @param s2
@@ -433,7 +433,7 @@ public class TestLicenseException {
 		}
 		assertTrue(error);
 	}
-	
+
 	@Test
 	public void testDuplicateRestrictionIdSetId() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -453,7 +453,7 @@ public class TestLicenseException {
 		}
 		assertTrue(error);
 	}
-	
+
 	@Test public void testEquivalent() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
@@ -463,7 +463,7 @@ public class TestLicenseException {
 		assertTrue(le.equivalent(le));
 		Model model2 = ModelFactory.createDefaultModel();
 		ModelContainerForTest testContainer2 = new ModelContainerForTest(model2, "http://Another/uri");
-		
+
 		LicenseException le2 = new LicenseException(EXCEPTION_ID2,
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1, EXCEPTION_EXAMPLE1);

@@ -31,14 +31,14 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public class SPDXCreatorInformation {
-	
+
 	private String[] creators = null;
 	private String comment = null;
 	private String createdDate = null;
 	private Node creatorNode = null;
 	private Model model = null;
 	private Resource creatorResource = null;
-	
+
 	/**
 	 * @return the name
 	 */
@@ -92,7 +92,7 @@ public class SPDXCreatorInformation {
 		this.createdDate = createdDate;
 		this.comment = comment;
 	}
-	
+
 	public SPDXCreatorInformation(Model spdxModel, Node creatorNode) throws InvalidSPDXAnalysisException {
 		this.model = spdxModel;
 		this.creatorNode = creatorNode;
@@ -106,7 +106,7 @@ public class SPDXCreatorInformation {
 		// creators
 		Node p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CREATION_CREATOR).asNode();
 		Triple m = Triple.createMatch(creatorNode, p, null);
-		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);
 		ArrayList<String> alCreators = new ArrayList<String>();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
@@ -116,7 +116,7 @@ public class SPDXCreatorInformation {
 		// comment
 		p = spdxModel.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
 		m = Triple.createMatch(creatorNode, p, null);
-		tripleIter = spdxModel.getGraph().find(m);	
+		tripleIter = spdxModel.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.comment = t.getObject().toString(false);
@@ -124,20 +124,20 @@ public class SPDXCreatorInformation {
 		// created
 		p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CREATION_CREATED).asNode();
 		m = Triple.createMatch(creatorNode, p, null);
-		tripleIter = spdxModel.getGraph().find(m);	
+		tripleIter = spdxModel.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.createdDate = t.getObject().toString(false);
 		}
 	}
-	
+
 	public Resource createResource(Model model) {
 		this.model = model;
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE +
 				SpdxRdfConstants.CLASS_SPDX_CREATION_INFO);
 		Resource r = model.createResource(type);
 		if (creators != null && creators.length > 0) {
-			Property nameProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property nameProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_CREATION_CREATOR);
 			for (int i = 0; i < creators.length; i++) {
 				r.addProperty(nameProperty, this.creators[i]);
@@ -156,11 +156,11 @@ public class SPDXCreatorInformation {
 		this.creatorResource = r;
 		return r;
 	}
-	
+
 	public String getCreated() {
 		return this.createdDate;
 	}
-	
+
 	public void setCreated(String createdDate) {
 		this.createdDate = createdDate;
 		if (this.creatorNode != null) {
@@ -174,7 +174,7 @@ public class SPDXCreatorInformation {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SPDXCreatorInformation)) {
@@ -225,9 +225,9 @@ public class SPDXCreatorInformation {
 			}
 		}
 		return true;
-		
+
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

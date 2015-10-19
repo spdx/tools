@@ -36,7 +36,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 	private String standardLicenseHeader;
 	private String template;
 	private boolean osiApproved;
-	
+
 	public SPDXStandardLicense(String name, String id, String text, String sourceUrl, String notes,
 			String standardLicenseHeader, String template, boolean osiApproved) {
 		super(id, text);
@@ -50,14 +50,14 @@ public class SPDXStandardLicense extends SPDXLicense {
 	/**
 	 * Constructs an SPDX License from the licenseNode
 	 * @param licenseNode RDF graph node representing the SPDX License
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXStandardLicense(Model spdxModel, Node licenseNode) throws InvalidSPDXAnalysisException {
 		super(spdxModel, licenseNode);
 		// name
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME).asNode();
 		Triple m = Triple.createMatch(licenseNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.name = t.getObject().toString(false);
@@ -67,7 +67,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		// SourceUrl
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.sourceUrl = t.getObject().toString(false);
@@ -77,7 +77,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		// notes
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTES).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.notes = t.getObject().toString(false);
@@ -87,7 +87,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		// standardLicenseHeader
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.standardLicenseHeader = t.getObject().toString(false);
@@ -97,7 +97,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		// template
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.template = t.getObject().toString(false);
@@ -107,7 +107,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		// OSI Approved
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED).asNode();
 		m = Triple.createMatch(licenseNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().toString(false).toUpperCase().startsWith("T")) {
@@ -180,10 +180,10 @@ public class SPDXStandardLicense extends SPDXLicense {
 	public void setTemplate(String template) {
 		this.template = template;
 	}
-	
+
 	@Override
 	public String toString() {
-		// must be only the ID if we want to reuse the 
+		// must be only the ID if we want to reuse the
 		// toString for creating parseable license info strings
 		return this.id;
 	}
@@ -199,7 +199,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 		//TODO: Implement additional properties
 		return r;
 	}
-	
+
 	/**
 	 * Creates a standard license URI by appending the standard license ID to the URL hosting the SPDX licenses
 	 * @param id Standard License ID
@@ -255,7 +255,7 @@ public class SPDXStandardLicense extends SPDXLicense {
 	public boolean isOsiApproved() {
 		return this.osiApproved;
 	}
-	
+
 	public void setOsiApproved(boolean osiApproved) {
 		this.osiApproved = osiApproved;
 	}

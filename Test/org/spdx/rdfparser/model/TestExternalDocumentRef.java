@@ -38,7 +38,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class TestExternalDocumentRef {
-	
+
 	static final String SHA1_VALUE1 = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12";
 	static final String SHA1_VALUE2 = "2222e1c67a2d28fced849ee1bb76e7391b93eb12";
 	static final Checksum CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE1);
@@ -47,7 +47,7 @@ public class TestExternalDocumentRef {
 	static final String DOCUMENT_URI2 = "http://spdx.org/docs/uniquevalue2";
 	static final String DOCUMENT_ID1 = "DocumentRef-1";
 	static final String DOCUMENT_ID2 = "DocumentRef-2";
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -91,7 +91,7 @@ public class TestExternalDocumentRef {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#populateModel()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testPopulateModel() throws InvalidSPDXAnalysisException {
@@ -109,7 +109,7 @@ public class TestExternalDocumentRef {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#equivalent(org.spdx.rdfparser.model.RdfModelObject)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
@@ -137,10 +137,10 @@ public class TestExternalDocumentRef {
 		edf2.setExternalDocumentId(DOCUMENT_ID1);
 		assertTrue(edf.equivalent(edf2));
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -154,12 +154,12 @@ public class TestExternalDocumentRef {
 		edf.setChecksum(null);
 		assertEquals(1, edf.verify().size());
 		edf.setSpdxDocumentNamespace(null);
-		assertEquals(2, edf.verify().size());		
+		assertEquals(2, edf.verify().size());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#setChecksum(org.spdx.rdfparser.model.Checksum)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetChecksum() throws InvalidSPDXAnalysisException {
@@ -172,10 +172,10 @@ public class TestExternalDocumentRef {
 		assertTrue(CHECKSUM1.equivalent(edf.getChecksum()));
 		edf.setChecksum(CHECKSUM2);
 		assertTrue(CHECKSUM2.equivalent(edf.getChecksum()));
-		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());		
+		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());
 		assertTrue(CHECKSUM2.equivalent(edf2.getChecksum()));
 	}
-	
+
 	@Test
 	public void testSetExternalDocumentId() throws InvalidSPDXAnalysisException {
 		ExternalDocumentRef edf = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
@@ -187,13 +187,13 @@ public class TestExternalDocumentRef {
 		assertEquals(DOCUMENT_ID1, edf.getExternalDocumentId());
 		edf.setExternalDocumentId(DOCUMENT_ID2);
 		assertEquals(DOCUMENT_ID2, edf.getExternalDocumentId());
-		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());		
+		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());
 		assertEquals(DOCUMENT_ID2, edf2.getExternalDocumentId());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#setSpdxDocumentNamespace(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetSpdxDocumentUri() throws InvalidSPDXAnalysisException {
@@ -206,13 +206,13 @@ public class TestExternalDocumentRef {
 		assertEquals(DOCUMENT_URI1, edf.getSpdxDocumentNamespace());
 		edf.setSpdxDocumentNamespace(DOCUMENT_URI2);
 		assertEquals(DOCUMENT_URI2, edf.getSpdxDocumentNamespace());
-		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());		
+		ExternalDocumentRef edf2 = new ExternalDocumentRef(modelContainer, r.asNode());
 		assertEquals(DOCUMENT_URI2, edf2.getSpdxDocumentNamespace());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#setSpdxDocument(org.spdx.rdfparser.model.SpdxDocument)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetSpdxDocument() throws InvalidSPDXAnalysisException {
@@ -232,7 +232,7 @@ public class TestExternalDocumentRef {
 		SpdxDocumentContainer container2 = new SpdxDocumentContainer(DOCUMENT_URI2);
 		SpdxDocument doc2 = container2.getSpdxDocument();
 		doc2.setName("name2");
-		edf2.setSpdxDocument(doc2);		
+		edf2.setSpdxDocument(doc2);
 		assertEquals(DOCUMENT_URI2, edf2.getSpdxDocumentNamespace());
 		assertEquals(doc2.getName(), edf2.getSpdxDocument().getName());
 		assertEquals(DOCUMENT_URI2, edf.getSpdxDocumentNamespace());
@@ -240,7 +240,7 @@ public class TestExternalDocumentRef {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#clone()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {

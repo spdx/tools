@@ -36,7 +36,7 @@ public abstract class AbstractSheet {
 	static final String CHECKBOX = "P";
 	protected CellStyle checkboxStyle;
 	protected CellStyle dateStyle;
-	
+
 	protected Sheet sheet;
 	protected int lastRowNum;
 	protected int firstCellNum;
@@ -63,7 +63,7 @@ public abstract class AbstractSheet {
 		}
 		createStyles(workbook);
 	}
-	
+
 	/**
 	 * create the styles in the workbook
 	 */
@@ -80,14 +80,14 @@ public abstract class AbstractSheet {
 		checkboxFont.setFontHeight(FONT_SIZE);
 		checkboxFont.setFontName(CHECKBOX_FONT_NAME);
 		this.checkboxStyle.setFont(checkboxFont);
-		
+
 		this.dateStyle = wb.createCellStyle();
 		DataFormat df = wb.createDataFormat();
 		this.dateStyle.setDataFormat(df.getFormat("m/d/yy h:mm"));
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private void findLastRow() {
 		boolean done = false;
@@ -95,8 +95,8 @@ public abstract class AbstractSheet {
 		try {
 			while (!done) {
 				Row row = sheet.getRow(lastRowNum);
-				if (row == null || row.getCell(firstCellNum) == null || 
-						row.getCell(firstCellNum).getStringCellValue() == null || 
+				if (row == null || row.getCell(firstCellNum) == null ||
+						row.getCell(firstCellNum).getStringCellValue() == null ||
 						row.getCell(firstCellNum).getStringCellValue().isEmpty()) {
 					lastRowNum--;
 					done = true;
@@ -109,7 +109,7 @@ public abstract class AbstractSheet {
 			// we just stop - stop counting rows at the first invalid row
 		}
 	}
-	
+
 	/**
 	 * Add a new row to the end of the sheet
 	 * @return new row
@@ -119,7 +119,7 @@ public abstract class AbstractSheet {
 		Row row = sheet.createRow(lastRowNum);
 		return row;
 	}
-	
+
 	/**
 	 * Clears all data from the worksheet
 	 */
@@ -129,20 +129,20 @@ public abstract class AbstractSheet {
 			sheet.removeRow(row);
 		}
 		lastRowNum = firstRowNum;
-	}	
-	
+	}
+
 	public int getFirstDataRow() {
 		return this.firstRowNum + 1;
 	}
-	
+
 	public int getNumDataRows() {
 		return this.lastRowNum - (this.firstRowNum);
 	}
-	
+
 	public Sheet getSheet() {
 		return this.sheet;
 	}
-	
+
 	public abstract String verify();
 
 	public static CellStyle createHeaderStyle(Workbook wb) {
@@ -157,14 +157,14 @@ public abstract class AbstractSheet {
 		headerStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		return headerStyle;
 	}
-	
+
 	public static CellStyle createLeftWrapStyle(Workbook wb) {
 		CellStyle wrapStyle = wb.createCellStyle();
 		wrapStyle.setWrapText(true);
 		wrapStyle.setAlignment(CellStyle.ALIGN_LEFT);
 		return wrapStyle;
 	}
-	
+
 	public static CellStyle createCenterStyle(Workbook wb) {
 		CellStyle centerStyle = wb.createCellStyle();
 		centerStyle.setWrapText(false);

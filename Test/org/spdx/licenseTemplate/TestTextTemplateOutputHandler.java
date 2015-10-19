@@ -83,7 +83,7 @@ public class TestTextTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.TextTemplateOutputHandler#variableRule(org.spdx.licenseTemplate.LicenseTemplateRule)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testVariableRule() throws LicenseTemplateRuleException {
@@ -101,7 +101,7 @@ public class TestTextTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.TextTemplateOutputHandler#beginOptional(org.spdx.licenseTemplate.LicenseTemplateRule)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testBeginOptional() throws LicenseTemplateRuleException {
@@ -118,7 +118,7 @@ public class TestTextTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.TextTemplateOutputHandler#endOptional(org.spdx.licenseTemplate.LicenseTemplateRule)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testEndOptional() throws LicenseTemplateRuleException {
@@ -135,7 +135,7 @@ public class TestTextTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.TextTemplateOutputHandler#getText()}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testGetText() throws LicenseTemplateRuleException {

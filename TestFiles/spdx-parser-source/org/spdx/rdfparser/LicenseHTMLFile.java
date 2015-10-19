@@ -41,13 +41,13 @@ public class LicenseHTMLFile {
 	static final String SITE = "[SITE]";
 	static final String NOTES = "[NOTES]";
 	static final String OTHERWEBPAGE = "[OTHERWEBPAGE]";
-	static final String OTHER_WEB_PAGE_ROW = 
+	static final String OTHER_WEB_PAGE_ROW =
 		"				<li><a href=\""+WEBURL+"\" rel=\"owl:sameAs\">"+SITE+"</a></li>\n";
 	static final String LICENSE_TEXT = "[LICENSE_TEXT]";
 	static final Pattern SITE_PATTERN = Pattern.compile("http://(.*)\\.(.*)(\\.org|\\.com|\\.net|\\.info)");
-	
+
 	private String template;
-	
+
 	private SPDXStandardLicense license;
 	public LicenseHTMLFile(String template, SPDXStandardLicense license) {
 		this.template = template;
@@ -57,7 +57,7 @@ public class LicenseHTMLFile {
 		this.template = template;
 		this.license = null;
 	}
-	
+
 	/**
 	 * @return the license
 	 */
@@ -71,11 +71,11 @@ public class LicenseHTMLFile {
 	public void setLicense(SPDXStandardLicense license) {
 		this.license = license;
 	}
-	
+
 	public void setTemplate(String template) {
 		this.template = template;
 	}
-	
+
 	public String getTemplate() {
 		return this.template;
 	}

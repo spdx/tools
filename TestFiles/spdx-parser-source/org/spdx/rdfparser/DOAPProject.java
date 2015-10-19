@@ -32,7 +32,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 public class DOAPProject {
-	
+
 	static final String UNKNOWN_URI = "UNKNOWN";
 	private String name = null;
 	private String homePage = null;
@@ -40,7 +40,7 @@ public class DOAPProject {
 	private Resource projectResource = null;
 	private Model model = null;
 	private String uri = null;
-	
+
 	/**
 	 * This method will create a DOAP Project object from a DOAP document
 	 * which already exists.  The DOAP project is read from the uri and
@@ -48,14 +48,14 @@ public class DOAPProject {
 	 * @param model Jena model to populate
 	 * @param projectUrl The URL of the DOAP project
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	static DOAPProject getExistingProject(Model model, String projectUrl) throws InvalidSPDXAnalysisException {
 		Resource projectResource = model.createResource(projectUrl);
 		model.read(projectUrl);
 		return new DOAPProject(model, projectResource.asNode());
 	}
-	
+
 	public DOAPProject(Model model, Node node) throws InvalidSPDXAnalysisException {
 		this.model = model;
 		this.projectNode = node;
@@ -67,11 +67,11 @@ public class DOAPProject {
 		} else {
 			throw(new InvalidSPDXAnalysisException("Can not create a DOAP project from a literal node"));
 		}
-		
+
 		// name
 		Node p = model.getProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_NAME).asNode();
 		Triple m = Triple.createMatch(projectNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.name = t.getObject().toString(false);
@@ -79,7 +79,7 @@ public class DOAPProject {
 		// home page
 		p = model.getProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_HOMEPAGE).asNode();
 		m = Triple.createMatch(projectNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.homePage = t.getObject().toString(false);
@@ -137,7 +137,7 @@ public class DOAPProject {
 			}
 		}
 	}
-	
+
 	public String getProjectUri() {
 		if (projectNode == null) {
 			if (uri == null || uri.isEmpty()) {
@@ -153,7 +153,7 @@ public class DOAPProject {
 			}
 		}
 	}
-	
+
 	public Resource createResource(Model model) {
 		Resource type = model.createResource(SpdxRdfConstants.DOAP_NAMESPACE + SpdxRdfConstants.CLASS_DOAP_PROJECT);
 		Resource retval;
@@ -174,8 +174,8 @@ public class DOAPProject {
 		this.model = model;
 		this.projectNode = projectResource.asNode();
 		this.projectResource = projectResource;
-		
-		// Name		
+
+		// Name
 		if (name != null) {
 			Property p = model.createProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_NAME);
 			projectResource.addProperty(p, name);
@@ -185,7 +185,7 @@ public class DOAPProject {
 		if (homePage != null) {
 			Property p = model.createProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 			projectResource.addProperty(p, homePage);
-		}		
+		}
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class DOAPProject {
 
 	/**
 	 * @param uri
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setUri(String uri) throws InvalidSPDXAnalysisException {
 		if (this.projectResource != null) {

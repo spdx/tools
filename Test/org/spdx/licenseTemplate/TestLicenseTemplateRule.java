@@ -31,7 +31,7 @@ import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
  *
  */
 public class TestLicenseTemplateRule {
-	
+
 	static final String PARSEABLE_RULE = "var;original=Copyright (c) <year> <owner>\\nAll rights reserved.;match=Copyright \\(c\\) .+All rights reserved.;name=copyright;example=Copyright (C) 2013 John Doe\\nAll rights reserved.\n";
 	static final String RULE_NAME = "copyright";
 	static final RuleType RULE_TYPE = RuleType.VARIABLE;
@@ -76,7 +76,7 @@ public class TestLicenseTemplateRule {
 		assertEquals(rule.getType(), RULE_TYPE);
 		assertEquals(rule.getMatch(), RULE_MATCH);
 	}
-	
+
 	@Test
 	public void testBeginOptionalRule() throws LicenseTemplateRuleException {
 		String ruleName = "optionalName";
@@ -85,7 +85,7 @@ public class TestLicenseTemplateRule {
 		assertEquals(RuleType.BEGIN_OPTIONAL, rule.getType());
 		assertEquals(ruleName, rule.getName());
 	}
-	
+
 	@Test
 	public void testEndOptionalRule() throws LicenseTemplateRuleException {
 		String ruleStr = "endOptional";

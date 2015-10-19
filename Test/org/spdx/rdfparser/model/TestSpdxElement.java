@@ -41,25 +41,25 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class TestSpdxElement {
-	
+
 	static final String DOCUMENT_NAMESPACE = "http://doc/name/space#";
 	static final String ELEMENT_NAME1 = "element1";
 	static final String ELEMENT_NAME2 = "element2";
 	static final String ELEMENT_COMMENT1 = "comment1";
 	static final String ELEMENT_COMMENT2 = "comment2";
-	
+
 	static final String DATE_NOW = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT).format(new Date());
-	static final Annotation ANNOTATION1 = new Annotation("Annotator1", 
+	static final Annotation ANNOTATION1 = new Annotation("Annotator1",
 			AnnotationType.annotationType_other, DATE_NOW, "Comment1");
-	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
+	static final Annotation ANNOTATION2 = new Annotation("Annotator2",
 			AnnotationType.annotationType_review, DATE_NOW, "Comment2");
-	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 			"related element comment 1", null, null);
-	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 			"related element comment 2", null, null);
-	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
 			RelationshipType.relationshipType_contains, "Relationship Comment1");
-	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
 			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
 	Model model;
 	IModelContainer modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
@@ -99,20 +99,20 @@ public class TestSpdxElement {
 	 */
 	@Test
 	public void testGetType() {
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				null, null);
 		assertTrue(element1.getType(model).getURI().endsWith(SpdxRdfConstants.CLASS_SPDX_ELEMENT));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#populateModel()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testPopulateModel() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		Resource r = element1.createResource(modelContainer);
 		SpdxElement element2 = new SpdxElement(modelContainer, r.asNode());
@@ -124,16 +124,16 @@ public class TestSpdxElement {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#equals(java.lang.Object)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEquivalentObject() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		assertTrue(element1.equivalent(element1));
-		SpdxElement element2 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element2 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		assertTrue(element1.equivalent(element2));
 		element2.createResource(modelContainer);
@@ -173,7 +173,7 @@ public class TestSpdxElement {
 		assertFalse(element1.equivalent(element2));
 		element2.setRelationships(relationships);
 		assertTrue(element2.equivalent(element1));
-		// relationship null	
+		// relationship null
 		element2.setRelationships(null);
 		assertFalse(element1.equivalent(element2));
 	}
@@ -183,7 +183,7 @@ public class TestSpdxElement {
 	 */
 	@Test
 	public void testSpdxElementStringStringAnnotationArrayRelationshipArray() {
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				null, null);
 		assertEquals(ELEMENT_NAME1, element1.getName());
 		assertEquals(ELEMENT_COMMENT1, element1.getComment());
@@ -191,7 +191,7 @@ public class TestSpdxElement {
 		assertEquals(0, element1.getRelationships().length);
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element2 = new SpdxElement(ELEMENT_NAME2, ELEMENT_COMMENT2, 
+		SpdxElement element2 = new SpdxElement(ELEMENT_NAME2, ELEMENT_COMMENT2,
 				annotations, relationships);
 		assertEquals(ELEMENT_NAME2, element2.getName());
 		assertEquals(ELEMENT_COMMENT2, element2.getComment());
@@ -212,13 +212,13 @@ public class TestSpdxElement {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#setAnnotations(org.spdx.rdfparser.model.Annotation[])}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetAnnotations() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, element1.getAnnotations()));
 		element1.createResource(modelContainer);
@@ -237,7 +237,7 @@ public class TestSpdxElement {
 	@Test
 	public void testAddAnnotations() throws InvalidSPDXAnalysisException {
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				new Annotation[0], relationships);
 		element1.createResource(modelContainer);
 		element1.addAnnotation(ANNOTATION1);
@@ -245,16 +245,16 @@ public class TestSpdxElement {
 		element1.addAnnotation(ANNOTATION2);
 		assertTrue(UnitTestHelper.isArraysEqual(new Annotation[] {ANNOTATION1, ANNOTATION2}, element1.getAnnotations()));
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#setComment(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		assertEquals(ELEMENT_COMMENT1, element1.getComment());
 		element1.createResource(modelContainer);
@@ -267,13 +267,13 @@ public class TestSpdxElement {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#setName(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetName() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		assertEquals(ELEMENT_NAME1, element1.getName());
 		element1.createResource(modelContainer);
@@ -286,13 +286,13 @@ public class TestSpdxElement {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElement#setRelationships(org.spdx.rdfparser.model.Relationship[])}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetRelationships() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, element1.getRelationships()));
 		element1.createResource(modelContainer);
@@ -308,11 +308,11 @@ public class TestSpdxElement {
 		assertTrue(UnitTestHelper.isArraysEqual(relationships4, element1.getRelationships()));
 
 	}
-	
+
 	@Test
 	public void testAddRelationships() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
-		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, new Relationship[0]);
 		assertEquals(0, element1.getRelationships().length);
 		element1.createResource(modelContainer);

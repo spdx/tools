@@ -34,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public abstract class SPDXLicenseInfo {
 
 	//TODO: Consider adding a comment text string
-	
+
 	Model model = null;
 	Node licenseInfoNode = null;
 	Resource resource = null;
@@ -43,7 +43,7 @@ public abstract class SPDXLicenseInfo {
 	 * the model at the LicenseInfo node
 	 * @param model
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	SPDXLicenseInfo(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
@@ -56,7 +56,7 @@ public abstract class SPDXLicenseInfo {
 	 * @param cmodel
 	 * @param cnode
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
 		if (cnode.isBlank()) {
@@ -74,7 +74,7 @@ public abstract class SPDXLicenseInfo {
 		this.licenseInfoNode = null;
 		this.resource = null;
 	}
-	
+
 	/**
 	 * If a resource does not already exist in this model for this object,
 	 * create a new resource and populate it.  If the resource does exist,
@@ -96,17 +96,17 @@ public abstract class SPDXLicenseInfo {
 			return retval;
 		}
 	}
-	
+
 	/**
 	 * Internal implementation of create resource which is subclass specific
 	 * @param model
 	 * @return
 	 */
 	protected abstract Resource _createResource(Model model);
-	
+
 	// force subclasses to implement toString
 	public abstract String toString();
-	
+
 	// force subclasses to implement equals
 	public abstract boolean equals(Object o);
 

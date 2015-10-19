@@ -51,19 +51,19 @@ public class TestSpdxElementFactory {
 	static final String ELEMENT_NAME2 = "element2";
 	static final String ELEMENT_COMMENT1 = "comment1";
 	static final String ELEMENT_COMMENT2 = "comment2";
-	
+
 	static final String DATE_NOW = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT).format(new Date());
-	static final Annotation ANNOTATION1 = new Annotation("Annotator1", 
+	static final Annotation ANNOTATION1 = new Annotation("Annotator1",
 			AnnotationType.annotationType_other, DATE_NOW, "Comment1");
-	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
+	static final Annotation ANNOTATION2 = new Annotation("Annotator2",
 			AnnotationType.annotationType_review, DATE_NOW, "Comment2");
-	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 			"related element comment 1", null, null);
-	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 			"related element comment 2", null, null);
-	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
 			RelationshipType.relationshipType_contains, "Relationship Comment1");
-	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
 			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
 	static final ExtractedLicenseInfo LICENSE1 = new ExtractedLicenseInfo("LicenseRef-1", "License Text 1");
 	static final ExtractedLicenseInfo LICENSE2 = new ExtractedLicenseInfo("LicenseRef-2", "License Text 2");
@@ -71,27 +71,27 @@ public class TestSpdxElementFactory {
 	static final String COPYRIGHT_TEXT2 = "copyright text 2";
 	static final String LICENSE_COMMENT1 = "License Comment 1";
 	static final String LICENSE_COMMENT2 = "License comment 2";
-	
+
 	String SPDX_ID1 = "SPDXRef-1";
 	String SPDX_ID2 = "SPDXRef-2";
-	
+
 	String FILE_CONTRIBUTOR1 = "File Contributor 1";
 	String FILE_CONTRIBUTOR2 = "File Contributor 2";
-	
+
 	String NOTICE_TEXT1 = "Notice1";
 	String NOTICE_TEXT2 = "Notice2";
-	
-	Checksum CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+
+	Checksum CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
-	Checksum CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+	Checksum CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 			"0000e1c67a2d28fced849ee1bb76e7391b93eb12");
-	
+
 	FileType FILE_TYPE1 = FileType.fileType_image;
 	FileType FILE_TYPE2 = FileType.fileType_audio;
-	
+
 	DoapProject DOAP_PROJECT1 = new DoapProject("Project1Name", "http://com.projct1");
 	DoapProject DOAP_PROJECT2 = new DoapProject("Second project name", "http://yet.another.project/hi");
-	
+
 	Model model;
 	ModelContainerForTest modelContainer;
 	/**
@@ -126,19 +126,19 @@ public class TestSpdxElementFactory {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxElementFactory#createElementFromModel(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateElementFromModel() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		String[] fileContributors = new String[] {FILE_CONTRIBUTOR1, FILE_CONTRIBUTOR2};
-		
+
 		// SpdxFile
 		SimpleLicensingInfo[] extractedLicenses = new ExtractedLicenseInfo[] {LICENSE2};
 		DoapProject[] artifactOfs = new DoapProject[] {DOAP_PROJECT1, DOAP_PROJECT2};
-		SpdxFile file = new SpdxFile(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships,LICENSE1, extractedLicenses, 
+		SpdxFile file = new SpdxFile(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships,LICENSE1, extractedLicenses,
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, new FileType[] {FILE_TYPE1}, new Checksum[] {CHECKSUM1},
 				fileContributors, NOTICE_TEXT1, artifactOfs);
 		Resource r = file.createResource(modelContainer);
@@ -152,14 +152,14 @@ public class TestSpdxElementFactory {
 		assertEquals(LICENSE1, fileResult.getLicenseConcluded());
 		assertEquals(COPYRIGHT_TEXT1, fileResult.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, fileResult.getLicenseComments());
-		
+
 		// SpdxPackage
-		
-		SpdxPackage sPackage = new SpdxPackage(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] { LICENSE2}, 
+
+		SpdxPackage sPackage = new SpdxPackage(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] { LICENSE2},
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE2, new Checksum[] {CHECKSUM1},
-				"Description", "Downlodlocation", new SpdxFile[] {file}, 
-				"http://home.page/one", "originator", "packagename", 
+				"Description", "Downlodlocation", new SpdxFile[] {file},
+				"http://home.page/one", "originator", "packagename",
 				new SpdxPackageVerificationCode("0000e1c67a2d28fced849ee1bb76e7391b93eb12", new String[] {"excludedfile1", "excluedfiles2"}),
 				"sourceinfo", "summary", "supplier", "version1");
 		r = sPackage.createResource(modelContainer);
@@ -176,10 +176,10 @@ public class TestSpdxElementFactory {
 		assertEquals(LICENSE2, packageResult.getLicenseDeclared());
 		assertEquals(COPYRIGHT_TEXT1, packageResult.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, packageResult.getLicenseComments());
-		
+
 		// SpdxItem
-		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1, 
-				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] {LICENSE2}, 
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships,LICENSE1, new SimpleLicensingInfo[] {LICENSE2},
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1);
 		r = item.createResource(modelContainer);
 		result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
@@ -194,9 +194,9 @@ public class TestSpdxElementFactory {
 				itemResult.getLicenseInfoFromFiles()));
 		assertEquals(COPYRIGHT_TEXT1, itemResult.getCopyrightText());
 		assertEquals(LICENSE_COMMENT1, itemResult.getLicenseComments());
-		
+
 		// SpdxElement
-		SpdxElement element = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1, 
+		SpdxElement element = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
 				annotations, relationships);
 		r = element.createResource(modelContainer);
 		result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
@@ -206,7 +206,7 @@ public class TestSpdxElementFactory {
 		assertEquals(ELEMENT_COMMENT1, elementResult.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, elementResult.getAnnotations()));
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, elementResult.getRelationships()));
-		
+
 		// external document element
 		String docId = SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM + "docId";
 		String elementId = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + "elementId";

@@ -31,7 +31,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  *
  */
 public class LicenseTOCHTMLFile {
-	
+
 	static final String TABLE_ROW = "[TABLEROW]";
 	static final String REFERENCE = "[REFERENCE]";
 	static final String REFNUMBER = "[REFERENCE_NUMBER]";
@@ -39,22 +39,22 @@ public class LicenseTOCHTMLFile {
 	static final String LICENSE_NAME = "[LICENSE_NAME]";
 	static final String OSI_APPROVED = "[OSI_APPROVED]";
       static final String ROW_TEMPLATE = "    <tr>\n      <td><a href=\""+REFERENCE+
-      		"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
-      		"      <td about=\""+REFERENCE+"\" typeof=\"spdx:License\">\n"+
-      		"      <code property=\"spdx:licenseId\">"+LICENSEID+"</code></td>\n"+
-      		"      <td align=\"center\">"+OSI_APPROVED+"</td>\n"+
-      		"      <td><a href=\""+REFERENCE+"#licenseText\">License Text</a></td>\n"+
-      		"    </tr>\n";
+		"\" rel=\"rdf:_"+REFNUMBER+"\">"+LICENSE_NAME+"</a></td>\n"+
+		"      <td about=\""+REFERENCE+"\" typeof=\"spdx:License\">\n"+
+		"      <code property=\"spdx:licenseId\">"+LICENSEID+"</code></td>\n"+
+		"      <td align=\"center\">"+OSI_APPROVED+"</td>\n"+
+		"      <td><a href=\""+REFERENCE+"#licenseText\">License Text</a></td>\n"+
+		"    </tr>\n";
       ArrayList<String> tableRows = new ArrayList<String>();
 
       private int currentRefNumber = 1;
-      
+
       String template;
-      
+
       public LicenseTOCHTMLFile(String template) {
-    	  this.template = template;
+	  this.template = template;
       }
-      
+
 	public void addLicense(SPDXStandardLicense license, String licHTMLReference) {
 		String newRow = ROW_TEMPLATE.replace(REFERENCE, licHTMLReference);
 		currentRefNumber++;
@@ -65,10 +65,10 @@ public class LicenseTOCHTMLFile {
 			newRow = newRow.replace(OSI_APPROVED, "Y");
 		} else {
 			newRow = newRow.replace(OSI_APPROVED, "");
-		}		
+		}
 		tableRows.add(newRow);
 	}
-	
+
 	private String escapeHTML(String s) {
 		return StringEscapeUtils.escapeHtml(s);
 	}
@@ -103,6 +103,6 @@ public class LicenseTOCHTMLFile {
 			}
 		}
 	}
-	
+
 
 }

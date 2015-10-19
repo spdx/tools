@@ -32,7 +32,7 @@ import org.spdx.rdfparser.SPDXStandardLicense;
  *
  */
 public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
-	
+
 	public class LicenseIterator implements Iterator<SPDXStandardLicense> {
 
 		private int currentRowNum;
@@ -62,10 +62,10 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
 		public void remove() {
 			// not implementd
 		}
-		
+
 	}
 	static final String LICENSE_SHEET_NAME = "Licenses";
-	
+
 	private LicenseSheet licenseSheet;
 
 	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create, boolean readonly)
@@ -126,6 +126,6 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet {
 	public Iterator<SPDXStandardLicense> getIterator() {
 		return new LicenseIterator();
 	}
-	
-	
+
+
 }

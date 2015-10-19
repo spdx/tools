@@ -28,7 +28,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 /**
  * Contains an SPDX Package Verification Code, currently consisting
  * of a value and list of excluded files.
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -40,7 +40,7 @@ public class SpdxPackageVerificationCode {
 	private Node verificationCodeNode;
 	private Resource verificationCodeResource;
 
-	
+
 	public SpdxPackageVerificationCode(String value, String[] excludedFileNames) {
 		this.value = value;
 		for (int i = 0; i < excludedFileNames.length; i++) {
@@ -50,7 +50,7 @@ public class SpdxPackageVerificationCode {
 		this.verificationCodeNode = null;
 		this.verificationCodeResource = null;
 	}
-	
+
 	public SpdxPackageVerificationCode(Model model, Node verificationCodeNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
 		this.verificationCodeNode = verificationCodeNode;
@@ -65,22 +65,22 @@ public class SpdxPackageVerificationCode {
 		// Algorithm
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_VERIFICATIONCODE_IGNORED_FILES).asNode();
 		Triple m = Triple.createMatch(verificationCodeNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.excludedFileNames.add(t.getObject().toString(false));
 		}
-		
+
 		// value
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_VERIFICATIONCODE_VALUE).asNode();
 		m = Triple.createMatch(verificationCodeNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.value = t.getObject().toString(false);
 		}
 	}
-	
+
 	/**
 	 * Creates a resource from this SPDX Verification Code
 	 * @param model
@@ -92,7 +92,7 @@ public class SpdxPackageVerificationCode {
 				SpdxRdfConstants.CLASS_SPDX_VERIFICATIONCODE);
 		Resource r = model.createResource(type);
 		if (this.excludedFileNames.size() > 0) {
-			Property excludedFileProp = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property excludedFileProp = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_VERIFICATIONCODE_IGNORED_FILES);
 			for (int i = 0; i < this.excludedFileNames.size(); i++) {
 				r.addProperty(excludedFileProp, this.excludedFileNames.get(i));
@@ -106,12 +106,12 @@ public class SpdxPackageVerificationCode {
 		this.verificationCodeResource = r;
 		return r;
 	}
-	
+
 	public String[] getExcludedFileNames() {
 		String[] retval = this.excludedFileNames.toArray(new String[excludedFileNames.size()]);
 		return retval;
 	}
-	
+
 	public void setExcludedFileNames(String[] excludedFileNames) {
 		this.excludedFileNames.clear();
 		if (this.verificationCodeNode != null && this.model != null) {
@@ -123,7 +123,7 @@ public class SpdxPackageVerificationCode {
 			addExcludedFileName(excludedFileNames[i]);
 		}
 	}
-	
+
 	public void addExcludedFileName(String excludedFileName) {
 		this.excludedFileNames.add(excludedFileName);
 		if (this.verificationCodeNode != null && this.model != null) {
@@ -131,11 +131,11 @@ public class SpdxPackageVerificationCode {
 			this.verificationCodeResource.addProperty(p, excludedFileName);
 		}
 	}
-	
+
 	public String getValue() {
 		return this.value;
 	}
-	
+
 	/**
 	 * @param value the value to set
 	 */
@@ -150,7 +150,7 @@ public class SpdxPackageVerificationCode {
 			verificationCodeResource.addProperty(p, value);
 		}
 	}
-	
+
 	public ArrayList<String> verify() {
 		ArrayList<String> retval = new ArrayList<String>();
 		String value = this.getValue();

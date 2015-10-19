@@ -32,7 +32,7 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 	/**
 	 * @param model
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXDisjunctiveLicenseSet(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
@@ -53,7 +53,7 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET);
 		return super._createResource(model, type);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#toString()
 	 */
@@ -72,7 +72,7 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 		sb.append(")");
 		return sb.toString();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.SPDXLicenseInfo#equals(java.lang.Object)
 	 */

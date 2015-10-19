@@ -38,13 +38,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
- * A Package represents a collection of software files that are 
+ * A Package represents a collection of software files that are
  * delivered as a single functional component.
  * @author Gary O'Neall
  *
  */
 public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparable<SpdxPackage> {
-	
+
 	AnyLicenseInfo licenseDeclared;
 	Checksum[] checksums;
 	String description;
@@ -58,7 +58,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	String supplier;
 	String versionInfo;
 	SpdxFile[] files;
-	
+
 
 	/**
 	 * @param name
@@ -74,7 +74,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
 			AnyLicenseInfo[] licenseInfosFromFiles, String copyrightText,
 			String licenseComment, AnyLicenseInfo licenseDeclared,
-			Checksum[] checksums, String description, String downloadLocation, 
+			Checksum[] checksums, String description, String downloadLocation,
 			SpdxFile[] files, String homepage, String originator, String packageFileName,
 			SpdxPackageVerificationCode packageVerificationCode,
 			String sourceInfo, String summary, String supplier,
@@ -95,18 +95,18 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this.homepage = homepage;
 		this.originator = originator;
 		this.packageFileName = packageFileName;
-		this.packageVerificationCode = packageVerificationCode;	
+		this.packageVerificationCode = packageVerificationCode;
 		this.sourceInfo = sourceInfo;
 		this.summary = summary;
 		this.supplier = supplier;
 		this.versionInfo = versionInfo;
 	}
-	
+
 	public SpdxPackage(String name, AnyLicenseInfo licenseConcluded,
 			AnyLicenseInfo[] licenseInfosFromFiles, String copyrightText,
 			AnyLicenseInfo licenseDeclared, String downloadLocation, SpdxFile[] files,
 			SpdxPackageVerificationCode packageVerificationCode) {
-		this(name, null, null, null, licenseConcluded, 
+		this(name, null, null, null, licenseConcluded,
 				licenseInfosFromFiles, copyrightText, null, licenseDeclared,
 				null, null, downloadLocation, files, null, null, null, packageVerificationCode,
 				null, null, null, null);
@@ -122,7 +122,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		super(modelContainer, node);
 		getMyPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -130,22 +130,22 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
-		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
+		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DECLARED_LICENSE);
-		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
+		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE,
 				PROP_PACKAGE_CHECKSUM);
 		this.description = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DESCRIPTION);
 		this.downloadLocation = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DOWNLOAD_URL);
-		this.homepage = findSinglePropertyValue(DOAP_NAMESPACE, 
+		this.homepage = findSinglePropertyValue(DOAP_NAMESPACE,
 				PROP_PROJECT_HOMEPAGE);
 		this.originator = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_ORIGINATOR);
 		this.packageFileName = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_FILE_NAME);
 		this.packageVerificationCode = findVerificationCodePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_VERIFICATION_CODE);	
+				PROP_PACKAGE_VERIFICATION_CODE);
 		this.sourceInfo = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_SOURCE_INFO);
 		this.summary = findSinglePropertyValue(SPDX_NAMESPACE,
@@ -164,24 +164,24 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			this.files[i] = (SpdxFile)filesE[i];
 		}
 	}
-	
+
 	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
-		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
+		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DECLARED_LICENSE);
-		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
+		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE,
 				PROP_PACKAGE_CHECKSUM);
 		this.description = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DESCRIPTION);
 		this.downloadLocation = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DOWNLOAD_URL);
-		this.homepage = findSinglePropertyValue(DOAP_NAMESPACE, 
+		this.homepage = findSinglePropertyValue(DOAP_NAMESPACE,
 				PROP_PROJECT_HOMEPAGE);
 		this.originator = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_ORIGINATOR);
 		this.packageFileName = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_FILE_NAME);
 		this.packageVerificationCode = findVerificationCodePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_VERIFICATION_CODE);	
+				PROP_PACKAGE_VERIFICATION_CODE);
 		this.sourceInfo = findSinglePropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_SOURCE_INFO);
 		this.summary = findSinglePropertyValue(SPDX_NAMESPACE,
@@ -200,7 +200,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			this.files[i] = (SpdxFile)filesE[i];
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#findDuplicateResource(org.spdx.rdfparser.IModelContainer, java.lang.String)
 	 */
@@ -221,9 +221,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		Node nameProperty = localModel.getProperty(SPDX_NAMESPACE, this.getNamePropertyName()).asNode();
 		Node verificationCodeProperty = localModel.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE).asNode();
 		Node verificationCodeValueProperty = localModel.getProperty(SPDX_NAMESPACE, PROP_VERIFICATIONCODE_VALUE).asNode();
-		
+
 		Triple nameMatch = Triple.createMatch(null, nameProperty, Node.createLiteral(this.name));
-		ExtendedIterator<Triple> nameleIter = localModel.getGraph().find(nameMatch);	
+		ExtendedIterator<Triple> nameleIter = localModel.getGraph().find(nameMatch);
 		while (nameleIter.hasNext()) {
 			Triple t = nameleIter.next();
 			// Check for the package verification code
@@ -242,32 +242,32 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 					}
 				}
 			}
-		}		
+		}
 		return null;	// if we got here, we didn't find a duplicate
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.SpdxItem#populateModel()
 	 */
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
-		 setPropertyValue(SPDX_NAMESPACE, 
+		 setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DECLARED_LICENSE, this.licenseDeclared);
-		setPropertyValues(SPDX_NAMESPACE, 
+		setPropertyValues(SPDX_NAMESPACE,
 				PROP_PACKAGE_CHECKSUM, this.checksums);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DESCRIPTION, this.description);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_DOWNLOAD_URL, this.downloadLocation);
-		setPropertyValue(DOAP_NAMESPACE, 
+		setPropertyValue(DOAP_NAMESPACE,
 				PROP_PROJECT_HOMEPAGE, this.homepage);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_ORIGINATOR, this.originator);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_FILE_NAME, this.packageFileName);
 		setPropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_VERIFICATION_CODE, this.packageVerificationCode);	
+				PROP_PACKAGE_VERIFICATION_CODE, this.packageVerificationCode);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_SOURCE_INFO, this.sourceInfo);
 		setPropertyValue(SPDX_NAMESPACE,
@@ -292,16 +292,16 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_PACKAGE);
 	}
-	
-	
-	
+
+
+
 	/**
 	 * @return the licenseDeclared
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public AnyLicenseInfo getLicenseDeclared() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
-			AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE, 
+			AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE,
 					PROP_PACKAGE_DECLARED_LICENSE);
 			if (refresh == null || !refresh.equals(this.licenseDeclared)) {
 				this.licenseDeclared = refresh;
@@ -312,21 +312,21 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @param licenseDeclared the licenseDeclared to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setLicenseDeclared(AnyLicenseInfo licenseDeclared) throws InvalidSPDXAnalysisException {
 		this.licenseDeclared = licenseDeclared;
-		 setPropertyValue(SPDX_NAMESPACE, 
+		 setPropertyValue(SPDX_NAMESPACE,
 					PROP_PACKAGE_DECLARED_LICENSE, this.licenseDeclared);
 	}
 
 	/**
 	 * @return the checksums
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public Checksum[] getChecksums() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
-			Checksum[] refresh = findMultipleChecksumPropertyValues(SPDX_NAMESPACE, 
+			Checksum[] refresh = findMultipleChecksumPropertyValues(SPDX_NAMESPACE,
 					PROP_PACKAGE_CHECKSUM);
 			if (!arraysEquivalent(refresh, this.checksums, true)) {
 				this.checksums = refresh;
@@ -337,18 +337,18 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @param checksums the checksums to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setChecksums(Checksum[] checksums) throws InvalidSPDXAnalysisException {
 		this.checksums = checksums;
-		setPropertyValues(SPDX_NAMESPACE, 
+		setPropertyValues(SPDX_NAMESPACE,
 					PROP_PACKAGE_CHECKSUM, this.checksums);
 	}
-	
+
 	/**
 	 * Add a checksum to the list of checksums for this package
 	 * @param checksum
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void addChecksum(Checksum checksum) throws InvalidSPDXAnalysisException {
 		if (checksum == null) {
@@ -356,7 +356,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		this.checksums = Arrays.copyOf(this.checksums, this.checksums.length + 1);
 		this.checksums[this.checksums.length-1] = checksum;
-		addPropertyValue(SPDX_NAMESPACE, 
+		addPropertyValue(SPDX_NAMESPACE,
 					PROP_PACKAGE_CHECKSUM, checksum);
 	}
 
@@ -405,7 +405,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 */
 	public String getHomepage() {
 		if (this.resource != null && refreshOnGet) {
-			this.homepage = findSinglePropertyValue(DOAP_NAMESPACE, 
+			this.homepage = findSinglePropertyValue(DOAP_NAMESPACE,
 					PROP_PROJECT_HOMEPAGE);
 		}
 		return homepage;
@@ -416,7 +416,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 */
 	public void setHomepage(String homepage) {
 		this.homepage = homepage;
-		setPropertyValue(DOAP_NAMESPACE, 
+		setPropertyValue(DOAP_NAMESPACE,
 					PROP_PROJECT_HOMEPAGE, this.homepage);
 	}
 
@@ -462,12 +462,12 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @return the packageVerificationCode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxPackageVerificationCode getPackageVerificationCode() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
 			SpdxPackageVerificationCode refresh = findVerificationCodePropertyValue(SPDX_NAMESPACE,
-					PROP_PACKAGE_VERIFICATION_CODE);	
+					PROP_PACKAGE_VERIFICATION_CODE);
 			if (refresh == null || !refresh.equivalent(this.packageVerificationCode)) {
 				this.packageVerificationCode = refresh;
 			}
@@ -477,20 +477,20 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @param packageVerificationCode the packageVerificationCode to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setPackageVerificationCode(
 			SpdxPackageVerificationCode packageVerificationCode) throws InvalidSPDXAnalysisException {
 		this.packageVerificationCode = packageVerificationCode;
 		setPropertyValue(SPDX_NAMESPACE,
-					PROP_PACKAGE_VERIFICATION_CODE, this.packageVerificationCode);	
+					PROP_PACKAGE_VERIFICATION_CODE, this.packageVerificationCode);
 	}
 
 	/**
 	 * @return the sourceInfo
 	 */
 	public String getSourceInfo() {
-		if (this.resource != null && refreshOnGet) {	
+		if (this.resource != null && refreshOnGet) {
 			this.sourceInfo = findSinglePropertyValue(SPDX_NAMESPACE,
 					PROP_PACKAGE_SOURCE_INFO);
 		}
@@ -501,7 +501,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @param sourceInfo the sourceInfo to set
 	 */
 	public void setSourceInfo(String sourceInfo) {
-		this.sourceInfo = sourceInfo;	
+		this.sourceInfo = sourceInfo;
 		setPropertyValue(SPDX_NAMESPACE,
 					PROP_PACKAGE_SOURCE_INFO, this.sourceInfo);
 	}
@@ -576,7 +576,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	/**
 	 * @return the files
 	 * @param checkRelationships - if true, compare relationships when determining if the files need to be loaded
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxFile[] getFiles(boolean checkRelationships) throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
@@ -597,7 +597,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @param files the files to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setFiles(SpdxFile[] files) throws InvalidSPDXAnalysisException {
 		this.files = files;
@@ -608,7 +608,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	/**
 	 * Add a file to the list of files attached to this package
 	 * @param file
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void addFile(SpdxFile file) throws InvalidSPDXAnalysisException {
 		if (file == null) {
@@ -623,12 +623,12 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		addPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_FILE, file);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o) {
 		return this.equivalent(o, true);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o, boolean testRelationships) {
 		if (o == this) {
@@ -674,14 +674,14 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxPackage)clonedElementIds.get(this.getId());
 		}
-		
-		SpdxPackage retval = new SpdxPackage(this.name, this.comment, this.cloneAnnotations(), 
+
+		SpdxPackage retval = new SpdxPackage(this.name, this.comment, this.cloneAnnotations(),
 				null, this.cloneLicenseConcluded(),
 				this.cloneLicenseInfosFromFiles(), this.copyrightText,
 				this.licenseComments, this.cloneLicenseDeclared(), this.cloneCheckums(),
 				this.description, this.downloadLocation, null,
-				this.homepage, this.originator, this.packageFileName, 
-				this.clonePackageVerificationCode(), this.sourceInfo, 
+				this.homepage, this.originator, this.packageFileName,
+				this.clonePackageVerificationCode(), this.sourceInfo,
 				this.summary, this.supplier, this.versionInfo);
 		clonedElementIds.put(this.getId(), retval);
 		try {
@@ -696,7 +696,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public SpdxPackage clone() {
 		return clone(Maps.<String, SpdxElement>newHashMap());
@@ -751,7 +751,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public List<String> verify() {
 		String pkgName = name;
@@ -760,7 +760,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		List<String> retval = super.verify();
 		// summary - nothing really to check
-	
+
 		// description - nothing really to check
 
 		// download location
@@ -778,7 +778,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 
 		// sourceinfo - nothing really to check
-		
+
 		// license declared - mandatory - 1 (need to change return values)
 		try {
 			AnyLicenseInfo declaredLicense = this.getLicenseDeclared();
@@ -788,7 +788,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				List<String> verify = declaredLicense.verify();
 				addNameToWarnings(verify);
 				retval.addAll(verify);
-			}				
+			}
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package declared license: "+e.getMessage());
 		}
@@ -806,8 +806,8 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			}
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package files: "+e.getMessage());
-		}		
-		
+		}
+
 		// verification code
 		SpdxPackageVerificationCode verificationCode = null;
 		try {
@@ -883,7 +883,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	/**
 	 * This method has been replaced by getPackageVerificationCode() to be consistent with the spec property name
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
 	public SpdxPackageVerificationCode getVerificationCode() throws InvalidSPDXAnalysisException {
@@ -902,7 +902,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	/**
 	 * This method has been replaced by getLicenseDeclared() to be consistent with the spec property name
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
 	public AnyLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
@@ -942,9 +942,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		return myNameVersion.compareTo(compNameVersion);
 	}
-	
+
 	/**
-	 * @return the Sha1 checksum value for this package, or a blank string if no 
+	 * @return the Sha1 checksum value for this package, or a blank string if no
 	 * sha1 checksum has been set
 	 */
 	public String getSha1() {

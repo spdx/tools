@@ -26,17 +26,17 @@ import org.spdx.rdfparser.SPDXPackageInfo;
  *
  */
 public abstract class PackageInfoSheet extends AbstractSheet {
-	
+
 	protected String version;
 
 	public PackageInfoSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
 		this.version = version;
 	}
-	
+
 	public abstract void add(SPDXPackageInfo pkgInfo);
 	public abstract SPDXPackageInfo getPackageInfo(int rowNum) throws SpreadsheetException;
-	
+
 	public static String licensesToString(SPDXLicenseInfo[] licenses) {
 		if (licenses == null || licenses.length == 0) {
 			return "";
@@ -51,7 +51,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 			return sb.toString();
 		}
 	}
-	
+
 	public static void create(Workbook wb, String sheetName) {
 		PackageInfoSheetV09d3.create(wb, sheetName);
 	}

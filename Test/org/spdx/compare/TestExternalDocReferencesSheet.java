@@ -56,7 +56,7 @@ public class TestExternalDocReferencesSheet {
 	static final String DOCUMENT_URI4 = "http://spdx.org/docs/uniquevalue4";
 	static final String DOCUMENT_URI5 = "http://spdx.org/docs/uniquevalue5";
 
-	
+
 
 	/**
 	 * @throws java.lang.Exception
@@ -97,37 +97,37 @@ public class TestExternalDocReferencesSheet {
 		SpdxDocument doc1 = container1.getSpdxDocument();
 		SpdxDocument doc2 = container2.getSpdxDocument();
 		SpdxDocument doc3 = container3.getSpdxDocument();
-		ExternalDocumentRef ref1_1 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1, 
+		ExternalDocumentRef ref1_1 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"1_1");
-		ExternalDocumentRef ref1_2 = new ExternalDocumentRef(DOCUMENT_URI2, CHECKSUM2, 
+		ExternalDocumentRef ref1_2 = new ExternalDocumentRef(DOCUMENT_URI2, CHECKSUM2,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"1_2");
-		ExternalDocumentRef ref1_3 = new ExternalDocumentRef(DOCUMENT_URI3, CHECKSUM3, 
+		ExternalDocumentRef ref1_3 = new ExternalDocumentRef(DOCUMENT_URI3, CHECKSUM3,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"1_3");
-		ExternalDocumentRef ref1_4 = new ExternalDocumentRef(DOCUMENT_URI4, CHECKSUM4, 
+		ExternalDocumentRef ref1_4 = new ExternalDocumentRef(DOCUMENT_URI4, CHECKSUM4,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"1_4");
-		ExternalDocumentRef ref1_5 = new ExternalDocumentRef(DOCUMENT_URI5, CHECKSUM5, 
+		ExternalDocumentRef ref1_5 = new ExternalDocumentRef(DOCUMENT_URI5, CHECKSUM5,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"1_5");
 		ExternalDocumentRef[] refs1 = new ExternalDocumentRef[] {
 				ref1_4, ref1_2, ref1_1, ref1_5, ref1_3
 		};
-		ExternalDocumentRef ref2_1 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1, 
+		ExternalDocumentRef ref2_1 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"2_1");
 		// missing 2
 		// missing 3
-		ExternalDocumentRef ref2_4 = new ExternalDocumentRef(DOCUMENT_URI4, CHECKSUM4, 
+		ExternalDocumentRef ref2_4 = new ExternalDocumentRef(DOCUMENT_URI4, CHECKSUM4,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"2_4");
-		ExternalDocumentRef ref2_5 = new ExternalDocumentRef(DOCUMENT_URI5, CHECKSUM5, 
+		ExternalDocumentRef ref2_5 = new ExternalDocumentRef(DOCUMENT_URI5, CHECKSUM5,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"2_5");
 		ExternalDocumentRef[] refs2 = new ExternalDocumentRef[] {
 				ref2_1, ref2_4, ref2_5
 		};
-		ExternalDocumentRef ref3_1 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1, 
+		ExternalDocumentRef ref3_1 = new ExternalDocumentRef(DOCUMENT_URI1, CHECKSUM1,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"3_1");
-		ExternalDocumentRef ref3_2 = new ExternalDocumentRef(DOCUMENT_URI2, CHECKSUM2, 
+		ExternalDocumentRef ref3_2 = new ExternalDocumentRef(DOCUMENT_URI2, CHECKSUM2,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"3_2");
 		// missing 3
 		// missing 4
-		ExternalDocumentRef ref3_5 = new ExternalDocumentRef(DOCUMENT_URI5, CHECKSUM4, 
+		ExternalDocumentRef ref3_5 = new ExternalDocumentRef(DOCUMENT_URI5, CHECKSUM4,
 				SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"3_5");
 		// different checksum
 		ExternalDocumentRef[] refs3 = new ExternalDocumentRef[] {
@@ -138,15 +138,15 @@ public class TestExternalDocReferencesSheet {
 		doc3.setExternalDocumentRefs(refs3);
 		doc1.setName("Name1");
 		doc1.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		doc2.setName("Name2");
 		doc2.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		doc3.setName("Name3");
 		doc3.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 
 		SpdxComparer comparer = new SpdxComparer();
@@ -207,7 +207,7 @@ public class TestExternalDocReferencesSheet {
 		assertEquals(SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"2_4", idCell.getStringCellValue());
 		idCell = row.getCell(ExternalReferencesSheet.FIRST_DOC_ID_COL + 2);
 		assertTrue(cellEmpty(idCell));
-		
+
 		row = refSheet.getSheet().getRow(refSheet.getFirstDataRow()+4);
 		namespaceCell = row.getCell(ExternalReferencesSheet.NAMESPACE_COL);
 		assertEquals(DOCUMENT_URI5, namespaceCell.getStringCellValue());
@@ -219,7 +219,7 @@ public class TestExternalDocReferencesSheet {
 		assertTrue(cellEmpty(idCell));
 		idCell = row.getCell(ExternalReferencesSheet.FIRST_DOC_ID_COL + 2);
 		assertEquals(SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM+"3_5", idCell.getStringCellValue());
-		
+
 		row = refSheet.getSheet().getRow(refSheet.getFirstDataRow()+5);
 		namespaceCell = row.getCell(ExternalReferencesSheet.NAMESPACE_COL);
 		assertEquals(DOCUMENT_URI5, namespaceCell.getStringCellValue());

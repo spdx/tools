@@ -53,7 +53,7 @@ public class TestNormalizedFileNameComparator {
 		assertTrue(comp.compare(FILE_A, FILE_B) < 0);
 		assertTrue(comp.compare(FILE_B, FILE_A) > 0);
 	}
-	
+
 	@Test
 	public void testCompareDir() {
 		NormalizedFileNameComparator comp = new NormalizedFileNameComparator();
@@ -61,7 +61,7 @@ public class TestNormalizedFileNameComparator {
 		assertTrue(comp.compare(FILE_A_DIR, FILE_B_DIR) < 0);
 		assertTrue(comp.compare(FILE_B_DIR, FILE_A_DIR) > 0);
 	}
-	
+
 	@Test
 	public void testCompareRelative() {
 		NormalizedFileNameComparator comp = new NormalizedFileNameComparator();
@@ -69,7 +69,7 @@ public class TestNormalizedFileNameComparator {
 		assertTrue(comp.compare(FILE_A_DIR_RELATIVE, FILE_B_DIR) < 0);
 		assertTrue(comp.compare(FILE_B_DIR, FILE_A_DIR_RELATIVE) > 0);
 	}
-	
+
 	@Test
 	public void testCompareDirDos() {
 		NormalizedFileNameComparator comp = new NormalizedFileNameComparator();
@@ -85,7 +85,7 @@ public class TestNormalizedFileNameComparator {
 //		assertTrue(comp.compare(FILE_A_DIR_EXTRA_DIR_RELATIVE, FILE_B_DIR) > 0);
 //		assertTrue(comp.compare(FILE_B_DIR, FILE_A_DIR_EXTRA_DIR_RELATIVE) < 0);
 //	}
-//	
+//
 	/**
 	 * Test method for {@link org.spdx.compare.NormalizedFileNameComparator#hasLeadingDir(java.lang.String, java.lang.String)}.
 	 */

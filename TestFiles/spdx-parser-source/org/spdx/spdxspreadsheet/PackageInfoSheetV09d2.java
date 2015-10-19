@@ -51,21 +51,21 @@ public class PackageInfoSheetV09d2 extends PackageInfoSheet {
 	int SHORT_DESC_COL = DECLARED_COPYRIGHT_COL + 1;
 	int FULL_DESC_COL = SHORT_DESC_COL + 1;
 
-	
-	static final boolean[] REQUIRED = new boolean[] {true, false, true, true, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, false, true, true,
 		true, true, true, false, true, true, true, false, true, false, false};
-	static final String[] HEADER_TITLES = new String[] {"Package Name", "Package Version", 
+	static final String[] HEADER_TITLES = new String[] {"Package Name", "Package Version",
 		"Package FileName", "Package Download Location", "Package Checksum", "Package Verification Code",
-		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files", 
+		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files",
 		"License Comments", "Package Copyright Text", "Summary", "Description"};
-	
+
 	static final int[] COLUMN_WIDTHS = new int[] {30, 17, 30, 50, 25, 25, 40, 30,
 		40, 40, 90, 50, 50, 50, 80};
 
 	/**
 	 * @param workbook
 	 * @param sheetName
-	 * @param version 
+	 * @param version
 	 */
 	public PackageInfoSheetV09d2(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
@@ -86,7 +86,7 @@ public class PackageInfoSheetV09d2 extends PackageInfoSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Package Info worksheet";
@@ -169,7 +169,7 @@ public class PackageInfoSheetV09d2 extends PackageInfoSheet {
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
-	
+
 	public void add(SPDXPackageInfo pkgInfo) {
 		Row row = addRow();
 		Cell nameCell = row.createCell(NAME_COL);
@@ -234,7 +234,7 @@ public class PackageInfoSheetV09d2 extends PackageInfoSheet {
 			versionInfoCell.setCellValue(pkgInfo.getVersionInfo());
 		}
 	}
-	
+
 	public SPDXPackageInfo getPackageInfo(int rowNum) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -258,7 +258,7 @@ public class PackageInfoSheetV09d2 extends PackageInfoSheet {
 		} else {
 			sourceInfo = "";
 		}
-		SPDXLicenseInfo declaredLicenses = 
+		SPDXLicenseInfo declaredLicenses =
 				SPDXLicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue());
 		SPDXLicenseInfo concludedLicense;
 		Cell concludedLicensesCell = row.getCell(CONCLUDED_LICENSE_COL);
@@ -314,9 +314,9 @@ public class PackageInfoSheetV09d2 extends PackageInfoSheet {
 			versionInfo = "";
 		}
 		SpdxPackageVerificationCode verificationCode = new SpdxPackageVerificationCode(packageVerificationValue, excludedFiles);
-		return new SPDXPackageInfo(declaredName, versionInfo, machineName, sha1, sourceInfo, 
-				declaredLicenses, concludedLicense, licenseInfosFromFiles, 
-				licenseComment, declaredCopyright, shortDesc, 
+		return new SPDXPackageInfo(declaredName, versionInfo, machineName, sha1, sourceInfo,
+				declaredLicenses, concludedLicense, licenseInfosFromFiles,
+				licenseComment, declaredCopyright, shortDesc,
 				description, url, verificationCode, "", "");
 	}
 

@@ -46,11 +46,11 @@ public class TestRelationship {
 	static final String ELEMENT_NAME2 = "element2";
 	static final String ELEMENT_COMMENT1 = "comment1";
 	static final String ELEMENT_COMMENT2 = "comment2";
-	
+
 	static final String DATE_NOW = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT).format(new Date());
-	static final Annotation ANNOTATION1 = new Annotation("Annotator1", 
+	static final Annotation ANNOTATION1 = new Annotation("Annotator1",
 			AnnotationType.annotationType_other, DATE_NOW, "Comment1");
-	static final Annotation ANNOTATION2 = new Annotation("Annotator2", 
+	static final Annotation ANNOTATION2 = new Annotation("Annotator2",
 			AnnotationType.annotationType_review, DATE_NOW, "Comment2");
 	SpdxElement RELATED_ELEMENT1;
 	SpdxElement RELATED_ELEMENT2;
@@ -78,9 +78,9 @@ public class TestRelationship {
 	public void setUp() throws Exception {
 		model = ModelFactory.createDefaultModel();
 		modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
-		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 				"related element comment 1", null, null);
-		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 				"related element comment 2", null, null);
 	}
 
@@ -106,7 +106,7 @@ public class TestRelationship {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Relationship#Relationship(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testRelationshipIModelContainerNode() throws InvalidSPDXAnalysisException {
@@ -125,7 +125,7 @@ public class TestRelationship {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Relationship#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -141,7 +141,7 @@ public class TestRelationship {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Relationship#setRelationshipType(org.spdx.rdfparser.model.Relationship.RelationshipType)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetRelationshipType() throws InvalidSPDXAnalysisException {
@@ -159,7 +159,7 @@ public class TestRelationship {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Relationship#setComment(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
@@ -177,7 +177,7 @@ public class TestRelationship {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Relationship#setRelatedSpdxElement(org.spdx.rdfparser.model.SpdxElement)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetRelatedSpdxElement() throws InvalidSPDXAnalysisException {
@@ -191,7 +191,7 @@ public class TestRelationship {
 		relationship.setRelatedSpdxElement(RELATED_ELEMENT2);
 		assertEquals(RELATED_ELEMENT2, relationship.getRelatedSpdxElement());
 	}
-	
+
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
@@ -226,7 +226,7 @@ public class TestRelationship {
 		relationship2.setComment(comment1);
 		assertTrue(relationship2.equivalent(relationship));
 	}
-	
+
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
