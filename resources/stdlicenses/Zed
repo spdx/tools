@@ -81,8 +81,8 @@
 <h2 style="color: #003F69;" id="licenseText">Text</h2>
 
 <div property="spdx:licenseText" class="license-text">
-(c) Jim Davies, January 1995<br/>
-You may copy and distribute this file freely.  Any queries and complaints should be forwarded to Jim.Davies@comlab.ox.ac.uk.<br/>
+(c) Jim Davies, January 1995<br/>
+You may copy and distribute this file freely.  Any queries and complaints should be forwarded to Jim.Davies@comlab.ox.ac.uk.<br/>
 If you make any changes to this file, please do not distribute the results under the name `zed-csp.sty&apos;.
 </div>
 
