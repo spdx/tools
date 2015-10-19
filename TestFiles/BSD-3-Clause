@@ -89,13 +89,13 @@ Copyright (c)
  All rights reserved.
 </div>
 
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>1. Redistributions of source code must retain the above copyright<br/>
-   notice, this list of conditions and the following disclaimer.<br/>
-2. Redistributions in binary form must reproduce the above copyright<br/>
-   notice, this list of conditions and the following disclaimer in the<br/>
-   documentation and/or other materials provided with the distribution.</p>
-<p>THIS SOFTWARE IS PROVIDED BY</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<p>1. Redistributions of source code must retain the above copyright<br/>
+   notice, this list of conditions and the following disclaimer.<br/>
+2. Redistributions in binary form must reproduce the above copyright<br/>
+   notice, this list of conditions and the following disclaimer in the<br/>
+   documentation and/or other materials provided with the distribution.</p>
+<p>THIS SOFTWARE IS PROVIDED BY</p>
 <div id="copyrightHolderAsIs" class="replacable-license-text">THE COPYRIGHT HOLDERS AND CONTRIBUTORS</div>
  &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
 <div id="copyrightHolderLiability" class="replacable-license-text">THE COPYRIGHT HOLDER OR CONTRIBUTORS</div>
@@ -106,16 +106,16 @@ Copyright (c)
 <div property="spdx:standardLicenseHeader" class="license-text">Test BSD Standard License Header</div>
 
 <h2 style="color: #003F69;"  id=standardLicenseTemplate>License Template</h2>
-<div property="spdx:licenseTemplate" class="license-template">﻿&lt;&lt;beginOptional;name=copyrightSection&gt;&gt;<br/>
-Copyright (c) &lt;&lt;var;name=copyright;original= &lt;year&gt; &lt;owner&gt;;match=.+;example=John Doe&gt;&gt; All rights reserved.<br/>
+<div property="spdx:licenseTemplate" class="license-template">﻿&lt;&lt;beginOptional;name=copyrightSection&gt;&gt;<br/>
+Copyright (c) &lt;&lt;var;name=copyright;original= &lt;year&gt; &lt;owner&gt;;match=.+;example=John Doe&gt;&gt; All rights reserved.<br/>
 &lt;&lt;endOptional&gt;&gt;
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p>1. Redistributions of source code must retain the above copyright<br/>
-   notice, this list of conditions and the following disclaimer.<br/>
-2. Redistributions in binary form must reproduce the above copyright<br/>
-   notice, this list of conditions and the following disclaimer in the<br/>
-   documentation and/or other materials provided with the distribution.</p>
-<p>THIS SOFTWARE IS PROVIDED BY<br/>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<p>1. Redistributions of source code must retain the above copyright<br/>
+   notice, this list of conditions and the following disclaimer.<br/>
+2. Redistributions in binary form must reproduce the above copyright<br/>
+   notice, this list of conditions and the following disclaimer in the<br/>
+   documentation and/or other materials provided with the distribution.</p>
+<p>THIS SOFTWARE IS PROVIDED BY<br/>
 &lt;&lt;var;name=copyrightHolderAsIs;original=THE COPYRIGHT HOLDERS AND CONTRIBUTORS;match=.+;example=JOHN DOE&gt;&gt; &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL &lt;&lt;var;name=copyrightHolderLiability;original=THE COPYRIGHT HOLDER OR CONTRIBUTORS;match=.+;example=JOHN DOE&gt;&gt; BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div>
 
     <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
