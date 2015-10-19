@@ -22,12 +22,12 @@ import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxDocument;
 
 public class TestDocumentSheet {
-	
+
 	private static final String DIFFERENT_STRING = "Diff";
 	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample.rdf";
 	static final String SHEET_NAME = "Name";
 	String[] docNames = new String[] {"doc1", "doc2", "doc3"};
-	
+
 	SpdxComparer comparer = new SpdxComparer();
 	SpdxDocument doc1;	// for the unit tests, doc1 and doc2 are the same and doc3 is different
 	SpdxDocument doc2;
@@ -69,17 +69,17 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.DOCUMENT_NAME_COL, i));
 		}
 	}
-	
+
 	private String getEqualsValue(int columnNum) {
 		return docSheet.getSheet().getRow(docSheet.getFirstDataRow()).
 				getCell(columnNum).getStringCellValue();
 	}
-	
+
 	private String getDataValue(int columnNum, int docIndex) {
 		return docSheet.getSheet().getRow(docSheet.getFirstDataRow()+ docIndex + 1).
 				getCell(columnNum).getStringCellValue();
 	}
-	
+
 	@Test
 	public void testSpdxVersion() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.setSpecVersion(SpdxDocumentContainer.ONE_DOT_ONE_SPDX_VERSION);
@@ -92,7 +92,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.SPDX_VERSION_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testDataLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.setDataLicense(LicenseInfoFactory.getListedLicenseById("Apache-1.0"));
@@ -105,7 +105,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.DATA_LICENSE_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testId() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
@@ -116,7 +116,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.SPDX_IDENTIFIER_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testUri() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
@@ -127,7 +127,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.DOCUMENT_NAMESPACE_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testDocumentComment() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.setComment("Different");
@@ -140,7 +140,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.DOCUMENT_COMMENT_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testCreatorDate() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.getCreationInfo().setCreated("Different");
@@ -153,7 +153,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.CREATION_DATE_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testCreatorComment() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.getCreationInfo().setComment("Different");
@@ -166,7 +166,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.CREATOR_COMMENT_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testLicenseListVersion() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.getCreationInfo().setLicenseListVersion("Different");
@@ -179,7 +179,7 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.LICENSE_LIST_VERSION_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testAnnotations() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.setAnnotations(new Annotation[] {
@@ -194,10 +194,10 @@ public class TestDocumentSheet {
 					getDataValue(docSheet.ANNOTATION_COL, i));
 		}
 	}
-	
+
 	@Test
 	public void testRelationships() throws InvalidSPDXAnalysisException, SpdxCompareException {
-		doc3.addRelationship(new Relationship(doc3.getDocumentDescribes()[0], 
+		doc3.addRelationship(new Relationship(doc3.getDocumentDescribes()[0],
 						RelationshipType.relationshipType_contains, "Different"));
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		docSheet.importCompareResults(comparer, docNames);

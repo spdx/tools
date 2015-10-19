@@ -40,10 +40,10 @@ public class ReviewersSheet extends AbstractSheet {
 	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false};
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false};
-	
+
 	@SuppressWarnings("unused")
 	private String version;
-	
+
 	public ReviewersSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
 		this.version = version;
@@ -58,7 +58,7 @@ public class ReviewersSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Reviewers worksheet";
@@ -126,7 +126,7 @@ public class ReviewersSheet extends AbstractSheet {
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
-	
+
 	public void addReviewer(String reviewer, Date timeStamp, String reviewerComment) {
 		Row row = addRow();
 		row.createCell(REVIEWER_COL).setCellValue(reviewer);
@@ -139,7 +139,7 @@ public class ReviewersSheet extends AbstractSheet {
 			row.createCell(COMMENT_COL).setCellValue(reviewerComment);
 		}
 	}
-	
+
 	public String getReviewer(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -151,7 +151,7 @@ public class ReviewersSheet extends AbstractSheet {
 		}
 		return reviewer.getStringCellValue();
 	}
-	
+
 	public Date getReviewerTimestamp(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -163,7 +163,7 @@ public class ReviewersSheet extends AbstractSheet {
 		}
 		return tsCell.getDateCellValue();
 	}
-	
+
 	public String getReviewerComment(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {

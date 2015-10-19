@@ -41,10 +41,10 @@ public class OriginsSheet extends AbstractSheet {
 	static final int CREATED_COL = CREATED_BY_COL + 1;
 	static final int DATA_LICENSE_COL = CREATED_COL + 1;
 	static final int AUTHOR_COMMENTS_COL = DATA_LICENSE_COL + 1;
-	
+
 	static final int DATA_ROW_NUM = 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, true, true,
 		true, true, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
@@ -53,7 +53,7 @@ public class OriginsSheet extends AbstractSheet {
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, false};
 	String version = CURRENT_VERSION;	// updated in the verify method
-	
+
 	public OriginsSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
@@ -76,7 +76,7 @@ public class OriginsSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Origins worksheet";
@@ -128,7 +128,7 @@ public class OriginsSheet extends AbstractSheet {
 		if (sheetNum >= 0) {
 			wb.removeSheetAt(sheetNum);
 		}
-		
+
 		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
@@ -149,7 +149,7 @@ public class OriginsSheet extends AbstractSheet {
 		Cell ssVersionCell = dataRow.createCell(SPREADSHEET_VERSION_COL);
 		ssVersionCell.setCellValue(CURRENT_VERSION);
 	}
-	
+
 	private Row getDataRow() {
 		Row dataRow = sheet.getRow(firstRowNum + DATA_ROW_NUM);
 		if (dataRow == null) {
@@ -157,7 +157,7 @@ public class OriginsSheet extends AbstractSheet {
 		}
 		return dataRow;
 	}
-	
+
 	private Cell getOrCreateDataCell(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
@@ -167,18 +167,18 @@ public class OriginsSheet extends AbstractSheet {
 //TODO: add date format		cell.setCellStyle(dateStyle);
 		return cell;
 	}
-	
+
 	private void setDataCellStringValue(int colNum, String value) {
 		getOrCreateDataCell(colNum).setCellValue(value);
 	}
-	
+
 	private void setDataCellDateValue(int colNum, Date value) {
 		Cell cell = getOrCreateDataCell(colNum);
 		cell.setCellValue(value);
 		cell.setCellStyle(dateStyle);
-		
+
 	}
-	
+
 	private Date getDataCellDateValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
@@ -187,7 +187,7 @@ public class OriginsSheet extends AbstractSheet {
 			return cell.getDateCellValue();
 		}
 	}
-	
+
 	private String getDataCellStringValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
@@ -196,43 +196,43 @@ public class OriginsSheet extends AbstractSheet {
 			return cell.getStringCellValue();
 		}
 	}
-	
+
 	public void setAuthorComments(String comments) {
 		setDataCellStringValue(AUTHOR_COMMENTS_COL, comments);
 	}
-	
+
 	public void setCreatedBy(String createdBy) {
 		setDataCellStringValue(CREATED_BY_COL, createdBy);
 	}
-	
+
 	public void setDataLicense(String dataLicense) {
 		setDataCellStringValue(DATA_LICENSE_COL, dataLicense);
 	}
-	
+
 	public void setSPDXVersion(String version) {
 		setDataCellStringValue(SPDX_VERSION_COL, version);
 	}
-	
+
 	public void setSpreadsheetVersion(String version) {
 		setDataCellStringValue(SPREADSHEET_VERSION_COL, version);
 	}
-	
+
 	public String getAuthorComments() {
 		return getDataCellStringValue(AUTHOR_COMMENTS_COL);
 	}
-	
+
 	public Date getCreated() {
 		return getDataCellDateValue(CREATED_COL);
 	}
-	
+
 	public String getDataLicense() {
 		return getDataCellStringValue(DATA_LICENSE_COL);
 	}
-	
+
 	public String getSPDXVersion() {
 		return getDataCellStringValue(SPDX_VERSION_COL);
 	}
-	
+
 	public String getSpreadsheetVersion() {
 		return getDataCellStringValue(SPREADSHEET_VERSION_COL);
 	}
@@ -265,7 +265,7 @@ public class OriginsSheet extends AbstractSheet {
 			cell.setCellValue(createdBy[i]);
 		}
 	}
-	
+
 	public String[] getCreatedBy() {
 		// first count rows
 		int numRows = 0;

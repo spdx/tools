@@ -25,7 +25,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * A spreadsheet containing information on an SPDX Document.
- * 
+ *
  * The spreadsheet contains 4 sheets:
  *   - Origins - Information about the origin of the SPDX Document (Version, createdby, ...)
  *   - Package Info - Information about the package itself
@@ -48,7 +48,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	private ReviewersSheet reviewersSheet;
 	static final String REVIEWERS_SHEET_NAME = "Reviewers";
 	private String version;
-	
+
 	/**
 	 * @param spreadsheetFile
 	 * @param create

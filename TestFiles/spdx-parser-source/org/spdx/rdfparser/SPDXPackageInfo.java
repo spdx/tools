@@ -75,10 +75,10 @@ public class SPDXPackageInfo {
 	}
 
 	public SPDXPackageInfo(String declaredName, String versionInfo, String machineName,
-			String sha1, String sourceInfo, SPDXLicenseInfo declaredLicense, 
+			String sha1, String sourceInfo, SPDXLicenseInfo declaredLicense,
 			SPDXLicenseInfo concludedLicense, SPDXLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
-			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode, 
+			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode,
 			String supplier, String originator) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;

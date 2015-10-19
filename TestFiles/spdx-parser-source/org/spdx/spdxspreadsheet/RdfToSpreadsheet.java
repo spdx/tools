@@ -40,7 +40,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 /**
  * Translates an RDF XML file to a SPDX Spreadsheet format
  * Usage: RdfToSpreadsheet rdfxmlfile.rdf spreadsheetfile.xls
- * where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is 
+ * where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is
  * the output SPDX spreadsheeet file.
  * @author Gary O'Neall
  *
@@ -125,7 +125,7 @@ public class RdfToSpreadsheet {
 
 	private static void copyReviewerInfo(SPDXReview[] reviewers,
 			ReviewersSheet reviewersSheet) throws InvalidSPDXAnalysisException {
-		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		for (int i = 0; i < reviewers.length; i++) {
 			String reviewerName = reviewers[i].getReviewer();
 			Date reviewDate = null;
@@ -180,13 +180,13 @@ public class RdfToSpreadsheet {
 			originsSheet.setAuthorComments(comments);
 		}
 		String created = creator.getCreated();
-		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		try {
 			originsSheet.setCreated(dateFormat.parse(created));
 		} catch (ParseException e) {
 			throw(new InvalidSPDXAnalysisException("Invalid created date - unable to parse"));
 		}
-		
+
 	}
 
 	private static void usage() {

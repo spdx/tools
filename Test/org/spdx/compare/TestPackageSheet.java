@@ -49,11 +49,11 @@ import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
  *
  */
 public class TestPackageSheet {
-	
+
 	static final String TEST_RDF_FILE_PATH = "TestFiles"+File.separator+"SPDXRdfExample.rdf";
 	static final String SHEET_NAME = "Name";
 	String[] docNames = new String[] {"doc1", "doc2", "doc3"};
-	
+
 	SpdxComparer comparer = new SpdxComparer();
 	SpdxDocument doc1;	// for the unit tests, doc1 and doc2 are the same and doc3 is different
 	SpdxDocument doc2;
@@ -61,7 +61,7 @@ public class TestPackageSheet {
 	Workbook wb;
 	PackageSheet pkgSheet;
 
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -95,7 +95,7 @@ public class TestPackageSheet {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void testDescriptionCol() throws Exception {
 		String different = "DIFFERENT";
@@ -113,11 +113,11 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.DESCRIPTION_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	/**
 	 * @param doc
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private SpdxPackage getDescribedPackage(SpdxDocument doc) throws InvalidSPDXAnalysisException {
 		SpdxItem[] items = doc.getDocumentDescribes();
@@ -145,7 +145,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.SUMMARY_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testCopyrightCol() throws Exception {
 		String different = "DIFFERENT";
@@ -162,7 +162,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.COPYRIGHT_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testLicenseCommentCol() throws Exception {
 		String different = "DIFFERENT";
@@ -179,7 +179,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.LICENSE_COMMENT_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testDeclaredLicenseCol() throws Exception {
 		AnyLicenseInfo diffLicense = new SpdxNoAssertionLicense();
@@ -197,7 +197,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.DECLARED_LICENSE_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testSeenLicensesCol() throws Exception {
 		AnyLicenseInfo[] diffLicense = new AnyLicenseInfo[] {new SpdxNoAssertionLicense()};
@@ -215,7 +215,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.LICENSE_INFOS_FROM_FILES_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void tesConcludedLicensetCol() throws Exception {
 		AnyLicenseInfo diffLicense = new SpdxNoAssertionLicense();
@@ -233,7 +233,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.CONCLUDED_LICENSE_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testSourceInfotCol() throws Exception {
 		String different = "DIFFERENT";
@@ -250,7 +250,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.SOURCEINFO_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testChecksumCol() throws Exception {
 		Checksum[] different = new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, "DIFFERENT")};
@@ -269,7 +269,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.CHECKSUM_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testExcludedCol() throws Exception {
 		String different = "DIFFERENT";
@@ -286,7 +286,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.VERIFICATION_EXCLUDED_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testVerificationCol() throws Exception {
 		String different = "DIFFERENT";
@@ -320,7 +320,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.DOWNLOAD_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testOriginatorCol() throws Exception {
 		String different = "Person: DIFFERENT";
@@ -337,7 +337,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.ORIGINATOR_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testSupplierCol() throws Exception {
 		String different = "Person: DIFFERENT";
@@ -354,7 +354,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.SUPPLIER_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testFileNameCol() throws Exception {
 		String different = "DIFFERENT";
@@ -371,7 +371,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.FILE_NAME_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testVersionNameCol() throws Exception {
 		String different = "DIFFERENT";
@@ -388,7 +388,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.VERSION_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	/**
 	 * @param docIndex
 	 * @return
@@ -428,7 +428,7 @@ public class TestPackageSheet {
 		assertEquals(getDescribedPackage(doc2).getId(), getDocCellValue(1, row));
 		assertEquals(getDescribedPackage(doc3).getId(), getDocCellValue(2, row));
 	}
-	
+
 	@Test
 	public void testAnnotationsCol() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Annotation[] different = new Annotation[] {
@@ -449,7 +449,7 @@ public class TestPackageSheet {
 		row = findRow(PackageSheet.ANNOTATION_FIELD_TEXT);
 		assertEquals(PackageSheet.EQUAL_STRING, getEqualCellValue(row));
 	}
-	
+
 	@Test
 	public void testRelationshipsCol() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxElement relatedElement = getDescribedPackage(doc3).getFiles()[0];

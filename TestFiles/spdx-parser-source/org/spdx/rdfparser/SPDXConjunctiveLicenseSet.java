@@ -32,7 +32,7 @@ public class SPDXConjunctiveLicenseSet extends SPDXLicenseSet {
 	/**
 	 * @param model
 	 * @param node
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXConjunctiveLicenseSet(Model model, Node node) throws InvalidSPDXAnalysisException {
 		super(model, node);

@@ -45,34 +45,34 @@ public class PerFileSheet extends AbstractSheet {
 	static final int ARTIFACT_OF_PROJECT_COL = SEEN_COPYRIGHT_COL + 1;
 	static final int ARTIFACT_OF_HOMEPAGE_COL = ARTIFACT_OF_PROJECT_COL + 1;
 	static final int ARTIFACT_OF_PROJECT_URL_COL = ARTIFACT_OF_HOMEPAGE_COL + 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		false, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"File Name", "File Type",
 		"File Checksum", "License Concluded", "License Info in File", "License Comments",
-		"File Copyright Text", "Artifact of Project", "Artifact of Homepage", 
+		"File Copyright Text", "Artifact of Project", "Artifact of Homepage",
 		"Artifact of URL"};
 	static final int[] COLUMN_WIDTHS = new int[] {60, 10, 25, 30, 30, 40,
 		40, 25, 60, 60};
-	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true, 
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true,
 		true, true, true, true, true, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false, 
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false,
 		false, false, false, false, false, false, false};
 
 
 	@SuppressWarnings("unused")
 	private String version;
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName
-	 * @param version 
+	 * @param version
 	 */
 	public PerFileSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
 		this.version = version;
 	}
-	
+
 	public void add(SPDXFile fileInfo) {
 		Row row = addRow();
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {
@@ -100,7 +100,7 @@ public class PerFileSheet extends AbstractSheet {
 			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheetV09d2.licensesToString(fileInfo.getSeenLicenses()));
 		}
 	}
-	
+
 	public SPDXFile getFileInfo(int rowNum) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -177,8 +177,8 @@ public class PerFileSheet extends AbstractSheet {
 		} else {
 			artifactOf = new DOAPProject[0];
 		}
-		return new SPDXFile(name, type, sha1, fileLicenses, 
-				seenLicenses, licenseComments, copyright, artifactOf);		
+		return new SPDXFile(name, type, sha1, fileLicenses,
+				seenLicenses, licenseComments, copyright, artifactOf);
 	}
 
 	/* (non-Javadoc)
@@ -193,7 +193,7 @@ public class PerFileSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX File worksheet";
@@ -254,7 +254,7 @@ public class PerFileSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);

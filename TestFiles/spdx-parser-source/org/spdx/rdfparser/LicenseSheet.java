@@ -28,22 +28,22 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class LicenseSheet extends AbstractSheet {
-	
+
 	static final int NUM_COLS = 8;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;
 	static final int COL_SOURCE_URL = COL_ID + 1;
 	static final int COL_NOTES = COL_SOURCE_URL + 1;
-	static final int COL_OSI_APPROVED = COL_NOTES + 1;	
+	static final int COL_OSI_APPROVED = COL_NOTES + 1;
 	static final int COL_STANDARD_LICENSE_HEADER = COL_OSI_APPROVED + 1;
 	static final int COL_TEXT = COL_STANDARD_LICENSE_HEADER + 1;
 	static final int COL_TEMPLATE = COL_TEXT + 1;
 
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		false, false, true, false};
-	static final String[] HEADER_TITLES = new String[] {"Full name of License", "License Identifier", "Source/url", "Notes", 
+	static final String[] HEADER_TITLES = new String[] {"Full name of License", "License Identifier", "Source/url", "Notes",
 		"OSI Approved", "Standard License Header", "Text", "Template"};
-	
+
 	public LicenseSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
@@ -62,7 +62,7 @@ public class LicenseSheet extends AbstractSheet {
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
-	
+
 	public void add(SPDXStandardLicense license) {
 		Row row = addRow();
 		Cell nameCell = row.createCell(COL_NAME);
@@ -92,7 +92,7 @@ public class LicenseSheet extends AbstractSheet {
 			osiApprovedCell.setCellValue("YES");
 		}
 	}
-	
+
 	public SPDXStandardLicense getLicense(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -156,7 +156,7 @@ public class LicenseSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Licenses worksheet";

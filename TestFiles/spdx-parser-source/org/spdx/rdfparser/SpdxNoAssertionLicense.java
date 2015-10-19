@@ -40,7 +40,7 @@ public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public SpdxNoAssertionLicense() {
 		super();

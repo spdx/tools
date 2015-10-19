@@ -40,7 +40,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  *
  */
 public class TestAnnotation {
-	
+
 	static final String ANNOTATOR1 = "Person: Annotator1";
 	static final String ANNOTATOR2 = "Person: Annotator2";
 	static final String COMMENT1 = "Comment1";
@@ -82,7 +82,7 @@ public class TestAnnotation {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Annotation#Annotation(java.lang.String, org.spdx.rdfparser.model.Annotation.AnnotationType, java.lang.String, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testAnnotationStringAnnotationTypeStringString() throws InvalidSPDXAnalysisException {
@@ -103,7 +103,7 @@ public class TestAnnotation {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Annotation#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -118,7 +118,7 @@ public class TestAnnotation {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Annotation#setAnnotationType(org.spdx.rdfparser.model.Annotation.AnnotationType)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetAnnotationType() throws InvalidSPDXAnalysisException {
@@ -138,7 +138,7 @@ public class TestAnnotation {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Annotation#setAnnotator(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetAnnotator() throws InvalidSPDXAnalysisException {
@@ -158,7 +158,7 @@ public class TestAnnotation {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Annotation#setComment(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
@@ -178,7 +178,7 @@ public class TestAnnotation {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Annotation#setAnnotationDate(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetDate() throws InvalidSPDXAnalysisException {
@@ -195,7 +195,7 @@ public class TestAnnotation {
 		Annotation copy = new Annotation(modelContainer, r.asNode());
 		assertEquals(oldDate, copy.getAnnotationDate());
 	}
-	
+
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		Annotation a1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);
@@ -210,24 +210,24 @@ public class TestAnnotation {
 		a2.setAnnotator(ANNOTATOR2);
 		assertFalse(a1.equivalent(a2));
 		a2.setAnnotator(ANNOTATOR1);
-		assertTrue(a2.equivalent(a1));	
+		assertTrue(a2.equivalent(a1));
 		// annotationType
 		a2.setAnnotationType(REVIEW_ANNOTATION);
 		assertFalse(a1.equivalent(a2));
 		a2.setAnnotationType(OTHER_ANNOTATION);
-		assertTrue(a2.equivalent(a1));	
+		assertTrue(a2.equivalent(a1));
 		// comment
 		a2.setComment(COMMENT2);
 		assertFalse(a1.equivalent(a2));
 		a2.setComment(COMMENT1);
-		assertTrue(a2.equivalent(a1));	
+		assertTrue(a2.equivalent(a1));
 		// date
 		a2.setAnnotationDate(oldDate);
 		assertFalse(a1.equivalent(a2));
 		a2.setAnnotationDate(date);
-		assertTrue(a2.equivalent(a1));	
+		assertTrue(a2.equivalent(a1));
 	}
-	
+
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		Annotation a1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, date, COMMENT1);

@@ -72,7 +72,7 @@ public class TestCompareTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.compare.CompareTemplateOutputHandler#optionalText(java.lang.String)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testOptionalText() throws LicenseTemplateRuleException {
@@ -90,7 +90,7 @@ public class TestCompareTemplateOutputHandler {
 		ctoh.endOptional(new LicenseTemplateRule("EndOptional",RuleType.END_OPTIONAL));
 		ctoh.normalText(l4);
 		assertTrue(ctoh.matches());
-		
+
 		// optional at beginning
 		compareText = l3+l4;
 		ctoh = new CompareTemplateOutputHandler(compareText);
@@ -101,7 +101,7 @@ public class TestCompareTemplateOutputHandler {
 		ctoh.normalText(l3);
 		ctoh.normalText(l4);
 		assertTrue(ctoh.matches());
-		// optional at end		
+		// optional at end
 		compareText = l1+l2+l3;
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		ctoh.normalText(l1);
@@ -144,11 +144,11 @@ public class TestCompareTemplateOutputHandler {
 		assertTrue(ctoh.textEquivalent(l4));
 		// after end of compare string
 		assertTrue(!ctoh.textEquivalent(l4));
-		
+
 		// difference in string
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(!ctoh.textEquivalent(l4));
-		
+
 		// skippable tokens
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(ctoh.matches());
@@ -156,7 +156,7 @@ public class TestCompareTemplateOutputHandler {
 		assertTrue(ctoh.textEquivalent(l2S));
 		assertTrue(ctoh.textEquivalent(l3));
 		assertTrue(ctoh.textEquivalent(l4));
-		
+
 		// equivalent tokens
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(ctoh.matches());
@@ -184,7 +184,7 @@ public class TestCompareTemplateOutputHandler {
 		assertTrue(ctoh.matches());
 		ctoh.normalText(line3);
 		assertTrue(ctoh.matches());
-		
+
 		// missmatched line
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(ctoh.matches());
@@ -194,7 +194,7 @@ public class TestCompareTemplateOutputHandler {
 		assertTrue(!ctoh.matches());
 		ctoh.normalText(line3);
 		assertTrue(!ctoh.matches());
-		
+
 		// off the end of the compare text
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(ctoh.matches());
@@ -210,7 +210,7 @@ public class TestCompareTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.compare.CompareTemplateOutputHandler#variableRule(org.spdx.licenseTemplate.LicenseTemplateRule)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testVariableRule() throws LicenseTemplateRuleException {
@@ -226,42 +226,42 @@ public class TestCompareTemplateOutputHandler {
 		assertTrue(ctoh.matches());
 		ctoh.normalText(line1);
 		assertTrue(ctoh.matches());
-		LicenseTemplateRule variableRule = new LicenseTemplateRule("Variable Rule", 
+		LicenseTemplateRule variableRule = new LicenseTemplateRule("Variable Rule",
 								RuleType.VARIABLE, line2, line2Match, "Example: "+line2);
 		ctoh.variableRule(variableRule);
 		assertTrue(ctoh.matches());
 		ctoh.normalText(line3);
 		assertTrue(ctoh.matches());
-		
+
 		// success scenario - match at end
 		String partialCompareText = line1 + line2;
 		ctoh = new CompareTemplateOutputHandler(partialCompareText);
 		assertTrue(ctoh.matches());
 		ctoh.normalText(line1);
 		assertTrue(ctoh.matches());
-		variableRule = new LicenseTemplateRule("Variable Rule", 
+		variableRule = new LicenseTemplateRule("Variable Rule",
 								RuleType.VARIABLE, line2, line2Match, "Example: "+line2);
 		ctoh.variableRule(variableRule);
 		assertTrue(ctoh.matches());
-		
+
 		// non-matching
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(ctoh.matches());
 		ctoh.normalText(line1);
 		assertTrue(ctoh.matches());
-		variableRule = new LicenseTemplateRule("Variable Rule", 
+		variableRule = new LicenseTemplateRule("Variable Rule",
 				RuleType.VARIABLE, line2, line2MissMatch, "Example: "+line2);
 		ctoh.variableRule(variableRule);
 		assertTrue(!ctoh.matches());
 		ctoh.normalText(line3);
 		assertTrue(!ctoh.matches());
-		
+
 		// Extra word
 		ctoh = new CompareTemplateOutputHandler(compareText);
 		assertTrue(ctoh.matches());
 		ctoh.normalText(line1);
 		assertTrue(ctoh.matches());
-		variableRule = new LicenseTemplateRule("Variable Rule", 
+		variableRule = new LicenseTemplateRule("Variable Rule",
 				RuleType.VARIABLE, line2, line2PartialMatch, "Example: "+line2);
 		ctoh.variableRule(variableRule);
 		assertTrue(ctoh.matches());

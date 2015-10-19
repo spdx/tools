@@ -36,7 +36,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 public abstract class AbstractSpreadsheet {
 
 	protected static final Logger logger = Logger.getLogger(AbstractSpreadsheet.class.getName());
-	
+
 	protected File saveFile;
 	protected Workbook workbook;
 
@@ -45,7 +45,7 @@ public abstract class AbstractSpreadsheet {
 	/**
 	 * @param spreadsheetFile
 	 * @param create
-	 * @throws AnalyzeException 
+	 * @throws AnalyzeException
 	 */
 	public AbstractSpreadsheet(File spreadsheetFile, boolean create, boolean readonly) throws SpreadsheetException {
 		this.readonly = readonly;
@@ -61,9 +61,9 @@ public abstract class AbstractSpreadsheet {
 			} catch (IOException ex) {
 				logger.error("IO error creating spreadsheet: "+ex.getMessage());
 				throw(new SpreadsheetException("I/O error creating spreadsheet"));
-			}		
+			}
 		}
-		this.saveFile = spreadsheetFile;	
+		this.saveFile = spreadsheetFile;
 		InputStream input = null;
 		try {
 			input = new FileInputStream(spreadsheetFile);
@@ -93,10 +93,10 @@ public abstract class AbstractSpreadsheet {
 	public abstract void create(File spreadsheetFile) throws IOException, SpreadsheetException;
 	public abstract void clear();
 	public abstract String verifyWorkbook();
-	
+
 	/**
 	 * Writes the spreadsheet to a file
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void writeToFile(File file) throws IOException {
 		if (readonly) {
@@ -113,10 +113,10 @@ public abstract class AbstractSpreadsheet {
 		}
 
 	}
-	
+
 	/**
-	 * @throws AnalyzeException 
-	 * 
+	 * @throws AnalyzeException
+	 *
 	 */
 	public void close() throws SpreadsheetException {
 		try {

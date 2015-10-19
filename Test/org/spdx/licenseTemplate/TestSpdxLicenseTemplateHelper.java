@@ -30,15 +30,15 @@ import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
  *
  */
 public class TestSpdxLicenseTemplateHelper {
-	
+
 	String optionalTextString;
 	String normalTextString;
 	LicenseTemplateRule variableRule;
 	LicenseTemplateRule optionalRule;
 	LicenseTemplateRule endOptionalRule;
-	
+
 	public class TestLicenseTemplateOutputHandler implements ILicenseTemplateOutputHandler {
-		
+
 		public TestLicenseTemplateOutputHandler() {
 			optionalTextString = null;
 			normalTextString = null;
@@ -86,16 +86,16 @@ public class TestSpdxLicenseTemplateHelper {
 		public void endOptional(LicenseTemplateRule rule) {
 			endOptionalRule = rule;
 		}
-		
+
 	}
-	
+
 	static final String LINE1 = "This is the start of the license.\n";
 	static final String REQUIRED_RULE="<<var;original=Copyright (c) <year> <owner>\\nAll rights reserved.;match=Copyright \\(c\\) .+All rights reserved.;name=copyright;example=Copyright (C) 2013 John Doe\\nAll rights reserved.>>";
 	static final String LINE2 = "\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met";
 	static final String OPTIONAL_RULE="<<beginOptional;name=optional>>Original Text<<endOptional>>";
 	static final String LINE3="\nLast line of the license";
 	static final String TEMPLATE_TEXT = LINE1+REQUIRED_RULE+LINE2+OPTIONAL_RULE+LINE3;
-	
+
 	static final String HTML_COPYRIGHT="\n<span id=\"copyright\" class=\"replacable-license-text\">Copyright (c) &lt;year&gt; &lt;owner&gt;<br/>\nAll rights reserved.</span>\n";
 	static final String HTML_OPTIONAL_RULE="\n<div id=\"optional\" class=\"optional-license-text\">\nOriginal Text</div>\n";
 	static final String HTML_LICENSE = LINE1.replace("\n", "<br/>\n")+
@@ -103,7 +103,7 @@ public class TestSpdxLicenseTemplateHelper {
 			LINE2.replace("\n", "<br/>\n")+
 			HTML_OPTIONAL_RULE+
 			LINE3.replace("\n", "<br/>\n");
-	
+
 	static final String TEXT_COPYRIGHT = "Copyright (c) <year> <owner>\nAll rights reserved.";
 	static final String TEXT_OPTIONAL_RULE = "Original Text";
 	static final String TEXT_LICENSE = LINE1+TEXT_COPYRIGHT+LINE2+TEXT_OPTIONAL_RULE+LINE3;
@@ -116,7 +116,7 @@ public class TestSpdxLicenseTemplateHelper {
 								"<<beginOptional;name="+PARSE_OPTIONAL_RULE_NAME+
 								">>"+PARSE_OPTIONAL_TEXT+"<<endOptional>>";
 	/**
-	 * @throws java.lang.Exception 
+	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -145,7 +145,7 @@ public class TestSpdxLicenseTemplateHelper {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.SpdxLicenseTemplateHelper#templateTextToHtml(java.lang.String)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testTemplateTextToHtml() throws LicenseTemplateRuleException {
@@ -155,7 +155,7 @@ public class TestSpdxLicenseTemplateHelper {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.SpdxLicenseTemplateHelper#templateToText(java.lang.String)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testTemplateToText() throws LicenseTemplateRuleException {
@@ -172,7 +172,7 @@ public class TestSpdxLicenseTemplateHelper {
 		String escaped = "&lt;abc<br/>\nline2&gt;";
 		assertEquals(escaped, SpdxLicenseTemplateHelper.escapeHTML(unEscaped));
 	}
-	
+
 	@Test
 	public void testParseTemplate() throws LicenseTemplateRuleException {
 		String noText = "";
@@ -183,7 +183,7 @@ public class TestSpdxLicenseTemplateHelper {
 		assertEquals(null, variableRule);
 		assertEquals(null, optionalRule);
 		assertEquals(null, endOptionalRule);
-		
+
 		handler = new TestLicenseTemplateOutputHandler();
 		SpdxLicenseTemplateHelper.parseTemplate(PARSE_TEXT_STRING, handler);
 		assertEquals(PARSE_NORMAL_TEXT, normalTextString);
@@ -194,7 +194,7 @@ public class TestSpdxLicenseTemplateHelper {
 		assertEquals(RuleType.BEGIN_OPTIONAL, optionalRule.getType());
 		assertEquals(RuleType.END_OPTIONAL, endOptionalRule.getType());
 	}
-	
+
 	@Test
 	public void testAddHtmlFormatting() {
 		String noParagraphs = "lines1\nline2\nline3";

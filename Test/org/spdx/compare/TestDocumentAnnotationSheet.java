@@ -49,7 +49,7 @@ public class TestDocumentAnnotationSheet {
 	static final String DATE3 = "2013-01-29T18:30:22Z";
 	static final String DATE4 = "2014-01-29T18:30:22Z";
 	static final String DATE5 = "2015-01-29T18:30:22Z";
-	
+
 	static Annotation.AnnotationType REVIEW_ANNOTATION = Annotation.AnnotationType.annotationType_review;
 	static Annotation.AnnotationType OTHER_ANNOTATION = Annotation.AnnotationType.annotationType_other;
 
@@ -94,34 +94,34 @@ public class TestDocumentAnnotationSheet {
 		SpdxDocument doc3 = container3.getSpdxDocument();
 		doc1.setName("Name1");
 		doc1.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		doc2.setName("Name2");
 		doc2.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		doc3.setName("Name3");
 		doc3.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 
 		Annotation ann1_1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, DATE1, COMMENT1);
-		Annotation ann1_2 = new Annotation(ANNOTATOR2, REVIEW_ANNOTATION, DATE2, COMMENT2);		
+		Annotation ann1_2 = new Annotation(ANNOTATOR2, REVIEW_ANNOTATION, DATE2, COMMENT2);
 		Annotation[] anns1 = new Annotation[] {ann1_1, ann1_2};
 		doc1.setAnnotations(anns1);
-		
+
 		Annotation ann2_1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, DATE3, COMMENT1);
-		Annotation ann2_3 = new Annotation(ANNOTATOR3, OTHER_ANNOTATION, DATE4, COMMENT3);		
+		Annotation ann2_3 = new Annotation(ANNOTATOR3, OTHER_ANNOTATION, DATE4, COMMENT3);
 		Annotation[] anns2 = new Annotation[] {ann2_1, ann2_3};
 		doc2.setAnnotations(anns2);
-		
+
 		Annotation ann3_1 = new Annotation(ANNOTATOR1, OTHER_ANNOTATION, DATE5, COMMENT1);
 		Annotation[] anns3 = new Annotation[] {ann3_1};
 		doc3.setAnnotations(anns3);
-		
+
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
-		
+
 		String sheetName = "Sheet";
 		HSSFWorkbook wb = new HSSFWorkbook();
 		DocumentAnnotationSheet.create(wb, sheetName);
@@ -145,7 +145,7 @@ public class TestDocumentAnnotationSheet {
 		assertEquals(DATE3, dateCell.getStringCellValue());
 		dateCell  = row.getCell(DocumentAnnotationSheet.FIRST_DATE_COL + 2);
 		assertEquals(DATE5, dateCell.getStringCellValue());
-		
+
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+1);
 		annotatorCell = row.getCell(DocumentAnnotationSheet.ANNOTATOR_COL);
 		assertEquals(ANNOTATOR2, annotatorCell.getStringCellValue());
@@ -159,7 +159,7 @@ public class TestDocumentAnnotationSheet {
 		assertTrue(cellEmpty(dateCell));
 		dateCell  = row.getCell(DocumentAnnotationSheet.FIRST_DATE_COL + 2);
 		assertTrue(cellEmpty(dateCell));
-		
+
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+2);
 		annotatorCell = row.getCell(DocumentAnnotationSheet.ANNOTATOR_COL);
 		assertEquals(ANNOTATOR3, annotatorCell.getStringCellValue());
@@ -173,7 +173,7 @@ public class TestDocumentAnnotationSheet {
 		dateCell  = row.getCell(DocumentAnnotationSheet.FIRST_DATE_COL + 2);
 		assertTrue(cellEmpty(dateCell));
 	}
-	
+
 	/**
 	 * @param cell
 	 * @return

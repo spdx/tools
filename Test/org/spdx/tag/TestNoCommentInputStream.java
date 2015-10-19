@@ -63,7 +63,7 @@ public class TestNoCommentInputStream {
 
 	/**
 	 * Test method for {@link org.spdx.tag.NoCommentInputStream#read()}.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Test
 	public void testRead() throws IOException {
@@ -77,7 +77,7 @@ public class TestNoCommentInputStream {
 		assertEquals(-1, nci.read());
 		nci.close();
 	}
-	
+
 	@Test
 	public void testReadWithComment() throws IOException {
 		String inputString = "Now is #the time\n#for all good\nmen\rto\tcome to the aid of thier country";
@@ -92,7 +92,7 @@ public class TestNoCommentInputStream {
 		assertEquals(-1, nci.read());
 		nci.close();
 	}
-	
+
 	@Test
 	public void testReadWithTextTags() throws IOException {
 		String inputString = "Now is the time\n#for all good\nmen\rto\tcome <text>to \n#the aid of </text>\nthier country\n#also";
@@ -110,7 +110,7 @@ public class TestNoCommentInputStream {
 
 	/**
 	 * Test method for {@link java.io.InputStream#read(byte[], int, int)}.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Test
 	public void testReadByteArrayIntInt() throws IOException {
@@ -130,7 +130,7 @@ public class TestNoCommentInputStream {
 
 	/**
 	 * Test method for {@link java.io.InputStream#skip(long)}.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Test
 	public void testSkip() throws IOException {
@@ -148,7 +148,7 @@ public class TestNoCommentInputStream {
 
 	/**
 	 * Test method for {@link java.io.InputStream#markSupported()}.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Test
 	public void testMarkSupported() throws IOException {

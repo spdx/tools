@@ -91,7 +91,7 @@ public class TestOriginsSheet {
 		assertEquals(spdxVersion, originsSheet.getSPDXVersion());
 		spdxVersion = "1.2";
 		originsSheet.setSPDXVersion(spdxVersion);
-		assertEquals(spdxVersion, originsSheet.getSPDXVersion());		
+		assertEquals(spdxVersion, originsSheet.getSPDXVersion());
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class TestOriginsSheet {
 		originsSheet.setCreatedBy(createdBys);
 		compareStrings(createdBys, originsSheet.getCreatedBy());
 	}
-	
+
 	/**
 	 * @param s1
 	 * @param s2
@@ -140,7 +140,7 @@ public class TestOriginsSheet {
 		assertEquals(licenseId, originsSheet.getDataLicense());
 		licenseId = "GPL-2.0+";
 		originsSheet.setDataLicense(licenseId);
-		assertEquals(licenseId, originsSheet.getDataLicense());	
+		assertEquals(licenseId, originsSheet.getDataLicense());
 	}
 
 	/**

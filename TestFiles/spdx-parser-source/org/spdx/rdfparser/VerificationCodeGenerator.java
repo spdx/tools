@@ -27,13 +27,13 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
- * Generates a package verification code from a directory of source code.  
- * 
+ * Generates a package verification code from a directory of source code.
+ *
  * A class implementing the IFileChecksumGenerator is supplied as a parameter to the constructor.
  * The method <code>getFileChecksum</code> is called for each file in the directory.  This can
- * be used as a hook to capture all files in the directory and capture the checksum values at 
+ * be used as a hook to capture all files in the directory and capture the checksum values at
  * a file level.
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -41,7 +41,7 @@ public class VerificationCodeGenerator {
 
 	private static final String END_OF_LINE_CHAR = "\n";
 	private IFileChecksumGenerator fileChecksumGenerator;
-	
+
 	public VerificationCodeGenerator(IFileChecksumGenerator fileChecksumGenerator) {
 		this.fileChecksumGenerator = fileChecksumGenerator;
 	}
@@ -49,8 +49,8 @@ public class VerificationCodeGenerator {
 	 * Generate the SPDX Package Verification Code from a directory of files included in the archive
 	 * @param sourceDirectory
 	 * @return
-	 * @throws NoSuchAlgorithmException 
-	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
 	 */
 	public SpdxPackageVerificationCode generatePackageVerificationCode(File sourceDirectory, File[] skippedFiles) throws NoSuchAlgorithmException, IOException {
 		// create a sorted list of file paths
@@ -85,7 +85,7 @@ public class VerificationCodeGenerator {
 	 * @param prefixForRelative The portion of the filepath which preceeds the relative file path for the archive
 	 * @param sourceDirectory
 	 * @param fileNameAndChecksums
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private void collectFileData(String prefixForRelative, File sourceDirectory,
 			ArrayList<String> fileNameAndChecksums, TreeSet<String> skippedFiles) throws IOException {
@@ -113,7 +113,7 @@ public class VerificationCodeGenerator {
 	 * @return
 	 */
 	public static String normalizeFilePath(String nonNormalizedFilePath) {
-		String filePath = nonNormalizedFilePath.replace('\\', '/').trim();		
+		String filePath = nonNormalizedFilePath.replace('\\', '/').trim();
 		if (filePath.contains("../")) {
 			// need to remove these references
 			String[] filePathParts = filePath.split("/");
@@ -140,7 +140,7 @@ public class VerificationCodeGenerator {
 	 * @return
 	 */
 	private static String convertChecksumToString(byte[] digest) {
-		StringBuilder sb = new StringBuilder();   
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < digest.length; i++) {
 			String hex = Integer.toHexString(0xff & digest[i]);
 			if (hex.length() < 2) {
@@ -154,8 +154,8 @@ public class VerificationCodeGenerator {
 	 * @param sourceDirectory
 	 * @param skippedFiles
 	 * @return
-	 * @throws NoSuchAlgorithmException 
-	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
 	 */
 	public SpdxPackageVerificationCode generatePackageVerificationCode(
 			File sourceDirectory) throws NoSuchAlgorithmException, IOException {

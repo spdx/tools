@@ -61,13 +61,13 @@ public class TestHtmlTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#optionalText(java.lang.String)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testOptionalText() throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
 		String ruleName = "optionalRule";
-		
+
 		LicenseTemplateRule beginRule = new LicenseTemplateRule(ruleName, RuleType.BEGIN_OPTIONAL);
 		htoh.beginOptional(beginRule);
 		String optionalText = "Optional Text";
@@ -100,8 +100,8 @@ public class TestHtmlTemplateOutputHandler {
 		String exampleText = "Example \\n text";
 		LicenseTemplateRule normalRule = new LicenseTemplateRule(ruleName, RuleType.VARIABLE,
 				originalText, matchText, exampleText);
-		String expectedResult = "\n<span id=\"" + ruleName + 
-			"\" class=\"replacable-license-text\">" + compareOriginalText + 
+		String expectedResult = "\n<span id=\"" + ruleName +
+			"\" class=\"replacable-license-text\">" + compareOriginalText +
 			"</span>\n";
 		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
 		htoh.variableRule(normalRule);
@@ -116,8 +116,8 @@ public class TestHtmlTemplateOutputHandler {
 		String originalText = "Original \ntext";
 		String compareOriginalText = "Original <br/>\ntext";
 		String ruleName = "testRule";
-		String expectedResult = "\n<span id=\"" + ruleName + 
-		"\" class=\"replacable-license-text\">" + compareOriginalText + 
+		String expectedResult = "\n<span id=\"" + ruleName +
+		"\" class=\"replacable-license-text\">" + compareOriginalText +
 		"</span>\n";
 		String result = HtmlTemplateOutputHandler.formatReplaceabledHTML(originalText, ruleName);
 		assertEquals(expectedResult, result);
@@ -141,7 +141,7 @@ public class TestHtmlTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#getHtml()}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testGetHtml() throws LicenseTemplateRuleException {
@@ -149,16 +149,16 @@ public class TestHtmlTemplateOutputHandler {
 		String beginText = "Begin text\n";
 		String escapedBeginText = "Begin text<br/>\n";
 		htoh.normalText(beginText);
-		
+
 		String optRuleName = "optionalRule";
-		
+
 		LicenseTemplateRule beginRule = new LicenseTemplateRule(optRuleName, RuleType.BEGIN_OPTIONAL);
 		htoh.beginOptional(beginRule);
 		String optionalText = "Optional Text";
 		htoh.optionalText(optionalText);
 		String escapedBeginRuleText = "\n<div id=\"" + optRuleName + "\" class=\"optional-license-text\">\n";
 		String escapedOptionalText = optionalText;
-		
+
 		String varRuleName = "testRule";
 		String originalText = "Original \\ntext";
 		String compareOriginalText = "Original <br/>\ntext";
@@ -166,33 +166,33 @@ public class TestHtmlTemplateOutputHandler {
 		String exampleText = "Example \\n text";
 		LicenseTemplateRule normalRule = new LicenseTemplateRule(varRuleName, RuleType.VARIABLE,
 				originalText, matchText, exampleText);
-		String escapedVariableRuleText = "\n<span id=\"" + varRuleName + 
-			"\" class=\"replacable-license-text\">" + compareOriginalText + 
+		String escapedVariableRuleText = "\n<span id=\"" + varRuleName +
+			"\" class=\"replacable-license-text\">" + compareOriginalText +
 			"</span>\n";
 		htoh.variableRule(normalRule);
 		LicenseTemplateRule endRule = new LicenseTemplateRule(optRuleName, RuleType.END_OPTIONAL);
 		htoh.endOptional(endRule);
 		String escapedEndRuleText = "</div>\n";
-		
+
 		String lastLine = "\nLast Line.&";
 		htoh.normalText(lastLine);
 		String escapedLastLine = "<br/>\nLast Line.&amp;";
-		
+
 		String expectedValue = escapedBeginText +escapedBeginRuleText+escapedOptionalText+
 		escapedVariableRuleText+escapedEndRuleText+escapedLastLine;
-		
+
 		assertEquals(expectedValue, htoh.getHtml());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#beginOptional(org.spdx.licenseTemplate.LicenseTemplateRule)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testBeginOptional() throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
 		String optRuleName = "optionalRule";
-		
+
 		LicenseTemplateRule beginRule = new LicenseTemplateRule(optRuleName, RuleType.BEGIN_OPTIONAL);
 		htoh.beginOptional(beginRule);
 		String escapedBeginRuleText = "\n<div id=\"" + optRuleName + "\" class=\"optional-license-text\">\n";
@@ -201,7 +201,7 @@ public class TestHtmlTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#formatStartOptionalHTML(java.lang.String)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testFormatStartOptionalHTML() throws LicenseTemplateRuleException {
@@ -222,16 +222,16 @@ public class TestHtmlTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#endOptional(org.spdx.licenseTemplate.LicenseTemplateRule)}.
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
 	public void testEndOptional() throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
 		String optRuleName = "optionalRule";
-		
+
 		LicenseTemplateRule beginRule = new LicenseTemplateRule(optRuleName, RuleType.BEGIN_OPTIONAL);
 		htoh.beginOptional(beginRule);
-		
+
 		LicenseTemplateRule endRule = new LicenseTemplateRule(optRuleName, RuleType.END_OPTIONAL);
 		htoh.endOptional(endRule);
 		String escapedEndRuleText = "</div>\n";

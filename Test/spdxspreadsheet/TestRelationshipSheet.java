@@ -67,10 +67,10 @@ public class TestRelationshipSheet {
 	public void tearDown() throws Exception {
 		spreadsheetFile.delete();
 	}
-	
+
 	@Test
 	public void testCreate() throws IOException, InvalidFormatException {
-		
+
 		Workbook wb = new HSSFWorkbook();
 		RelationshipsSheet.create(wb, "Relationship Info");
 		RelationshipsSheet relationships = new RelationshipsSheet(wb, "Relationship Info");
@@ -82,24 +82,24 @@ public class TestRelationshipSheet {
 
 	/**
 	 * Test method for {@link org.spdx.spdxspreadsheet.RelationshipsSheet#add(org.spdx.rdfparser.model.Relationship, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpreadsheetException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpreadsheetException
 	 */
 	@Test
 	public void testAddandGet() throws InvalidSPDXAnalysisException, SpreadsheetException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
-		SpdxElement element1 = new SpdxElement("Element1", "", new Annotation[0], 
+		SpdxElement element1 = new SpdxElement("Element1", "", new Annotation[0],
 				new Relationship[0]);
 		element1.setId("SPDXRef-1");
 		doc.addElement(element1);
 		Relationship rel1 = new Relationship(element1, RelationshipType.relationshipType_amends, "Comment1");
-		SpdxElement element2 = new SpdxElement("Element2", "", new Annotation[0], 
+		SpdxElement element2 = new SpdxElement("Element2", "", new Annotation[0],
 				new Relationship[0]);
 		element2.setId("SPDXRef-2");
 		doc.addElement(element2);
 		Relationship rel2 = new Relationship(element2, RelationshipType.relationshipType_contains, null);
-		SpdxElement element3 = new SpdxElement("Element3", "", new Annotation[0], 
+		SpdxElement element3 = new SpdxElement("Element3", "", new Annotation[0],
 				new Relationship[0]);
 		element3.setId("SPDXRef-3");
 		doc.addElement(element3);

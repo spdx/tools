@@ -44,7 +44,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 
 public class TestPackageInfoSheet {
-	
+
 	File spreadsheetFile;
 
 	@Before
@@ -60,7 +60,7 @@ public class TestPackageInfoSheet {
 
 	@Test
 	public void testCreate() throws IOException, InvalidFormatException {
-		
+
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
 		PackageInfoSheet pkgInfo = PackageInfoSheet.openVersion(wb, "Package Info", SPDXSpreadsheet.CURRENT_VERSION);
@@ -85,7 +85,7 @@ public class TestPackageInfoSheet {
 		};
 		testLicenses1[2] = new ConjunctiveLicenseSet(conjunctiveLicenses);
 		AnyLicenseInfo testLicense1 = new DisjunctiveLicenseSet(testLicenses1);
-		
+
 //		String lic1String = PackageInfoSheet.licensesToString(testLicenses1);
 		AnyLicenseInfo[] testLicenses2 = new AnyLicenseInfo[2];
 		testLicenses2[0] = new ExtractedLicenseInfo("License3", "License 3 text");
@@ -97,19 +97,19 @@ public class TestPackageInfoSheet {
 //		String lic2String = PackageInfoSheet.licensesToString(testLicenses2);
 
 		SpdxPackage pkgInfo1 =  new SpdxPackage("decname1", "Comment1", new Annotation[0],
-				new Relationship[0], testLicense1, testLicenseInfos, 
-				"dec-copyright1", "license comments", testLicense2, 
-				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")}, 
-				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page1", "Organization: originator1", 
-				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1", 
+				new Relationship[0], testLicense1, testLicenseInfos,
+				"dec-copyright1", "license comments", testLicense2,
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
+				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page1", "Organization: originator1",
+				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1",
 				"Version1");
 		pkgInfo1.setId("SPDXRef-Package1");
 		SpdxPackage pkgInfo2 =  new SpdxPackage("decname1", "Comment1", new Annotation[0],
-				new Relationship[0], testLicense1, testLicenseInfos, 
-				"dec-copyright1", "license comments2", testLicense2, 
-				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")}, 
-				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page2", "Organization: originator2", 
-				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1", 
+				new Relationship[0], testLicense1, testLicenseInfos,
+				"dec-copyright1", "license comments2", testLicense2,
+				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
+				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page2", "Organization: originator2",
+				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1",
 				"Version2");
 		pkgInfo2.setId("SPDXRef-Package2");
 		Workbook wb = new HSSFWorkbook();
@@ -147,12 +147,12 @@ public class TestPackageInfoSheet {
 		assertEquals(pkgInfo1.getPackageVerificationCode().getExcludedFileNames().length,
 				pkgInfo2.getPackageVerificationCode().getExcludedFileNames().length);
 		for (int i = 0; i < pkgInfo1.getPackageVerificationCode().getExcludedFileNames().length; i++) {
-			assertEquals(pkgInfo1.getPackageVerificationCode().getExcludedFileNames()[i], 
+			assertEquals(pkgInfo1.getPackageVerificationCode().getExcludedFileNames()[i],
 					pkgInfo2.getPackageVerificationCode().getExcludedFileNames()[i]);
 		}
 		assertEquals(pkgInfo1.getSupplier(), pkgInfo2.getSupplier());
 		assertEquals(pkgInfo1.getOriginator(), pkgInfo2.getOriginator());
-		assertEquals(pkgInfo1.getHomepage(), pkgInfo2.getHomepage());		
+		assertEquals(pkgInfo1.getHomepage(), pkgInfo2.getHomepage());
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class TestPackageInfoSheet {
 				if (testLicenses[i].equals(result[j])) {
 					found = true;
 				}
-			}				
+			}
 			if (!found) {
 				fail("License match "+testLicenses[i].toString()+ " was not found.");
 			}

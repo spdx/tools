@@ -25,10 +25,10 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 /**
  * Describes a license
- * 
+ *
  * All licenses have an ID and text.  Subclasses should extend this class to add
  * additional properties.
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -39,14 +39,14 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 	/**
 	 * @param model
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	SPDXLicense(Model model, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(model, licenseInfoNode);
 		// id
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.id = t.getObject().toString(false);
@@ -54,7 +54,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		// text
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_TEXT).asNode();
 		m = Triple.createMatch(licenseInfoNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		// The following Kludge is to workaround a bug where the standard license HTML
 		// did not have the correct property name
 		//TODO: Remove kludge once the website is updated
@@ -62,7 +62,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		if (!tripleIter.hasNext()) {
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, "LicenseText").asNode();
 			m = Triple.createMatch(licenseInfoNode, p, null);
-			tripleIter = model.getGraph().find(m);	
+			tripleIter = model.getGraph().find(m);
 		}
 		// END KLUDGE
 		while (tripleIter.hasNext()) {
@@ -70,7 +70,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 			this.text = t.getObject().toString(false);
 		}
 	}
-	
+
 	SPDXLicense(String id, String text) {
 		super();
 		this.id = id;
@@ -119,7 +119,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 			resource.addProperty(p, text);
 		}
 	}
-	
+
 	/**
 	 * Create a basic SPDXLicense resource of a given type
 	 * If a license with this ID already exists in the model, then that resource
@@ -127,7 +127,7 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 	 * assumed to be unique.
 	 * NOTE: the type must be a subclass of SPDXLicense
 	 * @param model
-	 * @param uri 
+	 * @param uri
 	 * @param typeURI
 	 * @return
 	 */
@@ -135,12 +135,12 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 		Resource r = null;
 		if (id != null) {
 			// check to see if it exists
-			Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_LICENSE_ID);
-			Property typeProperty = this.model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+			Property typeProperty = this.model.getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 					SpdxRdfConstants.RDF_PROP_TYPE);
 			Triple m = Triple.createMatch(null, idProperty.asNode(), null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
 				if (t.getObject().toString(false).equals(this.id)) {
@@ -165,19 +165,19 @@ public abstract class SPDXLicense extends SPDXLicenseInfo {
 				r = model.createResource(uri, type);
 			}
 			if (id != null) {
-				Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_LICENSE_ID);
 				r.addProperty(idProperty, this.id);
 			}
 			if (this.text != null) {
-				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_LICENSE_TEXT);
 				r.addProperty(textProperty, this.text);
 			}
 		}
 		return r;
 	}
-	
+
 	@Override
 	public boolean equals(Object comp) {
 		if (!(comp instanceof SPDXLicense)) {

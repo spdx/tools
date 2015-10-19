@@ -31,7 +31,7 @@ import com.hp.hpl.jena.util.FileManager;
 /**
  * Factory for creating an SPDX Document from a variety of different sources
  * @author Gary O'Neall
- * 
+ *
  *
  */
 public class SPDXDocumentFactory {
@@ -45,7 +45,7 @@ public class SPDXDocumentFactory {
 	static SpdxRdfConstants createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
 	}
-	
+
 	/**
 	 * Create an SPDX Document from a file
 	 * @param fileNameOrUrl local file name or Url containing the SPDX data.  Can be in RDF/XML or RDFa format
@@ -68,16 +68,16 @@ public class SPDXDocumentFactory {
 
 		return new SPDXDocument(model);
 	}
-	
+
 	private static String figureBaseUri(String src) {
 		try{
 			URI s = new URI(src);
-			
+
 			if (null == s.getScheme())
 				return "file://" + new File(src).getAbsoluteFile().toString().replace("\\", "/");
 			else
 				return s.toString();
-			
+
 		} catch(URISyntaxException e){
 			return null;
 		}

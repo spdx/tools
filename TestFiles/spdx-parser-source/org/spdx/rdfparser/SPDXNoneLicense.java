@@ -32,12 +32,12 @@ public class SPDXNoneLicense extends SPDXLicenseInfo {
 	/**
 	 * @param model
 	 * @param node
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXNoneLicense(Model model, Node node) throws InvalidSPDXAnalysisException {
 		super(model, node);
 	}
-	
+
 	public SPDXNoneLicense() {
 		super();
 	}

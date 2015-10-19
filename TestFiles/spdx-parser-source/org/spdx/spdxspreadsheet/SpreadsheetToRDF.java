@@ -42,8 +42,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
  * Converts a spreadsheet to an SPDX RDF Analysis file
- * Usage: SpreadsheetToRDF spreadsheetfile.xls rdfxmlfile.rdf 
- * where spreadsheetfile.xls is a valid SPDX Spreadsheet and 
+ * Usage: SpreadsheetToRDF spreadsheetfile.xls rdfxmlfile.rdf
+ * where spreadsheetfile.xls is a valid SPDX Spreadsheet and
  * rdfxmlfile.rdf is the output SPDX RDF Analysis file.
  * @author Gary O'Neall
  *
@@ -53,7 +53,7 @@ public class SpreadsheetToRDF {
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
 	static DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
-	
+
 	/**
 	 * @param args
 	 */
@@ -76,7 +76,7 @@ public class SpreadsheetToRDF {
 			System.out.printf("Error: File %1$s already exists - please specify a new file.\n", args[1]);
 			return;
 		}
-	
+
 		try {
 			if (!spdxRdfFile.createNewFile()) {
 				System.out.println("Could not create the new SPDX RDF file "+args[1]);
@@ -139,10 +139,10 @@ public class SpreadsheetToRDF {
 			}
 		}
 	}
-	
+
 	private static void copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss,
 			SPDXDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
-		analysis.createSpdxAnalysis(ss.getPackageInfoSheet().getPackageInfo(1).getUrl()+"#SPDXANALYSIS");		
+		analysis.createSpdxAnalysis(ss.getPackageInfoSheet().getPackageInfo(1).getUrl()+"#SPDXANALYSIS");
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		analysis.createSpdxPackage();
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
@@ -181,7 +181,7 @@ public class SpreadsheetToRDF {
 		int firstRow = nonStandardLicensesSheet.getFirstDataRow();
 		SPDXNonStandardLicense[] nonStdLicenses = new SPDXNonStandardLicense[numNonStdLicenses];
 		for (int i = 0; i < nonStdLicenses.length; i++) {
-			nonStdLicenses[i] = new SPDXNonStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
+			nonStdLicenses[i] = new SPDXNonStandardLicense(nonStandardLicensesSheet.getIdentifier(firstRow+i),
 					nonStandardLicensesSheet.getExtractedText(firstRow+i));
 		}
 		analysis.setExtractedLicenseInfos(nonStdLicenses);
