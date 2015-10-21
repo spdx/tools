@@ -1166,7 +1166,7 @@ public class CompareSpdxDocs {
 		FileInputStream in = null;
 		try {
 			in = new FileInputStream(tagValueFile);
-			return TagToRDF.convertTatFileToRdf(in, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings).getSpdxDocument();
+			return TagToRDF.convertTagFileToRdf(in, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings).getSpdxDocument();
 		} catch (Exception e) {
 			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
 		} finally {
