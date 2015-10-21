@@ -112,7 +112,7 @@ public class HandBuiltParser {
 				nextLine = br.readLine();
 			}
 			if (inTextBlock) {
-				throw(new RecognitionException("Un terminted text block.  Expecting "+END_TEXT));
+				throw(new RecognitionException("Unterminated text block.  Expecting "+END_TEXT));
 			}
 			this.buildDocument.exit();
 		} finally {
