@@ -187,7 +187,7 @@ public class TagToRDF {
 	public static void convertTagFileToRdf(InputStream spdxTagFile,
 			OutputStream out, String outputFormat, List<String> warnings) throws RecognitionException, TokenStreamException, Exception {
 
-			convertTatFileToRdf(spdxTagFile, outputFormat, warnings).getModel().write(out, outputFormat);
+			convertTagFileToRdf(spdxTagFile, outputFormat, warnings).getModel().write(out, outputFormat);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class TagToRDF {
 	 * @return
 	 * @throws Exception
 	 */
-	public static SpdxDocumentContainer convertTatFileToRdf(
+	public static SpdxDocumentContainer convertTagFileToRdf(
 			InputStream spdxTagFile, String outputFormat, List<String> warnings) throws RecognitionException, TokenStreamException, Exception  {
 		// read the tag-value constants from a file
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
