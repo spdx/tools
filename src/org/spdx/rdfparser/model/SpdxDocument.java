@@ -71,7 +71,7 @@ public class SpdxDocument extends SpdxElement {
 		if (this.getCreationInfo() == null){
 			String licenseListVersion = ListedLicenses.getListedLicenses().getLicenseListVersion();
 			String creationDate = DateFormatUtils.format(Calendar.getInstance(), SpdxRdfConstants.SPDX_DATE_FORMAT);
-			SPDXCreatorInformation creationInfo = new SPDXCreatorInformation(null, creationDate, null, licenseListVersion);
+			SPDXCreatorInformation creationInfo = new SPDXCreatorInformation(new String[] {  }, creationDate, null, licenseListVersion);
 			setCreationInfo(creationInfo);
 		}
 		else if (StringUtils.isBlank(this.getCreationInfo().getLicenseListVersion())){
