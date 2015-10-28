@@ -81,9 +81,9 @@ public class LicenseExpressionParser {
 	private static String[] tokenizeExpression(String expression) {
 		String[] startTokens = expression.split("\\s");
 		List<String> endTokens = Lists.newArrayList();
-		for (int i = 0; i < startTokens.length; i++) {
-			if (!startTokens[i].isEmpty()) {
-				processPreToken(startTokens[i], endTokens);
+		for (String token : startTokens) {
+			if (!token.isEmpty()) {
+				processPreToken(token, endTokens);
 			}
 		}
 		return endTokens.toArray(new String[endTokens.size()]);
