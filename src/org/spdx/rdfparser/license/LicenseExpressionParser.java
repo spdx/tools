@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * A parser for the SPDX License EXpressions as documented in the SPDX appendix.
+ * A parser for the SPDX License Expressions as documented in the SPDX appendix.
  * 
  * This is a static help class.  The primary method is parseLicenseExpression which 
  * returns an AnyLicenseInfo.
