@@ -91,7 +91,7 @@ public class SpreadsheetToTag {
 		PrintWriter out = null;
 		try {
 			try {
-				out = new PrintWriter(new FileWriter(spdxTagFile));
+				out = new PrintWriter(spdxTagFile, "UTF-8");
 			} catch (IOException e1) {
 				System.out.println("Could not write to the new SPDX Tag file "
 						+ args[1]);

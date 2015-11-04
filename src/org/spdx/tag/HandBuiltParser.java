@@ -63,7 +63,7 @@ public class HandBuiltParser {
 	 * @throws Exception 
 	 */
 	public void data() throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(textInput));
+		BufferedReader br = new BufferedReader(new InputStreamReader(textInput, "UTF-8"));
 
 		try {
 			boolean inTextBlock = false;
