@@ -17,8 +17,9 @@
 package org.spdx.rdfparser.license;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 		 * @throws LicenseCsvException 
 		 */
 		public CsvLicenseIterator(File csvFile) throws IOException, LicenseCsvException {
-			iterReader = new CSVReader(new FileReader(csvFile), DELIM, STRING_DELIM);
+			iterReader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), "UTF-8"), DELIM, STRING_DELIM);
 			iterReader.readNext();
 			readNextStandardLicense();
 		}
@@ -180,7 +181,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 	 */
 	public SpdxLicenseCsv(File csvFile) throws IOException, LicenseCsvException {
 		this.csvFile = csvFile;
-		reader = new CSVReader(new FileReader(csvFile), DELIM, STRING_DELIM);
+		reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), "UTF-8"), DELIM, STRING_DELIM);
 		String[] header = reader.readNext();
 		if (header.length != NUM_COLS) {
 			throw(new LicenseCsvException("Incorrect number of columns for License CSV file.  Expected "+
