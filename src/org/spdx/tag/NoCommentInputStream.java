@@ -42,7 +42,6 @@ public class NoCommentInputStream extends InputStream {
 	private BufferedReader bufferedReader;
 	private int lineIndex = 1;
 	private String currentLine = "";
-	boolean eof = false;
 	boolean inText = false;
 	
 
@@ -62,18 +61,13 @@ public class NoCommentInputStream extends InputStream {
 	 * @throws IOException 
 	 */
 	private void readNextLine() throws IOException {
-		if (eof) {
-			return;
-		}
-		currentLine = bufferedReader.readLine();
-		while (currentLine != null && !inText && 
-				(currentLine.length() == 0 || currentLine.charAt(0) == COMMENT_CHAR)) {
+		do {
 			currentLine = bufferedReader.readLine();
-		}
-		if (currentLine == null) {
-			eof = true;
-			return;
-		}
+			if (currentLine == null) {
+				return;
+			}
+		} while (!inText && (currentLine.length() == 0 || currentLine.charAt(0) == COMMENT_CHAR));
+
 		if (inText) {
 			if (currentLine.contains(END_TEXT_TAG)) {
 				inText = false;
@@ -83,7 +77,8 @@ public class NoCommentInputStream extends InputStream {
 				inText = true;
 			}
 		}
-		this.lineIndex = 0;
+
+		lineIndex = 0;
 	}
 
 	/* (non-Javadoc)
@@ -91,18 +86,18 @@ public class NoCommentInputStream extends InputStream {
 	 */
 	@Override
 	public int read() throws IOException {
-		while (!eof && this.lineIndex >= this.currentLine.length()) {
+		while (currentLine != null && lineIndex >= currentLine.length()) {
 			readNextLine();
-			if (eof) {
+			if (currentLine == null) {
 				return -1;
 			} else {
 				return (int)'\n';
 			}
 		}
-		if (eof) {
+		if (currentLine == null) {
 			return -1;
 		}
-		return (int)currentLine.charAt(this.lineIndex++);
+		return (int)currentLine.charAt(lineIndex++);
 	}
 	
 	@Override
