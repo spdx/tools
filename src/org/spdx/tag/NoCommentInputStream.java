@@ -75,33 +75,15 @@ public class NoCommentInputStream extends InputStream {
 			return;
 		}
 		if (inText) {
-			if (containsEndText(currentLine)) {
+			if (currentLine.contains(END_TEXT_TAG)) {
 				inText = false;
 			}
 		} else {
-			if (containsStartText(currentLine)) {
+			if (currentLine.contains(START_TEXT_TAG)) {
 				inText = true;
 			}
 		}
 		this.lineIndex = 0;
-	}
-
-	/**
-	 * Return true if str contains the end text tag
-	 * @param str
-	 * @return
-	 */
-	private boolean containsEndText(String str) {
-		return str.contains(END_TEXT_TAG);
-	}
-
-	/**
-	 * Returns true if str contains the start text tag
-	 * @param str
-	 * @return
-	 */
-	private boolean containsStartText(String str) {
-		return str.contains(START_TEXT_TAG);
 	}
 
 	/* (non-Javadoc)
