@@ -57,37 +57,6 @@ public class VerificationCodeGenerator {
 	 * @return VerificationCode based on all files in spdxFiles minus the skippedFilePaths
 	 * @throws NoSuchAlgorithmException
 	 */
-	@Deprecated
-	public SpdxPackageVerificationCode generatePackageVerificationCode(SPDXFile[] spdxFiles, String[] skippedFilePaths) throws NoSuchAlgorithmException {
-		if (spdxFiles == null) {
-			return null;
-		}
-		Set<String> skippedFilePathSet = Sets.newTreeSet();
-		if (skippedFilePaths != null) {
-			for (int i = 0; i < skippedFilePaths.length; i++) {
-				if (skippedFilePaths[i] != null) {
-					skippedFilePathSet.add(skippedFilePaths[i]);
-				}
-			}
-		}
-		List<String> fileChecksums = Lists.newArrayList();
-		for (int i = 0; i < spdxFiles.length; i++) {
-			if (spdxFiles[i] != null && spdxFiles[i].getName() != null && 
-					!skippedFilePathSet.contains(spdxFiles[i].getName())) {
-				fileChecksums.add(spdxFiles[i].getSha1());
-			}
-		}
-		Collections.sort(fileChecksums);
-		return generatePackageVerificationCode(fileChecksums, skippedFilePaths);
-	}
-	
-	/**
-	 * Generate the SPDX Package Verification Code from an array of SPDXFiles
-	 * @param spdxFiles Files to generate the VerificationCode from
-	 * @param skippedFilePaths File path names to not include in the VerificationCode
-	 * @return VerificationCode based on all files in spdxFiles minus the skippedFilePaths
-	 * @throws NoSuchAlgorithmException
-	 */
 	public SpdxPackageVerificationCode generatePackageVerificationCode(SpdxFile[] spdxFiles, String[] skippedFilePaths) throws NoSuchAlgorithmException {
 		if (spdxFiles == null) {
 			return null;

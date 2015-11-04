@@ -156,11 +156,4 @@ public class VerificationCodeGeneratorTest {
         assertEquals(ns6, VerificationCodeGenerator.normalizeFilePath(s6));
     }
 
-    @Test
-    public void testGenerateVerificationCodeSpdxFiles() throws NoSuchAlgorithmException {
-        VerificationCodeGenerator vg = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
-        SpdxPackageVerificationCode result = vg.generatePackageVerificationCode(SPDX_FILES, SPDX_SKIPPED_FILE_NAMES);
-        assertEquals(SPDX_FILE_SHA1_RESULT, result.getValue());
-    }
-
 }
