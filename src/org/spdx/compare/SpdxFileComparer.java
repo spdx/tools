@@ -456,7 +456,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 			DoapProject[] uniqueArtifactOfA = this.getUniqueArtifactOf(docA, docB);
 			DoapProject[] uniqueArtifactOfB = this.getUniqueArtifactOf(docB, docA);
 			boolean artifactOfEquals = uniqueArtifactOfA.length == 0 &&
-					uniqueArtifactOfA.length == 0;
+					uniqueArtifactOfB.length == 0;
 			Checksum[] uniqueChecksumsA = this.getUniqueChecksums(docA, docB);
 			Checksum[] uniqueChecksumsB = this.getUniqueChecksums(docB, docA);
 			boolean checksumsEquals = uniqueChecksumsA.length == 0 && 
