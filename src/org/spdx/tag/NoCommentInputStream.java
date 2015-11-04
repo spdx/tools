@@ -40,8 +40,9 @@ public class NoCommentInputStream extends InputStream {
 	private InputStream inputStream;
 	private InputStreamReader reader;
 	private BufferedReader bufferedReader;
-	private int lineIndex = 1;
-	private String currentLine = "";
+	private String currentLine;
+	private int bytesIndex;
+	private byte[] currentBytes;
 	boolean inText = false;
 	
 
@@ -57,7 +58,7 @@ public class NoCommentInputStream extends InputStream {
 	}
 
 	/**
-	 * reads the next line in the input stream skipping when necessary
+	 * Reads the next line in the input stream, skipping empty lines and comments as necessary.
 	 * @throws IOException 
 	 */
 	private void readNextLine() throws IOException {
@@ -78,7 +79,8 @@ public class NoCommentInputStream extends InputStream {
 			}
 		}
 
-		lineIndex = 0;
+		bytesIndex = 0;
+		currentBytes = currentLine.getBytes("UTF-8");
 	}
 
 	/* (non-Javadoc)
@@ -86,18 +88,21 @@ public class NoCommentInputStream extends InputStream {
 	 */
 	@Override
 	public int read() throws IOException {
-		while (currentLine != null && lineIndex >= currentLine.length()) {
-			readNextLine();
-			if (currentLine == null) {
-				return -1;
-			} else {
-				return (int)'\n';
-			}
-		}
+		// Exit early on EOF.
 		if (currentLine == null) {
 			return -1;
 		}
-		return (int)currentLine.charAt(lineIndex++);
+
+		// Fill the buffer if we ran out of bytes.
+		if (bytesIndex >= currentBytes.length) {
+			readNextLine();
+			// Before returning bytes from the newly filled buffer, return the new
+			// line character that readLine() embezzled.
+			return (int)'\n';
+		}
+
+		// Return the current byte from the buffer and increment the index.
+		return (int)currentBytes[bytesIndex++];
 	}
 	
 	@Override
