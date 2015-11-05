@@ -44,8 +44,10 @@ public class SpdxPackageVerificationCode {
 	
 	public SpdxPackageVerificationCode(String value, String[] excludedFileNames) {
 		this.value = value;
-		for (int i = 0; i < excludedFileNames.length; i++) {
-			this.excludedFileNames.add(excludedFileNames[i]);
+		if (excludedFileNames != null) {
+			for (String fileName : excludedFileNames) {
+				this.excludedFileNames.add(fileName);
+			}
 		}
 		this.model = null;
 		this.verificationCodeNode = null;

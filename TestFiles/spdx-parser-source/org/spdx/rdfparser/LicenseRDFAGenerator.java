@@ -19,7 +19,6 @@ package org.spdx.rdfparser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashSet;
@@ -157,11 +156,11 @@ public class LicenseRDFAGenerator {
 	 * @return
 	 */
 	private static String textFileToString(File htmlTemplateFile) {
-		FileReader reader = null;
+		InputStreamReader reader = null;
 		BufferedReader in = null;
 		String retval = null;
 		try {
-			reader = new FileReader(htmlTemplateFile);
+			reader = new InputStreamReader(new FileInputStream(htmlTemplateFile), "UTF-8");
 			in = new BufferedReader(reader);
 			StringBuilder sb = new StringBuilder();
 			String line = in.readLine();

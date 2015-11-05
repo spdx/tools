@@ -230,8 +230,8 @@ public class SpdxLicenseTemplateHelper {
 	 * @param html
 	 * @return
 	 */
-	public static String HtmlToText(String html) {
-		String newlineString = "NeWLineGoesHere";
+	public static String htmlToText(String html) {
+		String newlineString = "NewLineGoesHere";
 		String replaceBrs = html.replaceAll("(?i)<br[^>]*>", newlineString);
 		String replaceBrsAndPs = replaceBrs.replaceAll("(?i)<p[^>]*>", newlineString);
 		Document doc = Jsoup.parse(replaceBrsAndPs);
