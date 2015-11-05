@@ -100,7 +100,7 @@ public abstract class License extends SimpleLicensingInfo {
 			this.licenseText = this.licenseText.substring(0, this.licenseText.length()-XML_LITERAL.length());
 		}
 		if (licenseText != null && this.textInHtml) {
-			this.licenseText = SpdxLicenseTemplateHelper.HtmlToText(this.licenseText);
+			this.licenseText = SpdxLicenseTemplateHelper.htmlToText(this.licenseText);
 		}
 		// standardLicenseHeader
 		standardLicenseHeader = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE);
@@ -120,7 +120,7 @@ public abstract class License extends SimpleLicensingInfo {
 			this.standardLicenseTemplate = this.standardLicenseTemplate.substring(0, this.standardLicenseTemplate.length()-XML_LITERAL.length());
 		}
 		if (standardLicenseTemplate != null && this.templateInHtml) {
-			this.standardLicenseTemplate = SpdxLicenseTemplateHelper.HtmlToText(this.standardLicenseTemplate);
+			this.standardLicenseTemplate = SpdxLicenseTemplateHelper.htmlToText(this.standardLicenseTemplate);
 		}
 		// OSI Approved
 		String osiTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
@@ -178,7 +178,7 @@ public abstract class License extends SimpleLicensingInfo {
 				this.licenseText = this.licenseText.substring(0, this.licenseText.length()-XML_LITERAL.length());
 			}
 			if (this.licenseText != null && this.textInHtml) {
-				this.licenseText = SpdxLicenseTemplateHelper.HtmlToText(this.licenseText);
+				this.licenseText = SpdxLicenseTemplateHelper.htmlToText(this.licenseText);
 			}
 		}
 		return this.licenseText;
@@ -248,7 +248,7 @@ public abstract class License extends SimpleLicensingInfo {
 				this.standardLicenseTemplate = this.standardLicenseTemplate.substring(0, this.standardLicenseTemplate.length()-XML_LITERAL.length());
 			}
 			if (standardLicenseTemplate != null && this.templateInHtml) {
-				this.standardLicenseTemplate = SpdxLicenseTemplateHelper.HtmlToText(this.standardLicenseTemplate);
+				this.standardLicenseTemplate = SpdxLicenseTemplateHelper.htmlToText(this.standardLicenseTemplate);
 			}
 		}
 		return standardLicenseTemplate;
