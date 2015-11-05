@@ -130,7 +130,7 @@ public class LicenseTOCHTMLFile {
 		}
 	}
 	
-	public class ListedSpdxLicense {
+	public static class ListedSpdxLicense {
 		private String reference;
 		private String refNumber;
 		private String licenseId;

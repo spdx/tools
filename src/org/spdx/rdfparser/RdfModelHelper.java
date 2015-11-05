@@ -93,12 +93,7 @@ public final class RdfModelHelper {
 		} else {
 			String s1norm = s1.replace("\r\n", "\n").trim();
 			String s2norm = s2.replace("\r\n", "\n").trim();
-			boolean retval = s1norm.equals(s2norm);
-			if (!retval) {
-				int j = 1;
-				j = j + 1;
-			}
-			return retval;
+			return s1norm.equals(s2norm);
 		}
 	}
 	

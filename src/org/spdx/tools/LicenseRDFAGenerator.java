@@ -144,26 +144,17 @@ public class LicenseRDFAGenerator {
 				System.exit(ERROR_STATUS);
 			}
 			File textFolder = new File(dir.getPath() + File.separator +  TEXT_FOLDER_NAME);
-			if (!textFolder.exists()) {
-				textFolder.mkdir();
-			}
-			if (!textFolder.isDirectory()) {
+			if (!textFolder.isDirectory() && !textFolder.mkdir()) {
 				System.out.println("Error: text folder is not a directory");
 				return;
 			}
 			File templateFolder = new File(dir.getPath() + File.separator +  TEMPLATE_FOLDER_NAME);
-			if (!templateFolder.exists()) {
-				templateFolder.mkdir();
-			}
-			if (!templateFolder.isDirectory()) {
+			if (!templateFolder.isDirectory() && !templateFolder.mkdir()) {
 				System.out.println("Error: template folder is not a directory");
 				return;
 			}
 			File htmlFolder = new File(dir.getPath() + File.separator +  HTML_FOLDER_NAME);
-			if (!htmlFolder.exists()) {
-				htmlFolder.mkdir();
-			}
-			if (!htmlFolder.isDirectory()) {
+			if (!htmlFolder.isDirectory() && !htmlFolder.mkdir()) {
 				System.out.println("Error: HTML folder is not a directory");
 				return;
 			}

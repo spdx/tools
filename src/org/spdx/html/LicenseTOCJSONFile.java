@@ -17,8 +17,9 @@
 package org.spdx.html;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -99,7 +100,7 @@ public class LicenseTOCJSONFile {
 
 	@SuppressWarnings("unchecked")
 	public void writeToFile(File jsonFile) throws IOException {
-		FileWriter writer = null;
+		OutputStreamWriter writer = null;
 		if (!jsonFile.exists()) {
 			if (!jsonFile.createNewFile()) {
 				throw(new IOException("Can not create new file "+jsonFile.getName()));
@@ -128,7 +129,7 @@ public class LicenseTOCJSONFile {
 				licensesList.add(licenseJSON);
 			}
 			jsonObject.put("licenses", licensesList);
-			writer = new FileWriter(jsonFile);
+			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
 			writer.write(jsonObject.toJSONString());
 		} finally {
 			if (writer != null) {
