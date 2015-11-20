@@ -273,7 +273,7 @@ public abstract class License extends SimpleLicensingInfo {
 	@Override
 	public int hashCode() {
 		if (this.getLicenseId() != null) {
-			return this.getLicenseId().hashCode();
+			return this.getLicenseId().toLowerCase().hashCode();
 		} else {
 			return 0;
 		}
@@ -294,7 +294,7 @@ public abstract class License extends SimpleLicensingInfo {
 		if (this.licenseId == null) {
 			return (comp.getLicenseId() == null);
 		} else {
-			return (this.licenseId.equals(comp.getLicenseId()));
+			return (this.licenseId.equalsIgnoreCase(comp.getLicenseId()));
 		}
 	}
 	/* (non-Javadoc)
