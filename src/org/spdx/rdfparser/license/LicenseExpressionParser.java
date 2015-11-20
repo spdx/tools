@@ -50,6 +50,9 @@ public class LicenseExpressionParser {
 		OPERATOR_MAP.put("AND", Operator.AND);
 		OPERATOR_MAP.put("OR", Operator.OR);
 		OPERATOR_MAP.put("WITH", Operator.WITH);
+		OPERATOR_MAP.put("and", Operator.AND);
+		OPERATOR_MAP.put("or", Operator.OR);
+		OPERATOR_MAP.put("with", Operator.WITH);
 	}
 	/**
 	 * Parses a license expression into an license for use in the RDF Parser
