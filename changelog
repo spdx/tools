@@ -1,4 +1,5 @@
 Implementation version 2.0.4
+- Fixed bug where license expressions were case sensitive
 - Fix bug 1317 - bad links on license page
 - Updated license list cache to version 2.1
 - Fixed Bug-1319: Proper conversion of line breaks to <br /> in generated HTML. Template handling for potentially multiline fields.
