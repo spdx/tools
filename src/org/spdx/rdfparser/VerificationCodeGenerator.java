@@ -76,7 +76,6 @@ public class VerificationCodeGenerator {
 				fileChecksums.add(spdxFiles[i].getSha1());
 			}
 		}
-		Collections.sort(fileChecksums);
 		return generatePackageVerificationCode(fileChecksums, skippedFilePaths);
 	}
 	
