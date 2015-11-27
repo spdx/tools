@@ -1,5 +1,9 @@
 language: java
 
 notifications:
-  email: false
+  email: 
+    recipients:
+      - gary@sourceauditor.com
+    on_success: change
+    on_failure: always
 
