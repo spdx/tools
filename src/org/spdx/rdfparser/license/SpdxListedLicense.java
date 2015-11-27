@@ -96,7 +96,13 @@ public class SpdxListedLicense extends License {
 		}
 		// For a listed license, if the ID's equal, it is considered equivalent
 		SpdxListedLicense sCompare = (SpdxListedLicense)compare;
-        return Objects.equal(this.licenseId, sCompare.getLicenseId());
+		if (this.licenseId == null) {
+			return sCompare.getLicenseId() == null;
+		} else if (sCompare.getLicenseId() == null) {
+			return false;
+		} else {
+			return this.licenseId.equalsIgnoreCase(sCompare.getLicenseId());
+		}
 	}
 
 }

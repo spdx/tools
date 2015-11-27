@@ -162,7 +162,7 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 		if (this.licenseId == null) {
 			return (comp.getLicenseId() == null);
 		} else {
-			return (this.licenseId.equals(comp.getLicenseId()));			
+			return (this.licenseId.equalsIgnoreCase(comp.getLicenseId()));			
 		}
 	}
 

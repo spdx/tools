@@ -286,11 +286,11 @@ public abstract class License extends SimpleLicensingInfo {
 		if (o == this) {
 			return true;
 		}
-		if (!(o instanceof SpdxListedLicense)) {
+		if (!(o instanceof License)) {
 			// covers o == null, as null is not an instance of anything
 			return false;
 		}
-		SpdxListedLicense comp = (SpdxListedLicense)o;
+		License comp = (License)o;
 		if (this.licenseId == null) {
 			return (comp.getLicenseId() == null);
 		} else {

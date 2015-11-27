@@ -16,15 +16,14 @@
 */
 package org.spdx.rdfparser.license;
 
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
-import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -124,7 +123,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 	 * @return all members "flattening out" conjunctive license sets which are members of this set
 	 */
 	private AnyLicenseInfo[] getFlattenedMembers() {
-		List<AnyLicenseInfo> retval = Lists.newArrayList();
+		HashSet<AnyLicenseInfo> retval = new HashSet<AnyLicenseInfo>();	// Use a set since any duplicated elements would be still considered equal
 		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {
 			AnyLicenseInfo li = iter.next();
