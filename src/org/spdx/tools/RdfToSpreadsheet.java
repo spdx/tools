@@ -126,7 +126,7 @@ public class RdfToSpreadsheet {
                 }
             }
         }else{
-            System.out.println("Error creating SPDX docuement reference, null reference returned");
+            System.out.println("Error creating SPDX document reference, null reference returned");
         }
     }
 
