@@ -96,9 +96,13 @@ public class NoCommentInputStream extends InputStream {
 		// Fill the buffer if we ran out of bytes.
 		if (bytesIndex >= currentBytes.length) {
 			readNextLine();
-			// Before returning bytes from the newly filled buffer, return the new
-			// line character that readLine() embezzled.
-			return (int)'\n';
+			if (currentLine == null) {
+				return -1;
+			} else {
+				// Before returning bytes from the newly filled buffer, return the new
+				// line character that readLine() embezzled.
+				return (int)'\n';
+			}
 		}
 
 		// Return the current byte from the buffer and increment the index.
