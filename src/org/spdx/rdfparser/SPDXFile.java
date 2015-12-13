@@ -825,7 +825,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 		}
 		String retval = fileTypeResource.getURI();
 		if (retval == null) {
-			throw(new InvalidSPDXAnalysisException("Not a recognized file type for an SPDX docuement."));
+			throw(new InvalidSPDXAnalysisException("Not a recognized file type for an SPDX document."));
 		}
 		return retval;
 	}
