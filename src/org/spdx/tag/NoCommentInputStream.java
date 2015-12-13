@@ -40,9 +40,9 @@ public class NoCommentInputStream extends InputStream {
 	private InputStream inputStream;
 	private InputStreamReader reader;
 	private BufferedReader bufferedReader;
-	private int lineIndex = 1;
-	private String currentLine = "";
-	boolean eof = false;
+	private String currentLine;
+	private int bytesIndex;
+	private byte[] currentBytes;
 	boolean inText = false;
 	
 
@@ -58,50 +58,29 @@ public class NoCommentInputStream extends InputStream {
 	}
 
 	/**
-	 * reads the next line in the input stream skipping when necessary
+	 * Reads the next line in the input stream, skipping empty lines and comments as necessary.
 	 * @throws IOException 
 	 */
 	private void readNextLine() throws IOException {
-		if (eof) {
-			return;
-		}
-		currentLine = bufferedReader.readLine();
-		while (currentLine != null && !inText && 
-				(currentLine.length() == 0 || currentLine.charAt(0) == COMMENT_CHAR)) {
+		do {
 			currentLine = bufferedReader.readLine();
-		}
-		if (currentLine == null) {
-			eof = true;
-			return;
-		}
+			if (currentLine == null) {
+				return;
+			}
+		} while (!inText && (currentLine.length() == 0 || currentLine.charAt(0) == COMMENT_CHAR));
+
 		if (inText) {
-			if (containsEndText(currentLine)) {
+			if (currentLine.contains(END_TEXT_TAG)) {
 				inText = false;
 			}
 		} else {
-			if (containsStartText(currentLine)) {
+			if (currentLine.contains(START_TEXT_TAG)) {
 				inText = true;
 			}
 		}
-		this.lineIndex = 0;
-	}
 
-	/**
-	 * Return true if str contains the end text tag
-	 * @param str
-	 * @return
-	 */
-	private boolean containsEndText(String str) {
-		return str.contains(END_TEXT_TAG);
-	}
-
-	/**
-	 * Returns true if str contains the start text tag
-	 * @param str
-	 * @return
-	 */
-	private boolean containsStartText(String str) {
-		return str.contains(START_TEXT_TAG);
+		bytesIndex = 0;
+		currentBytes = currentLine.getBytes("UTF-8");
 	}
 
 	/* (non-Javadoc)
@@ -109,18 +88,21 @@ public class NoCommentInputStream extends InputStream {
 	 */
 	@Override
 	public int read() throws IOException {
-		while (!eof && this.lineIndex >= this.currentLine.length()) {
-			readNextLine();
-			if (eof) {
-				return -1;
-			} else {
-				return (int)'\n';
-			}
-		}
-		if (eof) {
+		// Exit early on EOF.
+		if (currentLine == null) {
 			return -1;
 		}
-		return (int)currentLine.charAt(this.lineIndex++);
+
+		// Fill the buffer if we ran out of bytes.
+		if (bytesIndex >= currentBytes.length) {
+			readNextLine();
+			// Before returning bytes from the newly filled buffer, return the new
+			// line character that readLine() embezzled.
+			return (int)'\n';
+		}
+
+		// Return the current byte from the buffer and increment the index.
+		return (int)currentBytes[bytesIndex++];
 	}
 	
 	@Override
