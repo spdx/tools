@@ -247,14 +247,14 @@ public class CompareSpdxDocs {
 		if (!comparer.isExternalDcoumentRefsEquals()) {
 			ExternalDocumentRef[] uniqueA = comparer.getUniqueExternalDocumentRefs(0, 1);
 			if (uniqueA != null && uniqueA.length > 0) {
-				output.println("The following external docuement references were only found in "+doc1Name);
+				output.println("The following external document references were only found in "+doc1Name);
 				for (int i = 0; i < uniqueA.length; i++) {
 					printExternalDocumentRef(uniqueA[i], output);
 				}
 			}
 			ExternalDocumentRef[] uniqueB = comparer.getUniqueExternalDocumentRefs(1, 0);
 			if (uniqueB != null && uniqueB.length > 0) {
-				output.println("The following external docuement references were only found in "+doc2Name);
+				output.println("The following external document references were only found in "+doc2Name);
 				for (int i = 0; i < uniqueB.length; i++) {
 					printExternalDocumentRef(uniqueB[i], output);
 				}
@@ -285,7 +285,7 @@ public class CompareSpdxDocs {
 			}
 			Annotation[] uniqueB = comparer.getUniqueDocumentAnnotations(1, 0);
 			if (uniqueB != null && uniqueB.length > 0) {
-				output.println("The following docuement annotations were only found in "+doc2Name);
+				output.println("The following document annotations were only found in "+doc2Name);
 				for (int i = 0; i < uniqueB.length; i++) {
 					printAnnotation(uniqueB[i], output);
 				}
@@ -304,7 +304,7 @@ public class CompareSpdxDocs {
 			}
 			Relationship[] uniqueB = comparer.getUniqueDocumentRelationship(1, 0);
 			if (uniqueB != null && uniqueB.length > 0) {
-				output.println("The following docuement relationships were only found in "+doc2Name);
+				output.println("The following document relationships were only found in "+doc2Name);
 				for (int i = 0; i < uniqueB.length; i++) {
 					printRelationship(uniqueB[i], "SpdxRef-DOCUMENT", output);
 				}
