@@ -350,6 +350,7 @@ public class LicenseRDFAGenerator {
 			File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
 			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
+			tableOfContentsJSON.addLicense(deprecatedLicense.getLicense(), licHTMLReference);
 			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
 			Files.write(deprecatedLicense.getLicense().getLicenseText(), textFile, utf8);
 			if (deprecatedLicense.getLicense().getStandardLicenseTemplate() != null && !deprecatedLicense.getLicense().getStandardLicenseTemplate().trim().isEmpty()) {
