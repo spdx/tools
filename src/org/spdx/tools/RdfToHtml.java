@@ -204,10 +204,10 @@ public class RdfToHtml {
 				+ "the output html file.");
 	}
 
-    public static void rdfToHtml(SpdxDocument doc, String templateDirName,
+    public static void rdfToHtml(SpdxDocument doc, File templateDir,
     		File docHtmlFile, File licenseHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
-        String dirPath = docHtmlFile.getParent();
-		DefaultMustacheFactory lineBreakEscapingBuilder = new DefaultMustacheFactory(templateDirName){
+    	String dirPath = docHtmlFile.getParent();
+		DefaultMustacheFactory lineBreakEscapingBuilder = new DefaultMustacheFactory(templateDir){
 			@Override
 			public void encode(String value, Writer writer) {
 				try{
@@ -361,8 +361,9 @@ public class RdfToHtml {
 		File templateDirectoryRoot = new File(templateDir);
 		if (!(templateDirectoryRoot.exists() && templateDirectoryRoot.isDirectory())) {
 			templateDir = TEMPLATE_CLASS_PATH;
+			templateDirectoryRoot = new File(templateDir);
 		}
-		rdfToHtml(doc, templateDir, docHtmlFile, licenseHtmlFile, docFilesHtmlFile);
+		rdfToHtml(doc, templateDirectoryRoot, docHtmlFile, licenseHtmlFile, docFilesHtmlFile);
 	}
 
 }
