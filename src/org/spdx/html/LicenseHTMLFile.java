@@ -140,7 +140,7 @@ public class LicenseHTMLFile {
 		this.deprecatedVersion = deprecatedVersion;
 	}
 	
-	public void writeToFile(File htmlFile, String tableOfContentsReference) throws IOException, LicenseTemplateRuleException, MustacheException {
+	public void writeToFile(File htmlFile, String tableOfContentsReference) throws IOException, MustacheException, InvalidLicenseTemplateException {
 		FileOutputStream stream = null;
 		OutputStreamWriter writer = null;
 		if (!htmlFile.exists()) {
@@ -173,7 +173,7 @@ public class LicenseHTMLFile {
 	 * @return
 	 * @throws LicenseTemplateRuleException 
 	 */
-	private Map<String, Object> buildMustachMap() throws LicenseTemplateRuleException {
+	private Map<String, Object> buildMustachMap() throws InvalidLicenseTemplateException {
 			Map<String, Object> retval = Maps.newHashMap();
 			if (license != null) {
 				retval.put("licenseId", license.getLicenseId());
@@ -181,14 +181,22 @@ public class LicenseHTMLFile {
 				String licenseTemplateHtml = null;
 				String templateText = license.getStandardLicenseTemplate();
 				if (templateText != null && !templateText.trim().isEmpty()) {
-					licenseTextHtml = formatTemplateText(templateText);
+					try {
+						licenseTextHtml = formatTemplateText(templateText);
+					} catch(LicenseTemplateRuleException ex) {
+						throw new InvalidLicenseTemplateException("Invalid license expression found in license text for license "+this.license.getName()+":"+ex.getMessage());
+					}
 					licenseTemplateHtml = SpdxLicenseTemplateHelper.escapeHTML(templateText);
 				} else {
 					licenseTextHtml = SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText());
 				}
 				retval.put("licenseText", licenseTextHtml);
 				if (licenseTemplateHtml != null) {
-					retval.put("licenseTemplate", formatTemplateText(licenseTemplateHtml));
+					try {
+						retval.put("licenseTemplate", formatTemplateText(licenseTemplateHtml));
+					} catch(LicenseTemplateRuleException ex) {
+						throw new InvalidLicenseTemplateException("Invalid license expression found in license template text for license "+this.license.getName()+":"+ex.getMessage());
+					}
 				}
 				retval.put("licenseName", license.getName());
 				String notes;
@@ -217,7 +225,11 @@ public class LicenseHTMLFile {
 					header = null;	// so the template will appropriately skip the header text
 				} else {
 					//TODO: May need to add another field for the header template text
-					header = formatTemplateText(header);
+					try {
+						header = formatTemplateText(header);
+					} catch(LicenseTemplateRuleException ex) {
+						throw new InvalidLicenseTemplateException("Invalid license expression found in header text for license "+this.license.getName()+":"+ex.getMessage());
+					}
 				}
 				retval.put("licenseHeader", header);
 			}
