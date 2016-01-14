@@ -16,8 +16,10 @@
  */
 package org.spdx.tools;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 
 import java.util.Iterator;
@@ -29,6 +31,7 @@ import java.util.Set;
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.html.ExceptionHtml;
 import org.spdx.html.ExceptionHtmlToc;
+import org.spdx.html.InvalidLicenseTemplateException;
 import org.spdx.html.LicenseHTMLFile;
 import org.spdx.html.LicenseTOCHTMLFile;
 import org.spdx.html.LicenseTOCJSONFile;
@@ -176,11 +179,13 @@ public class LicenseRDFAGenerator {
 			}
 			System.out.println("Completed processing licenses");
 		} catch (SpreadsheetException e) {
-			System.out.println("Invalid spreadsheet: "+e.getMessage());
+			System.out.println("\nInvalid spreadsheet: "+e.getMessage());
 		} catch (SpdxListedLicenseException e) {
-			System.out.println("Error reading standard licenses: "+e.getMessage());
+			System.out.println("\nError reading standard licenses: "+e.getMessage());
+		} catch (InvalidLicenseTemplateException e) {
+			System.out.println("\nInvalid template found on one of the licenses: "+e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Unhandled exception generating html:");
+			System.out.println("\nUnhandled exception generating html:");
 			e.printStackTrace();
 		} finally {
 			if (licenseProvider != null && (licenseProvider instanceof SPDXLicenseSpreadsheet)) {
@@ -267,10 +272,28 @@ public class LicenseRDFAGenerator {
 	 */
 	private static void checkText(String text, String textDescription,
 			List<String> warnings) {
-		for (int i = 0; i < text.length(); i++) {
-			if (INVALID_TEXT_CHARS.contains(text.charAt(i))) {
-				warnings.add("Invalid character in " + textDescription +
-						" at character location "+String.valueOf(i));
+		BufferedReader reader = new BufferedReader(new StringReader(text));
+		try {
+			int lineNumber = 1;
+			String line = reader.readLine();
+			while (line != null) {
+				for (int i = 0; i < line.length(); i++) {
+					if (INVALID_TEXT_CHARS.contains(line.charAt(i))) {
+						warnings.add("Invalid character in " + textDescription +
+								" at line number " + String.valueOf(lineNumber) + 
+								" \"" +line + "\" at character location "+String.valueOf(i));
+					}
+				}
+				lineNumber++;
+				line = reader.readLine();
+			}
+		} catch (IOException e) {
+			warnings.add("IO error reading text");
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				warnings.add("IO Error closing string reader");
 			}
 		}
 	}
@@ -293,7 +316,7 @@ public class LicenseRDFAGenerator {
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings,
-			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, LicenseTemplateRuleException, MustacheException {
+			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseTOCJSONFile tableOfContentsJSON = new LicenseTOCJSONFile(version, releaseDate);
