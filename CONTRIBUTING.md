@@ -12,6 +12,12 @@ The source code for `spdx-tools` is hosted on [git.spdx.org](http://git.spdx.org
 
 To submit a patch via GitHub, fork the repository, create a topic branch from `master` for your work, and send a pull request when ready. If you would prefer to send a patch or grant access to pull from your own Git repository, please contact the project's contributors by e-mail.
 
+To contribute an implementation of a feature defined by a version of the SPDX specification later than the one supported by the current SPDX Tools release, clone the branch `develop/SPEC_X.X`, where X.X is the major.minor version of the targeted specification (e.g. "3.0").
+
+Once implemented, submit a pull request with `develop/SPEC_X.X` branch as the parent branch.
+
+
+
 Licensing
 ---------
 However you choose to contribute, please confirm in a comment to your pull request or by e-mail that you license your contributions under the terms of [the Apache License, Version 2.0](http://spdx.org/licenses/Apache-2.0).
