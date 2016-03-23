@@ -36,6 +36,8 @@ import com.google.common.collect.Lists;
  */
 public class LicenseTOCJSONFile {
 	
+	public static final String JSON_REFERENCE_FIELD = "detailsUrl";
+	
 	private static class ListedSpdxLicense {
 		private final String reference;
 		private final String refNumber;
@@ -43,15 +45,33 @@ public class LicenseTOCJSONFile {
 		private final boolean osiApproved;
 		private final String licenseName;
 		private final String[] seeAlso;
+		private boolean deprecated;
+		private String licJSONReference;
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean osiApproved, String licenseName, String[] seeAlso) {
+				String licenseId, boolean osiApproved, String licenseName, String[] seeAlso, boolean deprecated, String licJSONReference) {
 			this.reference = reference;
 			this.refNumber = refNumber;
 			this.licenseId = licenseId;
 			this.osiApproved = osiApproved;
 			this.licenseName = licenseName;
 			this.seeAlso = seeAlso;
+			this.deprecated = deprecated;
+			this.licJSONReference = licJSONReference;
+		}
+
+		/**
+		 * @return the licJSONReference
+		 */
+		public String getLicJSONReference() {
+			return licJSONReference;
+		}
+
+		/**
+		 * @return the deprecated
+		 */
+		public boolean isDeprecated() {
+			return deprecated;
 		}
 
 		public String getReference() {
@@ -91,11 +111,36 @@ public class LicenseTOCJSONFile {
 		this.version = version;
 		this.releaseDate = releaseDate;
 	}
-
-	public void addLicense(SpdxListedLicense license, String licHTMLReference) {
+	
+	/**
+	 * Add a license to the JSON table of contents file
+	 * @param license License to be added
+	 * @param licHTMLReference file path to the license file HTML
+	 * @param licHTMLReference file path to the license file JSON detail
+	 * @param deprecated true if the license ID is deprecated
+	 */
+	public void addLicense(SpdxListedLicense license, String licHTMLReference,
+			String licJSONReference, boolean deprecated) {
 		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				license.getLicenseId(), license.isOsiApproved(), license.getName(), license.getSeeAlso()));
+				license.getLicenseId(), license.isOsiApproved(), license.getName(), license.getSeeAlso(), 
+				deprecated, relativeToAbsolute(licJSONReference)));
 		currentRefNumber++;
+	}
+
+	/**
+	 * Convert a relative file reference to an absolute URL for the spdx.org/licenses web page
+	 * @param relativeRef
+	 * @return
+	 */
+	private String relativeToAbsolute(String relativeRef) {
+		String retval;
+		if (relativeRef.startsWith("./")) {
+			retval = relativeRef.substring(2);
+		} else {
+			retval = relativeRef;
+		}
+		retval = "http://spdx.org/licenses/" + retval;
+		return retval;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -125,7 +170,9 @@ public class LicenseTOCJSONFile {
 						seeAlsoArray.add(seeAlso);
 					}
 					licenseJSON.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
-				}				
+				}
+				licenseJSON.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, license.isDeprecated());
+				licenseJSON.put(JSON_REFERENCE_FIELD, license.getLicJSONReference());
 				licensesList.add(licenseJSON);
 			}
 			jsonObject.put("licenses", licensesList);
