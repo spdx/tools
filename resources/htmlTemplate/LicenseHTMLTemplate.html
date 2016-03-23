@@ -65,6 +65,10 @@
 {{#deprecated}}
 <h1 style="color:red">Deprecated</h1>
 <div style="color:red">This license has been deprecated since {{deprecatedVersion}}.</div>
+<div style="display:none;"><code property="spdx:deprecated">true</code></div>
+{{/deprecated}}
+{{^deprecated}}
+<div style="display:none;"><code property="spdx:deprecated">false</code></div>
 {{/deprecated}}
 <h2 style="color: #003F69;">Full name</h2>
     <p style="margin-left: 20px;"><code property="spdx:name">{{licenseName}}</code></p>

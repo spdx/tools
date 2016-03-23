@@ -35,6 +35,7 @@ import org.spdx.html.InvalidLicenseTemplateException;
 import org.spdx.html.LicenseHTMLFile;
 import org.spdx.html.LicenseTOCHTMLFile;
 import org.spdx.html.LicenseTOCJSONFile;
+import org.spdx.html.LicenseJSONFile;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
@@ -319,6 +320,7 @@ public class LicenseRDFAGenerator {
 			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
+		LicenseJSONFile licJson = new LicenseJSONFile();
 		LicenseTOCJSONFile tableOfContentsJSON = new LicenseTOCJSONFile(version, releaseDate);
 		LicenseTOCHTMLFile tableOfContentsHTML = new LicenseTOCHTMLFile(version, releaseDate);
 		// Main page - License list
@@ -340,16 +342,21 @@ public class LicenseRDFAGenerator {
 				checkText(license.getLicenseText(), "License text for "+license.getLicenseId(), warnings);
 				licHtml.setLicense(license);
 				licHtml.setDeprecated(false);
+				licJson.setLicense(license, false);
 				String licBaseHtmlFileName = formLicenseHTMLFileName(license.getLicenseId());
 				String licHtmlFileName = licBaseHtmlFileName + ".html";
+				String licJsonFileName = licBaseHtmlFileName + ".json";
 				String licHTMLReference = "./"+licHtmlFileName;
+				String licJSONReference = "./"+licJsonFileName;
 				String tocHTMLReference = "./"+LICENSE_TOC_HTML_FILE_NAME;
 				File licBaseHtmlFile = new File(dir.getPath()+File.separator+licBaseHtmlFileName);
+				File licJsonFile = new File(dir.getPath()+File.separator+licJsonFileName);
 				// the base file is used for direct references from tools, the html is used for rendering by the website
 				licHtml.writeToFile(licBaseHtmlFile, tocHTMLReference);
 				File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
 				licHtml.writeToFile(licHtmlFile, tocHTMLReference);
-				tableOfContentsJSON.addLicense(license, licHTMLReference);
+				licJson.writeToFile(licJsonFile);
+				tableOfContentsJSON.addLicense(license, licHTMLReference, licJSONReference, false);
 				tableOfContentsHTML.addLicense(license, licHTMLReference);
 				File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
 				Files.write(license.getLicenseText(), textFile, utf8);
@@ -367,13 +374,22 @@ public class LicenseRDFAGenerator {
 			licHtml.setLicense(deprecatedLicense.getLicense());
 			licHtml.setDeprecated(true);
 			licHtml.setDeprecatedVersion(deprecatedLicense.getDeprecatedVersion());
-			String licHtmlFileName = formLicenseHTMLFileName(deprecatedLicense.getLicense().getLicenseId());
+			licJson.setLicense(deprecatedLicense.getLicense(), true);
+			String licBaseHtmlFileName = formLicenseHTMLFileName(deprecatedLicense.getLicense().getLicenseId());
+			String licHtmlFileName = licBaseHtmlFileName + ".html";
 			String licHTMLReference = "./"+licHtmlFileName;
 			String tocHTMLReference = "./"+LICENSE_TOC_HTML_FILE_NAME;
+			File licBaseHtmlFile = new File(dir.getPath()+File.separator+licBaseHtmlFileName);
 			File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
+			String licJsonFileName = licBaseHtmlFileName + ".json";
+			String licJSONReference = "./"+licJsonFileName;
+			// the base file is used for direct references from tools, the html is used for rendering by the website
+			licHtml.writeToFile(licBaseHtmlFile, tocHTMLReference);
 			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
+			File licJsonFile = new File(dir.getPath()+File.separator+licJsonFileName);
+			licJson.writeToFile(licJsonFile);
 			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
-			tableOfContentsJSON.addLicense(deprecatedLicense.getLicense(), licHTMLReference);
+			tableOfContentsJSON.addLicense(deprecatedLicense.getLicense(), licHTMLReference, licJSONReference, true);
 			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
 			Files.write(deprecatedLicense.getLicense().getLicenseText(), textFile, utf8);
 			if (deprecatedLicense.getLicense().getStandardLicenseTemplate() != null && !deprecatedLicense.getLicense().getStandardLicenseTemplate().trim().isEmpty()) {
