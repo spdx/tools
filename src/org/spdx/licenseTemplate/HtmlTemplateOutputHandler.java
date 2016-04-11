@@ -41,7 +41,8 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void optionalText(String text) {
-		htmlString.append(text);
+		htmlString.append((SpdxLicenseTemplateHelper.escapeHTML(text, this.movingParagraph)));
+		this.movingParagraph = false;
 	}
 
 	/* (non-Javadoc)
