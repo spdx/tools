@@ -32,15 +32,15 @@ public class PrettyPrinter {
 	public static void main(String[] args) {
 		if (args.length < MIN_ARGS) {
 			System.console().printf("Usage:\n PrettyPrinter file\nwhere file is the file path to a valid SPDX RDF XML file");
-                return;
-                    }
+			return;
+		}
 		if (args.length > MAX_ARGS) {
 			System.out.printf("Warning: Extra arguments will be ignored");
-                }
-        SPDXDocument doc = null;
-        try {
-            doc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
-        } catch(Exception ex) {
+		}
+		SPDXDocument doc = null;
+		try {
+			doc = SPDXDocumentFactory.creatSpdxDocument(args[0]);
+		} catch(Exception ex) {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			return;
 		}
