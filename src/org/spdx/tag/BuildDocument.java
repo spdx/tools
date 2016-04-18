@@ -1021,16 +1021,4 @@ public class BuildDocument implements TagValueBehavior, Serializable {
         }
 
     }
-//
-//		The following can be removed after the interface changes to the
-//		build document for warning message has been tested.  Can be removed after Sept. 2015
-//    private static void assertEquals(String name, int expected,
-//            List<String> verify) {
-//        if (verify.size() > expected) {
-//            System.out.println("Converting the tag/value document to RDF resulted in the following verification errors for " + name + ":");
-//            for (int x = 0; x < verify.size(); x++) {
-//                System.out.println("\t" + verify.get(x));
-//            }
-//        }
-//    }
 }
