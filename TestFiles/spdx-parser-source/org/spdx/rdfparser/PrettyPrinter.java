@@ -31,7 +31,7 @@ public class PrettyPrinter {
 	 */
 	public static void main(String[] args) {
 		if (args.length < MIN_ARGS) {
-			System.console().printf("Usage:\n PrettyPrinter file\nwhere file is the file path to a valid SPDX RDF XML file");
+			System.err.println("Usage:\n PrettyPrinter file\nwhere file is the file path to a valid SPDX RDF XML file");
 			return;
 		}
 		if (args.length > MAX_ARGS) {
