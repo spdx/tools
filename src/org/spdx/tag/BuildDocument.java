@@ -925,21 +925,23 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			lastAnnotation = null;
 		}
 		for (int i = 0; i < annotations.size(); i++) {
-			if (annotations.get(i).getId() == null) {
+			String id = annotations.get(i).getId();
+			if (id == null) {
 				this.warningMessages.add("missing SPDXREF: tag in annotation " + annotations.get(i).getAnnotation().getComment());
+				continue;
 			}
-			SpdxElement element = this.analysis.getDocumentContainer().findElementById(annotations.get(i).getId());
+			SpdxElement element = this.analysis.getDocumentContainer().findElementById(id);
 			if (element == null) {
-				this.warningMessages.add("Invalid element reference in annotation: "+annotations.get(i).getId());
-			} else {
-				Annotation[] elementAnnotations = element.getAnnotations();
-				if (elementAnnotations == null) {
-					elementAnnotations = new Annotation[0];
-				}
-				Annotation[] newAnnotations = Arrays.copyOf(elementAnnotations, elementAnnotations.length+1);
-				newAnnotations[elementAnnotations.length] = annotations.get(i).getAnnotation();
-				element.setAnnotations(newAnnotations);
+				this.warningMessages.add("Invalid element reference in annotation: " + id);
+				continue;
 			}
+			Annotation[] elementAnnotations = element.getAnnotations();
+			if (elementAnnotations == null) {
+				elementAnnotations = new Annotation[0];
+			}
+			Annotation[] newAnnotations = Arrays.copyOf(elementAnnotations, elementAnnotations.length+1);
+			newAnnotations[elementAnnotations.length] = annotations.get(i).getAnnotation();
+			element.setAnnotations(newAnnotations);
 		}
 	}
 
