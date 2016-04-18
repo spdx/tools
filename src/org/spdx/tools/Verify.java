@@ -39,7 +39,7 @@ public class Verify {
 	public static void main(String[] args) {
 		if (args.length < MIN_ARGS) {
 			System.err
-					.println("Usage:\n Verify file\nwhere file is the file path to a valid SPDX RDF XML or a valid SPDX Tag/Value file");
+					.println("Usage:\n Verify file\nwhere file is the file path to an SPDX RDF XML or an SPDX Tag/Value file");
 			System.exit(ERROR_STATUS);
 		}
 		if (args.length > MAX_ARGS) {
