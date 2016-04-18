@@ -1158,7 +1158,7 @@ public class CompareSpdxDocs {
 	}
 
 	/**
-	 * Converts a tag/value filt to an rdfFile
+	 * Converts a tag/value file to an rdfFile
 	 * @param tagValueFile Input file in tag/value format
 	 * @param tempRdfFile File to output the generated RDF file (must already exist - file is overwritten)
 	 */
