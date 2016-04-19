@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.compare.SpdxComparer;
 import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
@@ -63,7 +65,8 @@ import com.google.common.base.Joiner;
  *
  */
 public class CompareSpdxDocs {
-	
+	static final Logger logger = Logger.getLogger(CompareSpdxDocs.class.getName());
+
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 3;
 	static final int ERROR_STATUS = 1;
@@ -1137,6 +1140,7 @@ public class CompareSpdxDocs {
 		SpdxDocument retval = null;
 		try {
 			retval = SPDXDocumentFactory.createSpdxDocument(spdxDocFileName);
+			logger.info("Document identified as SPDX RDF/XML.");
 		} catch (IOException e) {
 			// ignore - assume this is a tag value file
 		} catch (InvalidSPDXAnalysisException e) {
@@ -1147,6 +1151,7 @@ public class CompareSpdxDocs {
 		if (retval == null) {
 			try {
 				retval = convertTagValueToRdf(spdxDocFile, warnings);
+				logger.info("Document identified as SPDX tag/value.");
 			} catch (SpdxCompareException e) {
 				throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: "+e.getMessage()));
 			}
