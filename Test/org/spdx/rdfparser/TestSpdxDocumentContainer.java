@@ -434,7 +434,7 @@ public class TestSpdxDocumentContainer {
 		List<SpdxPackage> result = doc.findAllPackages();
 		assertEquals(1, result.size());
 		assertTrue(result.contains(pkg1));
-		Relationship rel = new Relationship(pkg3, RelationshipType.relationshipType_ancestorOf, "");
+		Relationship rel = new Relationship(pkg3, RelationshipType.ANCESTOR_OF, "");
 		pkg2.setRelationships(new Relationship[] {rel});
 		doc.addElement(pkg2);
 		result = doc.findAllPackages();
@@ -462,7 +462,7 @@ public class TestSpdxDocumentContainer {
 		List<SpdxFile> result = doc.findAllFiles();
 		assertEquals(1, result.size());
 		assertTrue(result.contains(file1));
-		Relationship rel = new Relationship(file3, RelationshipType.relationshipType_ancestorOf, "");
+		Relationship rel = new Relationship(file3, RelationshipType.ANCESTOR_OF, "");
 		file2.setRelationships(new Relationship[] {rel});
 		doc.addElement(file2);
 		result = doc.findAllFiles();

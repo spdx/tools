@@ -193,13 +193,13 @@ public class SpdxPackageComparerTest {
 		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
 				"related element comment 4", null, null);
 		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
-				RelationshipType.relationshipType_contains, "Relationship Comment1");
+				RelationshipType.CONTAINS, "Relationship Comment1");
 		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
-				RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3, 
-				RelationshipType.relationshipType_dataFile, "Relationship Comment3");
+				RelationshipType.DATA_FILE_OF, "Relationship Comment3");
 		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4, 
-				RelationshipType.relationshipType_distributionArtifact, "Relationship Comment4");
+				RelationshipType.DISTRIBUTION_ARTIFACT, "Relationship Comment4");
 		RELATIONSHIPSA = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		RELATIONSHIPSB = new Relationship[] {RELATIONSHIP3, RELATIONSHIP4};
 		CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 

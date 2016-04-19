@@ -424,7 +424,7 @@ public class TestRdfModelObject {
 		String elementName1 = "element name 1";
 		String elementComment1 = "element comment 1";
 		SpdxElement element1 = new SpdxElement(elementName1, elementComment1, null, null);
-		RelationshipType relType1 = RelationshipType.relationshipType_buildToolOf;
+		RelationshipType relType1 = RelationshipType.BUILD_TOOL_OF;
 		String relComment1 = "Relationship Comment 1";
 		Relationship relationship1 = new Relationship(element1, relType1, relComment1);
 		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, relationship1);
@@ -444,7 +444,7 @@ public class TestRdfModelObject {
 		String elementName1 = "element name 1";
 		String elementComment1 = "element comment 1";
 		SpdxElement element1 = new SpdxElement(elementName1, elementComment1, null, null);
-		RelationshipType relType1 = RelationshipType.relationshipType_buildToolOf;
+		RelationshipType relType1 = RelationshipType.BUILD_TOOL_OF;
 		String relComment1 = "Relationship Comment 1";
 		Relationship relationship1 = new Relationship(element1, relType1, relComment1);
 		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, new Relationship[] {relationship1});
@@ -454,7 +454,7 @@ public class TestRdfModelObject {
 		String elementName2 = "element name 2";
 		String elementComment2 = "element comment 2";
 		SpdxElement element2 = new SpdxElement(elementName2, elementComment2, null, null);
-		RelationshipType relType2 = RelationshipType.relationshipType_documentation;
+		RelationshipType relType2 = RelationshipType.DOCUMENTATION_OF;
 		String relComment2 = "Relationship Comment 2";
 		Relationship relationship2 = new Relationship(element2, relType2, relComment2);
 		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, new Relationship[] {relationship1, relationship2});

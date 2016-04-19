@@ -136,9 +136,9 @@ public class TestSpdxDocument {
 		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
 				"related element comment 2", null, null);
 		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
-				RelationshipType.relationshipType_contains, "Relationship Comment1");
+				RelationshipType.CONTAINS, "Relationship Comment1");
 		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
-				RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 		REVIEWER1 = new SPDXReview("Reviewer1", DATE1, "Reviewer Comment 1");
 		REVIEWER2 = new SPDXReview("Reviewer2", DATE2, "Reviewer Comment 2");
 		FILE1 = new SpdxFile("FileName1", "FileComment 1", 
@@ -252,7 +252,7 @@ public class TestSpdxDocument {
 		doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
 		for (int i = 0; i < items.length; i++) {
 			Relationship rel = new Relationship(items[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			relationships.add(rel);
 			doc.addRelationship(rel);
 		}
@@ -321,7 +321,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
 			for (int i = 0; i < items.length; i++) {
 				Relationship rel = new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, "");
+						Relationship.RelationshipType.DESCRIBES, "");
 				relationships.add(rel);
 				doc.addRelationship(rel);
 			}
@@ -379,9 +379,9 @@ public class TestSpdxDocument {
 			assertTrue(doc.equivalent(doc2));
 			// Items
 			doc2.addRelationship(new Relationship(FILE3, 
-					Relationship.RelationshipType.relationshipType_describes, ""));
+					Relationship.RelationshipType.DESCRIBES, ""));
 			doc2.addRelationship(new Relationship(PACKAGE3, 
-					Relationship.RelationshipType.relationshipType_describes, ""));
+					Relationship.RelationshipType.DESCRIBES, ""));
 			assertFalse(doc.equivalent(doc2));
 	}
 
@@ -417,7 +417,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			List<String> result = doc.verify();
 			assertEquals(0, result.size());
@@ -499,7 +499,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertEquals(CREATIONINFO1, doc.getCreationInfo());
 			doc.setCreationInfo(CREATIONINFO2);
@@ -538,7 +538,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			
 			assertEquals(CCO_DATALICENSE, doc.getDataLicense());
@@ -579,7 +579,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc.getExternalDocumentRefs()));
 			ExternalDocumentRef[] ref2 = new ExternalDocumentRef[] {
@@ -621,7 +621,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 			ExtractedLicenseInfo[] infos2 = new ExtractedLicenseInfo[] {
@@ -659,7 +659,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
 
@@ -704,7 +704,7 @@ public class TestSpdxDocument {
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
 				doc.addRelationship(new Relationship(items[i], 
-						Relationship.RelationshipType.relationshipType_describes, ""));
+						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			
 			assertEquals(SpdxDocumentContainer.CURRENT_SPDX_VERSION, doc.getSpecVersion());

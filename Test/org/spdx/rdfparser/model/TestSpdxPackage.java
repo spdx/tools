@@ -149,9 +149,9 @@ public class TestSpdxPackage {
 		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
 				"related element comment 2", null, null);
 		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
-				RelationshipType.relationshipType_contains, "Relationship Comment1");
+				RelationshipType.CONTAINS, "Relationship Comment1");
 		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
-				RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 	}
 
 	/**

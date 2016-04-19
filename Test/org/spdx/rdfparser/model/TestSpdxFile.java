@@ -268,8 +268,8 @@ public class TestSpdxFile {
 				contributors, "Notice Text", artifactOfs);
 		SpdxFile[] fileDependencies = new SpdxFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
-		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
+		Relationship rel1 = new Relationship(fileDep1, RelationshipType.CONTAINS, "Relationship 1 comment");
+		Relationship rel2 = new Relationship(fileDep2, RelationshipType.DOCUMENTATION_OF, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
 		SpdxFile file = new SpdxFile("fileName", 
 				"file comments", new Annotation[] {ANNOTATION3}, relationships,
@@ -326,8 +326,8 @@ public class TestSpdxFile {
 				contributors, "Notice Text", artifactOfs);
 		SpdxFile[] fileDependencies = new SpdxFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
-		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
+		Relationship rel1 = new Relationship(fileDep1, RelationshipType.CONTAINS, "Relationship 1 comment");
+		Relationship rel2 = new Relationship(fileDep2, RelationshipType.DOCUMENTATION_OF, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
 		String id = "SpdxRef-3";
 		String name = "fileName";
@@ -513,8 +513,8 @@ public class TestSpdxFile {
 				contributors, "Notice Text", artifactOfs);
 		SpdxFile[] fileDependencies = new SpdxFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
-		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
+		Relationship rel1 = new Relationship(fileDep1, RelationshipType.CONTAINS, "Relationship 1 comment");
+		Relationship rel2 = new Relationship(fileDep2, RelationshipType.DOCUMENTATION_OF, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
 		String name = "fileName";
 		String comment = "file comments";
@@ -629,8 +629,8 @@ public class TestSpdxFile {
 				contributors, "Notice Text", artifactOfs);
 		SpdxFile[] fileDependencies = new SpdxFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		Relationship rel1 = new Relationship(fileDep1, RelationshipType.relationshipType_contains, "Relationship 1 comment");
-		Relationship rel2 = new Relationship(fileDep2, RelationshipType.relationshipType_documentation, "Relationship 2 comment");
+		Relationship rel1 = new Relationship(fileDep1, RelationshipType.CONTAINS, "Relationship 1 comment");
+		Relationship rel2 = new Relationship(fileDep2, RelationshipType.DOCUMENTATION_OF, "Relationship 2 comment");
 		Relationship[] relationships = new Relationship[] {rel1, rel2};
 		String name = "fileName";
 		String comment = "file comments";

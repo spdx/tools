@@ -96,7 +96,7 @@ public class TestRelationship {
 	 */
 	@Test
 	public void testRelationshipSpdxElementRelationshipTypeString() {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
@@ -110,7 +110,7 @@ public class TestRelationship {
 	 */
 	@Test
 	public void testRelationshipIModelContainerNode() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
@@ -129,7 +129,7 @@ public class TestRelationship {
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(0, relationship.verify().size());
@@ -145,14 +145,14 @@ public class TestRelationship {
 	 */
 	@Test
 	public void testSetRelationshipType() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
 		assertEquals(relationshipType1, relationship.getRelationshipType());
 		assertEquals(comment1, relationship.getComment());
 		relationship.createResource(modelContainer);
-		RelationshipType relationshipType2  = RelationshipType.relationshipType_copyOf;
+		RelationshipType relationshipType2  = RelationshipType.COPY_OF;
 		relationship.setRelationshipType(relationshipType2);
 		assertEquals(relationshipType2, relationship.getRelationshipType());
 	}
@@ -163,7 +163,7 @@ public class TestRelationship {
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
@@ -181,7 +181,7 @@ public class TestRelationship {
 	 */
 	@Test
 	public void testSetRelatedSpdxElement() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
@@ -194,7 +194,7 @@ public class TestRelationship {
 
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		assertEquals(RELATED_ELEMENT1, relationship.getRelatedSpdxElement());
@@ -216,7 +216,7 @@ public class TestRelationship {
 		relationship2.setRelatedSpdxElement(RELATED_ELEMENT1);
 		assertTrue(relationship2.equivalent(relationship));
 		// relationship type
-		relationship2.setRelationshipType(RelationshipType.relationshipType_dynamicLink);
+		relationship2.setRelationshipType(RelationshipType.DYNAMIC_LINK);
 		assertFalse(relationship.equivalent(relationship2));
 		relationship2.setRelationshipType(relationshipType1);
 		assertTrue(relationship2.equivalent(relationship));
@@ -229,7 +229,7 @@ public class TestRelationship {
 
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
-		RelationshipType relationshipType1  = RelationshipType.relationshipType_descendantOf;
+		RelationshipType relationshipType1  = RelationshipType.DESCENDANT_OF;
 		String comment1 = "Comment1";
 		Relationship relationship = new Relationship(RELATED_ELEMENT1, relationshipType1, comment1);
 		relationship.createResource(modelContainer);
