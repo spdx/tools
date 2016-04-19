@@ -298,7 +298,7 @@ public class CommonCode {
 			String elementId, PrintWriter out, Properties constants) {
 		out.println(constants.getProperty("PROP_RELATIONSHIP")+
 				elementId+" " +
-				relationship.getRelationshipType().getTag()+
+				relationship.getRelationshipType().toTag()+
 				" " + relationship.getRelatedSpdxElement().getId());
 	}
 

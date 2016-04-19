@@ -334,7 +334,7 @@ public class CompareSpdxDocs {
 			relatedElementId = relationship.getRelatedSpdxElement().getId();
 		}
 		output.println("\tRelationship: " +
-				elementId + relationship.getRelationshipType().getTag() +
+				elementId + relationship.getRelationshipType().toTag() +
 				" " + relatedElementId);
 		if (relationship.getComment() != null && !relationship.getComment().isEmpty()) {
 			output.println("\tRelationshipComment: " + relationship.getComment());

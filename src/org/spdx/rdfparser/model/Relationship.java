@@ -59,9 +59,17 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		 relationshipType_testcaseOf, relationshipType_prerequisiteFor,
 		 relationshipType_hasPrerequisite;
 
-		
-		/** @return Returns the tag value for this relationship type */
+		@Deprecated
+		/**
+		 * Use {@link toTag()} instead.
+		 * @deprecated
+		 */
 		public String getTag(){
+			return toTag();
+		}
+
+		/** @return Returns the tag value for this relationship type */
+		public String toTag(){
 			return RELATIONSHIP_TYPE_TO_TAG.get(this);
 		}
 
@@ -73,7 +81,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 
 	@Deprecated
 	/**
-	 * Use {@link RelationshipType#getTag()} instead.
+	 * Use {@link RelationshipType#toTag()} instead.
 	 * @deprecated
 	 */
 	public static final Map<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG;

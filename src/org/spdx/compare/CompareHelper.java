@@ -151,7 +151,7 @@ public class CompareHelper {
 		if (relationship.getRelationshipType() == null) {
 			return "Unknown relationship type";
 		}
-		StringBuilder sb = new StringBuilder(relationship.getRelationshipType().getTag());
+		StringBuilder sb = new StringBuilder(relationship.getRelationshipType().toTag());
 		sb.append(":");
 		if (relationship.getRelatedSpdxElement() == null) {
 			sb.append("?NULL");

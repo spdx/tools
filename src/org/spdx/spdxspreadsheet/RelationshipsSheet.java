@@ -143,7 +143,7 @@ public class RelationshipsSheet extends AbstractSheet {
 		}	
 		if (relationship.getRelationshipType() != null) {
 			Cell relationshipCell = row.createCell(RELATIONSHIP_COL, Cell.CELL_TYPE_STRING);
-			relationshipCell.setCellValue(relationship.getRelationshipType().getTag());
+			relationshipCell.setCellValue(relationship.getRelationshipType().toTag());
 		}
 		if (relationship.getRelatedSpdxElement() != null) {
 			Cell relatedIdCell = row.createCell(RELATED_ID_COL, Cell.CELL_TYPE_STRING);
