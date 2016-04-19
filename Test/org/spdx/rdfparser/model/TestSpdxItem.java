@@ -60,9 +60,9 @@ public class TestSpdxItem {
 	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 			"related element comment 2", null, null);
 	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
-			RelationshipType.relationshipType_contains, "Relationship Comment1");
+			RelationshipType.CONTAINS, "Relationship Comment1");
 	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
-			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+			RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 	static final ExtractedLicenseInfo LICENSE1 = new ExtractedLicenseInfo("LicenseRef-1", "License Text 1");
 	static final ExtractedLicenseInfo LICENSE2 = new ExtractedLicenseInfo("LicenseRef-2", "License Text 2");
 	static final ExtractedLicenseInfo LICENSE3 = new ExtractedLicenseInfo("LicenseRef-3", "License Text 3");

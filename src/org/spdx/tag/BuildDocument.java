@@ -899,7 +899,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		Relationship[] documentRelationships = this.analysis.getRelationships();
 		List<String> describedElementIds = Lists.newArrayList();
 		for (int i = 0; i < documentRelationships.length; i++) {
-			if (documentRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes) {
+			if (documentRelationships[i].getRelationshipType() == Relationship.RelationshipType.DESCRIBES) {
 				if (pkgs.contains(documentRelationships[i])) {
 					describedElementIds.add(documentRelationships[i].getRelatedSpdxElement().getId());
 				}
@@ -909,7 +909,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			// add a relationship for the package as a default
 			// See the spec for the definition of this default behavior
 			Relationship describesRelationship = new Relationship(pkgs.get(0),
-					Relationship.RelationshipType.relationshipType_describes,
+					Relationship.RelationshipType.DESCRIBES,
 					"This describes relationship was added as a default relationship by the SPDX Tools Tag parser.");
 			this.analysis.addRelationship(describesRelationship);
 		}

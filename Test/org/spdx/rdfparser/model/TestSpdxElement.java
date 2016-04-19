@@ -58,9 +58,9 @@ public class TestSpdxElement {
 	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 			"related element comment 2", null, null);
 	static final Relationship RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
-			RelationshipType.relationshipType_contains, "Relationship Comment1");
+			RelationshipType.CONTAINS, "Relationship Comment1");
 	static final Relationship RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
-			RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+			RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 	Model model;
 	IModelContainer modelContainer = new ModelContainerForTest(model, DOCUMENT_NAMESPACE);
 

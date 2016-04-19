@@ -93,17 +93,17 @@ public class TestRelationshipSheet {
 				new Relationship[0]);
 		element1.setId("SPDXRef-1");
 		doc.addElement(element1);
-		Relationship rel1 = new Relationship(element1, RelationshipType.relationshipType_amends, "Comment1");
+		Relationship rel1 = new Relationship(element1, RelationshipType.AMENDS, "Comment1");
 		SpdxElement element2 = new SpdxElement("Element2", "", new Annotation[0],
 				new Relationship[0]);
 		element2.setId("SPDXRef-2");
 		doc.addElement(element2);
-		Relationship rel2 = new Relationship(element2, RelationshipType.relationshipType_contains, null);
+		Relationship rel2 = new Relationship(element2, RelationshipType.CONTAINS, null);
 		SpdxElement element3 = new SpdxElement("Element3", "", new Annotation[0],
 				new Relationship[0]);
 		element3.setId("SPDXRef-3");
 		doc.addElement(element3);
-		Relationship rel3 = new Relationship(element3, RelationshipType.relationshipType_copyOf, "Comment2");
+		Relationship rel3 = new Relationship(element3, RelationshipType.COPY_OF, "Comment2");
 		Workbook wb = new HSSFWorkbook();
 		RelationshipsSheet.create(wb, "Relationship Info");
 		RelationshipsSheet relationships = new RelationshipsSheet(wb, "Relationship Info");

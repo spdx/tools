@@ -220,13 +220,13 @@ public class SpdxComparerTest {
 		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
 				"related element comment 4", null, null);
 		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
-				RelationshipType.relationshipType_contains, "Relationship Comment1");
+				RelationshipType.CONTAINS, "Relationship Comment1");
 		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
-				RelationshipType.relationshipType_dynamicLink, "Relationship Comment2");
+				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3, 
-				RelationshipType.relationshipType_dataFile, "Relationship Comment3");
+				RelationshipType.DATA_FILE_OF, "Relationship Comment3");
 		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4, 
-				RelationshipType.relationshipType_distributionArtifact, "Relationship Comment4");
+				RelationshipType.DISTRIBUTION_ARTIFACT, "Relationship Comment4");
 		RELATIONSHIPSA = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		RELATIONSHIPSB = new Relationship[] {RELATIONSHIP3, RELATIONSHIP4};
 		CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
@@ -1712,12 +1712,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 		SpdxComparer comparer = new SpdxComparer();
@@ -1760,12 +1760,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 		SpdxComparer comparer = new SpdxComparer();
@@ -1821,12 +1821,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 
@@ -1883,12 +1883,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 
@@ -1953,7 +1953,7 @@ public class SpdxComparerTest {
 		docA.setCreationInfo(CREATION_INFOA);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 
@@ -1990,12 +1990,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 
@@ -2044,12 +2044,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 
@@ -2094,12 +2094,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOB);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 		docA.setRelationships(new Relationship[] {RELATIONSHIP1, RELATIONSHIP2});
@@ -2144,12 +2144,12 @@ public class SpdxComparerTest {
 		docB.setCreationInfo(CREATION_INFOA);
 		for (int i = 0; i < itemsA.length; i++) {
 			Relationship rel = new Relationship(itemsA[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docA.addRelationship(rel);
 		}
 		for (int i = 0; i < itemsB.length; i++) {
 			Relationship rel = new Relationship(itemsB[i], 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			docB.addRelationship(rel);
 		}
 		assertTrue(pkgA.equivalent(pkgB));
@@ -2169,7 +2169,7 @@ public class SpdxComparerTest {
 		docC.setExtractedLicenseInfos(EXTRACTED_LICENSESB);
 		docC.setName(DOC_NAMEA);
 		docC.setCreationInfo(CREATION_INFOA);
-		docC.addRelationship(new Relationship(pkgC, Relationship.RelationshipType.relationshipType_describes, ""));
+		docC.addRelationship(new Relationship(pkgC, Relationship.RelationshipType.DESCRIBES, ""));
 		comparer = new SpdxComparer();
 		comparer.compare(new SpdxDocument[] {docA, docB, docC});
 		assertTrue(comparer.isDifferenceFound());
