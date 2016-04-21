@@ -31,7 +31,9 @@ import java.util.Set;
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.html.ExceptionHtml;
 import org.spdx.html.ExceptionHtmlToc;
+import org.spdx.html.ExceptionTOCJSONFile;
 import org.spdx.html.InvalidLicenseTemplateException;
+import org.spdx.html.LicenseExceptionJSONFile;
 import org.spdx.html.LicenseHTMLFile;
 import org.spdx.html.LicenseTOCHTMLFile;
 import org.spdx.html.LicenseTOCJSONFile;
@@ -94,6 +96,10 @@ public class LicenseRDFAGenerator {
 	static final String LICENSE_TOC_JSON_FILE_NAME = "licenses.json";
 	static final String LICENSE_TOC_HTML_FILE_NAME = "index.html";
 	static final String EXCEPTION_TOC_FILE_NAME = "exceptions-index.html";
+	static final String EXCEPTION_JSON_TOC_FILE_NAME = "exceptions.json";
+	static final String RDFA_FOLDER_NAME = "rdfa";
+	static final String JSON_FOLDER_NAME = "json";
+	private static final String WEBSITE_FOLDER_NAME = "website";
 	
 	/**
 	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
@@ -162,15 +168,40 @@ public class LicenseRDFAGenerator {
 				System.out.println("Error: HTML folder is not a directory");
 				return;
 			}
+			File rdfaFolder = new File(dir.getPath() + File.separator +  RDFA_FOLDER_NAME);
+			if (!rdfaFolder.isDirectory() && !rdfaFolder.mkdir()) {
+				System.out.println("Error: RDFa folder is not a directory");
+				return;
+			}
+			File jsonFolder = new File(dir.getPath() + File.separator +  JSON_FOLDER_NAME);
+			if (!jsonFolder.isDirectory() && !jsonFolder.mkdir()) {
+				System.out.println("Error: JSON folder is not a directory");
+				return;
+			}
+			File jsonFolderDetails = new File(dir.getPath() + File.separator +  JSON_FOLDER_NAME+ File.separator + "details");
+			if (!jsonFolderDetails.isDirectory() && !jsonFolderDetails.mkdir()) {
+				System.out.println("Error: JSON folder is not a directory");
+				return;
+			}
+			File jsonFolderExceptions = new File(dir.getPath() + File.separator +  JSON_FOLDER_NAME + File.separator + "exceptions");
+			if (!jsonFolderExceptions.isDirectory() && !jsonFolderExceptions.mkdir()) {
+				System.out.println("Error: JSON folder is not a directory");
+				return;
+			}
+			File website = new File(dir.getPath() + File.separator +  WEBSITE_FOLDER_NAME);
+			if (!website.isDirectory() && !website.mkdir()) {
+				System.out.println("Error: Website folder is not a directory");
+				return;
+			}
 			System.out.print("Processing License List");
 			writeLicenseList(version, releaseDate, licenseProvider, warnings,
-					dir, textFolder, htmlFolder, templateFolder);
+					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder);
 			System.out.println();
 			System.out.print("Processing Exceptions");
-			writeExceptionList(version, licenseProvider, warnings,
-					dir, textFolder, htmlFolder, templateFolder);
-			writeCssFile(dir);
-			writeSortTableFile(dir);
+			writeExceptionList(version, releaseDate, licenseProvider, warnings,
+					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder);
+			writeCssFile(website);
+			writeSortTableFile(website);
 			System.out.println();
 			if (warnings.size() > 0) {
 				System.out.println("The following warning(s) were identified:");
@@ -201,21 +232,24 @@ public class LicenseRDFAGenerator {
 	}
 	/**
 	 * @param version License list version
+	 * @param releaseDate release date for the license list
 	 * @param licenseProvider Provides the licensing information
 	 * @param warnings Populated with any warnings if they occur
 	 * @param dir Directory storing the main HTML files
 	 * @param textFolder Directory holding the text only representation of the files
 	 * @param htmlFolder Directory holding the HTML formated license text
 	 * @param templateFolder Directory holding the template representation of the license text
+	 * @param jsonFolder Folder containing only the JSON files
+	 * @param rdfaFolder Folder containing the RDFa HTML files from the website
 	 * @throws IOException 
 	 * @throws SpreadsheetException 
 	 * @throws LicenseRestrictionException 
 	 * @throws MustacheException 
 	*/
-	private static void writeExceptionList(String version,
+	private static void writeExceptionList(String version,String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider,
 			List<String> warnings, File dir, File textFolder,
-			File htmlFolder, File templateFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException {
+			File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		Set<String> licenseIds = Sets.newHashSet();
@@ -229,6 +263,7 @@ public class LicenseRDFAGenerator {
 		}
 		String exceptionHtmlTocReference = "./" + EXCEPTION_TOC_FILE_NAME;
 		ExceptionHtmlToc exceptionToc = new ExceptionHtmlToc();
+		ExceptionTOCJSONFile jsonToc = new ExceptionTOCJSONFile(version, releaseDate);
 		Iterator<LicenseException> exceptionIter = licenseProvider.getExceptionIterator();
 		Map<String, String> addedExceptionsMap = Maps.newHashMap();
 		while (exceptionIter.hasNext()) {
@@ -253,17 +288,35 @@ public class LicenseRDFAGenerator {
 				ExceptionHtml exceptionHtml = new ExceptionHtml(nextException);
 				String exceptionHtmlFileName = formLicenseHTMLFileName(nextException.getLicenseExceptionId());
 				String exceptionHTMLReference = "./"+exceptionHtmlFileName + ".html";
+				String exceptionJsonFileName = exceptionHtmlFileName + ".json";
+				String exceptionJSONReference= "./" + exceptionJsonFileName;
 				File exceptionHtmlFile = new File(dir.getPath()+File.separator+exceptionHtmlFileName + ".html");
 				exceptionHtml.writeToFile(exceptionHtmlFile, exceptionHtmlTocReference);
+				File exceptionHtmlFileCopy = new File(rdfaFolder.getPath()+File.separator+exceptionHtmlFileName + ".html");
+				exceptionHtml.writeToFile(exceptionHtmlFileCopy, exceptionHtmlTocReference);
 				exceptionToc.addException(nextException, exceptionHTMLReference);
+				jsonToc.addException(nextException, exceptionHTMLReference, exceptionJSONReference, false);
+				
 				File textFile = new File(textFolder.getPath() + File.separator + exceptionHtmlFileName + ".txt");
 				Files.write(nextException.getLicenseExceptionText(), textFile, utf8);
-				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + exceptionHtmlFileName + ".html");
+				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + exceptionHtmlFileName);
 				Files.write(SpdxLicenseTemplateHelper.escapeHTML(nextException.getLicenseExceptionText()), htmlTextFile, utf8);
+				LicenseExceptionJSONFile exceptionJson = new LicenseExceptionJSONFile();
+				exceptionJson.setException(nextException, false);
+				File exceptionJsonFile = new File(dir.getPath() + File.separator + exceptionJsonFileName);
+				exceptionJson.writeToFile(exceptionJsonFile);
+				File exceptionJsonFileCopy = new File(jsonFolder.getPath() + File.separator + "exceptions" + File.separator +  exceptionJsonFileName);
+				exceptionJson.writeToFile(exceptionJsonFileCopy);
 			}
 		}
 		File exceptionTocFile = new File(dir.getPath()+File.separator+EXCEPTION_TOC_FILE_NAME);
 		exceptionToc.writeToFile(exceptionTocFile, version);
+		File exceptionTocFileCopy = new File(rdfaFolder.getPath()+File.separator+EXCEPTION_TOC_FILE_NAME);
+		exceptionToc.writeToFile(exceptionTocFileCopy, version);
+		File exceptionJsonTocFile = new File(dir.getPath()+File.separator+EXCEPTION_JSON_TOC_FILE_NAME);
+		jsonToc.writeToFile(exceptionJsonTocFile);
+		File exceptionJsonTocFileCopy = new File(jsonFolder.getPath()+File.separator+EXCEPTION_JSON_TOC_FILE_NAME);
+		jsonToc.writeToFile(exceptionJsonTocFileCopy);
 	}
 	/**
 	 * Check text for invalid characters
@@ -309,6 +362,8 @@ public class LicenseRDFAGenerator {
 	 * @param textFolder Directory holding the text only representation of the files
 	 * @param htmlFolder Directory holding the HTML formated license text
 	 * @param templateFolder Directory holding the template representation of the license text
+	 * @param jsonFolder Folder with only the JSON output files
+	 * @param rdfaFolder Folder containing all the HTML files copied to the website
 	 * @throws SpdxListedLicenseException 
 	 * @throws IOException 
 	 * @throws LicenseTemplateRuleException 
@@ -317,7 +372,7 @@ public class LicenseRDFAGenerator {
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings,
-			File dir, File textFolder, File htmlFolder, File templateFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException {
+			File dir, File textFolder, File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseJSONFile licJson = new LicenseJSONFile();
@@ -349,13 +404,17 @@ public class LicenseRDFAGenerator {
 				String licHTMLReference = "./"+licHtmlFileName;
 				String licJSONReference = "./"+licJsonFileName;
 				String tocHTMLReference = "./"+LICENSE_TOC_HTML_FILE_NAME;
+				// the base file is used for direct references from tools, the html is used for rendering by the website
 				File licBaseHtmlFile = new File(dir.getPath()+File.separator+licBaseHtmlFileName);
 				File licJsonFile = new File(dir.getPath()+File.separator+licJsonFileName);
-				// the base file is used for direct references from tools, the html is used for rendering by the website
+				File licJsonFileCopy = new File(jsonFolder.getPath()+File.separator+"details"+File.separator+licJsonFileName);
 				licHtml.writeToFile(licBaseHtmlFile, tocHTMLReference);
 				File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
+				File licHtmlFileCopy = new File(rdfaFolder.getPath()+File.separator+licHtmlFileName);
 				licHtml.writeToFile(licHtmlFile, tocHTMLReference);
+				licHtml.writeToFile(licHtmlFileCopy, tocHTMLReference);
 				licJson.writeToFile(licJsonFile);
+				licJson.writeToFile(licJsonFileCopy);
 				tableOfContentsJSON.addLicense(license, licHTMLReference, licJSONReference, false);
 				tableOfContentsHTML.addLicense(license, licHTMLReference);
 				File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
@@ -364,7 +423,7 @@ public class LicenseRDFAGenerator {
 					File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
 					Files.write(license.getStandardLicenseTemplate(), templateFile, utf8);
 				}
-				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
+				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
 				Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText()), htmlTextFile, utf8);
 			}
 		}
@@ -379,15 +438,19 @@ public class LicenseRDFAGenerator {
 			String licHtmlFileName = licBaseHtmlFileName + ".html";
 			String licHTMLReference = "./"+licHtmlFileName;
 			String tocHTMLReference = "./"+LICENSE_TOC_HTML_FILE_NAME;
+			// the base file is used for direct references from tools, the html is used for rendering by the website
 			File licBaseHtmlFile = new File(dir.getPath()+File.separator+licBaseHtmlFileName);
 			File licHtmlFile = new File(dir.getPath()+File.separator+licHtmlFileName);
+			File licHtmlFileCopy = new File(rdfaFolder.getPath()+File.separator+licHtmlFileName);
 			String licJsonFileName = licBaseHtmlFileName + ".json";
 			String licJSONReference = "./"+licJsonFileName;
-			// the base file is used for direct references from tools, the html is used for rendering by the website
 			licHtml.writeToFile(licBaseHtmlFile, tocHTMLReference);
 			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
+			licHtml.writeToFile(licHtmlFileCopy, tocHTMLReference);
 			File licJsonFile = new File(dir.getPath()+File.separator+licJsonFileName);
+			File licJsonFileCopy = new File(jsonFolder.getPath()+File.separator+licJsonFileName);
 			licJson.writeToFile(licJsonFile);
+			licJson.writeToFile(licJsonFileCopy);
 			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
 			tableOfContentsJSON.addLicense(deprecatedLicense.getLicense(), licHTMLReference, licJSONReference, true);
 			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
@@ -398,12 +461,15 @@ public class LicenseRDFAGenerator {
 			}
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
 			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
-
 		}
 		File tocJsonFile = new File(dir.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
 		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_HTML_FILE_NAME);
 		tableOfContentsJSON.writeToFile(tocJsonFile);
 		tableOfContentsHTML.writeToFile(tocHtmlFile);
+		File tocJsonFileCopy = new File(jsonFolder.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
+		File tocHtmlFileCopy = new File(rdfaFolder.getPath()+File.separator+LICENSE_TOC_HTML_FILE_NAME);
+		tableOfContentsJSON.writeToFile(tocJsonFileCopy);
+		tableOfContentsHTML.writeToFile(tocHtmlFileCopy);
 	}
 
 	private static void writeCssFile(File dir) throws IOException {
