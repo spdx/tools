@@ -3,4 +3,8 @@
 *.java text
 *.html text
 *.xml text
+*.otf binary
+*.eot binary
+*.ttf binary
+*.woff binary
 *.xls binary
