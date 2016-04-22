@@ -299,7 +299,7 @@ public class LicenseRDFAGenerator {
 				
 				File textFile = new File(textFolder.getPath() + File.separator + exceptionHtmlFileName + ".txt");
 				Files.write(nextException.getLicenseExceptionText(), textFile, utf8);
-				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + exceptionHtmlFileName);
+				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + exceptionHtmlFileName + ".html");
 				Files.write(SpdxLicenseTemplateHelper.escapeHTML(nextException.getLicenseExceptionText()), htmlTextFile, utf8);
 				LicenseExceptionJSONFile exceptionJson = new LicenseExceptionJSONFile();
 				exceptionJson.setException(nextException, false);
@@ -459,7 +459,7 @@ public class LicenseRDFAGenerator {
 				File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
 				Files.write(deprecatedLicense.getLicense().getStandardLicenseTemplate(), templateFile, utf8);
 			}
-			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName + ".html");
+			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
 			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
 		}
 		File tocJsonFile = new File(dir.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
