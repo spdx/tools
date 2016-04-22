@@ -448,7 +448,7 @@ public class LicenseRDFAGenerator {
 			licHtml.writeToFile(licHtmlFile, tocHTMLReference);
 			licHtml.writeToFile(licHtmlFileCopy, tocHTMLReference);
 			File licJsonFile = new File(dir.getPath()+File.separator+licJsonFileName);
-			File licJsonFileCopy = new File(jsonFolder.getPath()+File.separator+licJsonFileName);
+			File licJsonFileCopy = new File(jsonFolder.getPath()+File.separator+"details"+File.separator+licJsonFileName);
 			licJson.writeToFile(licJsonFile);
 			licJson.writeToFile(licJsonFileCopy);
 			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
