@@ -417,10 +417,10 @@ public class LicenseRDFAGenerator {
 				licJson.writeToFile(licJsonFileCopy);
 				tableOfContentsJSON.addLicense(license, licHTMLReference, licJSONReference, false);
 				tableOfContentsHTML.addLicense(license, licHTMLReference);
-				File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
+				File textFile = new File(textFolder.getPath() + File.separator + licBaseHtmlFileName + ".txt");
 				Files.write(license.getLicenseText(), textFile, utf8);
 				if (license.getStandardLicenseTemplate() != null && !license.getStandardLicenseTemplate().trim().isEmpty()) {
-					File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
+					File templateFile = new File(templateFolder.getPath() + File.separator + licBaseHtmlFileName + ".template.txt");
 					Files.write(license.getStandardLicenseTemplate(), templateFile, utf8);
 				}
 				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
@@ -453,10 +453,10 @@ public class LicenseRDFAGenerator {
 			licJson.writeToFile(licJsonFileCopy);
 			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
 			tableOfContentsJSON.addLicense(deprecatedLicense.getLicense(), licHTMLReference, licJSONReference, true);
-			File textFile = new File(textFolder.getPath() + File.separator + licHtmlFileName + ".txt");
+			File textFile = new File(textFolder.getPath() + File.separator + licBaseHtmlFileName + ".txt");
 			Files.write(deprecatedLicense.getLicense().getLicenseText(), textFile, utf8);
 			if (deprecatedLicense.getLicense().getStandardLicenseTemplate() != null && !deprecatedLicense.getLicense().getStandardLicenseTemplate().trim().isEmpty()) {
-				File templateFile = new File(templateFolder.getPath() + File.separator + licHtmlFileName + "-template.txt");
+				File templateFile = new File(templateFolder.getPath() + File.separator + licBaseHtmlFileName + ".template.txt");
 				Files.write(deprecatedLicense.getLicense().getStandardLicenseTemplate(), templateFile, utf8);
 			}
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
