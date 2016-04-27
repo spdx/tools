@@ -25,7 +25,6 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -43,113 +42,78 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	static final Logger logger = Logger.getLogger(RdfModelObject.class);
 	
 	public enum RelationshipType {
-		relationshipType_describes, relationshipType_describedBy,
-		 relationshipType_ancestorOf, relationshipType_buildToolOf,
-		 relationshipType_containedBy, relationshipType_contains,
-		 relationshipType_copyOf, relationshipType_dataFile,
-		 relationshipType_descendantOf, relationshipType_distributionArtifact,
-		 relationshipType_documentation, relationshipType_dynamicLink,
-		 relationshipType_expandedFromArchive, relationshipType_fileAdded,
-		 relationshipType_fileDeleted, relationshipType_fileModified,
-		 relationshipType_generatedFrom, relationshipType_generates,
-		 relationshipType_metafileOf, relationshipType_optionalComponentOf,
-		 relationshipType_other, relationshipType_packageOf,
-		 relationshipType_patchApplied, relationshipType_patchFor,
-		 relationshipType_amends, relationshipType_staticLink,
-		 relationshipType_testcaseOf, relationshipType_prerequisiteFor,
-		 relationshipType_hasPrerequisite;
+		DESCRIBES("relationshipType_describes"),
+		DESCRIBED_BY("relationshipType_describedBy"),
+		ANCESTOR_OF("relationshipType_ancestorOf"),
+		BUILD_TOOL_OF("relationshipType_buildToolOf"),
+		CONTAINED_BY("relationshipType_containedBy"),
+		CONTAINS("relationshipType_contains"),
+		COPY_OF("relationshipType_copyOf"),
+		DATA_FILE_OF("relationshipType_dataFile"),
+		DESCENDANT_OF("relationshipType_descendantOf"),
+		DISTRIBUTION_ARTIFACT("relationshipType_distributionArtifact"),
+		DOCUMENTATION_OF("relationshipType_documentation"),
+		DYNAMIC_LINK("relationshipType_dynamicLink"),
+		EXPANDED_FROM_ARCHIVE("relationshipType_expandedFromArchive"),
+		FILE_ADDED("relationshipType_fileAdded"),
+		FILE_DELETED("relationshipType_fileDeleted"),
+		FILE_MODIFIED("relationshipType_fileModified"),
+		GENERATED_FROM("relationshipType_generatedFrom"),
+		GENERATES("relationshipType_generates"),
+		METAFILE_OF("relationshipType_metafileOf"),
+		OPTIONAL_COMPONENT_OF("relationshipType_optionalComponentOf"),
+		OTHER("relationshipType_other"),
+		PACKAGE_OF("relationshipType_packageOf"),
+		PATCH_APPLIED("relationshipType_patchApplied"),
+		PATCH_FOR("relationshipType_patchFor"),
+		AMENDS("relationshipType_amends"),
+		STATIC_LINK("relationshipType_staticLink"),
+		TEST_CASE_OF("relationshipType_testcaseOf"),
+		PREQUISITE_FOR("relationshipType_prerequisiteFor"),
+		HAS_PREQUISITE("relationshipType_hasPrerequisite");
 
-		
-		/** @return Returns the tag value for this relationship type */
+		private static final Map<String, RelationshipType> STRING_TO_TYPE;
+		private String rdfString;
+
+		static {
+			ImmutableMap.Builder<String, RelationshipType> stringToTypeBuilder = new ImmutableMap.Builder<String, RelationshipType>();
+			for (RelationshipType type : RelationshipType.values()) {
+				stringToTypeBuilder.put(type.toString(), type);
+			}
+			STRING_TO_TYPE = stringToTypeBuilder.build();
+		}
+
+		RelationshipType(String rdfString) {
+			this.rdfString = rdfString;
+		}
+
+		@Override
+		public String toString() {
+			return rdfString;
+		}
+
+		public static RelationshipType fromString(String rdfString) {
+			return STRING_TO_TYPE.get(rdfString);
+		}
+
+		@Deprecated
+		/**
+		 * Use {@link toTag()} instead.
+		 * @deprecated
+		 */
 		public String getTag(){
-			return RELATIONSHIP_TYPE_TO_TAG.get(this);
+			return toTag();
+		}
+
+		/** @return Returns the tag value for this relationship type */
+		public String toTag(){
+			return name();
 		}
 
 		/** @return  The relationship type corresponding to the provided tag */
 		public static RelationshipType fromTag(String tag){
-			return TAG_TO_RELATIONSHIP_TYPE.get(tag);
+			return valueOf(tag);
 		}
-	}
-
-	@Deprecated
-	/**
-	 * Use {@link RelationshipType#getTag()} instead.
-	 * @deprecated
-	 */
-	public static final Map<RelationshipType, String> RELATIONSHIP_TYPE_TO_TAG;
-
-	@Deprecated
-	/**
-	 * Use {@link #RelationshipType.fromTag} instead.
-	 * @deprecated
-	 */
-	public static final Map<String, RelationshipType> TAG_TO_RELATIONSHIP_TYPE;
-
-	static {
-		ImmutableMap.Builder<RelationshipType, String> relationshipTypeToTagBuilder = new ImmutableBiMap.Builder<RelationshipType, String>();
-		ImmutableMap.Builder<String, RelationshipType> tagToRelationshipTypeBuilder = new ImmutableMap.Builder<String, RelationshipType>();
-		
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_describes, "DESCRIBES");
-		tagToRelationshipTypeBuilder.put("DESCRIBES", RelationshipType.relationshipType_describes);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_describedBy, "DESCRIBED_BY");
-		tagToRelationshipTypeBuilder.put("DESCRIBED_BY", RelationshipType.relationshipType_describedBy);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_hasPrerequisite, "HAS_PREQUISITE");
-		tagToRelationshipTypeBuilder.put("HAS_PREQUISITE", RelationshipType.relationshipType_hasPrerequisite);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_prerequisiteFor, "PREQUISITE_FOR");
-		tagToRelationshipTypeBuilder.put("PREQUISITE_FOR", RelationshipType.relationshipType_prerequisiteFor);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
-		tagToRelationshipTypeBuilder.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_buildToolOf, "BUILD_TOOL_OF");
-		tagToRelationshipTypeBuilder.put("BUILD_TOOL_OF",RelationshipType.relationshipType_buildToolOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_containedBy, "CONTAINED_BY");
-		tagToRelationshipTypeBuilder.put("CONTAINED_BY", RelationshipType.relationshipType_containedBy);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_contains, "CONTAINS");
-		tagToRelationshipTypeBuilder.put("CONTAINS", RelationshipType.relationshipType_contains);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_copyOf, "COPY_OF");
-		tagToRelationshipTypeBuilder.put("COPY_OF", RelationshipType.relationshipType_copyOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_dataFile, "DATA_FILE_OF");
-		tagToRelationshipTypeBuilder.put("DATA_FILE_OF", RelationshipType.relationshipType_dataFile);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_descendantOf, "DESCENDANT_OF");
-		tagToRelationshipTypeBuilder.put("DESCENDANT_OF", RelationshipType.relationshipType_descendantOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_distributionArtifact, "DISTRIBUTION_ARTIFACT");
-		tagToRelationshipTypeBuilder.put("DISTRIBUTION_ARTIFACT", RelationshipType.relationshipType_distributionArtifact);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_documentation, "DOCUMENTATION_OF");
-		tagToRelationshipTypeBuilder.put("DOCUMENTATION_OF", RelationshipType.relationshipType_documentation);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_dynamicLink, "DYNAMIC_LINK");
-		tagToRelationshipTypeBuilder.put("DYNAMIC_LINK", RelationshipType.relationshipType_dynamicLink);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_expandedFromArchive, "EXPANDED_FROM_ARCHIVE");
-		tagToRelationshipTypeBuilder.put("EXPANDED_FROM_ARCHIVE", RelationshipType.relationshipType_expandedFromArchive);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_fileAdded, "FILE_ADDED");
-		tagToRelationshipTypeBuilder.put("FILE_ADDED", RelationshipType.relationshipType_fileAdded);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_fileDeleted, "FILE_DELETED");
-		tagToRelationshipTypeBuilder.put("FILE_DELETED", RelationshipType.relationshipType_fileDeleted);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_fileModified, "FILE_MODIFIED");
-		tagToRelationshipTypeBuilder.put("FILE_MODIFIED", RelationshipType.relationshipType_fileModified);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_generatedFrom, "GENERATED_FROM");
-		tagToRelationshipTypeBuilder.put("GENERATED_FROM", RelationshipType.relationshipType_generatedFrom);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_generates, "GENERATES");
-		tagToRelationshipTypeBuilder.put("GENERATES", RelationshipType.relationshipType_generates);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_metafileOf, "METAFILE_OF");
-		tagToRelationshipTypeBuilder.put("METAFILE_OF", RelationshipType.relationshipType_metafileOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_optionalComponentOf, "OPTIONAL_COMPONENT_OF");
-		tagToRelationshipTypeBuilder.put("OPTIONAL_COMPONENT_OF", RelationshipType.relationshipType_optionalComponentOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_other, "OTHER");
-		tagToRelationshipTypeBuilder.put("OTHER",RelationshipType.relationshipType_other);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_packageOf, "PACKAGE_OF");
-		tagToRelationshipTypeBuilder.put("PACKAGE_OF", RelationshipType.relationshipType_packageOf);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_patchApplied, "PATCH_APPLIED");
-		tagToRelationshipTypeBuilder.put("PATCH_APPLIED", RelationshipType.relationshipType_patchApplied);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_patchFor, "PATCH_FOR");
-		tagToRelationshipTypeBuilder.put("PATCH_FOR", RelationshipType.relationshipType_patchFor);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_amends, "AMENDS");
-		tagToRelationshipTypeBuilder.put("AMENDS", RelationshipType.relationshipType_amends);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_staticLink, "STATIC_LINK");
-		tagToRelationshipTypeBuilder.put("STATIC_LINK", RelationshipType.relationshipType_staticLink);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_testcaseOf, "TEST_CASE_OF");
-		tagToRelationshipTypeBuilder.put("TEST_CASE_OF", RelationshipType.relationshipType_testcaseOf);
-		
-		TAG_TO_RELATIONSHIP_TYPE = tagToRelationshipTypeBuilder.build();
-		RELATIONSHIP_TYPE_TO_TAG = relationshipTypeToTagBuilder.build();
 	}
 
 	private RelationshipType relationshipType;
@@ -191,12 +155,12 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 		if (relationshipTypeUri != null) {
-			String sRelationshipType = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+			String relationshipString = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
 			try {
-				this.relationshipType = RelationshipType.valueOf(sRelationshipType);
+				this.relationshipType = RelationshipType.fromString(relationshipString);
 			}catch (Exception ex) {
-				logger.error("Invalid relationship type found in the model - "+sRelationshipType);
-				throw(new InvalidSPDXAnalysisException("Invalid relationship type: "+sRelationshipType));
+				logger.error("Invalid relationship type found in the model - " + relationshipString);
+				throw(new InvalidSPDXAnalysisException("Invalid relationship type: " + relationshipString));
 			}
 		}
 	}
@@ -260,11 +224,11 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 			String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 			if (relationshipTypeUri != null) {
-				String sRelationshipType = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
+				String relationshipString = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
 				try {
-					this.relationshipType = RelationshipType.valueOf(sRelationshipType);
+					this.relationshipType = RelationshipType.fromString(relationshipString);
 				}catch (Exception ex) {
-					logger.error("Invalid relationship type found in the model - "+sRelationshipType);
+					logger.error("Invalid relationship type found in the model - " + relationshipString);
 				}
 			}
 		}

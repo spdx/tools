@@ -454,7 +454,7 @@ public class TestPackageSheet {
 	public void testRelationshipsCol() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxElement relatedElement = getDescribedPackage(doc3).getFiles()[0];
 		Relationship[] different = new Relationship[] {
-				new Relationship(relatedElement, RelationshipType.relationshipType_containedBy, "Comment")};
+				new Relationship(relatedElement, RelationshipType.CONTAINED_BY, "Comment")};
 		getDescribedPackage(doc3).setRelationships(different);
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		pkgSheet.importCompareResults(comparer, docNames);

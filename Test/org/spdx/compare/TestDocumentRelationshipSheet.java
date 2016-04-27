@@ -48,10 +48,10 @@ public class TestDocumentRelationshipSheet {
 			"related element comment 2", null, null);
 	static final SpdxElement RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
 			"related element comment 4", null, null);
-	static final RelationshipType TYPE1 = RelationshipType.relationshipType_amends;
-	static final RelationshipType TYPE2 = RelationshipType.relationshipType_ancestorOf;
-	static final RelationshipType TYPE3 = RelationshipType.relationshipType_descendantOf;
-	static final RelationshipType TYPE4 = RelationshipType.relationshipType_generates;
+	static final RelationshipType TYPE1 = RelationshipType.AMENDS;
+	static final RelationshipType TYPE2 = RelationshipType.ANCESTOR_OF;
+	static final RelationshipType TYPE3 = RelationshipType.DESCENDANT_OF;
+	static final RelationshipType TYPE4 = RelationshipType.GENERATES;
 
 	/**
 	 * @throws java.lang.Exception
@@ -135,7 +135,7 @@ public class TestDocumentRelationshipSheet {
 
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+0);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(TYPE1.getTag(), typeCell.getStringCellValue());
+		assertEquals(TYPE1.toTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertEquals(CompareHelper.relationshipToString(rel1_1), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);
@@ -145,7 +145,7 @@ public class TestDocumentRelationshipSheet {
 		
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+1);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(TYPE1.getTag(), typeCell.getStringCellValue());
+		assertEquals(TYPE1.toTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertEquals(CompareHelper.relationshipToString(rel1_2), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);
@@ -155,7 +155,7 @@ public class TestDocumentRelationshipSheet {
 		
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+2);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(TYPE2.getTag(), typeCell.getStringCellValue());
+		assertEquals(TYPE2.toTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertEquals(CompareHelper.relationshipToString(rel1_3), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);
@@ -165,7 +165,7 @@ public class TestDocumentRelationshipSheet {
 		
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+3);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
-		assertEquals(TYPE2.getTag(), typeCell.getStringCellValue());
+		assertEquals(TYPE2.toTag(), typeCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 0);
 		assertTrue(cellEmpty(relationshipCell));
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 1);

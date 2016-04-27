@@ -198,7 +198,7 @@ public class TestDocumentSheet {
 	@Test
 	public void testRelationships() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		doc3.addRelationship(new Relationship(doc3.getDocumentDescribes()[0],
-						RelationshipType.relationshipType_contains, "Different"));
+						RelationshipType.CONTAINS, "Different"));
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
 		docSheet.importCompareResults(comparer, docNames);
 		assertEquals(DIFFERENT_STRING, getEqualsValue(docSheet.RELATIONSHIP_COL));

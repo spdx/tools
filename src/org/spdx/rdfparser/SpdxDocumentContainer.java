@@ -163,7 +163,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		}
 		for (SpdxPackage pkg:describedPackages) {
 			Relationship describes = new Relationship(pkg, 
-					Relationship.RelationshipType.relationshipType_describes, "");
+					Relationship.RelationshipType.DESCRIBES, "");
 			this.getSpdxDocument().addRelationship(describes);
 		}
 	}

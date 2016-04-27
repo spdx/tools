@@ -108,7 +108,7 @@ public class SpdxDocument extends SpdxElement {
 		Relationship[] allRelationships = this.getRelationships();
 		int count = 0;
 		for (int i = 0; i < allRelationships.length; i++) {
-			if (allRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes &&
+			if (allRelationships[i].getRelationshipType() == Relationship.RelationshipType.DESCRIBES &&
 					allRelationships[i].getRelatedSpdxElement() instanceof SpdxItem) {
 				count++;
 			}
@@ -116,7 +116,7 @@ public class SpdxDocument extends SpdxElement {
 		SpdxItem[] refresh = new SpdxItem[count];
 		int refreshIndex = 0;
 		for (int i = 0; i < allRelationships.length; i++) {
-			if (allRelationships[i].getRelationshipType() == Relationship.RelationshipType.relationshipType_describes &&
+			if (allRelationships[i].getRelationshipType() == Relationship.RelationshipType.DESCRIBES &&
 					allRelationships[i].getRelatedSpdxElement() instanceof SpdxItem) {
 				refresh[refreshIndex++] = (SpdxItem)allRelationships[i].getRelatedSpdxElement();
 			}
