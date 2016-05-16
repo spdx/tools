@@ -1,4 +1,4 @@
-  Copyright 2010, 2011, 2012, 2013, 2014, 2015 Source Auditor Inc.
+  Copyright 2010, 2011, 2012, 2013, 2014, 2015, 2016 Source Auditor Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -159,4 +159,8 @@ The RDFa License Generator exports SortTable version 2 7th April 2007
   Stuart Langridge, http://www.kryogenix.org/code/browser/sorttable/
   X11 License
   
-json-simple version 1.1.1 licensed under Apache License version 2.0 https://code.google.com/p/json-simple/
+json-simple version 1.1.1 licensed under Apache License version 2.0 
+https://code.google.com/p/json-simple/
+
+jgit version 4.3.1 licensed under Eclipse Distribution License (EDL - http://www.eclipse.org/org/documents/edl-v10.php)
+http://www.eclipse.org/jgit/

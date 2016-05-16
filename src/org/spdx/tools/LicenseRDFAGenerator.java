@@ -40,6 +40,7 @@ import org.spdx.html.LicenseTOCJSONFile;
 import org.spdx.html.LicenseJSONFile;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+import org.spdx.licensexml.XmlLicenseProvider;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
 import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
@@ -102,7 +103,7 @@ public class LicenseRDFAGenerator {
 	private static final String WEBSITE_FOLDER_NAME = "website";
 	
 	/**
-	 * @param args Arg 0 is the input spreadsheet, arg 1 is the directory for the output html files
+	 * @param args Arg 0 is either an input spreadsheet or a directory of licenses in XML format, arg 1 is the directory for the output html files
 	 */
 	public static void main(String[] args) {
 		if (args == null || args.length < MIN_ARGS || args.length > MAX_ARGS) {
@@ -149,6 +150,8 @@ public class LicenseRDFAGenerator {
 				if (releaseDate == null || releaseDate.trim().isEmpty()) {
 					releaseDate = licenseSpreadsheet.getLicenseSheet().getReleaseDate();
 				}
+			} else if (ssFile.isDirectory()) {
+				licenseProvider = new XmlLicenseProvider(ssFile);
 			} else {
 				System.out.println("Unsupported file format.  Must be a .xls file");
 				System.exit(ERROR_STATUS);
