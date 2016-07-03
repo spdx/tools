@@ -665,6 +665,35 @@ public class TestSpdxPackage {
 	}
 
 	/**
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxPackage#setSourceInfo(java.lang.String)}.
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@Test
+	public void testSetSourceFilesAnalyzed() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1};
+		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
+		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+
+		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
+				annotations, relationships,	LICENSE1, licenseFromFiles, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
+				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
+				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1, false);
+		
+		assertTrue(!pkg.isFilesAnalyzed());
+		Resource r = pkg.createResource(modelContainer);
+		assertTrue(!pkg.isFilesAnalyzed());
+		SpdxPackage pkg2 = new SpdxPackage(modelContainer, r.asNode());
+		assertTrue(!pkg2.isFilesAnalyzed());
+		pkg.setFilesAnalyzed(true);
+		assertTrue(pkg.isFilesAnalyzed());
+		assertTrue(pkg2.isFilesAnalyzed());
+	}
+	
+	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxPackage#setSummary(java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */

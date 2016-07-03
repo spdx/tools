@@ -41,16 +41,30 @@ import org.xml.sax.SAXException;
  */
 public class LicenseXmlDocument {
 	static final Logger logger = Logger.getLogger(LicenseXmlDocument.class.getName());
-	static final String ROOT_ELEMENT_NAME = "SPDX";
-	private static final String NAME_ATTRIBUTE = "name";
-	private static final String ID_ATTRIBUTE = "identifier";
-	private static final String LICENSE_TAG = "license";
-	private static final String BODY_TAG = "body";
-	private static final String DEPRECATED_ATTRIBUTE = "deprecated";
-	private static final String NOTES_TAG = "notes";
-	private static final String URLS_TAG = "urls";
-	private static final String HEADER_TAG = "header";
-	private static final String OSI_APPROVED_ATTRIBUTE = "osi-approved";
+	
+	// Document tags and attribute strings
+	public static final String ROOT_ELEMENT_NAME = "SPDX";
+	public static final String NAME_ATTRIBUTE = "name";
+	public static final String ID_ATTRIBUTE = "identifier";
+	public static final String LICENSE_TAG = "license";
+	public static final String BODY_TAG = "body";
+	public static final String DEPRECATED_ATTRIBUTE = "deprecated";
+	public static final String NOTES_TAG = "notes";
+	public static final String URLS_TAG = "urls";
+	public static final String HEADER_TAG = "header";
+	public static final String OSI_APPROVED_ATTRIBUTE = "osi-approved";
+	public static final String COPYRIGHT_TAG = "copyright";
+	public static final String TITLE_TAG = "title";
+	public static final String LIST_ITEM_TAG = "li";
+	public static final String LIST_TAG = "list";
+	public static final String ALTERNATIVE_TAG = "alt";
+	public static final String OPTIONAL_TAG = "optional";
+	public static final String BREAK_TAG = "br";
+	public static final String PARAGRAPH_TAG = "p";
+	public static final String VAR_NAME_ATTRIBUTE = "name";
+	public static final String VAR_ORIGINAL_ATTRIBUTE = "original";
+	public static final String VAR_MATCH_ATTRIBUTE = "match";
+	public static final String BULLET_TAG = "b";
 	private Document xmlDocument;
 
 	/**
@@ -131,20 +145,26 @@ public class LicenseXmlDocument {
 	 * @return
 	 */
 	public boolean isListedLicense() {
-		// TODO update once we know the tag
-		return true;
+		Element rootElement = this.xmlDocument.getDocumentElement();
+		NodeList licenseNodes = rootElement.getElementsByTagName(LICENSE_TAG);
+		//TODO: Verify that exceptions do not also have license node
+		return licenseNodes.getLength() > 0;
 	}
 
 	/**
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
+	 * @throws LicenseXmlException 
 	 */
-	public SpdxListedLicense getListedLicense() throws InvalidSPDXAnalysisException {
+	public SpdxListedLicense getListedLicense() throws InvalidSPDXAnalysisException, LicenseXmlException {
+		if (!this.isListedLicense()) {
+			return null;
+		}
 		Element rootElement = this.xmlDocument.getDocumentElement();
 		String name = rootElement.getAttribute(NAME_ATTRIBUTE);
 		String id = rootElement.getAttribute(ID_ATTRIBUTE);
 		Element licenseElement = (Element)(rootElement.getElementsByTagName(LICENSE_TAG).item(0));
-		String text = getLicenseText(licenseElement);
+		String text = LicenseXmlHelper.getLicenseText(licenseElement);
 		NodeList notes = rootElement.getElementsByTagName(NOTES_TAG);
 		String comment = null;
 		if (notes.getLength() > 0) {
@@ -163,9 +183,15 @@ public class LicenseXmlDocument {
 		String licenseHeader = null;
 		NodeList headerNodes = rootElement.getElementsByTagName(HEADER_TAG);
 		if (headerNodes.getLength() > 0) {
-			licenseHeader = headerNodes.item(0).getTextContent();
+			StringBuilder sb = new StringBuilder();
+			sb.append(LicenseXmlHelper.getHeaderText(headerNodes.item(0)));
+			for (int i = 1; i < headerNodes.getLength(); i++) {
+				sb.append('\n');
+				sb.append(LicenseXmlHelper.getHeaderText(headerNodes.item(i)));
+			}
+			licenseHeader = sb.toString();
 		}
-		String template = getLicenseTemplate(licenseElement);
+		String template = LicenseXmlHelper.getLicenseTemplate(licenseElement);
 		boolean osiApproved;
 		if (rootElement.hasAttribute(OSI_APPROVED_ATTRIBUTE)) {
 			osiApproved = "true".equals(rootElement.getAttribute(OSI_APPROVED_ATTRIBUTE).toLowerCase());
@@ -174,24 +200,6 @@ public class LicenseXmlDocument {
 		}
 		return new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
 				template, osiApproved);
-	}
-
-	/**
-	 * @param licenseElement
-	 * @return
-	 */
-	private String getLicenseTemplate(Element licenseElement) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * @param licenseElement
-	 * @return
-	 */
-	private String getLicenseText(Element licenseElement) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

@@ -387,6 +387,21 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/**
+	 * Set a property values for this resource.  Clears any existing resource.
+	 * @param nameSpace RDF Namespace for the property
+	 * @param propertyName RDF Property Name
+	 * @param value boolean value to set
+	 */
+	protected void setPropertyValue(String nameSpace, String propertyName,
+			boolean value) {
+		if (value) {
+			setPropertyValue(nameSpace, propertyName, "true");
+		} else {
+			setPropertyValue(nameSpace, propertyName, "false");
+		}
+	}
+	
+	/**
 	 * Sets the spdx element property value for this resource
 	 * @param nameSpace
 	 * @param propertyName

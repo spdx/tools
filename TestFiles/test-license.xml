@@ -1,0 +1,32 @@
+<SPDX name="Test License" identifier="test-id" osi-approved="true" deprecated="true">
+  <notes>Test note</notes>
+  <urls>
+    <url>http://test/url1</url>
+    <url>http://test/url2</url>
+  </urls>
+  <header> 
+    Test header
+  </header>
+  <license>
+    <copyright>
+      <p>Test Copyright</p>
+    </copyright>
+    <body>
+      <p>paragraph 1</p>
+      <list>
+        <li>
+          <b>1.</b>
+          <p>List item 1</p>
+        </li>
+        <li>
+          <b>2.</b>
+          <p>List item 2</p>
+        </li>
+      </list>
+      <p>Last Paragraph
+          <alt name="alttest" match=".+">Alternate Text</alt>Non matching line.
+          <optional identifier="optionaltest">Optional text</optional>
+      </p>
+    </body>
+  </license>
+</SPDX>
