@@ -142,6 +142,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_VERSION_INFO = "versionInfo";
 	public static final String PROP_PACKAGE_ORIGINATOR = "originator";
 	public static final String PROP_PACKAGE_SUPPLIER = "supplier";
+	public static final String PROP_PACKAGE_FILES_ANALYZED = "filesAnalyzed";
 	
 	// SPDX License Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace

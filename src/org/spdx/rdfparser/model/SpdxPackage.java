@@ -58,7 +58,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	String supplier;
 	String versionInfo;
 	SpdxFile[] files;
-
+	boolean filesAnalyzed = true;
 
 	/**
 	 * @param name
@@ -78,7 +78,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			SpdxFile[] files, String homepage, String originator, String packageFileName,
 			SpdxPackageVerificationCode packageVerificationCode,
 			String sourceInfo, String summary, String supplier,
-			String versionInfo) {
+			String versionInfo, boolean filesAnalyzed) {
 		super(name, comment, annotations, relationships, licenseConcluded,
 				licenseInfosFromFiles, copyrightText, licenseComment);
 		this.licenseDeclared = licenseDeclared;
@@ -100,6 +100,23 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this.summary = summary;
 		this.supplier = supplier;
 		this.versionInfo = versionInfo;
+		this.filesAnalyzed = filesAnalyzed;
+	}
+	
+	public SpdxPackage(String name, String comment, Annotation[] annotations,
+			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
+			AnyLicenseInfo[] licenseInfosFromFiles, String copyrightText,
+			String licenseComment, AnyLicenseInfo licenseDeclared,
+			Checksum[] checksums, String description, String downloadLocation,
+			SpdxFile[] files, String homepage, String originator, String packageFileName,
+			SpdxPackageVerificationCode packageVerificationCode,
+			String sourceInfo, String summary, String supplier,
+			String versionInfo) {
+		this(name, comment, annotations, relationships, licenseConcluded,
+				licenseInfosFromFiles, copyrightText, licenseComment, licenseDeclared, 
+				checksums, description, downloadLocation, files, homepage, 
+				originator, packageFileName, packageVerificationCode, 
+				sourceInfo, summary, supplier, versionInfo, true);
 	}
 
 	public SpdxPackage(String name, AnyLicenseInfo licenseConcluded,
@@ -109,7 +126,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this(name, null, null, null, licenseConcluded,
 				licenseInfosFromFiles, copyrightText, null, licenseDeclared,
 				null, null, downloadLocation, files, null, null, null, packageVerificationCode,
-				null, null, null, null);
+				null, null, null, null, true);
 	}
 
 	/**
@@ -130,39 +147,6 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
-		this.licenseDeclared = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_DECLARED_LICENSE);
-		this.checksums = findMultipleChecksumPropertyValues(SPDX_NAMESPACE,
-				PROP_PACKAGE_CHECKSUM);
-		this.description = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_DESCRIPTION);
-		this.downloadLocation = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_DOWNLOAD_URL);
-		this.homepage = findSinglePropertyValue(DOAP_NAMESPACE,
-				PROP_PROJECT_HOMEPAGE);
-		this.originator = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_ORIGINATOR);
-		this.packageFileName = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_FILE_NAME);
-		this.packageVerificationCode = findVerificationCodePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_VERIFICATION_CODE);
-		this.sourceInfo = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_SOURCE_INFO);
-		this.summary = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_SHORT_DESC);
-		this.supplier = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_SUPPLIER);
-		this.versionInfo = findSinglePropertyValue(SPDX_NAMESPACE,
-				PROP_PACKAGE_VERSION_INFO);
-		SpdxElement[] filesE = findMultipleElementPropertyValues(SPDX_NAMESPACE,
-				PROP_PACKAGE_FILE);
-		this.files = new SpdxFile[filesE.length];
-		for (int i = 0; i < filesE.length; i++) {
-			if (!(filesE[i] instanceof SpdxFile)) {
-				throw(new InvalidSPDXAnalysisException("Incorrect type for a file belonging to a package: "+filesE[i].getName()));
-			}
-			this.files[i] = (SpdxFile)filesE[i];
-		}
 	}
 
 	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
@@ -198,6 +182,20 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				throw(new InvalidSPDXAnalysisException("Incorrect type for a file belonging to a package: "+filesE[i].getName()));
 			}
 			this.files[i] = (SpdxFile)filesE[i];
+		}
+		String filesAnalyzedString = findSinglePropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_FILES_ANALYZED);
+		if (filesAnalyzedString != null) {
+			filesAnalyzedString = filesAnalyzedString.trim();
+			if (filesAnalyzedString.equals("true") || filesAnalyzedString.equals("1")) {
+				this.filesAnalyzed = true;
+			} else if (filesAnalyzedString.equals("false") || filesAnalyzedString.equals("0")){
+				this.filesAnalyzed = false;
+			} else {
+				throw(new InvalidSPDXAnalysisException("Invalid value for files analyzed - must be {true, false, 0, 1}"));
+			}
+		} else {			
+			this.filesAnalyzed = true;	// Default value is true per the 2.1 specification
 		}
 	}
 
@@ -278,6 +276,8 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				PROP_PACKAGE_VERSION_INFO, this.versionInfo);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_FILE, this.files);
+		setPropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_FILES_ANALYZED, this.filesAnalyzed);
 	}
 
 	@Override
@@ -293,7 +293,39 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_PACKAGE);
 	}
 
-
+	/**
+	 * @return true if filesAnalyzed flag is set
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public boolean isFilesAnalyzed() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && refreshOnGet) {
+			String filesAnalyzedString = findSinglePropertyValue(SPDX_NAMESPACE,
+					PROP_PACKAGE_FILES_ANALYZED);
+			if (filesAnalyzedString != null) {
+				filesAnalyzedString = filesAnalyzedString.trim();
+				if (filesAnalyzedString.equals("true") || filesAnalyzedString.equals("1")) {
+					this.filesAnalyzed = true;
+				} else if (filesAnalyzedString.equals("false") || filesAnalyzedString.equals("0")){
+					this.filesAnalyzed = false;
+				} else {
+					throw(new InvalidSPDXAnalysisException("Invalid value for files analyzed - must be {true, false, 0, 1}"));
+				}
+			} else {			
+				this.filesAnalyzed = true;	// Default value is true per the 2.1 specification
+			}
+		}
+		return this.filesAnalyzed;
+	}
+	
+	/**
+	 * Set files Analyzed for the package
+	 * @param filesAnalyzed
+	 */
+	public void setFilesAnalyzed(boolean filesAnalyzed) {
+		this.filesAnalyzed = filesAnalyzed;
+		setPropertyValue(SPDX_NAMESPACE,
+				PROP_PACKAGE_FILES_ANALYZED, filesAnalyzed);
+	}
 
 	/**
 	 * @return the licenseDeclared
@@ -651,6 +683,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 					return false;
 				}
 			}
+			if (this.filesAnalyzed != comp.filesAnalyzed) {
+				return false;
+			}
 		return (equivalentConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
 				arraysEquivalent(this.checksums, comp.getChecksums(), testRelationships) &&
 				RdfModelHelper.stringsEquivalent(this.description, comp.getDescription()) &&
@@ -682,7 +717,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				this.description, this.downloadLocation, null,
 				this.homepage, this.originator, this.packageFileName,
 				this.clonePackageVerificationCode(), this.sourceInfo,
-				this.summary, this.supplier, this.versionInfo);
+				this.summary, this.supplier, this.versionInfo, this.filesAnalyzed);
 		clonedElementIds.put(this.getId(), retval);
 		try {
 			retval.setRelationships(cloneRelationships(clonedElementIds));
@@ -792,12 +827,17 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package declared license: "+e.getMessage());
 		}
-		// hasFiles mandatory one or more
+		// files depends on if the filesAnalyzed flag
 		try {
 			SpdxFile[] files = this.getFiles();
 			if (files == null || files.length == 0) {
-				retval.add("Missing required package files for "+pkgName);
+				if (filesAnalyzed) {
+					retval.add("Missing required package files for "+pkgName);
+				}
 			} else {
+				if (!filesAnalyzed) {
+					retval.add("Warning: Found analyzed files for package "+pkgName+" when analyzedFiles is set to false.");
+				}
 				for (int i = 0; i < files.length; i++) {
 					List<String> verify = files[i].verify();
 					addNameToWarnings(verify);
