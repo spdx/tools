@@ -171,16 +171,27 @@ public class LicenseXmlHelper {
 		if (!LicenseXmlDocument.OPTIONAL_TAG.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Expecting optional tag, found "+element.getTagName()));
 		}
+		StringBuilder childSb = new StringBuilder();
+		if (element.hasChildNodes()) {
+			appendElementChildrenText(element, useTemplateFormat, childSb, indentCount);
+		} else {
+			childSb.append(element.getTextContent());
+		}
 		if (useTemplateFormat) {
 			sb.append("<<beginOptional>>");
-		}
-		if (element.hasChildNodes()) {
-			appendElementChildrenText(element, useTemplateFormat, sb, indentCount);
-		} else {
-			sb.append(element.getTextContent());
-		}
-		if (useTemplateFormat) {
+			if (childSb.length() > 0 && childSb.charAt(0) == ' ') {
+				sb.append(' ');
+				childSb.delete(0, 1);
+			} else if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
+				sb.append(' ');
+			}
+			sb.append(childSb);
 			sb.append("<<endOptional>>");
+		} else {
+			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
+				sb.append(' ');
+			}
+			sb.append(childSb);
 		}
 	}
 
@@ -198,26 +209,37 @@ public class LicenseXmlHelper {
 		if (!LicenseXmlDocument.ALTERNATIVE_TAG.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Expected alt tag.  Found '"+element.getTagName()+"'"));
 		}
+		StringBuilder originalSb = new StringBuilder();
+		if (element.hasChildNodes()) {
+			appendElementChildrenText(element, useTemplateFormat, originalSb, indentCount);
+		} else {
+			originalSb.append(element.getTextContent());
+		}
 		if (useTemplateFormat) {
+			if (originalSb.length() > 0 && originalSb.charAt(0) == ' ') {
+				sb.append(' ');
+				originalSb.delete(0, 1);
+			} else if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
+				sb.append(' ');
+			}
 			sb.append("<<var;name=\"");
 			if (!element.hasAttribute(LicenseXmlDocument.VAR_NAME_ATTRIBUTE)) {
 				throw(new LicenseXmlException("Missing name attribute for variable text"));
 			}
 			sb.append(element.getAttribute(LicenseXmlDocument.VAR_NAME_ATTRIBUTE));
 			sb.append("\";original=\"");
-		}
-		if (element.hasChildNodes()) {
-			appendElementChildrenText(element, useTemplateFormat, sb, indentCount);
-		} else {
-			sb.append(element.getTextContent());
-		}
-		if (useTemplateFormat) {
+			sb.append(originalSb);
 			sb.append("\";match=\"");
 			if (!element.hasAttribute(LicenseXmlDocument.VAR_MATCH_ATTRIBUTE)) {
 				throw(new LicenseXmlException("Missing match attribute for variable text"));
 			}
 			sb.append(element.getAttribute(LicenseXmlDocument.VAR_MATCH_ATTRIBUTE));
 			sb.append("\">>");
+		} else {
+			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
+				sb.append(' ');
+			}
+			sb.append(originalSb);
 		}
 	}
 
