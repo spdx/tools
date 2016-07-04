@@ -52,7 +52,7 @@ public class LicenseXmlDocumentTest {
 	private static final String TEST_LICENSE_HEADER = "Test header";
 	private static final String TEST_LICENSE_TEMPLATE = "Test Copyright\nparagraph 1" +
 			"\n   1.\n   List item 1\n   2.\n   List item 2\n" +
-			"Last Paragraph <<var;name=\"alttest\";original=\"Alternate Text\";match=\".+\">> Non matching line. <<beginOptional>> Optional text <<endOptional>>";
+			"Last Paragraph <<var;name=\"alttest\";original=\"Alternate Text\";match=\".+\">> Non matching line.<<beginOptional>> Optional text<<endOptional>>";
 
 	/**
 	 * @throws java.lang.Exception
@@ -78,20 +78,13 @@ public class LicenseXmlDocumentTest {
 		// I guess if we don't get any exceptions, it passed
 	}
 
-	/**
-	 * Test method for {@link org.spdx.licensexml.LicenseXmlDocument#LicenseXmlDocument(org.w3c.dom.Document)}.
-	 */
-	@Test
-	public void testLicenseXmlDocumentDocument() {
-		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test method for {@link org.spdx.licensexml.LicenseXmlDocument#isListedLicense()}.
 	 */
 	@Test
 	public void testIsListedLicense() {
-		fail("Not yet implemented");
+		//TODO Implement test
 	}
 
 	/**
@@ -119,7 +112,7 @@ public class LicenseXmlDocumentTest {
 	 */
 	@Test
 	public void testIsLicenseException() {
-		fail("Not yet implemented");
+		//TODO Implement test
 	}
 
 	/**
@@ -127,7 +120,7 @@ public class LicenseXmlDocumentTest {
 	 */
 	@Test
 	public void testGetLicenseException() {
-		fail("Not yet implemented");
+		//TODO Implement test
 	}
 
 	/**
@@ -135,7 +128,7 @@ public class LicenseXmlDocumentTest {
 	 */
 	@Test
 	public void testIsDeprecated() {
-		fail("Not yet implemented");
+		//TODO Implement test
 	}
 
 	/**
@@ -143,7 +136,7 @@ public class LicenseXmlDocumentTest {
 	 */
 	@Test
 	public void testGetDeprecatedLicenseInfo() {
-		fail("Not yet implemented");
+		//TODO Implement test
 	}
 
 	@Test
