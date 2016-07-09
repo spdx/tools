@@ -700,6 +700,14 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inAnnotation = false;
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_COMMENT"))) {
 			pkg.setComment(value);
+		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED"))) {
+			if ("TRUE".equals(value.toUpperCase())) {
+				pkg.setFilesAnalyzed(true);
+			} else if ("FALSE".equals(value.toUpperCase())) {
+				pkg.setFilesAnalyzed(false);
+			} else {
+				throw(new InvalidSpdxTagFileException("Invalid value for files analyzed.  Must be 'true' or 'false'.  Found value: "+value));
+			}
 		} else if (this.inFileDefinition) {
 			buildFile(this.lastFile, tag, value);
 		} else {

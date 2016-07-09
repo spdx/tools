@@ -156,8 +156,11 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 						this.algorithm = ChecksumAlgorithm.valueOf(algorithmS);
 					} catch (Exception ex) {
 						logger.error("Invalid checksum algorithm in the model - "+algorithmS);
+						algorithm = null;
 					}
 				}
+			} else {
+				algorithm = null;
 			}
 		}
 		return algorithm;
@@ -315,7 +318,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 		} 
 		if (retval == 0) {
 			if (this.getValue() == null) {
-				if (compare.getAlgorithm() != null) {
+				if (compare.getValue() != null) {
 					retval = 1;
 				} else {
 					retval = 0;
