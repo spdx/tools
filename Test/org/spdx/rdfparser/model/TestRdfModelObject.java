@@ -21,6 +21,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,6 +46,7 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
+import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Node;
@@ -807,5 +810,24 @@ public class TestRdfModelObject {
 		assertEquals(ver.getValue(), result.getValue());
 		assertTrue(UnitTestHelper.isArraysEqual(ver.getExcludedFileNames(), 
 				result.getExcludedFileNames()));
+	}
+	
+	@Test
+	public void testSetFindPropertyValueReferenceType() throws InvalidSPDXAnalysisException, URISyntaxException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		ReferenceType ref1 = new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "cpe22Type"), null, null, null);
+		ReferenceType ref2 = new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "maven"), null, null, null);
+		ref1.createResource(modelContainer);
+		ReferenceType result = empty.findReferenceTypePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertTrue(result == null);
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, ref1);
+		result = empty.findReferenceTypePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(ref1, result);
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2, ref2);
+		result = empty.findReferenceTypePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
+		assertEquals(ref2, result);
 	}
 }

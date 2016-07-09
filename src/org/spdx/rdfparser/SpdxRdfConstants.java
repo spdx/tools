@@ -75,6 +75,8 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_ITEM = "SpdxItem";
 	public static final String CLASS_SPDX_ELEMENT = "SpdxElement";
 	public static final String CLASS_EXTERNAL_DOC_REF = "ExternalDocumentRef";
+	public static final String CLASS_SPDX_EXTERNAL_REFERENCE = "ExternalRef";
+	public static final String CLASS_SPDX_REFERENCE_TYPE = "ReferenceType";
 	
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
@@ -212,6 +214,11 @@ public interface SpdxRdfConstants {
 	public static final String PROP_EXTERNAL_SPDX_DOCUMENT = "spdxDocument";
 	public static final String PROP_EXTERNAL_DOC_ID = "externalDocumentId";
 	
+	// External Reference properties
+	public static final String PROP_REFERENCE_CATEGORY = "referenceCategory";
+	public static final String PROP_REFERENCE_TYPE = "referenceType";
+	public static final String PROP_REFERENCE_LOCATOR = "referenceLocator";
+	
 	// SPDX Review Properties
 	// NOTE: These have all been deprecated as of SPDX 2.0
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
@@ -248,4 +255,6 @@ public interface SpdxRdfConstants {
 	// data license ID
 	public static final String SPDX_DATA_LICENSE_ID_VERSION_1_0 = "PDDL-1.0";
 	public static final String SPDX_DATA_LICENSE_ID = "CC0-1.0";
+	
+	public static final String SPDX_LISTED_REFERENCE_TYPES_PREFIX = "http://spdx.org/rdf/references/";
 }

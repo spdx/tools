@@ -28,6 +28,7 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -287,7 +288,6 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		return retval.toArray(new SpdxElement[retval.size()]);
 	}
 	
-	
 	/**
 	 * Find an SPDX element with a subject of this object
 	 * @param namespace
@@ -304,6 +304,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return null;
 		}
 	}
+	
 	/**
 	 * Find a property value with a subject of this object
 	 * @param namespace Namespace for the property name
@@ -761,6 +762,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
@@ -779,6 +781,46 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param referenceType
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected void setPropertyValue(String nameSpace,
+			String propertyName, ReferenceType referenceType) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (referenceType != null) {
+				this.resource.addProperty(p, referenceType.createResource(this.modelContainer));
+			}
+		}
+	}
+
+	/**
+	 * Find the reference type within a specific property in the model for this node
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected ReferenceType findReferenceTypePropertyValue(String nameSpace,
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			return new ReferenceType(modelContainer, t.getObject());
+		} else {
+			return null;
 		}
 	}
 
@@ -883,7 +925,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * Sets a property value as a list of Uris
 	 * @param nameSpace
 	 * @param propertyName
-	 * @param uri
+	 * @param referenceTypeUri
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyUriValues(String nameSpace,
@@ -893,8 +935,10 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			model.removeAll(this.resource, p, null);
 			if (uris != null) {
 				for (int i = 0; i < uris.length; i++) {
-					Resource uriResource = model.createResource(uris[i]);
-					this.resource.addProperty(p, uriResource);
+					if (uris[i] != null) {
+						Resource uriResource = model.createResource(uris[i]);
+						this.resource.addProperty(p, uriResource);
+					}
 				}
 			}
 		}

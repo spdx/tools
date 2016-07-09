@@ -59,6 +59,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	String versionInfo;
 	SpdxFile[] files;
 	boolean filesAnalyzed = true;
+	List<ExternalRef> externalReferences;
 
 	/**
 	 * @param name
