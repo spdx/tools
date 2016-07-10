@@ -1141,6 +1141,49 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param externalRef
+	 * @return all external references found as objects to the property
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected ExternalRef[] findExternalRefPropertyValues(String nameSpace,
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		List<ExternalRef> retval = Lists.newArrayList();
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new ExternalRef(modelContainer, t.getObject()));
+		}
+		return retval.toArray(new ExternalRef[retval.size()]);
+	}
+	
+	/**
+	 * Set the external refs as a value for the property
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param externalRefs
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void setPropertyValue(String nameSpace, 
+			String propertyName, ExternalRef[] externalRefs) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (externalRefs != null) {
+				for (int i = 0; i < externalRefs.length; i++) {
+					this.resource.addProperty(p, externalRefs[i].createResource(modelContainer));
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
 	 * order and considering nulls
 	 * @param array1

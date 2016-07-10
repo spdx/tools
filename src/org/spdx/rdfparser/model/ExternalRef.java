@@ -76,7 +76,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	
 	/**
 	 * @param referenceCategory Category for the external reference
-	 * @param referenceType ID String for the reference
+	 * @param referenceType Reference type as defined in the SPDX appendix
 	 * @param referenceLocator unique string with no spaces necessary to access the packagespecific
      * information, metadata, or content within the target location. The format of the locator is subject
      * to constraints defined by the referenceType
