@@ -59,7 +59,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	String versionInfo;
 	SpdxFile[] files;
 	boolean filesAnalyzed = true;
-	List<ExternalRef> externalReferences;
+	ExternalRef[] externalRefs;
 
 	/**
 	 * @param name
@@ -79,7 +79,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			SpdxFile[] files, String homepage, String originator, String packageFileName,
 			SpdxPackageVerificationCode packageVerificationCode,
 			String sourceInfo, String summary, String supplier,
-			String versionInfo, boolean filesAnalyzed) {
+			String versionInfo, boolean filesAnalyzed, ExternalRef[] externalRefs) {
 		super(name, comment, annotations, relationships, licenseConcluded,
 				licenseInfosFromFiles, copyrightText, licenseComment);
 		this.licenseDeclared = licenseDeclared;
@@ -102,6 +102,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this.supplier = supplier;
 		this.versionInfo = versionInfo;
 		this.filesAnalyzed = filesAnalyzed;
+		this.externalRefs = externalRefs;
 	}
 	
 	public SpdxPackage(String name, String comment, Annotation[] annotations,
@@ -117,7 +118,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				licenseInfosFromFiles, copyrightText, licenseComment, licenseDeclared, 
 				checksums, description, downloadLocation, files, homepage, 
 				originator, packageFileName, packageVerificationCode, 
-				sourceInfo, summary, supplier, versionInfo, true);
+				sourceInfo, summary, supplier, versionInfo, true, new ExternalRef[0]);
 	}
 
 	public SpdxPackage(String name, AnyLicenseInfo licenseConcluded,
@@ -127,7 +128,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this(name, null, null, null, licenseConcluded,
 				licenseInfosFromFiles, copyrightText, null, licenseDeclared,
 				null, null, downloadLocation, files, null, null, null, packageVerificationCode,
-				null, null, null, null, true);
+				null, null, null, null, true, new ExternalRef[0]);
 	}
 
 	/**
@@ -198,6 +199,8 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		} else {			
 			this.filesAnalyzed = true;	// Default value is true per the 2.1 specification
 		}
+		this.externalRefs = findExternalRefPropertyValues(SPDX_NAMESPACE, 
+				PROP_EXTERNAL_REF);
 	}
 
 	/* (non-Javadoc)
@@ -279,6 +282,8 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				PROP_PACKAGE_FILE, this.files);
 		setPropertyValue(SPDX_NAMESPACE,
 				PROP_PACKAGE_FILES_ANALYZED, this.filesAnalyzed);
+		setPropertyValue(SPDX_NAMESPACE,
+				PROP_EXTERNAL_REF, this.externalRefs);
 	}
 
 	@Override
@@ -600,6 +605,28 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	}
 
 	/**
+	 * @return the externalRefs
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public ExternalRef[] getExternalRefs() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && refreshOnGet) {
+			this.externalRefs = findExternalRefPropertyValues(SPDX_NAMESPACE,
+					PROP_EXTERNAL_REF);
+		}
+		return externalRefs;
+	}
+
+	/**
+	 * @param externalRefs the externalRefs to set
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void setExternalRefs(ExternalRef[] externalRefs) throws InvalidSPDXAnalysisException {
+		setPropertyValue(SPDX_NAMESPACE,
+				PROP_EXTERNAL_REF, externalRefs);
+		this.externalRefs = externalRefs;
+	}
+
+	/**
 	 * @return the files
 	 * @throws InvalidSPDXAnalysisException
 	 */
@@ -698,7 +725,8 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				RdfModelHelper.stringsEquivalent(this.sourceInfo, comp.getSourceInfo()) &&
 				RdfModelHelper.stringsEquivalent(this.summary, comp.getSummary()) &&
 				RdfModelHelper.stringsEquivalent(this.supplier, comp.getSupplier()) &&
-				RdfModelHelper.stringsEquivalent(this.versionInfo, comp.getVersionInfo()));
+				RdfModelHelper.stringsEquivalent(this.versionInfo, comp.getVersionInfo()) &&
+				arraysEquivalent(this.externalRefs, comp.getExternalRefs()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invalid analysis exception on comparing equivalent: "+e.getMessage(),e);
 			return false;
@@ -718,7 +746,8 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				this.description, this.downloadLocation, null,
 				this.homepage, this.originator, this.packageFileName,
 				this.clonePackageVerificationCode(), this.sourceInfo,
-				this.summary, this.supplier, this.versionInfo, this.filesAnalyzed);
+				this.summary, this.supplier, this.versionInfo, this.filesAnalyzed,
+				this.cloneExternalRefs());
 		clonedElementIds.put(this.getId(), retval);
 		try {
 			retval.setRelationships(cloneRelationships(clonedElementIds));
@@ -729,6 +758,20 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			retval.setFiles(this.cloneFiles(clonedElementIds));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Unexected error setting relationships during clone",e);
+		}
+		return retval;
+	}
+
+	/**
+	 * @return
+	 */
+	private ExternalRef[] cloneExternalRefs() {
+		if (this.externalRefs == null) {
+			return null;
+		}
+		ExternalRef[] retval = new ExternalRef[this.externalRefs.length];
+		for (int i = 0; i < this.externalRefs.length; i++) {
+			retval[i] = this.externalRefs[i].clone();
 		}
 		return retval;
 	}
@@ -879,6 +922,12 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			String error = SpdxVerificationHelper.verifyOriginator(originator);
 			if (error != null && !error.isEmpty()) {
 				retval.add("Originator error - "+error+ " for package "+pkgName);
+			}
+		}
+		// External refs
+		if (this.externalRefs != null) {
+			for (ExternalRef externalRef:this.externalRefs) {
+				retval.addAll(externalRef.verify());
 			}
 		}
 		return retval;

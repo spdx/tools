@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import static org.junit.Assert.*;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,8 +35,10 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.ExternalRef.ReferenceCategory;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -106,6 +109,12 @@ public class TestSpdxPackage {
 	SpdxPackageVerificationCode VERIFICATION_CODE2 = new SpdxPackageVerificationCode(
 			"3333e1c67a2d28fced849ee1bb76e7391b93eb12", 
 			new String[] {"Excluded3"});
+	
+	ReferenceType REF_TYPE1;
+	ExternalRef EXTERNAL_REF1;
+	ReferenceType REF_TYPE2;
+	ExternalRef EXTERNAL_REF2;
+	
 	Model model;
 	IModelContainer modelContainer;
 
@@ -152,6 +161,13 @@ public class TestSpdxPackage {
 				RelationshipType.CONTAINS, "Relationship Comment1");
 		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
 				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
+		
+		REF_TYPE1 = new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "npm"), null, null, null);
+		EXTERNAL_REF1 = new ExternalRef(ReferenceCategory.referenceCategory_packageManager,
+				REF_TYPE1, "locator1", "comment1");
+		REF_TYPE2 = new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "cpe23Type"), null, null, null);
+		EXTERNAL_REF2 = new ExternalRef(ReferenceCategory.referenceCategory_security,
+				REF_TYPE1, "locator1", "comment2");
 	}
 
 	/**
@@ -190,12 +206,14 @@ public class TestSpdxPackage {
 		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
 		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
 		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+		ExternalRef[] externalRefs = new ExternalRef[] {EXTERNAL_REF1, EXTERNAL_REF2};
 		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
 				annotations, relationships,	LICENSE1, licenseFromFiles, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
 				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
 				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
-				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1);
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1,
+				true, externalRefs);
 		assertEquals(PKG_NAME1, pkg.getName());
 		assertEquals(PKG_COMMENT1, pkg.getComment());
 		assertTrue(UnitTestHelper.isArraysEqual(annotations, pkg.getAnnotations()));
@@ -217,6 +235,7 @@ public class TestSpdxPackage {
 		assertEquals(SUMMARY1, pkg.getSummary());
 		assertEquals(SUPPLIER1, pkg.getSupplier());
 		assertEquals(VERSION1, pkg.getVersionInfo());
+		assertTrue(UnitTestHelper.isArraysEqual(externalRefs, pkg.getExternalRefs()));
 		
 		Resource r = pkg.createResource(modelContainer);
 		assertEquals(PKG_NAME1, pkg.getName());
@@ -240,6 +259,8 @@ public class TestSpdxPackage {
 		assertEquals(SUMMARY1, pkg.getSummary());
 		assertEquals(SUPPLIER1, pkg.getSupplier());
 		assertEquals(VERSION1, pkg.getVersionInfo());
+		assertTrue(UnitTestHelper.isArraysEqual(externalRefs, pkg.getExternalRefs()));
+		
 		SpdxPackage pkg2 = new SpdxPackage(modelContainer, r.asNode());
 		assertEquals(PKG_NAME1, pkg2.getName());
 		assertEquals(PKG_COMMENT1, pkg2.getComment());
@@ -262,6 +283,7 @@ public class TestSpdxPackage {
 		assertEquals(SUMMARY1, pkg2.getSummary());
 		assertEquals(SUPPLIER1, pkg2.getSupplier());
 		assertEquals(VERSION1, pkg2.getVersionInfo());
+		assertTrue(UnitTestHelper.isArraysEqual(externalRefs, pkg2.getExternalRefs()));
 	}
 
 	/**
@@ -275,13 +297,15 @@ public class TestSpdxPackage {
 		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
 		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
 		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+		ExternalRef[] externalRefs = new ExternalRef[] {EXTERNAL_REF1};
 
 		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
 				annotations, relationships,	LICENSE1, licenseFromFiles, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
 				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
 				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
-				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1);
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1,
+				true, externalRefs);
 		
 		assertTrue(pkg.equivalent(pkg));
 		SpdxPackage pkg2 = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
@@ -289,7 +313,8 @@ public class TestSpdxPackage {
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
 				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
 				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
-				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1);
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1,
+				true, externalRefs);
 		assertTrue(pkg.equivalent(pkg2));
 		pkg.createResource(modelContainer);
 		assertTrue(pkg.equivalent(pkg2));
@@ -352,6 +377,16 @@ public class TestSpdxPackage {
 		pkg2.setVersionInfo(VERSION2);
 		assertFalse(pkg.equivalent(pkg2));
 		pkg2.setVersionInfo(VERSION1);
+		assertTrue(pkg.equivalent(pkg2));
+		// ExternalRefs
+		pkg2.setExternalRefs(new ExternalRef[] {EXTERNAL_REF1, EXTERNAL_REF2});
+		assertFalse(pkg.equivalent(pkg2));
+		pkg2.setExternalRefs(externalRefs);
+		assertTrue(pkg.equivalent(pkg2));
+		// Files Analyzed
+		pkg2.setFilesAnalyzed(false);
+		assertFalse(pkg.equivalent(pkg2));
+		pkg2.setFilesAnalyzed(true);
 		assertTrue(pkg.equivalent(pkg2));
 	}
 
@@ -681,7 +716,8 @@ public class TestSpdxPackage {
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
 				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
 				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
-				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1, false);
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1, false,
+				new ExternalRef[0]);
 		
 		assertTrue(!pkg.isFilesAnalyzed());
 		Resource r = pkg.createResource(modelContainer);
@@ -846,18 +882,21 @@ public class TestSpdxPackage {
 		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
 		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
 		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+		ExternalRef[] externalRefs = new ExternalRef[] {
+				EXTERNAL_REF1, EXTERNAL_REF2
+		};
 
 		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
 				annotations, relationships,	LICENSE1, licenseFromFiles, 
 				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
 				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
 				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
-				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1);
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1, 
+				false, externalRefs);
 		pkg.createResource(modelContainer);
 		SpdxPackage pkg2 = pkg.clone();
 		assertTrue(pkg.equivalent(pkg2));
 		assertTrue(pkg2.resource == null);
-		
 	}
 
 	/**
@@ -883,6 +922,60 @@ public class TestSpdxPackage {
 		// verification code
 		pkg.setPackageVerificationCode(null);
 		assertEquals(1, pkg.verify().size());
+	}
+	
+	@Test
+	public void testSetExternalRefs() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1};
+		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
+		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+		ExternalRef[] externalRefs1 = new ExternalRef[] {EXTERNAL_REF1};
+		ExternalRef[] externalRefs2 = new ExternalRef[] {EXTERNAL_REF2, EXTERNAL_REF1};
+
+		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
+				annotations, relationships,	LICENSE1, licenseFromFiles, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
+				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
+				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1,
+				VERSION1, false, externalRefs1);
+		
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs1, pkg.getExternalRefs()));
+		Resource r = pkg.createResource(modelContainer);
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs1, pkg.getExternalRefs()));
+		SpdxPackage pkg2 = new SpdxPackage(modelContainer, r.asNode());
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs1, pkg2.getExternalRefs()));
+		pkg.setExternalRefs(externalRefs2);
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs2, pkg.getExternalRefs()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs2, pkg2.getExternalRefs()));
+	}
+	
+	@Test
+	public void testSetFilesAnalyzed() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1};
+		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
+		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+
+		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
+				annotations, relationships,	LICENSE1, licenseFromFiles, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
+				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
+				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1, VERSION1,
+				false, new ExternalRef[0]);
+		
+		assertFalse(pkg.isFilesAnalyzed());
+		Resource r = pkg.createResource(modelContainer);
+		assertFalse(pkg.isFilesAnalyzed());
+		SpdxPackage pkg2 = new SpdxPackage(modelContainer, r.asNode());
+		assertFalse(pkg2.isFilesAnalyzed());
+		pkg.setFilesAnalyzed(true);
+		assertTrue(pkg2.isFilesAnalyzed());
+		assertTrue(pkg.isFilesAnalyzed());
 	}
 
 }
