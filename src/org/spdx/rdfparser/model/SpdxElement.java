@@ -145,7 +145,11 @@ public class SpdxElement extends RdfModelObject {
 		String localName = name;
 		List<String> retval = Lists.newArrayList();
 		if (this.name == null) {
-			retval.add("Missing required name for type "+this.getClass().getName());
+			if (!(this instanceof SpdxSnippet)) {
+				// TODO: Move this down into the subclasses where they belong - 
+				// a bit of a quick fix while working on SPDX 2.1 changes
+				retval.add("Missing required name for type "+this.getClass().getName());
+			}
 			localName = "UNKNOWN";
 		}
 		if (this.annotations != null) {

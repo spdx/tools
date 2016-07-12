@@ -32,6 +32,7 @@ public interface SpdxRdfConstants {
 	public static final String SPDX_NAMESPACE = "http://spdx.org/rdf/terms#";
 	public static final String DOAP_NAMESPACE = "http://usefulinc.com/ns/doap#";
 	public static final String OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
+	public static final String RDF_POINTER_NAMESPACE = "http://www.w3.org/2009/pointers#";
 	
 	// RDF Properties
 	public static final String RDF_PROP_TYPE = "type";
@@ -52,6 +53,18 @@ public interface SpdxRdfConstants {
 	// DOAP Project Property Names
 	public static final String PROP_PROJECT_NAME = "name";
 	public static final String PROP_PROJECT_HOMEPAGE = "homepage";
+	
+	// Pointer Class Names
+	public static final String CLASS_POINTER_START_END_POINTER = "StartEndPointer";
+	public static final String CLASS_POINTER_BYTE_OFFSET_POINTER = "ByteOffsetPointer";
+	public static final String CLASS_POINTER_LINE_CHAR_POINTER = "LineCharPointer";
+	
+	// Pointer Properties
+	public static final String PROP_POINTER_START_POINTER = "startPointer";
+	public static final String PROP_POINTER_END_POINTER = "endPointer";
+	public static final String PROP_POINTER_REFERENCE = "reference";
+	public static final String PROP_POINTER_OFFSET = "offset";
+	public static final String PROP_POINTER_LINE_NUMBER = "lineNumber";
 	
 	// SPDX Class Names
 	public static final String CLASS_SPDX_DOCUMENT = "SpdxDocument";
@@ -77,6 +90,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_EXTERNAL_DOC_REF = "ExternalDocumentRef";
 	public static final String CLASS_SPDX_EXTERNAL_REFERENCE = "ExternalRef";
 	public static final String CLASS_SPDX_REFERENCE_TYPE = "ReferenceType";
+	public static final String CLASS_SPDX_SNIPPET = "Snippet";
 	
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
@@ -189,6 +203,10 @@ public interface SpdxRdfConstants {
 	public static final String PROP_FILE_FILE_DEPENDENCY = "fileDependency"; 
 	public static final String PROP_FILE_CONTRIBUTOR = "fileContributor";
 	public static final String PROP_FILE_NOTICE = "noticeText";
+	
+	// SPDX Snippet Properties
+	public static final String PROP_SNIPPET_FROM_FILE = "snippetFromFile";
+	public static final String PROP_SNIPPET_BYTE_RANGE = "byteRange";
 	
 	// SPDX File Type Properties
 	public static final String PROP_FILE_TYPE_SOURCE = "fileType_source";

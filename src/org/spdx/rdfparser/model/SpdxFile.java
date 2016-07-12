@@ -53,7 +53,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		fileType_image, fileType_other, fileType_source, fileType_spdx,
 		fileType_text, fileType_video;
 
-		@SuppressWarnings("deprecation")
 		/**
 		 * @return The tag for this file type.
 		 */
@@ -66,7 +65,6 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		 * @param tag
 		 * @return The file type corresponding to the provided tag.
 		 */
-		@SuppressWarnings("deprecation")
 		public static FileType fromTag(String tag){
 			return TAG_TO_FILE_TYPE.get(tag);
 		}
@@ -506,8 +504,10 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 	
 	/**
+	 * Artifact of has been replaced by a relationship to a package with the filesAnalyzed set to false
 	 * @return the artifactOf
 	 */
+	@Deprecated
 	public DoapProject[] getArtifactOf() {
 		if (this.resource != null && this.refreshOnGet) {
 			try {
@@ -524,9 +524,11 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	}
 
 	/**
+	 * Artifact of has been replaced by a relationship to a package with the filesAnalyzed set to false
 	 * @param artifactOf the artifactOf to set
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@Deprecated
 	public void setArtifactOf(DoapProject[] artifactOf) throws InvalidSPDXAnalysisException {
 		if (artifactOf == null) {
 			this.artifactOf = new DoapProject[0];
