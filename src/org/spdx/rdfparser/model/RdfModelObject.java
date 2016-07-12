@@ -28,6 +28,9 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.model.pointer.PointerFactory;
+import org.spdx.rdfparser.model.pointer.SinglePointer;
+import org.spdx.rdfparser.model.pointer.StartEndPointer;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
@@ -333,6 +336,50 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/**
+	 * Find an integer property value with a subject of this object
+	 * @param namespace Namespace for the property name
+	 * @param propertyName Name of the property
+	 * @return The string value of the property or null if no property exists
+	 */
+	public Integer findIntPropertyValue(String namespace, String propertyName) {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		Node p = model.getProperty(namespace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			if (t.getObject().isLiteral()) {
+				String sRetval = t.getObject().toString(false);
+				try {
+					return Integer.parseInt(sRetval);
+				} catch (Exception ex) {
+					return null;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Set a property value for this resource.  Clears any existing resource.
+	 * @param nameSpace RDF Namespace for the property
+	 * @param propertyName RDF Property Name (the RDF 
+	 * @param value Integer value to associate to this resource
+	 */
+	protected void setPropertyValue(String nameSpace, String propertyName,
+			Integer value) {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (value != null) {
+				this.resource.addProperty(p, Integer.toString(value));
+			}
+		}
+	}
+	
+	/**
 	 * Finds multiple property values with a subject of this object
 	 * @param namespace Namespace for the property name
 	 * @param propertyName Name of the property
@@ -557,6 +604,50 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			retval.add(new Relationship(this.modelContainer, t.getObject()));
 		}
 		return retval.toArray(new Relationship[retval.size()]);
+	}
+	
+	/**
+	 * Find all StartEndPointers assocated with a property
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected StartEndPointer[] findStartEndPointerPropertyValues(String nameSpace,
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		List<StartEndPointer> retval = Lists.newArrayList();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new StartEndPointer(this.modelContainer, t.getObject()));
+		}
+		return retval.toArray(new StartEndPointer[retval.size()]);
+	}
+	
+	/**
+	 * Set a property value for this resource.  Clears any existing resource.
+	 * @param nameSpace RDF Namespace for the property
+	 * @param propertyName RDF Property Name
+	 * @param value Values to set
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void setPropertyValue(String nameSpace,
+			String propertyName, StartEndPointer[] values) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			//TODO: Can all of these be replaced by a single method with RdfModel type?
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (values != null) {
+				for (int i = 0; i < values.length; i++) {
+					this.resource.addProperty(p, values[i].createResource(modelContainer));
+				}
+			}
+		}
 	}
 	
 	/**
@@ -1011,6 +1102,43 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 	}
 	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return a compound pointer as an object for the property
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected SinglePointer findSinglePointerPropertyValue(
+			String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return null;
+		}
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			return PointerFactory.getSinglePointerFromModel(modelContainer, t.getObject());
+		}
+		return null;
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param creatorInfo
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected void setPropertyValue(String nameSpace, 
+			String propertyName, SinglePointer singlePointer) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (singlePointer != null) {
+				this.resource.addProperty(p, singlePointer.createResource(modelContainer));
+			}
+		}
+	}
 	public ExternalDocumentRef[] findExternalDocRefPropertyValues(
 			String nameSpace, String propertyName)  throws InvalidSPDXAnalysisException {
 		return findExternalDocRefPropertyValues(nameSpace, propertyName,

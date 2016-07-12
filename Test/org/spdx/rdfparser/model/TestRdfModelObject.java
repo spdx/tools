@@ -47,6 +47,10 @@ import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.ExternalRef.ReferenceCategory;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
+import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
+import org.spdx.rdfparser.model.pointer.LineCharPointer;
+import org.spdx.rdfparser.model.pointer.SinglePointer;
+import org.spdx.rdfparser.model.pointer.StartEndPointer;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
@@ -869,5 +873,69 @@ public class TestRdfModelObject {
 		result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(0, result.length);
+	}
+	
+	@Test
+	public void testSetFindPropertyValueSinglePointer() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		SpdxElement refElement = new SpdxElement("ReferencedElement", null, null, null);
+		int offset = 55;
+		int line = 15;
+		SinglePointer point1 = new ByteOffsetPointer(refElement, offset);
+		point1.createResource(modelContainer);
+		SinglePointer point2 = new LineCharPointer(refElement, line);
+		point2.createResource(modelContainer);
+		SinglePointer result = empty.findSinglePointerPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(result == null);
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, point1);
+		result = empty.findSinglePointerPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(point1.equivalent(result));
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, point2);
+		result = empty.findSinglePointerPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(point2.equivalent(result));
+	}
+	
+	@Test
+	public void testSetFindIntegerPropertyValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		Integer result = empty.findIntPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(result == null);
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, 18);
+		result = empty.findIntPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(new Integer(18), result);
+	}
+	
+	@Test
+	public void testSetFindStartEndPointerPropertyValue() throws InvalidSPDXAnalysisException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		SpdxElement refElement = new SpdxElement("ReferencedElement", null, null, null);
+		int offset = 55;
+		int line = 15;
+		SinglePointer point1 = new ByteOffsetPointer(refElement, offset);
+		SinglePointer point2 = new LineCharPointer(refElement, line);
+		StartEndPointer sep1 = new StartEndPointer(point1, point2);
+		SpdxElement refElement2 = new SpdxElement("ReferencedElement2", null, null, null);
+		int offset2 = 234;
+		int line2 = 1443;
+		SinglePointer point3 = new ByteOffsetPointer(refElement2, offset2);
+		SinglePointer point4 = new LineCharPointer(refElement2, line2);
+		StartEndPointer sep2 = new StartEndPointer(point3, point4);
+		
+		StartEndPointer[] seps = new StartEndPointer[] {sep1, sep2};
+		StartEndPointer[] result = empty.findStartEndPointerPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, seps);
+		result = empty.findStartEndPointerPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertTrue(UnitTestHelper.isArraysEqual(seps, result));
 	}
 }
