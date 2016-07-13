@@ -121,7 +121,7 @@ snippet information applies to.
 	 */
 	private void getRangesFromModel() throws InvalidSPDXAnalysisException {
 		StartEndPointer[] allPointers = findStartEndPointerPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
-				SpdxRdfConstants.PROP_SNIPPET_BYTE_RANGE);
+				SpdxRdfConstants.PROP_SNIPPET_RANGE);
 		this.byteRange = null;
 		this.lineRange = null;
 		for (StartEndPointer sep:allPointers) {
@@ -240,7 +240,7 @@ snippet information applies to.
 			allRanges.add(lineRange);
 		}
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_SNIPPET_BYTE_RANGE, allRanges.toArray(new StartEndPointer[allRanges.size()]));
+				SpdxRdfConstants.PROP_SNIPPET_RANGE, allRanges.toArray(new StartEndPointer[allRanges.size()]));
 	}
 
 	/**

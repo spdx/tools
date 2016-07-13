@@ -228,7 +228,7 @@ public class TestSpdxSnippet {
 				null, FROM_FILE1, BYTE_RANGE1, LINE_RANGE1);
 		Resource sr = snippet.createResource(modelContainer);
 		
-		Node byteRangeProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SNIPPET_BYTE_RANGE).asNode();
+		Node byteRangeProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SNIPPET_RANGE).asNode();
 		Triple byteRangeMatch = Triple.createMatch(null, byteRangeProperty, null);
 		ExtendedIterator<Triple> byteRangeMatchIter = model.getGraph().find(byteRangeMatch);	
 		int numByteRanges = 0;
@@ -241,7 +241,7 @@ public class TestSpdxSnippet {
 		Resource sr2 = clonedSnippet.createResource(modelContainer);
 		assertEquals(sr, sr2);
 
-		byteRangeProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SNIPPET_BYTE_RANGE).asNode();
+		byteRangeProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SNIPPET_RANGE).asNode();
 		byteRangeMatch = Triple.createMatch(null, byteRangeProperty, null);
 		byteRangeMatchIter = model.getGraph().find(byteRangeMatch);	
 		numByteRanges = 0;

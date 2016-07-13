@@ -206,7 +206,7 @@ public interface SpdxRdfConstants {
 	
 	// SPDX Snippet Properties
 	public static final String PROP_SNIPPET_FROM_FILE = "snippetFromFile";
-	public static final String PROP_SNIPPET_BYTE_RANGE = "byteRange";
+	public static final String PROP_SNIPPET_RANGE = "range";
 	
 	// SPDX File Type Properties
 	public static final String PROP_FILE_TYPE_SOURCE = "fileType_source";
