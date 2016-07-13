@@ -88,8 +88,6 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 		ArrayList<String> retval = new ArrayList<String>();
 		if (this.referenceTypeUri == null) {
 			retval.add("Missing required URI for Reference Type");
-		} else if (!ListedReferenceTypes.getListedReferenceTypes().isListedReferenceType(this.referenceTypeUri)) {
-			retval.add("URI "+this.referenceTypeUri.toString()+" is not a listed SPDX reference type.");
 		}
 		return retval;
 	}
