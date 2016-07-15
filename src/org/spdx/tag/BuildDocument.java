@@ -53,6 +53,12 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
+import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
+import org.spdx.rdfparser.model.pointer.LineCharPointer;
+import org.spdx.rdfparser.model.pointer.SinglePointer;
+import org.spdx.rdfparser.model.pointer.StartEndPointer;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -129,23 +135,24 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private static Pattern EXTERNAL_DOC_REF_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+SHA1:\\s+(\\S+)");
 	private static Pattern RELATIONSHIP_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+(\\S+)");
 	private static Pattern CHECKSUM_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");
+	private static Pattern NUMBER_RANGE_PATTERN = Pattern.compile("(\\d+):(\\d+)");
 	/**
 	 * Tags used in the definition of an annotation
-	 * Note: does not include the annotator tag since that is the tag that starts the definition
 	 */
 	private Set<String> ANNOTATION_TAGS = Sets.newHashSet();
 	/**
 	 * Tags used in the definition of a file
-	 * Note: does not include the annotator tag since that is the tag that starts the definition
 	 */
 	private Set<String> FILE_TAGS = Sets.newHashSet();
 	/**
+	 * Tags used in the definition of a Snippet
+	 */
+	private Set<String> SNIPPET_TAGS = Sets.newHashSet();
+	/**
 	 * Tags used in the definition of a package
-	 * Note: does not include the annotator tag since that is the tag that starts the definition
 	 */
 	/**
 	 * Tags used in the definition of an extracted license
-	 * Note: does not include the annotator tag since that is the tag that starts the definition
 	 */
 	private Set<String> EXTRACTED_LICENSE_TAGS = Sets.newHashSet();
 	private Set<String> PACKAGE_TAGS = Sets.newHashSet();
@@ -158,10 +165,16 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private SPDXReview lastReviewer = null;
 	private ExtractedLicenseInfo lastExtractedLicense = null;
 	private SpdxFile lastFile = null;
+	private SpdxSnippet lastSnippet = null;
 	private DoapProject lastProject = null;
 	// Keep track of all file dependencies since these need to be added after all of the files
 	// have been parsed.  Map of file dependency file name to the SPDX files which depends on it
 	private Map<String, List<SpdxFile>> fileDependencyMap = Maps.newHashMap();
+	/**
+	 * Map of all snippetFileID's collected during parsing so that we can add the files
+	 * at the end of the document creation once the files are actually created
+	 */
+	private Map<String, List<SpdxSnippet>>  snippetDependencyMap = Maps.newHashMap();
 	/**
 	 * Keep track of the last relationship for any following relationship related tags
 	 */
@@ -198,8 +211,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	 * in the tag/value file.  Note that files defined as part of a package
 	 * will have the state flag inPackageDefinition set, and inFileDefinition will be false.
 	 */
-	private boolean inFileDefinition = false;;
-
+	private boolean inFileDefinition = false;
+	/**
+	 * true if we have started to define a Snippet
+	 */
+	private boolean inSnippetDefinition;
 	/**
 	 * True if we have started to define an annotation
 	 * in the tag/value file.
@@ -214,6 +230,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	 * The last (or current) package being defined by the tag/value file
 	 */
 	private SpdxPackage lastPackage = null;
+
 	public BuildDocument(SpdxDocumentContainer[] result, Properties constants, List<String> warnings) {
 		this.constants = constants;
 		this.warningMessages = warnings;
@@ -245,6 +262,25 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATION_COMMENT").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATION_ID").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATION_TYPE").trim()+" ");
+		
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_SPDX_ID").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_FROM_FILE_ID").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_BYTE_RANGE").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_LINE_RANGE").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_CONCLUDED_LICENSE").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_LIC_COMMENTS").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_COPYRIGHT").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_COMMENT").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_NAME").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_SEEN_LICENSE").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_DOCUMENT_NAMESPACE").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_RELATIONSHIP").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_RELATIONSHIP_COMMENT").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_ANNOTATOR").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_ANNOTATION_DATE").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_ANNOTATION_COMMENT").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_ANNOTATION_ID").trim()+" ");
+		this.SNIPPET_TAGS.add(constants.getProperty("PROP_ANNOTATION_TYPE").trim()+" ");
 
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_COMMENT").trim()+" ");
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_FILE_NAME").trim()+" ");
@@ -293,6 +329,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			buildAnnotation(tag, value, lastAnnotation);
 		} else if (this.inFileDefinition && FILE_TAGS.contains(tag)) {
 			buildFile(this.lastFile, tag, value);
+		} else if (this.inSnippetDefinition && SNIPPET_TAGS.contains(tag)) {
+			buildSnippet(this.lastSnippet, tag, value);
 		} else if (this.inPackageDefinition && PACKAGE_TAGS.contains(tag)) {
 			buildPackage(this.lastPackage, tag, value);
 		} else if (this.inExtractedLicenseDefinition && EXTRACTED_LICENSE_TAGS.contains(tag)) {
@@ -301,11 +339,136 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			if (inFileDefinition) {
 				addLastFile();
 			}
+			if (inSnippetDefinition) {
+				addLastSnippet();
+			}
 			this.inAnnotation = false;
 			this.inFileDefinition = false;
 			this.inPackageDefinition = false;
+			inSnippetDefinition = false;
 			buildDocumentProperties(tag, value);
 		}
+	}
+
+	/**
+	 * Add tag value properties to an existing snippet
+	 * @param snippet
+	 * @param tag
+	 * @param value
+	 * @throws InvalidSpdxTagFileException 
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidLicenseStringException 
+	 */
+	private void buildSnippet(SpdxSnippet snippet, String tag, String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
+		if (snippet == null) {
+			throw(new InvalidSpdxTagFileException("Missing Snippet ID - An SPDX Snippet ID must be specified before the snippet properties"));
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
+			snippet.setId(value);
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_FROM_FILE_ID"))) {
+			// Since the files have not all been parsed, we just keep track of the
+			// dependencies in a hashmap until we finish all processing and are building the package
+			List<SpdxSnippet> snippetsWithThisAsADependency = this.snippetDependencyMap.get(value);
+			if (snippetsWithThisAsADependency == null) {
+				snippetsWithThisAsADependency = Lists.newArrayList();
+				this.snippetDependencyMap.put(value, snippetsWithThisAsADependency);
+			}
+			snippetsWithThisAsADependency.add(snippet);
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_BYTE_RANGE"))) {
+			snippet.setByteRange(parseByteRange(value));
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_LINE_RANGE"))) {
+			snippet.setLineRange(parseLineRange(value));
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_CONCLUDED_LICENSE"))) {
+			snippet.setLicenseConcluded(LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer()));
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_LIC_COMMENTS"))) {
+			snippet.setLicenseComments(value);
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_COPYRIGHT"))) {
+			snippet.setCopyrightText(value);
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_COMMENT"))) {
+			snippet.setComment(value);
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_NAME"))) {
+			snippet.setName(value);
+		}
+		if (tag.equals(constants.getProperty("PROP_SNIPPET_SEEN_LICENSE"))) {
+			snippet.setLicenseInfosFromFiles(new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer())});
+		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
+			if (lastAnnotation != null) {
+				annotations.add(lastAnnotation);
+			}
+			this.inAnnotation = true;
+			lastAnnotation = new AnnotationWithId(value);
+		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP"))) {
+			if (lastRelationship != null) {
+				relationships.add(lastRelationship);
+			}
+			lastRelationship = parseRelationship(value);
+		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP_COMMENT"))) {
+			if (lastRelationship == null) {
+				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value));
+			}
+			lastRelationship.setComment(value);
+		} else {
+			throw new InvalidSPDXAnalysisException("Error parsing snippet.  Unrecognized tag: "+tag);
+		}
+		
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 * @throws InvalidSpdxTagFileException 
+	 */
+	private StartEndPointer parseLineRange(String value) throws InvalidSpdxTagFileException {
+		Matcher matcher = NUMBER_RANGE_PATTERN.matcher(value.trim());
+		if (!matcher.find()) {
+			throw(new InvalidSpdxTagFileException("Invalid snippet line range: "+value));
+		}	
+		LineCharPointer start = null;
+		try {
+			start = new LineCharPointer(null, Integer.parseInt(matcher.group(1)));
+		} catch (Exception ex) {
+			throw new InvalidSpdxTagFileException("Non integer start to snippet line offset: "+value);
+		}
+		LineCharPointer end = null;
+		try {
+			end = new LineCharPointer(null, Integer.parseInt(matcher.group(2)));
+		} catch (Exception ex) {
+			throw new InvalidSpdxTagFileException("Non integer end to snippet line offset: "+value);
+		}
+		return new StartEndPointer(start, end);
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 * @throws InvalidSpdxTagFileException 
+	 */
+	private StartEndPointer parseByteRange(String value) throws InvalidSpdxTagFileException {
+		Matcher matcher = NUMBER_RANGE_PATTERN.matcher(value.trim());
+		if (!matcher.find()) {
+			throw(new InvalidSpdxTagFileException("Invalid snippet byte range: "+value));
+		}	
+		ByteOffsetPointer start = null;
+		try {
+			start = new ByteOffsetPointer(null, Integer.parseInt(matcher.group(1)));
+		} catch (Exception ex) {
+			throw new InvalidSpdxTagFileException("Non integer start to snippet byte offset: "+value);
+		}
+		ByteOffsetPointer end = null;
+		try {
+			end = new ByteOffsetPointer(null, Integer.parseInt(matcher.group(2)));
+		} catch (Exception ex) {
+			throw new InvalidSpdxTagFileException("Non integer end to snippet byte offset: "+value);
+		}
+		return new StartEndPointer(start, end);
 	}
 
 	/**
@@ -481,6 +644,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inPackageDefinition = true;
 			inFileDefinition = false;
 			inAnnotation = false;
+			inSnippetDefinition = false;
 			if (this.lastPackage != null) {
 				if (this.lastPackage.getId() == null) {
 					this.warningMessages.add("Missing SPDX ID for "+this.lastPackage.getName()
@@ -498,10 +662,20 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inFileDefinition = true;
 			inPackageDefinition = false;
 			inAnnotation = false;
+			inSnippetDefinition = false;
 
 			this.lastFile = new SpdxFile(value, null, new Annotation[0], new Relationship[0], null,
 					new AnyLicenseInfo[0], null, null, new FileType[0], new Checksum[0],
 					new String[0] , null, new DoapProject[0]);
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
+			checkAnalysisNull();
+			addLastSnippet();
+			inSnippetDefinition = true;
+			inFileDefinition = false;
+			inPackageDefinition = false;
+			inAnnotation = false;
+			this.lastSnippet = new SpdxSnippet(null, null, new Annotation[0], new Relationship[0], null, 
+					new AnyLicenseInfo[0], null, null, null, null, null);
 		} else {
 			throw new InvalidSpdxTagFileException("Expecting a definition of a file, package, license information, or document property at "+tag+value);
 		}
@@ -526,6 +700,26 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 		}
 		this.lastFile = null;
+	}
+	
+	/**
+	 * Adds the last snippet to the document
+	 * @throws InvalidSPDXAnalysisException
+	 *
+	 */
+	private void addLastSnippet() throws InvalidSPDXAnalysisException {
+		if (this.lastSnippet != null) {
+			if (this.lastSnippet.getId() == null) {
+				String snippetName = this.lastSnippet.getName();
+				if (snippetName == null) {
+					snippetName = "[UNKNOWN]";
+				}
+				this.warningMessages.add("Missing SPDX ID for " + lastSnippet
+						+ ".  An SPDX ID will be generated for this file.");
+			}
+			this.analysis.getDocumentContainer().addElement(lastSnippet);
+		}
+		this.lastSnippet = null;
 	}
 
 	/**
@@ -697,7 +891,16 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 					new AnyLicenseInfo[0], null, null, new FileType[0], new Checksum[0],
 					new String[0] , null, new DoapProject[0]);
 			this.inFileDefinition = true;
+			inSnippetDefinition = false;
 			inAnnotation = false;
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
+			addLastSnippet();
+			inSnippetDefinition = true;
+			inFileDefinition = false;
+			inPackageDefinition = false;
+			inAnnotation = false;
+			this.lastSnippet = new SpdxSnippet(null, null, new Annotation[0], new Relationship[0], null, 
+					new AnyLicenseInfo[0], null, null, null, null, null);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_COMMENT"))) {
 			pkg.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED"))) {
@@ -708,10 +911,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			} else {
 				throw(new InvalidSpdxTagFileException("Invalid value for files analyzed.  Must be 'true' or 'false'.  Found value: "+value));
 			}
-		} else if (this.inFileDefinition) {
-			buildFile(this.lastFile, tag, value);
+//		} else if (this.inFileDefinition) {
+//			buildFile(this.lastFile, tag, value);
 		} else {
-			throw(new InvalidSpdxTagFileException("Expecting a file definition or a package property.  Found "+value));
+			throw(new InvalidSpdxTagFileException("Expecting a file definition, snippet definition or a package property.  Found "+value));
 		}
 	}
 
@@ -885,7 +1088,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		if (this.lastPackage != null) {
 			this.analysis.getDocumentContainer().addElement(this.lastPackage);
 		}
-		fixFileDependencies();
+		fixFileAndSnippetDependencies();
 		addRelationships();
 		checkSinglePackageDefault();
 		addAnnotations();
@@ -976,19 +1179,20 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 					relationships.get(i).getRelationshipType(), relationships.get(i).getComment()));
 		}
 	}
-
+	
 	/**
-	 * Go through all of the file dependencies and add them to the file
+	 * Go through all of the file dependencies and snippet dependencies and add them to the file
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
-	private void fixFileDependencies() throws InvalidSPDXAnalysisException {
+	private void fixFileAndSnippetDependencies() throws InvalidSPDXAnalysisException {
 		// be prepared - it is complicate to make this efficient
 		// the HashMap fileDependencyMap contains a map from a file name to all SPDX files which
 		// reference that file name as a dependency
 		// This method goes through all of the files in the analysis in a single pass and creates
-		// a new HashMap of files (as the key) and the dependency files (arraylist) as the values
-		// Once that hashmap is built, the actual dependencies are then added.
+		// a new HashMap of files (as the key) and the dependency files (arraylist) as the values.
+		// We also take care of updating the files in the Snippet Dependencies in this pass.
+		// Once that hashmap is built, the actual dependencies and snippets are then updated.
 		// the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
 		Map<SpdxFile, List<SpdxFile>> filesWithDependencies = Maps.newHashMap();
 		SpdxFile[] allFiles = analysis.getDocumentContainer().getFileReferences();
@@ -1009,8 +1213,23 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				// not match at the end
 				this.fileDependencyMap.remove(allFiles[i].getName());
 			}
+			List<SpdxSnippet> alSnippetsWithThisFile = this.snippetDependencyMap.get(allFiles[i].getId());
+			if (alSnippetsWithThisFile != null) {
+				for (SpdxSnippet snippet:alSnippetsWithThisFile) {
+					snippet.setSnippetFromFile(allFiles[i]);
+					StartEndPointer byteRange = snippet.getByteRange();
+					if (byteRange != null) {
+						fixPointerFileReferences(allFiles[i], byteRange);
+					}
+					StartEndPointer lineRange = snippet.getLineRange();
+					if (lineRange != null) {
+						fixPointerFileReferences(allFiles[i], lineRange);
+					}
+				}
+			}
+			this.snippetDependencyMap.remove(allFiles[i].getId());
 		}
-		// Go through the hashmap we just created and add the dependent files
+		// Go through the file dependency hashmap we just created and add the dependent files
 		Iterator<Entry<SpdxFile, List<SpdxFile>>> iter = filesWithDependencies.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<SpdxFile, List<SpdxFile>> entry = iter.next();
@@ -1023,12 +1242,37 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		// not found
 		Set<String> missingDependencies = this.fileDependencyMap.keySet();
 		if (missingDependencies != null && missingDependencies.size() > 0) {
-			System.out.println("The following file names were listed as file dependencies but were not found in the list of files:");
+			this.warningMessages.add("The following file names were listed as file dependencies but were not found in the list of files:");
 			Iterator<String> missingIter = missingDependencies.iterator();
 			while(missingIter.hasNext()) {
-				System.out.println("\t"+missingIter.next());
+				this.warningMessages.add("\t"+missingIter.next());
 			}
 		}
+		Set<String> missingSnippetFileIds = this.snippetDependencyMap.keySet();
+		if (missingSnippetFileIds != null && missingSnippetFileIds.size() > 0) {
+			this.warningMessages.add("The following file IDs were listed as files for snippets but were not found in the list of files:");
+			Iterator<String> missingIter = missingDependencies.iterator();
+			while(missingIter.hasNext()) {
+				this.warningMessages.add("\t"+missingIter.next());
+			}
+		}
+	}
 
+	/**
+	 * Add the file reference to a start/end pointer
+	 * @param spdxFile
+	 * @param pointer
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private void fixPointerFileReferences(SpdxFile spdxFile,
+			StartEndPointer pointer) throws InvalidSPDXAnalysisException {
+		SinglePointer start = pointer.getStartPointer();
+		if (start != null) {
+			start.setReference(spdxFile);
+		}
+		SinglePointer end = pointer.getEndPointer();
+		if (end != null) {
+			end.setReference(spdxFile);
+		}
 	}
 }

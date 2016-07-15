@@ -170,10 +170,6 @@ public class TestExternalReference {
 				null,
 				REFERENCE_LOCATORS[0], COMMENTS[0]);
 		assertEquals(1, noReferenceType.verify().size());
-		ExternalRef nonListedReferenceType = new ExternalRef(REFERENCE_CATEGORIES[0], 
-				new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "NotListed"), null, null, null),
-				REFERENCE_LOCATORS[0], COMMENTS[0]);
-		assertEquals(1, nonListedReferenceType.verify().size());
 		ExternalRef noRferenceLocator = new ExternalRef(REFERENCE_CATEGORIES[0], 
 				new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[0]), null, null, null),
 				null, COMMENTS[0]);
