@@ -24,6 +24,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.SpdxElement;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -102,13 +103,7 @@ public class ByteOffsetPointer extends SinglePointer {
 			return false;
 		}
 		ByteOffsetPointer comp = (ByteOffsetPointer)o;
-		if (this.offset == null) {
-			return comp.getOffset() == null;
-		}
-		if (comp.getOffset() == null) {
-			return false;
-		}
-		return this.offset.equals(comp.getOffset());
+		return Objects.equal(this.offset, comp.getOffset());
 	}
 
 	/**

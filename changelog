@@ -1,4 +1,5 @@
-Implementation version 2.0.5
+Implementation version 2.1.0
+- Implement the 2.1 changes (SpdxSnippet, ExternalRef, hasAnalyzedFiles - see spec for details)
 Implementation version 2.0.4
 - Fixed bug where the RdfToHTML could not open template files from the local resources directory
 - Fixed bug where license expressions were case sensitive

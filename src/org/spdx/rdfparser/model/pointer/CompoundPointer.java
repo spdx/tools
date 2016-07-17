@@ -119,7 +119,7 @@ public abstract class CompoundPointer extends RdfModelObject {
 		}
 		CompoundPointer comp = (CompoundPointer)o;
 		try {
-			return this.startPointer.equivalent(comp.getStartPointer());
+			return equivalentConsideringNull(this.startPointer, comp.getStartPointer());
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Error getting the start pointer for the comparison",e);
 			return false;

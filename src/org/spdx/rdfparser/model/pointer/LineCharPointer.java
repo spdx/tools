@@ -24,6 +24,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.SpdxElement;
 
+import com.google.common.base.Objects;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -125,13 +126,7 @@ public class LineCharPointer extends SinglePointer {
 			return false;
 		}
 		LineCharPointer comp = (LineCharPointer)o;
-		if (this.lineNumber == null) {
-			return comp.getLineNumber() == null;
-		}
-		if (comp.getLineNumber() == null) {
-			return false;
-		}
-		return this.lineNumber.equals(comp.getLineNumber());
+		return Objects.equal(this.lineNumber, comp.getLineNumber());
 	}
 
 	@Override

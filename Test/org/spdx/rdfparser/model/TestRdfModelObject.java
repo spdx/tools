@@ -938,4 +938,39 @@ public class TestRdfModelObject {
 		result = empty.findStartEndPointerPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(seps, result));
 	}
+	
+	@Test
+	public void testAddPropertyExternalRef() throws InvalidSPDXAnalysisException, URISyntaxException {
+		final Model model = ModelFactory.createDefaultModel();
+		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
+		Resource r = model.createResource();
+		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
+		ReferenceType refType1 = new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "cpe22Type"), null, null, null);
+		ReferenceType refType2 = new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "maven"), null, null, null);
+		ReferenceCategory refCat1 = ReferenceCategory.referenceCategory_packageManager;
+		ReferenceCategory refCat2 = ReferenceCategory.referenceCategory_security;
+		String refLocator1 = "Reference locator 1";
+		String refLocator2 = "Reference locator 2";
+		String comment1 = "Comment1";
+		String comment2 = "Comment2";
+		ExternalRef ref1 = new ExternalRef(refCat1, refType1, refLocator1, comment1);
+		ExternalRef ref2 = new ExternalRef(refCat2, refType2, refLocator2, comment2);
+		ref1.createResource(modelContainer);
+		ref2.createResource(modelContainer);
+		ExternalRef[] result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(0, result.length);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, ref1);
+		result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(1, result.length);
+		assertEquals(ref1, result[0]);
+		empty.addPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1,ref2);
+		result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
+		assertEquals(2, result.length);
+		if (ref1.equals(result[0])) {
+			assertEquals(ref2, result[1]);
+		} else {
+			assertEquals(ref1, result[1]);
+			assertEquals(ref2, result[0]);
+		}
+	}
 }

@@ -1048,4 +1048,22 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		// No sha1 found, return an empty string
 		return "";
 	}
+
+	/**
+	 * @param externalRef
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void addExternalRef(ExternalRef externalRef) throws InvalidSPDXAnalysisException {
+		if (externalRef == null) {
+			return;
+		}
+		if (this.externalRefs == null) {
+			this.externalRefs = new ExternalRef[] {externalRef};
+		} else {
+			this.externalRefs = Arrays.copyOf(this.externalRefs, this.externalRefs.length+1);
+			this.externalRefs[this.externalRefs.length-1] = externalRef;
+		}
+		addPropertyValue(SPDX_NAMESPACE,
+				PROP_EXTERNAL_REF, externalRef);
+	}
 }

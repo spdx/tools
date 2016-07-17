@@ -45,7 +45,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	
 	static final Logger logger = Logger.getLogger(ExternalRef.class);
 	
-	enum ReferenceCategory {referenceCategory_packageManager, referenceCategory_security,
+	public enum ReferenceCategory {referenceCategory_packageManager, referenceCategory_security,
 		referenceCategory_other;
 		public String getTag() {
 			switch(this) {
@@ -55,7 +55,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 			default: return "OTHER";
 			}
 		}
-		public ReferenceCategory fromTag(String tag) {
+		public static ReferenceCategory fromTag(String tag) {
 			String uTag = tag.toUpperCase();
 			if ("PACKAGEMANAGER".equals(uTag)) {
 				return referenceCategory_packageManager;
@@ -137,7 +137,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		ExternalRef erCompare = (ExternalRef)compare;
 		return Objects.equal(this.referenceCategory, erCompare.referenceCategory) &&
 				Objects.equal(this.referenceLocator, erCompare.referenceLocator) &&
-				Objects.equal(this.referenceType, erCompare.referenceType);
+				this.equivalentConsideringNull(this.referenceType, erCompare.referenceType);
 	}
 
 	/* (non-Javadoc)
