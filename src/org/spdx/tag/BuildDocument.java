@@ -17,6 +17,8 @@
 package org.spdx.tag;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -46,6 +48,8 @@ import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.ExternalRef;
+import org.spdx.rdfparser.model.ExternalRef.ReferenceCategory;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxDocument;
@@ -58,6 +62,8 @@ import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
 import org.spdx.rdfparser.model.pointer.LineCharPointer;
 import org.spdx.rdfparser.model.pointer.SinglePointer;
 import org.spdx.rdfparser.model.pointer.StartEndPointer;
+import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
+import org.spdx.rdfparser.referencetype.ReferenceType;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Lists;
@@ -81,6 +87,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		private AnnotationWithId(String annotator) {
 			this.annotation = new Annotation(annotator, null, null, null);
 		}
+		@SuppressWarnings("unused")
 		public void setAnnotator(String annotator) {
 			annotation.setAnnotator(annotator);
 		}
@@ -136,6 +143,8 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private static Pattern RELATIONSHIP_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+(\\S+)");
 	private static Pattern CHECKSUM_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");
 	private static Pattern NUMBER_RANGE_PATTERN = Pattern.compile("(\\d+):(\\d+)");
+	private static Pattern EXTERNAL_REF_PATTERN = Pattern.compile("([^ ]+) ([^ ]+) (.+)");
+	
 	/**
 	 * Tags used in the definition of an annotation
 	 */
@@ -231,6 +240,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	 */
 	private SpdxPackage lastPackage = null;
 
+	/**
+	 * The last external reference found
+	 */
+	private ExternalRef lastExternalRef = null;
+
 	public BuildDocument(SpdxDocumentContainer[] result, Properties constants, List<String> warnings) {
 		this.constants = constants;
 		this.warningMessages = warnings;
@@ -308,6 +322,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_ANNOTATION_COMMENT").trim()+" ");
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_ANNOTATION_ID").trim()+" ");
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_ANNOTATION_TYPE").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_EXTERNAL_REFERENCE").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_EXTERNAL_REFERENCE_COMMENT").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED").trim()+" ");
 
 		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_LICENSE_TEXT").trim()+" ");
 		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_EXTRACTED_TEXT").trim()+" ");
@@ -362,11 +379,9 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	private void buildSnippet(SpdxSnippet snippet, String tag, String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
 		if (snippet == null) {
 			throw(new InvalidSpdxTagFileException("Missing Snippet ID - An SPDX Snippet ID must be specified before the snippet properties"));
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
 			snippet.setId(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_FROM_FILE_ID"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_FROM_FILE_ID"))) {
 			// Since the files have not all been parsed, we just keep track of the
 			// dependencies in a hashmap until we finish all processing and are building the package
 			List<SpdxSnippet> snippetsWithThisAsADependency = this.snippetDependencyMap.get(value);
@@ -375,29 +390,21 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 				this.snippetDependencyMap.put(value, snippetsWithThisAsADependency);
 			}
 			snippetsWithThisAsADependency.add(snippet);
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_BYTE_RANGE"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_BYTE_RANGE"))) {
 			snippet.setByteRange(parseByteRange(value));
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_LINE_RANGE"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_LINE_RANGE"))) {
 			snippet.setLineRange(parseLineRange(value));
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_CONCLUDED_LICENSE"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_CONCLUDED_LICENSE"))) {
 			snippet.setLicenseConcluded(LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer()));
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_LIC_COMMENTS"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_LIC_COMMENTS"))) {
 			snippet.setLicenseComments(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_COPYRIGHT"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_COPYRIGHT"))) {
 			snippet.setCopyrightText(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_COMMENT"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_COMMENT"))) {
 			snippet.setComment(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_NAME"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_NAME"))) {
 			snippet.setName(value);
-		}
-		if (tag.equals(constants.getProperty("PROP_SNIPPET_SEEN_LICENSE"))) {
+		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SEEN_LICENSE"))) {
 			snippet.setLicenseInfosFromFiles(new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer())});
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
 			if (lastAnnotation != null) {
@@ -417,8 +424,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			lastRelationship.setComment(value);
 		} else {
 			throw new InvalidSPDXAnalysisException("Error parsing snippet.  Unrecognized tag: "+tag);
-		}
-		
+		}	
 	}
 
 	/**
@@ -676,6 +682,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inAnnotation = false;
 			this.lastSnippet = new SpdxSnippet(null, null, new Annotation[0], new Relationship[0], null, 
 					new AnyLicenseInfo[0], null, null, null, null, null);
+			this.lastSnippet.setId(value);
 		} else {
 			throw new InvalidSpdxTagFileException("Expecting a definition of a file, package, license information, or document property at "+tag+value);
 		}
@@ -869,6 +876,17 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			pkg.setSummary(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DESCRIPTION"))) {
 			pkg.setDescription(value);
+		} else if (tag.equals(constants.getProperty("PROP_EXTERNAL_REFERENCE"))) {
+			this.lastExternalRef = parseExternalRef(value);
+			pkg.addExternalRef(this.lastExternalRef);
+		} else if (tag.equals(constants.getProperty("PROP_EXTERNAL_REFERENCE_COMMENT"))) {
+			if (this.lastExternalRef == null) {
+				throw new InvalidSpdxTagFileException("External reference comment found without an external reference: "+value);
+			}
+			if (this.lastExternalRef.getComment() != null && !this.lastExternalRef.getComment().isEmpty()) {
+				throw new InvalidSpdxTagFileException("Second reference comment found for the same external reference: "+value);
+			}
+			this.lastExternalRef.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
 			if (lastAnnotation != null) {
 				annotations.add(lastAnnotation);
@@ -901,6 +919,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			inAnnotation = false;
 			this.lastSnippet = new SpdxSnippet(null, null, new Annotation[0], new Relationship[0], null, 
 					new AnyLicenseInfo[0], null, null, null, null, null);
+			this.lastSnippet.setId(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_COMMENT"))) {
 			pkg.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED"))) {
@@ -913,9 +932,51 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 //		} else if (this.inFileDefinition) {
 //			buildFile(this.lastFile, tag, value);
+			//TODO: Delete the above by end of 2017 if no error have been found - not quite sure why that code was there
 		} else {
 			throw(new InvalidSpdxTagFileException("Expecting a file definition, snippet definition or a package property.  Found "+value));
 		}
+	}
+
+	/**
+	 * Parse the external reference string
+	 * @param value
+	 * @return
+	 * @throws InvalidSpdxTagFileException 
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private ExternalRef parseExternalRef(String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
+		Matcher matcher = EXTERNAL_REF_PATTERN.matcher(value);
+		if (!matcher.find()) {
+			throw new InvalidSpdxTagFileException("Invalid External Ref format: "+value);
+		}
+		ReferenceCategory referenceCategory = ReferenceCategory.fromTag(matcher.group(1).trim());
+		if (referenceCategory == null) {
+			throw new InvalidSpdxTagFileException("Invalid External Ref category: "+value);
+		}
+		URI refTypeUri = null;
+		String tagType = matcher.group(2).trim();
+		try {
+			// First, try to find a listed type
+			refTypeUri = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceUri(tagType);
+		} catch (InvalidSPDXAnalysisException e) {
+			refTypeUri = null;
+		}
+		if (refTypeUri == null) {
+			try {
+				if (tagType.contains("/") || tagType.contains(":")) {
+					// Assume a full URI
+					refTypeUri = new URI(tagType);
+				} else {
+					// User the document namespace
+					refTypeUri = new URI(this.result[0].getDocumentNamespace() + matcher.group(2).trim());
+				}
+			} catch (URISyntaxException e) {
+				throw new InvalidSpdxTagFileException("Invalid External Ref type: "+value);
+			}
+		}
+		ReferenceType referenceType = new ReferenceType(refTypeUri, null, null, null);
+		return new ExternalRef(referenceCategory, referenceType, matcher.group(3), null);
 	}
 
 	/**

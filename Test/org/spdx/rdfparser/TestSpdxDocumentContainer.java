@@ -32,6 +32,7 @@ import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.rdfparser.model.UnitTestHelper;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
@@ -469,6 +470,34 @@ public class TestSpdxDocumentContainer {
 		assertEquals(3, result.size());
 		SpdxFile[] resultArray = result.toArray(new SpdxFile[result.size()]);
 		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxFile[] {file1,  file2, file3}, resultArray));
+	}
+	
+	@Test
+	public void testFindAllSnippets() throws InvalidSPDXAnalysisException {
+		String SNIPPET_ID1 = "SpdxRef-Snippet1";
+		String SNIPPET_ID2 = "SpdxRef-Snippet2";
+		String SNIPPET_ID3 = "SpdxRef-Snippet3";
+		SpdxSnippet snippet1 = new SpdxSnippet("Snippet1", null, null, null, null, null, null, null, null, null, null);
+		snippet1.setId(SNIPPET_ID1);
+		SpdxSnippet snippet2 = new SpdxSnippet("Snippet2", null, null, null, null, null, null, null, null, null, null);
+		snippet1.setId(SNIPPET_ID2);
+		SpdxSnippet snippet3 = new SpdxSnippet("Snippet3", null, null, null, null, null, null, null, null, null, null);
+		snippet1.setId(SNIPPET_ID3);
+		
+		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
+		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.1");
+		assertTrue(doc.findAllSnippets().isEmpty());
+		doc.addElement(snippet1);
+		List<SpdxSnippet> result = doc.findAllSnippets();
+		assertEquals(1, result.size());
+		assertTrue(result.contains(snippet1));
+		Relationship rel = new Relationship(snippet3, RelationshipType.ANCESTOR_OF, "");
+		snippet2.setRelationships(new Relationship[] {rel});
+		doc.addElement(snippet2);
+		result = doc.findAllSnippets();
+		assertEquals(3, result.size());
+		SpdxSnippet[] resultArray = result.toArray(new SpdxSnippet[result.size()]);
+		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxSnippet[] {snippet1,  snippet2, snippet3}, resultArray));
 	}
 	
 	@Test

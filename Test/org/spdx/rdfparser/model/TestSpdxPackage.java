@@ -978,4 +978,31 @@ public class TestSpdxPackage {
 		assertTrue(pkg.isFilesAnalyzed());
 	}
 
+	@Test
+	public void testAddExternalRefs() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1};
+		Checksum[] checksums = new Checksum[] {CHECKSUM1, CHECKSUM2};
+		SpdxFile[] files = new SpdxFile[] {FILE1, FILE2};
+		AnyLicenseInfo[] licenseFromFiles = new AnyLicenseInfo[] {LICENSE2};
+		ExternalRef[] externalRefs1 = new ExternalRef[] {EXTERNAL_REF1};
+		ExternalRef[] externalRefs2 = new ExternalRef[] {EXTERNAL_REF2, EXTERNAL_REF1};
+
+		SpdxPackage pkg = new SpdxPackage(PKG_NAME1, PKG_COMMENT1, 
+				annotations, relationships,	LICENSE1, licenseFromFiles, 
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, LICENSE3, checksums,
+				DESCRIPTION1, DOWNLOAD_LOCATION1, files,
+				HOMEPAGE1, ORIGINATOR1, PACKAGEFILENAME1, 
+				VERIFICATION_CODE1, SOURCEINFO1, SUMMARY1, SUPPLIER1,
+				VERSION1, false, externalRefs1);
+		
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs1, pkg.getExternalRefs()));
+		Resource r = pkg.createResource(modelContainer);
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs1, pkg.getExternalRefs()));
+		SpdxPackage pkg2 = new SpdxPackage(modelContainer, r.asNode());
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs1, pkg2.getExternalRefs()));
+		pkg.addExternalRef(EXTERNAL_REF2);
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs2, pkg.getExternalRefs()));
+		assertTrue(UnitTestHelper.isArraysEquivalent(externalRefs2, pkg2.getExternalRefs()));
+	}
 }

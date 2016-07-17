@@ -35,6 +35,7 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxElementFactory;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Lists;
@@ -67,9 +68,10 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	public static final String ONE_DOT_ONE_SPDX_VERSION = "SPDX-1.1";
 	public static final String ONE_DOT_TWO_SPDX_VERSION = "SPDX-1.2";
 	public static final String TWO_POINT_ZERO_VERSION = "SPDX-2.0";
-	public static final String CURRENT_SPDX_VERSION = TWO_POINT_ZERO_VERSION;
+	public static final String TWO_POINT_ONE_VERSION = "SPDX-2.1";
+	public static final String CURRENT_SPDX_VERSION = TWO_POINT_ONE_VERSION;
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.0.4";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.1.0";
 	
 	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 	
@@ -104,6 +106,8 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ZERO_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_ONE_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_TWO_SPDX_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(TWO_POINT_ZERO_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(TWO_POINT_ONE_VERSION);
 	}
 	private Model model;
 	private String documentNamespace;
@@ -716,8 +720,8 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	public List<SpdxFile> findAllFiles() throws InvalidSPDXAnalysisException {
 		Node rdfTypePredicate = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
-		Node packageTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_FILE).asNode();
-		Triple m = Triple.createMatch(null, rdfTypePredicate, packageTypeObject);
+		Node fileTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_FILE).asNode();
+		Triple m = Triple.createMatch(null, rdfTypePredicate, fileTypeObject);
 		List<SpdxFile> retval = Lists.newArrayList();
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
@@ -828,5 +832,22 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 				return false;
 			}			
 		}
+	}
+
+	/**
+	 * @return all snippets in the document container
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public List<SpdxSnippet> findAllSnippets() throws InvalidSPDXAnalysisException {
+		Node rdfTypePredicate = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
+		Node snippetTypeObject = model.createResource(SPDX_NAMESPACE + CLASS_SPDX_SNIPPET).asNode();
+		Triple m = Triple.createMatch(null, rdfTypePredicate, snippetTypeObject);
+		List<SpdxSnippet> retval = Lists.newArrayList();
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		while (tripleIter.hasNext()) {
+			retval.add((SpdxSnippet)SpdxElementFactory.createElementFromModel(this, tripleIter.next().getSubject()));
+		}
+		return retval;
 	}
 }

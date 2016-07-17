@@ -307,15 +307,6 @@ snippet information applies to.
 			logger.error("Error getting comparison snippet from file",e);
 			return false;
 		}
-		if (this.snippetFromFile == null) {
-			return compSnippetFromFile == null;
-		}
-		if (compSnippetFromFile == null) {
-			return false;
-		}
-		if (!this.snippetFromFile.equivalent(compSnippetFromFile)) {
-			return false;
-		}
 		StartEndPointer compByteRange = null;
 		try {
 			compByteRange = comp.getByteRange();
@@ -323,13 +314,8 @@ snippet information applies to.
 			logger.error("Error getting comparison byte range",e);
 			return false;
 		}
-		if (this.byteRange == null) {
-			return compByteRange == null;
-		}
-		if (compByteRange == null) {
-			return false;
-		}
-		return this.byteRange.equivalent(compByteRange);
+		return (equivalentConsideringNull(this.snippetFromFile, compSnippetFromFile)) &&
+				(equivalentConsideringNull(this.byteRange, compByteRange));
 		//Note: We don't compare the line range since the byte range is more precise
 	}
 	
