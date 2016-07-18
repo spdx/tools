@@ -1101,6 +1101,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 	/**
 	 * @param doapProject
 	 */
+	@SuppressWarnings("deprecation")
 	private void buildProject(SpdxFile file, String tag, String value)
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_PROJECT_NAME"))) {

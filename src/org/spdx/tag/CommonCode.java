@@ -36,7 +36,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,6 +50,7 @@ import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.DoapProject;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
+import org.spdx.rdfparser.model.ExternalRef;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
@@ -58,6 +58,11 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
+import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
+import org.spdx.rdfparser.model.pointer.LineCharPointer;
+import org.spdx.rdfparser.model.pointer.StartEndPointer;
+import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.tools.RdfToTag;
 
 import com.google.common.collect.Lists;
@@ -68,6 +73,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Rana Rahal, Protecode Inc.
  */
+@SuppressWarnings("deprecation")
 public class CommonCode {
 	
 
@@ -120,7 +126,7 @@ public class CommonCode {
 				println(out, externalDocRefHedr);
 			}
 			for (int i = 0; i < externalRefs.length; i++) {
-				printExternalRef(externalRefs[i], out, constants);
+				printExternalDocumentRef(externalRefs[i], out, constants);
 			}
 		}
 		// Creators
@@ -158,13 +164,17 @@ public class CommonCode {
 		// Print the actual files
 		List<SpdxPackage> allPackages = doc.getDocumentContainer().findAllPackages();
 		List<SpdxFile> allFiles = doc.getDocumentContainer().findAllFiles();
-		// first print out any described files
+		List<SpdxSnippet> allSnippets = doc.getDocumentContainer().findAllSnippets();
+		// first print out any described files or snippets
 		SpdxItem[] items = doc.getDocumentDescribes();
 		if (items != null && items.length > 0) {
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] instanceof SpdxFile) {
 					printFile((SpdxFile)items[i], out, constants);
 					allFiles.remove(items[i]);
+				} else if (items[i] instanceof SpdxSnippet) {
+					printSnippet((SpdxSnippet)items[i], out, constants);
+					allSnippets.remove(items[i]);
 				}
 			}
 		}
@@ -172,22 +182,23 @@ public class CommonCode {
 		if (items != null && items.length > 0) {
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] instanceof SpdxPackage) {
-					printPackage((SpdxPackage)items[i], out, constants, allFiles);
+					printPackage((SpdxPackage)items[i], out, constants, allFiles, doc.getDocumentNamespace());
 					allPackages.remove(items[i]);
 				}
 			}
 		}
 		// print remaining packages
-		Collections.sort(allPackages);
-		Iterator<SpdxPackage> pkgIter = allPackages.iterator();
-		while (pkgIter.hasNext()) {
-			printPackage(pkgIter.next(), out, constants, allFiles);
+		for (SpdxPackage pkg:allPackages) {
+			printPackage(pkg, out, constants, allFiles, doc.getDocumentNamespace());
 		}
 		// print remaining files
-		Collections.sort(allFiles);
-		Iterator<SpdxFile> fileIter = allFiles.iterator();
-		while (fileIter.hasNext()) {
-			printFile(fileIter.next(), out, constants);
+		for (SpdxFile file:allFiles) {
+			printFile(file, out, constants);
+		}
+		// print remainig snippets snippets
+		Collections.sort(allSnippets);
+		for (SpdxSnippet snippet:allSnippets) {
+			printSnippet(snippet, out, constants);
 		}
 		// Extracted license infos
 		println(out, "");
@@ -223,12 +234,90 @@ public class CommonCode {
 	}
 
 	/**
+	 * @param spdxSnippet
+	 * @param out
+	 * @param constants
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private static void printSnippet(SpdxSnippet spdxSnippet, PrintWriter out,
+			Properties constants) throws InvalidSPDXAnalysisException {
+		println(out, constants.getProperty("SNIPPET_HEADER"));
+		// NOTE: We can't call the print element properties since the order for tag/value is different for snippets
+		println(out, constants.getProperty("PROP_SNIPPET_SPDX_ID") + spdxSnippet.getId());
+		if (spdxSnippet.getSnippetFromFile() != null) {
+			println(out, constants.getProperty("PROP_SNIPPET_FROM_FILE_ID") + 
+					spdxSnippet.getSnippetFromFile().getId());
+		}
+		if (spdxSnippet.getByteRange() != null) {
+			println(out, constants.getProperty("PROP_SNIPPET_BYTE_RANGE") + 
+					formatPointerRange(spdxSnippet.getByteRange()));
+		}
+		if (spdxSnippet.getLineRange() != null) {
+			println(out, constants.getProperty("PROP_SNIPPET_LINE_RANGE") +
+					formatPointerRange(spdxSnippet.getLineRange()));
+		}
+		if (spdxSnippet.getLicenseConcluded() != null) {
+			println(out, constants.getProperty("PROP_SNIPPET_CONCLUDED_LICENSE") +
+					spdxSnippet.getLicenseConcluded());
+		}
+		if (spdxSnippet.getLicenseInfoFromFiles() != null) {
+			for (AnyLicenseInfo seenLicense:spdxSnippet.getLicenseInfoFromFiles()) {
+				println(out, constants.getProperty("PROP_SNIPPET_SEEN_LICENSE") +
+						seenLicense);
+			}
+		}
+		if (spdxSnippet.getLicenseComments() != null && !spdxSnippet.getLicenseComments().trim().isEmpty()) {
+			println(out, constants.getProperty("PROP_SNIPPET_LIC_COMMENTS") +
+					spdxSnippet.getLicenseComments());
+		}
+		if (spdxSnippet.getCopyrightText() != null && !spdxSnippet.getCopyrightText().trim().isEmpty()) {
+			println(out, constants.getProperty("PROP_SNIPPET_COPYRIGHT") +
+					spdxSnippet.getCopyrightText());
+		}
+		if (spdxSnippet.getComment() != null && !spdxSnippet.getComment().trim().isEmpty()) {
+			println(out, constants.getProperty("PROP_SNIPPET_COMMENT") +
+					spdxSnippet.getComment());
+		}
+		if (spdxSnippet.getName() != null && !spdxSnippet.getName().trim().isEmpty()) {
+			println(out, constants.getProperty("PROP_SNIPPET_NAME") +
+					spdxSnippet.getName());	
+		}
+		println(out, "");
+	}
+
+	/**
+	 * Format a start end pointer into a numeric range
+	 * @param pointer
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private static String formatPointerRange(StartEndPointer pointer) throws InvalidSPDXAnalysisException {
+		String start = "[MISSING]";
+		String end = "[MISSING]";
+		if (pointer.getStartPointer() != null) {
+			if (pointer.getStartPointer() instanceof ByteOffsetPointer) {
+				start = String.valueOf(((ByteOffsetPointer)(pointer.getStartPointer())).getOffset());
+			} else if (pointer.getStartPointer() instanceof LineCharPointer) {
+				start = String.valueOf(((LineCharPointer)(pointer.getStartPointer())).getLineNumber());
+			}
+		}
+		if (pointer.getEndPointer() != null) {
+			if (pointer.getEndPointer() instanceof ByteOffsetPointer) {
+				end = String.valueOf(((ByteOffsetPointer)(pointer.getEndPointer())).getOffset());
+			} else if (pointer.getStartPointer() instanceof LineCharPointer) {
+				end = String.valueOf(((LineCharPointer)(pointer.getEndPointer())).getLineNumber());
+			}
+		}
+		return start + ":" + end;
+	}
+
+	/**
 	 * @param externalDocumentRef
 	 * @param out
 	 * @param constants
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private static void printExternalRef(
+	private static void printExternalDocumentRef(
 			ExternalDocumentRef externalDocumentRef, PrintWriter out,
 			Properties constants) throws InvalidSPDXAnalysisException {
 		String uri = externalDocumentRef.getSpdxDocumentNamespace();
@@ -363,7 +452,8 @@ public class CommonCode {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printPackage(SpdxPackage pkg, PrintWriter out,
-			Properties constants, List<SpdxFile> remainingFilesToPrint) throws InvalidSPDXAnalysisException {
+			Properties constants, List<SpdxFile> remainingFilesToPrint,
+			String documentNamespace) throws InvalidSPDXAnalysisException {
 		println(out, constants.getProperty("PACKAGE_INFO_HEADER"));
 		printElementProperties(pkg, out, constants,"PROP_PACKAGE_DECLARED_NAME",
 				"PROP_PACKAGE_COMMENT");
@@ -488,9 +578,19 @@ public class CommonCode {
 					+ constants.getProperty("PROP_BEGIN_TEXT") 
 					+ pkg.getDescription() + constants.getProperty("PROP_END_TEXT"));
 		}
+		ExternalRef[] externalRefs = pkg.getExternalRefs();
+		if (externalRefs != null && externalRefs.length > 0) {
+			for (ExternalRef externalRef:externalRefs) {
+				printExternalRef(out, constants, externalRef, documentNamespace);
+			}
+		}
 		printElementAnnotationsRelationships(pkg, out, constants,"PROP_PACKAGE_DECLARED_NAME",
 				"PROP_PACKAGE_COMMENT");
 		// Files
+		if (!pkg.isFilesAnalyzed()) {
+			// Only print if not the default
+			println(out, constants.getProperty("PROP_PACKAGE_FILES_ANALYZED") + "false");
+		}
 		if (pkg.getFiles() != null && pkg.getFiles().length > 0) {
                     /* Add files to a List */
                     List<SpdxFile> sortedFileList = Lists.newArrayList();
@@ -505,6 +605,52 @@ public class CommonCode {
 				remainingFilesToPrint.remove(file);
 				println(out, "");
 			}
+		} else {
+			println(out, "");
+		}
+	}
+
+	/**
+	 * Print a package ExternalRef to out
+	 * @param out
+	 * @param constants
+	 * @param externalRef
+	 * @param docNamespace
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	private static void printExternalRef(PrintWriter out, Properties constants,
+			ExternalRef externalRef, String docNamespace) throws InvalidSPDXAnalysisException {
+		String category = null;
+		if (externalRef.getReferenceCategory() == null) {
+			category = "OTHER";
+		} else {
+			category = externalRef.getReferenceCategory().getTag();
+		}
+		String referenceType = null;
+		if (externalRef.getReferenceType() == null || 
+				externalRef.getReferenceType().getReferenceTypeUri() == null) {
+			referenceType = "[MISSING]";
+		} else {
+			try {
+				referenceType = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceName(externalRef.getReferenceType().getReferenceTypeUri());
+			} catch (InvalidSPDXAnalysisException e) {
+				referenceType = null;
+			}
+			if (referenceType == null) {
+				referenceType = externalRef.getReferenceType().getReferenceTypeUri().toString();
+				if (referenceType.startsWith(docNamespace)) {
+					referenceType = referenceType.substring(docNamespace.length());
+				}
+			}
+		}
+		String referenceLocator = externalRef.getReferenceLocator();
+		if (referenceLocator == null) {
+			referenceLocator = "[MISSING]";
+		}
+		println(out, constants.getProperty("PROP_EXTERNAL_REFERENCE") + 
+				category + " " + referenceType + " " + referenceLocator);
+		if (externalRef.getComment() != null) {
+			println(out, constants.getProperty("PROP_EXTERNAL_REFERENCE_COMMENT") + externalRef.getComment());
 		}
 	}
 

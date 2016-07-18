@@ -138,6 +138,9 @@ public class SpdxElementFactory {
 								propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
 										SpdxRdfConstants.PROP_PACKAGE_VERIFICATION_CODE))  {
 			return new SpdxPackage(modelContainer, node);
+		} else if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxRdfConstants.PROP_SNIPPET_FROM_FILE)) {
+			return new SpdxSnippet(modelContainer, node);
 		} else {
 			return new SpdxItem(modelContainer, node);
 		}
@@ -190,6 +193,8 @@ public class SpdxElementFactory {
 				return new SpdxFile(modelContainer, node);
 			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_PACKAGE)) {
 				return new SpdxPackage(modelContainer, node);
+			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_SNIPPET)) {
+				return new SpdxSnippet(modelContainer, node);
 			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_ITEM)) {
 				return new SpdxItem(modelContainer, node);
 			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_ELEMENT)) {
