@@ -163,7 +163,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 		if (!(compare instanceof DisjunctiveLicenseSet)) {
 			return false;
 		}
-		return super.equivalent(compare);
+		return this.equals(compare);
 	}
 
 	/* (non-Javadoc)

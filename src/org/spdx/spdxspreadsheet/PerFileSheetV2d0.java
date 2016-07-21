@@ -43,9 +43,6 @@ import com.google.common.collect.Maps;
  */
 public class PerFileSheetV2d0 extends PerFileSheet {
 
-	PerFileSheetV2d0(Workbook workbook, String sheetName, String version) {
-		super(workbook, sheetName, version);
-	}
 	static final int NUM_COLS = 17;
 	static final int FILE_NAME_COL = 0;
 	static final int ID_COL = FILE_NAME_COL + 1;
@@ -83,6 +80,10 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 	 * Hashmap of the file name to SPDX file
 	 */
 	Map<String, SpdxFile> fileCache = Maps.newHashMap();
+	
+	PerFileSheetV2d0(Workbook workbook, String sheetName, String version) {
+		super(workbook, sheetName, version);
+	}
 	
 	@Override
     @SuppressWarnings("deprecation")
@@ -189,12 +190,12 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 				throw(new SpreadsheetException("Error converting file checksums: "+e.getMessage()));
 			}
 		}
-		AnyLicenseInfo fileLicenses;
-		Cell assertedLicenseCell = row.getCell(CONCLUDED_LIC_COL);
-		if (assertedLicenseCell != null && !assertedLicenseCell.getStringCellValue().isEmpty()) {
-			fileLicenses = LicenseInfoFactory.parseSPDXLicenseString(assertedLicenseCell.getStringCellValue(), container);
+		AnyLicenseInfo concludedLicense;
+		Cell concludedLicenseCell = row.getCell(CONCLUDED_LIC_COL);
+		if (concludedLicenseCell != null && !concludedLicenseCell.getStringCellValue().isEmpty()) {
+			concludedLicense = LicenseInfoFactory.parseSPDXLicenseString(concludedLicenseCell.getStringCellValue(), container);
 		} else {
-			fileLicenses = null;
+			concludedLicense = null;
 		}
 		AnyLicenseInfo[] seenLicenses;
 		Cell seenLicenseCell = row.getCell(LIC_INFO_IN_FILE_COL);
@@ -286,7 +287,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 		SpdxFile retval;
 		try {
 			retval = new SpdxFile(name, comment, new Annotation[0], new Relationship[0], 
-					fileLicenses, seenLicenses, copyright, licenseComments, types, 
+					concludedLicense, seenLicenses, copyright, licenseComments, types, 
 					checksums, contributors, noticeText, projects);
 			Cell idCell = row.getCell(ID_COL);
 			if (idCell != null && idCell.getStringCellValue() != null && !idCell.getStringCellValue().isEmpty()) {

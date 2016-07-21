@@ -43,8 +43,10 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.spdxspreadsheet.AnnotationsSheet;
 import org.spdx.spdxspreadsheet.DocumentInfoSheet;
+import org.spdx.spdxspreadsheet.ExternalRefsSheet;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
@@ -52,6 +54,7 @@ import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.RelationshipsSheet;
 import org.spdx.spdxspreadsheet.ReviewersSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
+import org.spdx.spdxspreadsheet.SnippetSheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.google.common.collect.Maps;
@@ -177,13 +180,34 @@ public class SpreadsheetToRDF {
 		copyOrigins(ss.getOriginsSheet(), analysis);
 		copyNonStdLicenses(ss.getNonStandardLicensesSheet(), analysis);
 		// note - non std licenses must be added first so that the text is available
-		Map<String, SpdxPackage> pkgIdToPackage = copyPackageInfo(ss.getPackageInfoSheet(), analysis);
+		Map<String, SpdxPackage> pkgIdToPackage = copyPackageInfo(ss.getPackageInfoSheet(), ss.getExternalRefsSheet(), analysis);
 		// note - packages need to be added before the files so that the files can be added to the packages
-		copyPerFileInfo(ss.getPerFileSheet(), analysis, pkgIdToPackage);
+		Map<String, SpdxFile> fileIdToFile = copyPerFileInfo(ss.getPerFileSheet(), analysis, pkgIdToPackage);
+		// note - files need to be added before snippets
+		copyPerSnippetInfo(ss.getSnippetSheet(), analysis, fileIdToFile);
 		copyAnnotationInfo(ss.getAnnotationsSheet(), analysis);
 		copyRelationshipInfo(ss.getRelationshipsSheet(), analysis);
 		copyReviewerInfo(ss.getReviewersSheet(), analysis);
 		return analysis;
+	}
+
+	/**
+	 * Copy snippet information from the spreadsheet to the analysis document
+	 * @param snippetSheet
+	 * @param analysis
+	 * @param fileIdToFile
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpreadsheetException 
+	 */
+	private static void copyPerSnippetInfo(SnippetSheet snippetSheet,
+			SpdxDocument analysis, Map<String, SpdxFile> fileIdToFile) throws InvalidSPDXAnalysisException, SpreadsheetException {
+		int i = snippetSheet.getFirstDataRow();
+		SpdxSnippet snippet = snippetSheet.getSnippet(i, analysis.getDocumentContainer());
+		while (snippet != null) {
+			analysis.getDocumentContainer().addElement(snippet);
+			i = i + 1;
+			snippet = snippetSheet.getSnippet(i, analysis.getDocumentContainer());
+		}
 	}
 
 	/**
@@ -240,12 +264,14 @@ public class SpreadsheetToRDF {
 		analysis.setReviewers(reviewers);
 	}
 
-	private static void copyPerFileInfo(PerFileSheet perFileSheet,
+	private static Map<String, SpdxFile> copyPerFileInfo(PerFileSheet perFileSheet,
 			SpdxDocument analysis, Map<String, SpdxPackage> pkgIdToPackage) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		int firstRow = perFileSheet.getFirstDataRow();
 		int numFiles = perFileSheet.getNumDataRows();
+		Map<String, SpdxFile> retval = Maps.newHashMap();
 		for (int i = 0; i < numFiles; i++) {
 			SpdxFile file = perFileSheet.getFileInfo(firstRow+i, analysis.getDocumentContainer());
+			retval.put(file.getId(), file);
 			String[] pkgIds = perFileSheet.getPackageIds(firstRow+i);
 			boolean fileAdded = false;
 			for (int j = 0;j < pkgIds.length; j++) {
@@ -261,6 +287,7 @@ public class SpreadsheetToRDF {
 				analysis.getDocumentContainer().addElement(file);
 			}
 		}
+		return retval;
 	}
 
 	private static void copyNonStdLicenses(
@@ -279,10 +306,11 @@ public class SpreadsheetToRDF {
 	}
 
 	private static Map<String, SpdxPackage> copyPackageInfo(PackageInfoSheet packageInfoSheet,
-			SpdxDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
+			ExternalRefsSheet externalRefsSheet, SpdxDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		SpdxPackage[] packages = packageInfoSheet.getPackages(analysis.getDocumentContainer());
 		Map<String, SpdxPackage> pkgIdToPackage = Maps.newHashMap();
 		for (int i = 0; i < packages.length; i++) {
+			packages[i].setExternalRefs(externalRefsSheet.getExternalRefsForPkgid(packages[i].getId()));
 			pkgIdToPackage.put(packages[i].getId(), packages[i]);
 			analysis.getDocumentContainer().addElement(packages[i]);
 		}

@@ -349,6 +349,15 @@ public class TestSpdxSnippet {
 		snCopy.setSnippetFromFile(FROM_FILE2);
 		assertTrue(FROM_FILE2.equivalent(snCopy.getSnippetFromFile()));
 		assertTrue(FROM_FILE2.equivalent(snippet.getSnippetFromFile()));
+		// setting the from file should also set the reference file in the pointers
+		assertTrue(FROM_FILE2.equivalent(snCopy.getByteRange().getStartPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snCopy.getByteRange().getEndPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snCopy.getLineRange().getStartPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snCopy.getLineRange().getEndPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snippet.getByteRange().getStartPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snippet.getByteRange().getEndPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snippet.getLineRange().getStartPointer().getReference()));
+		assertTrue(FROM_FILE2.equivalent(snippet.getLineRange().getEndPointer().getReference()));
 	}
 
 	/**

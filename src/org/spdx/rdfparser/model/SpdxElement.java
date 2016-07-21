@@ -535,10 +535,10 @@ public class SpdxElement extends RdfModelObject {
 	 */
 	@Override
 	public boolean equivalentConsideringNull(IRdfModel o1, IRdfModel o2) {
-		if (!(o1 instanceof SpdxElement) || (o2 instanceof SpdxElement)) {
-			return super.equivalentConsideringNull(o1, o2);
-		} else {
+		if (o1 instanceof SpdxElement && o2 instanceof SpdxElement) {
 			return this.equivalentConsideringNull((SpdxElement)o1, (SpdxElement)o2, true);
+		} else {
+			return super.equivalentConsideringNull(o1, o2);
 		}
 	}
 

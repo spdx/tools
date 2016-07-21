@@ -197,6 +197,23 @@ snippet information applies to.
 		this.snippetFromFile = snippetFromFile;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_SNIPPET_FROM_FILE, snippetFromFile);
+		// Update the references in the ranges
+		if (this.byteRange != null) {
+			if (this.byteRange.getStartPointer() != null) {
+				this.byteRange.getStartPointer().setReference(snippetFromFile);
+			}
+			if (this.byteRange.getEndPointer() != null) {
+				this.byteRange.getEndPointer().setReference(snippetFromFile);
+			}
+		}
+		if (this.lineRange != null) {
+			if (this.lineRange.getStartPointer() != null) {
+				this.lineRange.getStartPointer().setReference(snippetFromFile);
+			}
+			if (this.lineRange.getEndPointer() != null) {
+				this.lineRange.getEndPointer().setReference(snippetFromFile);
+			}
+		}
 	}
 
 	/**

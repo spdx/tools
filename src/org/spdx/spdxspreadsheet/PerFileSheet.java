@@ -62,6 +62,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 		} else if (version.compareToIgnoreCase(SPDXSpreadsheet.VERSION_1_2_0) <=0) {
 			return new PerFileSheetV1d2(workbook, perFileSheetName, version);
 		} else {
+			// Note: No changes in version 2.1 for the file
 			return new PerFileSheetV2d0(workbook, perFileSheetName, version);
 		}
 	}
