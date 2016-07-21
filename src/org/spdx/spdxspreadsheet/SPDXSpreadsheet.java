@@ -48,7 +48,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 * version using the static method <code>openVersion(Workbook wb, String sheetName, String versionNumber)</code>
 	 * Each sheet also implements a method to create the latest version <code>create(Workbook wb, String sheetName)</code>
 	 */
-	public static final String CURRENT_VERSION = "2.0.0";
+	public static final String CURRENT_VERSION = "2.1.0";
+	public static final String VERSION_2_0_0 = "2.0.0";
 	public static final String VERSION_1_2_0 = "1.2.0";
 	public static final String VERSION_1_1_0 = "1.1.0";
 	public static final String VERSION_0_9_4 = "0.9.4";
@@ -56,7 +57,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public static final String VERSION_0_9_2 = "0.9.2";
 	public static final String VERSION_0_9_1 = "0.9.1";
 	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION,VERSION_0_9_4, 
-		VERSION_0_9_3, VERSION_0_9_2, VERSION_0_9_1};
+		VERSION_0_9_3, VERSION_0_9_2, VERSION_0_9_1, VERSION_2_0_0};
 	public static final String UNKNOWN_VERSION = "UNKNOWN";
 	
 	private DocumentInfoSheet documentInfoSheet;
@@ -73,7 +74,12 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	static final String ANNOTATIONS_SHEET_NAME = "Annotations";
 	private ReviewersSheet reviewersSheet;
 	static final String REVIEWERS_SHEET_NAME = "Reviewers";
+	private SnippetSheet snippetSheet;
+	static final String SNIPPET_SHEET_NAME = "Snippets";
+	private ExternalRefsSheet externalRefsSheet;
+	static final String EXTERNAL_REFS_SHEET_NAME = "External Refs";
 	private String version;
+	
 	
 	/**
 	 * Creates a new spreadsheet based on an existing file.  Handles all version compatibilities
@@ -101,6 +107,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		this.relationshipsSheet = new RelationshipsSheet(this.workbook, RELATIONSHIPS_SHEET_NAME);
 		this.annotationsSheet = new AnnotationsSheet(this.workbook, ANNOTATIONS_SHEET_NAME);
 		this.reviewersSheet = new ReviewersSheet(this.workbook, REVIEWERS_SHEET_NAME, version);
+		this.snippetSheet = new SnippetSheet(this.workbook, SNIPPET_SHEET_NAME);
+		this.externalRefsSheet = new ExternalRefsSheet(this.workbook, EXTERNAL_REFS_SHEET_NAME);
 
 		verifyMsg = verifyWorkbook();
 		if (verifyMsg != null) {
@@ -165,7 +173,9 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			PerFileSheet.create(wb, PER_FILE_SHEET_NAME);
 			RelationshipsSheet.create(wb, RELATIONSHIPS_SHEET_NAME);
 			AnnotationsSheet.create(wb, ANNOTATIONS_SHEET_NAME);
+			ExternalRefsSheet.create(wb, EXTERNAL_REFS_SHEET_NAME);
 			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);
+			SnippetSheet.create(wb, SNIPPET_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
 		    if(excelOut != null){
@@ -186,6 +196,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		this.relationshipsSheet.clear();
 		this.annotationsSheet.clear();
 		this.reviewersSheet.clear();
+		this.snippetSheet.clear();
+		this.externalRefsSheet.clear();
 	}
 
 	/* (non-Javadoc)
@@ -211,6 +223,12 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		}
 		if (retval == null || retval.isEmpty()) {
 			retval = this.annotationsSheet.verify();
+		}
+		if (retval == null || retval.isEmpty()) {
+			retval = this.snippetSheet.verify();
+		}
+		if (retval == null || retval.isEmpty()) {
+			retval = this.externalRefsSheet.verify();
 		}
 		return retval;
 	}
@@ -286,8 +304,6 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		this.reviewersSheet = reviewersSheet;
 	}
 	
-	
-
 	public RelationshipsSheet getRelationshipsSheet() {
 		return relationshipsSheet;
 	}
@@ -316,6 +332,34 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public void setPerFileSheet(PerFileSheet perFileSheet) {
 		this.perFileSheet = perFileSheet;
 	}
+	
+	/**
+	 * @return the snippetSheet
+	 */
+	public SnippetSheet getSnippetSheet() {
+		return snippetSheet;
+	}
+
+	/**
+	 * @param snippetSheet the snippetSheet to set
+	 */
+	public void setSnippetSheet(SnippetSheet snippetSheet) {
+		this.snippetSheet = snippetSheet;
+	}
+	
+	/**
+	 * @return the externalRefsSheet
+	 */
+	public ExternalRefsSheet getExternalRefsSheet() {
+		return externalRefsSheet;
+	}
+
+	/**
+	 * @param snippetSheet the snippetSheet to set
+	 */
+	public void setExternaRefsSheet(ExternalRefsSheet externalRefsSheet) {
+		this.externalRefsSheet = externalRefsSheet;
+	}
 
 	/**
 	 * 
@@ -327,6 +371,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		perFileSheet.resizeRows();
 		relationshipsSheet.resizeRows();
 		annotationsSheet.resizeRows();
+		snippetSheet.resizeRows();
+		externalRefsSheet.resizeRows();
 //		reviewersSheet.resizeRows(); - Can't resize the review sheet since it uses blank cells
 	}
 

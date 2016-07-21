@@ -165,7 +165,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 		if (!(compare instanceof ConjunctiveLicenseSet)) {
 			return false;
 		}
-		return super.equivalent(compare);
+		return this.equals(compare);
 	}
 
 	/* (non-Javadoc)

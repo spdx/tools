@@ -36,19 +36,23 @@ import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
+import org.spdx.rdfparser.model.ExternalRef;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.spdxspreadsheet.AnnotationsSheet;
 import org.spdx.spdxspreadsheet.DocumentInfoSheet;
+import org.spdx.spdxspreadsheet.ExternalRefsSheet;
 import org.spdx.spdxspreadsheet.NonStandardLicensesSheet;
 import org.spdx.spdxspreadsheet.PackageInfoSheet;
 import org.spdx.spdxspreadsheet.PerFileSheet;
 import org.spdx.spdxspreadsheet.RelationshipsSheet;
 import org.spdx.spdxspreadsheet.ReviewersSheet;
 import org.spdx.spdxspreadsheet.SPDXSpreadsheet;
+import org.spdx.spdxspreadsheet.SnippetSheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.google.common.collect.Maps;
@@ -138,9 +142,13 @@ public class RdfToSpreadsheet {
 			return;
 		}
 		copyOrigins(doc, ss.getOriginsSheet());
-		Map<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(), ss.getPackageInfoSheet());
+		Map<String, ExternalRef[]> externalRefs = new TreeMap<String, ExternalRef[]>();
+		Map<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(),
+				ss.getPackageInfoSheet(), externalRefs);
+		copyExternalRefs(externalRefs, ss.getExternalRefsSheet());
 		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
 		copyPerFileInfo(doc.getDocumentContainer().findAllFiles(), ss.getPerFileSheet(), fileIdToPackageId);
+		copySnippetInfo(doc.getDocumentContainer().findAllSnippets(), ss.getSnippetSheet());
 		Map<String, Relationship[]> allRelationships = new TreeMap<String, Relationship[]>();
 		Map<String, Annotation[]> allAnnotations = new TreeMap<String, Annotation[]>();
 		allRelationships.put(doc.getId(), doc.getRelationships());
@@ -154,6 +162,21 @@ public class RdfToSpreadsheet {
 		copyAnnotations(allAnnotations, ss.getAnnotationsSheet());
 		copyReviewerInfo(doc.getReviewers(), ss.getReviewersSheet());
 		ss.resizeRow();
+	}
+
+	/**
+	 * Copy external references to the spreadsheet
+	 * @param externalRefsMap
+	 */
+	private static void copyExternalRefs(Map<String, ExternalRef[]> externalRefsMap,
+			ExternalRefsSheet externalRefSheet) {
+		for (Entry<String, ExternalRef[]> entry:externalRefsMap.entrySet()) {
+			ExternalRef[] externalRefs = entry.getValue();
+			Arrays.sort(externalRefs);
+			for (ExternalRef externalRef:externalRefs) {
+				externalRefSheet.add(entry.getKey(), externalRef);
+			}
+		}
 	}
 
 	/**
@@ -214,6 +237,15 @@ public class RdfToSpreadsheet {
 			perFileSheet.add(file, fileIdToPackageId.get(file.getId()));
 		}
 	}
+	
+	private static void copySnippetInfo(List<SpdxSnippet> snippets,
+			SnippetSheet snippetSheet) throws SpreadsheetException {            
+            Collections.sort(snippets);
+            /* Print out sorted files */            
+		for (SpdxSnippet snippet : snippets) {
+			snippetSheet.add(snippet);
+		}
+	}
 
 	private static void copyNonStdLicenses(ExtractedLicenseInfo[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
@@ -226,7 +258,7 @@ public class RdfToSpreadsheet {
 	}
 
 	private static Map<String, String> copyPackageInfo(List<SpdxPackage> packages,
-			PackageInfoSheet packageInfoSheet) throws InvalidSPDXAnalysisException {
+			PackageInfoSheet packageInfoSheet, Map<String, ExternalRef[]> externalRefs) throws InvalidSPDXAnalysisException {
 		Map<String, String> fileIdToPkgId = Maps.newHashMap();
 		Collections.sort(packages);
 		Iterator<SpdxPackage> iter = packages.iterator();
@@ -243,6 +275,10 @@ public class RdfToSpreadsheet {
 					pkgIdsForFile = pkgIdsForFile + ", " + pkgId;
 				}
 				fileIdToPkgId.put(fileId, pkgIdsForFile);
+			}
+			ExternalRef[] pkgExternalRefs = pkg.getExternalRefs();
+			if (pkgExternalRefs != null && pkgExternalRefs.length > 0) {
+				externalRefs.put(pkgId, pkgExternalRefs);
 			}
 			packageInfoSheet.add(pkg);
 		}
