@@ -336,6 +336,9 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 			setAuthorComments(comments);
 		}
 		String created = creator.getCreated();
+		if (created == null) {
+			throw(new SpreadsheetException("Missing created date"));
+		}
 		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
 		try {
 			setCreated(dateFormat.parse(created));

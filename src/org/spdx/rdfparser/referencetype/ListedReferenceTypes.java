@@ -22,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -30,6 +31,8 @@ import org.apache.log4j.Logger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
+
+import com.google.common.collect.Maps;
 
 /**
  * Singleton class that maintains the current SPDX listed reference types.
@@ -48,6 +51,7 @@ public class ListedReferenceTypes {
 	private static ListedReferenceTypes listedReferenceTypes;
 	private Properties listedReferenceTypeProperties;
 	List<String> listedReferenceNames = new ArrayList<String>();
+	Map<String, ReferenceType> listedReferenceTypeCache = Maps.newConcurrentMap();
 	
 	private ListedReferenceTypes() {
 		listedReferenceTypeProperties  = new Properties();
@@ -155,6 +159,24 @@ public class ListedReferenceTypes {
 		}
     	if (!isListedReferenceType(retval)) {
     		throw(new InvalidSPDXAnalysisException(listedReferenceName + " is not a valid SPDX listed reference type."));
+    	}
+    	return retval;
+    }
+    
+    public ReferenceType getListedReferenceTypeByName(String listedReferenceName) throws InvalidSPDXAnalysisException {
+    	ReferenceType retval = this.listedReferenceTypeCache.get(listedReferenceName);
+    	if (retval == null) {
+    		URI listedRefUri = getListedReferenceUri(listedReferenceName);
+    		if (listedRefUri == null) {
+    			return null;
+    		}
+    		else {
+    			retval = new ReferenceType(listedRefUri, null, null, null);
+    			ReferenceType oldValue = this.listedReferenceTypeCache.putIfAbsent(listedReferenceName, retval);
+    			if (oldValue != null) {
+    				retval = oldValue;
+    			}
+    		}
     	}
     	return retval;
     }

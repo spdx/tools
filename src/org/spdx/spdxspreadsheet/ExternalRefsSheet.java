@@ -16,16 +16,24 @@
 */
 package org.spdx.spdxspreadsheet;
 
-import java.util.Date;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.model.ExternalRef;
+import org.spdx.rdfparser.model.ExternalRef.ReferenceCategory;
+import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.rdfparser.referencetype.ReferenceType;
+
+import com.google.common.collect.Lists;
 
 /**
  * Package external refs
@@ -33,6 +41,8 @@ import org.spdx.rdfparser.referencetype.ReferenceType;
  *
  */
 public class ExternalRefsSheet extends AbstractSheet {
+	
+	static final Logger logger = Logger.getLogger(ExternalRefsSheet.class);
 	
 	static final int PKG_ID_COL = 0;
 	static final int REF_CATEGORY_COL = PKG_ID_COL + 1;
@@ -118,11 +128,11 @@ public class ExternalRefsSheet extends AbstractSheet {
 	 * @param externalRefsSheetName
 	 */
 	public static void create(Workbook wb, String externalRefsSheetName) {
-		int sheetNum = wb.getSheetIndex(sheetName);
+		int sheetNum = wb.getSheetIndex(externalRefsSheetName);
 		if (sheetNum >= 0) {
 			wb.removeSheetAt(sheetNum);
 		}
-		Sheet sheet = wb.createSheet(sheetName);
+		Sheet sheet = wb.createSheet(externalRefsSheetName);
 		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
@@ -143,9 +153,10 @@ public class ExternalRefsSheet extends AbstractSheet {
 	/**
 	 * @param packageId Package ID for the package that contains this external ref
 	 * @param externalRef
+	 * @param container 
 	 * @throws SpreadsheetException 
 	 */
-	public void add(String packageId, ExternalRef externalRef) throws SpreadsheetException {
+	public void add(String packageId, ExternalRef externalRef, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = addRow();
 		if (packageId != null) {
 			row.createCell(PKG_ID_COL).setCellValue(packageId);
@@ -156,7 +167,7 @@ public class ExternalRefsSheet extends AbstractSheet {
 			}
 			try {
 				if (externalRef.getReferenceType() != null) {
-					row.createCell(REF_TYPE_COL).setCellValue(refTypeToString(externalRef.getReferenceType()));
+					row.createCell(REF_TYPE_COL).setCellValue(refTypeToString(externalRef.getReferenceType(), container));
 				}
 			} catch (InvalidSPDXAnalysisException e) {
 				throw(new SpreadsheetException("Error getting external reference type: "+e.getMessage()));
@@ -174,20 +185,108 @@ public class ExternalRefsSheet extends AbstractSheet {
 	 * Convert a reference type to the type used in 
 	 * @param referenceType
 	 * @return
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private Date refTypeToString(ReferenceType referenceType) {
-		// TODO Auto-generated method stub
-		return null;
+	protected static String refTypeToString(ReferenceType referenceType, SpdxDocumentContainer container) {
+		String retval;
+		if (referenceType == null) {
+			return "[No Reference Type]";
+		}
+		URI referenceTypeUri = referenceType.getReferenceTypeUri();
+		if (referenceTypeUri == null) {
+			return "[No Reference Type]";
+		}
+		try {
+			retval = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceName(referenceTypeUri);
+		} catch (InvalidSPDXAnalysisException e) {
+			retval = null;
+		}
+		if (retval == null) {
+			retval = referenceTypeUri.toString();
+			if (retval.startsWith(container.getDocumentNamespace())) {
+				retval = retval.substring(container.getDocumentNamespace().length());
+			}
+		}
+		return retval;
 	}
 
 	/**
 	 * Get all external references for a given package ID
 	 * @param id
+	 * @param container
 	 * @return
 	 */
-	public ExternalRef[] getExternalRefsForPkgid(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExternalRef[] getExternalRefsForPkgid(String id, SpdxDocumentContainer container) {
+		if (id == null) {
+			return new ExternalRef[0];
+		}
+		List<ExternalRef> retval = Lists.newArrayList();
+		int i = getFirstDataRow();
+		Row row = sheet.getRow(i++);
+		while(row != null) {
+			Cell pkgIdCell = row.getCell(PKG_ID_COL);
+			if (pkgIdCell != null && id.equals(pkgIdCell.getStringCellValue())) {
+				ReferenceCategory refCategory = null;
+				Cell refCategoryCell = row.getCell(REF_CATEGORY_COL);
+				if (refCategoryCell != null) {
+					refCategory = ReferenceCategory.fromTag(refCategoryCell.getStringCellValue());
+				}
+				
+				Cell refTypeCell = row.getCell(REF_TYPE_COL);
+				ReferenceType refType = null;
+				if (refTypeCell != null) {
+					String refTypeStr = refTypeCell.getStringCellValue();
+					refType = stringToRefType(refTypeStr, container);
+				}
+				
+				Cell refLocatorCell = row.getCell(REF_LOCATOR_COL);
+				String refLocator = null;
+				if (refLocatorCell != null) {
+					refLocator = refLocatorCell.getStringCellValue();
+				}
+				
+				Cell commentCell = row.getCell(COMMENT_COL);
+				String comment = null;
+				if (commentCell != null) {
+					comment = commentCell.getStringCellValue();
+				}
+				
+				retval.add(new ExternalRef(refCategory, refType, refLocator, comment));
+			}
+			row = sheet.getRow(i++);
+		}
+		return retval.toArray(new ExternalRef[retval.size()]);
 	}
 
+	/**
+	 * Convert a string to a reference type
+	 * @param refTypeStr can be a listed reference type name, a URI string, or a local name
+	 * @param container
+	 * @return
+	 */
+	protected static ReferenceType stringToRefType(String refTypeStr,
+			SpdxDocumentContainer container) {
+		ReferenceType refType = null;
+		if (refTypeStr != null) {
+			refTypeStr = refTypeStr.trim();
+			try {
+				refType = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceTypeByName(refTypeStr.trim());
+			} catch (InvalidSPDXAnalysisException e) {
+				// Ignore - likely due to not being a listed reference type
+			}
+			if (refType == null) {
+				if (!(refTypeStr.contains(":") || refTypeStr.contains("/"))) {
+					refTypeStr = container.getDocumentNamespace() + refTypeStr;
+				}
+				try {
+					refType = new ReferenceType(new URI(refTypeStr), null, null, null);
+				} catch (InvalidSPDXAnalysisException e) {
+					logger.warn("SPDX Exception creating reference type",e);
+				} catch (URISyntaxException e) {
+					logger.warn("Invalid URI for reference type: "+refTypeStr);
+				}
+			}
+		}
+		return refType;
+	}
 }

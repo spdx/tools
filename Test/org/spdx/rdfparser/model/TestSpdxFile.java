@@ -44,8 +44,8 @@ import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.spdxspreadsheet.TestPackageInfoSheet;
 
-import spdxspreadsheet.TestPackageInfoSheet;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;

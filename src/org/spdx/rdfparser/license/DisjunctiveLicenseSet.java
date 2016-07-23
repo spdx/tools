@@ -161,9 +161,29 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 			return true;
 		}
 		if (!(compare instanceof DisjunctiveLicenseSet)) {
+			// covers o == null, as null is not an instance of anything
 			return false;
 		}
-		return this.equals(compare);
+		DisjunctiveLicenseSet comp = (DisjunctiveLicenseSet)compare;
+		AnyLicenseInfo[] compInfos = comp.getFlattenedMembers();
+		AnyLicenseInfo[] myInfos = this.getFlattenedMembers();
+		if (compInfos.length != myInfos.length) {
+			return false;
+		}
+		for (int j = 0; j < myInfos.length; j++) {
+			AnyLicenseInfo li = myInfos[j];
+			boolean found = false;
+			for (int i = 0; i < compInfos.length; i++) {
+				if (li.equivalent(compInfos[i])) {
+					found = true;
+					break;
+				} 
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/* (non-Javadoc)

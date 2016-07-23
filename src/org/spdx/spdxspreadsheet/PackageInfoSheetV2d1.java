@@ -68,7 +68,7 @@ public class PackageInfoSheetV2d1 extends PackageInfoSheet {
 
 	
 	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false, false, true, 
-		true, true, false, false, true, true, true, false, true, false, false, false, false, false};
+		false, false, false, false, true, true, false, false, true, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package Name", "SPDX Identifier", "Package Version", 
 		"Package FileName", "Package Supplier", "Package Originator", "Home Page",
 		"Package Download Location", "Package Checksum", "Package Verification Code",
@@ -354,7 +354,14 @@ public class PackageInfoSheetV2d1 extends PackageInfoSheet {
 		} else {
 			concludedLicense = new SpdxNoneLicense();
 		}
-		String[] licenseStrings = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
+		Cell licenseInfoInFilesCell = row.getCell(LICENSE_INFO_IN_FILES_COL);
+		String[] licenseStrings;
+		if (licenseInfoInFilesCell != null) {
+			licenseStrings = row.getCell(LICENSE_INFO_IN_FILES_COL).getStringCellValue().split(",");
+		} else {
+			licenseStrings = new String[0];
+		}
+		
 		AnyLicenseInfo[] licenseInfosFromFiles = new AnyLicenseInfo[licenseStrings.length];
 		for (int i = 0; i < licenseStrings.length; i++) {
 			licenseInfosFromFiles[i] = LicenseInfoFactory.parseSPDXLicenseString(licenseStrings[i].trim(), container);

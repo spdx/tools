@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.SPDXReview;
+import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
@@ -145,7 +146,7 @@ public class RdfToSpreadsheet {
 		Map<String, ExternalRef[]> externalRefs = new TreeMap<String, ExternalRef[]>();
 		Map<String, String> fileIdToPackageId = copyPackageInfo(doc.getDocumentContainer().findAllPackages(),
 				ss.getPackageInfoSheet(), externalRefs);
-		copyExternalRefs(externalRefs, ss.getExternalRefsSheet());
+		copyExternalRefs(externalRefs, ss.getExternalRefsSheet(), doc.getDocumentContainer());
 		copyNonStdLicenses(doc.getExtractedLicenseInfos(), ss.getNonStandardLicensesSheet());
 		copyPerFileInfo(doc.getDocumentContainer().findAllFiles(), ss.getPerFileSheet(), fileIdToPackageId);
 		copySnippetInfo(doc.getDocumentContainer().findAllSnippets(), ss.getSnippetSheet());
@@ -167,14 +168,15 @@ public class RdfToSpreadsheet {
 	/**
 	 * Copy external references to the spreadsheet
 	 * @param externalRefsMap
+	 * @throws SpreadsheetException 
 	 */
 	private static void copyExternalRefs(Map<String, ExternalRef[]> externalRefsMap,
-			ExternalRefsSheet externalRefSheet) {
+			ExternalRefsSheet externalRefSheet, SpdxDocumentContainer container) throws SpreadsheetException {
 		for (Entry<String, ExternalRef[]> entry:externalRefsMap.entrySet()) {
 			ExternalRef[] externalRefs = entry.getValue();
 			Arrays.sort(externalRefs);
 			for (ExternalRef externalRef:externalRefs) {
-				externalRefSheet.add(entry.getKey(), externalRef);
+				externalRefSheet.add(entry.getKey(), externalRef, container);
 			}
 		}
 	}
