@@ -954,16 +954,17 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		if (referenceCategory == null) {
 			throw new InvalidSpdxTagFileException("Invalid External Ref category: "+value);
 		}
-		URI refTypeUri = null;
+		ReferenceType referenceType = null;
 		String tagType = matcher.group(2).trim();
 		try {
 			// First, try to find a listed type
-			refTypeUri = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceUri(tagType);
+			referenceType = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceTypeByName(tagType);
 		} catch (InvalidSPDXAnalysisException e) {
-			refTypeUri = null;
+			referenceType = null;
 		}
-		if (refTypeUri == null) {
+		if (referenceType == null) {
 			try {
+				URI refTypeUri = null;
 				if (tagType.contains("/") || tagType.contains(":")) {
 					// Assume a full URI
 					refTypeUri = new URI(tagType);
@@ -971,11 +972,11 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 					// User the document namespace
 					refTypeUri = new URI(this.result[0].getDocumentNamespace() + matcher.group(2).trim());
 				}
+				referenceType = new ReferenceType(refTypeUri, null, null, null);
 			} catch (URISyntaxException e) {
 				throw new InvalidSpdxTagFileException("Invalid External Ref type: "+value);
 			}
 		}
-		ReferenceType referenceType = new ReferenceType(refTypeUri, null, null, null);
 		return new ExternalRef(referenceCategory, referenceType, matcher.group(3), null);
 	}
 

@@ -14,9 +14,10 @@
  *   limitations under the License.
  *
 */
-package spdxspreadsheet;
+package org.spdx.spdxspreadsheet;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -29,20 +30,20 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.license.LicenseException;
+import org.spdx.rdfparser.license.LicenseRestrictionException;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
-import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 import com.google.common.collect.Lists;
 
 /**
- * @author Gary
+ * @author Gary O'Neall
  *
  */
-public class TestDeprecatedLicenseSheet {
-	
-	String LICENSE_SPREADSHEET_PATH_20 = "TestFiles" + File.separator + "spdx_licenselist_v2.0.xls";
+public class TestLicenseExceptionSheet {
 
+	String LICENSE_SPREADSHEET_PATH_20 = "TestFiles" + File.separator + "spdx_licenselist_v2.0.xls";
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -71,13 +72,8 @@ public class TestDeprecatedLicenseSheet {
 	public void tearDown() throws Exception {
 	}
 
-	/**
-	 * Test method for {@link org.spdx.spdxspreadsheet.DeprecatedLicenseSheet#add(org.spdx.rdfparser.SPDXStandardLicense)}.
-	 * @throws IOException 
-	 * @throws SpreadsheetException 
-	 */
 	@Test
-	public void testAdd() throws IOException, SpreadsheetException {
+	public void testAdd() throws IOException, SpreadsheetException, LicenseRestrictionException {
 		File tempFile = File.createTempFile("TestLic", "test");
 		String tempDirPath = tempFile.getPath() + "-DIR";
 		File tempDir = new File(tempDirPath);
@@ -87,52 +83,41 @@ public class TestDeprecatedLicenseSheet {
 		}
 		try {
 			// create a copy of the spreadsheet then compare
-			List<DeprecatedLicenseInfo> licenses = Lists.newArrayList();
-			File spreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
-			SPDXLicenseSpreadsheet spreadsheet = new SPDXLicenseSpreadsheet(spreadsheetFile, false, true);
+			List<LicenseException> exceptions = Lists.newArrayList();
+			File origSpreadsheetFile = new File(LICENSE_SPREADSHEET_PATH_20);
+			SPDXLicenseSpreadsheet origSpreadsheet = new SPDXLicenseSpreadsheet(origSpreadsheetFile, false, true);
+			Iterator<LicenseException> iter = origSpreadsheet.getExceptionIterator();
 			File spreadsheetCopy = new File(tempDir.getPath()+File.separator+"sscopy.xls");
 			SPDXLicenseSpreadsheet copy = new SPDXLicenseSpreadsheet(spreadsheetCopy, true, false);
-			Iterator<DeprecatedLicenseInfo> iter = spreadsheet.getDeprecatedLicenseIterator();
 			while (iter.hasNext()) {
-				DeprecatedLicenseInfo nextLic = iter.next();
-				licenses.add(nextLic);
-				copy.getDeprecatedLicenseSheet().add(nextLic.getLicense(), nextLic.getDeprecatedVersion());
+				LicenseException nextRestriction = iter.next();
+				exceptions.add(nextRestriction);
+				copy.getLicenseExceptionSheet().add(nextRestriction);
 			}
 			copy.close();
-			spreadsheet.close();
+			origSpreadsheet.close();
 			// compare
 			SPDXLicenseSpreadsheet compare = new SPDXLicenseSpreadsheet(spreadsheetCopy, false, true);
 			try {
-				iter = compare.getDeprecatedLicenseIterator();
+				iter = compare.getExceptionIterator();
 				int i = 0;
 				while (iter.hasNext()) {
-					if (i > licenses.size()) {
-						fail("to many licenses in copy");
+					if (i > exceptions.size()) {
+						fail("to many exceptions in copy");
 					}
-					DeprecatedLicenseInfo nextLic = iter.next();
-					assertEquals(licenses.get(i).getLicense().getLicenseId(),
-							nextLic.getLicense().getLicenseId());
-					assertEquals(licenses.get(i).getLicense().getName(),
-							nextLic.getLicense().getName());
-					assertEquals(licenses.get(i).getLicense().getComment(),
-							nextLic.getLicense().getComment());
-					assertEquals(licenses.get(i).getLicense().getSeeAlso(),
-							nextLic.getLicense().getSeeAlso());
-					assertEquals(licenses.get(i).getLicense().getStandardLicenseHeader(),
-							nextLic.getLicense().getStandardLicenseHeader());
-					assertEquals(licenses.get(i).getLicense().getStandardLicenseTemplate(),
-							nextLic.getLicense().getStandardLicenseTemplate());
-					if (!TestLicenseSheet.compareText(licenses.get(i).getLicense().getLicenseText(),
-							nextLic.getLicense().getLicenseText())) {
-						fail("license text does not match for "+licenses.get(i).getLicense().getLicenseId());
+					LicenseException nextException = iter.next();
+					assertEquals(exceptions.get(i).getLicenseExceptionId(), nextException.getLicenseExceptionId());
+					assertEquals(exceptions.get(i).getName(), nextException.getName());
+					assertEquals(exceptions.get(i).getComment(), nextException.getComment());
+					assertEquals(exceptions.get(i).getExample(), nextException.getExample());
+					if (!TestLicenseSheet.compareText(exceptions.get(i).getLicenseExceptionText(), nextException.getLicenseExceptionText())) {
+						fail("license text does not match for "+exceptions.get(i).getLicenseExceptionId());
 					}
-					assertEquals(licenses.get(i).getLicense().isOsiApproved(), 
-							nextLic.getLicense().isOsiApproved());
-					assertEquals(licenses.get(i).getDeprecatedVersion(), 
-							nextLic.getDeprecatedVersion());
+					assertStringArraysEquals(exceptions.get(i).getSeeAlso(),
+							nextException.getSeeAlso());
 					i = i + 1;
 				}
-				assertEquals(licenses.size(), i);
+				assertEquals(exceptions.size(), i);
 			} finally {
 				compare.close();
 			}
@@ -155,4 +140,34 @@ public class TestDeprecatedLicenseSheet {
 		}
 		tempDir.delete();
 	}
+	/**
+	 * @param s1
+	 * @param s2
+	 */
+	private void assertStringArraysEquals(String[] s1,
+			String[] s2) {
+		if (s1 == null) {
+			if (s2 != null) {
+				fail("Second array is not null");
+			}
+		}
+		if (s2 == null) {
+			
+			fail ("first array is not null");
+		}
+		assertEquals(s1.length, s2.length);
+		for (int i = 0; i < s1.length; i++) {
+			boolean found = false;
+			for (int j = 0; j < s2.length; j++) {
+				if (s1[i].equals(s2[j])) {
+					found = true;
+					break;
+				}
+			}
+			assertTrue(found);
+		}
+	}
+	
+	
+
 }

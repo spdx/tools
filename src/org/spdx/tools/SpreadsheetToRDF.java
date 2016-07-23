@@ -310,7 +310,8 @@ public class SpreadsheetToRDF {
 		SpdxPackage[] packages = packageInfoSheet.getPackages(analysis.getDocumentContainer());
 		Map<String, SpdxPackage> pkgIdToPackage = Maps.newHashMap();
 		for (int i = 0; i < packages.length; i++) {
-			packages[i].setExternalRefs(externalRefsSheet.getExternalRefsForPkgid(packages[i].getId()));
+			packages[i].setExternalRefs(externalRefsSheet.getExternalRefsForPkgid(
+					packages[i].getId(), analysis.getDocumentContainer()));
 			pkgIdToPackage.put(packages[i].getId(), packages[i]);
 			analysis.getDocumentContainer().addElement(packages[i]);
 		}

@@ -201,10 +201,10 @@ public class SPDXCreatorInformation {
 			// delete any previous comments
 			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CREATION_CREATED);
 			model.removeAll(creatorResource, p, null);
-			if (comment != null) {
+			if (createdDate != null) {
 				// add the property
 				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CREATION_CREATED);
-				creatorResource.addProperty(p, this.createdDate);
+				creatorResource.addProperty(p, createdDate);
 			}
 		}
 	}

@@ -169,13 +169,13 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 			Workbook wb = new HSSFWorkbook();
 			DocumentInfoSheet.create(wb, DOCUMENT_INFO_NAME);
 			PackageInfoSheet.create(wb, PACKAGE_INFO_SHEET_NAME);
+			ExternalRefsSheet.create(wb, EXTERNAL_REFS_SHEET_NAME);
 			NonStandardLicensesSheet.create(wb, NON_STANDARD_LICENSE_SHEET_NAME);
 			PerFileSheet.create(wb, PER_FILE_SHEET_NAME);
 			RelationshipsSheet.create(wb, RELATIONSHIPS_SHEET_NAME);
 			AnnotationsSheet.create(wb, ANNOTATIONS_SHEET_NAME);
-			ExternalRefsSheet.create(wb, EXTERNAL_REFS_SHEET_NAME);
-			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);
 			SnippetSheet.create(wb, SNIPPET_SHEET_NAME);
+			ReviewersSheet.create(wb, REVIEWERS_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
 		    if(excelOut != null){

@@ -14,7 +14,7 @@
  *   limitations under the License.
  *
 */
-package spdxspreadsheet;
+package org.spdx.spdxspreadsheet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

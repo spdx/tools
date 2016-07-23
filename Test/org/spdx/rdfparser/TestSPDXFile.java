@@ -33,8 +33,8 @@ import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.model.IRdfModel;
+import org.spdx.spdxspreadsheet.TestPackageInfoSheet;
 
-import spdxspreadsheet.TestPackageInfoSheet;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
