@@ -22,8 +22,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -51,7 +51,7 @@ public class ListedReferenceTypes {
 	private static ListedReferenceTypes listedReferenceTypes;
 	private Properties listedReferenceTypeProperties;
 	List<String> listedReferenceNames = new ArrayList<String>();
-	Map<String, ReferenceType> listedReferenceTypeCache = Maps.newConcurrentMap();
+	ConcurrentMap<String, ReferenceType> listedReferenceTypeCache = Maps.newConcurrentMap();
 	
 	private ListedReferenceTypes() {
 		listedReferenceTypeProperties  = new Properties();
