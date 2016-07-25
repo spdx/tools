@@ -19,13 +19,17 @@ package org.spdx.html;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.DoapProject;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.model.SpdxSnippet;
 
 import com.google.common.collect.Lists;
 
@@ -39,19 +43,24 @@ public class FileContext {
 	
 	SpdxFile spdxFile = null;
 	Exception error = null;
+	private Map<String, String> spdxIdToUrl;
+	private Map<String, List<SpdxSnippet>> fileIdToSnippets;
 
 	/**
 	 * @param SpdxFile
 	 */
-	public FileContext(SpdxFile SpdxFile) {
+	public FileContext(SpdxFile SpdxFile, Map<String, String> spdxIdToUrl,
+			Map<String, List<SpdxSnippet>> fileIdToSnippets) {
 		this.spdxFile = SpdxFile;
+		this.spdxIdToUrl = spdxIdToUrl;
+		this.fileIdToSnippets = fileIdToSnippets;
 	}
 
 	/**
 	 * @param e
 	 */
 	public FileContext(InvalidSPDXAnalysisException e) {
-		this.error = null;
+		this.error = e;
 	}
 	
 	public String fileName() {
@@ -102,7 +111,7 @@ public class FileContext {
 				List<String> retval = Lists.newArrayList();
 				FileType[] fileTypes = spdxFile.getFileTypes();
 				for (int i = 0; i < fileTypes.length; i++) {
-					retval.add(SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]));
+					retval.add(fileTypes[i].getTag());
 				}
 				Collections.sort(retval);
 				return retval;
@@ -170,6 +179,7 @@ public class FileContext {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public List<ProjectContext> artifactOf() {
 		List<ProjectContext> retval = Lists.newArrayList();
 		if (spdxFile == null && error != null) {
@@ -221,5 +231,46 @@ public class FileContext {
 		}
 		return retval;
 	}
-
+	
+	public List<RelationshipContext> fileRelationships() {
+	    List<RelationshipContext> retval = Lists.newArrayList();
+	    if (this.spdxFile != null) {
+		    Relationship[] relationships = spdxFile.getRelationships();
+		    if (relationships != null) {
+		        Arrays.sort(relationships);
+			
+	    		for (Relationship relationship : relationships) {
+	    		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
+	    		}
+		    }
+	    }    
+		return retval;
+	}
+	
+	public List<AnnotationContext> fileAnnotations() {
+		List<AnnotationContext> retval  = Lists.newArrayList();
+		if (this.spdxFile != null) {
+			Annotation[] annotations = spdxFile.getAnnotations();
+			if (annotations != null) {
+				Arrays.sort(annotations);
+				for (Annotation annotation : annotations) {
+					retval.add(new AnnotationContext(annotation));
+				}
+			}	
+		}
+		return retval;
+	}
+	
+	public List<ElementContext> fileSnippets() {
+		List<ElementContext> retval = Lists.newArrayList();
+		if (this.spdxFile != null) {
+			List<SpdxSnippet> snippets = this.fileIdToSnippets.get(this.spdxFile.getId());
+			if (snippets != null) {
+				for (SpdxSnippet snippet:snippets) {
+					retval.add(new ElementContext(snippet, spdxIdToUrl));
+				}
+			}	
+		}
+		return retval;
+	}
 }
