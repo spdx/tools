@@ -36,6 +36,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -67,6 +68,7 @@ public class RdfToHtml {
 	static final String SPDX_DOCUMENT_HTML_TEMPLATE = "SpdxDocHTMLTemplate.html";
 	static final String SPDX_PACKAGE_HTML_TEMPLATE = "PackageHTMLTemplate.html";
 	static final String SPDX_FILE_HTML_TEMPLATE = "FilesHTMLTemplate.html";
+	static final String SPDX_SNIPPET_HTML_TEMPLATE = "SnippetHTMLTemplate.html";
 	static final String SPDX_LICENSE_HTML_TEMPLATE = "LicensesHTMLTemplate.html";
 	
 	static final String DOC_HTML_FILE_POSTFIX = "-document.html";
@@ -74,6 +76,7 @@ public class RdfToHtml {
 	static final String PACKAGE_HTML_FILE_POSTFIX = "-package.html";
 	static final String PACKAGE_FILE_HTML_FILE_POSTFIX = "-packagefiles.html";
 	static final String DOCUMENT_FILE_HTML_FILE_POSTFIX = "-documentfiles.html";
+	static final String SNIPPET_FILE_NAME = "snippets.html";
 
 	private static final Escaper HTML_LINEBREAK_ESCAPER = //A variation on Guava's HTML escaper
 			Escapers.builder()
@@ -134,6 +137,9 @@ public class RdfToHtml {
 		String docHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + DOC_HTML_FILE_POSTFIX;
 		File docHtmlFile = new File(docHtmlFilePath);
 		filesToCreate.add(docHtmlFile);
+		String snippetHtmlFilePath = outputDirectory.getPath() + File.separator + SNIPPET_FILE_NAME;
+		File snippetHtmlFile = new File(snippetHtmlFilePath);
+		filesToCreate.add(snippetHtmlFile);
 		String licenseHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + LICENSE_HTML_FILE_POSTFIX;
 		File licenseHtmlFile = new File(licenseHtmlFilePath);
 		filesToCreate.add(licenseHtmlFile);
@@ -169,7 +175,7 @@ public class RdfToHtml {
 		}
 		Writer writer = null;
 		try {
-			rdfToHtml(doc, docHtmlFile, licenseHtmlFile, docFilesHtmlFile);
+			rdfToHtml(doc, docHtmlFile, licenseHtmlFile, snippetHtmlFile, docFilesHtmlFile);
 		} catch (IOException e) {
 			System.out.println("IO Error opening SPDX Document");
 			usage();
@@ -205,7 +211,8 @@ public class RdfToHtml {
 	}
 
     public static void rdfToHtml(SpdxDocument doc, File templateDir,
-    		File docHtmlFile, File licenseHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
+    		File docHtmlFile, File licenseHtmlFile, File snippetHtmlFile,
+    		File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
     	String dirPath = docHtmlFile.getParent();
 		DefaultMustacheFactory lineBreakEscapingBuilder = new DefaultMustacheFactory(templateDir){
 			@Override
@@ -220,6 +227,18 @@ public class RdfToHtml {
 			}
 		};
         Map<String, String> spdxIdToUrl = buildIdMap(doc, dirPath);
+        Map<String, List<SpdxSnippet>> fileIdToSnippets = Maps.newHashMap();
+        List<SpdxSnippet> snippets = doc.getDocumentContainer().findAllSnippets();
+        for (SpdxSnippet snippet:snippets) {
+        	if (snippet.getId() != null && snippet.getSnippetFromFile() != null && snippet.getSnippetFromFile().getId() != null) {
+        		List<SpdxSnippet> fileSnippets = fileIdToSnippets.get(snippet.getId());
+        		if (fileSnippets == null) {
+        			fileSnippets = Lists.newArrayList();
+        			fileIdToSnippets.put(snippet.getSnippetFromFile().getId(), fileSnippets);
+        		}
+        		fileSnippets.add(snippet);
+        	}
+        }
         List<SpdxPackage> allPackages = doc.getDocumentContainer().findAllPackages();
         Iterator<SpdxPackage> pkgIter = allPackages.iterator();
         while (pkgIter.hasNext()) {
@@ -232,7 +251,8 @@ public class RdfToHtml {
 					PACKAGE_FILE_HTML_FILE_POSTFIX;
 			File packageFilesHtmlFile = new File(packageFilesHtmlFilePath);
         	PackageContext pkgContext = new PackageContext(pkg, spdxIdToUrl);
-        	Map<String, Object> pkgFileMap = MustacheMap.buildPkgFileMap(pkg, spdxIdToUrl);
+        	Map<String, Object> pkgFileMap = MustacheMap.buildPkgFileMap(pkg, spdxIdToUrl,
+        			fileIdToSnippets);
         	Mustache mustache = lineBreakEscapingBuilder.compile(SPDX_PACKAGE_HTML_TEMPLATE);
 			OutputStreamWriter packageHtmlFileWriter = new OutputStreamWriter(new FileOutputStream(packageHtmlFile), "UTF-8");
         	try {
@@ -265,7 +285,7 @@ public class RdfToHtml {
         		}
         	}
         	Map<String, Object> docFileMap = MustacheMap.buildDocFileMustacheMap(
-        			doc, files, spdxIdToUrl);
+        			doc, files, spdxIdToUrl, fileIdToSnippets);
         	Mustache mustache = lineBreakEscapingBuilder.compile(SPDX_FILE_HTML_TEMPLATE);
         	OutputStreamWriter docFilesHtmlFileWriter = new OutputStreamWriter(new FileOutputStream(docFilesHtmlFile), "UTF-8");
         	try {
@@ -281,6 +301,14 @@ public class RdfToHtml {
         	mustache.execute(licenseHtmlFileWriter, extracteLicMustacheMap);
         } finally {
         	licenseHtmlFileWriter.close();
+        }
+        Map<String, Object> snippetMustacheMap = MustacheMap.buildSnippetMustachMap(doc, spdxIdToUrl);
+        mustache = lineBreakEscapingBuilder.compile(SPDX_SNIPPET_HTML_TEMPLATE);
+        OutputStreamWriter snippetHtmlFileWriter = new OutputStreamWriter(new FileOutputStream(snippetHtmlFile), "UTF-8");
+        try {
+        	mustache.execute(snippetHtmlFileWriter, snippetMustacheMap);
+        } finally {
+        	snippetHtmlFileWriter.close();
         }
         Map<String, Object> docMustacheMap = MustacheMap.buildDocMustachMap(doc, spdxIdToUrl);
         mustache = lineBreakEscapingBuilder.compile(SPDX_DOCUMENT_HTML_TEMPLATE);
@@ -329,6 +357,14 @@ public class RdfToHtml {
 				}
 			}
 		}
+		// Snippets
+		List<SpdxSnippet> snippets = doc.getDocumentContainer().findAllSnippets();
+		for (SpdxSnippet snippet:snippets) {
+			String snippetId = snippet.getId();
+			if (snippetId != null) {
+				retval.put(snippetId, SNIPPET_FILE_NAME);
+			}
+		}
 		// finally, add the document files
 		String docFilesName = doc.getName() + DOCUMENT_FILE_HTML_FILE_POSTFIX;
 		SpdxItem[] describedItems = doc.getDocumentDescribes();
@@ -356,14 +392,14 @@ public class RdfToHtml {
 	}
 
 	public static void rdfToHtml(SpdxDocument doc, File docHtmlFile, 
-			File licenseHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
+			File licenseHtmlFile, File snippetHtmlFile, File docFilesHtmlFile) throws MustacheException, IOException, InvalidSPDXAnalysisException {
 		String templateDir = TEMPLATE_ROOT_PATH;
 		File templateDirectoryRoot = new File(templateDir);
 		if (!(templateDirectoryRoot.exists() && templateDirectoryRoot.isDirectory())) {
 			templateDir = TEMPLATE_CLASS_PATH;
 			templateDirectoryRoot = new File(templateDir);
 		}
-		rdfToHtml(doc, templateDirectoryRoot, docHtmlFile, licenseHtmlFile, docFilesHtmlFile);
+		rdfToHtml(doc, templateDirectoryRoot, docHtmlFile, licenseHtmlFile, snippetHtmlFile, docFilesHtmlFile);
 	}
 
 }

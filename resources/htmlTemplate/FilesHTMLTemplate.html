@@ -51,11 +51,28 @@ Contributors:<br />
 <li>{{contributors}}</li>
 {{/contributors}}
 </ul>
-Dependencies:<br />
+<h4>Dependencies:</h4>
 <ul>
 {{#fileDependencies}}
 <li>{{fileDependencies}}</li>
 {{/fileDependencies}}
+</ul>
+<h4>Relationships:</h4>
+<ul>
+{{#fileRelationships}}
+<li>{{type}}:<a href="{{elementLink}}">{{relatedElementId}}</a>{{#comment}} ({{comment}}){{/comment}}</li>
+{{/fileRelationships}}
+</ul>
+<h4>Annotations:</h4>
+<ul>
+{{#fileAnnotations}}
+<li>{{type}}-{{annotator}},{{date}}:{{comment}}</li>
+{{/fileAnnotations}}
+</ul>
+<h4>Snippets:</h4>
+<ul>{{#fileSnippets}}
+<li>Snippet ID: <a href="{{elementLink}}">{{id}}</a></li>
+{{/fileSnippets}}
 </ul>
 {{/hasFile}}
 </body>

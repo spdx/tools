@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Generated from the SPDX Viewer tools (see spdx.org/tools) -->
+<title>Snippets</title>
+</head>
+<body>
+<h2>SPDX Snippet Information</h2>
+{{#snippets}}
+<h3 id="{{spdxId}}">SPDXID: {{spdxId}}</h3>
+{{#name}}Name: {{name}}<br />{{/name}}
+From file: {{snippetFromFile}}<br />
+Byte Range: {{byteRange}}<br />
+{{#lineRange}}Line Range {{lineRange}}<br />{{/lineRange}}
+Concluded License:{{licenseConcluded}}<br />
+<h4>License Information from Snippet</h4>
+<ul>
+{{#licenseInfoInSnippet}}
+    <li>{{licenseInfoInSnippet}}</li>
+{{/licenseInfoInSnippet}}
+</ul>
+{{#licenseComments}}
+License Comments: {{licenseComments}}<br />
+{{/licenseComments}}
+Copyright Text: {{copyrightText}}<br />
+{{#comment}}
+Snippet comment: {{comment}}<br />
+{{/comment}}
+<h4>Relationships:</h4>
+<ul>
+{{#snippetRelationships}}
+<li>{{type}}:<a href="{{elementLink}}">{{relatedElementId}}</a>{{#comment}} ({{comment}}){{/comment}}</li>
+{{/snippetRelationships}}
+</ul>
+<h4>Annotations:</h4>
+<ul>
+{{#snippetAnnotations}}
+<li>{{type}}-{{annotator}},{{date}}:{{comment}}</li>
+{{/snippetAnnotations}}
+</ul>
+{{/snippets}}
+</body>
+</html>

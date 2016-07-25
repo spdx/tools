@@ -33,6 +33,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -132,7 +133,7 @@ public class MustacheMap {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public static Map<String, Object> buildDocFileMustacheMap(SpdxDocument doc, SpdxFile[] files,
-			Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+			Map<String, String> spdxIdToUrl, Map<String, List<SpdxSnippet>> fileIdToSnippets) throws InvalidSPDXAnalysisException {
 		Map<String, Object> retval = Maps.newHashMap();
 		retval.put("about", "SPDX Document "+doc.getName());
 		SpdxItem[] describedItems = doc.getDocumentDescribes();
@@ -155,7 +156,7 @@ public class MustacheMap {
 		List<FileContext> describedFiles = Lists.newArrayList();
 		for (int i = 0; i < describedItems.length; i++) {
 			if (describedItems[i] instanceof SpdxFile) {
-				describedFiles.add(new FileContext((SpdxFile)describedItems[i]));
+				describedFiles.add(new FileContext((SpdxFile)describedItems[i],spdxIdToUrl, fileIdToSnippets));
 			}
 		}
 		retval.put("hasFile", describedFiles);
@@ -250,7 +251,7 @@ public class MustacheMap {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public static Map<String, Object> buildPkgFileMap(SpdxPackage pkg,
-			Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
+			Map<String, String> spdxIdToUrl, Map<String, List<SpdxSnippet>> fileIdToSnippets) throws InvalidSPDXAnalysisException {
 		Map<String, Object> retval = Maps.newHashMap();
 		retval.put("about", "SPDX Package "+pkg.getName());
 		SpdxFile[] files = pkg.getFiles();
@@ -273,10 +274,31 @@ public class MustacheMap {
 		List<FileContext> alFiles = Lists.newArrayList();
 		for (int i = 0; i < files.length; i++) {
 			if (files[i] != null) {
-				alFiles.add(new FileContext(files[i]));
+				alFiles.add(new FileContext(files[i], spdxIdToUrl, fileIdToSnippets));
 			}
 		}
 		retval.put("hasFile", alFiles);
+		return retval;
+	}
+
+	/**
+	 * @param doc
+	 * @param spdxIdToUrl
+	 * @return
+	 */
+	public static Map<String, Object> buildSnippetMustachMap(SpdxDocument doc,
+			Map<String, String> spdxIdToUrl) {
+		List<SnippetContext> snippetContexts = Lists.newArrayList();
+		try {
+			List<SpdxSnippet> snippets = doc.getDocumentContainer().findAllSnippets();
+			for (SpdxSnippet snippet:snippets) {
+				snippetContexts.add(new SnippetContext(snippet, spdxIdToUrl));
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			snippetContexts.add(new SnippetContext(e));
+		}
+		Map<String, Object> retval = Maps.newHashMap();
+		retval.put("snippets", snippetContexts);
 		return retval;
 	}
 }

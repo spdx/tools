@@ -16,6 +16,7 @@
 */
 package org.spdx.html;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +25,10 @@ import java.util.Map;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.ExternalRef;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
 
@@ -268,4 +272,58 @@ public class PackageContext {
 		return retval;
 	}
 	
+	public boolean isFilesAnalyzed() {
+		if (this.pkg == null) {
+			return true;
+		}
+		try {
+			return this.pkg.isFilesAnalyzed();
+		} catch (InvalidSPDXAnalysisException e) {
+			return true;
+		}
+	}
+	
+	public List<RelationshipContext> packageRelationships() {
+		    List<RelationshipContext> retval = Lists.newArrayList();
+		    Relationship[] relationships = pkg.getRelationships();
+		    if (relationships != null) {
+		        Arrays.sort(relationships);
+			
+	    		for (Relationship relationship : relationships) {
+	    		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
+	    		}
+		    }
+		    
+			return retval;
+	}
+	
+	public List<AnnotationContext> packageAnnotations() {
+		List<AnnotationContext> retval  = Lists.newArrayList();
+		Annotation[] annotations = pkg.getAnnotations();
+		if (annotations != null) {
+			Arrays.sort(annotations);
+			for (Annotation annotation : annotations) {
+				retval.add(new AnnotationContext(annotation));
+			}
+		}
+		return retval;
+	}
+	
+	public List<ExternalRefContext> externalRefs() {
+		List<ExternalRefContext> retval  = Lists.newArrayList();
+		if (this.pkg != null) {
+			try {
+				ExternalRef[] externalRefs = pkg.getExternalRefs();
+				if (externalRefs != null) {
+					Arrays.sort(externalRefs);
+					for (ExternalRef externalRef:externalRefs) {
+						retval.add(new ExternalRefContext(externalRef));
+					}
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				// Return an empty list
+			}	
+		}
+		return retval;
+	}
 }

@@ -78,11 +78,31 @@ Declared License: {{licenseDeclared}}<br />
 
 <h3>Description</h3>
 {{description}}<br />
+<h3>filesAnalyzed</h3>
+{{isFilesAnalyzed}}
 <h3>Files</h3>
 <ul>
 {{#hasFile}}
 <li>File name: <a href="{{elementLink}}">{{name}}</a></li>
 {{/hasFile}}
+</ul>
+<h3>Relationships:</h3>
+<ul>
+{{#packageRelationships}}
+<li>{{type}}:<a href="{{elementLink}}">{{relatedElementId}}</a>{{#comment}} ({{comment}}){{/comment}}</li>
+{{/packageRelationships}}
+</ul>
+<h3>Annotations:</h3>
+<ul>
+{{#packageAnnotations}}
+<li>{{type}}-{{annotator}},{{date}}:{{comment}}</li>
+{{/packageAnnotations}}
+</ul>
+<h3>External Refs:</h3>
+<ul>
+{{#externalRefs}}
+<li>{{category}} {{type}} {{locator}} {{#comment}} ({{comment}}){{/comment}}</li>
+{{/externalRefs}}
 </ul>
 </body>
 </html>
