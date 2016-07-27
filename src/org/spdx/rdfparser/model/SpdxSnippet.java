@@ -176,6 +176,10 @@ snippet information applies to.
 		return null;
 	}
 
+	@Override
+	public String getLicenseInfoFromFilesPropertyName() {
+		return SpdxRdfConstants.PROP_LICENSE_INFO_FROM_SNIPPETS;
+	}
 	
 
 	/**

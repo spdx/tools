@@ -43,6 +43,7 @@ public class FileArtifactOfSheet extends AbstractFileCompareSheet {
 	/* (non-Javadoc)
 	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	String getFileValue(SpdxFile spdxFile) {
 		DoapProject[] projects = spdxFile.getArtifactOf();
@@ -67,6 +68,7 @@ public class FileArtifactOfSheet extends AbstractFileCompareSheet {
 	/* (non-Javadoc)
 	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.SpdxFile, int, org.spdx.rdfparser.SpdxFile, int)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {

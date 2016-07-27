@@ -395,7 +395,6 @@ public class TestSpdxFile {
 			@Override
 			public boolean addCheckNodeObject(Node node,
 					IRdfModel rdfModelObject) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
@@ -457,7 +456,6 @@ public class TestSpdxFile {
 			@Override
 			public boolean addCheckNodeObject(Node node,
 					IRdfModel rdfModelObject) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 			
@@ -851,6 +849,7 @@ public class TestSpdxFile {
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxFile#setArtifactOf(org.spdx.rdfparser.model.DoapProject[])}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetArtifactOf() throws InvalidSPDXAnalysisException {
 		DoapProject project1 = new DoapProject("Artifactof Project", "http://project.home.page/this");

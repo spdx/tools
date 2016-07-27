@@ -286,6 +286,7 @@ public class SpdxComparer {
 		differenceFound = false;
 		compareExtractedLicenseInfos();	// note - this must be done first to build the translation map of IDs
 		compareDocumentFields();
+		compareSnippets();
 		compareFiles();
 		comparePackages();
 		compareReviewers();
@@ -294,6 +295,14 @@ public class SpdxComparer {
 		compareDocumentRelationships();
 		compareExternalDocumentRefs();
 		compareInProgress = false;	
+	}
+
+	/**
+	 * Compare the snippets in the documents
+	 */
+	private void compareSnippets() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**

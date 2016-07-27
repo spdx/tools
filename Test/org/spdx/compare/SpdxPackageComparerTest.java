@@ -16,10 +16,10 @@
 */
 package org.spdx.compare;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.junit.After;
@@ -27,14 +27,18 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
+import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
+import org.spdx.rdfparser.model.ExternalRef.ReferenceCategory;
+import org.spdx.rdfparser.model.ExternalRef;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxDocument;
@@ -42,11 +46,12 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Maps;
 
 /**
- * @author Gary
+ * @author Gary O'Neall
  *
  */
 public class SpdxPackageComparerTest {
@@ -71,6 +76,7 @@ public class SpdxPackageComparerTest {
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDA = LICENSEA1;
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDB = LICENSEB1;
 	private static final String NAMEA = "NameA";
+	@SuppressWarnings("unused")
 	private static final String NAMEB = "NameB";
 	private static final AnyLicenseInfo LICENSE_DECLAREDA = LICENSEA2;
 	private static final AnyLicenseInfo LICENSE_DECLAREDB = LICENSEB2;
@@ -94,6 +100,26 @@ public class SpdxPackageComparerTest {
 	private static final String SUPPLIERA = "Person: Supplier A";
 	private static final String SUPPLIERB = "Person: Supplier B";
 	private static final Map<String, String> LICENSE_XLATION_MAPAB = Maps.newHashMap();
+	
+	private static final String[] REFERENCE_LOCATORS = new String[] {
+		"org.apache.tomcat:tomcat:9.0.0.M4", "Microsoft.AspNet.MVC/5.0.0",
+		"cpe:2.3:o:canonical:ubuntu_linux:10.04::lts:*:*:*:*:*"
+	};
+
+	private static final String[] COMMENTS = new String[] {
+		"comment one", "comment two", ""
+	};
+
+	private static final String[] REFERENCE_TYPE_NAMES = new String[] {
+		"maven-central", "nuget", "cpe23Type"
+	};
+
+	ReferenceCategory[] REFERENCE_CATEGORIES = {ReferenceCategory.referenceCategory_packageManager,
+			ReferenceCategory.referenceCategory_packageManager,
+			ReferenceCategory.referenceCategory_security
+	};
+
+	ExternalRef[] TEST_REFERENCES;
 	
 	static {
 		LICENSE_XLATION_MAPAB.put("LicenseRef-1", "LicenseRef-4");
@@ -261,6 +287,15 @@ public class SpdxPackageComparerTest {
 		Map<SpdxDocument, Map<String, String>> amap = Maps.newHashMap();
 		amap.put(DOCA, LICENSE_XLATION_MAPBA);
 		LICENSE_XLATION_MAP.put(DOCB, amap);
+		
+		TEST_REFERENCES = new ExternalRef[REFERENCE_CATEGORIES.length];
+		for (int i = 0; i < REFERENCE_CATEGORIES.length; i++) {
+			TEST_REFERENCES[i] = new ExternalRef(REFERENCE_CATEGORIES[i], 
+					new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[i]), null, null, null),
+					REFERENCE_LOCATORS[i], COMMENTS[i]);
+		}
+		
+		Arrays.sort(TEST_REFERENCES);
 	}
 
 	/**
@@ -1078,5 +1113,99 @@ public class SpdxPackageComparerTest {
 		assertEquals(1, result.length);
 		assertEquals(FILE3B, result[0]);
 	}
+	
+	@Test
+	public void testIsFilesAnalyzedEquals() throws SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, new ExternalRef[0]);
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA, false, new ExternalRef[0]);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
+		assertTrue(pc.isDifferenceFound());
+		assertFalse(pc.isFilesAnalyzedEquals());
+	}
+	@Test
+	public void testGetExternalRefDifferences() throws SpdxCompareException, InvalidSPDXAnalysisException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, TEST_REFERENCES);
+		ExternalRef[] externalRefB = new ExternalRef[TEST_REFERENCES.length];
+		
+		for (int i = 0; i < TEST_REFERENCES.length; i++) {
+			externalRefB[i] = TEST_REFERENCES[i].clone();
+		}
+		externalRefB[0].setComment("Different comment");
+		
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, externalRefB);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
+		assertTrue(pc.isDifferenceFound());
+		assertFalse(pc.isExternalRefsEquals());
+		SpdxExternalRefDifference[] result = pc.getExternalRefDifferences(DOCA, DOCB);
+		assertEquals(1, result.length);
+		assertEquals(result[0].getReferenceLocator(), TEST_REFERENCES[0].getReferenceLocator());
+		assertTrue(result[0].getReferenceType().equivalent(TEST_REFERENCES[0].getReferenceType()));
+		assertFalse(result[0].isCommentsEqual());
+		assertEquals(TEST_REFERENCES[0].getComment(), result[0].getCommentB());
+		assertEquals(externalRefB[0].getComment(), result[0].getCommentA());		
+		result = pc.getExternalRefDifferences(DOCB, DOCA);
+		assertEquals(1, result.length);
+		assertEquals(result[0].getReferenceLocator(), TEST_REFERENCES[0].getReferenceLocator());
+		assertTrue(result[0].getReferenceType().equivalent(TEST_REFERENCES[0].getReferenceType()));
+		assertFalse(result[0].isCommentsEqual());
+		assertEquals(TEST_REFERENCES[0].getComment(), result[0].getCommentB());
+		assertEquals(externalRefB[0].getComment(), result[0].getCommentA());	
+	}
+	
+	@Test
+	public void testGetUniqueExternalRefs() throws SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, TEST_REFERENCES);
+		ExternalRef[] externalRefB = new ExternalRef[TEST_REFERENCES.length-1];
+		
+		for (int i = 0; i < TEST_REFERENCES.length-1; i++) {
+			externalRefB[i] = TEST_REFERENCES[i].clone();
+		}
 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, externalRefB);
+		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
+		pc.addDocumentPackage(DOCA, pkgA);
+		pc.addDocumentPackage(DOCB, pkgB);
+		assertTrue(pc.isDifferenceFound());
+		assertFalse(pc.isExternalRefsEquals());
+		ExternalRef[] result = pc.getUniqueExternalRefs(DOCA, DOCB);
+		assertEquals(1, result.length);
+		assertTrue(TEST_REFERENCES[TEST_REFERENCES.length-1].equivalent(result[0]));
+		result = pc.getUniqueExternalRefs(DOCB, DOCA);
+		assertEquals(0, result.length);
+		
+	}
 }

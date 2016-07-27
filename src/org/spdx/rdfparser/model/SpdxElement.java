@@ -308,7 +308,12 @@ public class SpdxElement extends RdfModelObject {
 				}
 			}
 		}
-		return id;
+		if (id == null) {
+			// Use the hash function to create a unique ID for this element
+			return String.valueOf(this.hashCode());
+		} else {
+			return id;
+		}
 	}
 
 	/**
