@@ -60,6 +60,10 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.model.SpdxSnippet;
+import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
+import org.spdx.rdfparser.model.pointer.LineCharPointer;
+import org.spdx.rdfparser.model.pointer.StartEndPointer;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.model.UnitTestHelper;
@@ -67,7 +71,6 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
 
 /**
  * @author Gary O'Neall
@@ -142,6 +145,7 @@ public class SpdxComparerTest {
 	};
 	private static final String DOC_NAMEA = "DocumentA";
 	private static final String DOC_NAMEB = "DocumentB";
+	private static final String DOC_NAMEC = "DocumentC";
 	private static final SPDXCreatorInformation CREATION_INFOA = new SPDXCreatorInformation(
 			new String[] {"Person: CreatorA"}, "2010-01-29T18:30:22Z", "Creator CommentA", "1.15");
 	private static final SPDXCreatorInformation CREATION_INFOB = new SPDXCreatorInformation(
@@ -151,16 +155,31 @@ public class SpdxComparerTest {
 		LICENSE_XLATION_MAP.put("LicenseRef-2", "LicenseRef-5");
 		LICENSE_XLATION_MAP.put("LicenseRef-3", "LicenseRef-6");
 	}
+	
+	Integer OFFSET1_1 = new Integer(2342);
+	ByteOffsetPointer BOP_POINTER1_1;
+	Integer LINE1_1 = new Integer(113);
+	LineCharPointer LCP_POINTER1_1; 
+	Integer OFFSET2_1 = new Integer(444);
+	ByteOffsetPointer BOP_POINTER2_1;
+	Integer LINE2_1 = new Integer(23422);
+	LineCharPointer LCP_POINTER2_1; 
+	Integer OFFSET1_2 = new Integer(3542);
+	ByteOffsetPointer BOP_POINTER1_2;
+	Integer LINE1_2 = new Integer(555);
+	LineCharPointer LCP_POINTER1_2; 
+	Integer OFFSET2_2 = new Integer(2444);
+	ByteOffsetPointer BOP_POINTER2_2;
+	Integer LINE2_2 = new Integer(23428);
+
 	private Annotation ANNOTATION1;
 	private Annotation ANNOTATION2;
 	private Annotation ANNOTATION3;
 	private Annotation ANNOTATION4;
 	private Annotation[] ANNOTATIONSA;
-	@SuppressWarnings("unused")
 	private Annotation[] ANNOTATIONSB;
 	
 	private Relationship[] RELATIONSHIPSA;
-	@SuppressWarnings("unused")
 	private Relationship[] RELATIONSHIPSB;
 	private SpdxElement RELATED_ELEMENT1;
 	private SpdxElement RELATED_ELEMENT2;
@@ -194,6 +213,15 @@ public class SpdxComparerTest {
 	private SpdxPackageVerificationCode VERIFICATION_CODEA;
 	@SuppressWarnings("unused")
 	private SpdxPackageVerificationCode VERIFICATION_CODEB;
+	
+	LineCharPointer LCP_POINTER2_2; 
+	StartEndPointer BYTE_RANGE1;
+	StartEndPointer BYTE_RANGE2;
+	StartEndPointer LINE_RANGE1;
+	StartEndPointer LINE_RANGE2;
+	
+	SpdxSnippet SNIPPET1;
+	SpdxSnippet SNIPPET2;
 
 	/**
 	 * @throws java.lang.Exception
@@ -280,6 +308,24 @@ public class SpdxComparerTest {
 				new String[] {"file2"});
 		VERIFICATION_CODEB = new SpdxPackageVerificationCode("bbbbf72bf99b7e471f1a27989667a903658652bb",
 				new String[] {"file3"});
+		BOP_POINTER1_1 = new ByteOffsetPointer(FILE1A, OFFSET1_1);
+		BOP_POINTER1_2 = new ByteOffsetPointer(FILE1A, OFFSET1_2);
+		BYTE_RANGE1 = new StartEndPointer(BOP_POINTER1_1, BOP_POINTER1_2);
+		LCP_POINTER1_1 = new LineCharPointer(FILE1A, LINE1_1);
+		LCP_POINTER1_2 = new LineCharPointer(FILE1A, LINE1_2);
+		LINE_RANGE1 = new StartEndPointer(LCP_POINTER1_1, LCP_POINTER1_2);
+		BOP_POINTER2_1 = new ByteOffsetPointer(FILE2A, OFFSET2_1);
+		BOP_POINTER2_2 = new ByteOffsetPointer(FILE2A, OFFSET2_2);
+		BYTE_RANGE2 = new StartEndPointer(BOP_POINTER2_1, BOP_POINTER2_2);
+		LCP_POINTER2_1 = new LineCharPointer(FILE2A, LINE2_1);
+		LCP_POINTER2_2 = new LineCharPointer(FILE2A, LINE2_2);
+		LINE_RANGE2 = new StartEndPointer(LCP_POINTER2_1, LCP_POINTER2_2);
+		SNIPPET1 = new SpdxSnippet("SnippetName1", "SnippetCOmment1", ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2}, 
+				"Copyright1", "LicenseComment1", FILE1A, BYTE_RANGE1, LINE_RANGE1);
+		SNIPPET2 = new SpdxSnippet("SnippetName2", "SnippetCOmment2", ANNOTATIONSB, 
+				RELATIONSHIPSB, LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2}, 
+				"Copyright2", "LicenseComment2", FILE2A, BYTE_RANGE2, LINE_RANGE2);
 	}
 
 	/**
@@ -1595,6 +1641,7 @@ public class SpdxComparerTest {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetFileDifferences() throws InvalidSPDXAnalysisException, IOException, SpdxCompareException, InvalidLicenseStringException {
 		SpdxComparer comparer = new SpdxComparer();
@@ -2174,5 +2221,72 @@ public class SpdxComparerTest {
 		comparer.compare(new SpdxDocument[] {docA, docB, docC});
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isDocumentContentsEquals());
+	}
+	
+	@Test
+	public void testCompareSnippets() throws InvalidSPDXAnalysisException, SpdxCompareException {
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxPackage pkgC = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
+				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
+				SUMMARYA, SUPPLIERA, VERSIONINFOA);
+		SpdxSnippet SNIPPET1_CLONE = SNIPPET1.clone();
+		SpdxItem[] itemsA = new SpdxItem[] {pkgA, SNIPPET1};
+		SpdxItem[] itemsB = new SpdxItem[] {pkgB, SNIPPET1_CLONE};
+		SpdxItem[] itemsC = new SpdxItem[] {pkgC, SNIPPET2};
+		SpdxDocumentContainer containerA = new SpdxDocumentContainer(DOC_URIA);
+		SpdxDocumentContainer containerB = new SpdxDocumentContainer(DOC_URIB);
+		SpdxDocumentContainer containerC = new SpdxDocumentContainer(DOC_URIC);
+		SpdxDocument docA = containerA.getSpdxDocument();
+		SpdxDocument docB = containerB.getSpdxDocument();
+		SpdxDocument docC = containerC.getSpdxDocument();
+		docA.setName(DOC_NAMEA);
+		docB.setName(DOC_NAMEB);
+		docC.setName(DOC_NAMEC);
+		docA.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docB.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docC.setExtractedLicenseInfos(EXTRACTED_LICENSESA);
+		docA.setCreationInfo(CREATION_INFOA);
+		docB.setCreationInfo(CREATION_INFOA);
+		docC.setCreationInfo(CREATION_INFOA);
+		for (int i = 0; i < itemsA.length; i++) {
+			Relationship rel = new Relationship(itemsA[i], 
+					Relationship.RelationshipType.DESCRIBES, "");
+			docA.addRelationship(rel);
+		}
+		for (int i = 0; i < itemsB.length; i++) {
+			Relationship rel = new Relationship(itemsB[i], 
+					Relationship.RelationshipType.DESCRIBES, "");
+			docB.addRelationship(rel);
+		}
+		for (int i = 0; i < itemsC.length; i++) {
+			Relationship rel = new Relationship(itemsC[i], 
+					Relationship.RelationshipType.DESCRIBES, "");
+			docC.addRelationship(rel);
+		}
+		assertTrue(SNIPPET1.equivalent(SNIPPET1_CLONE));
+		assertFalse(SNIPPET1.equivalent(SNIPPET2));
+		SpdxComparer comparer = new SpdxComparer();
+		comparer.compare(docA, docB);
+		/*
+		assertFalse(comparer.isDifferenceFound());
+		assertTrue(comparer.isSnippetsEqual());
+		comparer.compare(new SpdxDocument[] {docA, docB, docC});
+		assertTrue(comparer.isDifferenceFound());
+		assertFalse(comparer.isSnippetsEqual());
+		*/
 	}
 }

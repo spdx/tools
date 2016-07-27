@@ -55,7 +55,7 @@ public class FileTypeSheet extends AbstractFileCompareSheet {
 			FileType[] fileTypes = spdxFile.getFileTypes();
 			String[] sFileTypes = new String[fileTypes.length];
 			for (int i = 0; i < fileTypes.length; i++) {
-				sFileTypes[i] = SpdxFile.FILE_TYPE_TO_TAG.get(fileTypes[i]);
+				sFileTypes[i] = fileTypes[i].getTag();
 			}
 			Arrays.sort(sFileTypes);
 			StringBuilder sb = new StringBuilder(sFileTypes[0]);

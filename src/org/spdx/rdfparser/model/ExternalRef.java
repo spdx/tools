@@ -220,39 +220,27 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	@Override
 	public int compareTo(ExternalRef o) {
 		
-		if (this.getReferenceCategory() == null) {
-			if (o.getReferenceCategory() != null) {
-				return 1;
-			} else {
-				return 0;
-			}
+		ReferenceType myReferenceType = null;
+		int retval = 0;
+		try {
+			myReferenceType = this.getReferenceType();
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Invalid reference type during compare",e);
 		}
-		if (o.getReferenceCategory() == null) {
-			return -1;
+		ReferenceType compRefType = null;
+		try {
+			compRefType = o.getReferenceType();
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Invalid reference type during compare",e);
 		}
-		int retval = this.referenceCategory.toString().compareTo(o.getReferenceCategory().toString());
-		if (retval == 0) {
-			ReferenceType myReferenceType = null;
-			try {
-				myReferenceType = this.getReferenceType();
-			} catch (InvalidSPDXAnalysisException e) {
-				logger.error("Invalid reference type during compare",e);
+		if (myReferenceType == null) {
+			if (compRefType != null) {
+				retval = 1;
 			}
-			ReferenceType compRefType = null;
-			try {
-				compRefType = o.getReferenceType();
-			} catch (InvalidSPDXAnalysisException e) {
-				logger.error("Invalid reference type during compare",e);
-			}
-			if (myReferenceType == null) {
-				if (compRefType != null) {
-					retval = 1;
-				}
-			} else if (compRefType == null) { 
-				retval = -1;
-			} else {
-				retval = myReferenceType.compareTo(compRefType);
-			}
+		} else if (compRefType == null) { 
+			retval = -1;
+		} else {
+			retval = myReferenceType.compareTo(compRefType);
 		}
 		if (retval == 0) {
 			String myReferenceLocator = this.getReferenceLocator();
@@ -264,6 +252,17 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 				retval = -1;
 			} else {
 				retval = myReferenceLocator.compareTo(o.getReferenceLocator());
+			}
+		}
+		if (retval == 0) {
+			if (this.getReferenceCategory() == null) {
+				if (o.getReferenceCategory() != null) {
+					return 1;
+				} else {
+					return 0;
+				}
+			} else {
+				retval = this.referenceCategory.toString().compareTo(o.getReferenceCategory().toString());
 			}
 		}
 		if (retval == 0) {
