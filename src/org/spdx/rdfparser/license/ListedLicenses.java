@@ -453,7 +453,9 @@ public class ListedLicenses implements IModelContainer {
             InputStream in = null;
             try {
                 in = LicenseInfoFactory.class.getResourceAsStream("/" + LISTED_LICENSE_PROPERTIES_FILENAME);
-                licenseProperties.load(in);
+                if (in != null) {
+                    licenseProperties.load(in);
+                }
             } catch (IOException e) {
                 // Ignore it and fall through
                 logger.warn("IO Exception reading listed license properties file: " + e.getMessage());

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -7,22 +7,76 @@
     xmlns:dc="http://purl.org/dc/terms/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:spdx="http://spdx.org/rdf/terms#">
-<head>
-    <title>Nethack General Public License</title>
-    
-    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
-<!--[if IE 6]>
-    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
-<![endif]-->
-    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
 
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="sites/all/themes/cpstandard/favicon.ico" type="image/vnd.microsoft.icon" />
 
-<!--[if IE 6]>
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
-<![endif]-->
+    <title>Nethack General Public License | Software Package Data Exchange (SPDX)</title>
+
+    <link rel="shortcut icon" href="sites/all/themes/cpstandard/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/cpstandard/css/style.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/cpstandard/css/colors.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <!-- GOOGLE FONTS -->
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,400italic,300,300italic,100italic,100,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css' />
+
+    <style type="text/css">
+
+      #page {
+        color: #58595b;
+      }
+
+      #header {
+        border-bottom: 3px solid #4597cb;
+        padding-bottom: 50px;
+      }
+
+      .breadcrumb {
+        margin-top: 25px;
+      }
+
+      #content-header h1 {
+        color: #58595b;
+      }
+
+      #page h2, h3, h4, h5 {
+        color: #4597cb;
+      }
+      
+      #page h1 {
+      font-size: 2em;
+      }
+
+      #page h2 {
+      font-size: 1.5em;
+      }
+
+      #page p {
+        color: #58595b;
+      }
+
+      #page th {
+        color: #58595b;
+      }
+
+      a, a:visited, a:hover {
+        color: #4597cb;
+      }
+
+      #footer-copyright {
+        margin-top: 25px;
+      }
+      .replacable-license-text {
+      color: #CC0000;
+      }
+
+      .optional-license-text {
+      color: #0000cc;
+      }
+
+    </style>
+
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -37,169 +91,111 @@
 
   </script>
 
-</head>
-<body typeof="spdx:License">
-<div id="page"><div id="page-inner">
-<div id="header"><div id="header-inner" class="clear-block">
-<div id="util_nav">
- <ul class="inline_list list_icon float_left" style="padding-top:2px;">
-        <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
- </ul>
-</div> <!-- close util_nav -->
-<div id="logo-title">
-    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-    <div id="site-slogan">Software Package Data Exchange®</div>
-</div> <!-- /#logo-title -->
-<br />
-<br />
+  </head>
 
-</div>
+  <body typeof="spdx:License">
 
-</div></div> <!-- /#header-inner, /#header -->
-
-<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
-
-<h1 property="dc:title">Nethack General Public License</h1>
-<h2 style="color: #003F69;">Full name</h2>
-    <p style="margin-left: 20px;"><code property="spdx:name">Nethack General Public License</code></p>
-
-<h2 style="color: #003F69;">Short identifier</h2>
-    <p style="margin-left: 20px;"><code property="spdx:licenseId">NGPL</code></p>
-
-<h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">
-       <li><a href="http://www.opensource.org/licenses/NGPL" rel="rdfs:seeAlso">http://www.opensource.org/licenses/NGPL</a></li>
-    </p>
-    
-<div property="spdx:isOsiApproved" style="display: none;">true</div>
-
-<h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">None</p>
-
-<h2 style="color: #003F69;" id="licenseText">Text</h2>
-
-<div property="spdx:licenseText" class="license-text">
-NETHACK GENERAL PUBLIC LICENSE
-<p>(Copyright 1989 M. Stephenson) <br/>
-(Based on the BISON general public license, copyright 1988 Richard M. Stallman)</p>
-<p>Everyone is permitted to copy and distribute verbatim copies of this license, but changing it is not allowed. You can also use this wording to make the terms for other programs.</p>
-<p>The license agreements of most software companies keep you at the mercy of those companies. By contrast, our general public license is intended to give everyone the right to share NetHack. To make sure that you get the rights we want you to have, we need to make restrictions that forbid anyone to deny you these rights or to ask you to surrender the rights. Hence this license agreement.</p>
-<p>Specifically, we want to make sure that you have the right to give away copies of NetHack, that you receive source code or else can get it if you want it, that you can change NetHack or use pieces of it in new free programs, and that you know you can do these things.</p>
-<p>To make sure that everyone has such rights, we have to forbid you to deprive anyone else of these rights. For example, if you distribute copies of NetHack, you must give the recipients all the rights that you have. You must make sure that they, too, receive or can get the source code. And you must tell them their rights.</p>
-<p>Also, for our own protection, we must make certain that everyone finds out that there is no warranty for NetHack. If NetHack is modified by someone else and passed on, we want its recipients to know that what they have is not what we distributed.</p>
-<p>Therefore we (Mike Stephenson and other holders of NetHack copyrights) make the following terms which say what you must do to be allowed to distribute or change NetHack.</p>
-<p>COPYING POLICIES</p>
-<p>You may copy and distribute verbatim copies of NetHack source code as you receive it, in any medium, provided that you keep intact the notices on all files that refer to copyrights, to this License Agreement, and to the absence of any warranty; and give any other recipients of the NetHack program a copy of this License Agreement along with the program.</p>
-<p>You may modify your copy or copies of NetHack or any portion of it, and copy and distribute such modifications under the terms of Paragraph 1 above (including distributing this License Agreement), provided that you also do the following:</p>
-<p style="margin-left: 20px;">     a) cause the modified files to carry prominent notices stating that you changed the files and the date of any change; and</p>
-<p style="margin-left: 20px;">     b) cause the whole of any work that you distribute or publish, that in whole or in part contains or is a derivative of NetHack or any part thereof, to be licensed at no charge to all third parties on terms identical to those contained in this License Agreement (except that you may choose to grant more extensive warranty protection to some or all third parties, at your option)</p>
-<p style="margin-left: 20px;">     c) You may charge a distribution fee for the physical act of transferring a copy, and you may at your option offer warranty protection in exchange for a fee.</p>
-<p>You may copy and distribute NetHack (or a portion or derivative of it, under Paragraph 2) in object code or executable form under the terms of Paragraphs 1 and 2 above provided that you also do one of the following:</p>
-<p style="margin-left: 20px;">     a) accompany it with the complete machine-readable source code, which must be distributed under the terms of Paragraphs 1 and 2 above; or,</p>
-<p style="margin-left: 20px;">     b) accompany it with full information as to how to obtain the complete machine-readable source code from an appropriate archive site. (This alternative is allowed only for noncommercial distribution.)</p>
-<p>For these purposes, complete source code means either the full source distribution as originally released over Usenet or updated copies of the files in this distribution used to create the object code or executable.</p>
-<p>You may not copy, sublicense, distribute or transfer NetHack except as expressly provided under this License Agreement. Any attempt otherwise to copy, sublicense, distribute or transfer NetHack is void and your rights to use the program under this License agreement shall be automatically terminated. However, parties who have received computer software programs from you with this License Agreement will not have their licenses terminated so long as such parties remain in full compliance.<br/>
-Stated plainly: You are permitted to modify NetHack, or otherwise use parts of NetHack, provided that you comply with the conditions specified above; in particular, your modified NetHack or program containing parts of NetHack must remain freely available as provided in this License Agreement. In other words, go ahead and share NetHack, but don&apos;t try to stop anyone else from sharing it farther. </p>
-</div>
-
-<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text">
-  <p style="font-style: italic">There is no standard license header for the license</p>
-  
-</div>
-
-    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
-  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
-  
-  <div class="content">
-    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
-<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-</div><!-- /.region -->
-      <div class="clearfix"></div>
-
+  <div id="lf-header" class="collaborative-projects">
+    <div class="gray-diagonal">
+      <div class="container">
+        <a id="collaborative-projects-logo" href="http://collabprojects.linuxfoundation.org">Linux Foundation Collaborative Projects</a>
+      </div>
     </div>
+  </div>
 
+  <div id="header">
+    <div id="header-inner">
+      <a href="/" title="Home" rel="home" id="logo">
+        <img src="https://spdx.linuxfound.info/sites/cpstandard/files/logo_spdx_250.png" alt="Home" />
+      </a>
+      
+      <div id="name-and-slogan">
+        <div id="site-name">
+          <h1><a href="/" title="Home" rel="home">Software Package Data Exchange (SPDX)</a></h1>
+        </div>    
+      </div>
+      
+    </div>
+  </div> <!-- /header -->
 
-<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
-<div class="section">
+  <div id="highlighted">  
+      <div class="region region-highlighted">
+      </div>
+  </div>
 
-        
-<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
-reserved.</p>
+    <div id="page" class="page">
 
-<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+      <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
-        
+      <h1 property="dc:title">Nethack General Public License</h1>
+      <div style="display:none;"><code property="spdx:deprecated">false</code></div>
+      <h2>Full name</h2>
+          <p style="margin-left: 20px;"><code property="spdx:name">Nethack General Public License</code></p>
+
+      <h2>Short identifier</h2>
+          <p style="margin-left: 20px;"><code property="spdx:licenseId">NGPL</code></p>
+
+      <h2>Other web pages for this license</h2>
+          <div style="margin-left: 20px;">
+            <ul>
+             <li><a href="http://www.opensource.org/licenses/NGPL" rel="rdfs:seeAlso">http://www.opensource.org/licenses/NGPL</a></li>
+           </ul>
+          </div>
+          
+      <div property="spdx:isOsiApproved" style="display: none;">true</div>
+
+      <h2 id="notes">Notes</h2>
+          <p style="margin-left: 20px;">None</p>
+
+      <h2 id="licenseText">Text</h2>
+
+      <div property="spdx:licenseText" class="license-text">
+      NETHACK GENERAL PUBLIC LICENSE
+<p>(Copyright 1989 M. Stephenson) <br/>
+(Based on the BISON general public license, copyright 1988 Richard M. Stallman)</p>
+<p>Everyone is permitted to copy and distribute verbatim copies of this license, but changing it is not allowed. You can also use this wording to make the terms for other programs.</p>
+<p>The license agreements of most software companies keep you at the mercy of those companies. By contrast, our general public license is intended to give everyone the right to share NetHack. To make sure that you get the rights we want you to have, we need to make restrictions that forbid anyone to deny you these rights or to ask you to surrender the rights. Hence this license agreement.</p>
+<p>Specifically, we want to make sure that you have the right to give away copies of NetHack, that you receive source code or else can get it if you want it, that you can change NetHack or use pieces of it in new free programs, and that you know you can do these things.</p>
+<p>To make sure that everyone has such rights, we have to forbid you to deprive anyone else of these rights. For example, if you distribute copies of NetHack, you must give the recipients all the rights that you have. You must make sure that they, too, receive or can get the source code. And you must tell them their rights.</p>
+<p>Also, for our own protection, we must make certain that everyone finds out that there is no warranty for NetHack. If NetHack is modified by someone else and passed on, we want its recipients to know that what they have is not what we distributed.</p>
+<p>Therefore we (Mike Stephenson and other holders of NetHack copyrights) make the following terms which say what you must do to be allowed to distribute or change NetHack.</p>
+<p>COPYING POLICIES</p>
+<p>You may copy and distribute verbatim copies of NetHack source code as you receive it, in any medium, provided that you keep intact the notices on all files that refer to copyrights, to this License Agreement, and to the absence of any warranty; and give any other recipients of the NetHack program a copy of this License Agreement along with the program.</p>
+<p>You may modify your copy or copies of NetHack or any portion of it, and copy and distribute such modifications under the terms of Paragraph 1 above (including distributing this License Agreement), provided that you also do the following:</p>
+<p style="margin-left: 20px;">     a) cause the modified files to carry prominent notices stating that you changed the files and the date of any change; and</p>
+<p style="margin-left: 20px;">     b) cause the whole of any work that you distribute or publish, that in whole or in part contains or is a derivative of NetHack or any part thereof, to be licensed at no charge to all third parties on terms identical to those contained in this License Agreement (except that you may choose to grant more extensive warranty protection to some or all third parties, at your option)</p>
+<p style="margin-left: 20px;">     c) You may charge a distribution fee for the physical act of transferring a copy, and you may at your option offer warranty protection in exchange for a fee.</p>
+<p>You may copy and distribute NetHack (or a portion or derivative of it, under Paragraph 2) in object code or executable form under the terms of Paragraphs 1 and 2 above provided that you also do one of the following:</p>
+<p style="margin-left: 20px;">     a) accompany it with the complete machine-readable source code, which must be distributed under the terms of Paragraphs 1 and 2 above; or,</p>
+<p style="margin-left: 20px;">     b) accompany it with full information as to how to obtain the complete machine-readable source code from an appropriate archive site. (This alternative is allowed only for noncommercial distribution.)</p>
+<p>For these purposes, complete source code means either the full source distribution as originally released over Usenet or updated copies of the files in this distribution used to create the object code or executable.</p>
+<p>You may not copy, sublicense, distribute or transfer NetHack except as expressly provided under this License Agreement. Any attempt otherwise to copy, sublicense, distribute or transfer NetHack is void and your rights to use the program under this License agreement shall be automatically terminated. However, parties who have received computer software programs from you with this License Agreement will not have their licenses terminated so long as such parties remain in full compliance.<br/>
+Stated plainly: You are permitted to modify NetHack, or otherwise use parts of NetHack, provided that you comply with the conditions specified above; in particular, your modified NetHack or program containing parts of NetHack must remain freely available as provided in this License Agreement. In other words, go ahead and share NetHack, but don&apos;t try to stop anyone else from sharing it farther. </p>
+      </div>
+
+      <h2  id="licenseHeader">Standard License Header</h2>
+      <div property="spdx:standardLicenseHeader" class="license-text">
+        <p style="font-style: italic">There is no standard license header for the license</p>
         
       </div>
 
-</div> <!-- /#footer-inner, /#footer -->
+    </div> <!-- /page -->
 
-</div></div> <!-- /#page-inner, /#page -->
+    <div class="collaborative-projects">
+      <div class="gray-diagonal">
+        <div class="container">
+          <div id="footer-copyright">
+            <p>(c) 2016          SPDX Workgroup a Linux Foundation Collaborative Project. All Rights Reserved.        </p>
+            <p>Linux Foundation is a registered trademark of The Linux Foundation. Linux is a registered <a href="http://www.linuxfoundation.org/programs/legal/trademark" title="Linux Mark Institute">trademark</a> of Linus Torvalds.</p>
+            <p>Please see our <a href="http://www.linuxfoundation.org/privacy">privacy policy</a> and <a href="http://www.linuxfoundation.org/terms">terms of use</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-</body>
+    <div id="top-page-link">
+      <a href="#"><i class="fa fa-arrow-circle-up"></i><span>top of page</span></a>
+    </div>
+
+  </body>
 </html>

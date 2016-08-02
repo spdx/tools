@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -7,22 +7,76 @@
     xmlns:dc="http://purl.org/dc/terms/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:spdx="http://spdx.org/rdf/terms#">
-<head>
-    <title>BSD with attribution</title>
-    
-    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
-<!--[if IE 6]>
-    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
-<![endif]-->
-    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
 
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="sites/all/themes/cpstandard/favicon.ico" type="image/vnd.microsoft.icon" />
 
-<!--[if IE 6]>
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
-<![endif]-->
+    <title>BSD with attribution | Software Package Data Exchange (SPDX)</title>
+
+    <link rel="shortcut icon" href="sites/all/themes/cpstandard/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/cpstandard/css/style.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/cpstandard/css/colors.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <!-- GOOGLE FONTS -->
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,400italic,300,300italic,100italic,100,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css' />
+
+    <style type="text/css">
+
+      #page {
+        color: #58595b;
+      }
+
+      #header {
+        border-bottom: 3px solid #4597cb;
+        padding-bottom: 50px;
+      }
+
+      .breadcrumb {
+        margin-top: 25px;
+      }
+
+      #content-header h1 {
+        color: #58595b;
+      }
+
+      #page h2, h3, h4, h5 {
+        color: #4597cb;
+      }
+      
+      #page h1 {
+      font-size: 2em;
+      }
+
+      #page h2 {
+      font-size: 1.5em;
+      }
+
+      #page p {
+        color: #58595b;
+      }
+
+      #page th {
+        color: #58595b;
+      }
+
+      a, a:visited, a:hover {
+        color: #4597cb;
+      }
+
+      #footer-copyright {
+        margin-top: 25px;
+      }
+      .replacable-license-text {
+      color: #CC0000;
+      }
+
+      .optional-license-text {
+      color: #0000cc;
+      }
+
+    </style>
+
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -37,156 +91,98 @@
 
   </script>
 
-</head>
-<body typeof="spdx:License">
-<div id="page"><div id="page-inner">
-<div id="header"><div id="header-inner" class="clear-block">
-<div id="util_nav">
- <ul class="inline_list list_icon float_left" style="padding-top:2px;">
-        <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
- </ul>
-</div> <!-- close util_nav -->
-<div id="logo-title">
-    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-    <div id="site-slogan">Software Package Data Exchange®</div>
-</div> <!-- /#logo-title -->
-<br />
-<br />
+  </head>
 
-</div>
+  <body typeof="spdx:License">
 
-</div></div> <!-- /#header-inner, /#header -->
+  <div id="lf-header" class="collaborative-projects">
+    <div class="gray-diagonal">
+      <div class="container">
+        <a id="collaborative-projects-logo" href="http://collabprojects.linuxfoundation.org">Linux Foundation Collaborative Projects</a>
+      </div>
+    </div>
+  </div>
 
-<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
+  <div id="header">
+    <div id="header-inner">
+      <a href="/" title="Home" rel="home" id="logo">
+        <img src="https://spdx.linuxfound.info/sites/cpstandard/files/logo_spdx_250.png" alt="Home" />
+      </a>
+      
+      <div id="name-and-slogan">
+        <div id="site-name">
+          <h1><a href="/" title="Home" rel="home">Software Package Data Exchange (SPDX)</a></h1>
+        </div>    
+      </div>
+      
+    </div>
+  </div> <!-- /header -->
 
-<h1 property="dc:title">BSD with attribution</h1>
-<h2 style="color: #003F69;">Full name</h2>
-    <p style="margin-left: 20px;"><code property="spdx:name">BSD with attribution</code></p>
+  <div id="highlighted">  
+      <div class="region region-highlighted">
+      </div>
+  </div>
 
-<h2 style="color: #003F69;">Short identifier</h2>
-    <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-3-Clause-Attribution</code></p>
+    <div id="page" class="page">
 
-<h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">
-       <li><a href="https://fedoraproject.org/wiki/Licensing/BSD_with_Attribution" rel="rdfs:seeAlso">https://fedoraproject.org/wiki/Licensing/BSD_with_Attribution</a></li>
-    </p>
-    
-<div property="spdx:isOsiApproved" style="display: none;">false</div>
+      <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">None</p>
+      <h1 property="dc:title">BSD with attribution</h1>
+      <div style="display:none;"><code property="spdx:deprecated">false</code></div>
+      <h2>Full name</h2>
+          <p style="margin-left: 20px;"><code property="spdx:name">BSD with attribution</code></p>
 
-<h2 style="color: #003F69;" id="licenseText">Text</h2>
+      <h2>Short identifier</h2>
+          <p style="margin-left: 20px;"><code property="spdx:licenseId">BSD-3-Clause-Attribution</code></p>
 
-<div property="spdx:licenseText" class="license-text">
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-<p style="margin-left: 20px;">     1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
-<p style="margin-left: 20px;">     2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p style="margin-left: 20px;">     3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</p>
+      <h2>Other web pages for this license</h2>
+          <div style="margin-left: 20px;">
+            <ul>
+             <li><a href="https://fedoraproject.org/wiki/Licensing/BSD_with_Attribution" rel="rdfs:seeAlso">https://fedoraproject.org/wiki/Licensing/BSD_with_Attribution</a></li>
+           </ul>
+          </div>
+          
+      <div property="spdx:isOsiApproved" style="display: none;">false</div>
+
+      <h2 id="notes">Notes</h2>
+          <p style="margin-left: 20px;">None</p>
+
+      <h2 id="licenseText">Text</h2>
+
+      <div property="spdx:licenseText" class="license-text">
+      Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+<p style="margin-left: 20px;">     1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
+<p style="margin-left: 20px;">     2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
+<p style="margin-left: 20px;">     3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</p>
 <p style="margin-left: 20px;">     4. Redistributions of any form whatsoever must retain the following acknowledgment: &apos;This product includes software developed by the 
 <span id="organization" class="replacable-license-text">&quot;Universidad de Palermo, Argentina&quot; (http://www.palermo.edu/).&apos;</span>
-</p>
+</p>
 <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-</div>
+      </div>
 
-<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text">
-  <p style="font-style: italic">There is no standard license header for the license</p>
-  
-</div>
-
-    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
-  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
-  
-  <div class="content">
-    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
-<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-</div><!-- /.region -->
-      <div class="clearfix"></div>
-
-    </div>
-
-
-<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
-<div class="section">
-
-        
-<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
-reserved.</p>
-
-<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
-
-<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
-        
+      <h2  id="licenseHeader">Standard License Header</h2>
+      <div property="spdx:standardLicenseHeader" class="license-text">
+        <p style="font-style: italic">There is no standard license header for the license</p>
         
       </div>
 
-</div> <!-- /#footer-inner, /#footer -->
+    </div> <!-- /page -->
 
-</div></div> <!-- /#page-inner, /#page -->
+    <div class="collaborative-projects">
+      <div class="gray-diagonal">
+        <div class="container">
+          <div id="footer-copyright">
+            <p>(c) 2016          SPDX Workgroup a Linux Foundation Collaborative Project. All Rights Reserved.        </p>
+            <p>Linux Foundation is a registered trademark of The Linux Foundation. Linux is a registered <a href="http://www.linuxfoundation.org/programs/legal/trademark" title="Linux Mark Institute">trademark</a> of Linus Torvalds.</p>
+            <p>Please see our <a href="http://www.linuxfoundation.org/privacy">privacy policy</a> and <a href="http://www.linuxfoundation.org/terms">terms of use</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-</body>
+    <div id="top-page-link">
+      <a href="#"><i class="fa fa-arrow-circle-up"></i><span>top of page</span></a>
+    </div>
+
+  </body>
 </html>

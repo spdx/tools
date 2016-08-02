@@ -92,7 +92,7 @@ public class SpdxItemComparer {
 		}
 		if (this.name == null) {
 			this.name = spdxItem.getName();
-		} else if (!this.name.equals(spdxItem.getName())) {
+		} else if (!this.name.equals(spdxItem.getName()) && !(this instanceof SpdxSnippetComparer)) {
 			throw(new SpdxCompareException("Names do not match for item being added to comparer: "+
 					spdxItem.getName()+", expecting "+this.name));
 		}

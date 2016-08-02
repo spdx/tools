@@ -456,4 +456,32 @@ snippet information applies to.
 			return -1;
 		}	
 	}
+	
+	@Override
+	public String toString() {
+		if (name != null && !name.isEmpty()) {
+			return name;
+		}
+		StringBuilder sb = new StringBuilder();
+		if (this.snippetFromFile != null) {
+			String fileName = this.snippetFromFile.getName();
+			if (fileName != null && !fileName.isEmpty()) {
+				sb.append(fileName);
+			} else {
+				if (this.snippetFromFile.getId() != null && !this.snippetFromFile.getId().isEmpty()) {
+					sb.append("FileID ");
+					sb.append(this.snippetFromFile.getId());
+				} else {
+					sb.append("[Unnamed File]");
+				}
+			}
+			sb.append(": ");
+		}
+		if (this.byteRange != null) {
+			sb.append(this.byteRange.toString());
+		} else {
+			sb.append("[No byte range set]");
+		}
+		return sb.toString();
+	}
 }
