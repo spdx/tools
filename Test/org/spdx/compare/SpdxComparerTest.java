@@ -2281,12 +2281,10 @@ public class SpdxComparerTest {
 		assertFalse(SNIPPET1.equivalent(SNIPPET2));
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(docA, docB);
-		/*
 		assertFalse(comparer.isDifferenceFound());
 		assertTrue(comparer.isSnippetsEqual());
 		comparer.compare(new SpdxDocument[] {docA, docB, docC});
 		assertTrue(comparer.isDifferenceFound());
 		assertFalse(comparer.isSnippetsEqual());
-		*/
 	}
 }

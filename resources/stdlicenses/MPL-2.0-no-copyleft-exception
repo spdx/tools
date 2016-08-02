@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -7,22 +7,76 @@
     xmlns:dc="http://purl.org/dc/terms/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:spdx="http://spdx.org/rdf/terms#">
-<head>
-    <title>Mozilla Public License 2.0 (no copyleft exception)</title>
-    
-    <link rel="shortcut icon" href="sites/all/themes/spdx/favicon.ico" type="image/x-icon" />
-<!--[if IE 6]>
-    <script type="text/javascript" src="sites/all/themes/spdx/suckerfish.js"></script>
-<![endif]-->
-    <link type="text/css" rel="stylesheet" href="screen.css" media="screen" type="text/css" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/universe_nav.css?a" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/style.css?a" />
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/zen.css?a" />
 
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="sites/all/themes/cpstandard/favicon.ico" type="image/vnd.microsoft.icon" />
 
-<!--[if IE 6]>
-    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/spdx/ie6.css" />
-<![endif]-->
+    <title>Mozilla Public License 2.0 (no copyleft exception) | Software Package Data Exchange (SPDX)</title>
+
+    <link rel="shortcut icon" href="sites/all/themes/cpstandard/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/cpstandard/css/style.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="sites/all/themes/cpstandard/css/colors.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <!-- GOOGLE FONTS -->
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,400italic,300,300italic,100italic,100,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css' />
+
+    <style type="text/css">
+
+      #page {
+        color: #58595b;
+      }
+
+      #header {
+        border-bottom: 3px solid #4597cb;
+        padding-bottom: 50px;
+      }
+
+      .breadcrumb {
+        margin-top: 25px;
+      }
+
+      #content-header h1 {
+        color: #58595b;
+      }
+
+      #page h2, h3, h4, h5 {
+        color: #4597cb;
+      }
+      
+      #page h1 {
+      font-size: 2em;
+      }
+
+      #page h2 {
+      font-size: 1.5em;
+      }
+
+      #page p {
+        color: #58595b;
+      }
+
+      #page th {
+        color: #58595b;
+      }
+
+      a, a:visited, a:hover {
+        color: #4597cb;
+      }
+
+      #footer-copyright {
+        margin-top: 25px;
+      }
+      .replacable-license-text {
+      color: #CC0000;
+      }
+
+      .optional-license-text {
+      color: #0000cc;
+      }
+
+    </style>
+
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -37,443 +91,175 @@
 
   </script>
 
-</head>
-<body typeof="spdx:License">
-<div id="page"><div id="page-inner">
-<div id="header"><div id="header-inner" class="clear-block">
-<div id="util_nav">
- <ul class="inline_list list_icon float_left" style="padding-top:2px;">
-        <li style="padding-right:4px; border-right:1px solid;"><a class="" href="http://www.linuxfoundation.org" style="background:0;">LINUXFOUNDATION.ORG</a></li>
-        <li style="padding-left:4px;"><a href="http://events.linuxfoundation.org" class="" style="background:0; padding-right:0">EVENTS</a></li>
- </ul>
-</div> <!-- close util_nav -->
-<div id="logo-title">
-    <div id="logo"><a href="/" title="Home" rel="home"><img src="images/logo_spdx.jpg" alt="Home" id="logo-image" /></a></div>
-    <div id="lf_logo"><a href="http://linuxfoundation.org"></a></div>
-    <div id="site-slogan">Software Package Data Exchange®</div>
-</div> <!-- /#logo-title -->
-<br />
-<br />
+  </head>
 
-</div>
+  <body typeof="spdx:License">
 
-</div></div> <!-- /#header-inner, /#header -->
-
-<div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
-
-<h1 property="dc:title">Mozilla Public License 2.0 (no copyleft exception)</h1>
-<h2 style="color: #003F69;">Full name</h2>
-    <p style="margin-left: 20px;"><code property="spdx:name">Mozilla Public License 2.0 (no copyleft exception)</code></p>
-
-<h2 style="color: #003F69;">Short identifier</h2>
-    <p style="margin-left: 20px;"><code property="spdx:licenseId">MPL-2.0-no-copyleft-exception</code></p>
-
-<h2 style="color: #003F69;">Other web pages for this license</h2>
-    <p style="margin-left: 20px;">
-       <li><a href="http://www.mozilla.org/MPL/2.0/" rel="rdfs:seeAlso">http://www.mozilla.org/MPL/2.0/</a></li>
-       <li><a href="http://opensource.org/licenses/MPL-2.0" rel="rdfs:seeAlso">http://opensource.org/licenses/MPL-2.0</a></li>
-    </p>
-    
-<div property="spdx:isOsiApproved" style="display: none;">true</div>
-
-<h2 style="color: #003F69;" id="notes">Notes</h2>
-    <p style="margin-left: 20px;">This license was released in January 2012.&#10;This license list entry is for use when the MPL's Exhibit B, which removes the Sec 3.3 copyleft exception.</p>
-
-<h2 style="color: #003F69;" id="licenseText">Text</h2>
-
-<div property="spdx:licenseText" class="license-text">
-Mozilla Public License Version 2.0<br/>
-==================================
-<p>1. Definitions<br/>
---------------</p>
-<p>1.1. &quot;Contributor&quot;<br/>
-    means each individual or legal entity that creates, contributes to<br/>
-    the creation of, or owns Covered Software.</p>
-<p>1.2. &quot;Contributor Version&quot;<br/>
-    means the combination of the Contributions of others (if any) used<br/>
-    by a Contributor and that particular Contributor&apos;s Contribution.</p>
-<p>1.3. &quot;Contribution&quot;<br/>
-    means Covered Software of a particular Contributor.</p>
-<p>1.4. &quot;Covered Software&quot;<br/>
-    means Source Code Form to which the initial Contributor has attached<br/>
-    the notice in Exhibit A, the Executable Form of such Source Code<br/>
-    Form, and Modifications of such Source Code Form, in each case<br/>
-    including portions thereof.</p>
-<p>1.5. &quot;Incompatible With Secondary Licenses&quot;<br/>
-    means</p>
-<p>    (a) that the initial Contributor has attached the notice described<br/>
-        in Exhibit B to the Covered Software; or</p>
-<p>    (b) that the Covered Software was made available under the terms of<br/>
-        version 1.1 or earlier of the License, but not also under the<br/>
-        terms of a Secondary License.</p>
-<p>1.6. &quot;Executable Form&quot;<br/>
-    means any form of the work other than Source Code Form.</p>
-<p>1.7. &quot;Larger Work&quot;<br/>
-    means a work that combines Covered Software with other material, in <br/>
-    a separate file or files, that is not Covered Software.</p>
-<p>1.8. &quot;License&quot;<br/>
-    means this document.</p>
-<p>1.9. &quot;Licensable&quot;<br/>
-    means having the right to grant, to the maximum extent possible,<br/>
-    whether at the time of the initial grant or subsequently, any and<br/>
-    all of the rights conveyed by this License.</p>
-<p>1.10. &quot;Modifications&quot;<br/>
-    means any of the following:</p>
-<p>    (a) any file in Source Code Form that results from an addition to,<br/>
-        deletion from, or modification of the contents of Covered<br/>
-        Software; or</p>
-<p>    (b) any new file in Source Code Form that contains any Covered<br/>
-        Software.</p>
-<p>1.11. &quot;Patent Claims&quot; of a Contributor<br/>
-    means any patent claim(s), including without limitation, method,<br/>
-    process, and apparatus claims, in any patent Licensable by such<br/>
-    Contributor that would be infringed, but for the grant of the<br/>
-    License, by the making, using, selling, offering for sale, having<br/>
-    made, import, or transfer of either its Contributions or its<br/>
-    Contributor Version.</p>
-<p>1.12. &quot;Secondary License&quot;<br/>
-    means either the GNU General Public License, Version 2.0, the GNU<br/>
-    Lesser General Public License, Version 2.1, the GNU Affero General<br/>
-    Public License, Version 3.0, or any later versions of those<br/>
-    licenses.</p>
-<p>1.13. &quot;Source Code Form&quot;<br/>
-    means the form of the work preferred for making modifications.</p>
-<p>1.14. &quot;You&quot; (or &quot;Your&quot;)<br/>
-    means an individual or a legal entity exercising rights under this<br/>
-    License. For legal entities, &quot;You&quot; includes any entity that<br/>
-    controls, is controlled by, or is under common control with You. For<br/>
-    purposes of this definition, &quot;control&quot; means (a) the power, direct<br/>
-    or indirect, to cause the direction or management of such entity,<br/>
-    whether by contract or otherwise, or (b) ownership of more than<br/>
-    fifty percent (50%) of the outstanding shares or beneficial<br/>
-    ownership of such entity.</p>
-<p>2. License Grants and Conditions<br/>
---------------------------------</p>
-<p>2.1. Grants</p>
-<p>Each Contributor hereby grants You a world-wide, royalty-free,<br/>
-non-exclusive license:</p>
-<p>(a) under intellectual property rights (other than patent or trademark)<br/>
-    Licensable by such Contributor to use, reproduce, make available,<br/>
-    modify, display, perform, distribute, and otherwise exploit its<br/>
-    Contributions, either on an unmodified basis, with Modifications, or<br/>
-    as part of a Larger Work; and</p>
-<p>(b) under Patent Claims of such Contributor to make, use, sell, offer<br/>
-    for sale, have made, import, and otherwise transfer either its<br/>
-    Contributions or its Contributor Version.</p>
-<p>2.2. Effective Date</p>
-<p>The licenses granted in Section 2.1 with respect to any Contribution<br/>
-become effective for each Contribution on the date the Contributor first<br/>
-distributes such Contribution.</p>
-<p>2.3. Limitations on Grant Scope</p>
-<p>The licenses granted in this Section 2 are the only rights granted under<br/>
-this License. No additional rights or licenses will be implied from the<br/>
-distribution or licensing of Covered Software under this License.<br/>
-Notwithstanding Section 2.1(b) above, no patent license is granted by a<br/>
-Contributor:</p>
-<p>(a) for any code that a Contributor has removed from Covered Software;<br/>
-    or</p>
-<p>(b) for infringements caused by: (i) Your and any other third party&apos;s<br/>
-    modifications of Covered Software, or (ii) the combination of its<br/>
-    Contributions with other software (except as part of its Contributor<br/>
-    Version); or</p>
-<p>(c) under Patent Claims infringed by Covered Software in the absence of<br/>
-    its Contributions.</p>
-<p>This License does not grant any rights in the trademarks, service marks,<br/>
-or logos of any Contributor (except as may be necessary to comply with<br/>
-the notice requirements in Section 3.4).</p>
-<p>2.4. Subsequent Licenses</p>
-<p>No Contributor makes additional grants as a result of Your choice to<br/>
-distribute the Covered Software under a subsequent version of this<br/>
-License (see Section 10.2) or under the terms of a Secondary License (if<br/>
-permitted under the terms of Section 3.3).</p>
-<p>2.5. Representation</p>
-<p>Each Contributor represents that the Contributor believes its<br/>
-Contributions are its original creation(s) or it has sufficient rights<br/>
-to grant the rights to its Contributions conveyed by this License.</p>
-<p>2.6. Fair Use</p>
-<p>This License is not intended to limit any rights You have under<br/>
-applicable copyright doctrines of fair use, fair dealing, or other<br/>
-equivalents.</p>
-<p>2.7. Conditions</p>
-<p>Sections 3.1, 3.2, 3.3, and 3.4 are conditions of the licenses granted<br/>
-in Section 2.1.</p>
-<p>3. Responsibilities<br/>
--------------------</p>
-<p>3.1. Distribution of Source Form</p>
-<p>All distribution of Covered Software in Source Code Form, including any<br/>
-Modifications that You create or to which You contribute, must be under<br/>
-the terms of this License. You must inform recipients that the Source<br/>
-Code Form of the Covered Software is governed by the terms of this<br/>
-License, and how they can obtain a copy of this License. You may not<br/>
-attempt to alter or restrict the recipients&apos; rights in the Source Code<br/>
-Form.</p>
-<p>3.2. Distribution of Executable Form</p>
-<p>If You distribute Covered Software in Executable Form then:</p>
-<p>(a) such Covered Software must also be made available in Source Code<br/>
-    Form, as described in Section 3.1, and You must inform recipients of<br/>
-    the Executable Form how they can obtain a copy of such Source Code<br/>
-    Form by reasonable means in a timely manner, at a charge no more<br/>
-    than the cost of distribution to the recipient; and</p>
-<p>(b) You may distribute such Executable Form under the terms of this<br/>
-    License, or sublicense it under different terms, provided that the<br/>
-    license for the Executable Form does not attempt to limit or alter<br/>
-    the recipients&apos; rights in the Source Code Form under this License.</p>
-<p>3.3. Distribution of a Larger Work</p>
-<p>You may create and distribute a Larger Work under terms of Your choice,<br/>
-provided that You also comply with the requirements of this License for<br/>
-the Covered Software. If the Larger Work is a combination of Covered<br/>
-Software with a work governed by one or more Secondary Licenses, and the<br/>
-Covered Software is not Incompatible With Secondary Licenses, this<br/>
-License permits You to additionally distribute such Covered Software<br/>
-under the terms of such Secondary License(s), so that the recipient of<br/>
-the Larger Work may, at their option, further distribute the Covered<br/>
-Software under the terms of either this License or such Secondary<br/>
-License(s).</p>
-<p>3.4. Notices</p>
-<p>You may not remove or alter the substance of any license notices<br/>
-(including copyright notices, patent notices, disclaimers of warranty,<br/>
-or limitations of liability) contained within the Source Code Form of<br/>
-the Covered Software, except that You may alter any license notices to<br/>
-the extent required to remedy known factual inaccuracies.</p>
-<p>3.5. Application of Additional Terms</p>
-<p>You may choose to offer, and to charge a fee for, warranty, support,<br/>
-indemnity or liability obligations to one or more recipients of Covered<br/>
-Software. However, You may do so only on Your own behalf, and not on<br/>
-behalf of any Contributor. You must make it absolutely clear that any<br/>
-such warranty, support, indemnity, or liability obligation is offered by<br/>
-You alone, and You hereby agree to indemnify every Contributor for any<br/>
-liability incurred by such Contributor as a result of warranty, support,<br/>
-indemnity or liability terms You offer. You may include additional<br/>
-disclaimers of warranty and limitations of liability specific to any<br/>
-jurisdiction.</p>
-<p>4. Inability to Comply Due to Statute or Regulation<br/>
----------------------------------------------------</p>
-<p>If it is impossible for You to comply with any of the terms of this<br/>
-License with respect to some or all of the Covered Software due to<br/>
-statute, judicial order, or regulation then You must: (a) comply with<br/>
-the terms of this License to the maximum extent possible; and (b)<br/>
-describe the limitations and the code they affect. Such description must<br/>
-be placed in a text file included with all distributions of the Covered<br/>
-Software under this License. Except to the extent prohibited by statute<br/>
-or regulation, such description must be sufficiently detailed for a<br/>
-recipient of ordinary skill to be able to understand it.</p>
-<p>5. Termination<br/>
---------------</p>
-<p>5.1. The rights granted under this License will terminate automatically<br/>
-if You fail to comply with any of its terms. However, if You become<br/>
-compliant, then the rights granted under this License from a particular<br/>
-Contributor are reinstated (a) provisionally, unless and until such<br/>
-Contributor explicitly and finally terminates Your grants, and (b) on an<br/>
-ongoing basis, if such Contributor fails to notify You of the<br/>
-non-compliance by some reasonable means prior to 60 days after You have<br/>
-come back into compliance. Moreover, Your grants from a particular<br/>
-Contributor are reinstated on an ongoing basis if such Contributor<br/>
-notifies You of the non-compliance by some reasonable means, this is the<br/>
-first time You have received notice of non-compliance with this License<br/>
-from such Contributor, and You become compliant prior to 30 days after<br/>
-Your receipt of the notice.</p>
-<p>5.2. If You initiate litigation against any entity by asserting a patent<br/>
-infringement claim (excluding declaratory judgment actions,<br/>
-counter-claims, and cross-claims) alleging that a Contributor Version<br/>
-directly or indirectly infringes any patent, then the rights granted to<br/>
-You by any and all Contributors for the Covered Software under Section<br/>
-2.1 of this License shall terminate.</p>
-<p>5.3. In the event of termination under Sections 5.1 or 5.2 above, all<br/>
-end user license agreements (excluding distributors and resellers) which<br/>
-have been validly granted by You or Your distributors under this License<br/>
-prior to termination shall survive termination.</p>
-<p>************************************************************************<br/>
-*                                                                      *<br/>
-*  6. Disclaimer of Warranty                                           *<br/>
-*  -------------------------                                           *<br/>
-*                                                                      *<br/>
-*  Covered Software is provided under this License on an &quot;as is&quot;       *<br/>
-*  basis, without warranty of any kind, either expressed, implied, or  *<br/>
-*  statutory, including, without limitation, warranties that the       *<br/>
-*  Covered Software is free of defects, merchantable, fit for a        *<br/>
-*  particular purpose or non-infringing. The entire risk as to the     *<br/>
-*  quality and performance of the Covered Software is with You.        *<br/>
-*  Should any Covered Software prove defective in any respect, You     *<br/>
-*  (not any Contributor) assume the cost of any necessary servicing,   *<br/>
-*  repair, or correction. This disclaimer of warranty constitutes an   *<br/>
-*  essential part of this License. No use of any Covered Software is   *<br/>
-*  authorized under this License except under this disclaimer.         *<br/>
-*                                                                      *<br/>
-************************************************************************</p>
-<p>************************************************************************<br/>
-*                                                                      *<br/>
-*  7. Limitation of Liability                                          *<br/>
-*  --------------------------                                          *<br/>
-*                                                                      *<br/>
-*  Under no circumstances and under no legal theory, whether tort      *<br/>
-*  (including negligence), contract, or otherwise, shall any           *<br/>
-*  Contributor, or anyone who distributes Covered Software as          *<br/>
-*  permitted above, be liable to You for any direct, indirect,         *<br/>
-*  special, incidental, or consequential damages of any character      *<br/>
-*  including, without limitation, damages for lost profits, loss of    *<br/>
-*  goodwill, work stoppage, computer failure or malfunction, or any    *<br/>
-*  and all other commercial damages or losses, even if such party      *<br/>
-*  shall have been informed of the possibility of such damages. This   *<br/>
-*  limitation of liability shall not apply to liability for death or   *<br/>
-*  personal injury resulting from such party&apos;s negligence to the       *<br/>
-*  extent applicable law prohibits such limitation. Some               *<br/>
-*  jurisdictions do not allow the exclusion or limitation of           *<br/>
-*  incidental or consequential damages, so this exclusion and          *<br/>
-*  limitation may not apply to You.                                    *<br/>
-*                                                                      *<br/>
-************************************************************************</p>
-<p>8. Litigation<br/>
--------------</p>
-<p>Any litigation relating to this License may be brought only in the<br/>
-courts of a jurisdiction where the defendant maintains its principal<br/>
-place of business and such litigation shall be governed by laws of that<br/>
-jurisdiction, without reference to its conflict-of-law provisions.<br/>
-Nothing in this Section shall prevent a party&apos;s ability to bring<br/>
-cross-claims or counter-claims.</p>
-<p>9. Miscellaneous<br/>
-----------------</p>
-<p>This License represents the complete agreement concerning the subject<br/>
-matter hereof. If any provision of this License is held to be<br/>
-unenforceable, such provision shall be reformed only to the extent<br/>
-necessary to make it enforceable. Any law or regulation which provides<br/>
-that the language of a contract shall be construed against the drafter<br/>
-shall not be used to construe this License against a Contributor.</p>
-<p>10. Versions of the License<br/>
----------------------------</p>
-<p>10.1. New Versions</p>
-<p>Mozilla Foundation is the license steward. Except as provided in Section<br/>
-10.3, no one other than the license steward has the right to modify or<br/>
-publish new versions of this License. Each version will be given a<br/>
-distinguishing version number.</p>
-<p>10.2. Effect of New Versions</p>
-<p>You may distribute the Covered Software under the terms of the version<br/>
-of the License under which You originally received the Covered Software,<br/>
-or under the terms of any subsequent version published by the license<br/>
-steward.</p>
-<p>10.3. Modified Versions</p>
-<p>If you create software not governed by this License, and you want to<br/>
-create a new license for such software, you may create and use a<br/>
-modified version of this License if you rename the license and remove<br/>
-any references to the name of the license steward (except to note that<br/>
-such modified license differs from this License).</p>
-<p>10.4. Distributing Source Code Form that is Incompatible With Secondary<br/>
-Licenses</p>
-<p>If You choose to distribute Source Code Form that is Incompatible With<br/>
-Secondary Licenses under the terms of this version of the License, the<br/>
-notice described in Exhibit B of this License must be attached.</p>
-<p>Exhibit A - Source Code Form License Notice<br/>
--------------------------------------------</p>
-<p>  This Source Code Form is subject to the terms of the Mozilla Public<br/>
-  License, v. 2.0. If a copy of the MPL was not distributed with this<br/>
-  file, You can obtain one at http://mozilla.org/MPL/2.0/.</p>
-<p>If it is not possible or desirable to put the notice in a particular<br/>
-file, then You may include the notice in a location (such as a LICENSE<br/>
-file in a relevant directory) where a recipient would be likely to look<br/>
-for such a notice.</p>
-<p>You may add additional accurate notices of copyright ownership.</p>
-<p>Exhibit B - &quot;Incompatible With Secondary Licenses&quot; Notice<br/>
----------------------------------------------------------</p>
-<p>  This Source Code Form is &quot;Incompatible With Secondary Licenses&quot;, as<br/>
-  defined by the Mozilla Public License, v. 2.0.</p>
-</div>
-
-<h2 style="color: #003F69;"  id="licenseText">Standard License Header</h2>
-<div property="spdx:standardLicenseHeader" class="license-text">
-  
-  This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.<br/>
-This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-</div>
-
-    <div id="bottom-links" class="clearfix" style="margin-right: 10px;margin-top:20px;background:#ADDAF2;color:#000;"><div class="region region-bottom-links">
-  <div id="block-block-1" class="block block-block first region-odd odd region-count-1 count-9" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Who are we?</h2>
-  
-  <div class="content">
-    <p style="font-size:12px;color:#000;">The Linux Foundation is a non-profit consortium dedicated to fostering the growth of Linux.</p>
-<p style="font-size:12px;"><a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">More on the Foundation...</a></p>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-2" class="block block-block region-even even region-count-2 count-10" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Explore</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/search">Search or Browse</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/">Home</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/news">News</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/announcements">Announcements</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/news-media/blogs">Blogs</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/publications">Publications</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events">Events</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups">Workgroups</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">Membership</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/members">Members</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-3" class="block block-block region-odd odd region-count-3 count-11" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">Stay Current</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://events.linuxfoundation.org/">Linux Foundation Events</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/events/calendar">Linux Foundation Public Calendar</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://training.linuxfoundation.org/">Linux Training</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linux.com/">Linux.com</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/stay-connected/newsletter">Linux Foundation Monthly Newsletter</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-<div id="block-block-4" class="block block-block last region-even even region-count-4 count-12" style="width:225px;padding:10px;float:left;">
-      <h2 class="title" style="color:#003F69;font-size:16px;border:0px;margin:0px 0px 10px;">About</h2>
-  
-  <div class="content">
-    <ul style="list-style:none;margin:0px;padding:0px;">
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/faq">Frequently Asked Questions</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/join">How do I get Involved?</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about">About</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/contact">Contact Us</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/careers">Careers</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/staff">Staff</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/board-members">Board Members</a></li>
-<li>
-        <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/privacy">Privacy Policy</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/terms">Terms of Use</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/about/linux-foundation-trademark-usage-guidelines">Trademarks</a>&nbsp;/&nbsp;<a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/collaborate/workgroups/faq">Workgroups FAQ</a></li>
-</ul>
-  </div>
-
-  </div><!-- /.block -->
-</div><!-- /.region -->
-      <div class="clearfix"></div>
-
+  <div id="lf-header" class="collaborative-projects">
+    <div class="gray-diagonal">
+      <div class="container">
+        <a id="collaborative-projects-logo" href="http://collabprojects.linuxfoundation.org">Linux Foundation Collaborative Projects</a>
+      </div>
     </div>
+  </div>
 
+  <div id="header">
+    <div id="header-inner">
+      <a href="/" title="Home" rel="home" id="logo">
+        <img src="https://spdx.linuxfound.info/sites/cpstandard/files/logo_spdx_250.png" alt="Home" />
+      </a>
+      
+      <div id="name-and-slogan">
+        <div id="site-name">
+          <h1><a href="/" title="Home" rel="home">Software Package Data Exchange (SPDX)</a></h1>
+        </div>    
+      </div>
+      
+    </div>
+  </div> <!-- /header -->
 
-<div id="footer" style="overflow:visible;word-wrap:break-word;margin:30px 0px 10px;padding:0px;background: transparent url(images/footer-logo.png) no-repeat top left;min-height:37px;color:#369;">
-<div class="section">
+  <div id="highlighted">  
+      <div class="region region-highlighted">
+      </div>
+  </div>
 
-        
-<div id="footer-message"><p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Copyright &copy; 2013 The Linux Foundation. All rights 
-reserved.</p>
+    <div id="page" class="page">
 
-<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux Foundation, Linux Standard Base, LSB, LSB Certified, IAccessible2, MeeGo are registered trademarks of the Linux Foundation.</p>
+      <div class="breadcrumb"><a href="/">Home</a> » <a href="/licenses">Licenses</a></div>
 
-<p style="margin:0px 0px 0px 130px;font-size:12px;line-height:14px;">Linux is a registered <a style="color:#000;text-decoration:none;" href="http://www.linuxfoundation.org/programs/legal/trademark">trademark</a> of Linus Torvalds. Please see our <a style="color:#000;text-decoration:none;" href="https://www.linuxfoundation.org/privacy">privacy policy</a>.</p></div>
-        
-        
+      <h1 property="dc:title">Mozilla Public License 2.0 (no copyleft exception)</h1>
+      <div style="display:none;"><code property="spdx:deprecated">false</code></div>
+      <h2>Full name</h2>
+          <p style="margin-left: 20px;"><code property="spdx:name">Mozilla Public License 2.0 (no copyleft exception)</code></p>
+
+      <h2>Short identifier</h2>
+          <p style="margin-left: 20px;"><code property="spdx:licenseId">MPL-2.0-no-copyleft-exception</code></p>
+
+      <h2>Other web pages for this license</h2>
+          <div style="margin-left: 20px;">
+            <ul>
+             <li><a href="http://www.mozilla.org/MPL/2.0/" rel="rdfs:seeAlso">http://www.mozilla.org/MPL/2.0/</a></li>
+             <li><a href="http://opensource.org/licenses/MPL-2.0" rel="rdfs:seeAlso">http://opensource.org/licenses/MPL-2.0</a></li>
+           </ul>
+          </div>
+          
+      <div property="spdx:isOsiApproved" style="display: none;">true</div>
+
+      <h2 id="notes">Notes</h2>
+          <p style="margin-left: 20px;">This license was released in January 2012.&#10;This license list entry is for use when the MPL's Exhibit B, which removes the Sec 3.3 copyleft exception.</p>
+
+      <h2 id="licenseText">Text</h2>
+
+      <div property="spdx:licenseText" class="license-text">
+      Mozilla Public License Version 2.0 
+<p>1. Definitions</p>
+<p style="margin-left: 20px;">     1.1. &quot;Contributor&quot; means each individual or legal entity that creates, contributes to the creation of, or owns Covered Software.</p>
+<p style="margin-left: 20px;">     1.2. &quot;Contributor Version&quot; means the combination of the Contributions of others (if any) used by a Contributor and that particular Contributor&apos;s Contribution.</p>
+<p style="margin-left: 20px;">     1.3. &quot;Contribution&quot; means Covered Software of a particular Contributor.</p>
+<p style="margin-left: 20px;">     1.4. &quot;Covered Software&quot; means Source Code Form to which the initial Contributor has attached the notice in Exhibit A, the Executable Form of such Source Code Form, and Modifications of such Source Code Form, in each case including portions thereof.</p>
+<p style="margin-left: 20px;">     1.5. &quot;Incompatible With Secondary Licenses&quot; means</p>
+<p style="margin-left: 40px;">          (a) that the initial Contributor has attached the notice described in Exhibit B to the Covered Software; or</p>
+<p style="margin-left: 40px;">          (b) that the Covered Software was made available under the terms of version 1.1 or earlier of the License, but not also under the terms of a Secondary License.</p>
+<p style="margin-left: 20px;">     1.6. &quot;Executable Form&quot; means any form of the work other than Source Code Form.</p>
+<p style="margin-left: 20px;">     1.7. &quot;Larger Work&quot; means a work that combines Covered Software with other material, in a separate file or files, that is not Covered Software.</p>
+<p style="margin-left: 20px;">     1.8. &quot;License&quot; means this document.</p>
+<p style="margin-left: 20px;">     1.9. &quot;Licensable&quot; means having the right to grant, to the maximum extent possible, whether at the time of the initial grant or subsequently, any and all of the rights conveyed by this License.</p>
+<p style="margin-left: 20px;">     1.10. &quot;Modifications&quot; means any of the following:</p>
+<p style="margin-left: 40px;">          (a) any file in Source Code Form that results from an addition to, deletion from, or modification of the contents of Covered Software; or</p>
+<p style="margin-left: 40px;">          (b) any new file in Source Code Form that contains any Covered Software.</p>
+<p style="margin-left: 20px;">     1.11. &quot;Patent Claims&quot; of a Contributor means any patent claim(s), including without limitation, method, process, and apparatus claims, in any patent Licensable by such Contributor that would be infringed, but for the grant of the License, by the making, using, selling, offering for sale, having made, import, or transfer of either its Contributions or its Contributor Version.</p>
+<p style="margin-left: 20px;">     1.12. &quot;Secondary License&quot; means either the GNU General Public License, Version 2.0, the GNU Lesser General Public License, Version 2.1, the GNU Affero General Public License, Version 3.0, or any later versions of those licenses.</p>
+<p style="margin-left: 20px;">     1.13. &quot;Source Code Form&quot; means the form of the work preferred for making modifications.</p>
+<p style="margin-left: 20px;">     1.14. &quot;You&quot; (or &quot;Your&quot;) means an individual or a legal entity exercising rights under this License. For legal entities, &quot;You&quot; includes any entity that controls, is controlled by, or is under common control with You. For purposes of this definition, &quot;control&quot; means (a) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (b) ownership of more than fifty percent (50%) of the outstanding shares or beneficial ownership of such entity.</p>
+<p>2. License Grants and Conditions </p>
+<p style="margin-left: 20px;">     2.1. Grants<br/>
+     Each Contributor hereby grants You a world-wide, royalty-free, non-exclusive license:</p>
+<p style="margin-left: 40px;">          (a) under intellectual property rights (other than patent or trademark) Licensable by such Contributor to use, reproduce, make available, modify, display, perform, distribute, and otherwise exploit its Contributions, either on an unmodified basis, with Modifications, or as part of a Larger Work; and</p>
+<p style="margin-left: 40px;">          (b) under Patent Claims of such Contributor to make, use, sell, offer for sale, have made, import, and otherwise transfer either its Contributions or its Contributor Version.</p>
+<p style="margin-left: 20px;">     2.2. Effective Date<br/>
+     The licenses granted in Section 2.1 with respect to any Contribution become effective for each Contribution on the date the Contributor first distributes such Contribution.</p>
+<p style="margin-left: 20px;">     2.3. Limitations on Grant Scope<br/>
+     The licenses granted in this Section 2 are the only rights granted under this License. No additional rights or licenses will be implied from the distribution or licensing of Covered Software under this License. Notwithstanding Section 2.1(b) above, no patent license is granted by a Contributor:</p>
+<p style="margin-left: 40px;">          (a) for any code that a Contributor has removed from Covered Software; or</p>
+<p style="margin-left: 40px;">          (b) for infringements caused by: (i) Your and any other third party&apos;s modifications of Covered Software, or (ii) the combination of its Contributions with other software (except as part of its Contributor Version); or</p>
+<p style="margin-left: 40px;">          (c) under Patent Claims infringed by Covered Software in the absence of its Contributions.</p>
+<p style="margin-left: 20px;">     This License does not grant any rights in the trademarks, service marks, or logos of any Contributor (except as may be necessary to comply with the notice requirements in Section 3.4).</p>
+<p style="margin-left: 20px;">     2.4. Subsequent Licenses<br/>
+     No Contributor makes additional grants as a result of Your choice to distribute the Covered Software under a subsequent version of this License (see Section 10.2) or under the terms of a Secondary License (if permitted under the terms of Section 3.3).</p>
+<p style="margin-left: 20px;">     2.5. Representation<br/>
+     Each Contributor represents that the Contributor believes its Contributions are its original creation(s) or it has sufficient rights to grant the rights to its Contributions conveyed by this License.</p>
+<p style="margin-left: 20px;">     2.6. Fair Use<br/>
+     This License is not intended to limit any rights You have under applicable copyright doctrines of fair use, fair dealing, or other equivalents.</p>
+<p style="margin-left: 20px;">     2.7. Conditions<br/>
+     Sections 3.1, 3.2, 3.3, and 3.4 are conditions of the licenses granted in Section 2.1.</p>
+<p>3. Responsibilities</p>
+<p style="margin-left: 20px;">     3.1. Distribution of Source Form<br/>
+     All distribution of Covered Software in Source Code Form, including any Modifications that You create or to which You contribute, must be under the terms of this License. You must inform recipients that the Source Code Form of the Covered Software is governed by the terms of this License, and how they can obtain a copy of this License. You may not attempt to alter or restrict the recipients&apos; rights in the Source Code Form.</p>
+<p style="margin-left: 20px;">     3.2. Distribution of Executable Form<br/>
+     If You distribute Covered Software in Executable Form then:</p>
+<p style="margin-left: 40px;">          (a) such Covered Software must also be made available in Source Code Form, as described in Section 3.1, and You must inform recipients of the Executable Form how they can obtain a copy of such Source Code Form by reasonable means in a timely manner, at a charge no more than the cost of distribution to the recipient; and</p>
+<p style="margin-left: 40px;">          (b) You may distribute such Executable Form under the terms of this License, or sublicense it under different terms, provided that the license for the Executable Form does not attempt to limit or alter the recipients&apos; rights in the Source Code Form under this License.</p>
+<p style="margin-left: 20px;">     3.3. Distribution of a Larger Work<br/>
+     You may create and distribute a Larger Work under terms of Your choice, provided that You also comply with the requirements of this License for the Covered Software. If the Larger Work is a combination of Covered Software with a work governed by one or more Secondary Licenses, and the Covered Software is not Incompatible With Secondary Licenses, this License permits You to additionally distribute such Covered Software under the terms of such Secondary License(s), so that the recipient of the Larger Work may, at their option, further distribute the Covered Software under the terms of either this License or such Secondary License(s).</p>
+<p style="margin-left: 20px;">     3.4. Notices<br/>
+     You may not remove or alter the substance of any license notices (including copyright notices, patent notices, disclaimers of warranty, or limitations of liability) contained within the Source Code Form of the Covered Software, except that You may alter any license notices to the extent required to remedy known factual inaccuracies.</p>
+<p style="margin-left: 20px;">     3.5. Application of Additional Terms<br/>
+     You may choose to offer, and to charge a fee for, warranty, support, indemnity or liability obligations to one or more recipients of Covered Software. However, You may do so only on Your own behalf, and not on behalf of any Contributor. You must make it absolutely clear that any such warranty, support, indemnity, or liability obligation is offered by You alone, and You hereby agree to indemnify every Contributor for any liability incurred by such Contributor as a result of warranty, support, indemnity or liability terms You offer. You may include additional disclaimers of warranty and limitations of liability specific to any jurisdiction.</p>
+<p>4. Inability to Comply Due to Statute or Regulation <br/>
+If it is impossible for You to comply with any of the terms of this License with respect to some or all of the Covered Software due to statute, judicial order, or regulation then You must: (a) comply with the terms of this License to the maximum extent possible; and (b) describe the limitations and the code they affect. Such description must be placed in a text file included with all distributions of the Covered Software under this License. Except to the extent prohibited by statute or regulation, such description must be sufficiently detailed for a recipient of ordinary skill to be able to understand it.</p>
+<p>5. Termination </p>
+<p style="margin-left: 20px;">     5.1. The rights granted under this License will terminate automatically if You fail to comply with any of its terms. However, if You become compliant, then the rights granted under this License from a particular Contributor are reinstated (a) provisionally, unless and until such Contributor explicitly and finally terminates Your grants, and (b) on an ongoing basis, if such Contributor fails to notify You of the non-compliance by some reasonable means prior to 60 days after You have come back into compliance. Moreover, Your grants from a particular Contributor are reinstated on an ongoing basis if such Contributor notifies You of the non-compliance by some reasonable means, this is the first time You have received notice of non-compliance with this License from such Contributor, and You become compliant prior to 30 days after Your receipt of the notice.</p>
+<p style="margin-left: 20px;">     5.2. If You initiate litigation against any entity by asserting a patent infringement claim (excluding declaratory judgment actions, counter-claims, and cross-claims) alleging that a Contributor Version directly or indirectly infringes any patent, then the rights granted to You by any and all Contributors for the Covered Software under Section 2.1 of this License shall terminate.</p>
+<p style="margin-left: 20px;">     5.3. In the event of termination under Sections 5.1 or 5.2 above, all end user license agreements (excluding distributors and resellers) which have been validly granted by You or Your distributors under this License prior to termination shall survive termination.</p>
+<p>6. Disclaimer of Warranty <br/>
+Covered Software is provided under this License on an &quot;as is&quot; basis, without warranty of any kind, either expressed, implied, or statutory, including, without limitation, warranties that the Covered Software is free of defects, merchantable, fit for a particular purpose or non-infringing. The entire risk as to the quality and performance of the Covered Software is with You. Should any Covered Software prove defective in any respect, You (not any Contributor) assume the cost of any necessary servicing, repair, or correction. This disclaimer of warranty constitutes an essential part of this License. No use of any Covered Software is authorized under this License except under this disclaimer. </p>
+<p>7. Limitation of Liability <br/>
+Under no circumstances and under no legal theory, whether tort (including negligence), contract, or otherwise, shall any Contributor, or anyone who distributes Covered Software as permitted above, be liable to You for any direct, indirect, special, incidental, or consequential damages of any character including, without limitation, damages for lost profits, loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses, even if such party shall have been informed of the possibility of such damages. This limitation of liability shall not apply to liability for death or personal injury resulting from such party&apos;s negligence to the extent applicable law prohibits such limitation. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so this exclusion and limitation may not apply to You. </p>
+<p>8. Litigation <br/>
+Any litigation relating to this License may be brought only in the courts of a jurisdiction where the defendant maintains its principal place of business and such litigation shall be governed by laws of that jurisdiction, without reference to its conflict-of-law provisions. Nothing in this Section shall prevent a party&apos;s ability to bring cross-claims or counter-claims.</p>
+<p>9. Miscellaneous <br/>
+This License represents the complete agreement concerning the subject matter hereof. If any provision of this License is held to be unenforceable, such provision shall be reformed only to the extent necessary to make it enforceable. Any law or regulation which provides that the language of a contract shall be construed against the drafter shall not be used to construe this License against a Contributor.</p>
+<p>10. Versions of the License </p>
+<p style="margin-left: 20px;">     10.1. New Versions<br/>
+     Mozilla Foundation is the license steward. Except as provided in Section 10.3, no one other than the license steward has the right to modify or publish new versions of this License. Each version will be given a distinguishing version number.</p>
+<p style="margin-left: 20px;">     10.2. Effect of New Versions<br/>
+     You may distribute the Covered Software under the terms of the version of the License under which You originally received the Covered Software, or under the terms of any subsequent version published by the license steward.</p>
+<p style="margin-left: 20px;">     10.3. Modified Versions<br/>
+     If you create software not governed by this License, and you want to create a new license for such software, you may create and use a modified version of this License if you rename the license and remove any references to the name of the license steward (except to note that such modified license differs from this License).</p>
+<p style="margin-left: 20px;">     10.4. Distributing Source Code Form that is Incompatible With Secondary Licenses<br/>
+     If You choose to distribute Source Code Form that is Incompatible With Secondary Licenses under the terms of this version of the License, the notice described in Exhibit B of this License must be attached.</p>
+<p>Exhibit A - Source Code Form License Notice </p>
+<p style="margin-left: 20px;">     This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.</p>
+<p>If it is not possible or desirable to put the notice in a particular file, then You may include the notice in a location (such as a LICENSE file in a relevant directory) where a recipient would be likely to look for such a notice.</p>
+<p>You may add additional accurate notices of copyright ownership.</p>
+<p>Exhibit B - &quot;Incompatible With Secondary Licenses&quot; Notice </p>
+<p style="margin-left: 20px;">     This Source Code Form is &quot;Incompatible With Secondary Licenses&quot;, as defined by the Mozilla Public License, v. 2.0.</p>
       </div>
 
-</div> <!-- /#footer-inner, /#footer -->
+      <h2  id="licenseHeader">Standard License Header</h2>
+      <div property="spdx:standardLicenseHeader" class="license-text">
+        
+        This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.<br/>
+This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
+      </div>
 
-</div></div> <!-- /#page-inner, /#page -->
+    </div> <!-- /page -->
 
-</body>
+    <div class="collaborative-projects">
+      <div class="gray-diagonal">
+        <div class="container">
+          <div id="footer-copyright">
+            <p>(c) 2016          SPDX Workgroup a Linux Foundation Collaborative Project. All Rights Reserved.        </p>
+            <p>Linux Foundation is a registered trademark of The Linux Foundation. Linux is a registered <a href="http://www.linuxfoundation.org/programs/legal/trademark" title="Linux Mark Institute">trademark</a> of Linus Torvalds.</p>
+            <p>Please see our <a href="http://www.linuxfoundation.org/privacy">privacy policy</a> and <a href="http://www.linuxfoundation.org/terms">terms of use</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="top-page-link">
+      <a href="#"><i class="fa fa-arrow-circle-up"></i><span>top of page</span></a>
+    </div>
+
+  </body>
 </html>

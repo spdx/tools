@@ -251,6 +251,9 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// find any matching file names
 		Model model = modelContainer.getModel();
 		Node fileNameProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME).asNode();
+		if (spdxFile.getName() == null) {
+			return null;	// Can't match without a name
+		}
 		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, Node.createLiteral(spdxFile.getName()));
 		
 		ExtendedIterator<Triple> filenameMatchIter = model.getGraph().find(fileNameMatch);	

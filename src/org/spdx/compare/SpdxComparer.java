@@ -19,6 +19,7 @@ package org.spdx.compare;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.rdfparser.model.SpdxSnippet;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -247,6 +249,10 @@ public class SpdxComparer {
 	// External Document References comparison results
 	private Map<SpdxDocument, Map<SpdxDocument, ExternalDocumentRef[]>> uniqueExternalDocumentRefs = Maps.newHashMap();
 	
+	// Snippet references comparison results
+	private Map<SpdxDocument, Map<SpdxDocument, SpdxSnippet[]>> uniqueSnippets = Maps.newHashMap();
+	private Map<String, SpdxSnippetComparer>  snippetComparers = Maps.newHashMap();
+	
 	public SpdxComparer() {
 		
 	}
@@ -258,7 +264,7 @@ public class SpdxComparer {
 	 * @throws InvalidSPDXAnalysisException
 	 * @throws SpdxCompareException
 	 */
-	public synchronized void compare(SpdxDocument spdxDoc1, SpdxDocument spdxDoc2) throws InvalidSPDXAnalysisException, SpdxCompareException {
+	public void compare(SpdxDocument spdxDoc1, SpdxDocument spdxDoc2) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		compare(new SpdxDocument[] {spdxDoc1, spdxDoc2});
 	}
 	
@@ -268,7 +274,7 @@ public class SpdxComparer {
 	 * @throws SpdxCompareException 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void compare(SpdxDocument[] spdxDocuments) throws InvalidSPDXAnalysisException, SpdxCompareException {
+	public synchronized void compare(SpdxDocument[] spdxDocuments) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		//TODO: Add a monitor function which allows for cancel
 		clearCompareResults();
 		this.spdxDocs = spdxDocuments;
@@ -299,10 +305,107 @@ public class SpdxComparer {
 
 	/**
 	 * Compare the snippets in the documents
+	 * @throws SpdxCompareException 
 	 */
-	private void compareSnippets() {
-		// TODO Auto-generated method stub
-		
+	private void compareSnippets() throws SpdxCompareException {
+		// This will be a complete NXN comparison of all documents filling in the uniqueSnippets map
+		if (this.spdxDocs == null || this.spdxDocs.length < 1) {
+			return;
+		}
+		this.uniqueSnippets.clear();
+		this.snippetComparers.clear();
+		// N x N comparison of all snippets
+		for (int i = 0; i < spdxDocs.length; i++) {
+			List<SpdxSnippet> snippetsA;
+			try {
+				snippetsA = spdxDocs[i].getDocumentContainer().findAllSnippets();
+			} catch (InvalidSPDXAnalysisException e) {
+				throw(new SpdxCompareException("Error collecting snippets from SPDX document "+spdxDocs[i].getName(), e));
+			}
+			// note - the snippet arrays MUST be sorted for the comparator methods to work
+			Collections.sort(snippetsA);
+			addSnippetComparers(spdxDocs[i], snippetsA, this.extractedLicenseIdMap);
+			Map<SpdxDocument, SpdxSnippet[]> uniqueAMap = this.uniqueSnippets.get(spdxDocs[i]);
+			if (uniqueAMap == null) {
+				uniqueAMap = Maps.newHashMap();
+			}
+			for (int j = 0; j < spdxDocs.length; j++) {
+				if (j == i) {
+					continue;
+				}
+				List<SpdxSnippet> snippetsB;
+				try {
+					snippetsB = spdxDocs[j].getDocumentContainer().findAllSnippets();
+				} catch (InvalidSPDXAnalysisException e) {
+					throw(new SpdxCompareException("Error collecting snippets from SPDX document "+spdxDocs[i].getName(), e));
+				}
+				//Note that the files arrays must be sorted for the find methods to work
+				Collections.sort(snippetsB);
+				SpdxSnippet[] uniqueAB = findUniqueSnippets(snippetsA, snippetsB);
+				if (uniqueAB != null && uniqueAB.length > 0) {
+					uniqueAMap.put(spdxDocs[j], uniqueAB);
+				}
+			}
+			if (!uniqueAMap.isEmpty()) {
+				this.uniqueSnippets.put(spdxDocs[i], uniqueAMap);
+			}
+		}
+		if (!_isSnippetsEqualsNoCheck()) {
+			this.differenceFound = true;
+		}		
+	}
+
+	/**
+	 * @param snippetsA
+	 * @param snippetsB
+	 * @return
+	 */
+	private SpdxSnippet[] findUniqueSnippets(List<SpdxSnippet> snippetsA,
+			List<SpdxSnippet> snippetsB) {
+		int bIndex = 0;
+		int aIndex = 0;
+		List<SpdxSnippet> alRetval = Lists.newArrayList();
+		while (aIndex < snippetsA.size()) {
+			if (bIndex >= snippetsB.size()) {
+				alRetval.add(snippetsA.get(aIndex));
+				aIndex++;
+			} else {
+				int compareVal = snippetsA.get(aIndex).compareTo(snippetsB.get(bIndex));
+				if (compareVal == 0) {
+					// snippets are equal
+					aIndex++;
+					bIndex++;
+				} else if (compareVal > 0) {
+					// snippetsA is greater than snippetsB
+					bIndex++;
+				} else {
+					// snippetsB is greater than snippetsA
+					alRetval.add(snippetsA.get(aIndex));
+					aIndex++;
+				}
+			}
+		}
+		return alRetval.toArray(new SpdxSnippet[alRetval.size()]);
+	}
+
+	/**
+	 * @param spdxDocument
+	 * @param snippets
+	 * @param extractedLicenseIdMap2
+	 * @throws SpdxCompareException 
+	 */
+	private void addSnippetComparers(
+			SpdxDocument spdxDocument,
+			List<SpdxSnippet> snippets,
+			Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap2) throws SpdxCompareException {
+		for (SpdxSnippet snippet:snippets) {
+			SpdxSnippetComparer comparer = this.snippetComparers.get(snippet.toString());
+			if (comparer == null) {
+				comparer = new SpdxSnippetComparer(extractedLicenseIdMap);
+				this.snippetComparers.put(snippet.toString(), comparer);
+			}
+			comparer.addDocumentSnippet(spdxDocument, snippet);
+		}
 	}
 
 	/**
@@ -2140,4 +2243,36 @@ public class SpdxComparer {
 		return this.documentContentsEquals;
 	}
 
+	/**
+	 * @return
+	 * @throws SpdxCompareException 
+	 */
+	public boolean isSnippetsEqual() throws SpdxCompareException {
+		this.checkDocsField();
+		this.checkInProgress();
+		return this._isSnippetsEqualsNoCheck();
+	}
+
+	/**
+	 * @return
+	 * @throws SpdxCompareException 
+	 */
+	private boolean _isSnippetsEqualsNoCheck() throws SpdxCompareException {
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, SpdxSnippet[]>>> iter = this.uniqueSnippets.entrySet().iterator();
+		while (iter.hasNext()) {
+			Iterator<SpdxSnippet[]> docIterator = iter.next().getValue().values().iterator();
+			while (docIterator.hasNext()) {
+				if (docIterator.next().length > 0) {
+					return false;
+				}
+			}
+		}
+		Iterator<SpdxSnippetComparer> diffIter = this.snippetComparers.values().iterator();
+		while (diffIter.hasNext()) {
+			if (diffIter.next().isDifferenceFound()) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
