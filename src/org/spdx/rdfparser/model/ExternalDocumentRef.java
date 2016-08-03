@@ -275,8 +275,8 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 		}
 		ExternalDocumentRef compref = (ExternalDocumentRef)compare;
 		try {
-            return (Objects.equal(this.spdxDocumentNamespace, compref.getSpdxDocumentNamespace()) &&
-                    equivalentConsideringNull(this.checksum, compref.getChecksum()) && Objects.equal(this.externalDocumentId,
+            return (Objects.equal(this.getSpdxDocumentNamespace(), compref.getSpdxDocumentNamespace()) &&
+                    equivalentConsideringNull(this.getChecksum(), compref.getChecksum()) && Objects.equal(this.getExternalDocumentId(),
                     compref.getExternalDocumentId()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invald SPDX Analysis exception comparing external document references: "+e.getMessage(),e);

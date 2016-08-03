@@ -266,10 +266,10 @@ public class SpdxItem extends SpdxElement {
 		if (!super.equivalent(comp, testRelationships)) {
 			return false;
 		}
-		return (RdfModelHelper.stringsEquivalent(this.copyrightText, comp.getCopyrightText()) &&
-				equivalentConsideringNull(this.licenseConcluded, comp.getLicenseConcluded()) &&
-				arraysEquivalent(this.licenseInfoFromFiles, comp.getLicenseInfoFromFiles(), testRelationships) &&
-				RdfModelHelper.stringsEquivalent(this.licenseComments, comp.getLicenseComments()));
+		return (RdfModelHelper.stringsEquivalent(this.getCopyrightText(), comp.getCopyrightText()) &&
+				equivalentConsideringNull(this.getLicenseConcluded(), comp.getLicenseConcluded()) &&
+				arraysEquivalent(this.getLicenseInfoFromFiles(), comp.getLicenseInfoFromFiles(), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.getLicenseComments(), comp.getLicenseComments()));
 	}
 	
 	protected AnyLicenseInfo cloneLicenseConcluded() {

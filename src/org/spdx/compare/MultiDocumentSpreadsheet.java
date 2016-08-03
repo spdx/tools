@@ -111,6 +111,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private static final String FILE_COPYRIGHT_SHEET_NAME = "File Copyrights";
 	private static final String FILE_ANNOTATION_SHEET_NAME = "File Annot.";
 	private static final String FILE_RELATIONSHIP_SHEET = "File Relationships";
+	private static final String SNIPPET_SHEET_NAME = "Snippets";
 	
 	private VerificationSheet verificationSheet;
 
@@ -127,6 +128,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private FileAnnotationSheet fileAnnotationSheet;
 
 	private FileRelationshipSheet fileRelationshipSheet;
+	
+	private SnippetSheet snippetSheet;
 	
 	/**
 	 * @param spreadsheetFile
@@ -158,7 +161,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileDependenciesSheet = new FileDependenciesSheet(this.workbook, FILE_DEPENDENCIES_SHEET_NAME);
 		fileAnnotationSheet = new FileAnnotationSheet(this.workbook, FILE_ANNOTATION_SHEET_NAME);
 		fileRelationshipSheet = new FileRelationshipSheet(this.workbook, FILE_RELATIONSHIP_SHEET);
-		
+		snippetSheet = new SnippetSheet(this.workbook, SNIPPET_SHEET_NAME);
 		reviewerSheet = new ReviewerSheet(this.workbook, REVIEWER_SHEET_NAME);	
 		verificationSheet = new VerificationSheet(this.workbook, VERIFICATION_SHEET_NAME);	
 		String verify = this.verifyWorkbook();
@@ -202,6 +205,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			FileNoticeSheet.create(wb, FILE_NOTICE_SHEET_NAME);
 			FileAnnotationSheet.create(wb, FILE_ANNOTATION_SHEET_NAME);
 			FileRelationshipSheet.create(wb, FILE_RELATIONSHIP_SHEET);
+			SnippetSheet.create(wb, SNIPPET_SHEET_NAME);
 			ReviewerSheet.create(wb, REVIEWER_SHEET_NAME);	
 			VerificationSheet.create(wb, VERIFICATION_SHEET_NAME);
 			wb.write(excelOut);
@@ -272,6 +276,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileRelationshipSheet.resizeRows();
 		reviewerSheet.importCompareResults(comparer, docNames);
 		reviewerSheet.resizeRows();
+		snippetSheet.importCompareResults(comparer, docNames);
+		snippetSheet.resizeRows();
 	}
 
 	/* (non-Javadoc)
@@ -294,6 +300,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileContributorsSheet.clear();
 		fileDependenciesSheet.clear();
 		fileNoticeSheet.clear();
+		snippetSheet.clear();
 	}
 
 	/* (non-Javadoc)
@@ -371,7 +378,12 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		verificationSheet.verify();	
+		sheetVerify = verificationSheet.verify();	
+		if (sheetVerify != null && !sheetVerify.isEmpty()) {
+			sb.append("; ");
+			sb.append(sheetVerify);
+		}
+		sheetVerify = snippetSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);

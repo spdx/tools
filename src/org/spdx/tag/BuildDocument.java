@@ -1258,6 +1258,7 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 		// Once that hashmap is built, the actual dependencies and snippets are then updated.
 		// the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
 		Map<SpdxFile, List<SpdxFile>> filesWithDependencies = Maps.newHashMap();
+		Map<SpdxFile, List<SpdxSnippet>> filesWithSnippets = Maps.newHashMap();
 		SpdxFile[] allFiles = analysis.getDocumentContainer().getFileReferences();
 		// fill in the filesWithDependencies map
 		for (int i = 0;i < allFiles.length; i++) {
@@ -1278,16 +1279,10 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			}
 			List<SpdxSnippet> alSnippetsWithThisFile = this.snippetDependencyMap.get(allFiles[i].getId());
 			if (alSnippetsWithThisFile != null) {
+				List<SpdxSnippet> snippets = Lists.newArrayList();
+				filesWithSnippets.put(allFiles[i], snippets);
 				for (SpdxSnippet snippet:alSnippetsWithThisFile) {
-					snippet.setSnippetFromFile(allFiles[i]);
-					StartEndPointer byteRange = snippet.getByteRange();
-					if (byteRange != null) {
-						fixPointerFileReferences(allFiles[i], byteRange);
-					}
-					StartEndPointer lineRange = snippet.getLineRange();
-					if (lineRange != null) {
-						fixPointerFileReferences(allFiles[i], lineRange);
-					}
+					snippets.add(snippet);
 				}
 			}
 			this.snippetDependencyMap.remove(allFiles[i].getId());
@@ -1299,6 +1294,17 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			List<SpdxFile> alDependencies = entry.getValue();
 			if (alDependencies != null && alDependencies.size() > 0) {
 				entry.getKey().setFileDependencies(alDependencies.toArray(new SpdxFile[alDependencies.size()]));
+			}
+		}
+		// Now go through the snippets map
+		Iterator<Entry<SpdxFile, List<SpdxSnippet>>> snIter = filesWithSnippets.entrySet().iterator();
+		while (snIter.hasNext()) {
+			Entry<SpdxFile, List<SpdxSnippet>> entry = snIter.next();
+			List<SpdxSnippet> alSnippets = entry.getValue();
+			if (alSnippets != null) {
+				for (SpdxSnippet snippet:alSnippets) {
+					snippet.setSnippetFromFile(entry.getKey());
+				}
 			}
 		}
 		// Check to see if there are any left over and and throw an error if the dependent files were
@@ -1318,24 +1324,6 @@ public class BuildDocument implements TagValueBehavior, Serializable {
 			while(missingIter.hasNext()) {
 				this.warningMessages.add("\t"+missingIter.next());
 			}
-		}
-	}
-
-	/**
-	 * Add the file reference to a start/end pointer
-	 * @param spdxFile
-	 * @param pointer
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-	private void fixPointerFileReferences(SpdxFile spdxFile,
-			StartEndPointer pointer) throws InvalidSPDXAnalysisException {
-		SinglePointer start = pointer.getStartPointer();
-		if (start != null) {
-			start.setReference(spdxFile);
-		}
-		SinglePointer end = pointer.getEndPointer();
-		if (end != null) {
-			end.setReference(spdxFile);
 		}
 	}
 }

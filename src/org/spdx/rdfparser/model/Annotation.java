@@ -45,12 +45,10 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		annotationType_other,
 		annotationType_review;
 
-		@SuppressWarnings("deprecation")
 		public String getTag(){
 			return ANNOTATION_TYPE_TO_TAG.get(this);
 		}
 
-		@SuppressWarnings("deprecation")
 		public static AnnotationType fromTag(String tag){
 			return TAG_TO_ANNOTATION_TYPE.get(tag);
 		}
@@ -304,9 +302,10 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 			return false;
 		}
 		Annotation comp = (Annotation)o;
-        return (Objects.equal(annotator, comp.getAnnotator()) &&
-                Objects.equal(annotationType, comp.getAnnotationType()) &&
-                Objects.equal(comment, comp.getComment()) && Objects.equal(annotationDate, comp.getAnnotationDate()));
+        return (Objects.equal(getAnnotator(), comp.getAnnotator()) &&
+                Objects.equal(getAnnotationType(), comp.getAnnotationType()) &&
+                Objects.equal(getComment(), comp.getComment()) && 
+                Objects.equal(getAnnotationDate(), comp.getAnnotationDate()));
 	}
 	
 	/**

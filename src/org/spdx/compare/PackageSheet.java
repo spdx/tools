@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AbstractSheet;
@@ -74,6 +75,9 @@ public class PackageSheet extends AbstractSheet {
 	protected static final String ANNOTATION_FIELD_TEXT = "Annotations";
 	protected static final String RELATIONSHIPS_FIELD_TEXT = "Relationships";
 	private static final String NO_PACKAGE = "[No Package]";
+	private static final String FILES_ANALYZED_FIELD_TEXT = "Files Analyzed";
+	private static final String EXTERNAL_REFS_FIELD_TEXT = "External Refs";
+	private static final String NO_VALUE = "[No Value]";
 	
 	/**
 	 * @param workbook
@@ -162,7 +166,7 @@ public class PackageSheet extends AbstractSheet {
 	}
 	
 	/**
-	 * @param nextPackages
+	 * @param comparer
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws SpdxCompareException 
 	 */
@@ -308,6 +312,20 @@ public class PackageSheet extends AbstractSheet {
 		} else {
 			setCellDifferentValue(descriptionRow.createCell(EQUALS_COL));
 		}
+		Row filesAnalyzedRow = this.addRow();
+		filesAnalyzedRow.createCell(FIELD_COL).setCellValue(FILES_ANALYZED_FIELD_TEXT);
+		if (comparer.isFilesAnalyzedEquals()) {
+			setCellEqualValue(filesAnalyzedRow.createCell(EQUALS_COL), allDocsPresent);
+		} else {
+			setCellDifferentValue(filesAnalyzedRow.createCell(EQUALS_COL));
+		}
+		Row externalRefsRow = this.addRow();
+		externalRefsRow.createCell(FIELD_COL).setCellValue(EXTERNAL_REFS_FIELD_TEXT);
+		if (comparer.isExternalRefsEquals()) {
+			setCellEqualValue(externalRefsRow.createCell(EQUALS_COL), allDocsPresent);
+		} else {
+			setCellDifferentValue(externalRefsRow.createCell(EQUALS_COL));
+		}
 		
 		for (int i = 0; i < docs.length; i++) {
 			SpdxPackage pkg = comparer.getDocPackage(docs[i]);
@@ -321,8 +339,14 @@ public class PackageSheet extends AbstractSheet {
 				supplierRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSupplier());
 				originatorRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getOriginator());
 				downloadRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDownloadLocation());
-				verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageVerificationCode().getValue());
-				verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getPackageVerificationCode().getExcludedFileNames()));
+				SpdxPackageVerificationCode verificationCode = pkg.getPackageVerificationCode();
+				if (verificationCode != null) {
+					verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getPackageVerificationCode().getValue());
+					verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(exludeFilesToString(pkg.getPackageVerificationCode().getExcludedFileNames()));
+				} else {
+					verificationRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_VALUE);
+					verificationExcludedRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_VALUE);
+				}
 				checksumRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.checksumsToString(pkg.getChecksums()));
 				homePageRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getHomepage());
 				sourceInfoRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSourceInfo());
@@ -333,6 +357,8 @@ public class PackageSheet extends AbstractSheet {
 				copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
 				summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
 				descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());
+				filesAnalyzedRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.isFilesAnalyzed());
+				externalRefsRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.externalRefsToString(pkg.getExternalRefs(), docs[i].getDocumentNamespace()));
 			} else {
 				packageNameRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
 				idRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
@@ -355,6 +381,8 @@ public class PackageSheet extends AbstractSheet {
 				copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
 				summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
 				descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				filesAnalyzedRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
+				externalRefsRow.createCell(FIRST_DOC_COL+i).setCellValue(NO_PACKAGE);
 			}
 		}
 	}

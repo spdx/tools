@@ -335,8 +335,22 @@ snippet information applies to.
 			logger.error("Error getting comparison byte range",e);
 			return false;
 		}
-		return (equivalentConsideringNull(this.snippetFromFile, compSnippetFromFile)) &&
-				(equivalentConsideringNull(this.byteRange, compByteRange));
+		SpdxFile mySnippetFromFile;
+		try {
+			mySnippetFromFile = this.getSnippetFromFile();
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Error getting my snippet from file",e);
+			return false;
+		}
+		StartEndPointer myByteRange;
+		try {
+			myByteRange = this.getByteRange();
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Error getting my byte range",e);
+			return false;
+		}
+		return (equivalentConsideringNull(mySnippetFromFile, compSnippetFromFile)) &&
+				(equivalentConsideringNull(myByteRange, compByteRange));
 		//Note: We don't compare the line range since the byte range is more precise
 	}
 	

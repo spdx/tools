@@ -578,6 +578,7 @@ public class CommonCode {
 					+ constants.getProperty("PROP_BEGIN_TEXT") 
 					+ pkg.getDescription() + constants.getProperty("PROP_END_TEXT"));
 		}
+		// External Refs
 		ExternalRef[] externalRefs = pkg.getExternalRefs();
 		if (externalRefs != null && externalRefs.length > 0) {
 			for (ExternalRef externalRef:externalRefs) {

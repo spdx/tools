@@ -126,7 +126,7 @@ public class LineCharPointer extends SinglePointer {
 			return false;
 		}
 		LineCharPointer comp = (LineCharPointer)o;
-		return Objects.equal(this.lineNumber, comp.getLineNumber());
+		return Objects.equal(this.getLineNumber(), comp.getLineNumber());
 	}
 
 	@Override

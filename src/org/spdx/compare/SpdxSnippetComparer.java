@@ -269,4 +269,24 @@ public class SpdxSnippetComparer extends SpdxItemComparer {
 		}
 		return docMap.get(docB);
 	}
+
+	/**
+	 * @return Total number of snippets
+	 */
+	public int getNumSnippets() {
+		return this.documentItem.size();
+	}
+
+	/**
+	 * @param spdxDocument
+	 * @return
+	 */
+	public SpdxSnippet getDocSnippet(SpdxDocument spdxDocument) {
+		SpdxItem retItem = this.documentItem.get(spdxDocument);
+		if (retItem != null && retItem instanceof SpdxSnippet) {
+			return (SpdxSnippet)retItem;
+		} else {
+			return null;
+		}
+	}
 }

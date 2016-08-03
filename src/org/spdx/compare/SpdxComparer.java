@@ -960,6 +960,12 @@ public class SpdxComparer {
 	static boolean compareVerificationCodes(
 			SpdxPackageVerificationCode verificationCode,
 			SpdxPackageVerificationCode verificationCode2) {
+		if (verificationCode == null) {
+			return verificationCode2 == null;
+		}
+		if (verificationCode2 == null) {
+			return false;
+		}
 		if (!stringsEqual(verificationCode.getValue(), verificationCode2.getValue())) {
 			return false;
 		}
@@ -2274,5 +2280,13 @@ public class SpdxComparer {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * @return all snippet comparers
+	 */
+	public SpdxSnippetComparer[] getSnippetComparers() {
+		return this.snippetComparers.values().toArray(
+				new SpdxSnippetComparer[this.snippetComparers.values().size()]);
 	}
 }

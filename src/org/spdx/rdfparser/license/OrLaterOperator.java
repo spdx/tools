@@ -163,7 +163,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 		if (!(compare instanceof OrLaterOperator)) {
 			return false;
 		}
-		return RdfModelHelper.equivalentConsideringNull(this.license, ((OrLaterOperator)compare).getLicense());
+		return RdfModelHelper.equivalentConsideringNull(this.getLicense(), ((OrLaterOperator)compare).getLicense());
 	}
 
 	/* (non-Javadoc)
