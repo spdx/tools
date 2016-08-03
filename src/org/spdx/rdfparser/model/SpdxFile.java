@@ -613,12 +613,12 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		// compare based on properties
 		// Note: We don't compare the ID's since they may be different if they come
 		// from different models
-		return (arraysEquivalent(this.checksums, comp.getChecksums(), testRelationships) &&
-				RdfModelHelper.arraysEqual(this.fileTypes, comp.getFileTypes())&&
-				RdfModelHelper.arraysEqual(this.fileContributors, comp.getFileContributors()) &&
-				arraysEquivalent(this.artifactOf, comp.getArtifactOf(), testRelationships) &&
-				arraysEquivalent(this.fileDependencies, comp.getFileDependencies(), testRelationships) &&
-				RdfModelHelper.stringsEquivalent(this.noticeText, comp.getNoticeText()));
+		return (arraysEquivalent(this.getChecksums(), comp.getChecksums(), testRelationships) &&
+				RdfModelHelper.arraysEqual(this.getFileTypes(), comp.getFileTypes())&&
+				RdfModelHelper.arraysEqual(this.getFileContributors(), comp.getFileContributors()) &&
+				arraysEquivalent(this.getArtifactOf(), comp.getArtifactOf(), testRelationships) &&
+				arraysEquivalent(this.getFileDependencies(), comp.getFileDependencies(), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.getNoticeText(), comp.getNoticeText()));
 	}
 	
 	protected Checksum[] cloneChecksum() {

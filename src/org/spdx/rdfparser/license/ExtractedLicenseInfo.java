@@ -226,6 +226,6 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 			return false;
 		}
 		// Only test for the text - other fields do not need to equal to be considered equivalent
-		return LicenseCompareHelper.isLicenseTextEquivalent(this.extractedText, ((ExtractedLicenseInfo)compare).getExtractedText());
+		return LicenseCompareHelper.isLicenseTextEquivalent(this.getExtractedText(), ((ExtractedLicenseInfo)compare).getExtractedText());
 	}
 }

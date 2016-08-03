@@ -283,7 +283,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 			return false;
 		}
 		Checksum cksum = (Checksum)compare;
-        return (Objects.equal(this.algorithm, cksum.getAlgorithm()) && Objects.equal(this.checksumValue, cksum.getValue()));
+        return (Objects.equal(this.getAlgorithm(), cksum.getAlgorithm()) && Objects.equal(this.getValue(), cksum.getValue()));
 	}
 	
 	@Override

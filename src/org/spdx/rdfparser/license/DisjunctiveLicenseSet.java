@@ -135,6 +135,13 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 	 * @return all members "flattening out" disjunctive license sets which are members of this set
 	 */
 	protected AnyLicenseInfo[] getFlattenedMembers() {
+		if (this.resource != null && this.refreshOnGet) {
+			try {
+				getPropertiesFromModel();
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.warn("Error getting properites from model, using stored values.",e);
+			}
+		}
 		HashSet<AnyLicenseInfo> retval = new HashSet<AnyLicenseInfo>();	// Use a set since any duplicated elements would be still considered equal
 		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
 		while (iter.hasNext()) {

@@ -25,7 +25,9 @@ import org.spdx.compare.MultiDocumentSpreadsheet;
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.compare.SpdxComparer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxDocument;
+import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
 /**

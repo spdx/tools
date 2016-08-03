@@ -459,7 +459,6 @@ public class TestSPDXFile {
 	
 	@Test
 	public void testCloneSimple() throws InvalidSPDXAnalysisException, IOException {
-	
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
@@ -476,16 +475,14 @@ public class TestSPDXFile {
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
 		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
-
 		// clone without a model assigned to the original file
-		model = ModelFactory.createDefaultModel();
-		SPDXDocument toDoc1 = new SPDXDocument(model);
+		Model mymodel = ModelFactory.createDefaultModel();
+		SPDXDocument toDoc1 = new SPDXDocument(mymodel);
 		String testDocUri = "https://my/test/doc1";
 		toDoc1.createSpdxAnalysis(testDocUri);
 		String pkgUri = "https://my/test/doc1#doc1";
 		toDoc1.createSpdxPackage(pkgUri);
 		String toFileUri = "https://my/test/doc1#file1";
-		
 		SPDXFile toFile = file.clone(toDoc1, toFileUri);
 		assertEquals(file.getArtifactOf()[0].getName(), toFile.getArtifactOf()[0].getName());
 		assertEquals(file.getArtifactOf()[0].getHomePage(), toFile.getArtifactOf()[0].getHomePage());

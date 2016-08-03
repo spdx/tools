@@ -22,9 +22,11 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Annotation;
 import org.spdx.rdfparser.model.Checksum;
+import org.spdx.rdfparser.model.ExternalRef;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.tag.BuildDocument;
 import org.spdx.tag.InvalidSpdxTagFileException;
 
@@ -294,6 +296,66 @@ public class CompareHelper {
 			} catch (InvalidSpdxTagFileException e) {
 				throw(new InvalidSPDXAnalysisException("Invalid checksum string: "+parts[i]));
 			}
+		}
+		return retval;
+	}
+
+	/**
+	 * Convert external refs to a friendly string
+	 * @param externalRefs
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static String externalRefsToString(ExternalRef[] externalRefs, String docNamespace) throws InvalidSPDXAnalysisException {
+		if (externalRefs == null || externalRefs.length == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(externalRefToString(externalRefs[0], docNamespace));
+		for (int i = 1; i < externalRefs.length; i++) {
+			sb.append("; ");
+			sb.append(externalRefToString(externalRefs[i], docNamespace));
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Convert a single external ref to a friendly string
+	 * @param externalRef
+	 * @param docNamespace
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public static String externalRefToString(ExternalRef externalRef, String docNamespace) throws InvalidSPDXAnalysisException {
+		String category = null;
+		if (externalRef.getReferenceCategory() == null) {
+			category = "OTHER";
+		} else {
+			category = externalRef.getReferenceCategory().getTag();
+		}
+		String referenceType = null;
+		if (externalRef.getReferenceType() == null || 
+				externalRef.getReferenceType().getReferenceTypeUri() == null) {
+			referenceType = "[MISSING]";
+		} else {
+			try {
+				referenceType = ListedReferenceTypes.getListedReferenceTypes().getListedReferenceName(externalRef.getReferenceType().getReferenceTypeUri());
+			} catch (InvalidSPDXAnalysisException e) {
+				referenceType = null;
+			}
+			if (referenceType == null) {
+				referenceType = externalRef.getReferenceType().getReferenceTypeUri().toString();
+				if (docNamespace != null && !docNamespace.isEmpty() && referenceType.startsWith(docNamespace)) {
+					referenceType = referenceType.substring(docNamespace.length());
+				}
+			}
+		}
+		String referenceLocator = externalRef.getReferenceLocator();
+		if (referenceLocator == null) {
+			referenceLocator = "[MISSING]";
+		}
+		String retval = category + " " + referenceType + " " + referenceLocator;
+		if (externalRef.getComment() != null && !externalRef.getComment().isEmpty()) {
+			retval = retval + "(" + externalRef.getComment() + ")";
 		}
 		return retval;
 	}

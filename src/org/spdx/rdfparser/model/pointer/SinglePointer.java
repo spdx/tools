@@ -91,13 +91,20 @@ public abstract class SinglePointer extends RdfModelObject implements Comparable
 			logger.error("Error getting reference from comparison",e);
 			return false;
 		}
-		if (this.reference == null) {
+		SpdxElement myReference;
+		try {
+			myReference = this.getReference();
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Error getting my reference from comparison",e);
+			return false;
+		}
+		if (myReference == null) {
 			return compFile == null;
 		}
 		if (compFile == null) {
 			return false;
 		}
-		return this.reference.equivalent(compFile, false);
+		return myReference.equivalent(compFile, false);
 	}
 
 	/* (non-Javadoc)

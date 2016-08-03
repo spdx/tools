@@ -231,28 +231,32 @@ public abstract class AbstractSheet {
 	 * @return
 	 */
 	private int getNumWrappedLines(Cell cell) {
-		String val = cell.getStringCellValue();
-		if (val == null || val.isEmpty()) {
+		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+			String val = cell.getStringCellValue();
+			if (val == null || val.isEmpty()) {
+				return 1;
+			}
+			CellStyle style = cell.getCellStyle();
+			if (style == null || !style.getWrapText()) {
+				return 1;
+			}
+			Font font = sheet.getWorkbook().getFontAt(style.getFontIndex());
+			AttributedString astr = new AttributedString(val);
+			java.awt.Font awtFont = new java.awt.Font(font.getFontName(), 0, font.getFontHeightInPoints());
+			float cellWidth = sheet.getColumnWidth(cell.getColumnIndex())/256 * 5.5F;
+			astr.addAttribute(TextAttribute.FONT, awtFont);
+			FontRenderContext context = new FontRenderContext(null, true, true);
+			java.awt.font.LineBreakMeasurer measurer = new java.awt.font.LineBreakMeasurer(astr.getIterator(), context);
+			int pos = 0;
+			int numLines = 0;
+			while (measurer.getPosition() < val.length()) {
+				pos = measurer.nextOffset(cellWidth);
+				numLines++;
+				measurer.setPosition(pos);
+			}
+			return numLines;
+		} else {	// Not a string type
 			return 1;
 		}
-		CellStyle style = cell.getCellStyle();
-		if (style == null || !style.getWrapText()) {
-			return 1;
-		}
-		Font font = sheet.getWorkbook().getFontAt(style.getFontIndex());
-		AttributedString astr = new AttributedString(val);
-		java.awt.Font awtFont = new java.awt.Font(font.getFontName(), 0, font.getFontHeightInPoints());
-		float cellWidth = sheet.getColumnWidth(cell.getColumnIndex())/256 * 5.5F;
-		astr.addAttribute(TextAttribute.FONT, awtFont);
-		FontRenderContext context = new FontRenderContext(null, true, true);
-		java.awt.font.LineBreakMeasurer measurer = new java.awt.font.LineBreakMeasurer(astr.getIterator(), context);
-		int pos = 0;
-		int numLines = 0;
-		while (measurer.getPosition() < val.length()) {
-			pos = measurer.nextOffset(cellWidth);
-			numLines++;
-			measurer.setPosition(pos);
-		}
-		return numLines;
 	}
 }

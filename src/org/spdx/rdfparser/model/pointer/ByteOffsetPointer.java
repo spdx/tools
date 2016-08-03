@@ -103,7 +103,7 @@ public class ByteOffsetPointer extends SinglePointer {
 			return false;
 		}
 		ByteOffsetPointer comp = (ByteOffsetPointer)o;
-		return Objects.equal(this.offset, comp.getOffset());
+		return Objects.equal(this.getOffset(), comp.getOffset());
 	}
 
 	/**

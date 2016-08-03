@@ -135,9 +135,14 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		}
 		// Note - we consider references equiv. even if the comments differ
 		ExternalRef erCompare = (ExternalRef)compare;
-		return Objects.equal(this.referenceCategory, erCompare.referenceCategory) &&
-				Objects.equal(this.referenceLocator, erCompare.referenceLocator) &&
-				this.equivalentConsideringNull(this.referenceType, erCompare.referenceType);
+		try {
+			return Objects.equal(this.getReferenceCategory(), erCompare.getReferenceCategory()) &&
+					Objects.equal(this.getReferenceLocator(), erCompare.getReferenceLocator()) &&
+					this.equivalentConsideringNull(this.getReferenceType(), erCompare.getReferenceType());
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Error getting equiv. data",e);
+			return false;
+		}
 	}
 
 	/* (non-Javadoc)

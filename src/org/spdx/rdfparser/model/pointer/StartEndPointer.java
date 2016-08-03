@@ -94,16 +94,23 @@ public class StartEndPointer extends CompoundPointer implements Comparable<Start
 		try {
 			compEndPointer = ((StartEndPointer)compare).getEndPointer();
 		} catch (InvalidSPDXAnalysisException e) {
-			logger.error("Error getting the equivalend end pointer",e);
+			logger.error("Error getting the equiv. end pointer",e);
 			return false;
 		}
-		if (this.endPointer == null) {
+		SinglePointer myEndPointer;
+		try {
+			myEndPointer = this.getEndPointer();
+		} catch (InvalidSPDXAnalysisException e) {
+			logger.error("Error getting tmy end pointer",e);
+			return false;
+		}
+		if (myEndPointer == null) {
 			return compEndPointer == null;
 		}
 		if (compEndPointer == null) {
 			return false;
 		}
-		return this.endPointer.equivalent(compEndPointer);
+		return myEndPointer.equivalent(compEndPointer);
 	}
 
 	/* (non-Javadoc)

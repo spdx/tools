@@ -270,7 +270,7 @@ public class SpdxElement extends RdfModelObject {
 			try {
 				Relationship[] refresh = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_RELATIONSHIP);
-				if (refresh == null && !arraysEquivalent(refresh, this.relationships, true)) {
+				if (refresh != null && !arraysEquivalent(refresh, this.relationships, true)) {
 					this.relationships = refresh;
 				}
 			} catch (InvalidSPDXAnalysisException e) {

@@ -702,31 +702,32 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		SpdxPackage comp = (SpdxPackage)o;
 		try {
-			if (this.packageVerificationCode == null) {
+			SpdxPackageVerificationCode myVerificationCode = getPackageVerificationCode();
+			if (myVerificationCode == null) {
 				if (comp.getPackageVerificationCode() != null) {
 					return false;
 				}
 			} else {
-				if (!(this.packageVerificationCode.equivalent(comp.getPackageVerificationCode()))) {
+				if (!(myVerificationCode.equivalent(comp.getPackageVerificationCode()))) {
 					return false;
 				}
 			}
-			if (this.filesAnalyzed != comp.filesAnalyzed) {
+			if (this.isFilesAnalyzed() != comp.isFilesAnalyzed()) {
 				return false;
 			}
-		return (equivalentConsideringNull(this.licenseDeclared, comp.getLicenseDeclared()) &&
-				arraysEquivalent(this.checksums, comp.getChecksums(), testRelationships) &&
-				RdfModelHelper.stringsEquivalent(this.description, comp.getDescription()) &&
-				RdfModelHelper.stringsEquivalent(this.downloadLocation, comp.getDownloadLocation()) &&
-				arraysEquivalent(this.files, comp.getFiles(false), testRelationships) &&
-				RdfModelHelper.stringsEquivalent(this.homepage, comp.getHomepage()) &&
-				RdfModelHelper.stringsEquivalent(this.originator, comp.getOriginator()) &&
-				RdfModelHelper.stringsEquivalent(this.packageFileName, comp.getPackageFileName()) &&
-				RdfModelHelper.stringsEquivalent(this.sourceInfo, comp.getSourceInfo()) &&
-				RdfModelHelper.stringsEquivalent(this.summary, comp.getSummary()) &&
-				RdfModelHelper.stringsEquivalent(this.supplier, comp.getSupplier()) &&
-				RdfModelHelper.stringsEquivalent(this.versionInfo, comp.getVersionInfo()) &&
-				arraysEquivalent(this.externalRefs, comp.getExternalRefs()));
+		return (equivalentConsideringNull(this.getLicenseDeclared(), comp.getLicenseDeclared()) &&
+				arraysEquivalent(this.getChecksums(), comp.getChecksums(), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.getDescription(), comp.getDescription()) &&
+				RdfModelHelper.stringsEquivalent(this.getDownloadLocation(), comp.getDownloadLocation()) &&
+				arraysEquivalent(this.getFiles(false), comp.getFiles(false), testRelationships) &&
+				RdfModelHelper.stringsEquivalent(this.getHomepage(), comp.getHomepage()) &&
+				RdfModelHelper.stringsEquivalent(this.getOriginator(), comp.getOriginator()) &&
+				RdfModelHelper.stringsEquivalent(this.getPackageFileName(), comp.getPackageFileName()) &&
+				RdfModelHelper.stringsEquivalent(this.getSourceInfo(), comp.getSourceInfo()) &&
+				RdfModelHelper.stringsEquivalent(this.getSummary(), comp.getSummary()) &&
+				RdfModelHelper.stringsEquivalent(this.getSupplier(), comp.getSupplier()) &&
+				RdfModelHelper.stringsEquivalent(this.getVersionInfo(), comp.getVersionInfo()) &&
+				arraysEquivalent(this.getExternalRefs(), comp.getExternalRefs()));
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Invalid analysis exception on comparing equivalent: "+e.getMessage(),e);
 			return false;

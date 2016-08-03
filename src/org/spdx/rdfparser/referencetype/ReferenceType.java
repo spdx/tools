@@ -101,10 +101,11 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 			return false;
 		}
 		ReferenceType oComp = (ReferenceType)compare;
-		if (this.referenceTypeUri == null) {
+		URI myReferenceTypeUri = this.getReferenceTypeUri();
+		if (myReferenceTypeUri == null) {
 			return oComp.getReferenceTypeUri() == null;
 		}
-		return this.referenceTypeUri.equals(oComp.getReferenceTypeUri());
+		return myReferenceTypeUri.equals(oComp.getReferenceTypeUri());
 	}
 
 	/**
