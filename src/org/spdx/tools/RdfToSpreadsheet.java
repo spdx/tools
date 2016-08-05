@@ -172,11 +172,13 @@ public class RdfToSpreadsheet {
 	 */
 	private static void copyExternalRefs(Map<String, ExternalRef[]> externalRefsMap,
 			ExternalRefsSheet externalRefSheet, SpdxDocumentContainer container) throws SpreadsheetException {
-		for (Entry<String, ExternalRef[]> entry:externalRefsMap.entrySet()) {
-			ExternalRef[] externalRefs = entry.getValue();
+		String[] keys = externalRefsMap.keySet().toArray(new String[externalRefsMap.keySet().size()]);
+		Arrays.sort(keys);
+		for (String key:keys) {
+			ExternalRef[] externalRefs = externalRefsMap.get(key);
 			Arrays.sort(externalRefs);
 			for (ExternalRef externalRef:externalRefs) {
-				externalRefSheet.add(entry.getKey(), externalRef, container);
+				externalRefSheet.add(key, externalRef, container);
 			}
 		}
 	}
@@ -203,18 +205,21 @@ public class RdfToSpreadsheet {
 	private static void copyRelationships(Map<String, Relationship[]> relationshipMap,
 			RelationshipsSheet relationshipsSheet) {
 
-		for (Entry<String, Relationship[]> entry:relationshipMap.entrySet()) {
-			Relationship[] relationships = entry.getValue();
+		String[] keys = relationshipMap.keySet().toArray(new String[relationshipMap.keySet().size()]);
+		Arrays.sort(keys);
+		for (String key:keys) {
+			Relationship[] relationships = relationshipMap.get(key);
 			Arrays.sort(relationships);
 			for (int i = 0; i < relationships.length; i++) {
-				relationshipsSheet.add(relationships[i], entry.getKey());
+				relationshipsSheet.add(relationships[i], key);
 			}
 		}
 	}
 
 	private static void copyReviewerInfo(SPDXReview[] reviewers,
 			ReviewersSheet reviewersSheet) throws InvalidSPDXAnalysisException {
-		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
+		Arrays.sort(reviewers);
 		for (int i = 0; i < reviewers.length; i++) {
 			String reviewerName = reviewers[i].getReviewer();
 			Date reviewDate = null;
@@ -251,6 +256,7 @@ public class RdfToSpreadsheet {
 
 	private static void copyNonStdLicenses(ExtractedLicenseInfo[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
+		Arrays.sort(nonStandardLicenses);
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
 			nonStandardLicensesSheet.add(nonStandardLicenses[i].getLicenseId(), nonStandardLicenses[i].getExtractedText(), 
 					nonStandardLicenses[i].getName(),

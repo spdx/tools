@@ -39,7 +39,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class ExtractedLicenseInfo extends SimpleLicensingInfo {
+public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Comparable<ExtractedLicenseInfo> {
 	
 	private String extractedText;
 
@@ -227,5 +227,35 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo {
 		}
 		// Only test for the text - other fields do not need to equal to be considered equivalent
 		return LicenseCompareHelper.isLicenseTextEquivalent(this.getExtractedText(), ((ExtractedLicenseInfo)compare).getExtractedText());
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ExtractedLicenseInfo o) {
+		if (this.getLicenseId() == null) {
+			if (o.getLicenseId() == null) {
+				if (this.getExtractedText() == null) {
+					if (o.getExtractedText() == null) {
+						return 0;
+					} else {
+						return 1;
+					}
+				}else if (o.getExtractedText() == null) {
+					return -1;
+				} else {
+					return this.getExtractedText().compareToIgnoreCase(o.getExtractedText());
+				}
+			} else {
+				return 1;
+			}
+		} else {
+			if (o.getLicenseId() == null) {
+				return -1;
+			} else {
+				return this.getLicenseId().compareToIgnoreCase(o.getLicenseId());
+			}
+		}
 	}
 }

@@ -362,7 +362,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	}
 
 	/**
-	 * 
+	 * Resize the height of all rows - will not exceed a maximum height
 	 */
 	public void resizeRow() {
 		nonStandardLicensesSheet.resizeRows();
@@ -375,5 +375,4 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		externalRefsSheet.resizeRows();
 //		reviewersSheet.resizeRows(); - Can't resize the review sheet since it uses blank cells
 	}
-
 }

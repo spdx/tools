@@ -42,7 +42,7 @@ public class Main {
 		} else if (spdxTool.equalsIgnoreCase("CompareMultipleSpdxDocs")) {
 			CompareMultpleSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("CompareSpdxDocs")) {
-			CompareSpdxDocs.main(args);
+			System.out.println("This tool has not been updated to the 2.1 spec.  Please use the CompareMultipleSpdxDocs command.");
 		} else if (spdxTool.equalsIgnoreCase("LicenseRDFAGenerator")) {
 			LicenseRDFAGenerator.main(args);
 		} else if (spdxTool.equalsIgnoreCase("Verify")) {

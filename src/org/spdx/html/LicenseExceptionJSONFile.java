@@ -87,7 +87,7 @@ public class LicenseExceptionJSONFile {
 				jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 			}
 			jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, exception.getComment());
-			jsonObject.put(SpdxRdfConstants.PROP_EXCEPTION_TEXT, exception.getLicenseExceptionText());
+			jsonObject.put(SpdxRdfConstants.PROP_EXCEPTION_TEXT, exception.getLicenseExceptionText().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
 			jsonObject.put(SpdxRdfConstants.PROP_EXAMPLE, exception.getExample());
 			jsonObject.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, this.isDeprecated());
 			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");

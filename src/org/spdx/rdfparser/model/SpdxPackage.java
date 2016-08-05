@@ -1031,7 +1031,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		if (compVersion != null) {
 			compNameVersion = compNameVersion + compVersion;
 		}
-		return myNameVersion.compareTo(compNameVersion);
+		return myNameVersion.compareToIgnoreCase(compNameVersion);
 	}
 
 	/**

@@ -187,5 +187,4 @@ public class AnnotationsSheet extends AbstractSheet {
 		}
 		return new Annotation(annotator, type, date, comment);
 	}
-
 }
