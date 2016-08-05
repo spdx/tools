@@ -101,14 +101,16 @@ public class GenerateVerificationCode {
 			}
 		} else if (dir.isDirectory()) {
 			File[] children = dir.listFiles();
-			for (int i = 0; i < children.length; i++) {
-				if (children[i].isFile()) {
-					String relativePath = children[i].getPath().substring(rootPath.length()+1);
-					if (skippedPattern.matcher(relativePath).matches()) {
-						skippedFiles.add(children[i]);
+			if (children != null) {
+				for (int i = 0; i < children.length; i++) {
+					if (children[i].isFile()) {
+						String relativePath = children[i].getPath().substring(rootPath.length()+1);
+						if (skippedPattern.matcher(relativePath).matches()) {
+							skippedFiles.add(children[i]);
+						}
+					} else if (children[i].isDirectory()) {
+						collectSkippedFiles(skippedPattern, skippedFiles, rootPath, children[i]);
 					}
-				} else if (children[i].isDirectory()) {
-					collectSkippedFiles(skippedPattern, skippedFiles, rootPath, children[i]);
 				}
 			}
 		}

@@ -42,7 +42,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class LicenseException implements IRdfModel  {
+public class LicenseException implements IRdfModel, Cloneable  {
 	
 	Model model = null;
 	Node exceptionNode = null;

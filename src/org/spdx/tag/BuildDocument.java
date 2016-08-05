@@ -79,7 +79,7 @@ import com.google.common.collect.Sets;
  *
  * @author Rana Rahal, Protecode Inc.
  */
-public class BuildDocument implements TagValueBehavior, Serializable {
+public class BuildDocument implements TagValueBehavior {
 
 	private static class AnnotationWithId {
 		private Annotation annotation;
