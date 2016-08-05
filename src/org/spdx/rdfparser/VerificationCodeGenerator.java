@@ -133,6 +133,9 @@ public class VerificationCodeGenerator {
 			return;
 		}
 		File[] filesAndDirs = sourceDirectory.listFiles();
+		if (filesAndDirs == null) {
+			return;
+		}
 		for (int i = 0; i < filesAndDirs.length; i++) {
 			if (filesAndDirs[i].isDirectory()) {
 				collectFileData(prefixForRelative, filesAndDirs[i], fileNameAndChecksums, skippedFiles);

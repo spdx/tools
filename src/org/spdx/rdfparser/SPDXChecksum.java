@@ -37,7 +37,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  *
  */
 @Deprecated
-public class SPDXChecksum {
+public class SPDXChecksum implements Cloneable {
 
 	// Supported algorithms
 	public static final Map<String, String> ALGORITHM_TO_URI = Maps.newHashMap();
@@ -274,6 +274,18 @@ public class SPDXChecksum {
 			return false;
 		}
 		return compare.getValue().compareToIgnoreCase(this.getValue()) == 0;
+	}
+	
+	@Override
+	public int hashCode() {
+		int retval = 13;
+		if (this.getValue() != null) {
+			retval = retval ^ this.getValue().hashCode();
+		}
+		if (this.getAlgorithm() != null) {
+			retval = retval ^ this.getAlgorithm().hashCode();
+		}
+		return retval;
 	}
 
 	/**

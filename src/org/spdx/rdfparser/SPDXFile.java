@@ -1099,6 +1099,21 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 			return super.equals(o);
 		}
 	}
+	
+	@Override
+	public int hashCode() {
+		if (this.model != null && this.resource != null) {
+			if (this.resource.isAnon()) {
+				return this.resource.getId().hashCode();
+			} else if (this.resource.isURIResource()) {
+				return this.resource.getURI().hashCode();
+			} else {
+				return this.resource.hashCode();
+			}
+		} else {
+			return super.hashCode();
+		}
+	}
 	/**
 	 * @param r1
 	 * @param r2

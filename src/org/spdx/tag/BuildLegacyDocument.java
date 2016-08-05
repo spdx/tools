@@ -56,7 +56,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author Rana Rahal, Protecode Inc.
  */
 @Deprecated
-public class BuildLegacyDocument implements TagValueBehavior, Serializable {
+public class BuildLegacyDocument implements TagValueBehavior {
 	private static final long serialVersionUID = -5490491489627686708L;
 
 	private static final String DEFAULT_SHA1 = "0000000000000000000000000000000000000000";
