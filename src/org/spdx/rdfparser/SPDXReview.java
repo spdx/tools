@@ -31,7 +31,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
-public class SPDXReview {
+public class SPDXReview implements Comparable<SPDXReview> {
 	private String reviewer = null;
 	private String reviewDate = null;
 	private String comment = null;
@@ -267,5 +267,37 @@ public class SPDXReview {
 		}
 
 		return retval;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(SPDXReview o) {
+		if (this.getReviewDate() == null) {
+			if (o.getReviewDate() == null) {
+				if (this.getReviewer() == null) {
+					if (o.getReviewer() == null) {
+						return 0;
+					} else {
+						return 1;
+					}
+				} else {
+					if (o.getReviewer() == null) {
+						return -1;
+					} else {
+						return this.getReviewer().compareTo(o.getReviewer());
+					}
+				}
+			} else {
+				return 1;
+			}
+		} else {
+			if (o.getReviewDate() == null) {
+				return -1;
+			} else {
+				return this.getReviewDate().compareTo(o.getReviewDate());
+			}
+		}
 	}
 }

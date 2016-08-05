@@ -84,9 +84,9 @@ public class LicenseJSONFile {
 				jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 			}
 			jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, license.getComment());
-			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_TEXT, license.getLicenseText());
-			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NOTICE, license.getStandardLicenseHeader());
-			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, license.getStandardLicenseTemplate());
+			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_TEXT, license.getLicenseText().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NOTICE, license.getStandardLicenseHeader().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, license.getStandardLicenseTemplate().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
 			jsonObject.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, this.isDeprecated());
 			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
 			writer.write(jsonObject.toJSONString());
