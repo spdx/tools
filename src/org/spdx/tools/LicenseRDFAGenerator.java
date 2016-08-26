@@ -456,10 +456,10 @@ public class LicenseRDFAGenerator {
 			licJson.writeToFile(licJsonFileCopy);
 			tableOfContentsHTML.addDeprecatedLicense(deprecatedLicense, licHTMLReference);
 			tableOfContentsJSON.addLicense(deprecatedLicense.getLicense(), licHTMLReference, licJSONReference, true);
-			File textFile = new File(textFolder.getPath() + File.separator + licBaseHtmlFileName + ".txt");
+			File textFile = new File(textFolder.getPath() + File.separator + "depreciate_" + licBaseHtmlFileName + ".txt");
 			Files.write(deprecatedLicense.getLicense().getLicenseText(), textFile, utf8);
 			if (deprecatedLicense.getLicense().getStandardLicenseTemplate() != null && !deprecatedLicense.getLicense().getStandardLicenseTemplate().trim().isEmpty()) {
-				File templateFile = new File(templateFolder.getPath() + File.separator + licBaseHtmlFileName + ".template.txt");
+				File templateFile = new File(templateFolder.getPath() + File.separator + "depreciate_" + licBaseHtmlFileName + ".template.txt");
 				Files.write(deprecatedLicense.getLicense().getStandardLicenseTemplate(), templateFile, utf8);
 			}
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
