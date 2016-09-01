@@ -69,8 +69,8 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		AMENDS("relationshipType_amends"),
 		STATIC_LINK("relationshipType_staticLink"),
 		TEST_CASE_OF("relationshipType_testcaseOf"),
-		PREQUISITE_FOR("relationshipType_prerequisiteFor"),
-		HAS_PREQUISITE("relationshipType_hasPrerequisite");
+		PREREQUISITE_FOR("relationshipType_prerequisiteFor"),
+		HAS_PREREQUISITE("relationshipType_hasPrerequisite");
 
 		private static final Map<String, RelationshipType> STRING_TO_TYPE;
 		private String rdfString;
