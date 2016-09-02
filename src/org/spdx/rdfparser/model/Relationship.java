@@ -93,10 +93,10 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		tagToRelationshipTypeBuilder.put("DESCRIBES", RelationshipType.relationshipType_describes);
 		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_describedBy, "DESCRIBED_BY");
 		tagToRelationshipTypeBuilder.put("DESCRIBED_BY", RelationshipType.relationshipType_describedBy);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_hasPrerequisite, "HAS_PREQUISITE");
-		tagToRelationshipTypeBuilder.put("HAS_PREQUISITE", RelationshipType.relationshipType_hasPrerequisite);
-		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_prerequisiteFor, "PREQUISITE_FOR");
-		tagToRelationshipTypeBuilder.put("PREQUISITE_FOR", RelationshipType.relationshipType_prerequisiteFor);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_hasPrerequisite, "HAS_PREREQUISITE");
+		tagToRelationshipTypeBuilder.put("HAS_PREREQUISITE", RelationshipType.relationshipType_hasPrerequisite);
+		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_prerequisiteFor, "PREREQUISITE_FOR");
+		tagToRelationshipTypeBuilder.put("PREREQUISITE_FOR", RelationshipType.relationshipType_prerequisiteFor);
 		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_ancestorOf, "ANCESTOR_OF");
 		tagToRelationshipTypeBuilder.put("ANCESTOR_OF", RelationshipType.relationshipType_ancestorOf);
 		relationshipTypeToTagBuilder.put(RelationshipType.relationshipType_buildToolOf, "BUILD_TOOL_OF");
