@@ -40,6 +40,7 @@ import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
+import com.google.common.collect.Lists;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -922,6 +923,16 @@ public class TestSpdxPackage {
 		// verification code
 		pkg.setPackageVerificationCode(null);
 		assertEquals(1, pkg.verify().size());
+		
+		// Make sure no files are allowed when filesAnalyzed is false
+		pkg.setFilesAnalyzed(false);
+		assertEquals(Lists.newArrayList("Warning: Found analyzed files for package " + pkg.getName()
+							+ " when analyzedFiles is set to false."), pkg.verify());
+		
+		//Make sure we're valid with no files and no verification code when filesAnalyzed = false.
+		pkg.setFiles(new SpdxFile[0]);
+		assertEquals(0, pkg.verify().size());
+		
 	}
 	
 	@Test
