@@ -1,3 +1,5 @@
+Implementation version 2.1.1
+- Fix incorrect PREREQUISITE type relationship value
 Implementation version 2.1.0
 - Implement the 2.1 changes (SpdxSnippet, ExternalRef, hasAnalyzedFiles - see spec for details)
 Implementation version 2.0.4
