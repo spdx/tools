@@ -1,5 +1,6 @@
 Implementation version 2.1.1
 - Fix incorrect PREREQUISITE type relationship value
+- Fix incorrect inclusing of the package verification code when filesAnalyzed is set to false
 Implementation version 2.1.0
 - Implement the 2.1 changes (SpdxSnippet, ExternalRef, hasAnalyzedFiles - see spec for details)
 Implementation version 2.0.4
