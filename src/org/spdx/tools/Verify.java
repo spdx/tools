@@ -67,6 +67,7 @@ public class Verify {
 					System.out.print("\t" + warning+"\n");
 				}
 			}
+			System.exit(ERROR_STATUS);
 		} else {
 			System.out.println("This SPDX Document is valid.");
 		}
