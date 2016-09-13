@@ -897,15 +897,17 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		SpdxPackageVerificationCode verificationCode = null;
 		try {
 			verificationCode = this.getPackageVerificationCode();
-			if (verificationCode == null) {
-				retval.add("Missing required package verification code for package "+pkgName);
-			} else {
+			if (verificationCode == null && filesAnalyzed) {
+				retval.add("Missing required package verification code for package " + pkgName);
+			} else if (verificationCode != null && !filesAnalyzed) {
+				retval.add("Verification code must not be included when files not analyzed.");
+			} else if (filesAnalyzed) {
 				List<String> verify = verificationCode.verify();
 				addNameToWarnings(verify);
 				retval.addAll(verify);
 			}
 		} catch (InvalidSPDXAnalysisException e) {
-			retval.add("Invalid package verification code: "+e.getMessage());
+			retval.add("Invalid package verification code: " + e.getMessage());
 		}
 
 		// supplier
