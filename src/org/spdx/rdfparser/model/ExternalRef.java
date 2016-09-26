@@ -49,7 +49,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		referenceCategory_other;
 		public String getTag() {
 			switch(this) {
-			case referenceCategory_packageManager: return "PACKAGEMANAGER";
+			case referenceCategory_packageManager: return "PACKAGE-MANAGER";
 			case referenceCategory_security: return "SECURITY";
 			case referenceCategory_other: return "OTHER";
 			default: return "OTHER";
@@ -57,7 +57,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		}
 		public static ReferenceCategory fromTag(String tag) {
 			String uTag = tag.toUpperCase();
-			if ("PACKAGEMANAGER".equals(uTag)) {
+			if ("PACKAGE-MANAGER".equals(uTag)) {
 				return referenceCategory_packageManager;
 			} else if ("SECURITY".equals(uTag)) {
 				return referenceCategory_security;
