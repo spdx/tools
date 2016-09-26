@@ -70,8 +70,8 @@ public class LicenseTemplateRule {
 		if (this.type == null) {
 			throw(new LicenseTemplateRuleException("Rule type can not be null."));
 		}
-		if (this.type != RuleType.END_OPTIONAL && this.name == null) {
-			throw(new LicenseTemplateRuleException("Rule name can not be null."));
+		if (this.type == RuleType.VARIABLE && this.name == null) {
+			throw(new LicenseTemplateRuleException("Rule name can not be null for a variable or alt rule."));
 		}
 		if (this.type == RuleType.VARIABLE && this.original == null) {
 			throw(new LicenseTemplateRuleException("Rule original text can not be null."));
