@@ -223,7 +223,7 @@ public class LicenseHTMLFile {
 				String header = license.getStandardLicenseHeader();
 				if (header != null && header.trim().isEmpty()) {
 					header = null;	// so the template will appropriately skip the header text
-				} else {
+				} else if (header != null) {
 					//TODO: May need to add another field for the header template text
 					try {
 						header = formatTemplateText(header);

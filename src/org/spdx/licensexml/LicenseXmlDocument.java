@@ -51,6 +51,7 @@ public class LicenseXmlDocument {
 	public static final String DEPRECATED_ATTRIBUTE = "deprecated";
 	public static final String NOTES_TAG = "notes";
 	public static final String URLS_TAG = "urls";
+	public static final String URL_TAG = "url";
 	public static final String HEADER_TAG = "header";
 	public static final String OSI_APPROVED_ATTRIBUTE = "osi-approved";
 	public static final String COPYRIGHT_TAG = "copyright";
@@ -82,7 +83,7 @@ public class LicenseXmlDocument {
 		try {
 			this.xmlDocument = builder.parse(file);
 		} catch (SAXException e) {
-			logger.error("Error parsing license XML document",e);
+//			logger.error("Error parsing license XML document",e);
 			throw(new LicenseXmlException("Unable to parse license XML file: "+e.getMessage()));
 		} catch (IOException e) {
 			logger.error("I/O Error reading license XML file",e);
