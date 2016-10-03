@@ -44,6 +44,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	static final String DIFFERENT_VALUE = "Different";
 	static final String EQUAL_VALUE = "Equal";
 	static final String NO_FILE_VALUE = "[No File]";
+	private static final int MAX_VALUE_LENGTH = 32000;
 	
 	private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 
@@ -135,7 +136,10 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 							!valuesMatch(comparer, lastFile, lastDocIndex, files[i][fileIndexes[i]], i)) {
 						allValuesMatch = false;
 					}
-					lastFile = files[i][fileIndexes[i]];					
+					lastFile = files[i][fileIndexes[i]];	
+					if (val.length() > MAX_VALUE_LENGTH) {
+						val = val.substring(0, MAX_VALUE_LENGTH-9) + "[more...]";
+					}
 					cell.setCellValue(val);
 					fileIndexes[i]++;
 				} else {
