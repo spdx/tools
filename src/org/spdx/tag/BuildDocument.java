@@ -16,7 +16,6 @@
  */
 package org.spdx.tag;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
@@ -60,7 +59,6 @@ import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
 import org.spdx.rdfparser.model.pointer.LineCharPointer;
-import org.spdx.rdfparser.model.pointer.SinglePointer;
 import org.spdx.rdfparser.model.pointer.StartEndPointer;
 import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.rdfparser.referencetype.ReferenceType;
@@ -137,8 +135,7 @@ public class BuildDocument implements TagValueBehavior {
 			return comment;
 		}
 	}
-	private static final long serialVersionUID = -5490491489627686708L;
-
+	
 	private static Pattern EXTERNAL_DOC_REF_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+SHA1:\\s+(\\S+)");
 	private static Pattern RELATIONSHIP_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+(\\S+)");
 	private static Pattern CHECKSUM_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");
@@ -772,7 +769,7 @@ public class BuildDocument implements TagValueBehavior {
 
 	private void checkAnalysisNull() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
 		if (this.analysis == null) {
-			if (this.specVersion.compareTo("SPDX-2.0") < 0) {
+			if (this.specVersion != null && this.specVersion.compareTo("SPDX-2.0") < 0) {
 				result[0] = new SpdxDocumentContainer(generateDocumentNamespace());
 				this.analysis = result[0].getSpdxDocument();
 			} else {
@@ -1246,9 +1243,10 @@ public class BuildDocument implements TagValueBehavior {
 	/**
 	 * Go through all of the file dependencies and snippet dependencies and add them to the file
 	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSpdxTagFileException 
 	 */
 	@SuppressWarnings("deprecation")
-	private void fixFileAndSnippetDependencies() throws InvalidSPDXAnalysisException {
+	private void fixFileAndSnippetDependencies() throws InvalidSPDXAnalysisException, InvalidSpdxTagFileException {
 		// be prepared - it is complicate to make this efficient
 		// the HashMap fileDependencyMap contains a map from a file name to all SPDX files which
 		// reference that file name as a dependency
@@ -1259,6 +1257,7 @@ public class BuildDocument implements TagValueBehavior {
 		// the key contains an SPDX file with one or more dependencies.  The value is the array list of file dependencies
 		Map<SpdxFile, List<SpdxFile>> filesWithDependencies = Maps.newHashMap();
 		Map<SpdxFile, List<SpdxSnippet>> filesWithSnippets = Maps.newHashMap();
+		this.checkAnalysisNull();
 		SpdxFile[] allFiles = analysis.getDocumentContainer().getFileReferences();
 		// fill in the filesWithDependencies map
 		for (int i = 0;i < allFiles.length; i++) {

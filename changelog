@@ -1,3 +1,6 @@
+Implementation version 2.1.2
+- Fix NPE in parser
+- Fix bug - Check for max. cell size in compare utility
 Implementation version 2.1.1
 - Fix incorrect PREREQUISITE type relationship value
 - Fix incorrect inclusing of the package verification code when filesAnalyzed is set to false

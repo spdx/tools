@@ -552,6 +552,6 @@ public class SpdxDocument extends SpdxElement {
 	 */
 	public void addExtractedLicenseInfos(
 			ExtractedLicenseInfo license) throws InvalidSPDXAnalysisException {
-		this.documentContainer.addExtractedLicenseInfos(license);
+		this.documentContainer.addExtractedLicenseInfos( license );
 	}
 }
