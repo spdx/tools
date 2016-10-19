@@ -1137,6 +1137,7 @@ public class BuildDocument implements TagValueBehavior {
 	}
 
 	private static String trim(String value) {
+		value = value.replaceAll("\u00A0", " ");
 		value = value.trim();
 		value = value.replaceAll("<text>", "").replaceAll("</text>", "");
 		return value;
