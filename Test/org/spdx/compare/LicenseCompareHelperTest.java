@@ -204,7 +204,6 @@ public class LicenseCompareHelperTest {
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic4, xlation));
 	}
 	
-	
 	@Test
 	public void testLicenseEqualsNonStdLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Map<String, String> xlation = Maps.newHashMap();
