@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 		"Full name of License","License Identifier","Source/url","Notes","OSI Approved","Standard License Header","Text","Template"
 	};
 	private static final int NUM_COLS = HEADER_ROW.length;
+	List<String> warnings = new ArrayList<String>();
 
 	
 	private static class CsvLicenseIterator implements Iterator<SpdxListedLicense> {
@@ -245,6 +247,14 @@ public class SpdxLicenseCsv implements ISpdxListedLicenseProvider {
 	@Override
 	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator() {
 		throw(new UnsupportedOperationException());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.ISpdxListedLicenseProvider#getWarnings()
+	 */
+	@Override
+	public List<String> getWarnings() {
+		return this.warnings;
 	}
 
 }

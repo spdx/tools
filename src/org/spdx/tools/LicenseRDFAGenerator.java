@@ -109,24 +109,24 @@ public class LicenseRDFAGenerator {
 		if (args == null || args.length < MIN_ARGS || args.length > MAX_ARGS) {
 			System.out.println("Invalid arguments");
 			usage();
-			return;
+			System.exit(ERROR_STATUS);
 		}
 		File ssFile = new File(args[0]);
 		if (!ssFile.exists()) {
 			System.out.println("Spreadsheet file "+ssFile.getName()+" does not exist");
 			usage();
-			return;
+			System.exit(ERROR_STATUS);
 		}
 		File dir = new File(args[1]);
 		if (!dir.exists()) {
 			System.out.println("Output directory "+dir.getName()+" does not exist");
 			usage();
-			return;
+			System.exit(ERROR_STATUS);
 		}
 		if (!dir.isDirectory()) {
 			System.out.println("Output directory "+dir.getName()+" is not a directory");
 			usage();
-			return;
+			System.exit(ERROR_STATUS);
 		}
 		String version = null;
 		if (args.length > 2) {
@@ -137,7 +137,26 @@ public class LicenseRDFAGenerator {
 			releaseDate = args[3];
 		}
 
+		try {
+			generateLicenseData(ssFile, dir, version, releaseDate);
+		} catch (LicenseGeneratorException e) {
+			System.out.println(e.getMessage());
+			System.exit(ERROR_STATUS);
+		}
 
+
+	}
+	/**
+	 * Generate license data
+	 * @param ssFile Either a license spreadsheet file or a directory containing license XML files
+	 * @param dir Output directory for the generated results
+	 * @param version Version for the license lise
+	 * @param releaseDate Release data string for the license
+	 * @return warnings
+	 * @throws LicenseGeneratorException 
+	 */
+	public static List<String> generateLicenseData(File ssFile, File dir,
+			String version, String releaseDate) throws LicenseGeneratorException {
 		List<String> warnings = Lists.newArrayList();
 		ISpdxListedLicenseProvider licenseProvider = null;
 		try {
@@ -153,48 +172,39 @@ public class LicenseRDFAGenerator {
 			} else if (ssFile.isDirectory()) {
 				licenseProvider = new XmlLicenseProvider(ssFile);
 			} else {
-				System.out.println("Unsupported file format.  Must be a .xls file");
-				System.exit(ERROR_STATUS);
+				throw new LicenseGeneratorException("Unsupported file format.  Must be a .xls file");
 			}
 			File textFolder = new File(dir.getPath() + File.separator +  TEXT_FOLDER_NAME);
 			if (!textFolder.isDirectory() && !textFolder.mkdir()) {
-				System.out.println("Error: text folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: text folder is not a directory");
 			}
 			File templateFolder = new File(dir.getPath() + File.separator +  TEMPLATE_FOLDER_NAME);
 			if (!templateFolder.isDirectory() && !templateFolder.mkdir()) {
-				System.out.println("Error: template folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: template folder is not a directory");
 			}
 			File htmlFolder = new File(dir.getPath() + File.separator +  HTML_FOLDER_NAME);
 			if (!htmlFolder.isDirectory() && !htmlFolder.mkdir()) {
-				System.out.println("Error: HTML folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: HTML folder is not a directory");
 			}
 			File rdfaFolder = new File(dir.getPath() + File.separator +  RDFA_FOLDER_NAME);
 			if (!rdfaFolder.isDirectory() && !rdfaFolder.mkdir()) {
-				System.out.println("Error: RDFa folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: RDFa folder is not a directory");
 			}
 			File jsonFolder = new File(dir.getPath() + File.separator +  JSON_FOLDER_NAME);
 			if (!jsonFolder.isDirectory() && !jsonFolder.mkdir()) {
-				System.out.println("Error: JSON folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: JSON folder is not a directory");
 			}
 			File jsonFolderDetails = new File(dir.getPath() + File.separator +  JSON_FOLDER_NAME+ File.separator + "details");
 			if (!jsonFolderDetails.isDirectory() && !jsonFolderDetails.mkdir()) {
-				System.out.println("Error: JSON folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: JSON folder is not a directory");
 			}
 			File jsonFolderExceptions = new File(dir.getPath() + File.separator +  JSON_FOLDER_NAME + File.separator + "exceptions");
 			if (!jsonFolderExceptions.isDirectory() && !jsonFolderExceptions.mkdir()) {
-				System.out.println("Error: JSON folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: JSON folder is not a directory");
 			}
 			File website = new File(dir.getPath() + File.separator +  WEBSITE_FOLDER_NAME);
 			if (!website.isDirectory() && !website.mkdir()) {
-				System.out.println("Error: Website folder is not a directory");
-				return;
+				throw new LicenseGeneratorException("Error: Website folder is not a directory");
 			}
 			System.out.print("Processing License List");
 			writeLicenseList(version, releaseDate, licenseProvider, warnings,
@@ -206,6 +216,7 @@ public class LicenseRDFAGenerator {
 			writeCssFile(website);
 			writeSortTableFile(website);
 			System.out.println();
+			warnings.addAll(licenseProvider.getWarnings());
 			if (warnings.size() > 0) {
 				System.out.println("The following warning(s) were identified:");
 				for (String warning : warnings) {
@@ -213,15 +224,15 @@ public class LicenseRDFAGenerator {
 				}
 			}
 			System.out.println("Completed processing licenses");
+			return warnings;
 		} catch (SpreadsheetException e) {
-			System.out.println("\nInvalid spreadsheet: "+e.getMessage());
+			throw new LicenseGeneratorException("\nInvalid spreadsheet: "+e.getMessage(),e);
 		} catch (SpdxListedLicenseException e) {
-			System.out.println("\nError reading standard licenses: "+e.getMessage());
+			throw new LicenseGeneratorException("\nError reading standard licenses: "+e.getMessage(),e);
 		} catch (InvalidLicenseTemplateException e) {
-			System.out.println("\nInvalid template found on one of the licenses: "+e.getMessage());
+			throw new LicenseGeneratorException("\nInvalid template found on one of the licenses: "+e.getMessage(),e);
 		} catch (Exception e) {
-			System.out.println("\nUnhandled exception generating html:");
-			e.printStackTrace();
+			throw new LicenseGeneratorException("\nUnhandled exception generating html:",e);
 		} finally {
 			if (licenseProvider != null && (licenseProvider instanceof SPDXLicenseSpreadsheet)) {
 				try {

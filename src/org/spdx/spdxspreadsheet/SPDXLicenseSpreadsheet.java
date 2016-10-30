@@ -19,7 +19,9 @@ package org.spdx.spdxspreadsheet;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,7 +39,6 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
 public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdxListedLicenseProvider  {
 	
 	public class LicenseIterator implements Iterator<SpdxListedLicense> {
-
 		private int currentRowNum;
 		SpdxListedLicense currentLicense;
 		public LicenseIterator() throws SpreadsheetException {
@@ -179,7 +180,8 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 	private LicenseSheet licenseSheet;
 	private LicenseExceptionSheet exceptionSheet;
 	private DeprecatedLicenseSheet deprecatedLicenseSheet;
-
+	private List<String> warnings = new ArrayList<String>();
+	
 	public SPDXLicenseSpreadsheet(File spreadsheetFile, boolean create, boolean readonly)
 			throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
@@ -294,5 +296,13 @@ public class SPDXLicenseSpreadsheet extends AbstractSpreadsheet implements ISpdx
 	 */
 	public DeprecatedLicenseSheet getDeprecatedLicenseSheet() {
 		return this.deprecatedLicenseSheet;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.ISpdxListedLicenseProvider#getWarnings()
+	 */
+	@Override
+	public List<String> getWarnings() {
+		return this.warnings;
 	}
 }
