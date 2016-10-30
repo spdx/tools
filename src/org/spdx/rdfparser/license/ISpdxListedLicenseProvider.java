@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.license;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
@@ -31,5 +32,6 @@ public interface ISpdxListedLicenseProvider {
 	public Iterator<SpdxListedLicense> getLicenseIterator() throws SpdxListedLicenseException;
 	public Iterator<LicenseException> getExceptionIterator() throws LicenseRestrictionException, SpreadsheetException;
 	public Iterator<DeprecatedLicenseInfo> getDeprecatedLicenseIterator();
+	public List<String> getWarnings();
 
 }
