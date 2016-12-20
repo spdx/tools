@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -256,7 +257,27 @@ public class RdfToSpreadsheet {
 
 	private static void copyNonStdLicenses(ExtractedLicenseInfo[] nonStandardLicenses,
 			NonStandardLicensesSheet nonStandardLicensesSheet) {
-		Arrays.sort(nonStandardLicenses);
+		Arrays.sort(nonStandardLicenses, new Comparator<ExtractedLicenseInfo>() {
+
+			@Override
+			public int compare(ExtractedLicenseInfo o1, ExtractedLicenseInfo o2) {
+				int result = 0;
+				if (o1.getName() != null && !(o1.getName().trim().isEmpty())) {
+					if (o2.getName() != null && !(o2.getName().trim().isEmpty())) {
+						result = o1.getName().compareToIgnoreCase(o2.getName());
+					} else {
+						result = 1;
+					}
+				} else {
+					result = -1;
+				}
+				if (result == 0) {
+					result = o1.getLicenseId().compareToIgnoreCase(o2.getLicenseId());
+				}
+				return result;
+			}
+			
+		});
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
 			nonStandardLicensesSheet.add(nonStandardLicenses[i].getLicenseId(), nonStandardLicenses[i].getExtractedText(), 
 					nonStandardLicenses[i].getName(),
