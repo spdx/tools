@@ -45,7 +45,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import org.spdx.spdxspreadsheet.SnippetSheet;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary

@@ -35,12 +35,13 @@ import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * The superclass for all classes the use the Jena RDF model.
@@ -123,7 +124,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		this.node = node;
 		this.refreshOnGet = modelContainer.addCheckNodeObject(node, this);
 		if (node.isBlank()) {
-			resource = model.createResource(node.getBlankNodeId());
+			resource = model.createResource(new AnonId(node.getBlankNodeId()));
 		} else if (node.isURI()) {
 			resource = model.createResource(node.getURI());
 		} else {
@@ -139,7 +140,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.IRdfModel#createResource(com.hp.hpl.jena.rdf.model.Model, java.lang.String)
+	 * @see org.spdx.rdfparser.model.IRdfModel#createResource(org.apache.jena.rdf.model.Model, java.lang.String)
 	 */
 	@Override
 	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {

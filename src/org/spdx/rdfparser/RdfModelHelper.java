@@ -22,8 +22,8 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
  * Static class containing helper methods for implementations of IRdfModel

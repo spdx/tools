@@ -24,9 +24,9 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * A special license meaning that no license was found
@@ -126,7 +126,7 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {

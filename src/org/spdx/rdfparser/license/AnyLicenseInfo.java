@@ -21,8 +21,8 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.RdfModelObject;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * This abstract class represents several ways of describing licensing information.

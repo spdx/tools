@@ -40,12 +40,12 @@ import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
 import org.spdx.rdfparser.model.pointer.LineCharPointer;
 import org.spdx.rdfparser.model.pointer.StartEndPointer;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Gary
@@ -253,7 +253,7 @@ public class TestSpdxSnippet {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxSnippet#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxSnippet#getType(org.apache.jena.rdf.model.Model)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test

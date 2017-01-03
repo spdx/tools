@@ -31,12 +31,12 @@ import org.spdx.rdfparser.model.ExternalRef.ReferenceCategory;
 import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Test cases for ExternalReference
@@ -144,7 +144,7 @@ public class TestExternalReference {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#getType(org.apache.jena.rdf.model.Model)}.
 	 */
 	@Test
 	public void testGetType() throws InvalidSPDXAnalysisException {

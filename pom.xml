@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.spdx</groupId>
 	<artifactId>spdx-tools</artifactId>
@@ -14,51 +15,58 @@
 	</licenses>
 	<url>http://spdx.org/tools</url>
 	<developers>
-	   <developer>
-	       <id>goneall</id>
-	       <name>Gary O'Neall</name>
-	       <email>gary@sourceauditor.com</email>
-	       <organization>SPDX</organization>
-	       <organizationUrl>http://spdx.org</organizationUrl>
-	   </developer>
+		<developer>
+			<id>goneall</id>
+			<name>Gary O'Neall</name>
+			<email>gary@sourceauditor.com</email>
+			<organization>SPDX</organization>
+			<organizationUrl>http://spdx.org</organizationUrl>
+		</developer>
 	</developers>
 	<organization>
 		<name>Linux Foundation</name>
 		<url>http://www.linuxfoundation.org</url>
 	</organization>
 	<scm>
-        <url>http://git.spdx.org/spdx-tools.git</url>
-        <connection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</connection>
-        <developerConnection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</developerConnection>
-    </scm>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-	    <repository>
-	        <id>ossrh</id>
-	        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-	    </repository>
-    </distributionManagement>
+		<url>http://git.spdx.org/spdx-tools.git</url>
+		<connection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</connection>
+		<developerConnection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</developerConnection>
+	</scm>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<repositories>
+		<repository>
+			<id>rdfa-bintray</id>
+			<url>https://dl.bintray.com/yevster/maven</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
-			<groupId>net.rootdev</groupId>
-			<artifactId>java-rdfa</artifactId>
-			<version>0.4.1</version>
+		  <groupId>com.yevster.net.rootdev</groupId>
+		  <artifactId>java-rdfa</artifactId>
+		  <version>0.4.3</version>
+		  <type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.hpl.jena</groupId>
-			<artifactId>jena</artifactId>
-			<version>2.6.4</version>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.hpl.jena</groupId>
-			<artifactId>arq</artifactId>
-			<version>2.8.8</version>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -143,15 +151,15 @@
 		</dependency>
 	</dependencies>
 	<profiles>
-  		<profile>
-    			<id>doclint-java8-disable</id>
-    			<activation>
-      				<jdk>[1.8,)</jdk>
-    			</activation>
-    			<properties>
-      				<javadoc.opts>-Xdoclint:none</javadoc.opts>
-    			</properties>
-  		</profile>
+		<profile>
+			<id>doclint-java8-disable</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<javadoc.opts>-Xdoclint:none</javadoc.opts>
+			</properties>
+		</profile>
 	</profiles>
 
 	<build>
@@ -269,8 +277,8 @@
 					<execution>
 						<id>attach-javadocs</id>
 						<configuration>
-            						<additionalparam>${javadoc.opts}</additionalparam>
-          					</configuration>
+							<additionalparam>${javadoc.opts}</additionalparam>
+						</configuration>
 						<goals>
 							<goal>jar</goal>
 						</goals>

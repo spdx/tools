@@ -24,9 +24,9 @@ import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Factory for creating SpdxElements from a Jena Model

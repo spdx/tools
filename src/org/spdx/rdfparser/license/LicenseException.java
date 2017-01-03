@@ -28,12 +28,13 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Represents an SPDX license exception as defined in the License Expression Language
@@ -183,7 +184,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 				if (this.exceptionNode.isURI()) {
 					this.resource = model.createResource(this.exceptionNode.getURI());
 				} else if (this.exceptionNode.isBlank()) {
-					this.resource = model.createResource(this.exceptionNode.getBlankNodeId());
+					this.resource = model.createResource(new AnonId(this.exceptionNode.getBlankNodeId()));
 				}
 			} else {	// create a node
 				Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE_EXCEPTION);

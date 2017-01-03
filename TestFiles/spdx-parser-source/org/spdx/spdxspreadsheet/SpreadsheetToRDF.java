@@ -37,8 +37,8 @@ import org.spdx.rdfparser.SPDXPackageInfo;
 import org.spdx.rdfparser.SPDXStandardLicense;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 /**
  * Converts a spreadsheet to an SPDX RDF Analysis file

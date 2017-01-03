@@ -149,8 +149,8 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class 
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseSet.html#SPDXLicenseSet(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">SPDXLicenseSet</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
-              com.hp.hpl.jena.graph.Node&nbsp;licenseInfoNode)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseSet.html#SPDXLicenseSet(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">SPDXLicenseSet</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model,
+              org.apache.jena.graph.Node&nbsp;licenseInfoNode)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseSet.html#SPDXLicenseSet(org.spdx.rdfparser.SPDXLicenseInfo[])">SPDXLicenseSet</a></strong>(<a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class in org.spdx.rdfparser">SPDXLicenseInfo</a>[]&nbsp;licenseInfos)</code>&nbsp;</td>
@@ -171,9 +171,9 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class 
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseSet.html#_createResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.rdf.model.Resource)">_createResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
-               com.hp.hpl.jena.rdf.model.Resource&nbsp;type)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseSet.html#_createResource(org.apache.jena.rdf.model.Model, org.apache.jena.rdf.model.Resource)">_createResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model,
+               org.apache.jena.rdf.model.Resource&nbsp;type)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class in org.spdx.rdfparser">SPDXLicenseInfo</a>[]</code></td>
@@ -193,7 +193,7 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class 
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.spdx.rdfparser.<a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class in org.spdx.rdfparser">SPDXLicenseInfo</a></h3>
-<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(com.hp.hpl.jena.rdf.model.Model)">_createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#createResource(com.hp.hpl.jena.rdf.model.Model)">createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#equals(java.lang.Object)">equals</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#getResource()">getResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#hashCode()">hashCode</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#toString()">toString</a></code></li>
+<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(org.apache.jena.rdf.model.Model)">_createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#createResource(org.apache.jena.rdf.model.Model)">createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#equals(java.lang.Object)">equals</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#getResource()">getResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#hashCode()">hashCode</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#toString()">toString</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -233,14 +233,14 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class 
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SPDXLicenseSet(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">
+<a name="SPDXLicenseSet(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>SPDXLicenseSet</h4>
-<pre>public&nbsp;SPDXLicenseSet(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
-              com.hp.hpl.jena.graph.Node&nbsp;licenseInfoNode)
+<pre>public&nbsp;SPDXLicenseSet(org.apache.jena.rdf.model.Model&nbsp;model,
+              org.apache.jena.graph.Node&nbsp;licenseInfoNode)
                throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>model</code> - </dd><dd><code>licenseInfoNode</code> - </dd>
 <dt><span class="strong">Throws:</span></dt>
@@ -264,14 +264,14 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class 
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="_createResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.rdf.model.Resource)">
+<a name="_createResource(org.apache.jena.rdf.model.Model, org.apache.jena.rdf.model.Resource)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>_createResource</h4>
-<pre>protected&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;_createResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
-                                                 com.hp.hpl.jena.rdf.model.Resource&nbsp;type)</pre>
+<pre>protected&nbsp;org.apache.jena.rdf.model.Resource&nbsp;_createResource(org.apache.jena.rdf.model.Model&nbsp;model,
+                                                 org.apache.jena.rdf.model.Resource&nbsp;type)</pre>
 </li>
 </ul>
 <a name="setSPDXLicenseInfos(org.spdx.rdfparser.SPDXLicenseInfo[])">

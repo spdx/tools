@@ -54,13 +54,13 @@ import org.spdx.rdfparser.model.pointer.StartEndPointer;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Gary
@@ -203,7 +203,7 @@ public class TestRdfModelObject {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#RdfModelObject(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#RdfModelObject(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
@@ -219,7 +219,7 @@ public class TestRdfModelObject {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#createResource(com.hp.hpl.jena.rdf.model.Model, java.lang.String)}.
+	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#createResource(org.apache.jena.rdf.model.Model, java.lang.String)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test

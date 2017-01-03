@@ -144,8 +144,8 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicense.html" title="class in o
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXStandardLicense.html#SPDXStandardLicense(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">SPDXStandardLicense</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;spdxModel,
-                   com.hp.hpl.jena.graph.Node&nbsp;licenseNode)</code>
+<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXStandardLicense.html#SPDXStandardLicense(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">SPDXStandardLicense</a></strong>(org.apache.jena.rdf.model.Model&nbsp;spdxModel,
+                   org.apache.jena.graph.Node&nbsp;licenseNode)</code>
 <div class="block">Constructs an SPDX License from the licenseNode</div>
 </td>
 </tr>
@@ -175,8 +175,8 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicense.html" title="class in o
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXStandardLicense.html#_createResource(com.hp.hpl.jena.rdf.model.Model)">_createResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>
+<td class="colFirst"><code>protected org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXStandardLicense.html#_createResource(org.apache.jena.rdf.model.Model)">_createResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model)</code>
 <div class="block">Internal implementation of create resource which is subclass specific</div>
 </td>
 </tr>
@@ -270,14 +270,14 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicense.html" title="class in o
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.spdx.rdfparser.<a href="../../../org/spdx/rdfparser/SPDXLicense.html" title="class in org.spdx.rdfparser">SPDXLicense</a></h3>
-<code><a href="../../../org/spdx/rdfparser/SPDXLicense.html#_createResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.rdf.model.Resource)">_createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicense.html#_createResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.rdf.model.Resource, java.lang.String)">_createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicense.html#getId()">getId</a>, <a href="../../../org/spdx/rdfparser/SPDXLicense.html#setId(java.lang.String)">setId</a></code></li>
+<code><a href="../../../org/spdx/rdfparser/SPDXLicense.html#_createResource(org.apache.jena.rdf.model.Model, org.apache.jena.rdf.model.Resource)">_createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicense.html#_createResource(org.apache.jena.rdf.model.Model, org.apache.jena.rdf.model.Resource, java.lang.String)">_createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicense.html#getId()">getId</a>, <a href="../../../org/spdx/rdfparser/SPDXLicense.html#setId(java.lang.String)">setId</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.spdx.rdfparser.SPDXLicenseInfo">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.spdx.rdfparser.<a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class in org.spdx.rdfparser">SPDXLicenseInfo</a></h3>
-<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#createResource(com.hp.hpl.jena.rdf.model.Model)">createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#getResource()">getResource</a></code></li>
+<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#createResource(org.apache.jena.rdf.model.Model)">createResource</a>, <a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#getResource()">getResource</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -319,14 +319,14 @@ extends <a href="../../../org/spdx/rdfparser/SPDXLicense.html" title="class in o
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="SPDXStandardLicense(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">
+<a name="SPDXStandardLicense(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SPDXStandardLicense</h4>
-<pre>public&nbsp;SPDXStandardLicense(com.hp.hpl.jena.rdf.model.Model&nbsp;spdxModel,
-                   com.hp.hpl.jena.graph.Node&nbsp;licenseNode)
+<pre>public&nbsp;SPDXStandardLicense(org.apache.jena.rdf.model.Model&nbsp;spdxModel,
+                   org.apache.jena.graph.Node&nbsp;licenseNode)
                     throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Constructs an SPDX License from the licenseNode</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>licenseNode</code> - RDF graph node representing the SPDX License</dd>
@@ -497,18 +497,18 @@ public&nbsp;void&nbsp;setNotes(<a href="http://docs.oracle.com/javase/6/docs/api
 </dl>
 </li>
 </ul>
-<a name="_createResource(com.hp.hpl.jena.rdf.model.Model)">
+<a name="_createResource(org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>_createResource</h4>
-<pre>protected&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;_createResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</pre>
-<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(com.hp.hpl.jena.rdf.model.Model)">SPDXLicenseInfo</a></code></strong></div>
+<pre>protected&nbsp;org.apache.jena.rdf.model.Resource&nbsp;_createResource(org.apache.jena.rdf.model.Model&nbsp;model)</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(org.apache.jena.rdf.model.Model)">SPDXLicenseInfo</a></code></strong></div>
 <div class="block">Internal implementation of create resource which is subclass specific</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(com.hp.hpl.jena.rdf.model.Model)">_createResource</a></code>&nbsp;in class&nbsp;<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class in org.spdx.rdfparser">SPDXLicenseInfo</a></code></dd>
+<dd><code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(org.apache.jena.rdf.model.Model)">_createResource</a></code>&nbsp;in class&nbsp;<code><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html" title="class in org.spdx.rdfparser">SPDXLicenseInfo</a></code></dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>

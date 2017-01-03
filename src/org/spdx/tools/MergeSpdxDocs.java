@@ -38,7 +38,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 
 
 /**

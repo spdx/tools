@@ -27,14 +27,14 @@ import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * @author Gary O'Neall
@@ -154,7 +154,7 @@ public class TestDoapProject {
 		}
 	}
 	/**
-	 * Test method for {@link org.spdx.rdfparser.DoapProject#createResource(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.DoapProject#createResource(org.apache.jena.rdf.model.Model)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
