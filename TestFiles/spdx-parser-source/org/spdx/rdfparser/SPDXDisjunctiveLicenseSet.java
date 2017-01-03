@@ -18,9 +18,9 @@ package org.spdx.rdfparser;
 
 import java.util.Iterator;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * A set of licenses where there is a choice of one of the licenses in the set
@@ -46,7 +46,7 @@ public class SPDXDisjunctiveLicenseSet extends SPDXLicenseSet {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	protected Resource _createResource(Model model) {

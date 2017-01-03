@@ -31,11 +31,11 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * A Package represents a collection of software files that are
@@ -224,7 +224,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		Node verificationCodeProperty = localModel.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE).asNode();
 		Node verificationCodeValueProperty = localModel.getProperty(SPDX_NAMESPACE, PROP_VERIFICATIONCODE_VALUE).asNode();
 
-		Triple nameMatch = Triple.createMatch(null, nameProperty, Node.createLiteral(this.name));
+		Triple nameMatch = Triple.createMatch(null, nameProperty, model.createLiteral(this.name).asNode());
 		ExtendedIterator<Triple> nameleIter = localModel.getGraph().find(nameMatch);
 		while (nameleIter.hasNext()) {
 			Triple t = nameleIter.next();
@@ -292,7 +292,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {

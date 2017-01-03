@@ -44,7 +44,7 @@ import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Model;
 
 /**
  * Translates an tag-value file to a an SPDX Document.

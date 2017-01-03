@@ -26,12 +26,12 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Contains and SPDXFile object and updates the RDF model.
@@ -375,7 +375,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	static protected Resource findFileResource(Model model, SPDXFile spdxFile) throws InvalidSPDXAnalysisException {
 		// find any matching file names
 		Node fileNameProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME).asNode();
-		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, Node.createLiteral(spdxFile.getName()));
+		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, model.createLiteral(spdxFile.getName()).asNode());
 		
 		ExtendedIterator<Triple> filenameMatchIter = model.getGraph().find(fileNameMatch);	
 		if (filenameMatchIter.hasNext()) {

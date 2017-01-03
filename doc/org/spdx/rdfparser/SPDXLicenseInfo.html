@@ -129,14 +129,14 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(com.hp.hpl.jena.rdf.model.Model)">_createResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>
+<td class="colFirst"><code>protected abstract org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#_createResource(org.apache.jena.rdf.model.Model)">_createResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model)</code>
 <div class="block">Internal implementation of create resource which is subclass specific</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#createResource(com.hp.hpl.jena.rdf.model.Model)">createResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>
+<td class="colFirst"><code>org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#createResource(org.apache.jena.rdf.model.Model)">createResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model)</code>
 <div class="block">If a resource does not already exist in this model for this object,
  create a new resource and populate it.</div>
 </td>
@@ -146,7 +146,7 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>com.hp.hpl.jena.rdf.model.Resource</code></td>
+<td class="colFirst"><code>org.apache.jena.rdf.model.Resource</code></td>
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXLicenseInfo.html#getResource()">getResource</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -183,13 +183,13 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createResource(com.hp.hpl.jena.rdf.model.Model)">
+<a name="createResource(org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createResource</h4>
-<pre>public&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;createResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</pre>
+<pre>public&nbsp;org.apache.jena.rdf.model.Resource&nbsp;createResource(org.apache.jena.rdf.model.Model&nbsp;model)</pre>
 <div class="block">If a resource does not already exist in this model for this object,
  create a new resource and populate it.  If the resource does exist,
  return the existing resource.</div>
@@ -197,13 +197,13 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <dt><span class="strong">Returns:</span></dt><dd>resource created from the model</dd></dl>
 </li>
 </ul>
-<a name="_createResource(com.hp.hpl.jena.rdf.model.Model)">
+<a name="_createResource(org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>_createResource</h4>
-<pre>protected abstract&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;_createResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</pre>
+<pre>protected abstract&nbsp;org.apache.jena.rdf.model.Resource&nbsp;_createResource(org.apache.jena.rdf.model.Model&nbsp;model)</pre>
 <div class="block">Internal implementation of create resource which is subclass specific</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>model</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -264,7 +264,7 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getResource</h4>
-<pre>public&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;getResource()</pre>
+<pre>public&nbsp;org.apache.jena.rdf.model.Resource&nbsp;getResource()</pre>
 <dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>

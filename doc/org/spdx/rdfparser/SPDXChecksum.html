@@ -143,8 +143,8 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#SPDXChecksum(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">SPDXChecksum</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;spdxModel,
-            com.hp.hpl.jena.graph.Node&nbsp;checksumNode)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#SPDXChecksum(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">SPDXChecksum</a></strong>(org.apache.jena.rdf.model.Model&nbsp;spdxModel,
+            org.apache.jena.graph.Node&nbsp;checksumNode)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#SPDXChecksum(java.lang.String, java.lang.String)">SPDXChecksum</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithm,
@@ -167,25 +167,25 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#algorithmResourceToString(com.hp.hpl.jena.rdf.model.Resource)">algorithmResourceToString</a></strong>(com.hp.hpl.jena.rdf.model.Resource&nbsp;algorithmResource)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#algorithmResourceToString(org.apache.jena.rdf.model.Resource)">algorithmResourceToString</a></strong>(org.apache.jena.rdf.model.Resource&nbsp;algorithmResource)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#algorithmStringToResource(java.lang.String, com.hp.hpl.jena.rdf.model.Model)">algorithmStringToResource</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithm,
-                         com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>
+<td class="colFirst"><code>static org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#algorithmStringToResource(java.lang.String, org.apache.jena.rdf.model.Model)">algorithmStringToResource</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithm,
+                         org.apache.jena.rdf.model.Model&nbsp;model)</code>
 <div class="block">Converts a string algorithm to an RDF resource</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#convertToResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">convertToResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;cmodel,
-                 com.hp.hpl.jena.graph.Node&nbsp;cnode)</code>
+<td class="colFirst"><code>protected static org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#convertToResource(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">convertToResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;cmodel,
+                 org.apache.jena.graph.Node&nbsp;cnode)</code>
 <div class="block">Convert a node to a resource</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#createResource(com.hp.hpl.jena.rdf.model.Model)">createResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>
+<td class="colFirst"><code>org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#createResource(org.apache.jena.rdf.model.Model)">createResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model)</code>
 <div class="block">Creates a resource from this SPDX Checksum</div>
 </td>
 </tr>
@@ -194,8 +194,8 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected static com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#findSpdxChecksum(com.hp.hpl.jena.rdf.model.Model, org.spdx.rdfparser.SPDXChecksum)">findSpdxChecksum</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
+<td class="colFirst"><code>protected static org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#findSpdxChecksum(org.apache.jena.rdf.model.Model, org.spdx.rdfparser.SPDXChecksum)">findSpdxChecksum</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model,
                 <a href="../../../org/spdx/rdfparser/SPDXChecksum.html" title="class in org.spdx.rdfparser">SPDXChecksum</a>&nbsp;checksum)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -203,7 +203,7 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#getAlgorithm()">getAlgorithm</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>com.hp.hpl.jena.rdf.model.Resource</code></td>
+<td class="colFirst"><code>org.apache.jena.rdf.model.Resource</code></td>
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXChecksum.html#getResource()">getResource</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -280,14 +280,14 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
             <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
 </li>
 </ul>
-<a name="SPDXChecksum(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">
+<a name="SPDXChecksum(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SPDXChecksum</h4>
-<pre>public&nbsp;SPDXChecksum(com.hp.hpl.jena.rdf.model.Model&nbsp;spdxModel,
-            com.hp.hpl.jena.graph.Node&nbsp;checksumNode)
+<pre>public&nbsp;SPDXChecksum(org.apache.jena.rdf.model.Model&nbsp;spdxModel,
+            org.apache.jena.graph.Node&nbsp;checksumNode)
              throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
@@ -301,14 +301,14 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="convertToResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">
+<a name="convertToResource(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>convertToResource</h4>
-<pre>protected static&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;convertToResource(com.hp.hpl.jena.rdf.model.Model&nbsp;cmodel,
-                                                   com.hp.hpl.jena.graph.Node&nbsp;cnode)
+<pre>protected static&nbsp;org.apache.jena.rdf.model.Resource&nbsp;convertToResource(org.apache.jena.rdf.model.Model&nbsp;cmodel,
+                                                   org.apache.jena.graph.Node&nbsp;cnode)
                                                                throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Convert a node to a resource</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cmodel</code> - </dd><dd><code>cnode</code> - </dd>
@@ -317,13 +317,13 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="findSpdxChecksum(com.hp.hpl.jena.rdf.model.Model, org.spdx.rdfparser.SPDXChecksum)">
+<a name="findSpdxChecksum(org.apache.jena.rdf.model.Model, org.spdx.rdfparser.SPDXChecksum)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>findSpdxChecksum</h4>
-<pre>protected static&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;findSpdxChecksum(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
+<pre>protected static&nbsp;org.apache.jena.rdf.model.Resource&nbsp;findSpdxChecksum(org.apache.jena.rdf.model.Model&nbsp;model,
                                                   <a href="../../../org/spdx/rdfparser/SPDXChecksum.html" title="class in org.spdx.rdfparser">SPDXChecksum</a>&nbsp;checksum)
                                                               throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
@@ -353,14 +353,14 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="algorithmStringToResource(java.lang.String, com.hp.hpl.jena.rdf.model.Model)">
+<a name="algorithmStringToResource(java.lang.String, org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>algorithmStringToResource</h4>
-<pre>public static&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;algorithmStringToResource(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithm,
-                                                           com.hp.hpl.jena.rdf.model.Model&nbsp;model)
+<pre>public static&nbsp;org.apache.jena.rdf.model.Resource&nbsp;algorithmStringToResource(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithm,
+                                                           org.apache.jena.rdf.model.Model&nbsp;model)
                                                                     throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Converts a string algorithm to an RDF resource</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>algorithm</code> - </dd>
@@ -369,13 +369,13 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="algorithmResourceToString(com.hp.hpl.jena.rdf.model.Resource)">
+<a name="algorithmResourceToString(org.apache.jena.rdf.model.Resource)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>algorithmResourceToString</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithmResourceToString(com.hp.hpl.jena.rdf.model.Resource&nbsp;algorithmResource)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;algorithmResourceToString(org.apache.jena.rdf.model.Resource&nbsp;algorithmResource)
                                         throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
@@ -401,13 +401,13 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - the value to set</dd></dl>
 </li>
 </ul>
-<a name="createResource(com.hp.hpl.jena.rdf.model.Model)">
+<a name="createResource(org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createResource</h4>
-<pre>public&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;createResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</pre>
+<pre>public&nbsp;org.apache.jena.rdf.model.Resource&nbsp;createResource(org.apache.jena.rdf.model.Model&nbsp;model)</pre>
 <div class="block">Creates a resource from this SPDX Checksum</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>model</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -441,7 +441,7 @@ extends <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getResource</h4>
-<pre>public&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;getResource()</pre>
+<pre>public&nbsp;org.apache.jena.rdf.model.Resource&nbsp;getResource()</pre>
 <dl><dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>

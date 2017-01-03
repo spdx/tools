@@ -26,7 +26,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.RdfModelObject;
 
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * A pointing method made up of a pair of pointers that identify a well defined section within a document delimited by a begin and an end.

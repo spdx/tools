@@ -18,9 +18,9 @@ package org.spdx.rdfparser;
 
 import java.util.ArrayList;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Special class of license to represent no asserted license license in the file or packages
@@ -47,7 +47,7 @@ public class SpdxNoAssertionLicense extends SPDXLicenseInfo {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.SPDXLicenseInfo#_createResource(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	protected Resource _createResource(Model model) {

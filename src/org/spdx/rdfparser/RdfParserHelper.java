@@ -16,9 +16,10 @@
 */
 package org.spdx.rdfparser;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Helper class with common functions used by the RDF Parser
@@ -36,7 +37,7 @@ public class RdfParserHelper {
 	 */
 	public static Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
 		if (cnode.isBlank()) {
-			return cmodel.createResource(cnode.getBlankNodeId());
+			return cmodel.createResource(new AnonId(cnode.getBlankNodeId()));
 		} else if (cnode.isURI()) {
 			return cmodel.createResource(cnode.getURI());
 		} else {

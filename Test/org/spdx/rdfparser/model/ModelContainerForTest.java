@@ -23,9 +23,9 @@ import org.spdx.rdfparser.IModelContainer;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Model container class used for testing
@@ -110,7 +110,7 @@ public class ModelContainerForTest implements IModelContainer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(org.apache.jena.rdf.model.Resource, java.lang.String, org.apache.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public Resource createResource(Resource duplicate, String uri,
@@ -127,7 +127,7 @@ public class ModelContainerForTest implements IModelContainer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(org.apache.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {

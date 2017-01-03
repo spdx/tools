@@ -28,9 +28,9 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * An Annotation is a comment on an SpdxItem by an agent.

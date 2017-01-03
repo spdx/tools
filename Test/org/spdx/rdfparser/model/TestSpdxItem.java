@@ -34,9 +34,9 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -109,7 +109,7 @@ public class TestSpdxItem {
 
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#getType(org.apache.jena.rdf.model.Model)}.
 	 */
 	@Test
 	public void testGetType() {
@@ -207,7 +207,7 @@ public class TestSpdxItem {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#SpdxItem(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#SpdxItem(org.spdx.rdfparser.IModelContainer, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test

@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.model.SpdxDocument;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.util.FileManager;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.FileManager;
 
 /**
  * Factory for creating an SPDX Document from a variety of different sources

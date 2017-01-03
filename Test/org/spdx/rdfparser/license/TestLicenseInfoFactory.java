@@ -38,12 +38,12 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.FileManager;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.FileManager;
 
 /**
  * @author Source Auditor
@@ -357,7 +357,7 @@ public class TestLicenseInfoFactory {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.license.LicenseInfoFactory#getLicenseInfoFromModel(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.license.LicenseInfoFactory#getLicenseInfoFromModel(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
