@@ -33,6 +33,7 @@ import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
@@ -254,7 +255,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 		if (spdxFile.getName() == null) {
 			return null;	// Can't match without a name
 		}
-		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, model.createLiteral(spdxFile.getName()).asNode());
+		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, NodeFactory.createLiteral(spdxFile.getName()));
 		
 		ExtendedIterator<Triple> filenameMatchIter = model.getGraph().find(fileNameMatch);	
 		if (filenameMatchIter.hasNext()) {

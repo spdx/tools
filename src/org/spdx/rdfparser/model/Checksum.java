@@ -29,6 +29,7 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
@@ -72,7 +73,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 			return null;
 		}
 		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
-		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, model.createLiteral(checksum.getValue()).asNode());
+		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, NodeFactory.createLiteral(checksum.getValue()));
 		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
 		while (checksumMatchIter.hasNext()) {
 			Triple checksumMatchTriple = checksumMatchIter.next();

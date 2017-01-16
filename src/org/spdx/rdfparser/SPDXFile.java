@@ -27,6 +27,7 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
@@ -375,7 +376,7 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	static protected Resource findFileResource(Model model, SPDXFile spdxFile) throws InvalidSPDXAnalysisException {
 		// find any matching file names
 		Node fileNameProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_NAME).asNode();
-		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, model.createLiteral(spdxFile.getName()).asNode());
+		Triple fileNameMatch = Triple.createMatch(null, fileNameProperty, NodeFactory.createLiteral(spdxFile.getName()));
 		
 		ExtendedIterator<Triple> filenameMatchIter = model.getGraph().find(fileNameMatch);	
 		if (filenameMatchIter.hasNext()) {

@@ -28,6 +28,7 @@ import org.spdx.rdfparser.referencetype.ReferenceType;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
@@ -415,7 +416,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 			return null;
 		}
 		Node referenceLocatorProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REFERENCE_LOCATOR).asNode();
-		Triple referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, model.createLiteral(this.referenceLocator).asNode());
+		Triple referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, NodeFactory.createLiteral(this.referenceLocator));
 		ExtendedIterator<Triple> referenceMatchIter = modelContainer.getModel().getGraph().find(referenceLocatorMatch);	
 		while (referenceMatchIter.hasNext()) {
 			Triple referenceMatchTriple = referenceMatchIter.next();

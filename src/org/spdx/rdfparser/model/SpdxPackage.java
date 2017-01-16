@@ -32,6 +32,7 @@ import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
@@ -224,7 +225,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		Node verificationCodeProperty = localModel.getProperty(SPDX_NAMESPACE, PROP_PACKAGE_VERIFICATION_CODE).asNode();
 		Node verificationCodeValueProperty = localModel.getProperty(SPDX_NAMESPACE, PROP_VERIFICATIONCODE_VALUE).asNode();
 
-		Triple nameMatch = Triple.createMatch(null, nameProperty, model.createLiteral(this.name).asNode());
+		Triple nameMatch = Triple.createMatch(null, nameProperty, NodeFactory.createLiteral(this.name));
 		ExtendedIterator<Triple> nameleIter = localModel.getGraph().find(nameMatch);
 		while (nameleIter.hasNext()) {
 			Triple t = nameleIter.next();
