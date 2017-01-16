@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.spdx</groupId>
 	<artifactId>spdx-tools</artifactId>
-	<version>2.1.3-SNAPSHOT</version>
+	<version>2.1.4-SNAPSHOT</version>
 	<name>SPDX tools</name>
 	<description>SPDX tools</description>
 	<licenses>
@@ -44,29 +44,51 @@
 	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jena.version>3.1.1</jena.version>
 	</properties>
 	<repositories>
+		<repository>
+			<!--  Some jena component releases missing from maven central -->
+			<id>jena-releases</id>
+			<name>Apache Jena Releases</name>
+			<url>https://repository.apache.org/content/repositories/releases</url>
+		</repository>
 		<repository>
 			<id>rdfa-bintray</id>
 			<url>https://dl.bintray.com/yevster/maven</url>
 		</repository>
 	</repositories>
 	<dependencies>
+
+
+		<!-- JENA -->
+		<dependency>
+		   <groupId>org.apache.jena</groupId>
+		   <artifactId>apache-jena-libs</artifactId>
+		   <version>${jena.version}</version>
+		   <type>pom</type>
+		 </dependency>
+		<dependency>
+		   <groupId>org.apache.jena</groupId>
+		   <artifactId>jena-iri</artifactId>
+		   <version>${jena.version}</version>
+		   <type>jar</type>
+		 </dependency>
+		<!-- THE REST -->
+		
+		<!-- The modification of the RDFa reader to use Jena 3 has been accepted but not
+		released to MVN Central. Hence its use from bintray. This dependency is temporary, until license list rearchitecture
+		to use RDF/XML with content negotiation. -->
 		<dependency>
 		  <groupId>com.yevster.net.rootdev</groupId>
 		  <artifactId>java-rdfa</artifactId>
 		  <version>0.4.3</version>
-		  <type>pom</type>
+			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-core</artifactId>
-			<version>3.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-arq</artifactId>
-			<version>3.1.1</version>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -121,12 +143,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.5.8</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.8</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -141,7 +163,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -212,10 +234,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.3</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>

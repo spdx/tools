@@ -31,6 +31,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.AnonId;
 import org.apache.jena.rdf.model.Model;
@@ -1683,7 +1684,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 */
 	protected boolean extractedLicenseExists(String id) throws InvalidSPDXAnalysisException {
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_LICENSE_ID).asNode();
-		Node o = model.createLiteral(id).asNode();
+		Node o = NodeFactory.createLiteral(id);
 		Triple m = Triple.createMatch(null, p, o);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		return tripleIter.hasNext();

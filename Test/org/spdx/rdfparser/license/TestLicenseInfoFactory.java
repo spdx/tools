@@ -38,6 +38,9 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+
+import junit.framework.Assert;
+
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -210,7 +213,7 @@ public class TestLicenseInfoFactory {
 		try {
 			in = FileManager.get().open(stdLicUri);
 			if ( in != null ) {
-				model.read(in, stdLicUri, "HTML");
+				ListedLicenses.readRdfaIntoModel(model, in, stdLicUri);
 			}
 //			String testOutFilename = "C:\\Users\\Source Auditor\\Documents\\SPDX\\testout.test";
 //			File outfile = new File(testOutFilename);
@@ -258,7 +261,7 @@ public class TestLicenseInfoFactory {
 		InputStream in = FileManager.get().open(stdLicUri);
 		try {
 			Model retval = ModelFactory.createDefaultModel();
-			retval.read(in, prefix, "HTML");
+			ListedLicenses.readRdfaIntoModel(retval, in, prefix);
 			StringWriter writer = new StringWriter();
 			retval.write(writer);
 			Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
@@ -285,6 +288,7 @@ public class TestLicenseInfoFactory {
 		assertEquals(header, lic.getStandardLicenseHeader());
 		String template = readTextFile("TestFiles"+File.separator+"BSD-3-Clause-Template.txt");
 		String licenseTemplate = lic.getStandardLicenseTemplate();
+		assertEquals(licenseTemplate.replaceAll(" ", "").replaceAll("\n", ""), template.replaceAll(" ", "").replaceAll("\n", ""));
 		int result = compareStringsIgnoreSpaces(template, licenseTemplate);
 		assertEquals(0, result);
 		assertEquals(note, lic.getComment());
