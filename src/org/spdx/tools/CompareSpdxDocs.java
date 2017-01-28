@@ -1138,6 +1138,7 @@ public class CompareSpdxDocs {
 		}
 
 		SpdxDocument retval = null;
+		String errorDetails = "(no error details available)";
 		try {
 			// Try to open the file as a tag/value file first.
 			retval = convertTagValueToRdf(spdxDocFile, warnings);
@@ -1151,15 +1152,18 @@ public class CompareSpdxDocs {
 				retval = SPDXDocumentFactory.createSpdxDocument(spdxDocFileName);
 				logger.info("Document identified as SPDX RDF/XML.");
 			} catch (IOException e) {
+				errorDetails = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			} catch (InvalidSPDXAnalysisException e) {
+				errorDetails = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			} catch (Exception e) {
+				errorDetails = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			}
 		}
 		if (retval == null) {
-			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format"));
+			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: " + errorDetails));
 		}
 		return retval;
 	}
