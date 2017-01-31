@@ -561,7 +561,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		
 		for (int i = 0; i < extractedAnyLicenseInfo.length; i++) {
 			if (!(extractedAnyLicenseInfo[i] instanceof ExtractedLicenseInfo)) {
-				throw new InvalidSPDXAnalysisException("Invalid type for extracted license infos");
+				throw new InvalidSPDXAnalysisException("Invalid type for extracted license infos: " + extractedAnyLicenseInfo[i]);
 			}
 			ExtractedLicenseInfo lic = (ExtractedLicenseInfo)extractedAnyLicenseInfo[i];
 			this.licenseIdToExtractedLicense.put(lic.getLicenseId(), lic);
