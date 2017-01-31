@@ -388,8 +388,20 @@ public class PackageInfoSheetV2d1 extends PackageInfoSheet {
 		} else {
 			description = "";
 		}
-		String url = row.getCell(DOWNLOAD_URL_COL).getStringCellValue();
-		String packageVerificationValue = row.getCell(FILE_VERIFICATION_VALUE_COL).getStringCellValue();
+		String url;
+		Cell downloadUrlCell = row.getCell(DOWNLOAD_URL_COL);
+		if (downloadUrlCell != null) {
+			url = downloadUrlCell.getStringCellValue();
+		} else {
+			url = "";
+		}
+		Cell packageVerificationCell = row.getCell(FILE_VERIFICATION_VALUE_COL);
+		String packageVerificationValue;
+		if (packageVerificationCell != null) {
+			packageVerificationValue = packageVerificationCell.getStringCellValue();
+		} else {
+			packageVerificationValue = "";
+		}
 		String[] excludedFiles;
 		
 		Cell excludedFilesCell = row.getCell(VERIFICATION_EXCLUDED_FILES_COL);
