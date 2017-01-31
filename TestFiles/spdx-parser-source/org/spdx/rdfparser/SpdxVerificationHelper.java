@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashSet;
 
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.iri.IRIFactory;
+import org.apache.jena.iri.IRIFactory;
 
 /**
  * Holds static methods used for verify various property valuse

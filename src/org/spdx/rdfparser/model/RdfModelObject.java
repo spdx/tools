@@ -35,12 +35,15 @@ import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.impl.PropertyImpl;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * The superclass for all classes the use the Jena RDF model.
@@ -123,7 +126,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		this.node = node;
 		this.refreshOnGet = modelContainer.addCheckNodeObject(node, this);
 		if (node.isBlank()) {
-			resource = model.createResource(node.getBlankNodeId());
+			resource = model.createResource(new AnonId(node.getBlankNodeId()));
 		} else if (node.isURI()) {
 			resource = model.createResource(node.getURI());
 		} else {
@@ -139,7 +142,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.IRdfModel#createResource(com.hp.hpl.jena.rdf.model.Model, java.lang.String)
+	 * @see org.spdx.rdfparser.model.IRdfModel#createResource(org.apache.jena.rdf.model.Model, java.lang.String)
 	 */
 	@Override
 	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
@@ -318,21 +321,16 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return null;
 		}
-		Node p = model.getProperty(namespace, propertyName).asNode();
-		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-		while (tripleIter.hasNext()) {
-			Triple t = tripleIter.next();
-			if (t.getObject().isURI()) {
-				// check for predefined
-				String retval = PRE_DEFINED_URI_VALUE.get(t.getObject().getURI());
-				if (retval != null) {
-					return retval;
-				}
-			}
-			return t.getObject().toString(false);
+		
+		Statement stmt = resource.getProperty(new PropertyImpl(namespace, propertyName));
+		if (stmt == null) return null;
+		else if (stmt.getObject().isLiteral()){
+			return stmt.getObject().asLiteral().getString();
+		} else if (stmt.getObject().isResource()){
+			return PRE_DEFINED_URI_VALUE.get(stmt.getObject().asResource().getURI());
+		} else {
+			return stmt.getObject().toString();
 		}
-		return null;
 	}
 	
 	/**
@@ -426,7 +424,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 							Resource valueResource = this.model.createResource(valueUri);
 							this.resource.addProperty(p, valueResource);
 						} else {
-							this.resource.addProperty(p, values[i]);
+							this.resource.addLiteral(p, values[i]);
 						}
 					}
 				}

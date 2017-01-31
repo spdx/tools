@@ -29,9 +29,9 @@ import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -77,7 +77,7 @@ public class TestExternalDocumentRef {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.ExternalDocumentRef#getType(org.apache.jena.rdf.model.Model)}.
 	 */
 	@Test
 	public void testGetType() {

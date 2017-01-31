@@ -29,9 +29,9 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.ModelContainerForTest;
 import org.spdx.rdfparser.model.SpdxElement;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -70,7 +70,7 @@ public class TestLineCharPointer {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.pointer.LineCharPointer#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.pointer.LineCharPointer#getType(org.apache.jena.rdf.model.Model)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test

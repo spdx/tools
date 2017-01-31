@@ -31,9 +31,9 @@ import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.license.WithExceptionOperator;
 
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * An SpdxItem is a potentially copyrightable work.
@@ -242,7 +242,7 @@ public class SpdxItem extends SpdxElement {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.SpdxElement#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.SpdxElement#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {

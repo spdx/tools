@@ -31,9 +31,9 @@ import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -90,7 +90,7 @@ public class TestChecksum {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.Checksum#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.Checksum#getType(org.apache.jena.rdf.model.Model)}.
 	 */
 	@Test
 	public void testGetType() {
@@ -132,7 +132,7 @@ public class TestChecksum {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.Checksum#findSpdxChecksum(com.hp.hpl.jena.rdf.model.Model, org.spdx.rdfparser.model.Checksum)}.
+	 * Test method for {@link org.spdx.rdfparser.model.Checksum#findSpdxChecksum(org.apache.jena.rdf.model.Model, org.spdx.rdfparser.model.Checksum)}.
 	 */
 	@Test
 	public void testFindSpdxChecksum() throws InvalidSPDXAnalysisException {

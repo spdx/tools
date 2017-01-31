@@ -23,7 +23,7 @@ import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 
 
-import com.hp.hpl.jena.iri.IRIFactory;
+import org.apache.jena.iri.IRIFactory;
 
 /**
  * Holds static methods used for verify various property valuse

@@ -27,11 +27,11 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.ModelContainerForTest;
 import org.spdx.rdfparser.model.SpdxElement;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -67,7 +67,7 @@ public class TestPointerFactory {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.pointer.PointerFactory#getSinglePointerFromModel(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.model.pointer.PointerFactory#getSinglePointerFromModel(org.spdx.rdfparser.IModelContainer, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
@@ -91,7 +91,7 @@ public class TestPointerFactory {
 	}
 	
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.pointer.PointerFactory#getSinglePointerFromModel(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.model.pointer.PointerFactory#getSinglePointerFromModel(org.spdx.rdfparser.IModelContainer, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test
