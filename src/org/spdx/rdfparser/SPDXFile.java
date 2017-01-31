@@ -24,8 +24,8 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -61,26 +61,32 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	private String[] contributors;
 	private String noticeText;
 	
-	public static Map<String, String> FILE_TYPE_TO_RESOURCE = Maps.newHashMap();
-	public static Map<String, String> RESOURCE_TO_FILE_TYPE = Maps.newHashMap();
+	public static final Map<String, String> FILE_TYPE_TO_RESOURCE;
+	public static final Map<String, String> RESOURCE_TO_FILE_TYPE;
 
 	static {
-		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_SOURCE, 
+	    ImmutableMap.Builder<String, String> fileTypeBuilder = ImmutableMap.builder();
+	    ImmutableMap.Builder<String, String> resourceToTypeBuilder = ImmutableMap.builder();
+	    
+	    fileTypeBuilder.put(SpdxRdfConstants.FILE_TYPE_SOURCE, 
 				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_SOURCE);
-		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_SOURCE, 
+	    resourceToTypeBuilder.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_SOURCE, 
 				SpdxRdfConstants.FILE_TYPE_SOURCE);
-		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_BINARY, 
+		fileTypeBuilder.put(SpdxRdfConstants.FILE_TYPE_BINARY, 
 				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_BINARY);
-		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_BINARY, 
+		resourceToTypeBuilder.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_BINARY, 
 				SpdxRdfConstants.FILE_TYPE_BINARY);
-		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_ARCHIVE, 
+		fileTypeBuilder.put(SpdxRdfConstants.FILE_TYPE_ARCHIVE, 
 				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_ARCHIVE);
-		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_ARCHIVE, 
+		resourceToTypeBuilder.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_ARCHIVE, 
 				SpdxRdfConstants.FILE_TYPE_ARCHIVE);
-		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_OTHER, 
+		fileTypeBuilder.put(SpdxRdfConstants.FILE_TYPE_OTHER, 
 				SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_OTHER);
-		RESOURCE_TO_FILE_TYPE.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_OTHER, 
+		resourceToTypeBuilder.put(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.PROP_FILE_TYPE_OTHER, 
 				SpdxRdfConstants.FILE_TYPE_OTHER);
+		
+		FILE_TYPE_TO_RESOURCE = fileTypeBuilder.build();
+		RESOURCE_TO_FILE_TYPE = resourceToTypeBuilder.build();
 	};
 	
 	/**
