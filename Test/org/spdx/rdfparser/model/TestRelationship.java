@@ -32,9 +32,9 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.Annotation.AnnotationType;
 import org.spdx.rdfparser.model.Relationship.RelationshipType;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -105,7 +105,7 @@ public class TestRelationship {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.Relationship#Relationship(org.spdx.rdfparser.IModelContainer, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.model.Relationship#Relationship(org.spdx.rdfparser.IModelContainer, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test

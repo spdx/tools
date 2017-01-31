@@ -148,8 +148,8 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#SPDXFile(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">SPDXFile</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
-        com.hp.hpl.jena.graph.Node&nbsp;fileNode)</code>
+<td class="colOne"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#SPDXFile(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">SPDXFile</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model,
+        org.apache.jena.graph.Node&nbsp;fileNode)</code>
 <div class="block">Construct an SPDX File form the fileNode</div>
 </td>
 </tr>
@@ -210,15 +210,15 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected static com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#convertToResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">convertToResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;cmodel,
-                 com.hp.hpl.jena.graph.Node&nbsp;cnode)</code>
+<td class="colFirst"><code>protected static org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#convertToResource(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">convertToResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;cmodel,
+                 org.apache.jena.graph.Node&nbsp;cnode)</code>
 <div class="block">Convert a node to a resource</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#createResource(com.hp.hpl.jena.rdf.model.Model)">createResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>&nbsp;</td>
+<td class="colFirst"><code>org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#createResource(org.apache.jena.rdf.model.Model)">createResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -226,18 +226,18 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#fileTypeResourceToString(com.hp.hpl.jena.rdf.model.Resource)">fileTypeResourceToString</a></strong>(com.hp.hpl.jena.rdf.model.Resource&nbsp;fileTypeResource)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#fileTypeResourceToString(org.apache.jena.rdf.model.Resource)">fileTypeResourceToString</a></strong>(org.apache.jena.rdf.model.Resource&nbsp;fileTypeResource)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#fileTypeStringToTypeResource(java.lang.String, com.hp.hpl.jena.rdf.model.Model)">fileTypeStringToTypeResource</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileType,
-                            com.hp.hpl.jena.rdf.model.Model&nbsp;model)</code>
+<td class="colFirst"><code>static org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#fileTypeStringToTypeResource(java.lang.String, org.apache.jena.rdf.model.Model)">fileTypeStringToTypeResource</a></strong>(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileType,
+                            org.apache.jena.rdf.model.Model&nbsp;model)</code>
 <div class="block">Converts a string file type to an RDF resource</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static com.hp.hpl.jena.rdf.model.Resource</code></td>
-<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#findFileResource(com.hp.hpl.jena.rdf.model.Model, org.spdx.rdfparser.SPDXFile)">findFileResource</a></strong>(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
+<td class="colFirst"><code>protected static org.apache.jena.rdf.model.Resource</code></td>
+<td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#findFileResource(org.apache.jena.rdf.model.Model, org.spdx.rdfparser.SPDXFile)">findFileResource</a></strong>(org.apache.jena.rdf.model.Model&nbsp;model,
                 <a href="../../../org/spdx/rdfparser/SPDXFile.html" title="class in org.spdx.rdfparser">SPDXFile</a>&nbsp;spdxFile)</code>
 <div class="block">Finds the resource for an existing file in the model</div>
 </td>
@@ -279,7 +279,7 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#getNoticeText()">getNoticeText</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected com.hp.hpl.jena.rdf.model.Resource</code></td>
+<td class="colFirst"><code>protected org.apache.jena.rdf.model.Resource</code></td>
 <td class="colLast"><code><strong><a href="../../../org/spdx/rdfparser/SPDXFile.html#getResource()">getResource</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -398,14 +398,14 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SPDXFile(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">
+<a name="SPDXFile(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>SPDXFile</h4>
-<pre>public&nbsp;SPDXFile(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
-        com.hp.hpl.jena.graph.Node&nbsp;fileNode)
+<pre>public&nbsp;SPDXFile(org.apache.jena.rdf.model.Model&nbsp;model,
+        org.apache.jena.graph.Node&nbsp;fileNode)
          throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Construct an SPDX File form the fileNode</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fileNode</code> - RDF Graph node representing the SPDX File</dd>
@@ -474,14 +474,14 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="convertToResource(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)">
+<a name="convertToResource(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>convertToResource</h4>
-<pre>protected static&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;convertToResource(com.hp.hpl.jena.rdf.model.Model&nbsp;cmodel,
-                                                   com.hp.hpl.jena.graph.Node&nbsp;cnode)
+<pre>protected static&nbsp;org.apache.jena.rdf.model.Resource&nbsp;convertToResource(org.apache.jena.rdf.model.Model&nbsp;cmodel,
+                                                   org.apache.jena.graph.Node&nbsp;cnode)
                                                                throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Convert a node to a resource</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cmodel</code> - </dd><dd><code>cnode</code> - </dd>
@@ -490,25 +490,25 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="createResource(com.hp.hpl.jena.rdf.model.Model)">
+<a name="createResource(org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createResource</h4>
-<pre>public&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;createResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model)
+<pre>public&nbsp;org.apache.jena.rdf.model.Resource&nbsp;createResource(org.apache.jena.rdf.model.Model&nbsp;model)
                                                   throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="findFileResource(com.hp.hpl.jena.rdf.model.Model, org.spdx.rdfparser.SPDXFile)">
+<a name="findFileResource(org.apache.jena.rdf.model.Model, org.spdx.rdfparser.SPDXFile)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>findFileResource</h4>
-<pre>protected static&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;findFileResource(com.hp.hpl.jena.rdf.model.Model&nbsp;model,
+<pre>protected static&nbsp;org.apache.jena.rdf.model.Resource&nbsp;findFileResource(org.apache.jena.rdf.model.Model&nbsp;model,
                                                   <a href="../../../org/spdx/rdfparser/SPDXFile.html" title="class in org.spdx.rdfparser">SPDXFile</a>&nbsp;spdxFile)
                                                               throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Finds the resource for an existing file in the model</div>
@@ -707,14 +707,14 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="fileTypeStringToTypeResource(java.lang.String, com.hp.hpl.jena.rdf.model.Model)">
+<a name="fileTypeStringToTypeResource(java.lang.String, org.apache.jena.rdf.model.Model)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>fileTypeStringToTypeResource</h4>
-<pre>public static&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;fileTypeStringToTypeResource(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileType,
-                                                              com.hp.hpl.jena.rdf.model.Model&nbsp;model)
+<pre>public static&nbsp;org.apache.jena.rdf.model.Resource&nbsp;fileTypeStringToTypeResource(<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileType,
+                                                              org.apache.jena.rdf.model.Model&nbsp;model)
                                                                        throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <div class="block">Converts a string file type to an RDF resource</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>fileType</code> - </dd>
@@ -723,13 +723,13 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
 </li>
 </ul>
-<a name="fileTypeResourceToString(com.hp.hpl.jena.rdf.model.Resource)">
+<a name="fileTypeResourceToString(org.apache.jena.rdf.model.Resource)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>fileTypeResourceToString</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileTypeResourceToString(com.hp.hpl.jena.rdf.model.Resource&nbsp;fileTypeResource)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileTypeResourceToString(org.apache.jena.rdf.model.Resource&nbsp;fileTypeResource)
                                        throws <a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></pre>
 <dl><dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="../../../org/spdx/rdfparser/InvalidSPDXAnalysisException.html" title="class in org.spdx.rdfparser">InvalidSPDXAnalysisException</a></code></dd></dl>
@@ -812,7 +812,7 @@ implements <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Comparabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getResource</h4>
-<pre>protected&nbsp;com.hp.hpl.jena.rdf.model.Resource&nbsp;getResource()</pre>
+<pre>protected&nbsp;org.apache.jena.rdf.model.Resource&nbsp;getResource()</pre>
 <dl><dt><span class="strong">Returns:</span></dt><dd>the Jena resource if it exists in the model</dd></dl>
 </li>
 </ul>

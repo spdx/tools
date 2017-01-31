@@ -27,7 +27,7 @@ import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.RdfModelObject;
 import org.spdx.rdfparser.model.SpdxElement;
 
-import com.hp.hpl.jena.graph.Node;
+import org.apache.jena.graph.Node;
 
 /**
  * A pointing method made up of a unique pointer. This is an abstract single pointer that provides the necessary framework, 

@@ -33,10 +33,10 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.SpdxDocument;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Source Auditor
@@ -141,7 +141,7 @@ public class TestExtractedLicenseInfo {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#SPDXNonStandardLicense(com.hp.hpl.jena.rdf.model.Model, com.hp.hpl.jena.graph.Node)}.
+	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#SPDXNonStandardLicense(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test

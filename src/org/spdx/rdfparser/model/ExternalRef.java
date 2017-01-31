@@ -27,11 +27,12 @@ import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * An External Reference allows a Package to reference an external source of
@@ -187,7 +188,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {
@@ -415,7 +416,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 			return null;
 		}
 		Node referenceLocatorProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REFERENCE_LOCATOR).asNode();
-		Triple referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, Node.createLiteral(this.referenceLocator));
+		Triple referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, NodeFactory.createLiteral(this.referenceLocator));
 		ExtendedIterator<Triple> referenceMatchIter = modelContainer.getModel().getGraph().find(referenceLocatorMatch);	
 		while (referenceMatchIter.hasNext()) {
 			Triple referenceMatchTriple = referenceMatchIter.next();

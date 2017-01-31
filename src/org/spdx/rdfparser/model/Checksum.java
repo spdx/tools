@@ -28,11 +28,12 @@ import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * A Checksum is value that allows the contents of a file to be authenticated. 
@@ -72,7 +73,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 			return null;
 		}
 		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
-		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, Node.createLiteral(checksum.getValue()));
+		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, NodeFactory.createLiteral(checksum.getValue()));
 		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
 		while (checksumMatchIter.hasNext()) {
 			Triple checksumMatchTriple = checksumMatchIter.next();
@@ -232,7 +233,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {

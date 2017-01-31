@@ -19,12 +19,13 @@ package org.spdx.rdfparser;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Reviewer class for SPDX Analysis
@@ -44,7 +45,7 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		this.model = model;
 		this.reviewerNode = reviewerNode;
 		if (reviewerNode.isBlank()) {
-			reviewerResource = model.createResource(reviewerNode.getBlankNodeId());
+			reviewerResource = model.createResource(new AnonId(reviewerNode.getBlankNodeId()));
 		} else if (reviewerNode.isURI()) {
 			reviewerResource = model.createResource(reviewerNode.getURI());
 		} else {

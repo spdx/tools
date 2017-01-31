@@ -27,9 +27,9 @@ import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Information about an external SPDX document reference including the checksum.  
@@ -162,7 +162,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {

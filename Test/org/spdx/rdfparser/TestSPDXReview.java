@@ -27,9 +27,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Source Auditor
@@ -65,7 +65,7 @@ public class TestSPDXReview {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.SPDXReview#createResource(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.SPDXReview#createResource(org.apache.jena.rdf.model.Model)}.
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Test

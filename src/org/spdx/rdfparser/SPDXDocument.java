@@ -30,13 +30,15 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 
 /**
@@ -1228,7 +1230,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 		if (node.isURI()) {
 			s = model.createResource(node.getURI());
 		} else if (node.isBlank()) {
-			s = model.createResource(node.getBlankNodeId());
+			s = model.createResource(new AnonId(node.getBlankNodeId()));
 		} else {
 			throw(new InvalidSPDXAnalysisException("Node can not be a literal"));
 		}
@@ -1682,7 +1684,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	 */
 	protected boolean extractedLicenseExists(String id) throws InvalidSPDXAnalysisException {
 		Node p = model.getProperty(SPDX_NAMESPACE, PROP_LICENSE_ID).asNode();
-		Node o = Node.createLiteral(id);
+		Node o = NodeFactory.createLiteral(id);
 		Triple m = Triple.createMatch(null, p, o);
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		return tripleIter.hasNext();
@@ -1896,7 +1898,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(org.apache.jena.rdf.model.Resource, java.lang.String, org.apache.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public Resource createResource(Resource duplicate, String uri,
@@ -1911,7 +1913,7 @@ public class SPDXDocument implements SpdxRdfConstants, IModelContainer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(org.apache.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {

@@ -42,8 +42,8 @@ import org.spdx.rdfparser.model.Relationship.RelationshipType;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary
@@ -190,7 +190,7 @@ public class TestSpdxDocument {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#getType(com.hp.hpl.jena.rdf.model.Model)}.
+	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#getType(org.apache.jena.rdf.model.Model)}.
 	 */
 	@Test
 	public void testGetType() {

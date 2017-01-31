@@ -25,9 +25,9 @@ import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.SpdxElement;
 
 import com.google.common.base.Objects;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * @author Gary O'Neall
@@ -83,7 +83,7 @@ public class LineCharPointer extends SinglePointer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(com.hp.hpl.jena.rdf.model.Model)
+	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
 	@Override
 	public Resource getType(Model model) {

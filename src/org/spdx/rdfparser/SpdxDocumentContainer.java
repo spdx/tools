@@ -23,6 +23,14 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
@@ -41,13 +49,7 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+
 
 /**
  * This class contains the SPDX Document and provides some of the basic
@@ -611,7 +613,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		if (node.isURI()) {
 			s = model.createResource(node.getURI());
 		} else if (node.isBlank()) {
-			s = model.createResource(node.getBlankNodeId());
+			s = model.createResource(new AnonId(node.getBlankNodeId()));
 		} else {
 			throw(new InvalidSPDXAnalysisException("Node can not be a literal"));
 		}
@@ -757,7 +759,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	// must be synchronized since it interacts with a map of nodes and objects that represent the model
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(org.apache.jena.rdf.model.Resource, java.lang.String, org.apache.jena.rdf.model.Resource)
 	 */
 	@Override
 	public synchronized Resource createResource(Resource duplicate, String uri, Resource type, IRdfModel nodeObject) {
@@ -796,7 +798,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#addNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#addNodeObject(org.apache.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public synchronized boolean addCheckNodeObject(Node node, IRdfModel nodeObject) {

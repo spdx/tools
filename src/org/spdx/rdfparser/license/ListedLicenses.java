@@ -16,16 +16,20 @@
 */
 package org.spdx.rdfparser.license;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
@@ -35,15 +39,16 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.FileManager;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
+import net.rootdev.javardfa.jena.RDFaReader.HTMLRDFaReader;
 /**
  * Singleton class which holds the listed licenses
  * @author Gary O'Neall
@@ -56,6 +61,7 @@ public class ListedLicenses implements IModelContainer {
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	public static final String LISTED_LICENSE_URI_PREFIX = "http://spdx.org/licenses/";
 	private static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
+	
 
 	private static final String LISTED_LICENSE_RDF_LOCAL_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "index.html";
 	private static final String LISTED_LICENSE_PROPERTIES_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "licenses.properties";
@@ -121,6 +127,10 @@ public class ListedLicenses implements IModelContainer {
         } finally {
             listedLicenseModificationLock.writeLock().unlock();
         }
+    }
+    
+    static void readRdfaIntoModel(Model model, InputStream is, String rootUri){
+    	new HTMLRDFaReader().read(model, is, rootUri);
     }
 
 	/* (non-Javadoc)
@@ -255,19 +265,16 @@ public class ListedLicenses implements IModelContainer {
 	 * @throws NoListedLicenseRdfModel 
 	 */
 	private Model getLicenseModel(String uri, String base) throws NoListedLicenseRdfModel {
-		try {
-			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-		} catch(java.lang.ClassNotFoundException e) {
-			throw(new NoListedLicenseRdfModel("Could not load the RDFa reader for licenses.  This could be caused by an installation problem - missing java-rdfa jar file"));
-		}  
 		Model retval = ModelFactory.createDefaultModel();
 		InputStream in = null;
 		try {
 			try {
 				if (!(onlyUseLocalLicenses && uri.startsWith(LISTED_LICENSE_URI_PREFIX))) {
-				    in = FileManager.get().open(uri);
-					try {
-						retval.read(in, base, "HTML");
+					//Accessing the old HTTP urls produces 301.
+					String actualUrl = StringUtils.replaceOnce(uri, "http://", "https://");
+					in = FileManager.get().open(actualUrl);
+					try { 
+						readRdfaIntoModel(retval, in, base);
 						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 				    	if (retval.isEmpty() || !retval.contains(null, p)) {
 					    	try {
@@ -297,8 +304,8 @@ public class ListedLicenses implements IModelContainer {
 				if (in == null) {
 					throw(new NoListedLicenseRdfModel("SPDX listed license "+uri+" could not be read."));
 				}
-				try {
-					retval.read(in, base, "HTML");
+				try (InputStreamReader reader = new InputStreamReader(in, Charset.forName("UTF-8"))){
+					readRdfaIntoModel(retval, in, uri);
 				} catch(Exception ex) {
 					throw(new NoListedLicenseRdfModel("Error reading the spdx listed licenses: "+ex.getMessage(),ex));
 				}
@@ -326,25 +333,19 @@ public class ListedLicenses implements IModelContainer {
 	 * Load an spdx listed license model from the index page
 	 */
 	private void loadListedLicenseModel() throws InvalidSPDXAnalysisException {
-		try {
-			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-		} catch(java.lang.ClassNotFoundException e) {
-			logger.warn("Unable to load Java RDFa reader");
-		}  
 
 		// Create the initial model from the index page which only contains
 		// the license ID's
 		// We will fill in the licenses into the cache on demand
 		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
-		String fileType = "HTML";
-		String base = LISTED_LICENSE_URI_PREFIX+"index.html";
+
 		InputStream licRdfInput;
 		if (onlyUseLocalLicenses) {
 		    licRdfInput = null;
 		} else {
 		    licRdfInput = FileManager.get().open(LISTED_LICENSE_URI_PREFIX+"index.html");
 		    try {
-		    	myStdLicModel.read(licRdfInput, base, fileType);
+		    	readRdfaIntoModel(myStdLicModel, licRdfInput, LISTED_LICENSE_URI_PREFIX);
 				Property p = myStdLicModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 		    	if (myStdLicModel.isEmpty() || !myStdLicModel.contains(null, p)) {
 			    	try {
@@ -369,7 +370,6 @@ public class ListedLicenses implements IModelContainer {
 		try {
 			if (licRdfInput == null) {
 				// need to load a static copy
-				base = "file://"+LISTED_LICENSE_RDF_LOCAL_FILENAME;
 				licRdfInput = FileManager.get().open(LISTED_LICENSE_RDF_LOCAL_FILENAME);
 				if ( licRdfInput == null ) {
 					// try the class loader
@@ -379,7 +379,7 @@ public class ListedLicenses implements IModelContainer {
 					throw new NoListedLicenseRdfModel("Unable to open SPDX listed license from website or from local file");
 				}
 				try {
-					myStdLicModel.read(licRdfInput, base, fileType);
+			    	readRdfaIntoModel(myStdLicModel, licRdfInput, LISTED_LICENSE_URI_PREFIX);
 				} catch(Exception ex) {
 					throw new NoListedLicenseRdfModel("Unable to read the SPDX listed license model", ex);
 				}
@@ -596,7 +596,7 @@ public class ListedLicenses implements IModelContainer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#createResource(com.hp.hpl.jena.rdf.model.Resource, java.lang.String, com.hp.hpl.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#createResource(org.apache.jena.rdf.model.Resource, java.lang.String, org.apache.jena.rdf.model.Resource, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public Resource createResource(Resource duplicate, String uri,
@@ -619,7 +619,7 @@ public class ListedLicenses implements IModelContainer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(com.hp.hpl.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
+	 * @see org.spdx.rdfparser.IModelContainer#addCheckNodeObject(org.apache.jena.graph.Node, org.spdx.rdfparser.model.IRdfModel)
 	 */
 	@Override
 	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {

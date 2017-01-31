@@ -21,12 +21,14 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * SPDX Checksum class for packages and files
@@ -58,7 +60,7 @@ public class SPDXChecksum implements Cloneable {
 	protected static Resource findSpdxChecksum(Model model, SPDXChecksum checksum) throws InvalidSPDXAnalysisException {
 		// find any matching checksum values
 		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
-		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, Node.createLiteral(checksum.getValue()));
+		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, NodeFactory.createLiteral(checksum.getValue()));
 		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
 		while (checksumMatchIter.hasNext()) {
 			Triple checksumMatchTriple = checksumMatchIter.next();
@@ -98,7 +100,7 @@ public class SPDXChecksum implements Cloneable {
 		this.model = spdxModel;
 		this.checksumNode = checksumNode;
 		if (checksumNode.isBlank()) {
-			checksumResource = model.createResource(checksumNode.getBlankNodeId());
+			checksumResource = model.createResource(new AnonId(checksumNode.getBlankNodeId()));
 		} else if (checksumNode.isURI()) {
 			checksumResource = model.createResource(checksumNode.getURI());
 		} else {
