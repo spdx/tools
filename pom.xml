@@ -28,9 +28,9 @@
 		<url>http://www.linuxfoundation.org</url>
 	</organization>
 	<scm>
-		<url>http://git.spdx.org/spdx-tools.git</url>
-		<connection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</connection>
-		<developerConnection>scm:git:ssh://git-spdx@git.spdx.org/spdx-tools.git</developerConnection>
+		<url>https://github.com/spdx/tools</url>
+		<connection>scm:git:ssh://git@github.com:spdx/tools.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:spdx/tools.git</developerConnection>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
@@ -309,4 +309,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.codehaus.mojo</groupId>
+        		<artifactId>findbugs-maven-plugin</artifactId>
+        		<version>3.0.1</version>
+      		</plugin>
+    	</plugins>
+  </reporting>
 </project>

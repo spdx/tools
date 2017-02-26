@@ -255,7 +255,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 			return new ReferenceType(this.referenceTypeUri, this.contextualExample, this.documentation, this.externalReferenceSite);
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Error cloning reference type",e);
-			return null;
+			throw new AssertionError("Clone should never cause an Invalid SPDX Exception",e);
 		}
 	}
 }

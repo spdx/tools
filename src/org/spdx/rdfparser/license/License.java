@@ -367,8 +367,7 @@ public abstract class License extends SimpleLicensingInfo {
 					this.getLicenseText(), this.getSeeAlso(), this.getComment(),
 					this.getStandardLicenseHeader(), this.getStandardLicenseTemplate(), this.isOsiApproved());
 		} catch (InvalidSPDXAnalysisException e) {
-			// Hmmm - TODO: Figure out what to do in this case
-			return null;
+			throw new AssertionError("Clone should never cause an Invalid SPDX Exception",e);
 		}
 	}
 	

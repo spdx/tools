@@ -293,6 +293,7 @@ public class SpdxItem extends SpdxElement {
 	
 	@Override
 	public SpdxItem clone() {
+		//NOTE: We don't call super.clone since we must handle the special case avoiding infinite recursion
 		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
 	

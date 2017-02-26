@@ -208,9 +208,11 @@ public class LicenseListPublisher {
 	private static void cleanLicenseDataDir(File licenseDataDir) {
 		// Leave the files at the top level and delete files underneath leaving the directories
 		File[] children = licenseDataDir.listFiles();
-		for (File child:children) {
-			if (child.isDirectory()) {
-				deleteOnlyFiles(child);
+		if (children != null) {
+			for (File child:children) {
+				if (child != null && child.isDirectory()) {
+					deleteOnlyFiles(child);
+				}
 			}
 		}
 	}
@@ -225,11 +227,15 @@ public class LicenseListPublisher {
 		}
 		if (file.isDirectory()) {
 			File[] children = file.listFiles();
-			for (File child:children) {
-				if (child.isDirectory()) {
-					deleteOnlyFiles(child);
-				} else {
-					child.delete();
+			if (children != null) {
+				for (File child:children) {
+					if (child != null) {
+						if (child.isDirectory()) {
+							deleteOnlyFiles(child);
+						} else {
+							child.delete();
+						}
+					}
 				}
 			}
 		} else {
@@ -244,9 +250,11 @@ public class LicenseListPublisher {
 	private static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
 			File[] children = dir.listFiles();
-			for (File child:children) {
-				if (!deleteDir(child)) {
-					return false;
+			if (children != null) {
+				for (File child:children) {
+					if (child != null && !deleteDir(child)) {
+						return false;
+					}
 				}
 			}
 		}

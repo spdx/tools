@@ -26,13 +26,13 @@ import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.apache.jena.iri.IRIFactory;
 
 /**
- * Holds static methods used for verify various property valuse
+ * Holds static methods used for verify various property values
  * @author Gary O'Neall
  *
  */
 public class SpdxVerificationHelper {
 	
-	static IRIFactory iriFactory = IRIFactory.semanticWebImplementation();
+	static IRIFactory iriFactory = IRIFactory.iriImplementation();
 
 	static final String[] VALID_CREATOR_PREFIXES = new String[] {SpdxRdfConstants.CREATOR_PREFIX_PERSON,
 		SpdxRdfConstants.CREATOR_PREFIX_ORGANIZATION, SpdxRdfConstants.CREATOR_PREFIX_TOOL};
