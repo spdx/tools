@@ -87,7 +87,7 @@ public class RdfToSpreadsheet {
 		}
 		File spdxRdfFile = new File(args[0]);
 		if (!spdxRdfFile.exists()) {
-			System.out.printf("Error: File %1$s does not exist.\n", args[0]);
+			System.out.printf("Error: File %1$s does not exist.%n", args[0]);
 			return;
 		}
 		File spdxSpreadsheetFile = new File(args[1]);

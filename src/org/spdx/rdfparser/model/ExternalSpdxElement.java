@@ -130,12 +130,8 @@ public class ExternalSpdxElement extends SpdxElement {
 		// we don't want to call super.verify since we really don't require those fields
 		List<String> retval = Lists.newArrayList();
 		String id = this.getId();
-		if (id == null) {
-			retval.add("Missing required ID for external SPDX element");
-		} else {
-			if (!SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(id).matches()) {				
-				retval.add("Invalid id format for an external document reference.  Must be of the form ExternalSPDXRef:SPDXID");
-			}
+		if (!SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(id).matches()) {				
+			retval.add("Invalid id format for an external document reference.  Must be of the form ExternalSPDXRef:SPDXID");
 		}
 		return retval;
 	}

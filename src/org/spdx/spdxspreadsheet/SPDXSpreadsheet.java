@@ -26,6 +26,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * A spreadsheet containing information on an SPDX Document.
  * 
@@ -56,8 +58,13 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public static final String VERSION_0_9_3 = "0.9.3";
 	public static final String VERSION_0_9_2 = "0.9.2";
 	public static final String VERSION_0_9_1 = "0.9.1";
-	public static final String[] SUPPORTED_VERSIONS = new String[] {CURRENT_VERSION,VERSION_0_9_4, 
-		VERSION_0_9_3, VERSION_0_9_2, VERSION_0_9_1, VERSION_2_0_0};
+	public static final ImmutableList<String> SUPPORTED_VERSIONS = new ImmutableList.Builder<String>()
+							.add(CURRENT_VERSION,VERSION_0_9_4)
+							.add(VERSION_0_9_3)
+							.add(VERSION_0_9_2)
+							.add(VERSION_0_9_1)
+							.add(VERSION_2_0_0)
+							.build();
 	public static final String UNKNOWN_VERSION = "UNKNOWN";
 	
 	private DocumentInfoSheet documentInfoSheet;
@@ -142,15 +149,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 * @return
 	 */
 	public static boolean verifyVersion(String versionToCheck) {
-		boolean supported = false;
 		String trVersion = versionToCheck.trim();
-		for (int i = 0; i < SPDXSpreadsheet.SUPPORTED_VERSIONS.length; i++) {
-			if (SPDXSpreadsheet.SUPPORTED_VERSIONS[i].equals(trVersion)) {
-				supported = true;
-				break;
-			}
-		}
-		return supported;
+		return SPDXSpreadsheet.SUPPORTED_VERSIONS.contains(trVersion);
 	}
 
 	/* (non-Javadoc)

@@ -148,8 +148,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		this.spdxDocument = new SpdxDocument(this, this.documentNode);
 		initializeNextLicenseRef();
 		initializeNextElementRef();
-		if (this.spdxDocument.getDocumentDescribes() != null || 
-				this.spdxDocument.getDocumentDescribes().length == 0) {
+		if (this.spdxDocument.getDocumentDescribes().length == 0) {
 			upgradeDescribesToRelationship();
 		}
 	}

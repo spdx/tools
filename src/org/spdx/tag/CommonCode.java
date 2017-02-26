@@ -167,7 +167,7 @@ public class CommonCode {
 		List<SpdxSnippet> allSnippets = doc.getDocumentContainer().findAllSnippets();
 		// first print out any described files or snippets
 		SpdxItem[] items = doc.getDocumentDescribes();
-		if (items != null && items.length > 0) {
+		if (items.length > 0) {
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] instanceof SpdxFile) {
 					printFile((SpdxFile)items[i], out, constants);
@@ -179,7 +179,7 @@ public class CommonCode {
 			}
 		}
 		// print any described packages
-		if (items != null && items.length > 0) {
+		if (items.length > 0) {
 			for (int i = 0; i < items.length; i++) {
 				if (items[i] instanceof SpdxPackage) {
 					printPackage((SpdxPackage)items[i], out, constants, allFiles, doc.getDocumentNamespace());

@@ -16,6 +16,7 @@
 */
 package org.spdx.compare;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -25,8 +26,12 @@ import java.util.Comparator;
  * @author Gary O'Neall
  *
  */
-public class NormalizedFileNameComparator implements Comparator<String> {
+public class NormalizedFileNameComparator implements Comparator<String>, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static final char DOS_SEPARATOR = '\\';
 	static final char UNIX_SEPARATOR = '/';
 	static final String RELATIVE_DIR = "./";

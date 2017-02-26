@@ -167,16 +167,11 @@ public class ListedReferenceTypes {
     	ReferenceType retval = this.listedReferenceTypeCache.get(listedReferenceName);
     	if (retval == null) {
     		URI listedRefUri = getListedReferenceUri(listedReferenceName);
-    		if (listedRefUri == null) {
-    			return null;
-    		}
-    		else {
-    			retval = new ReferenceType(listedRefUri, null, null, null);
-    			ReferenceType oldValue = this.listedReferenceTypeCache.putIfAbsent(listedReferenceName, retval);
-    			if (oldValue != null) {
-    				retval = oldValue;
-    			}
-    		}
+			retval = new ReferenceType(listedRefUri, null, null, null);
+			ReferenceType oldValue = this.listedReferenceTypeCache.putIfAbsent(listedReferenceName, retval);
+			if (oldValue != null) {
+				retval = oldValue;
+			}
     	}
     	return retval;
     }

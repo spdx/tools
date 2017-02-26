@@ -62,8 +62,8 @@ public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	private String[] contributors;
 	private String noticeText;
 	
-	public static Map<String, String> FILE_TYPE_TO_RESOURCE = Maps.newHashMap();
-	public static Map<String, String> RESOURCE_TO_FILE_TYPE = Maps.newHashMap();
+	public static final Map<String, String> FILE_TYPE_TO_RESOURCE = Maps.newHashMap();
+	public static final Map<String, String> RESOURCE_TO_FILE_TYPE = Maps.newHashMap();
 
 	static {
 		FILE_TYPE_TO_RESOURCE.put(SpdxRdfConstants.FILE_TYPE_SOURCE, 

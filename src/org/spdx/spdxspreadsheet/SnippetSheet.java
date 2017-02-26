@@ -158,8 +158,8 @@ public class SnippetSheet extends AbstractSheet {
 						int start = 0;
 						int end = 0;
 						try {
-							start = Integer.valueOf(rangeMatcher.group(1));
-							end = Integer.valueOf(rangeMatcher.group(2));
+							start = Integer.parseInt(rangeMatcher.group(1));
+							end = Integer.parseInt(rangeMatcher.group(2));
 							if (start >= end) {
 								return "Invalid range for "+HEADER_TITLES[i]+": "+cell.getStringCellValue() + ".  End is not greater than or equal to the end.";
 							}
@@ -342,8 +342,8 @@ public class SnippetSheet extends AbstractSheet {
 					throw new SpreadsheetException("Invalid byte range: "+range);
 				}
 				try {
-					start = Integer.valueOf(rangeMatcher.group(1));
-					end = Integer.valueOf(rangeMatcher.group(2));
+					start = Integer.parseInt(rangeMatcher.group(1));
+					end = Integer.parseInt(rangeMatcher.group(2));
 				} catch(Exception ex) {
 					throw new SpreadsheetException("Invalid byte range: "+range);
 				}

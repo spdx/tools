@@ -16,7 +16,6 @@
 */
 package org.spdx.rdfparser.model;
 
-import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -27,6 +26,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -51,19 +51,19 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 		checksumAlgorithm_md5};		
 		
 	// Mapping tables for Checksum Algorithms
-	public static final Hashtable<ChecksumAlgorithm, String> CHECKSUM_ALGORITHM_TO_TAG = 
-			new Hashtable<ChecksumAlgorithm, String>();
-	public static final Hashtable<String, ChecksumAlgorithm> CHECKSUM_TAG_TO_ALGORITHM = 
-			new Hashtable<String, ChecksumAlgorithm>();
-	static {
-		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_md5, "MD5:");
-		CHECKSUM_TAG_TO_ALGORITHM.put("MD5:", ChecksumAlgorithm.checksumAlgorithm_md5);
-		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha1, "SHA1:");
-		CHECKSUM_TAG_TO_ALGORITHM.put("SHA1:", ChecksumAlgorithm.checksumAlgorithm_sha1);
-		CHECKSUM_ALGORITHM_TO_TAG.put(ChecksumAlgorithm.checksumAlgorithm_sha256, "SHA256:");
-		CHECKSUM_TAG_TO_ALGORITHM.put("SHA256:", ChecksumAlgorithm.checksumAlgorithm_sha256);
-	}
-	
+	public static final ImmutableMap<ChecksumAlgorithm, String> CHECKSUM_ALGORITHM_TO_TAG = 
+			new ImmutableMap.Builder<ChecksumAlgorithm, String>()
+				.put(ChecksumAlgorithm.checksumAlgorithm_md5, "MD5:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_sha1, "SHA1:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_sha256, "SHA256:")
+				.build();
+	public static final ImmutableMap<String, ChecksumAlgorithm> CHECKSUM_TAG_TO_ALGORITHM = 
+			new ImmutableMap.Builder<String, ChecksumAlgorithm>()
+			.put("MD5:", ChecksumAlgorithm.checksumAlgorithm_md5)
+			.put("SHA1:", ChecksumAlgorithm.checksumAlgorithm_sha1)
+			.put("SHA256:", ChecksumAlgorithm.checksumAlgorithm_sha256)
+			.build();
+
 	ChecksumAlgorithm algorithm;
 	String checksumValue;
 	

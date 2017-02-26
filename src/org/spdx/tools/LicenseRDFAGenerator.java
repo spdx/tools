@@ -489,7 +489,9 @@ public class LicenseRDFAGenerator {
 	private static void writeCssFile(File dir) throws IOException {
 		File cssFile = new File(dir.getPath()+ File.separator + CSS_FILE_NAME);
 		if (cssFile.exists()) {
-			cssFile.delete();
+			if (!cssFile.delete()) {
+				throw(new IOException("Unable to delete old file"));
+			}
 		}
 		File cssTemplateFile = new File(CSS_TEMPLATE_FILE); 
 		Files.copy(cssTemplateFile, cssFile);		

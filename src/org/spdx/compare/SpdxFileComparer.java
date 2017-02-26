@@ -17,6 +17,7 @@
 */
 package org.spdx.compare;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -70,7 +71,12 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 * @author Gary O'Neall
 	 *
 	 */
-	private static class DoapComparator implements Comparator<DoapProject> {
+	private static class DoapComparator implements Comparator<DoapProject>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
