@@ -121,7 +121,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		try {
 			return new ExternalSpdxElement(this.getId());
 		} catch (InvalidSPDXAnalysisException e) {
-			return null;
+			throw new AssertionError("Clone should never cause an Invalid SPDX Exception",e);
 		}
 	}
 	

@@ -317,6 +317,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 			if (!(entry.getValue() instanceof SpdxFile)) {
 				continue;
 			}
+			@SuppressWarnings("deprecation")
 			DoapProject[] compareArtifactOf = ((SpdxFile)entry.getValue()).getArtifactOf();
 			Map<SpdxDocument, DoapProject[]> uniqueCompareArtifactOf = this.uniqueArtifactOfs.get(entry.getKey());
 			if (uniqueCompareArtifactOf == null) {
