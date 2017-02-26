@@ -100,22 +100,14 @@ public class SnippetContext {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
 		}
-		if (snippet != null) {
-			return snippet.getLicenseConcluded().toString();
-		} else {
-			return null;
-		}
+		return snippet.getLicenseConcluded().toString();
 	}
 	
 	public String licenseComments() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
 		}
-		if (snippet != null) {
-			return snippet.getLicenseComments();
-		} else {
-			return null;
-		}
+		return snippet.getLicenseComments();
 	}
 	
 	public List<String> licenseInfoInSnippet() {
@@ -136,11 +128,7 @@ public class SnippetContext {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
 		}
-		if (snippet != null) {
-			return snippet.getCopyrightText();
-		} else {
-			return null;
-		}
+		return snippet.getCopyrightText();
 	}
 	
 	public String comment() {

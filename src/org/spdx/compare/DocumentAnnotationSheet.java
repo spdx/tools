@@ -16,6 +16,7 @@
 */
 package org.spdx.compare;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -35,7 +36,12 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class DocumentAnnotationSheet extends AbstractSheet {
 	
-	private static class AnnotationComparator implements Comparator<Annotation> {
+	private static class AnnotationComparator implements Comparator<Annotation>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

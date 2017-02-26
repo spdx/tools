@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
@@ -65,6 +66,8 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  * 8.	If there are any problems, copy the files from the backup back to ~/www/spdx/content/licenses
  */
 public class LicenseListPublisher {
+	
+	static final Logger logger = Logger.getLogger(LicenseListPublisher.class);
 	
 	static final int ERROR_STATUS = 1;
 	private static final String LICENSE_XML_URI = "https://github.com/goneall/license-list-XML.git";
@@ -233,7 +236,9 @@ public class LicenseListPublisher {
 						if (child.isDirectory()) {
 							deleteOnlyFiles(child);
 						} else {
-							child.delete();
+							if (!child.delete()) {
+								logger.warn("Unable to delete file "+child.getName());
+							}
 						}
 					}
 				}

@@ -243,7 +243,7 @@ public abstract class AbstractSheet {
 			Font font = sheet.getWorkbook().getFontAt(style.getFontIndex());
 			AttributedString astr = new AttributedString(val);
 			java.awt.Font awtFont = new java.awt.Font(font.getFontName(), 0, font.getFontHeightInPoints());
-			float cellWidth = sheet.getColumnWidth(cell.getColumnIndex())/256 * 5.5F;
+			float cellWidth = sheet.getColumnWidth(cell.getColumnIndex())/ 256F * 5.5F;
 			astr.addAttribute(TextAttribute.FONT, awtFont);
 			FontRenderContext context = new FontRenderContext(null, true, true);
 			java.awt.font.LineBreakMeasurer measurer = new java.awt.font.LineBreakMeasurer(astr.getIterator(), context);

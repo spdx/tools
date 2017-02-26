@@ -40,12 +40,6 @@ public class FileSpdxIdSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
-		if (fileA.getId() == null) {
-			return fileB.getId() == null;
-		}
-		if (fileB.getId() == null) {
-			return false;
-		}
 		return fileA.getId().equals(fileB.getId());
 	}
 
@@ -54,11 +48,7 @@ public class FileSpdxIdSheet extends AbstractFileCompareSheet {
 	 */
 	@Override
 	String getFileValue(SpdxFile spdxFile) {
-		if (spdxFile.getId() == null) {
-			return "NONE";
-		} else {
-			return spdxFile.getId();
-		}
+		return spdxFile.getId();
 	}
 
 }

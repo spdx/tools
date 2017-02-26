@@ -649,10 +649,6 @@ public class BuildDocument implements TagValueBehavior {
 			inAnnotation = false;
 			inSnippetDefinition = false;
 			if (this.lastPackage != null) {
-				if (this.lastPackage.getId() == null) {
-					this.warningMessages.add("Missing SPDX ID for "+this.lastPackage.getName()
-							+ ".  An SPDX ID will be generated for this package.");
-				}
 				this.analysis.getDocumentContainer().addElement(this.lastPackage);
 			}
 			this.lastPackage = new SpdxPackage(value, null, null, null, null, null, null, null);
@@ -693,10 +689,6 @@ public class BuildDocument implements TagValueBehavior {
 	 */
 	private void addLastFile() throws InvalidSPDXAnalysisException {
 		if (this.lastFile != null) {
-			if (this.lastFile.getId() == null) {
-				this.warningMessages.add("Missing SPDX ID for "+this.lastFile.getName()
-						+ ".  An SPDX ID will be generated for this file.");
-			}
 			if (lastPackage != null) {
 				this.lastPackage.addFile(lastFile);
 			} else {
@@ -713,14 +705,6 @@ public class BuildDocument implements TagValueBehavior {
 	 */
 	private void addLastSnippet() throws InvalidSPDXAnalysisException {
 		if (this.lastSnippet != null) {
-			if (this.lastSnippet.getId() == null) {
-				String snippetName = this.lastSnippet.getName();
-				if (snippetName == null) {
-					snippetName = "[UNKNOWN]";
-				}
-				this.warningMessages.add("Missing SPDX ID for " + lastSnippet
-						+ ".  An SPDX ID will be generated for this file.");
-			}
 			this.analysis.getDocumentContainer().addElement(lastSnippet);
 		}
 		this.lastSnippet = null;
@@ -759,8 +743,10 @@ public class BuildDocument implements TagValueBehavior {
 		if (!matcher.find()) {
 			throw(new InvalidSpdxTagFileException("Invalid relationship: "+value));
 		}
-		RelationshipType relationshipType = RelationshipType.fromTag(matcher.group(2));
-		if (relationshipType == null) {
+		RelationshipType relationshipType = null;
+		try {
+			relationshipType = RelationshipType.fromTag(matcher.group(2));
+		} catch (IllegalArgumentException ex) {
 			throw(new InvalidSpdxTagFileException("Invalid relationship type: "+value));
 		}
 		return new RelationshipWithId(matcher.group(1), matcher.group(3),

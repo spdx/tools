@@ -66,18 +66,18 @@ public class RdfToTag {
 			return;
 		}
 		if (args.length > MAX_ARGS) {
-			System.out.printf("Warning: Extra arguments will be ignored\n");
+			System.out.printf("Warning: Extra arguments will be ignored%n");
 			usage();
 		}
 		File spdxRdfFile = new File(args[0]);
 		if (!spdxRdfFile.exists()) {
-			System.out.printf("RDF file %1$s does not exists.\n", args[0]);
+			System.out.printf("RDF file %1$s does not exists.%n", args[0]);
 			return;
 		}
 		File spdxTagFile = new File(args[1]);
 		if (spdxTagFile.exists()) {
 			System.out
-					.printf("Error: File %1$s already exists - please specify a new file.\n",
+					.printf("Error: File %1$s already exists - please specify a new file.%n",
 							args[1]);
 			return;
 		}

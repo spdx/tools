@@ -63,7 +63,7 @@ public class TagToSpreadsheet {
 			spdxTagFile = new FileInputStream(args[0]);
 		} catch (FileNotFoundException ex) {
 			System.out
-					.printf("Tag-Value file %1$s does not exists.\n", args[0]);
+					.printf("Tag-Value file %1$s does not exists.%n", args[0]);
 			return;
 		}
 		File spdxSpreadsheetFile = new File(args[1]);

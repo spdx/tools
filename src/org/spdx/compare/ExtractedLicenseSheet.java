@@ -17,6 +17,7 @@
 */
 package org.spdx.compare;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -39,7 +40,12 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class ExtractedLicenseSheet extends AbstractSheet {
 	
-	private static final class ExtractedLicenseComparator implements Comparator<AnyLicenseInfo> {
+	private static final class ExtractedLicenseComparator implements Comparator<AnyLicenseInfo>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

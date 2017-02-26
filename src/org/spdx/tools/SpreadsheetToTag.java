@@ -61,14 +61,14 @@ public class SpreadsheetToTag {
 		}
 		File spdxSpreadsheetFile = new File(args[0]);
 		if (!spdxSpreadsheetFile.exists()) {
-			System.out.printf("Spreadsheet file %1$s does not exists.\n",
+			System.out.printf("Spreadsheet file %1$s does not exists.%n",
 					args[0]);
 			return;
 		}
 		File spdxTagFile = new File(args[1]);
 		if (spdxTagFile.exists()) {
 			System.out
-					.printf("Error: File %1$s already exists - please specify a new file.\n",
+					.printf("Error: File %1$s already exists - please specify a new file.%n",
 							args[1]);
 			return;
 		}

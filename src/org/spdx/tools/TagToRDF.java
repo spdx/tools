@@ -89,14 +89,14 @@ public class TagToRDF {
 			spdxTagStream = new FileInputStream(args[0]);
 		} catch (FileNotFoundException ex) {
 			System.out
-					.printf("Tag-Value file %1$s does not exists.\n", args[0]);
+					.printf("Tag-Value file %1$s does not exists.%n", args[0]);
 			return;
 		}
 
 		File spdxRDFFile = new File(args[1]);
 		if (spdxRDFFile.exists()) {
 			System.out
-					.printf("Error: File %1$s already exists - please specify a new file.\n",
+					.printf("Error: File %1$s already exists - please specify a new file.%n",
 							args[1]);
 			try {
 				spdxTagStream.close();

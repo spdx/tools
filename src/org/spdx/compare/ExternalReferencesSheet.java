@@ -16,6 +16,7 @@
 */
 package org.spdx.compare;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -37,7 +38,12 @@ import com.google.common.base.Objects;
  */
 public class ExternalReferencesSheet extends AbstractSheet {
 	
-	private static class ExternalDocRefComparator implements Comparator<ExternalDocumentRef> {
+	private static class ExternalDocRefComparator implements Comparator<ExternalDocumentRef>, Serializable {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4558641025187339674L;
 
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

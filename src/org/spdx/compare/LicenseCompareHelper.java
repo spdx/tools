@@ -19,7 +19,6 @@ package org.spdx.compare;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,9 +33,9 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.LicenseSet;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Primarily a static class of helper functions for comparing two SPDX licenses
@@ -46,15 +45,10 @@ import com.google.common.collect.Sets;
 public class LicenseCompareHelper {
 	
 	protected static final String TOKEN_DELIM = "\\s";	// white space
-	protected static final Set<String> SKIPPABLE_TOKENS = Sets.newHashSet();
-	static {
-		// most of these are comments for common programming languages (C style, Java, Ruby, Python)
-		SKIPPABLE_TOKENS.add("//");		SKIPPABLE_TOKENS.add("/*");
-		SKIPPABLE_TOKENS.add("*/");		SKIPPABLE_TOKENS.add("/**");
-		SKIPPABLE_TOKENS.add("#");		SKIPPABLE_TOKENS.add("##");
-		SKIPPABLE_TOKENS.add("*");		SKIPPABLE_TOKENS.add("\"\"\"");
-		SKIPPABLE_TOKENS.add("=begin");	SKIPPABLE_TOKENS.add("=end");
-	}
+	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
+	protected static final ImmutableSet<String> SKIPPABLE_TOKENS = ImmutableSet.<String>builder()
+		.add("//").add("/*").add("*/").add("/**").add("#").add("##")
+		.add("*").add("\"\"\"").add("=begin").add("=end").build();
 	
 	protected static final Map<String, String> EQUIV_TOKENS = Maps.newHashMap();
 	

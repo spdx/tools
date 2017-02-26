@@ -100,8 +100,9 @@ public class RelationshipsSheet extends AbstractSheet {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in relationships sheet";
 			} 
 			if (i == RELATIONSHIP_COL && cell.getStringCellValue() != null) {
-				RelationshipType rt = RelationshipType.fromTag(cell.getStringCellValue());
-				if (rt == null) {
+				try {
+					RelationshipType.fromTag(cell.getStringCellValue());
+				} catch (IllegalArgumentException ex) {
 					return "Invalid relationship type in row "+String.valueOf(row) + ": " + cell.getStringCellValue();
 				}
 			}
