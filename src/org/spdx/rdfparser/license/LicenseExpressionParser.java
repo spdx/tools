@@ -104,7 +104,7 @@ public class LicenseExpressionParser {
 		} else if (preToken.endsWith(")")) {
 			processPreToken(preToken.substring(0, preToken.length()-1), tokenList);
 			tokenList.add(")");
-		} else if (preToken.endsWith("+")) {
+		} else if (preToken.endsWith("+") && !(preToken.startsWith(SpdxRdfConstants.EXTERNAL_DOC_REF_PRENUM) || preToken.startsWith(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM))) {
 			processPreToken(preToken.substring(0, preToken.length()-1), tokenList);
 			tokenList.add("+");
 		} else {
