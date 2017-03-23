@@ -216,7 +216,7 @@ public class TestHtmlTemplateOutputHandler {
 	@Test
 	public void testFormatEndOptionalHTML() {
 		String escapedEndRuleText = "</div>\n";
-		assertEquals(escapedEndRuleText, HtmlTemplateOutputHandler.formatEndOptionalHTML());
+		assertEquals(escapedEndRuleText, HtmlTemplateOutputHandler.formatEndOptionalHTML(false));
 
 	}
 

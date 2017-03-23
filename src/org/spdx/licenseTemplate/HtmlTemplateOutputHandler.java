@@ -41,8 +41,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void optionalText(String text) {
-		htmlString.append((SpdxLicenseTemplateHelper.escapeHTML(text, this.movingParagraph)));
-		this.movingParagraph = false;
+		htmlString.append((SpdxLicenseTemplateHelper.escapeHTML(text, false)));
 	}
 
 	/* (non-Javadoc)
@@ -189,8 +188,12 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		return sb.toString();
 	}
 
-	public static String formatEndOptionalHTML() {
-		return "</div>\n";
+	public static String formatEndOptionalHTML(boolean inParagraph) {
+		if (inParagraph) {
+			return "</div>\n</p>\n";
+		} else {
+			return "</div>\n";
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -198,7 +201,8 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void endOptional(LicenseTemplateRule rule) {
-		this.htmlString.append(formatEndOptionalHTML());
+		this.htmlString.append(formatEndOptionalHTML(this.movingParagraph));
+		this.movingParagraph = false;
 		inOptional = false;
 	}
 }
