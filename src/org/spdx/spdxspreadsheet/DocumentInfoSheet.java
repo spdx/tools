@@ -18,6 +18,7 @@ package org.spdx.spdxspreadsheet;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.model.ExternalDocumentRef;
@@ -84,7 +85,7 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			cell = getDataRow().createCell(colNum);
-			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+			cell.setCellType(CellType.NUMERIC);
 		}
 		return cell;
 	}
@@ -109,12 +110,13 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected String getDataCellStringValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			return null;
 		} else {
-			if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {				
+			if (cell.getCellTypeEnum() == CellType.NUMERIC) {				
 				return Double.toString(cell.getNumericCellValue());
 			} else {
 				return cell.getStringCellValue();

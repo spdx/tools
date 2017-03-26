@@ -73,6 +73,7 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 		false, false, false, false, false, false, false, false, false};
 
 	
+	@SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String pkgId) {
 		Row row = addRow();
 		if (fileInfo.getArtifactOf() != null && fileInfo.getArtifactOf().length > 0) {

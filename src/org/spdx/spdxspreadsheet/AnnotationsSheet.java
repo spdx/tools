@@ -18,6 +18,7 @@ package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -136,7 +137,7 @@ public class AnnotationsSheet extends AbstractSheet {
 	public void add(Annotation annotation, String elementId) {
 		Row row = addRow();		
 		if (elementId != null) {
-			Cell idCell = row.createCell(ID_COL, Cell.CELL_TYPE_STRING);
+			Cell idCell = row.createCell(ID_COL, CellType.STRING);
 			idCell.setCellValue(elementId);
 		}
 		if (annotation.getComment() != null) {

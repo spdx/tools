@@ -22,6 +22,7 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -108,6 +109,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private String validateRow(Row row) {
 		for (int i = 0; i < NUM_COLS; i++) {
 			Cell cell = row.getCell(i);
@@ -117,7 +119,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 				}
 			} else {
 				if (i == CREATED_COL) {
-					if (!(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
+					if (!(cell.getCellTypeEnum() == CellType.NUMERIC)) {
 						return "Created column in origin spreadsheet is not of type Date";
 					}
 				}

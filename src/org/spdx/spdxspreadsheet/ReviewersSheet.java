@@ -19,6 +19,7 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -85,6 +86,7 @@ public class ReviewersSheet extends AbstractSheet {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private String validateRow(Row row) {
 		for (int i = 0; i < NUM_COLS; i++) {
 			Cell cell = row.getCell(i);
@@ -92,7 +94,7 @@ public class ReviewersSheet extends AbstractSheet {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in reviewer sheet";
 			} else {
 				if (i == TIMESTAMP_COL) {
-					if (!(cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
+					if (!(cell.getCellTypeEnum() == CellType.NUMERIC)) {
 						return "Timestamp cell is not a numeric type for row "+String.valueOf(row.getRowNum())+" in Reviewer sheet";
 					}
 				}
