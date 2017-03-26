@@ -21,12 +21,17 @@ import java.awt.font.TextAttribute;
 import java.text.AttributedString;
 
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 /**
  * Abstract class representing a workbook sheet used in storing structured data
@@ -46,15 +51,18 @@ public abstract class AbstractSheet {
 	protected CellStyle redWrapped;
 	protected CellStyle yellowWrapped;
 	
+	protected Workbook workbook;
 	protected Sheet sheet;
 	protected int lastRowNum;
 	protected int firstCellNum;
 	protected int firstRowNum;
+
 	/**
 	 * @param workbook
 	 * @param sheetName
 	 */
 	public AbstractSheet(Workbook workbook, String sheetName) {
+		this.workbook = workbook;
 		sheet = workbook.getSheet(sheetName);
 		if (sheet != null) {
 			firstRowNum = sheet.getFirstRowNum();
@@ -79,12 +87,12 @@ public abstract class AbstractSheet {
 	private void createStyles(Workbook wb) {
 		// create the styles
 		this.checkboxStyle = wb.createCellStyle();
-		this.checkboxStyle.setAlignment(CellStyle.ALIGN_CENTER);
-		this.checkboxStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-		this.checkboxStyle.setBorderBottom(CellStyle.BORDER_THIN);
-		this.checkboxStyle.setBorderLeft(CellStyle.BORDER_THIN);
-		this.checkboxStyle.setBorderRight(CellStyle.BORDER_THIN);
-		this.checkboxStyle.setBorderTop(CellStyle.BORDER_THIN);
+		this.checkboxStyle.setAlignment(HorizontalAlignment.CENTER);
+		this.checkboxStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		this.checkboxStyle.setBorderBottom(BorderStyle.THIN);
+		this.checkboxStyle.setBorderLeft(BorderStyle.THIN);
+		this.checkboxStyle.setBorderRight(BorderStyle.THIN);
+		this.checkboxStyle.setBorderTop(BorderStyle.THIN);
 		Font checkboxFont = wb.createFont();
 		checkboxFont.setFontHeight(FONT_SIZE);
 		checkboxFont.setFontName(CHECKBOX_FONT_NAME);
@@ -96,16 +104,16 @@ public abstract class AbstractSheet {
 		
 		this.greenWrapped = createLeftWrapStyle(wb);
 		this.greenWrapped.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
-		this.greenWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		this.greenWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		this.greenWrapped.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		this.greenWrapped.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		
 		this.yellowWrapped = createLeftWrapStyle(wb);
 		this.yellowWrapped.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-		this.yellowWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		this.yellowWrapped.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		
 		this.redWrapped = createLeftWrapStyle(wb);
 		this.redWrapped.setFillForegroundColor(HSSFColor.RED.index);
-		this.redWrapped.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		this.redWrapped.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 	}
 	
 	/**
@@ -170,14 +178,14 @@ public abstract class AbstractSheet {
 	public static CellStyle createHeaderStyle(Workbook wb) {
 		CellStyle headerStyle = wb.createCellStyle();
 		headerStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-		headerStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		Font headerFont = wb.createFont();
 		headerFont.setFontName("Arial");
 		headerFont.setFontHeight(FONT_SIZE);
-		headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		headerFont.setBold(true);
 		headerStyle.setFont(headerFont);
-		headerStyle.setAlignment(CellStyle.ALIGN_CENTER);
-		headerStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		headerStyle.setWrapText(true);
 		return headerStyle;
 	}
@@ -185,15 +193,15 @@ public abstract class AbstractSheet {
 	public static CellStyle createLeftWrapStyle(Workbook wb) {
 		CellStyle wrapStyle = wb.createCellStyle();
 		wrapStyle.setWrapText(true);
-		wrapStyle.setAlignment(CellStyle.ALIGN_LEFT);
-		wrapStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		wrapStyle.setAlignment(HorizontalAlignment.LEFT);
+		wrapStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		return wrapStyle;
 	}
 	
 	public static CellStyle createCenterStyle(Workbook wb) {
 		CellStyle centerStyle = wb.createCellStyle();
 		centerStyle.setWrapText(false);
-		centerStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		centerStyle.setAlignment(HorizontalAlignment.CENTER);
 		return centerStyle;
 	}
 	
@@ -230,8 +238,9 @@ public abstract class AbstractSheet {
 	 * @param cell
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private int getNumWrappedLines(Cell cell) {
-		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+		if (cell.getCellTypeEnum() == CellType.STRING) {
 			String val = cell.getStringCellValue();
 			if (val == null || val.isEmpty()) {
 				return 1;

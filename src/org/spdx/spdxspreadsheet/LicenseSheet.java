@@ -28,8 +28,9 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFHyperlink;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -71,6 +72,7 @@ public class LicenseSheet extends AbstractSheet {
 	String version = null;
 	String releaseDate = null;
 	
+	@SuppressWarnings("deprecation")
 	public LicenseSheet(Workbook workbook, String sheetName, File workbookFile) {
 		super(workbook, sheetName);
 		workbookPath = workbookFile.getParent();
@@ -79,17 +81,17 @@ public class LicenseSheet extends AbstractSheet {
 			// fill in versions
 			Cell versionCell = firstDataRow.getCell(COL_VERSION);
 			if (versionCell != null) {
-				if (versionCell.getCellType() == Cell.CELL_TYPE_STRING) {
+				if (versionCell.getCellTypeEnum() == CellType.STRING) {
 					version = versionCell.getStringCellValue();
-				} else if (versionCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+				} else if (versionCell.getCellTypeEnum() == CellType.NUMERIC) {
 					version = String.valueOf(versionCell.getNumericCellValue());
 				}
 			}
 			Cell releaseDateCell = firstDataRow.getCell(COL_RELEASE_DATE);
 			if (releaseDateCell != null) {
-				if (releaseDateCell.getCellType() == Cell.CELL_TYPE_STRING) {
+				if (releaseDateCell.getCellTypeEnum() == CellType.STRING) {
 					this.releaseDate = releaseDateCell.getStringCellValue();
-				} else if (releaseDateCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+				} else if (releaseDateCell.getCellTypeEnum() == CellType.NUMERIC) {
 				    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 					this.releaseDate = dateFormat.format(releaseDateCell.getDateCellValue());
 				}
@@ -158,7 +160,7 @@ public class LicenseSheet extends AbstractSheet {
 		if (templateText == null || templateText.trim().isEmpty()) {
 			templateText = license.getLicenseText();
 		}
-		setTemplateText(templateCell, templateText, license.getLicenseId(), workbookPath);
+		setTemplateText(templateCell, templateText, license.getLicenseId(), workbookPath, this.workbook);
 		if (license.isOsiApproved()) {
 			Cell osiApprovedCell = row.createCell(COL_OSI_APPROVED);
 			osiApprovedCell.setCellValue("YES");
@@ -180,7 +182,7 @@ public class LicenseSheet extends AbstractSheet {
 	 * @param textCell
 	 * @param text
 	 */
-	public static void setTemplateText(Cell textCell, String text, String licenseId, String textFilePath) {
+	public static void setTemplateText(Cell textCell, String text, String licenseId, String textFilePath, Workbook workbook) {
 		String licenseFileName = licenseId + TEXT_EXTENSION;
 		File licenseTextFile = new File(textFilePath + File.separator + licenseFileName);
 		try {
@@ -205,7 +207,7 @@ public class LicenseSheet extends AbstractSheet {
 				out.write(text);
 				// add in the hyperlink
 				textCell.setCellValue(licenseFileName);
-				HSSFHyperlink hyperlink = new HSSFHyperlink(HSSFHyperlink.LINK_FILE);
+				Hyperlink hyperlink = workbook.getCreationHelper().createHyperlink(HyperlinkType.FILE);
 				hyperlink.setAddress(licenseFileName);
 				textCell.setHyperlink(hyperlink);
 			} finally {

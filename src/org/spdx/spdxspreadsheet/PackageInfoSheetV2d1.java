@@ -18,6 +18,7 @@ package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -309,6 +310,7 @@ public class PackageInfoSheetV2d1 extends PackageInfoSheet {
 		return retval;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private SpdxPackage getPackage(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -448,7 +450,7 @@ public class PackageInfoSheetV2d1 extends PackageInfoSheet {
 		boolean filesAnalyzed = true;
 		Cell filesAnalyzedCell = row.getCell(FILES_ANALYZED_COL);
 		if (filesAnalyzedCell != null) {
-			if (filesAnalyzedCell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
+			if (filesAnalyzedCell.getCellTypeEnum() == CellType.BOOLEAN) {
 				filesAnalyzed = filesAnalyzedCell.getBooleanCellValue();
 			} else {
 				String filesAnalyzedStr = filesAnalyzedCell.getStringCellValue();

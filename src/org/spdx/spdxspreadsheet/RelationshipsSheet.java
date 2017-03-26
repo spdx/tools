@@ -18,6 +18,7 @@ package org.spdx.spdxspreadsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -139,19 +140,19 @@ public class RelationshipsSheet extends AbstractSheet {
 	public void add(Relationship relationship, String elementId) {
 		Row row = addRow();		
 		if (elementId != null) {
-			Cell idCell = row.createCell(ID_COL, Cell.CELL_TYPE_STRING);
+			Cell idCell = row.createCell(ID_COL, CellType.STRING);
 			idCell.setCellValue(elementId);
 		}	
 		if (relationship.getRelationshipType() != null) {
-			Cell relationshipCell = row.createCell(RELATIONSHIP_COL, Cell.CELL_TYPE_STRING);
+			Cell relationshipCell = row.createCell(RELATIONSHIP_COL, CellType.STRING);
 			relationshipCell.setCellValue(relationship.getRelationshipType().toTag());
 		}
 		if (relationship.getRelatedSpdxElement() != null) {
-			Cell relatedIdCell = row.createCell(RELATED_ID_COL, Cell.CELL_TYPE_STRING);
+			Cell relatedIdCell = row.createCell(RELATED_ID_COL, CellType.STRING);
 			relatedIdCell.setCellValue(relationship.getRelatedSpdxElement().getId());
 		}		
 		if (relationship.getComment() != null) {
-			Cell commentCell = row.createCell(COMMENT_COL, Cell.CELL_TYPE_STRING);
+			Cell commentCell = row.createCell(COMMENT_COL, CellType.STRING);
 			commentCell.setCellValue(relationship.getComment());
 		}
 	}
