@@ -9,3 +9,4 @@
 /pom.xml.releaseBackup
 SPDXParser.spdx
 maven-eclipse.xml
+dependency-reduced-pom.xml
