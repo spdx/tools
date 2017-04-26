@@ -80,7 +80,7 @@ public class ListedLicenses implements IModelContainer {
 
 	private static volatile ListedLicenses listedLicenses = null;
 	
-	//Lock to ensure thead-safety of all modifications.
+	//Lock to ensure thread-safety of all modifications.
 	//Since modifications should be extremely rare, a single lock for both listed licenses and the model
 	//should be sufficient.
 	private static final ReadWriteLock listedLicenseModificationLock = new ReentrantReadWriteLock();

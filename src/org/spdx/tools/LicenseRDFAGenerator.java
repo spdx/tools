@@ -18,10 +18,11 @@ package org.spdx.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,9 @@ import org.spdx.html.LicenseJSONFile;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.licensexml.XmlLicenseProvider;
+import org.spdx.rdfparser.IModelContainer;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
 import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.LicenseRestrictionException;
@@ -65,6 +69,7 @@ import com.google.common.io.Files;
  *
  */
 public class LicenseRDFAGenerator {
+	
 	static final Set<Character> INVALID_FILENAME_CHARS = Sets.newHashSet();
 
 	static { 	
@@ -101,6 +106,9 @@ public class LicenseRDFAGenerator {
 	static final String RDFA_FOLDER_NAME = "rdfa";
 	static final String JSON_FOLDER_NAME = "json";
 	private static final String WEBSITE_FOLDER_NAME = "website";
+	private static final String RDFXML_FOLDER_NAME = "rdfxml";
+	private static final String RDFTURTLE_FOLDER_NAME = "rdfturtle";
+	private static final String RDFNT_FOLDER_NAME = "rdfnt";
 	
 	/**
 	 * @param args Arg 0 is either an input spreadsheet or a directory of licenses in XML format, arg 1 is the directory for the output html files
@@ -206,13 +214,30 @@ public class LicenseRDFAGenerator {
 			if (!website.isDirectory() && !website.mkdir()) {
 				throw new LicenseGeneratorException("Error: Website folder is not a directory");
 			}
+			File rdfXml = new File(dir.getPath() + File.separator +  RDFXML_FOLDER_NAME);
+			if (!rdfXml.isDirectory() && !rdfXml.mkdir()) {
+				throw new LicenseGeneratorException("Error: RdfXML folder is not a directory");
+			}
+			File rdfTurtle = new File(dir.getPath() + File.separator +  RDFTURTLE_FOLDER_NAME);
+			if (!rdfTurtle.isDirectory() && !rdfTurtle.mkdir()) {
+				throw new LicenseGeneratorException("Error: RDF Turtle folder is not a directory");
+			}
+			File rdfNt = new File(dir.getPath() + File.separator +  RDFNT_FOLDER_NAME);
+			if (!rdfNt.isDirectory() && !rdfNt.mkdir()) {
+				throw new LicenseGeneratorException("Error: RDF NT folder is not a directory");
+			}
+			// Create model container to hold licenses and exceptions
+			LicenseContainer container = new LicenseContainer();
 			System.out.print("Processing License List");
 			writeLicenseList(version, releaseDate, licenseProvider, warnings,
-					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder);
+					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder,
+					container, rdfXml, rdfTurtle, rdfNt);
 			System.out.println();
 			System.out.print("Processing Exceptions");
 			writeExceptionList(version, releaseDate, licenseProvider, warnings,
-					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder);
+					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder,
+					container, rdfXml, rdfTurtle, rdfNt);
+			writeRdf(container, rdfXml, rdfTurtle, rdfNt, "licenses");
 			writeCssFile(website);
 			writeSortTableFile(website);
 			System.out.println();
@@ -231,8 +256,10 @@ public class LicenseRDFAGenerator {
 			throw new LicenseGeneratorException("\nError reading standard licenses: "+e.getMessage(),e);
 		} catch (InvalidLicenseTemplateException e) {
 			throw new LicenseGeneratorException("\nInvalid template found on one of the licenses: "+e.getMessage(),e);
+		} catch (LicenseGeneratorException e) {
+			throw(e);
 		} catch (Exception e) {
-			throw new LicenseGeneratorException("\nUnhandled exception generating html:",e);
+			throw new LicenseGeneratorException("\nUnhandled exception generating html: "+e.getMessage(),e);
 		} finally {
 			if (licenseProvider != null && (licenseProvider instanceof SPDXLicenseSpreadsheet)) {
 				try {
@@ -240,6 +267,56 @@ public class LicenseRDFAGenerator {
 					spreadsheet.close();
 				} catch (SpreadsheetException e) {
 					System.out.println("Error closing spreadsheet file: "+e.getMessage());
+				}
+			}
+		}
+	}
+	/**
+	 * Write the RDF representations of the licenses and exceptions
+	 * @param container Container with the licenses and exceptions
+	 * @param rdfXml Folder for the RdfXML representation
+	 * @param rdfTurtle Folder for the Turtle representation
+	 * @param rdfNt Folder for the NT representation
+	 * @param name Name of the file
+	 * @throws LicenseGeneratorException 
+	 */
+	private static void writeRdf(IModelContainer container, File rdfXml, File rdfTurtle, File rdfNt, String name) throws LicenseGeneratorException {
+		writeRdf(container, rdfXml.getPath() + File.separator + name + ".rdf", "RDF/XML-ABBREV");
+		writeRdf(container, rdfTurtle.getPath() + File.separator + name + ".turtle", "TURTLE");
+		writeRdf(container, rdfNt.getPath() + File.separator + name + ".nt", "NT");
+	}
+	
+	/**
+	 * Write an RDF file for for all elements in the container
+	 * @param container Container for the RDF elements
+	 * @param fileName File name to write the elements to
+	 * @param format Jena RDF format
+	 * @throws LicenseGeneratorException 
+	 */
+	private static void writeRdf(IModelContainer container, String fileName, String format) throws LicenseGeneratorException {
+		File outFile = new File(fileName);
+		if (!outFile.exists()) {
+			try {
+				if (!outFile.createNewFile()) {
+					throw new LicenseGeneratorException("Can not create RDF output file "+fileName);
+				}
+			} catch (IOException e) {
+				throw new LicenseGeneratorException("Can not create RDF output file "+fileName);
+			}
+		}
+		
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(outFile);
+			container.getModel().write(out, format);
+		} catch (FileNotFoundException e1) {
+			throw new LicenseGeneratorException("Can not create RDF output file "+fileName);
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					System.out.println("Warning - unable to close RDF output file "+fileName);
 				}
 			}
 		}
@@ -255,15 +332,22 @@ public class LicenseRDFAGenerator {
 	 * @param templateFolder Directory holding the template representation of the license text
 	 * @param jsonFolder Folder containing only the JSON files
 	 * @param rdfaFolder Folder containing the RDFa HTML files from the website
+	 * @param modelContainer container to store all exceptions processed
+	 * @param rdfXmlFolder Folder for the RDF XML files to be written
+	 * @param rdfTurtleFolder Folder for the RDF Turtle files to be written
+	 * @param rdfNtFolder Folder for the RDF NT files to be written
 	 * @throws IOException 
 	 * @throws SpreadsheetException 
 	 * @throws LicenseRestrictionException 
 	 * @throws MustacheException 
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws LicenseGeneratorException 
 	*/
 	private static void writeExceptionList(String version,String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider,
 			List<String> warnings, File dir, File textFolder,
-			File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException {
+			File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder,
+			IModelContainer allLicensesContainer, File rdfXmlFolder, File rdfTurtleFolder, File rdfNtFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		Set<String> licenseIds = Sets.newHashSet();
@@ -321,6 +405,12 @@ public class LicenseRDFAGenerator {
 				exceptionJson.writeToFile(exceptionJsonFile);
 				File exceptionJsonFileCopy = new File(jsonFolder.getPath() + File.separator + "exceptions" + File.separator +  exceptionJsonFileName);
 				exceptionJson.writeToFile(exceptionJsonFileCopy);
+				LicenseException exceptionClone = nextException.clone();
+				LicenseContainer onlyThisException = new LicenseContainer();
+				exceptionClone.createResource(onlyThisException);
+				writeRdf(allLicensesContainer, rdfXmlFolder, rdfTurtleFolder, rdfNtFolder, exceptionHtmlFileName);
+				
+				nextException.createResource(allLicensesContainer);	
 			}
 		}
 		File exceptionTocFile = new File(dir.getPath()+File.separator+EXCEPTION_TOC_FILE_NAME);
@@ -378,15 +468,23 @@ public class LicenseRDFAGenerator {
 	 * @param templateFolder Directory holding the template representation of the license text
 	 * @param jsonFolder Folder with only the JSON output files
 	 * @param rdfaFolder Folder containing all the HTML files copied to the website
+	 * @param container Container to store the licenses
+	 * @param rdfXmlFolder Folder for the RDF XML files to be written
+	 * @param rdfTurtleFolder Folder for the RDF Turtle files to be written
+	 * @param rdfNtFolder Folder for the RDF NT files to be written
 	 * @throws SpdxListedLicenseException 
 	 * @throws IOException 
 	 * @throws LicenseTemplateRuleException 
 	 * @throws MustacheException 
+	 * @throws InvalidSPDXAnalysisException 
+	 * @throws LicenseGeneratorException 
 	 * 
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings,
-			File dir, File textFolder, File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException {
+			File dir, File textFolder, File htmlFolder, File templateFolder, 
+			File rdfaFolder, File jsonFolder, IModelContainer container,
+			File rdfXmlFolder, File rdfTurtleFolder, File rdfNtFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseJSONFile licJson = new LicenseJSONFile();
@@ -439,6 +537,11 @@ public class LicenseRDFAGenerator {
 				}
 				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
 				Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText()), htmlTextFile, utf8);
+				AnyLicenseInfo licenseClone = license.clone();
+				LicenseContainer onlyThisLicense = new LicenseContainer();
+				licenseClone.createResource(onlyThisLicense);
+				writeRdf(onlyThisLicense, rdfXmlFolder, rdfTurtleFolder, rdfNtFolder, licHtmlFileName);
+				license.createResource(container);
 			}
 		}
 		Iterator<DeprecatedLicenseInfo> depIter = licenseProvider.getDeprecatedLicenseIterator();
