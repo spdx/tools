@@ -180,6 +180,7 @@ public class TagToRDF {
 	 * Convert a Tag File to an RDF output stream
 	 * @param spdxTagFile File containing a tag/value formatted SPDX file
 	 * @param out Stream where the RDF/XML data is written
+	 * @param outputFormat must be one of RDF/XML-ABBREV (default), RDF/XML, N-TRIPLET, or TURTLE
 	 * @throws Exception
 	 * @throws TokenStreamException
 	 * @throws RecognitionException
@@ -191,10 +192,11 @@ public class TagToRDF {
 	}
 
 	/**
-	 * @param spdxTagFile
-	 * @param outputFormat
-	 * @param warnings
-	 * @return
+	 * Convert an tag/value format input stream into an SPDX Document
+	 * @param spdxTagFile Input stream containing a SPDX tag/value format text
+	 * @param outputFormat must be one of RDF/XML-ABBREV (default), RDF/XML, N-TRIPLET, or TURTLE
+	 * @param warnings List of any warnings generated during the tag/value parsing
+	 * @return SpdxDocumentContainer containing the SPDX document represented by the spdxTagVile
 	 * @throws Exception
 	 */
 	public static SpdxDocumentContainer convertTagFileToRdf(
