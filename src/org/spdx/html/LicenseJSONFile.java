@@ -16,11 +16,6 @@
 */
 package org.spdx.html;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -31,7 +26,7 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
  * @author Gary O'Neall
  *
  */
-public class LicenseJSONFile {
+public class LicenseJSONFile extends AbstractJsonFile {
 
 	private boolean deprecated;
 	private SpdxListedLicense license;
@@ -59,57 +54,41 @@ public class LicenseJSONFile {
 	}
 
 	/**
-	 * @param jsonFile File to write JSON data to
-	 * @throws IOException 
-	 */
-	@SuppressWarnings("unchecked")
-	public void writeToFile(File jsonFile) throws IOException {
-		OutputStreamWriter writer = null;
-		if (!jsonFile.exists()) {
-			if (!jsonFile.createNewFile()) {
-				throw(new IOException("Can not create new file "+jsonFile.getName()));
-			}
-		}
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
-			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.isOsiApproved());
-			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getName());
-			String[] seeAlsos = license.getSeeAlso();
-			if (seeAlsos != null && seeAlsos.length > 0) {
-				JSONArray seeAlsoArray = new JSONArray();
-				for (String seeAlso:seeAlsos) {
-					seeAlsoArray.add(seeAlso);
-				}
-				jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
-			}
-			if (license.getComment() != null && !license.getComment().isEmpty()) {
-				jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, license.getComment());
-			}
-			if (license.getLicenseText() != null) {
-				jsonObject.put(SpdxRdfConstants.PROP_LICENSE_TEXT, license.getLicenseText().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
-			}
-			if (license.getStandardLicenseHeader() != null) {
-				jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NOTICE, license.getStandardLicenseHeader().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
-			}
-			if (license.getStandardLicenseTemplate() != null) {
-				jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, license.getStandardLicenseTemplate().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
-			}
-			jsonObject.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, this.isDeprecated());
-			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
-			writer.write(jsonObject.toJSONString());
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-
-	/**
 	 * @return
 	 */
 	private Object isDeprecated() {
 		return this.deprecated;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected JSONObject getJsonObject() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
+		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.isOsiApproved());
+		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getName());
+		String[] seeAlsos = license.getSeeAlso();
+		if (seeAlsos != null && seeAlsos.length > 0) {
+			JSONArray seeAlsoArray = new JSONArray();
+			for (String seeAlso:seeAlsos) {
+				seeAlsoArray.add(seeAlso);
+			}
+			jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
+		}
+		if (license.getComment() != null && !license.getComment().isEmpty()) {
+			jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, license.getComment());
+		}
+		if (license.getLicenseText() != null) {
+			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_TEXT, license.getLicenseText().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+		}
+		if (license.getStandardLicenseHeader() != null) {
+			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NOTICE, license.getStandardLicenseHeader().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+		}
+		if (license.getStandardLicenseTemplate() != null) {
+			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, license.getStandardLicenseTemplate().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+		}
+		jsonObject.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, this.isDeprecated());
+		return jsonObject;
 	}
 
 }

@@ -171,6 +171,11 @@
 			<artifactId>org.eclipse.jgit</artifactId>
 			<version>4.6.1.201703071140-r</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>

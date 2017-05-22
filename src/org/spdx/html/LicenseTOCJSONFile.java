@@ -16,10 +16,6 @@
  */
 package org.spdx.html;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -34,7 +30,7 @@ import com.google.common.collect.Lists;
  * @author Kyle E. Mitchell
  *
  */
-public class LicenseTOCJSONFile {
+public class LicenseTOCJSONFile extends AbstractJsonFile {
 	
 	public static final String JSON_REFERENCE_FIELD = "detailsUrl";
 	
@@ -143,45 +139,33 @@ public class LicenseTOCJSONFile {
 		return retval;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public void writeToFile(File jsonFile) throws IOException {
-		OutputStreamWriter writer = null;
-		if (!jsonFile.exists()) {
-			if (!jsonFile.createNewFile()) {
-				throw(new IOException("Can not create new file "+jsonFile.getName()));
-			}
-		}
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_LIST_VERSION, version);
-			jsonObject.put("releaseDate", releaseDate);
-			JSONArray licensesList = new JSONArray();
-			for (ListedSpdxLicense license : listedLicenses) {
-				JSONObject licenseJSON = new JSONObject();
-				licenseJSON.put("reference", license.getReference());
-				licenseJSON.put("referenceNumber", license.getRefNumber());
-				licenseJSON.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
-				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.getOsiApproved());
-				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getLicenseName());
-				String[] seeAlsos = license.getSeeAlso();
-				if (seeAlsos != null && seeAlsos.length > 0) {
-					JSONArray seeAlsoArray = new JSONArray();
-					for (String seeAlso:seeAlsos) {
-						seeAlsoArray.add(seeAlso);
-					}
-					licenseJSON.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
+	protected JSONObject getJsonObject() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(SpdxRdfConstants.PROP_LICENSE_LIST_VERSION, version);
+		jsonObject.put("releaseDate", releaseDate);
+		JSONArray licensesList = new JSONArray();
+		for (ListedSpdxLicense license : listedLicenses) {
+			JSONObject licenseJSON = new JSONObject();
+			licenseJSON.put("reference", license.getReference());
+			licenseJSON.put("referenceNumber", license.getRefNumber());
+			licenseJSON.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
+			licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.getOsiApproved());
+			licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getLicenseName());
+			String[] seeAlsos = license.getSeeAlso();
+			if (seeAlsos != null && seeAlsos.length > 0) {
+				JSONArray seeAlsoArray = new JSONArray();
+				for (String seeAlso:seeAlsos) {
+					seeAlsoArray.add(seeAlso);
 				}
-				licenseJSON.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, license.isDeprecated());
-				licenseJSON.put(JSON_REFERENCE_FIELD, license.getLicJSONReference());
-				licensesList.add(licenseJSON);
+				licenseJSON.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 			}
-			jsonObject.put("licenses", licensesList);
-			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
-			writer.write(jsonObject.toJSONString());
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
+			licenseJSON.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, license.isDeprecated());
+			licenseJSON.put(JSON_REFERENCE_FIELD, license.getLicJSONReference());
+			licensesList.add(licenseJSON);
 		}
+		jsonObject.put("licenses", licensesList);
+		return jsonObject;
 	}
 }

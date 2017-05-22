@@ -16,10 +16,6 @@
  */
 package org.spdx.html;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -35,7 +31,7 @@ import com.google.common.collect.Lists;
  * Copied from LicenseTOCJSONFile by Kyle E. Mitchell
  *
  */
-public class ExceptionTOCJSONFile {
+public class ExceptionTOCJSONFile extends AbstractJsonFile {
 	
 	public static final String JSON_REFERENCE_FIELD = "detailsUrl";
 	
@@ -139,44 +135,32 @@ public class ExceptionTOCJSONFile {
 		return retval;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public void writeToFile(File jsonFile) throws IOException {
-		OutputStreamWriter writer = null;
-		if (!jsonFile.exists()) {
-			if (!jsonFile.createNewFile()) {
-				throw(new IOException("Can not create new file "+jsonFile.getName()));
-			}
-		}
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_LIST_VERSION, version);
-			jsonObject.put("releaseDate", releaseDate);
-			JSONArray exceptionList = new JSONArray();
-			for (ListedSpdxException exception : listedExceptions) {
-				JSONObject exceptionJSON = new JSONObject();
-				exceptionJSON.put("reference", exception.getReference());
-				exceptionJSON.put("referenceNumber", exception.getRefNumber());
-				exceptionJSON.put(SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID, exception.getExceptionId());
-				exceptionJSON.put(SpdxRdfConstants.PROP_NAME, exception.getName());
-				String[] seeAlsos = exception.getSeeAlso();
-				if (seeAlsos != null && seeAlsos.length > 0) {
-					JSONArray seeAlsoArray = new JSONArray();
-					for (String seeAlso:seeAlsos) {
-						seeAlsoArray.add(seeAlso);
-					}
-					exceptionJSON.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
+	protected JSONObject getJsonObject() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(SpdxRdfConstants.PROP_LICENSE_LIST_VERSION, version);
+		jsonObject.put("releaseDate", releaseDate);
+		JSONArray exceptionList = new JSONArray();
+		for (ListedSpdxException exception : listedExceptions) {
+			JSONObject exceptionJSON = new JSONObject();
+			exceptionJSON.put("reference", exception.getReference());
+			exceptionJSON.put("referenceNumber", exception.getRefNumber());
+			exceptionJSON.put(SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID, exception.getExceptionId());
+			exceptionJSON.put(SpdxRdfConstants.PROP_NAME, exception.getName());
+			String[] seeAlsos = exception.getSeeAlso();
+			if (seeAlsos != null && seeAlsos.length > 0) {
+				JSONArray seeAlsoArray = new JSONArray();
+				for (String seeAlso:seeAlsos) {
+					seeAlsoArray.add(seeAlso);
 				}
-				exceptionJSON.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, exception.isDeprecated());
-				exceptionJSON.put(JSON_REFERENCE_FIELD, exception.getExcJSONReference());
-				exceptionList.add(exceptionJSON);
+				exceptionJSON.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 			}
-			jsonObject.put("exceptions", exceptionList);
-			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
-			writer.write(jsonObject.toJSONString());
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
+			exceptionJSON.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, exception.isDeprecated());
+			exceptionJSON.put(JSON_REFERENCE_FIELD, exception.getExcJSONReference());
+			exceptionList.add(exceptionJSON);
 		}
+		jsonObject.put("exceptions", exceptionList);
+		return jsonObject;
 	}
 }

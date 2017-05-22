@@ -16,10 +16,6 @@
 */
 package org.spdx.html;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,7 +27,7 @@ import org.spdx.rdfparser.license.LicenseException;
  * @author Gary O'Neall
  *
  */
-public class LicenseExceptionJSONFile {
+public class LicenseExceptionJSONFile extends AbstractJsonFile {
 
 	private boolean deprecated;
 	private LicenseException exception;
@@ -63,47 +59,31 @@ public class LicenseExceptionJSONFile {
 	}
 
 	/**
-	 * @param jsonFile File to write JSON data to
-	 * @throws IOException 
-	 */
-	@SuppressWarnings("unchecked")
-	public void writeToFile(File jsonFile) throws IOException {
-		OutputStreamWriter writer = null;
-		if (!jsonFile.exists()) {
-			if (!jsonFile.createNewFile()) {
-				throw(new IOException("Can not create new file "+jsonFile.getName()));
-			}
-		}
-		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID, exception.getLicenseExceptionId());
-			jsonObject.put(SpdxRdfConstants.PROP_NAME, exception.getName());
-			String[] seeAlsos = exception.getSeeAlso();
-			if (seeAlsos != null && seeAlsos.length > 0) {
-				JSONArray seeAlsoArray = new JSONArray();
-				for (String seeAlso:seeAlsos) {
-					seeAlsoArray.add(seeAlso);
-				}
-				jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
-			}
-			jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, exception.getComment());
-			jsonObject.put(SpdxRdfConstants.PROP_EXCEPTION_TEXT, exception.getLicenseExceptionText().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
-			jsonObject.put(SpdxRdfConstants.PROP_EXAMPLE, exception.getExample());
-			jsonObject.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, this.isDeprecated());
-			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
-			writer.write(jsonObject.toJSONString());
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-
-	/**
 	 * @return
 	 */
 	private Object isDeprecated() {
 		return this.deprecated;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected JSONObject getJsonObject() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID, exception.getLicenseExceptionId());
+		jsonObject.put(SpdxRdfConstants.PROP_NAME, exception.getName());
+		String[] seeAlsos = exception.getSeeAlso();
+		if (seeAlsos != null && seeAlsos.length > 0) {
+			JSONArray seeAlsoArray = new JSONArray();
+			for (String seeAlso:seeAlsos) {
+				seeAlsoArray.add(seeAlso);
+			}
+			jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
+		}
+		jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, exception.getComment());
+		jsonObject.put(SpdxRdfConstants.PROP_EXCEPTION_TEXT, exception.getLicenseExceptionText().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+		jsonObject.put(SpdxRdfConstants.PROP_EXAMPLE, exception.getExample());
+		jsonObject.put(SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, this.isDeprecated());
+		return jsonObject;
 	}
 
 }
