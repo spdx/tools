@@ -17,6 +17,7 @@
 package org.spdx.rdfparser.license;
 
 import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -72,7 +73,11 @@ public class LicenseExpressionParser {
 		} else if (tokens.length == 1 && tokens[0].equals(SpdxRdfConstants.NONE_VALUE)) {
 			return new SpdxNoneLicense();
 		} else {
-			return parseLicenseExpression(tokens, container);
+			try {
+				return parseLicenseExpression(tokens, container);
+			} catch (EmptyStackException ex) {
+				throw(new LicenseParserException("Invalid license expression - check that every operator (e.g. AND and OR) has operators and that parenthesis are matched"));
+			}
 		}
 	}
 
