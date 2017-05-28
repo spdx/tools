@@ -16,7 +16,7 @@ import com.google.gson.JsonParser;
 
 /**
  * Supports writing files in JSON format
- * Implementation classes need to implemen the getJsonObject method to provide the JSON object to be written
+ * Implementation classes need to implement the getJsonObject method to provide the JSON object to be written
  * @author Gary O'Nell
  *
  */

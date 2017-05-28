@@ -341,8 +341,9 @@ public class ListedLicenses implements IModelContainer {
 		if (onlyUseLocalLicenses) {
 		    licRdfInput = null;
 		} else {
-		    licRdfInput = FileManager.get().open(LISTED_LICENSE_URI_PREFIX+"index.html");
+			licRdfInput = null;
 		    try {
+		    	licRdfInput = FileManager.get().open(LISTED_LICENSE_URI_PREFIX+"index.html");
 		    	readRdfaIntoModel(myStdLicModel, licRdfInput, LISTED_LICENSE_URI_PREFIX);
 				Property p = myStdLicModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 		    	if (myStdLicModel.isEmpty() || !myStdLicModel.contains(null, p)) {

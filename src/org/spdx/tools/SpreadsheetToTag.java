@@ -122,7 +122,7 @@ public class SpreadsheetToTag {
 				System.out.println("Error translating the Tag file: "
 						+ e.getMessage());
 			} catch (Exception e) {
-				System.out.print("Unexpected error displaying SPDX Document: "
+				System.out.print("Unexpected error converting SPDX Document: "
 						+ e.getMessage());
 			} finally {
 				if (ss != null) {
