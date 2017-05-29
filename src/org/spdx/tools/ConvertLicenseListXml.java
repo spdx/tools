@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -26,6 +27,7 @@ import org.spdx.licensexml.LicenseXmlException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
@@ -64,6 +66,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 	public static final String OLD_VAR_ORIGINAL_ATTRIBUTE = "original";
 	public static final String OLD_VAR_MATCH_ATTRIBUTE = "match";
 	public static final String OLD_BULLET_TAG = "b";
+	private static final String OLD_LICENSE_LIST_VERSION_ATTRIBUTE = LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED;
 	/**
 	 * Map of old tag names to new tag names
 	 */
@@ -72,6 +75,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		TAG_MAP.put(OLD_ROOT_ELEMENT_NAME, LICENSEXML_ELEMENT_LICENSE_COLLECTION);
 		TAG_MAP.put(OLD_NAME_ATTRIBUTE, LICENSEXML_ATTRIBUTE_NAME);
 		TAG_MAP.put(OLD_ID_ATTRIBUTE, LICENSEXML_ATTRIBUTE_ID);
+		TAG_MAP.put(OLD_LICENSE_LIST_VERSION_ATTRIBUTE, LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED);
 		TAG_MAP.put(OLD_LICENSE_TAG, LICENSEXML_ELEMENT_LICENSE);
 		TAG_MAP.put(OLD_EXCEPTION_TAG, LICENSEXML_ELEMENT_EXCEPTION);
 		TAG_MAP.put(OLD_DEPRECATED_ATTRIBUTE, LICENSEXML_ATTRIBUTE_DEPRECATED);
@@ -168,11 +172,16 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		try {
 			inputXmlDocument = builder.parse(inputFile.toFile());
 		} catch (SAXException e) {
-			throw(new LicenseXmlConverterException("Unable to parse license XML file: "+e.getMessage()));
+			throw(new LicenseXmlConverterException("Unable to parse license XML file "+inputFile.getFileName()+": "+e.getMessage()));
 		} catch (IOException e) {
-			throw(new LicenseXmlConverterException("I/O Error reading XML file: "+e.getMessage()));
+			throw(new LicenseXmlConverterException("I/O Error reading XML file"+inputFile.getFileName()+": "+e.getMessage()));
 		}
-		assertValid(inputXmlDocument);
+		try {
+			assertValid(inputXmlDocument);
+		} catch(LicenseXmlConverterException ex) {
+			throw new LicenseXmlConverterException("File "+inputFile.getFileName()+" is invalid: "+ex.getMessage());
+		}
+		
 		Document outputXmlDocument = builder.newDocument();
 		convertLicenseXmlDocument(inputXmlDocument, outputXmlDocument);
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -185,9 +194,10 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		DOMSource source = new DOMSource(outputXmlDocument);
 		StreamResult result = new StreamResult(outputFile.toFile());
 		try {
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);
 		} catch (TransformerException e) {
-			throw(new LicenseXmlConverterException("Error saving the converted XML file: "+e.getMessage()));
+			throw(new LicenseXmlConverterException("Error saving the converted XML file"+outputFile.getFileName()+": "+e.getMessage()));
 		}
 	}
 
@@ -242,6 +252,9 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		}
 		if (inputRootElement.hasAttribute(OLD_OSI_APPROVED_ATTRIBUTE)) {
 			outputElement.setAttribute(LICENSEXML_ATTRIBUTE_OSI_APPROVED, inputRootElement.getAttribute(OLD_OSI_APPROVED_ATTRIBUTE));
+		}
+		if (inputRootElement.hasAttribute(OLD_LICENSE_LIST_VERSION_ATTRIBUTE)) {
+			outputElement.setAttribute(LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED, inputRootElement.getAttribute(OLD_LICENSE_LIST_VERSION_ATTRIBUTE));
 		}
 		// Cross reference URLS
 		NodeList urls = inputRootElement.getElementsByTagName(OLD_URLS_TAG);
@@ -357,24 +370,46 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		if (!rootElement.hasAttribute(OLD_ID_ATTRIBUTE)) {
 			throw(new LicenseXmlConverterException("Missing required license ID"));
 		}
-		// Check for the license, should only be one
+		// Check to make sure there are no unknown attributes
+		NamedNodeMap rootAttributes = rootElement.getAttributes();
+		for (int i = 0; i < rootAttributes.getLength(); i++) {
+			if (TAG_MAP.get(rootAttributes.item(i).getNodeName()) == null) {
+				throw new LicenseXmlConverterException("Unknown attribute "+rootAttributes.item(i).getNodeName());
+			}
+		}
+		// Check to make sure there are no unknown elements
+		NodeList rootChildren = rootElement.getChildNodes();
+		for (int i = 0; i < rootChildren.getLength(); i++) {
+			if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				if (TAG_MAP.get(rootChildren.item(i).getNodeName()) == null) {
+					throw new LicenseXmlConverterException("Unknown element "+rootChildren.item(i).getNodeName());
+				}
+			}
+		}
+		// Check for the license or exception, should only be one
 		NodeList licenseNodes = rootElement.getElementsByTagName(OLD_LICENSE_TAG);
-		if (licenseNodes.getLength() < 1) {
-			throw(new LicenseXmlConverterException("Missing required license element"));
+		NodeList exceptionNodes = rootElement.getElementsByTagName(OLD_EXCEPTION_TAG);
+		if (licenseNodes.getLength() < 1 && exceptionNodes.getLength() < 1) {
+			throw(new LicenseXmlConverterException("Missing required license or exception element"));
 		}
-		if (licenseNodes.getLength() > 1) {
-			throw(new LicenseXmlConverterException("More than one license elements"));
+		if (licenseNodes.getLength() +  exceptionNodes.getLength() > 1) {
+			throw(new LicenseXmlConverterException("More than one license and exception elements"));
 		}
-		Node licenseNode = licenseNodes.item(0);
+		Node licenseNode;
+		if (licenseNodes.getLength() > 0) {
+			licenseNode = licenseNodes.item(0);
+		} else {
+			licenseNode = exceptionNodes.item(0);
+		}
 		if (licenseNode.getNodeType() != Node.ELEMENT_NODE) {
 			throw(new LicenseXmlConverterException("Invalid node type for license"));
 		}
 		Element licenseElement = (Element)licenseNode;
 		// Check license body - should only be one, but allow for zero
-		NodeList bodyNodes = licenseElement.getElementsByTagName(OLD_BODY_TAG);
-		if (bodyNodes.getLength() > 1) {
-			throw(new LicenseXmlConverterException("More than one license body elements"));
-		}
+//		NodeList bodyNodes = licenseElement.getElementsByTagName(OLD_BODY_TAG);
+//		if (bodyNodes.getLength() > 1) {
+//			throw(new LicenseXmlConverterException("More than one license body elements"));
+//		}
 		// zero or one license header
 		NodeList headerNodes = rootElement.getElementsByTagName(OLD_HEADER_TAG);
 		if (headerNodes.getLength() > 1) {
@@ -394,7 +429,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 	}
 
 	/**
-	 * Print the useage
+	 * Print the usage
 	 */
 	private static void usage() {
 		System.out.println("Usage: ConvertLicenseListXml inputDir outputDir");

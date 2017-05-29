@@ -282,6 +282,18 @@ public class LicenseXmlHelper {
 		appendNodeText(licenseElement, true, sb, 0);
 		return sb.toString();
 	}
+	
+	/**
+	 * Format note text taking into account line breaks, paragraphs etc.
+	 * @param licenseElement
+	 * @return
+	 * @throws LicenseXmlException
+	 */
+	public static String getNoteText(Element licenseElement) throws LicenseXmlException {
+		StringBuilder sb = new StringBuilder();
+		appendNodeText(licenseElement, false, sb, 0);
+		return sb.toString();
+	}
 
 	/**
 	 * Gets license text from the license element

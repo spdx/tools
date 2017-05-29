@@ -18,10 +18,18 @@ package org.spdx.licensexml;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.apache.log4j.Logger;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -30,7 +38,6 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -42,6 +49,8 @@ import org.xml.sax.SAXException;
 public class LicenseXmlDocument {
 	static final Logger logger = Logger.getLogger(LicenseXmlDocument.class.getName());
 	
+	//TODO: Update the XML schema location to a more permanent location
+	public static final String LICENSE_XML_SCHEMA_LOCATION = "https://raw.githubusercontent.com/spdx/license-list-XML/schemadev/schema/ListedLicense.xsd";
 	// Document tags and attribute strings
 	public static final String ROOT_ELEMENT_NAME = "SPDX";
 	public static final String NAME_ATTRIBUTE = "name";
@@ -89,54 +98,30 @@ public class LicenseXmlDocument {
 			logger.error("I/O Error reading license XML file",e);
 			throw(new LicenseXmlException("I/O Error reading XML file: "+e.getMessage()));
 		}
-		assertValid();
+		assertValid(file);
 	}
 
 	/**
 	 * Checks the xmlDocument for a valid file and throws a LicenseXmlException if not valid
 	 */
-	private void assertValid() throws LicenseXmlException {
-		// Check that the root element is SPDX
-		Element rootElement = this.xmlDocument.getDocumentElement();
-		if (!ROOT_ELEMENT_NAME.equals(rootElement.getTagName())) {
-			throw(new LicenseXmlException("Incorrect document element name - expected '"+
-					ROOT_ELEMENT_NAME+"', found '"+rootElement.getTagName() + "'"));
+	private void assertValid(File licenseXmlFile) throws LicenseXmlException {
+		try {
+			URL schemaFile = new URL(LICENSE_XML_SCHEMA_LOCATION);
+			Source xmlSource = new StreamSource(licenseXmlFile);
+			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = schemaFactory.newSchema(schemaFile);
+			Validator validator = schema.newValidator();
+			validator.validate(xmlSource);
+		} catch (MalformedURLException e) {
+			logger.error("Unable to open License List XML schema file",e);
+			throw new LicenseXmlException("Unable to open License List XML schema file");
+		} catch (SAXException e) {
+			logger.error("Invalid license XML file "+licenseXmlFile.getName(),e);
+			throw new LicenseXmlException("Invalid license XML file "+licenseXmlFile.getName()+":"+e.getMessage());
+		} catch (IOException e) {
+			logger.error("IO Error validating license XML file",e);
+			throw new LicenseXmlException("IO Error validating license XML file");
 		}
-		// Required name
-		if (!rootElement.hasAttribute(NAME_ATTRIBUTE)) {
-			throw(new LicenseXmlException("Missing required license name"));
-		}
-		// Required ID
-		if (!rootElement.hasAttribute(ID_ATTRIBUTE)) {
-			throw(new LicenseXmlException("Missing required license ID"));
-		}
-		// Check for the license, should only be one
-		NodeList licenseNodes = rootElement.getElementsByTagName(LICENSE_TAG);
-		if (licenseNodes.getLength() < 1) {
-			throw(new LicenseXmlException("Missing required license element"));
-		}
-		if (licenseNodes.getLength() > 1) {
-			throw(new LicenseXmlException("More than one license elements"));
-		}
-		Node licenseNode = licenseNodes.item(0);
-		if (licenseNode.getNodeType() != Node.ELEMENT_NODE) {
-			throw(new LicenseXmlException("Invalid node type for license"));
-		}
-		Element licenseElement = (Element)licenseNode;
-		// Check license body - should only be one
-		NodeList bodyNodes = licenseElement.getElementsByTagName(BODY_TAG);
-		if (bodyNodes.getLength() < 1) {
-			throw(new LicenseXmlException("Missing required license body element"));
-		}
-		if (bodyNodes.getLength() > 1) {
-			throw(new LicenseXmlException("More than one license body elements"));
-		}
-		// zero or one license header
-		NodeList headerNodes = rootElement.getElementsByTagName(HEADER_TAG);
-		if (headerNodes.getLength() > 1) {
-			throw(new LicenseXmlException("More than one standard license header elements"));
-		}
-		//TODO: There are other validations we can do on the text of some of the elements
 	}
 
 	public LicenseXmlDocument(Document xmlDocument) throws LicenseXmlException {
@@ -169,6 +154,7 @@ public class LicenseXmlDocument {
 		NodeList notes = rootElement.getElementsByTagName(NOTES_TAG);
 		String comment = null;
 		if (notes.getLength() > 0) {
+			//TODO: Change to support formatting
 			StringBuilder commentBuilder = new StringBuilder(notes.item(0).getTextContent());
 			for (int i = 1; i < notes.getLength(); i++) {
 				commentBuilder.append("; ");
