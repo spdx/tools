@@ -98,7 +98,7 @@ public class LicenseXmlDocument {
 			logger.error("I/O Error reading license XML file",e);
 			throw(new LicenseXmlException("I/O Error reading XML file: "+e.getMessage()));
 		}
-		assertValid(file);
+//		assertValid(file);
 	}
 
 	/**
