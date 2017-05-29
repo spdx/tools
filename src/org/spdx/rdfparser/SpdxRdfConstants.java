@@ -277,4 +277,31 @@ public interface SpdxRdfConstants {
 	public static final String SPDX_DATA_LICENSE_ID = "CC0-1.0";
 	
 	public static final String SPDX_LISTED_REFERENCE_TYPES_PREFIX = "http://spdx.org/rdf/references/";
+	
+	// License XML constants
+	public static final String LICENSEXML_URI = "http://www.spdx.org/license";
+	public static final String LICENSEXML_ELEMENT_LICENSE_COLLECTION = "SPDXLicenseCollection";
+	public static final String LICENSEXML_ELEMENT_LICENSE = "license";
+	public static final String LICENSEXML_ELEMENT_EXCEPTION = "exception";
+	public static final String LICENSEXML_ATTRIBUTE_ID = "licenseId";
+	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED = "isDeprecated";
+	public static final String LICENSEXML_ATTRIBUTE_OSI_APPROVED = "isOsiApproved";
+	public static final String LICENSEXML_ATTRIBUTE_NAME = "name";
+	public static final String LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED = "listVersionAdded";
+	public static final String LICENSEXML_ELEMENT_CROSS_REFS = "crossRefs";
+	public static final String LICENSEXML_ELEMENT_CROSS_REF = "crossRef";
+	public static final String LICENSEXML_ELEMENT_NOTES = "notes";
+	public static final String LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER = "standardLicenseHeader";
+	public static final String LICENSEXML_ELEMENT_TITLE_TEXT = "titleText";
+	public static final String LICENSEXML_ELEMENT_COPYRIGHT_TEXT = "copyrightText";
+	public static final String LICENSEXML_ELEMENT_BULLET = "bullet";
+	public static final String LICENSEXML_ELEMENT_LIST = "list";
+	public static final String LICENSEXML_ELEMENT_ITEM = "item";
+	public static final String LICENSEXML_ELEMENT_PARAGRAPH = "p";
+	public static final String LICENSEXML_ELEMENT_OPTIONAL = "optional";
+	public static final String LICENSEXML_ELEMENT_ALT = "alt";
+	public static final String LICENSEXML_ATTRIBUTE_ALT_NAME = "name";
+	public static final String LICENSEXML_ATTRIBUTE_ALT_MATCH = "match";
+	public static final String LICENSEXML_ELEMENT_BREAK = "br";
+	
 }
