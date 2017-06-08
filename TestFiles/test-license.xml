@@ -1,32 +1,83 @@
-<SPDX name="Test License" identifier="test-id" osi-approved="true" deprecated="true">
-  <notes>Test note</notes>
-  <urls>
-    <url>http://test/url1</url>
-    <url>http://test/url2</url>
-  </urls>
-  <header> 
+<SPDXLicenseCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.spdx.org/license https://raw.githubusercontent.com/spdx/license-list-XML/schemadev/schema/ListedLicense.xsd" xmlns="http://www.spdx.org/license">
+	<license name="Test License" licenseId="test-id" isOsiApproved="true">
+		<notes>Test note</notes>
+		<crossRefs>
+			<crossRef>http://test/url1</crossRef>
+			<crossRef>http://test/url2</crossRef>
+		</crossRefs>
+		<standardLicenseHeader> 
     Test header
-  </header>
-  <license>
-    <copyright>
-      <p>Test Copyright</p>
-    </copyright>
-    <body>
-      <p>paragraph 1</p>
-      <list>
-        <li>
-          <b>1.</b>
-          <p>List item 1</p>
-        </li>
-        <li>
-          <b>2.</b>
-          <p>List item 2</p>
-        </li>
-      </list>
-      <p>Last Paragraph
+  </standardLicenseHeader>
+		<copyrightText>
+			<p>Test Copyright</p>
+		</copyrightText>
+		<p>paragraph 1</p>
+		<list>
+			<item>
+				<bullet>1.</bullet>
+				<p>List item 1</p>
+			</item>
+			<item>
+				<bullet>2.</bullet>
+				<p>List item 2</p>
+			</item>
+		</list>
+		<p>Last Paragraph
           <alt name="alttest" match=".+">Alternate Text</alt>Non matching line.
-          <optional identifier="optionaltest">Optional text</optional>
-      </p>
-    </body>
-  </license>
-</SPDX>
+          <optional>Optional text</optional>
+		</p>
+	</license>
+	<license name="Test Deprecated License" licenseId="test-dep" isOsiApproved="false" isDeprecated="true" deprecatedVersion="2.2">
+		<notes>Test dep note</notes>
+		<crossRefs>
+			<crossRef>http://test/url1d</crossRef>
+			<crossRef>http://test/url2d</crossRef>
+		</crossRefs>
+		<standardLicenseHeader> 
+    Test header dep
+  </standardLicenseHeader>
+		<copyrightText>
+			<p>Test Copyright dep</p>
+		</copyrightText>
+		<p>paragraph 1d</p>
+		<list>
+			<item>
+				<bullet>1.d</bullet>
+				<p>List item 1d</p>
+			</item>
+			<item>
+				<bullet>2.d</bullet>
+				<p>List item 2d</p>
+			</item>
+		</list>
+		<p>Last Paragraph dep
+          <alt name="alttestd" match=".+">Alternate Text dep</alt>Non matching line dep.
+          <optional>Optional text dep</optional>
+		</p>
+	</license>
+	<exception name="Test Exception" licenseId="test-ex">
+		<notes>Test note exception</notes>
+		<crossRefs>
+			<crossRef>http://test/url1e</crossRef>
+			<crossRef>http://test/url2e</crossRef>
+		</crossRefs>
+		<copyrightText>
+			<p>Test Copyrighte</p>
+		</copyrightText>
+		<p>paragraph 1e</p>
+		<list>
+			<item>
+				<bullet>1.e</bullet>
+				<p>List item 1e</p>
+			</item>
+			<item>
+				<bullet>2.e</bullet>
+				<p>List item 2e</p>
+			</item>
+		</list>
+		<p>Last Paragraph exc
+          <alt name="altteste" match=".+">Alternate Text exc</alt>Non matching line. e
+          <optional>Optional text exc</optional>
+		</p>
+	</exception>
+</SPDXLicenseCollection>
