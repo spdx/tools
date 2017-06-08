@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.spdx.rdfparser.SpdxRdfConstants;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,25 +31,86 @@ import org.w3c.dom.NodeList;
  * @author Gary O'Neall
  *
  */
-public class LicenseXmlHelper {
+public class LicenseXmlHelper implements SpdxRdfConstants {
 	static final Logger logger = Logger.getLogger(LicenseXmlHelper.class);
 
 	private static final String INDENT_STRING = "   ";
-	
+
 	/**
 	 * Tags that do not require any processing - the text for the children will be included
 	 */
-	static HashSet<String> UNPROCESSED_TAGS = new HashSet<String>();
+	static HashSet<String> LICENSE_AND_EXCEPTION_SKIPPED_TAGS = new HashSet<String>();
 	static {
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.BODY_TAG);
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.COPYRIGHT_TAG);
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.TITLE_TAG);
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.LIST_ITEM_TAG);
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.LICENSE_TAG);
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.BULLET_TAG);
-		UNPROCESSED_TAGS.add(LicenseXmlDocument.HEADER_TAG);
+		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
+		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
+		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
+		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
 	}
-
+	
+	static HashSet<String> LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS = new HashSet<String>();
+	static {
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+	}
+	
+	static HashSet<String> NOTES_SKIPPED_TAGS = new HashSet<String>();
+	static {
+		NOTES_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
+		NOTES_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
+		NOTES_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
+	}
+	
+	static HashSet<String> NOTES_UNPROCESSED_TAGS = new HashSet<String>();
+	static {
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
+		NOTES_UNPROCESSED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+	}
+	
+	static HashSet<String> HEADER_SKIPPED_TAGS = new HashSet<String>();
+	static {
+		HEADER_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
+		HEADER_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
+		HEADER_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
+	}
+	
+	static HashSet<String> HEADER_UNPROCESSED_TAGS = new HashSet<String>();
+	static {
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+		HEADER_UNPROCESSED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
+	}
+	
+	static HashSet<String> EXAMPLE_SKIPPED_TAGS = new HashSet<String>();
+	static {
+		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
+		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
+		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
+		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
+	}
+	
+	static HashSet<String> EXAMPLE_UNPROCESSED_TAGS = new HashSet<String>();
+	static {
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXAMPLE);
+		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+	}	
 	/**
 	 * Convert a node to text which contains various markup information and appends it to the sb
 	 * @param node node to convert
@@ -56,32 +118,36 @@ public class LicenseXmlHelper {
 	 * if false, translate to the equivalent text
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
+	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
+	 * @param skippedTags Tags that should not be included
 	 * @return
 	 * @throws LicenseXmlException 
 	 */
-	private static void appendNodeText(Node node, boolean useTemplateFormat, StringBuilder sb, int indentCount) throws LicenseXmlException {
+	private static void appendNodeText(Node node, boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
+			HashSet<String> skippedTags) throws LicenseXmlException {
 		if (node.getNodeType() == Node.TEXT_NODE) {
 			appendNormalizedWhiteSpaceText(sb, node.getNodeValue());
 		} else if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element element = (Element)node;
 			String tagName = element.getTagName();
-			if (LicenseXmlDocument.LIST_TAG.equals(tagName)) {
-				appendListElements(element, useTemplateFormat, sb, indentCount);
-			} else if (LicenseXmlDocument.ALTERNATIVE_TAG.equals(tagName)) {
-				appendAltText(element, useTemplateFormat, sb, indentCount);
-			} else if (LicenseXmlDocument.OPTIONAL_TAG.equals(tagName)) {
-				appendOptionalText(element, useTemplateFormat, sb, indentCount);
-			} else {
-				if (LicenseXmlDocument.BREAK_TAG.equals(tagName)) {
+			if (LICENSEXML_ELEMENT_LIST.equals(tagName)) {
+				appendListElements(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
+			} else if (LICENSEXML_ELEMENT_ALT.equals(tagName)) {
+				appendAltText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
+			} else if (LICENSEXML_ELEMENT_OPTIONAL.equals(tagName)) {
+				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
+			} else if (LICENSEXML_ELEMENT_BREAK.equals(tagName)) {
+				addNewline(sb, indentCount);
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
+			} else if (LICENSEXML_ELEMENT_PARAGRAPH.equals(tagName)) {
+				if (sb.length() > 1) {
 					addNewline(sb, indentCount);
-				} else if (LicenseXmlDocument.PARAGRAPH_TAG.equals(tagName)) {
-					if (sb.length() > 1) {
-						addNewline(sb, indentCount);
-					}
-				} else if (!UNPROCESSED_TAGS.contains(tagName)) {
-					throw(new LicenseXmlException("Unknown license element tag name: "+tagName));
 				}
-				appendElementChildrenText(element, useTemplateFormat, sb, indentCount);
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
+			} else if (unprocessedTags.contains(tagName)) {
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
+			} else if (!skippedTags.contains(tagName)) {
+				throw(new LicenseXmlException("Unknown license element tag name: "+tagName));
 			}
 		}
 	}
@@ -135,13 +201,16 @@ public class LicenseXmlHelper {
 	 * if false, translate to the equivalent text
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
+	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
+	 * @param skippedTags Tags that should not be included
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendElementChildrenText(Element element,
-			boolean useTemplateFormat, StringBuilder sb, int indentCount) throws LicenseXmlException {
+			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
+			HashSet<String> skippedTags) throws LicenseXmlException {
 		NodeList licenseChildNodes = element.getChildNodes();
 		for (int i = 0; i < licenseChildNodes.getLength(); i++) {
-			appendNodeText(licenseChildNodes.item(i),useTemplateFormat, sb, indentCount);
+			appendNodeText(licenseChildNodes.item(i),useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags);
 		}	
 	}
 
@@ -164,16 +233,19 @@ public class LicenseXmlHelper {
 	 * if false, translate to the equivalent text
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
+	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
+	 * @param skippedTags Tags that should not be included
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendOptionalText(Element element,
-			boolean useTemplateFormat, StringBuilder sb, int indentCount) throws LicenseXmlException {
-		if (!LicenseXmlDocument.OPTIONAL_TAG.equals(element.getTagName())) {
+			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
+			HashSet<String> skippedTags) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_OPTIONAL.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Expecting optional tag, found "+element.getTagName()));
 		}
 		StringBuilder childSb = new StringBuilder();
 		if (element.hasChildNodes()) {
-			appendElementChildrenText(element, useTemplateFormat, childSb, indentCount);
+			appendElementChildrenText(element, useTemplateFormat, childSb, indentCount, unprocessedTags, skippedTags);
 		} else {
 			childSb.append(element.getTextContent());
 		}
@@ -202,16 +274,19 @@ public class LicenseXmlHelper {
 	 * if false, translate to the equivalent text
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
+	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
+	 * @param skippedTags Tags that should not be included
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendAltText(Element element,
-			boolean useTemplateFormat, StringBuilder sb, int indentCount) throws LicenseXmlException {
-		if (!LicenseXmlDocument.ALTERNATIVE_TAG.equals(element.getTagName())) {
+			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
+			HashSet<String> skippedTags) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_ALT.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Expected alt tag.  Found '"+element.getTagName()+"'"));
 		}
 		StringBuilder originalSb = new StringBuilder();
 		if (element.hasChildNodes()) {
-			appendElementChildrenText(element, useTemplateFormat, originalSb, indentCount);
+			appendElementChildrenText(element, useTemplateFormat, originalSb, indentCount, unprocessedTags, skippedTags);
 		} else {
 			originalSb.append(element.getTextContent());
 		}
@@ -223,17 +298,17 @@ public class LicenseXmlHelper {
 				sb.append(' ');
 			}
 			sb.append("<<var;name=\"");
-			if (!element.hasAttribute(LicenseXmlDocument.VAR_NAME_ATTRIBUTE)) {
+			if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME)) {
 				throw(new LicenseXmlException("Missing name attribute for variable text"));
 			}
-			sb.append(element.getAttribute(LicenseXmlDocument.VAR_NAME_ATTRIBUTE));
+			sb.append(element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME));
 			sb.append("\";original=\"");
 			sb.append(originalSb);
 			sb.append("\";match=\"");
-			if (!element.hasAttribute(LicenseXmlDocument.VAR_MATCH_ATTRIBUTE)) {
+			if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH)) {
 				throw(new LicenseXmlException("Missing match attribute for variable text"));
 			}
-			sb.append(element.getAttribute(LicenseXmlDocument.VAR_MATCH_ATTRIBUTE));
+			sb.append(element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH));
 			sb.append("\">>");
 		} else {
 			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
@@ -249,22 +324,25 @@ public class LicenseXmlHelper {
 	 * @param useTemplateFormat
 	 * @param sb
 	 * @param indentCount Number of indentations for the text
+	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
+	 * @param skippedTags Tags that should not be included
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendListElements(Element element,
-			boolean useTemplateFormat, StringBuilder sb, int indentCount) throws LicenseXmlException {
-		if (!LicenseXmlDocument.LIST_TAG.equals(element.getTagName())) {
+			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
+			HashSet<String> skippedTags) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_LIST.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Invalid list element tag - expected 'list', found '"+element.getTagName()+"'"));
 		}
 		NodeList listItemNodes = element.getChildNodes();
 		for (int i = 0; i < listItemNodes.getLength(); i++) {
 			if (listItemNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
 				Element listItem = (Element)listItemNodes.item(i);
-				if (!LicenseXmlDocument.LIST_ITEM_TAG.equals(listItem.getTagName())) {
-					throw(new LicenseXmlException("Expected only list item tags ('li') in a list, found "+listItem.getTagName()));
+				if (!LICENSEXML_ELEMENT_ITEM.equals(listItem.getTagName())) {
+					throw(new LicenseXmlException("Expected only list item tags ('item') in a list, found "+listItem.getTagName()));
 				}
 				addNewline(sb, indentCount+1);
-				appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1);
+				appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, skippedTags);
 			} else if (listItemNodes.item(i).getNodeType() != Node.TEXT_NODE) {
 				throw(new LicenseXmlException("Expected only element children for a list element"));	
 			}
@@ -279,7 +357,7 @@ public class LicenseXmlHelper {
 	 */
 	public static String getLicenseTemplate(Element licenseElement) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, true, sb, 0);
+		appendNodeText(licenseElement, true, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, LICENSE_AND_EXCEPTION_SKIPPED_TAGS);
 		return sb.toString();
 	}
 	
@@ -291,7 +369,7 @@ public class LicenseXmlHelper {
 	 */
 	public static String getNoteText(Element licenseElement) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, false, sb, 0);
+		appendNodeText(licenseElement, false, sb, 0, NOTES_UNPROCESSED_TAGS, NOTES_SKIPPED_TAGS);
 		return sb.toString();
 	}
 
@@ -303,7 +381,7 @@ public class LicenseXmlHelper {
 	 */
 	public static String getLicenseText(Element licenseElement) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, false, sb, 0);
+		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, LICENSE_AND_EXCEPTION_SKIPPED_TAGS);
 		return sb.toString();
 	}
 	
@@ -342,12 +420,23 @@ public class LicenseXmlHelper {
 
 	/**
 	 * @param headerNode
-	 * @return
+	 * @return header text where headerNode is the root element
 	 * @throws LicenseXmlException 
 	 */
 	public static Object getHeaderText(Node headerNode) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(headerNode, false, sb, 0);
+		appendNodeText(headerNode, false, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS);
+		return sb.toString();
+	}
+
+	/**
+	 * @param exampleElement
+	 * @return Example text where exampleElement is the root element
+	 * @throws LicenseXmlException 
+	 */
+	public static String getExampleText(Element exampleElement) throws LicenseXmlException {
+		StringBuilder sb = new StringBuilder();
+		appendNodeText(exampleElement, false, sb, 0, EXAMPLE_UNPROCESSED_TAGS, EXAMPLE_SKIPPED_TAGS);
 		return sb.toString();
 	}
 

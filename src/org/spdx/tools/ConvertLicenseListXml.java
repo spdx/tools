@@ -404,13 +404,6 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		if (licenseNode.getNodeType() != Node.ELEMENT_NODE) {
 			throw(new LicenseXmlConverterException("Invalid node type for license"));
 		}
-		Element licenseElement = (Element)licenseNode;
-		// Check license body - should only be one, but allow for zero
-//		NodeList bodyNodes = licenseElement.getElementsByTagName(OLD_BODY_TAG);
-//		if (bodyNodes.getLength() > 1) {
-//			throw(new LicenseXmlConverterException("More than one license body elements"));
-//		}
-		// zero or one license header
 		NodeList headerNodes = rootElement.getElementsByTagName(OLD_HEADER_TAG);
 		if (headerNodes.getLength() > 1) {
 			throw(new LicenseXmlConverterException("More than one standard license header elements"));

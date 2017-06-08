@@ -285,6 +285,7 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ELEMENT_EXCEPTION = "exception";
 	public static final String LICENSEXML_ATTRIBUTE_ID = "licenseId";
 	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED = "isDeprecated";
+	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED_VERSION = "deprecatedVersion";
 	public static final String LICENSEXML_ATTRIBUTE_OSI_APPROVED = "isOsiApproved";
 	public static final String LICENSEXML_ATTRIBUTE_NAME = "name";
 	public static final String LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED = "listVersionAdded";
@@ -292,6 +293,7 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ELEMENT_CROSS_REF = "crossRef";
 	public static final String LICENSEXML_ELEMENT_NOTES = "notes";
 	public static final String LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER = "standardLicenseHeader";
+	public static final String LICENSEXML_ELEMENT_EXAMPLE = "example";
 	public static final String LICENSEXML_ELEMENT_TITLE_TEXT = "titleText";
 	public static final String LICENSEXML_ELEMENT_COPYRIGHT_TEXT = "copyrightText";
 	public static final String LICENSEXML_ELEMENT_BULLET = "bullet";

@@ -47,6 +47,7 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 	class XmlLicenseIterator implements Iterator<SpdxListedLicense> {		
 		private int xmlFileIndex = 0;
 		private SpdxListedLicense nextListedLicense = null;
+		private Iterator<SpdxListedLicense> fileListedLicenseIter = null;
 		
 		public XmlLicenseIterator() {
 			findNextItem();
@@ -54,22 +55,29 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 
 		private void findNextItem() {
 			nextListedLicense = null;
-			while (xmlFileIndex < xmlFiles.length && nextListedLicense == null) {
-				try {
-					LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
-					if (licDoc.isListedLicense() && !licDoc.isDeprecated()) {
+			if (fileListedLicenseIter == null || !fileListedLicenseIter.hasNext()) {
+				fileListedLicenseIter = null;
+				while (xmlFileIndex < xmlFiles.length && fileListedLicenseIter == null) {
+					try {
+						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
 						try {
-							this.nextListedLicense = licDoc.getListedLicense();
+							List<SpdxListedLicense> licList = licDoc.getListedLicenses();
+							if (licList != null && !licList.isEmpty()) {
+								fileListedLicenseIter = licList.iterator();
+							}
 						} catch (InvalidSPDXAnalysisException e) {
-							logger.error("Invalid SPDX license in XML document "+xmlFiles[xmlFileIndex].getName(),e);
-							this.nextListedLicense = null;	// continue to look for the next valid license
+							warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+							logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
 						}
+					} catch(LicenseXmlException e) {
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
 					}
-				} catch(LicenseXmlException e) {
-					warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-					logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+					
 				}
-				xmlFileIndex++;
+			}
+			if (fileListedLicenseIter != null && fileListedLicenseIter.hasNext()) {
+				nextListedLicense = fileListedLicenseIter.next();
 			}
 		}
 		/* (non-Javadoc)
@@ -102,6 +110,7 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 	class XmlExceptionIterator implements Iterator<LicenseException> {
 		private int xmlFileIndex = 0;
 		private LicenseException nextLicenseException = null;
+		private Iterator<LicenseException> fileExceptionIterator = null;
 		
 		public XmlExceptionIterator() {
 			findNextItem();
@@ -109,18 +118,26 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 
 		private void findNextItem() {
 			nextLicenseException = null;
-			while (xmlFileIndex < xmlFiles.length && nextLicenseException == null) {
-				try {
-					LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
-					if (licDoc.isLicenseException() && !licDoc.isDeprecated()) {
-						this.nextLicenseException = licDoc.getLicenseException();
+			if (fileExceptionIterator == null || !fileExceptionIterator.hasNext()) {
+				fileExceptionIterator = null;
+				while (xmlFileIndex < xmlFiles.length && fileExceptionIterator == null) {
+					try {
+						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
+						List<LicenseException> exceptionList = licDoc.getLicenseExceptions();
+						if (exceptionList != null && !exceptionList.isEmpty()) {
+							fileExceptionIterator = exceptionList.iterator();
+						}
+					} catch(LicenseXmlException e) {
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
 					}
-				} catch(LicenseXmlException e) {
-					warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-					logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+					xmlFileIndex++;
 				}
-				xmlFileIndex++;
 			}
+			if (fileExceptionIterator != null && fileExceptionIterator.hasNext()) {
+				nextLicenseException = fileExceptionIterator.next();
+			}
+
 		}
 		/* (non-Javadoc)
 		 * @see java.util.Iterator#hasNext()
@@ -152,6 +169,7 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 	class XmlDeprecatedLicenseIterator implements Iterator<DeprecatedLicenseInfo> {
 		private int xmlFileIndex = 0;
 		private DeprecatedLicenseInfo nextDeprecatedLicense = null;
+		private Iterator<DeprecatedLicenseInfo> fileDeprecatedLicenses = null;
 		
 		public XmlDeprecatedLicenseIterator() {
 			findNextItem();
@@ -159,17 +177,28 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 
 		private void findNextItem() {
 			nextDeprecatedLicense = null;
-			while (xmlFileIndex < xmlFiles.length && nextDeprecatedLicense == null) {
-				try {
-					LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
-					if (licDoc.isListedLicense() && licDoc.isDeprecated()) {
-						this.nextDeprecatedLicense = licDoc.getDeprecatedLicenseInfo();
+			if (fileDeprecatedLicenses == null || !fileDeprecatedLicenses.hasNext()) {
+				fileDeprecatedLicenses = null;
+				while (xmlFileIndex < xmlFiles.length && fileDeprecatedLicenses == null) {
+					try {
+						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
+						List<DeprecatedLicenseInfo> depList = licDoc.getDeprecatedLicenseInfos();
+						if (depList != null && !depList.isEmpty()) {
+							fileDeprecatedLicenses = depList.iterator();
+						}
+					} catch(LicenseXmlException e) {
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+					} catch (InvalidSPDXAnalysisException e) {
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
 					}
-				} catch(LicenseXmlException e) {
-					warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-					logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+					xmlFileIndex++;
 				}
-				xmlFileIndex++;
+			}
+
+			if (fileDeprecatedLicenses != null && fileDeprecatedLicenses.hasNext()) {
+				nextDeprecatedLicense = fileDeprecatedLicenses.next();
 			}
 		}
 		/* (non-Javadoc)
