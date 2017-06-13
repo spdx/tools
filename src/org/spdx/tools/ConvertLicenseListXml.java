@@ -213,11 +213,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		// Start at the root
 		Element inputRootElement = inputXmlDocument.getDocumentElement();
 		Element outputRootElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE_COLLECTION);
-//		Element outputRootElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE_COLLECTION);
 		outputRootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", NAMESPACE);
-//		outputRootElement.set
-//		outputRootElement.setAttributeNS("http://www.spdx.org/license", null, null);
-//		outputRootElement.setPrefix("xmlns:xsi="+"http://www.spdx.org/license");
 		outputXmlDocument.appendChild(outputRootElement);
 		
 		// Create the license nodes
@@ -231,7 +227,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		// Create the exception nodes
 		NodeList exceptioneNodes = inputRootElement.getElementsByTagName(OLD_EXCEPTION_TAG);
 		for (int i = 0; i < exceptioneNodes.getLength(); i++) {
-			Element outputExceptionElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE);
+			Element outputExceptionElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_EXCEPTION);
 			convertLicense(outputXmlDocument, inputRootElement, (Element)exceptioneNodes.item(i), outputExceptionElement);
 			outputRootElement.appendChild(outputExceptionElement);
 		}

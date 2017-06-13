@@ -43,6 +43,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Parses and provides access to a License XML document
@@ -96,9 +97,12 @@ public class LicenseXmlDocument {
 		} catch (MalformedURLException e) {
 			logger.error("Unable to open License List XML schema file",e);
 			throw new LicenseXmlException("Unable to open License List XML schema file");
+		} catch (SAXParseException e) {
+			logger.error("Invalid license XML file "+licenseXmlFile.getName(),e);
+			throw new LicenseXmlException("Parsing error in XML file "+licenseXmlFile.getName()+ " at line "+e.getLineNumber()+", column "+e.getColumnNumber()+":"+e.getMessage());
 		} catch (SAXException e) {
 			logger.error("Invalid license XML file "+licenseXmlFile.getName(),e);
-			throw new LicenseXmlException("Invalid license XML file "+licenseXmlFile.getName()+":"+e.getMessage());
+			throw new LicenseXmlException("Invalid XML file "+licenseXmlFile.getName()+":"+e.getMessage());
 		} catch (IOException e) {
 			logger.error("IO Error validating license XML file",e);
 			throw new LicenseXmlException("IO Error validating license XML file");
