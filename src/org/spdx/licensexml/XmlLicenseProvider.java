@@ -57,21 +57,21 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 			nextListedLicense = null;
 			if (fileListedLicenseIter == null || !fileListedLicenseIter.hasNext()) {
 				fileListedLicenseIter = null;
-				while (xmlFileIndex < xmlFiles.length && fileListedLicenseIter == null) {
+				while (xmlFileIndex < xmlFiles.size() && fileListedLicenseIter == null) {
 					try {
-						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
+						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles.get(xmlFileIndex));
 						try {
 							List<SpdxListedLicense> licList = licDoc.getListedLicenses();
 							if (licList != null && !licList.isEmpty()) {
 								fileListedLicenseIter = licList.iterator();
 							}
 						} catch (InvalidSPDXAnalysisException e) {
-							warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-							logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+							warnings.add(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
+							logger.warn(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
 						}
 					} catch(LicenseXmlException e) {
-						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
 					} finally {
 						xmlFileIndex++;
 					}
@@ -121,16 +121,16 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 			nextLicenseException = null;
 			if (fileExceptionIterator == null || !fileExceptionIterator.hasNext()) {
 				fileExceptionIterator = null;
-				while (xmlFileIndex < xmlFiles.length && fileExceptionIterator == null) {
+				while (xmlFileIndex < xmlFiles.size() && fileExceptionIterator == null) {
 					try {
-						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
+						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles.get(xmlFileIndex));
 						List<LicenseException> exceptionList = licDoc.getLicenseExceptions();
 						if (exceptionList != null && !exceptionList.isEmpty()) {
 							fileExceptionIterator = exceptionList.iterator();
 						}
 					} catch(LicenseXmlException e) {
-						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
 					}
 					xmlFileIndex++;
 				}
@@ -180,19 +180,19 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 			nextDeprecatedLicense = null;
 			if (fileDeprecatedLicenses == null || !fileDeprecatedLicenses.hasNext()) {
 				fileDeprecatedLicenses = null;
-				while (xmlFileIndex < xmlFiles.length && fileDeprecatedLicenses == null) {
+				while (xmlFileIndex < xmlFiles.size() && fileDeprecatedLicenses == null) {
 					try {
-						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles[xmlFileIndex]);
+						LicenseXmlDocument licDoc = new LicenseXmlDocument(xmlFiles.get(xmlFileIndex));
 						List<DeprecatedLicenseInfo> depList = licDoc.getDeprecatedLicenseInfos();
 						if (depList != null && !depList.isEmpty()) {
 							fileDeprecatedLicenses = depList.iterator();
 						}
 					} catch(LicenseXmlException e) {
-						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
 					} catch (InvalidSPDXAnalysisException e) {
-						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
-						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
+						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles.get(xmlFileIndex).getName());
 					}
 					xmlFileIndex++;
 				}
@@ -229,7 +229,7 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 		}
 	}
 	
-	private File[] xmlFiles = new File[0];
+	private List<File> xmlFiles = new ArrayList<File>();
 
 	/**
 	 * @param xmlFileDirectory directory of XML files
@@ -239,7 +239,31 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 		if (!xmlFileDirectory.isDirectory()) {
 			throw(new SpdxListedLicenseException("XML File Directory is not a directory"));
 		}
-		this.xmlFiles = xmlFileDirectory.listFiles(new FileFilter() {
+		this.xmlFiles = new ArrayList<File>();
+		addXmlFiles(xmlFileDirectory, this.xmlFiles);
+	}
+
+	/**
+	 * Add all XML files in the directory and subdirectories
+	 * @param xmlFileDirectory
+	 * @param alFiles
+	 */
+	private void addXmlFiles(File xmlFileDirectory, List<File> alFiles) {
+		
+		File[] directories = xmlFileDirectory.listFiles(new FileFilter() {
+
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.isDirectory();
+			}
+			
+		});
+		
+		for (File subDir:directories) {
+			addXmlFiles(subDir, alFiles);
+		}
+		
+		File[] localFiles = xmlFileDirectory.listFiles(new FileFilter() {
 
 			@Override
 			public boolean accept(File pathname) {
@@ -247,6 +271,11 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 			}
 			
 		});
+		
+		for (File file:localFiles) {
+			alFiles.add(file);
+		}
+
 	}
 
 	/* (non-Javadoc)
