@@ -59,7 +59,7 @@ public class ExceptionHtml {
 		}
 		mustacheMap.put("name", exception.getName());
 		mustacheMap.put("id", exception.getLicenseExceptionId());
-		mustacheMap.put("text", SpdxLicenseTemplateHelper.escapeHTML(exception.getLicenseExceptionText()));
+		mustacheMap.put("text", SpdxLicenseTemplateHelper.formatEscapeHTML(exception.getLicenseExceptionText()));
 		mustacheMap.put("getSourceUrl", alSourceUrls);
 		mustacheMap.put("notes", exception.getComment());
 		String example = exception.getExample();

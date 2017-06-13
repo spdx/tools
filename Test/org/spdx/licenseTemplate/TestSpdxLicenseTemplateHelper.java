@@ -164,13 +164,13 @@ public class TestSpdxLicenseTemplateHelper {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.licenseTemplate.SpdxLicenseTemplateHelper#escapeHTML(java.lang.String)}.
+	 * Test method for {@link org.spdx.licenseTemplate.SpdxLicenseTemplateHelper#formatEscapeHTML(java.lang.String)}.
 	 */
 	@Test
 	public void testEscapeHTML() {
 		String unEscaped = "<abc\nline2>";
 		String escaped = "&lt;abc<br/>\nline2&gt;";
-		assertEquals(escaped, SpdxLicenseTemplateHelper.escapeHTML(unEscaped));
+		assertEquals(escaped, SpdxLicenseTemplateHelper.formatEscapeHTML(unEscaped));
 	}
 
 	@Test

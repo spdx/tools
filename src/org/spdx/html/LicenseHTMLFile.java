@@ -177,27 +177,8 @@ public class LicenseHTMLFile {
 			Map<String, Object> retval = Maps.newHashMap();
 			if (license != null) {
 				retval.put("licenseId", license.getLicenseId());
-				String licenseTextHtml = null;
-				String licenseTemplateHtml = null;
-				String templateText = license.getStandardLicenseTemplate();
-				if (templateText != null && !templateText.trim().isEmpty()) {
-					try {
-						licenseTextHtml = formatTemplateText(templateText);
-					} catch(LicenseTemplateRuleException ex) {
-						throw new InvalidLicenseTemplateException("Invalid license expression found in license text for license "+this.license.getName()+":"+ex.getMessage());
-					}
-					licenseTemplateHtml = SpdxLicenseTemplateHelper.escapeHTML(templateText);
-				} else {
-					licenseTextHtml = SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText());
-				}
+				String licenseTextHtml = license.getLicenseTextHtml();
 				retval.put("licenseText", licenseTextHtml);
-				if (licenseTemplateHtml != null) {
-					try {
-						retval.put("licenseTemplate", formatTemplateText(licenseTemplateHtml));
-					} catch(LicenseTemplateRuleException ex) {
-						throw new InvalidLicenseTemplateException("Invalid license expression found in license template text for license "+this.license.getName()+":"+ex.getMessage());
-					}
-				}
 				retval.put("licenseName", license.getName());
 				String notes;
 				if (license.getComment() != null && !license.getComment().isEmpty()) {
@@ -226,7 +207,7 @@ public class LicenseHTMLFile {
 				} else if (header != null) {
 					//TODO: May need to add another field for the header template text
 					try {
-						header = formatTemplateText(header);
+						header = SpdxLicenseTemplateHelper.templateTextToHtml(header);
 					} catch(LicenseTemplateRuleException ex) {
 						throw new InvalidLicenseTemplateException("Invalid license expression found in header text for license "+this.license.getName()+":"+ex.getMessage());
 					}
@@ -238,13 +219,5 @@ public class LicenseHTMLFile {
 		retval.put("deprecatedVersion", this.deprecatedVersion);
 		return retval;
 	}
-	/**
-	 * Formats the license text from a template
-	 * @param licenseTemplate
-	 * @return
-	 * @throws LicenseTemplateRuleException 
-	 */
-	private String formatTemplateText(String licenseTemplate) throws LicenseTemplateRuleException {
-		return SpdxLicenseTemplateHelper.templateTextToHtml(licenseTemplate);
-	}
+
 }

@@ -72,8 +72,9 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 					} catch(LicenseXmlException e) {
 						warnings.add(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
 						logger.warn(e.getMessage() + ", Skipping file "+xmlFiles[xmlFileIndex].getName());
+					} finally {
+						xmlFileIndex++;
 					}
-					
 				}
 			}
 			if (fileListedLicenseIter != null && fileListedLicenseIter.hasNext()) {

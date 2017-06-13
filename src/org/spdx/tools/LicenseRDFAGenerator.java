@@ -398,7 +398,7 @@ public class LicenseRDFAGenerator {
 				File textFile = new File(textFolder.getPath() + File.separator + exceptionHtmlFileName + ".txt");
 				Files.write(nextException.getLicenseExceptionText(), textFile, utf8);
 				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + exceptionHtmlFileName + ".html");
-				Files.write(SpdxLicenseTemplateHelper.escapeHTML(nextException.getLicenseExceptionText()), htmlTextFile, utf8);
+				Files.write(SpdxLicenseTemplateHelper.formatEscapeHTML(nextException.getLicenseExceptionText()), htmlTextFile, utf8);
 				LicenseExceptionJSONFile exceptionJson = new LicenseExceptionJSONFile();
 				exceptionJson.setException(nextException, false);
 				File exceptionJsonFile = new File(dir.getPath() + File.separator + exceptionJsonFileName);
@@ -536,7 +536,7 @@ public class LicenseRDFAGenerator {
 					Files.write(license.getStandardLicenseTemplate(), templateFile, utf8);
 				}
 				File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
-				Files.write(SpdxLicenseTemplateHelper.escapeHTML(license.getLicenseText()), htmlTextFile, utf8);
+				Files.write(SpdxLicenseTemplateHelper.formatEscapeHTML(license.getLicenseText()), htmlTextFile, utf8);
 				AnyLicenseInfo licenseClone = license.clone();
 				LicenseContainer onlyThisLicense = new LicenseContainer();
 				licenseClone.createResource(onlyThisLicense);
@@ -577,7 +577,7 @@ public class LicenseRDFAGenerator {
 				Files.write(deprecatedLicense.getLicense().getStandardLicenseTemplate(), templateFile, utf8);
 			}
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
-			Files.write(SpdxLicenseTemplateHelper.escapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
+			Files.write(SpdxLicenseTemplateHelper.formatEscapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
 		}
 		File tocJsonFile = new File(dir.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
 		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_HTML_FILE_NAME);
