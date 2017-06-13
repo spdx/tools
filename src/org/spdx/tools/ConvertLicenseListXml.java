@@ -67,6 +67,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 	public static final String OLD_VAR_MATCH_ATTRIBUTE = "match";
 	public static final String OLD_BULLET_TAG = "b";
 	private static final String OLD_LICENSE_LIST_VERSION_ATTRIBUTE = LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED;
+	private static final String NAMESPACE = "http://www.spdx.org/license";
 	/**
 	 * Map of old tag names to new tag names
 	 */
@@ -211,13 +212,18 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		// Parse the entire document and convert at each step
 		// Start at the root
 		Element inputRootElement = inputXmlDocument.getDocumentElement();
-		Element outputRootElement = outputXmlDocument.createElement(LICENSEXML_ELEMENT_LICENSE_COLLECTION);
+		Element outputRootElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE_COLLECTION);
+//		Element outputRootElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE_COLLECTION);
+		outputRootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", NAMESPACE);
+//		outputRootElement.set
+//		outputRootElement.setAttributeNS("http://www.spdx.org/license", null, null);
+//		outputRootElement.setPrefix("xmlns:xsi="+"http://www.spdx.org/license");
 		outputXmlDocument.appendChild(outputRootElement);
 		
 		// Create the license nodes
 		NodeList licenseNodes = inputRootElement.getElementsByTagName(OLD_LICENSE_TAG);
 		for (int i = 0; i < licenseNodes.getLength(); i++) {
-			Element outputLicenseElement = outputXmlDocument.createElement(LICENSEXML_ELEMENT_LICENSE);
+			Element outputLicenseElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE);
 			convertLicense(outputXmlDocument, inputRootElement, (Element)licenseNodes.item(i), outputLicenseElement);
 			outputRootElement.appendChild(outputLicenseElement);
 		}
@@ -225,7 +231,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		// Create the exception nodes
 		NodeList exceptioneNodes = inputRootElement.getElementsByTagName(OLD_EXCEPTION_TAG);
 		for (int i = 0; i < exceptioneNodes.getLength(); i++) {
-			Element outputExceptionElement = outputXmlDocument.createElement(LICENSEXML_ELEMENT_LICENSE);
+			Element outputExceptionElement = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_LICENSE);
 			convertLicense(outputXmlDocument, inputRootElement, (Element)exceptioneNodes.item(i), outputExceptionElement);
 			outputRootElement.appendChild(outputExceptionElement);
 		}
@@ -259,12 +265,12 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		// Cross reference URLS
 		NodeList urls = inputRootElement.getElementsByTagName(OLD_URLS_TAG);
 		if (urls.getLength() > 0) {
-			Element outputCrossRefs = outputXmlDocument.createElement(LICENSEXML_ELEMENT_CROSS_REFS);
+			Element outputCrossRefs = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_CROSS_REFS);
 			outputElement.appendChild(outputCrossRefs);
 			for (int i = 0; i < urls.getLength(); i++) {
 				NodeList urlsUrls = ((Element)(urls.item(i))).getElementsByTagName(OLD_URL_TAG);
 				for (int j = 0; j < urlsUrls.getLength(); j++) {
-					Element outputCrossRef = outputXmlDocument.createElement(LICENSEXML_ELEMENT_CROSS_REF);
+					Element outputCrossRef = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_CROSS_REF);
 					outputCrossRef.setTextContent(urlsUrls.item(j).getTextContent());
 					outputCrossRefs.appendChild(outputCrossRef);
 				}
@@ -273,14 +279,14 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		// Standard header
 		NodeList headers = inputRootElement.getElementsByTagName(OLD_HEADER_TAG);
 		for (int i = 0; i < headers.getLength(); i++) {
-			Element outputHeader = outputXmlDocument.createElement(LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
+			Element outputHeader = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
 			convertMixedBody((Element)headers.item(i), outputHeader, outputXmlDocument);
 			outputElement.appendChild(outputHeader);
 		}
 		// Notes
 		NodeList notes = inputRootElement.getElementsByTagName(OLD_NOTES_TAG);
 		for (int i = 0; i < notes.getLength(); i++) {
-			Element outputNotes = outputXmlDocument.createElement(LICENSEXML_ELEMENT_NOTES);
+			Element outputNotes = outputXmlDocument.createElementNS(NAMESPACE, LICENSEXML_ELEMENT_NOTES);
 			outputNotes.setTextContent(notes.item(i).getTextContent());
 			outputElement.appendChild(outputNotes);
 		}
@@ -302,7 +308,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 			if (tagName == null) {
 				throw new LicenseXmlConverterException("Unrecognized source element tag: "+sourceElement.getTagName());
 			}
-			Element destinationElement = outputXmlDocument.createElement(tagName);
+			Element destinationElement = outputXmlDocument.createElementNS(NAMESPACE, tagName);
 			convertMixedBody(sourceElement, destinationElement, outputXmlDocument);
 			return destinationElement;
 		} else if (source.getNodeType() == Node.ATTRIBUTE_NODE) {

@@ -41,7 +41,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void optionalText(String text) {
-		htmlString.append((SpdxLicenseTemplateHelper.escapeHTML(text, false)));
+		htmlString.append((SpdxLicenseTemplateHelper.formatEscapeHTML(text, false)));
 	}
 
 	/* (non-Javadoc)
@@ -49,7 +49,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void normalText(String text) {
-		htmlString.append(SpdxLicenseTemplateHelper.escapeHTML(text, this.movingParagraph));
+		htmlString.append(SpdxLicenseTemplateHelper.formatEscapeHTML(text, this.movingParagraph));
 		this.movingParagraph = false;
 	}
 
@@ -112,7 +112,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		sb.append("class=\"");
 		sb.append(REPLACEABLE_LICENSE_TEXT_CLASS);
 		sb.append("\">");
-		sb.append(SpdxLicenseTemplateHelper.escapeHTML(text));
+		sb.append(SpdxLicenseTemplateHelper.formatEscapeHTML(text));
 		sb.append("</span>\n");
 		return sb.toString();
 	}

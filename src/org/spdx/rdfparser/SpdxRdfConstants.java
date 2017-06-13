@@ -293,7 +293,6 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ELEMENT_CROSS_REF = "crossRef";
 	public static final String LICENSEXML_ELEMENT_NOTES = "notes";
 	public static final String LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER = "standardLicenseHeader";
-	public static final String LICENSEXML_ELEMENT_EXAMPLE = "example";
 	public static final String LICENSEXML_ELEMENT_TITLE_TEXT = "titleText";
 	public static final String LICENSEXML_ELEMENT_COPYRIGHT_TEXT = "copyrightText";
 	public static final String LICENSEXML_ELEMENT_BULLET = "bullet";

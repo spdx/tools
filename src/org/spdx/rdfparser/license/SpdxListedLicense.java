@@ -18,6 +18,9 @@ package org.spdx.rdfparser.license;
 
 import java.util.List;
 
+import org.spdx.html.InvalidLicenseTemplateException;
+import org.spdx.licenseTemplate.LicenseTemplateRuleException;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -34,11 +37,19 @@ import org.apache.jena.rdf.model.Resource;
  */
 public class SpdxListedLicense extends License {
 	
-
+	private String licenseTextHtml = null;
+	
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, boolean osiApproved, String licenseTextHtml) throws InvalidSPDXAnalysisException {
+		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved);
+		this.licenseTextHtml = licenseTextHtml;
+	}
+	
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
-		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved);
+		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, null);
 	}
+	
 	/**
 	 * Constructs an SPDX License from the licenseNode
 	 * @param modelContainer container which includes the license
@@ -102,6 +113,35 @@ public class SpdxListedLicense extends License {
 		} else {
 			return this.licenseId.equalsIgnoreCase(sCompare.getLicenseId());
 		}
+	}
+	
+	/**
+	 * @return HTML fragment containing the License Text
+	 * @throws InvalidLicenseTemplateException 
+	 */
+	public String getLicenseTextHtml() throws InvalidLicenseTemplateException {
+		if (licenseTextHtml == null) {
+			// Format the HTML using the text and template
+			String templateText = this.getStandardLicenseTemplate();
+			if (templateText != null && !templateText.trim().isEmpty()) {
+				try {
+					licenseTextHtml = SpdxLicenseTemplateHelper.templateTextToHtml(templateText);
+				} catch(LicenseTemplateRuleException ex) {
+					throw new InvalidLicenseTemplateException("Invalid license expression found in license text for license "+getName()+":"+ex.getMessage());
+				}
+			} else {
+				licenseTextHtml = SpdxLicenseTemplateHelper.formatEscapeHTML(this.getLicenseText());
+			}
+		}
+		return licenseTextHtml;
+	}
+	
+	/**
+	 * Set the licenseTextHtml
+	 * @param licenseTextHtml HTML fragment representing the license text
+	 */
+	public void setLicenseTextHtml(String licenseTextHtml) {
+		this.licenseTextHtml = licenseTextHtml;
 	}
 
 }

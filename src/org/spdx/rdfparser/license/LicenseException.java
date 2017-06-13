@@ -124,6 +124,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	}
 
 	/**
+	 * The example field is no longer used, please use the constructor without th example
 	 * @param licenseExceptionId Exception ID - short form ID
 	 * @param name Full name of the Exception
 	 * @param licenseExceptionText Text for the Exception
@@ -131,6 +132,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * @param example Example of use
 	 * @param seeAlso URL references to external sources for the exception
 	 */
+	@Deprecated
 	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
 			String[] seeAlso, String comment, String example) {
 		this.licenseExceptionId = licenseExceptionId;
@@ -139,6 +141,19 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.seeAlso = seeAlso;
 		this.comment = comment;
 		this.example = example;
+	}
+	
+	/**
+	 * @param licenseExceptionId Exception ID - short form ID
+	 * @param name Full name of the Exception
+	 * @param licenseExceptionText Text for the Exception
+	 * @param comment Comments on the exception
+	 * @param example Example of use
+	 * @param seeAlso URL references to external sources for the exception
+	 */
+	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
+			String[] seeAlso, String comment) {
+		this(licenseExceptionId, name, licenseExceptionText, seeAlso, comment, null);
 	}
 	
 	/**
@@ -418,10 +433,12 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	/**
 	 * @return
 	 */
+	@Deprecated
 	public String getExample() {
 		return example;
 	}
 	
+	@Deprecated
 	public void setExample(String example) {
 		this.example = example;
 		if (this.exceptionNode != null) {

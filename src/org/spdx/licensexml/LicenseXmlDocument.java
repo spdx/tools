@@ -52,7 +52,6 @@ import org.xml.sax.SAXException;
 public class LicenseXmlDocument {
 	static final Logger logger = Logger.getLogger(LicenseXmlDocument.class.getName());
 	
-	//TODO: Update the XML schema location to a more permanent location
 	public static final String LICENSE_XML_SCHEMA_LOCATION = "org/spdx/licensexml/ListedLicense.xsd";
 
 	private Document xmlDocument;
@@ -175,8 +174,9 @@ public class LicenseXmlDocument {
 		} else {
 			osiApproved = false;
 		}
+		String licenseHtml = LicenseXmlHelper.getLicenseTextHtml(licenseElement);
 		return new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
-				template, osiApproved);
+				template, osiApproved, licenseHtml);
 	}
 
 	/**
@@ -213,16 +213,7 @@ public class LicenseXmlDocument {
 		for (int i = 0; i < urlNodes.getLength(); i++) {
 			sourceUrls[i] = urlNodes.item(i).getTextContent();
 		}
-		NodeList exampleElements = exceptionElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_EXAMPLE);
-		String example = null;
-		if (exampleElements.getLength() > 0) {
-			StringBuilder exampleBuilder = new StringBuilder(LicenseXmlHelper.getExampleText((Element)(exampleElements.item(0))));
-			for (int i = 1; i < exampleElements.getLength(); i++) {
-				exampleBuilder.append(LicenseXmlHelper.getExampleText((Element)(exampleElements.item(1))));
-			}
-			example = exampleBuilder.toString();
-		}
-		return new LicenseException(id, name, text, sourceUrls, comment, example);
+		return new LicenseException(id, name, text, sourceUrls, comment);
 	}
 
 	/**

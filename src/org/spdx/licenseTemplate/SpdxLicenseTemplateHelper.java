@@ -121,8 +121,8 @@ public class SpdxLicenseTemplateHelper {
 	 * @param text unformatted text
 	 * @return
 	 */
-	public static String escapeHTML(String text) {
-		return escapeHTML(text, false);
+	public static String formatEscapeHTML(String text) {
+		return formatEscapeHTML(text, false);
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class SpdxLicenseTemplateHelper {
 	 * @param inParagraph true if inside a paragraph tag
 	 * @return
 	 */
-	public static String escapeHTML(String text, boolean inParagraph) {
+	public static String formatEscapeHTML(String text, boolean inParagraph) {
 		String retval = StringEscapeUtils.escapeXml(text);
 		return addHtmlFormatting(retval, inParagraph);
 	}
