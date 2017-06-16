@@ -72,6 +72,9 @@ public class HandBuiltParser {
 			String nextLine = br.readLine();
 			while (nextLine != null) {
 				if (inTextBlock) {
+					if (nextLine.indexOf(START_TEXT)>0){
+						break;
+					}
 					int endText = nextLine.indexOf(END_TEXT);
 					if (endText >= 0) {
 						value = value + "\n" + nextLine.substring(0, endText).trim();
