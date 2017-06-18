@@ -74,7 +74,7 @@ public class NoCommentInputStream extends InputStream {
 				inText = false;
 			}
 		} else {
-			if (currentLine.contains(START_TEXT_TAG)) {
+			if (currentLine.contains(START_TEXT_TAG) && !currentLine.contains(END_TEXT_TAG)) {
 				inText = true;
 			}
 		}
