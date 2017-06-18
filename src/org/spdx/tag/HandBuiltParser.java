@@ -51,6 +51,10 @@ public class HandBuiltParser {
 		this.textInput = textInput;
 	}
 
+	public HandBuiltParser(InputStream bais) {
+		this.textInput = textInput;
+	}
+
 	/**
 	 * @param buildDocument
 	 */
@@ -73,7 +77,8 @@ public class HandBuiltParser {
 			while (nextLine != null) {
 				if (inTextBlock) {
 					if (nextLine.indexOf(START_TEXT)>0){
-						break;
+						throw(new RecognitionException("Found a text block inside another text block at line " + 
+									(textInput.getLineNo(nextLine)+1) + ".  Expecting "+END_TEXT));
 					}
 					int endText = nextLine.indexOf(END_TEXT);
 					if (endText >= 0) {

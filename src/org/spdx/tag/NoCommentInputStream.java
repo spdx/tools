@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -44,7 +45,7 @@ public class NoCommentInputStream extends InputStream {
 	private int bytesIndex;
 	private byte[] currentBytes;
 	boolean inText = false;
-	
+	private ArrayList<String> FileLines = new ArrayList<String>();
 
 	/**
 	 * @param in Input stream containing the commented data
@@ -67,6 +68,7 @@ public class NoCommentInputStream extends InputStream {
 			if (currentLine == null) {
 				return;
 			}
+			FileLines.add(currentLine);
 		} while (!inText && (currentLine.length() == 0 || currentLine.charAt(0) == COMMENT_CHAR));
 
 		if (inText) {
@@ -132,6 +134,14 @@ public class NoCommentInputStream extends InputStream {
 				logger.error("IO Error closing input stream: "+e.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * Searches for the string in the file stored in FileLine and returns the line no. if found.
+	 * @param string to be searched in the file
+	 */
+	public int getLineNo(String searchline){
+		return FileLines.indexOf(searchline);
 	}
 	
 }
