@@ -51,8 +51,8 @@ public class HandBuiltParser {
 		this.textInput = textInput;
 	}
 
-	public HandBuiltParser(InputStream bais) {
-		this.textInput = textInput;
+	public HandBuiltParser(InputStream textInput) {
+		this.textInput = (NoCommentInputStream) textInput;
 	}
 
 	/**
