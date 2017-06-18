@@ -82,7 +82,7 @@ public class TagToSpreadsheet {
 			// read the tag-value constants from a file
 			Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 			NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
-			HandBuiltParser parser = new HandBuiltParser(new DataInputStream(nci));
+			HandBuiltParser parser = new HandBuiltParser(nci);
 			List<String> warnings = new ArrayList<String>();
 			parser.setBehavior(new BuildDocument(result, constants, warnings));
 			parser.data();

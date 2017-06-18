@@ -40,14 +40,14 @@ public class HandBuiltParser {
 	private static final String START_TEXT = "<text>";
 	Pattern tagPattern = Pattern.compile("^\\w+:");
 	private TagValueBehavior buildDocument;
-	private InputStream textInput;
+	private NoCommentInputStream textInput;
 
 	/**
 	 * Creates a parser for an Input stream.
 	 * The input stream must not use any comments.
 	 * @param textInput
 	 */
-	public HandBuiltParser(InputStream textInput) {
+	public HandBuiltParser(NoCommentInputStream textInput) {
 		this.textInput = textInput;
 	}
 
