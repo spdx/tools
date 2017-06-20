@@ -206,7 +206,7 @@ public class TagToRDF {
 		NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
 //		TagValueLexer lexer = new TagValueLexer(new DataInputStream(nci));
 //		TagValueParser parser = new TagValueParser(lexer);
-		HandBuiltParser parser = new HandBuiltParser(new DataInputStream(nci));
+		HandBuiltParser parser = new HandBuiltParser(nci);
 		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
 		parser.setBehavior(new BuildDocument(result, constants, warnings));
 		parser.data();
