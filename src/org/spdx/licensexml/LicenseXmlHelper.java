@@ -38,8 +38,6 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 
 	private static final String INDENT_STRING = "   ";
 
-	private static final int[] PIXELS_PER_INDENT = new int[] {0, 20, 40, 60, 70, 80, 90, 100};
-
 	/**
 	 * Tags that do not require any processing - the text for the children will be included
 	 */
@@ -177,10 +175,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param indentCount
 	 */
 	private static void appendParagraphTag(StringBuilder sb, int indentCount) {
-		int pixels = PIXELS_PER_INDENT[indentCount];
-		sb.append("<p style=\"margin-left: ");
-		sb.append(String.valueOf(pixels));
-		sb.append("px;\">");
+		sb.append("<p>");
 	}
 
 	/**<
@@ -383,18 +378,23 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		if (!LICENSEXML_ELEMENT_LIST.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Invalid list element tag - expected 'list', found '"+element.getTagName()+"'"));
 		}
+		if (includeHtmlTags) {
+			sb.append("\n<ul style=\"list-style:none\">");
+		}
 		NodeList listItemNodes = element.getChildNodes();
 		for (int i = 0; i < listItemNodes.getLength(); i++) {
 			if (listItemNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
 				Element listItem = (Element)listItemNodes.item(i);
 				if (LICENSEXML_ELEMENT_ITEM.equals(listItem.getTagName())) {
 					if (includeHtmlTags) {
-						sb.append("\n");
-						appendParagraphTag(sb, indentCount+1);
+						sb.append("\n<li>");
+						appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, skippedTags, includeHtmlTags);
+						sb.append("</li>");
 					} else {
 						addNewline(sb, indentCount+1);
+						appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, skippedTags, includeHtmlTags);
 					}
-					appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, skippedTags, includeHtmlTags);
+					
 				} else if (LICENSEXML_ELEMENT_LIST.equals(listItem.getTagName())) {
 					appendListElements(listItem, useTemplateFormat, sb, indentCount+1,
 							unprocessedTags, skippedTags, includeHtmlTags);
@@ -404,6 +404,9 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			} else if (listItemNodes.item(i).getNodeType() != Node.TEXT_NODE) {
 				throw(new LicenseXmlException("Expected only element children for a list element"));	
 			}
+		}
+		if (includeHtmlTags) {
+			sb.append("\n</ul>");
 		}
 	}
 
