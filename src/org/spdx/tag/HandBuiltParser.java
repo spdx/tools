@@ -40,14 +40,14 @@ public class HandBuiltParser {
 	private static final String START_TEXT = "<text>";
 	Pattern tagPattern = Pattern.compile("^\\w+:");
 	private TagValueBehavior buildDocument;
-	private InputStream textInput;
+	private NoCommentInputStream textInput;
 
 	/**
 	 * Creates a parser for an Input stream.
 	 * The input stream must not use any comments.
 	 * @param textInput
 	 */
-	public HandBuiltParser(InputStream textInput) {
+	public HandBuiltParser(NoCommentInputStream textInput) {
 		this.textInput = textInput;
 	}
 
@@ -72,6 +72,10 @@ public class HandBuiltParser {
 			String nextLine = br.readLine();
 			while (nextLine != null) {
 				if (inTextBlock) {
+					if (nextLine.indexOf(START_TEXT)>0){
+						throw(new RecognitionException("Found a text block inside another text block at line " + 
+									(textInput.getLineNo(nextLine)+1) + ".  Expecting "+END_TEXT));
+					}
 					int endText = nextLine.indexOf(END_TEXT);
 					if (endText >= 0) {
 						value = value + "\n" + nextLine.substring(0, endText).trim();

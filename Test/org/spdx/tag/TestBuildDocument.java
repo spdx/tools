@@ -318,7 +318,7 @@ public class TestBuildDocument {
 	@Test
 	public void testBuildSimpleDocument() throws Exception {
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
-		HandBuiltParser parser = new HandBuiltParser(bais);
+		HandBuiltParser parser = new HandBuiltParser((NoCommentInputStream)bais);
 		List<String> warnings = Lists.newArrayList();
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
@@ -330,7 +330,7 @@ public class TestBuildDocument {
 	
 	@Test public void testExternalRefs() throws Exception {
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
-		HandBuiltParser parser = new HandBuiltParser(bais);
+		HandBuiltParser parser = new HandBuiltParser((NoCommentInputStream)bais);
 		List<String> warnings = Lists.newArrayList();
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
@@ -353,7 +353,7 @@ public class TestBuildDocument {
 	@Test 
 	public void testNoFilesAnalyzedFiles()  throws Exception {
 		InputStream bais = new ByteArrayInputStream(TAGDOCUMENT_NO_FILES.getBytes());
-		HandBuiltParser parser = new HandBuiltParser(bais);
+		HandBuiltParser parser = new HandBuiltParser((NoCommentInputStream)bais);
 		List<String> warnings = Lists.newArrayList();
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
@@ -369,7 +369,7 @@ public class TestBuildDocument {
 	@Test 
 	public void testFile()  throws Exception {
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
-		HandBuiltParser parser = new HandBuiltParser(bais);
+		HandBuiltParser parser = new HandBuiltParser((NoCommentInputStream)bais);
 		List<String> warnings = Lists.newArrayList();
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
@@ -391,7 +391,7 @@ public class TestBuildDocument {
 	public void testSnippet()  throws Exception {
 		
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
-		HandBuiltParser parser = new HandBuiltParser(bais);
+		HandBuiltParser parser = new HandBuiltParser((NoCommentInputStream)bais);
 		List<String> warnings = Lists.newArrayList();
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
