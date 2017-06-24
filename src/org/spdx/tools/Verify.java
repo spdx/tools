@@ -45,31 +45,56 @@ public class Verify {
 		if (args.length > MAX_ARGS) {
 			System.out.printf("Warning: Extra arguments will be ignored");
 		}
-		SpdxDocument doc = null;
-		List<String> parserWarnings = new ArrayList<String>();
+		List<String> verify = null;
 		try {
-			doc = CompareSpdxDocs.openRdfOrTagDoc(args[0], parserWarnings);
-		} catch (SpdxCompareException e) {
-			System.out
-				.printf("Unable to parse the file: " + e.getMessage());
+			verify = verify(args[0]);
+		} catch (SpdxVerificationException e) {
+			System.out.println(e.getMessage());;
 			System.exit(ERROR_STATUS);
 		}
-		List<String> verify = doc.verify();
 		if (verify.size() > 0) {
 			System.out.println("This SPDX Document is not valid due to:");
 			for (int i = 0; i < verify.size(); i++) {
 				System.out.print("\t" + verify.get(i)+"\n");
-				parserWarnings.remove(verify.get(i));
-			}
-			if (!parserWarnings.isEmpty()) {
-				System.out.println("The following parser warnings were found:");
-				for (String warning:parserWarnings) {
-					System.out.print("\t" + warning+"\n");
-				}
 			}
 			System.exit(ERROR_STATUS);
 		} else {
 			System.out.println("This SPDX Document is valid.");
 		}
+	}
+	
+	/**
+	 * Verify a tag/value or SPDX file
+	 * @param filePath File path to the SPDX file to be verified
+	 * @return A list of verification errors - if empty, the SPDX file is valid
+	 * @throws Errors where the SPDX file can not be parsed or the filename is invalid
+	 */
+	public static List<String> verify(String filePath) throws SpdxVerificationException {
+		SpdxDocument doc = null;
+		List<String> parserWarnings = new ArrayList<String>();
+		try {
+			doc = CompareSpdxDocs.openRdfOrTagDoc(filePath, parserWarnings);
+		} catch (SpdxCompareException e) {
+			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
+		}
+		List<String> verify = doc.verify();
+		List<String> retval = new ArrayList<String>();
+		if (!verify.isEmpty()) {
+			retval.addAll(parserWarnings);
+			for (String verifyMsg:verify) {	
+				// Add any un-duplicated warnings and errors
+				boolean found = false;
+				for (String parserWarning:parserWarnings) {
+					if (parserWarning.contains(verifyMsg)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					retval.add(verifyMsg);
+				}
+			}
+		}
+		return retval;		
 	}
 }
