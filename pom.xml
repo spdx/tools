@@ -57,6 +57,10 @@
 			<id>rdfa-bintray</id>
 			<url>https://dl.bintray.com/yevster/maven</url>
 		</repository>
+		<repository>
+			<id>JBoss 3rd-party</id>
+			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
+		</repository>
 	</repositories>
 	<dependencies>
 
@@ -67,7 +71,19 @@
 		   <artifactId>apache-jena-libs</artifactId>
 		   <version>${jena.version}</version>
 		   <type>pom</type>
-		 </dependency>
+		   <exclusions>
+		   <!--Known vulnearbility. Later version required -->
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+    		</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.11.0.SP5</version>
+		</dependency>
 		<dependency>
 		   <groupId>org.apache.jena</groupId>
 		   <artifactId>jena-iri</artifactId>
@@ -169,7 +185,7 @@
 		<dependency>
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
-			<version>4.6.1.201703071140-r</version>
+			<version>4.7.1.201706071930-r</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
