@@ -751,6 +751,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		retval.add(this.spdxDocument);
 		retval.addAll(this.findAllFiles());
 		retval.addAll(this.findAllPackages());
+		retval.addAll(this.findAllSnippets());
 		return retval;
 	}
 	

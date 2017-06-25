@@ -508,7 +508,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 			try {
 				retval[i] = BuildDocument.parseExternalDocumentRef(sheet.getRow(
 						firstRowNum + DATA_ROW_NUM + i).
-						getCell(EXTERNAL_DOC_REFS_COL).getStringCellValue());
+						getCell(EXTERNAL_DOC_REFS_COL).getStringCellValue(), firstRowNum + DATA_ROW_NUM + i);
 			} catch (InvalidSpdxTagFileException e) {
 				throw(new SpreadsheetException("Invalid external document reference string: "+sheet.getRow(
 						firstRowNum + DATA_ROW_NUM + i).

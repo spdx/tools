@@ -23,7 +23,7 @@ package org.spdx.tag;
  */
 
 public interface TagValueBehavior {
-  public void buildDocument(String tag, String value) throws Exception;
+  public void buildDocument(String tag, String value, int lineNumber) throws Exception;
   public void enter() throws Exception;
   public void exit() throws Exception;
 }
