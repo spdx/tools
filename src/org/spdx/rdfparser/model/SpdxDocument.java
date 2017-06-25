@@ -458,11 +458,18 @@ public class SpdxDocument extends SpdxElement {
 			if (items.length == 0) {
 				retval.add("Document must have at least one relationship of type DOCUMENT_DESCRIBES");
 			}
-			for (int i = 0; i < items.length; i++) {
-				retval.addAll(items[i].verify());
-			}
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid document items: "+e.getMessage());
+		}
+		try {
+			List<SpdxElement> allElements = documentContainer.findAllElements();
+			for (SpdxElement element:allElements) {
+				if (!element.getId().equals(this.getId())) {
+					retval.addAll(element.verify());
+				}				
+			}
+		} catch (InvalidSPDXAnalysisException e) {
+			retval.add("Invalid elements: "+e.getMessage());
 		}
 		return retval;
 	} 

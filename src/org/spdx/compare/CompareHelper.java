@@ -17,6 +17,7 @@
 package org.spdx.compare;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
 
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -25,6 +26,7 @@ import org.spdx.rdfparser.model.Checksum;
 import org.spdx.rdfparser.model.ExternalRef;
 import org.spdx.rdfparser.model.Relationship;
 import org.spdx.rdfparser.model.SpdxElement;
+import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.tag.BuildDocument;
@@ -292,12 +294,30 @@ public class CompareHelper {
 		Checksum[] retval = new Checksum[parts.length];
 		for (int i = 0; i < parts.length; i++) {
 			try {
-				retval[i] = BuildDocument.parseChecksum(parts[i].trim());
+				retval[i] = parseChecksum(parts[i].trim());
 			} catch (InvalidSpdxTagFileException e) {
 				throw(new InvalidSPDXAnalysisException("Invalid checksum string: "+parts[i]));
 			}
 		}
 		return retval;
+	}
+	
+	/**
+	 * Creates a Checksum from the parameters specified in the tag value
+	 * @param value
+	 * @return
+	 * @throws InvalidSpdxTagFileException
+	 */
+	public static Checksum parseChecksum(String value) throws InvalidSpdxTagFileException {
+		Matcher matcher = BuildDocument.CHECKSUM_PATTERN.matcher(value.trim());
+		if (!matcher.find()) {
+			throw(new InvalidSpdxTagFileException("Invalid checksum: "+value));
+		}
+		ChecksumAlgorithm algorithm = Checksum.CHECKSUM_TAG_TO_ALGORITHM.get(matcher.group(1));
+		if (algorithm == null) {
+			throw(new InvalidSpdxTagFileException("Invalid checksum algorithm: "+value));
+		}
+		return new Checksum(algorithm, matcher.group(2));
 	}
 
 	/**

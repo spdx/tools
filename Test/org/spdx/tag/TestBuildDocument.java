@@ -261,7 +261,7 @@ public class TestBuildDocument {
 	static final String SNIPPET_LIB_LICENSE_COMMENT = "Comment on snippet license";
 	static final String SNIPPET_LIB_LICENSE_COMMENT_TAG = "SnippetLicenseComments: " + 
 			SNIPPET_LIB_LICENSE_COMMENT;
-	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET = "(LGPL-2.0 OR LicenseRef-2)";
+	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET = "LGPL-2.0";
 	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET_TAG = "LicenseInfoInSnippet: " +
 			SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET;
 	static final String SNIPPET_LIB_COPYRIGHT = "Copyright 20082010 John Smith";
@@ -272,7 +272,7 @@ public class TestBuildDocument {
 	static final String SNIPPET_LIB_COMMENT_TAG = "SnippetComment: <text>" + SNIPPET_LIB_COMMENT + "</text>";
 	static final String SNIPPET_LIB_NAME = "from linux kernel";
 	static final String SNIPPET_LIB_NAME_TAG = "SnippetName: " + SNIPPET_LIB_NAME;
-	static final String SNIPPET_LIB_TAGS = SNIPPET_LIB_ID_TAG + "\n" + SNIPPET_LIB_FROM_FILE_TAG + "\n" +
+	static final String SNIPPET_LIB_TAGS = SNIPPET_LIB_ID_TAG + SNIPPET_LIB_ID + "\n" + SNIPPET_LIB_FROM_FILE_TAG + "\n" +
 			SNIPPET_LIB_BYTE_RANGE_TAG + "\n" + SNIPPET_LIB_LINE_RANGE_TAG + "\n" + SNIPPET_LIB_CONCLUDED_LICENSE_TAG + "\n" +
 			SNIPPET_LIB_LICENSE_COMMENT_TAG + "\n" + SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET_TAG + "\n" +
 			SNIPPET_LIB_COPYRIGHT_TAG + "\n" + SNIPPET_LIB_COMMENT_TAG + "\n" + SNIPPET_LIB_NAME_TAG;

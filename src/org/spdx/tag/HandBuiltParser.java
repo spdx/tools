@@ -16,9 +16,6 @@
 */
 package org.spdx.tag;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,24 +60,22 @@ public class HandBuiltParser {
 	 * @throws Exception 
 	 */
 	public void data() throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(textInput, "UTF-8"));
-
 		try {
 			boolean inTextBlock = false;
 			String tag = "";
 			String value = "";
-			String nextLine = br.readLine();
+			String nextLine = textInput.readLine();
 			while (nextLine != null) {
 				if (inTextBlock) {
 					if (nextLine.indexOf(START_TEXT)>0){
 						throw(new RecognitionException("Found a text block inside another text block at line " + 
-									(textInput.getLineNo(nextLine)+1) + ".  Expecting "+END_TEXT));
+									(textInput.getCurrentLineNo()) + ".  Expecting "+END_TEXT));
 					}
 					int endText = nextLine.indexOf(END_TEXT);
 					if (endText >= 0) {
 						value = value + "\n" + nextLine.substring(0, endText).trim();
 						inTextBlock = false;	//NOTE: we are skipping any text after the </text>
-						this.buildDocument.buildDocument(tag, value);
+						this.buildDocument.buildDocument(tag, value, textInput.getCurrentLineNo());
 						tag = "";
 						value = "";
 					} else {
@@ -96,7 +91,7 @@ public class HandBuiltParser {
 							value = nextLine.substring(startText + START_TEXT.length()).trim();
 							if (value.contains(END_TEXT)) {
 								value = value.substring(0, value.indexOf(END_TEXT)).trim();
-								this.buildDocument.buildDocument(tag, value);
+								this.buildDocument.buildDocument(tag, value, textInput.getCurrentLineNo());
 								tag = "";
 								value = "";
 							} else {
@@ -104,7 +99,7 @@ public class HandBuiltParser {
 							}
 						} else {
 							value = nextLine.substring(tag.length()).trim();
-							this.buildDocument.buildDocument(tag, value);
+							this.buildDocument.buildDocument(tag, value, textInput.getCurrentLineNo());
 							tag = "";
 							value = "";
 							
@@ -113,14 +108,14 @@ public class HandBuiltParser {
 						// note - we just ignore any lines that do not start with a tag
 					}
 				}
-				nextLine = br.readLine();
+				nextLine = textInput.readLine();
 			}
 			if (inTextBlock) {
 				throw(new RecognitionException("Unterminated text block.  Expecting "+END_TEXT));
 			}
 			this.buildDocument.exit();
 		} finally {
-			br.close();
+			textInput.close();
 		}
 	}
 

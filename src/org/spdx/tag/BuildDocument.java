@@ -82,8 +82,10 @@ public class BuildDocument implements TagValueBehavior {
 	private static class AnnotationWithId {
 		private Annotation annotation;
 		private String id;
-		private AnnotationWithId(String annotator) {
+		private int lineNumber;
+		private AnnotationWithId(String annotator, int lineNumber) {
 			this.annotation = new Annotation(annotator, null, null, null);
+			this.lineNumber = lineNumber;
 		}
 		@SuppressWarnings("unused")
 		public void setAnnotator(String annotator) {
@@ -107,17 +109,22 @@ public class BuildDocument implements TagValueBehavior {
 		public Annotation getAnnotation() {
 			return this.annotation;
 		}
+		public int getLineNumber() {
+			return lineNumber;
+		}
 	}
 	private static class RelationshipWithId {
 		private String id;
 		private String relatedId;
 		private RelationshipType relationshipType;
 		private String comment;
+		private int lineNumber;
 		public RelationshipWithId(String id, String relatedId,
-				RelationshipType relationshipType) {
+				RelationshipType relationshipType, int lineNumber) {
 			this.id = id;
 			this.relatedId = relatedId;
 			this.relationshipType = relationshipType;
+			this.lineNumber = lineNumber;
 		}
 		public void setComment(String comment) {
 			this.comment = comment;
@@ -134,11 +141,14 @@ public class BuildDocument implements TagValueBehavior {
 		public String getComment() {
 			return comment;
 		}
+		public int getLineNumber() {
+			return lineNumber;
+		}
 	}
 	
 	private static Pattern EXTERNAL_DOC_REF_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+SHA1:\\s+(\\S+)");
 	private static Pattern RELATIONSHIP_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)\\s+(\\S+)");
-	private static Pattern CHECKSUM_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");
+	public static Pattern CHECKSUM_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");
 	private static Pattern NUMBER_RANGE_PATTERN = Pattern.compile("(\\d+):(\\d+)");
 	private static Pattern EXTERNAL_REF_PATTERN = Pattern.compile("([^ ]+) ([^ ]+) (.+)");
 	
@@ -169,10 +179,17 @@ public class BuildDocument implements TagValueBehavior {
 	//When we retrieve a list from the SpdxDocument the order changes, therefore keep track of
 	//the last object that we are looking at so that we can fill in all of it's information
 	private SPDXReview lastReviewer = null;
+	private int lastReviewerLineNumber = 0;
+	
 	private ExtractedLicenseInfo lastExtractedLicense = null;
+	private int lastExtractedLicenseLineNumber = 0;
 	private SpdxFile lastFile = null;
+	private int lastFileLineNumber = 0;
 	private SpdxSnippet lastSnippet = null;
+	private int lastSnippetLineNumber = 0;
 	private DoapProject lastProject = null;
+	private int lastProjectLineNumber = 0;
+	private Map<String, Integer> elementIdLineNumberMap = Maps.newHashMap();
 	// Keep track of all file dependencies since these need to be added after all of the files
 	// have been parsed.  Map of file dependency file name to the SPDX files which depends on it
 	private Map<String, List<SpdxFile>> fileDependencyMap = Maps.newHashMap();
@@ -210,7 +227,7 @@ public class BuildDocument implements TagValueBehavior {
 	/**
 	 * True if we have started defining a package in the tag/value file
 	 */
-	private boolean inPackageDefinition = false;;
+	private boolean inPackageDefinition = false;
 
 	/**
 	 * True if we have started to define a file AT THE DOCUMENT LEVEL
@@ -221,12 +238,12 @@ public class BuildDocument implements TagValueBehavior {
 	/**
 	 * true if we have started to define a Snippet
 	 */
-	private boolean inSnippetDefinition;
+	private boolean inSnippetDefinition = false;;
 	/**
 	 * True if we have started to define an annotation
 	 * in the tag/value file.
 	 */
-	private boolean inAnnotation = false;;
+	private boolean inAnnotation = false;
 	/**
 	 * True if we are building an extracted license definition
 	 */
@@ -236,6 +253,7 @@ public class BuildDocument implements TagValueBehavior {
 	 * The last (or current) package being defined by the tag/value file
 	 */
 	private SpdxPackage lastPackage = null;
+	private int lastPackageLineNumber = 0;
 
 	/**
 	 * The last external reference found
@@ -336,31 +354,34 @@ public class BuildDocument implements TagValueBehavior {
 	}
 
 	@Override
-	public void buildDocument(String tag, String value) throws Exception {
+	public void buildDocument(String tag, String value, int lineNumber) throws Exception {
 		tag = tag.trim()+" ";
 		value = trim(value.trim());
 		if (this.inAnnotation && ANNOTATION_TAGS.contains(tag)) {
 			buildAnnotation(tag, value, lastAnnotation);
 		} else if (this.inFileDefinition && FILE_TAGS.contains(tag)) {
-			buildFile(this.lastFile, tag, value);
+			buildFile(this.lastFile, tag, value, lineNumber);
 		} else if (this.inSnippetDefinition && SNIPPET_TAGS.contains(tag)) {
-			buildSnippet(this.lastSnippet, tag, value);
+			buildSnippet(this.lastSnippet, tag, value, lineNumber);
 		} else if (this.inPackageDefinition && PACKAGE_TAGS.contains(tag)) {
-			buildPackage(this.lastPackage, tag, value);
+			buildPackage(this.lastPackage, tag, value, lineNumber);
 		} else if (this.inExtractedLicenseDefinition && EXTRACTED_LICENSE_TAGS.contains(tag)) {
-			buildExtractedLicense(this.lastExtractedLicense, tag, value);
+			buildExtractedLicense(this.lastExtractedLicense, tag, value, lineNumber);
 		} else {
+			if (inExtractedLicenseDefinition && lastExtractedLicense != null) {
+				verifyElement(lastExtractedLicense.verify(), "Extracted License", lastExtractedLicenseLineNumber, false);
+			}
 			if (inFileDefinition) {
 				addLastFile();
 			}
 			if (inSnippetDefinition) {
 				addLastSnippet();
 			}
-			this.inAnnotation = false;
-			this.inFileDefinition = false;
-			this.inPackageDefinition = false;
+			inAnnotation = false;
+			inFileDefinition = false;
+			inPackageDefinition = false;
 			inSnippetDefinition = false;
-			buildDocumentProperties(tag, value);
+			buildDocumentProperties(tag, value, lineNumber);
 		}
 	}
 
@@ -369,15 +390,17 @@ public class BuildDocument implements TagValueBehavior {
 	 * @param snippet
 	 * @param tag
 	 * @param value
+	 * @param lineNumber
 	 * @throws InvalidSpdxTagFileException 
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws InvalidLicenseStringException 
 	 */
-	private void buildSnippet(SpdxSnippet snippet, String tag, String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
+	private void buildSnippet(SpdxSnippet snippet, String tag, String value, int lineNumber) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException, InvalidLicenseStringException {
 		if (snippet == null) {
 			throw(new InvalidSpdxTagFileException("Missing Snippet ID - An SPDX Snippet ID must be specified before the snippet properties"));
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
 			snippet.setId(value);
+			elementIdLineNumberMap.put(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_FROM_FILE_ID"))) {
 			// Since the files have not all been parsed, we just keep track of the
 			// dependencies in a hashmap until we finish all processing and are building the package
@@ -388,11 +411,12 @@ public class BuildDocument implements TagValueBehavior {
 			}
 			snippetsWithThisAsADependency.add(snippet);
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_BYTE_RANGE"))) {
-			snippet.setByteRange(parseByteRange(value));
+			snippet.setByteRange(parseByteRange(value, lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_LINE_RANGE"))) {
-			snippet.setLineRange(parseLineRange(value));
+			snippet.setLineRange(parseLineRange(value, lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_CONCLUDED_LICENSE"))) {
 			snippet.setLicenseConcluded(LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer()));
+			// can not verify any licenses at this point since the extracted license infos may not be set
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_LIC_COMMENTS"))) {
 			snippet.setLicenseComments(value);
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_COPYRIGHT"))) {
@@ -403,73 +427,107 @@ public class BuildDocument implements TagValueBehavior {
 			snippet.setName(value);
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SEEN_LICENSE"))) {
 			snippet.setLicenseInfosFromFiles(new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer())});
+			// can not verify any licenses at this point since the extracted license infos may not be set
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
 			if (lastAnnotation != null) {
 				annotations.add(lastAnnotation);
 			}
 			this.inAnnotation = true;
-			lastAnnotation = new AnnotationWithId(value);
+			lastAnnotation = new AnnotationWithId(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP"))) {
 			if (lastRelationship != null) {
 				relationships.add(lastRelationship);
 			}
-			lastRelationship = parseRelationship(value);
+			lastRelationship = parseRelationship(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP_COMMENT"))) {
 			if (lastRelationship == null) {
-				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value));
+				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value + " at line number "+lineNumber));
 			}
 			lastRelationship.setComment(value);
 		} else {
-			throw new InvalidSPDXAnalysisException("Error parsing snippet.  Unrecognized tag: "+tag);
+			throw new InvalidSPDXAnalysisException("Error parsing snippet.  Unrecognized tag: "+tag + " at line number " + lineNumber);
 		}	
+	}
+	
+	private void verifyElement(List<String> verify, String prefix, int lineNumber) {
+		verifyElement(verify, prefix, lineNumber, false);
+	}
+
+	/**
+	 * Add warning messages for any element verification list
+	 * @param verify List of verification warnings
+	 * @param prefix Prefix to prepend the warning with
+	 * @param lineNumber Line number where the error occurs
+	 * @param ignoreMissingLicenseText if true, don't record any missing license text errors
+	 */
+	private void verifyElement(List<String> verify, String prefix, int lineNumber, boolean ignoreMissingLicenseText) {
+		if (!verify.isEmpty()) {
+			for (String verMsg:verify) {
+				if (!ignoreMissingLicenseText || !verMsg.contains("Missing required license text")) {
+					boolean found = false;
+					String newWarning = prefix + " at line "+lineNumber+" invalid: "+verMsg;
+					for (String existingWarn:this.warningMessages) {
+						if (existingWarn.equals(newWarning)) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						this.warningMessages.add(newWarning);
+					}
+				}
+			}
+		}
 	}
 
 	/**
 	 * @param value
+	 * @param lineNumber
 	 * @return
 	 * @throws InvalidSpdxTagFileException 
 	 */
-	private StartEndPointer parseLineRange(String value) throws InvalidSpdxTagFileException {
+	private StartEndPointer parseLineRange(String value, int lineNumber) throws InvalidSpdxTagFileException {
 		Matcher matcher = NUMBER_RANGE_PATTERN.matcher(value.trim());
 		if (!matcher.find()) {
-			throw(new InvalidSpdxTagFileException("Invalid snippet line range: "+value));
+			throw(new InvalidSpdxTagFileException("Invalid snippet line range: "+ value + " at line number "+lineNumber));
 		}	
 		LineCharPointer start = null;
 		try {
 			start = new LineCharPointer(null, Integer.parseInt(matcher.group(1)));
 		} catch (Exception ex) {
-			throw new InvalidSpdxTagFileException("Non integer start to snippet line offset: "+value);
+			throw new InvalidSpdxTagFileException("Non integer start to snippet line offset: "+value + " at line number "+lineNumber);
 		}
 		LineCharPointer end = null;
 		try {
 			end = new LineCharPointer(null, Integer.parseInt(matcher.group(2)));
 		} catch (Exception ex) {
-			throw new InvalidSpdxTagFileException("Non integer end to snippet line offset: "+value);
+			throw new InvalidSpdxTagFileException("Non integer end to snippet line offset: "+value + " at line number "+lineNumber);
 		}
 		return new StartEndPointer(start, end);
 	}
 
 	/**
 	 * @param value
+	 * @param lineNumber
 	 * @return
 	 * @throws InvalidSpdxTagFileException 
 	 */
-	private StartEndPointer parseByteRange(String value) throws InvalidSpdxTagFileException {
+	private StartEndPointer parseByteRange(String value, int lineNumber) throws InvalidSpdxTagFileException {
 		Matcher matcher = NUMBER_RANGE_PATTERN.matcher(value.trim());
 		if (!matcher.find()) {
-			throw(new InvalidSpdxTagFileException("Invalid snippet byte range: "+value));
+			throw(new InvalidSpdxTagFileException("Invalid snippet byte range: "+value + " at line number "+lineNumber));
 		}	
 		ByteOffsetPointer start = null;
 		try {
 			start = new ByteOffsetPointer(null, Integer.parseInt(matcher.group(1)));
 		} catch (Exception ex) {
-			throw new InvalidSpdxTagFileException("Non integer start to snippet byte offset: "+value);
+			throw new InvalidSpdxTagFileException("Non integer start to snippet byte offset: "+value + " at line number "+lineNumber);
 		}
 		ByteOffsetPointer end = null;
 		try {
 			end = new ByteOffsetPointer(null, Integer.parseInt(matcher.group(2)));
 		} catch (Exception ex) {
-			throw new InvalidSpdxTagFileException("Non integer end to snippet byte offset: "+value);
+			throw new InvalidSpdxTagFileException("Non integer end to snippet byte offset: "+value + " at line number "+lineNumber);
 		}
 		return new StartEndPointer(start, end);
 	}
@@ -478,23 +536,24 @@ public class BuildDocument implements TagValueBehavior {
 	 * @param license
 	 * @param tag
 	 * @param value
+	 * @param lineNumber
 	 * @throws InvalidSpdxTagFileException
 	 */
 	private void buildExtractedLicense(
-			ExtractedLicenseInfo license, String tag, String value) throws InvalidSpdxTagFileException {
+			ExtractedLicenseInfo license, String tag, String value, int lineNumber) throws InvalidSpdxTagFileException {
 		if (tag.equals(constants.getProperty("PROP_EXTRACTED_TEXT"))) {
 			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text"));
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license text at line number "+lineNumber));
 			}
 			license.setExtractedText(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_NAME"))) {
 			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license name"));
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license name at line number "+lineNumber));
 			}
 			license.setName(value);
 		} else if (tag.equals(constants.getProperty("PROP_SOURCE_URLS"))) {
 			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license URL"));
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license URL at line number "+lineNumber));
 			}
 			String[] values = value.split(",");
 			for (int i = 0; i < values.length; i++) {
@@ -503,14 +562,14 @@ public class BuildDocument implements TagValueBehavior {
 			license.setSeeAlso(values);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
 			if (lastExtractedLicense == null) {
-				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
+				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment at line number "+lineNumber));
 			}
 			license.setComment(value);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	private void buildDocumentProperties(String tag, String value) throws Exception {
+	private void buildDocumentProperties(String tag, String value, int lineNumber) throws Exception {
 		if (tag.equals(constants.getProperty("PROP_SPDX_VERSION"))) {
 			this.specVersion = value;
 			if (analysis != null) {
@@ -535,7 +594,7 @@ public class BuildDocument implements TagValueBehavior {
 			}
 		} else if (tag.equals(constants.getProperty("PROP_DOCUMENT_NAMESPACE"))) {
 			if (this.analysis != null) {
-				throw(new InvalidSpdxTagFileException("More than one document namespace was specified"));
+				throw(new InvalidSpdxTagFileException("More than one document namespace was specified at line number "+lineNumber));
 			}
 			if (this.specVersion == null) {
 				result[0] = new SpdxDocumentContainer(value);
@@ -552,19 +611,19 @@ public class BuildDocument implements TagValueBehavior {
 		} else if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
 			if (!value.equals(SpdxRdfConstants.SPDX_DOCUMENT_ID)) {
 				throw(new InvalidSpdxTagFileException("SPDX Document "+value
-						+" is invalid.  Document IDs must be "+SpdxRdfConstants.SPDX_DOCUMENT_ID));
+						+" is invalid.  Document IDs must be "+SpdxRdfConstants.SPDX_DOCUMENT_ID + " at line number "+lineNumber));
 			}
 		} else if (tag.equals(constants.getProperty("PROP_EXTERNAL_DOC_URI"))) {
 			checkAnalysisNull();
-			addExternalDocRef(value);
+			addExternalDocRef(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP"))) {
 			if (lastRelationship != null) {
 				relationships.add(lastRelationship);
 			}
-			lastRelationship = parseRelationship(value);
+			lastRelationship = parseRelationship(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP_COMMENT"))) {
 			if (lastRelationship == null) {
-				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value));
+				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value + " at line number "+lineNumber));
 			}
 			lastRelationship.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
@@ -572,15 +631,15 @@ public class BuildDocument implements TagValueBehavior {
 				annotations.add(lastAnnotation);
 			}
 			this.inAnnotation = true;
-			lastAnnotation = new AnnotationWithId(value);
+			lastAnnotation = new AnnotationWithId(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_DATE"))) {
-			throw(new InvalidSpdxTagFileException("Annotation date found outside of an annotation: "+value));
+			throw(new InvalidSpdxTagFileException("Annotation date found outside of an annotation: "+value + " at line number "+lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_COMMENT"))) {
-			throw(new InvalidSpdxTagFileException("Annotation comment found outside of an annotation: "+value));
+			throw(new InvalidSpdxTagFileException("Annotation comment found outside of an annotation: "+value + " at line number "+lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_ID"))) {
-			throw(new InvalidSpdxTagFileException("Annotation ID found outside of an annotation: "+value));
+			throw(new InvalidSpdxTagFileException("Annotation ID found outside of an annotation: "+value + " at line number "+lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_TYPE"))) {
-			throw(new InvalidSpdxTagFileException("Annotation type found outside of an annotation: "+value));
+			throw(new InvalidSpdxTagFileException("Annotation type found outside of an annotation: "+value + " at line number "+lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_CREATION_CREATOR"))) {
 			checkAnalysisNull();
 			if (analysis.getCreationInfo() == null) {
@@ -621,12 +680,14 @@ public class BuildDocument implements TagValueBehavior {
 			List<SPDXReview> reviewers = Lists.newArrayList(analysis.getReviewers());
 			reviewers.add(lastReviewer);
 			analysis.setReviewers(reviewers.toArray(new SPDXReview[0]));
+			this.verifyElement(lastReviewer.verify(), "Reviewer", lastReviewerLineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_DATE"))) {
 			checkAnalysisNull();
 			if (lastReviewer == null) {
 				throw(new InvalidSpdxTagFileException("Missing Reviewer - A reviewer must be provided before a review date"));
 			}
 			lastReviewer.setReviewDate(value);
+			this.verifyElement(lastReviewer.verify(), "Reviewer", lastReviewerLineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_REVIEW_COMMENT"))) {
 			checkAnalysisNull();
 			if (lastReviewer == null) {
@@ -635,10 +696,14 @@ public class BuildDocument implements TagValueBehavior {
 			lastReviewer.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_ID"))) {
 			checkAnalysisNull();
+			if (inExtractedLicenseDefinition) {
+				verifyElement(lastExtractedLicense.verify(), "Extracted License", lastExtractedLicenseLineNumber, false);
+			}
 			if (analysis.getDocumentContainer().extractedLicenseExists(value)) {
 				lastExtractedLicense = analysis.getDocumentContainer().getExtractedLicense(value);
 			} else {
 				lastExtractedLicense = new ExtractedLicenseInfo(value, "WARNING: TEXT IS REQUIRED", null, null, null); //change text later
+				lastExtractedLicenseLineNumber = lineNumber;
 				analysis.addExtractedLicenseInfos(lastExtractedLicense);
 			}
 			this.inExtractedLicenseDefinition = true;
@@ -648,10 +713,13 @@ public class BuildDocument implements TagValueBehavior {
 			inFileDefinition = false;
 			inAnnotation = false;
 			inSnippetDefinition = false;
+			inExtractedLicenseDefinition = false;
 			if (this.lastPackage != null) {
 				this.analysis.getDocumentContainer().addElement(this.lastPackage);
+				elementIdLineNumberMap.put(this.lastPackage.getId(), lastPackageLineNumber);
 			}
 			this.lastPackage = new SpdxPackage(value, null, null, null, null, null, null, null);
+			lastPackageLineNumber = lineNumber;
 		} else if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
 			checkAnalysisNull();
 			//NOTE: This must follow the inPackageDefinition check since
@@ -662,6 +730,7 @@ public class BuildDocument implements TagValueBehavior {
 			inPackageDefinition = false;
 			inAnnotation = false;
 			inSnippetDefinition = false;
+			inExtractedLicenseDefinition = false;
 
 			this.lastFile = new SpdxFile(value, null, new Annotation[0], new Relationship[0], null,
 					new AnyLicenseInfo[0], null, null, new FileType[0], new Checksum[0],
@@ -673,11 +742,13 @@ public class BuildDocument implements TagValueBehavior {
 			inFileDefinition = false;
 			inPackageDefinition = false;
 			inAnnotation = false;
+			inExtractedLicenseDefinition = false;
 			this.lastSnippet = new SpdxSnippet(null, null, new Annotation[0], new Relationship[0], null, 
 					new AnyLicenseInfo[0], null, null, null, null, null);
 			this.lastSnippet.setId(value);
+			this.lastSnippetLineNumber = lineNumber;
 		} else {
-			throw new InvalidSpdxTagFileException("Expecting a definition of a file, package, license information, or document property at "+tag+value);
+			throw new InvalidSpdxTagFileException("Expecting a definition of a file, package, license information, or document property at "+tag+value+" line number "+lineNumber);
 		}
 	}
 
@@ -694,6 +765,7 @@ public class BuildDocument implements TagValueBehavior {
 			} else {
 				this.analysis.getDocumentContainer().addElement(lastFile);
 			}
+			elementIdLineNumberMap.put(lastFile.getId(),lastFileLineNumber);
 		}
 		this.lastFile = null;
 	}
@@ -706,6 +778,7 @@ public class BuildDocument implements TagValueBehavior {
 	private void addLastSnippet() throws InvalidSPDXAnalysisException {
 		if (this.lastSnippet != null) {
 			this.analysis.getDocumentContainer().addElement(lastSnippet);
+			elementIdLineNumberMap.put(lastSnippet.getId(), lastSnippetLineNumber);
 		}
 		this.lastSnippet = null;
 	}
@@ -727,7 +800,7 @@ public class BuildDocument implements TagValueBehavior {
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATION_TYPE"))) {
 			AnnotationType annotationType = AnnotationType.fromTag(value);
 			if (annotationType == null) {
-				throw(new InvalidSPDXAnalysisException("Invalid annotation type: "+value));
+				throw(new InvalidSPDXAnalysisException("Invalid annotation type: "+value + " at line number "+annotation.getLineNumber()));
 			}
 			annotation.setAnnotationType(annotationType);
 		}
@@ -738,19 +811,19 @@ public class BuildDocument implements TagValueBehavior {
 	 * @return
 	 * @throws InvalidSpdxTagFileException
 	 */
-	private RelationshipWithId parseRelationship(String value) throws InvalidSpdxTagFileException {
+	private RelationshipWithId parseRelationship(String value, int lineNumber) throws InvalidSpdxTagFileException {
 		Matcher matcher = RELATIONSHIP_PATTERN.matcher(value.trim());
 		if (!matcher.find()) {
-			throw(new InvalidSpdxTagFileException("Invalid relationship: "+value));
+			throw(new InvalidSpdxTagFileException("Invalid relationship: "+value + " at line number "+lineNumber));
 		}
 		RelationshipType relationshipType = null;
 		try {
 			relationshipType = RelationshipType.fromTag(matcher.group(2));
 		} catch (IllegalArgumentException ex) {
-			throw(new InvalidSpdxTagFileException("Invalid relationship type: "+value));
+			throw(new InvalidSpdxTagFileException("Invalid relationship type: "+value + " at line number "+lineNumber));
 		}
 		return new RelationshipWithId(matcher.group(1), matcher.group(3),
-				relationshipType);
+				relationshipType, lineNumber);
 	}
 
 	private void checkAnalysisNull() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
@@ -773,11 +846,13 @@ public class BuildDocument implements TagValueBehavior {
 
 	/**
 	 * @param value
+	 * @param lineNumber
 	 * @throws InvalidSpdxTagFileException
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	private void addExternalDocRef(String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
-		ExternalDocumentRef ref = parseExternalDocumentRef(value);
+	private void addExternalDocRef(String value, int lineNumber) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
+		ExternalDocumentRef ref = parseExternalDocumentRef(value, lineNumber);
+		verifyElement(ref.verify(), "External Document Reference", lineNumber);
 		ExternalDocumentRef[] oldRefs = this.analysis.getExternalDocumentRefs();
 		if (oldRefs == null) {
 			oldRefs = new ExternalDocumentRef[0];
@@ -788,28 +863,34 @@ public class BuildDocument implements TagValueBehavior {
 	}
 
 	/**
-	 * Parse a tag/value exteranl document reference string
+	 * Parse a tag/value external document reference string
 	 * @param refStr
+	 * @param lineNumber
 	 * @return
 	 * @throws InvalidSpdxTagFileException
 	 */
-	public static ExternalDocumentRef parseExternalDocumentRef(String refStr) throws InvalidSpdxTagFileException {
+	public static ExternalDocumentRef parseExternalDocumentRef(String refStr, int lineNumber) throws InvalidSpdxTagFileException {
 		Matcher matcher = EXTERNAL_DOC_REF_PATTERN.matcher(refStr.trim());
 		if (!matcher.find()) {
-			throw(new InvalidSpdxTagFileException("Invalid external document reference: "+refStr));
+			throw(new InvalidSpdxTagFileException("Invalid external document reference: "+refStr+" at line number "+lineNumber));
 		}
+		Checksum checksum = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, matcher.group(3));
 		ExternalDocumentRef ref = new ExternalDocumentRef(matcher.group(2),
-				new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, matcher.group(3)),
-				matcher.group(1));
+				checksum, matcher.group(1));
 		return ref;
 	}
 
 	/**
-	 * @param spdxPackage
+	 * @param pkg
+	 * @param tag
+	 * @param value
+	 * @param lineNumber
 	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSpdxTagFileException 
+	 * @throws InvalidLicenseStringException 
 	 */
-	private void buildPackage(SpdxPackage pkg, String tag, String value)
-			throws Exception {
+	private void buildPackage(SpdxPackage pkg, String tag, String value, int lineNumber)
+			throws InvalidSPDXAnalysisException, InvalidSpdxTagFileException, InvalidLicenseStringException {
 		if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
 			pkg.setId(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_VERSION_INFO"))) {
@@ -823,33 +904,41 @@ public class BuildDocument implements TagValueBehavior {
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DOWNLOAD_URL"))) {
 			pkg.setDownloadLocation(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_VERIFICATION_CODE"))) {
+			SpdxPackageVerificationCode verificationCode = null;
 			if (value.contains("(")) {
 				String[] verification = value.split("\\(");
 				String[] excludedFiles = verification[1].replace(")", "").split(",");
 				for (int i = 0; i < excludedFiles.length; i++) {
 					excludedFiles[i] = excludedFiles[i].trim();
 				}
-				pkg.setPackageVerificationCode(new SpdxPackageVerificationCode(verification[0].trim(), excludedFiles));
+				verificationCode = new SpdxPackageVerificationCode(verification[0].trim(), excludedFiles);
 			}
 			else {
-				pkg.setPackageVerificationCode(new SpdxPackageVerificationCode(value, new String[0]));
+				verificationCode = new SpdxPackageVerificationCode(value, new String[0]);
 			}
+			verifyElement(verificationCode.verify(), "Verification Code", lineNumber);
+			pkg.setPackageVerificationCode(verificationCode);
 		} else if (constants.getProperty("PROP_PACKAGE_CHECKSUM").startsWith(tag)) {
-			pkg.addChecksum(parseChecksum(value));
+			Checksum checksum = parseChecksum(value, lineNumber);
+			verifyElement(checksum.verify(), "Package Checksum", lineNumber);
+			pkg.addChecksum(checksum);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_HOMEPAGE_URL"))) {
 			pkg.setHomepage(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_SOURCE_INFO"))) {
 			pkg.setSourceInfo(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_CONCLUDED_LICENSE"))) {
 			AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer());
+			// can not verify any licenses at this point since the extracted license infos may not be set
 			pkg.setLicenseConcluded(licenseSet);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_INFO_FROM_FILES"))) {
 			AnyLicenseInfo license = LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer());
+			// can not verify any licenses at this point since the extracted license infos may not be set
 			List<AnyLicenseInfo> licenses = Lists.newArrayList(pkg.getLicenseInfoFromFiles());
 			licenses.add(license);
 			pkg.setLicenseInfosFromFiles(licenses.toArray(new AnyLicenseInfo[0]));
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DECLARED_LICENSE"))) {
 			AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer());
+			// can not verify any licenses at this point since the extracted license infos may not be set
 			pkg.setLicenseDeclared(licenseSet);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_LICENSE_COMMENT"))) {
 			pkg.setLicenseComments(value);
@@ -860,14 +949,15 @@ public class BuildDocument implements TagValueBehavior {
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_DESCRIPTION"))) {
 			pkg.setDescription(value);
 		} else if (tag.equals(constants.getProperty("PROP_EXTERNAL_REFERENCE"))) {
-			this.lastExternalRef = parseExternalRef(value);
+			this.lastExternalRef = parseExternalRef(value, lineNumber);
+			verifyElement(this.lastExternalRef.verify(), "External Reference", lineNumber);
 			pkg.addExternalRef(this.lastExternalRef);
 		} else if (tag.equals(constants.getProperty("PROP_EXTERNAL_REFERENCE_COMMENT"))) {
 			if (this.lastExternalRef == null) {
-				throw new InvalidSpdxTagFileException("External reference comment found without an external reference: "+value);
+				throw new InvalidSpdxTagFileException("External reference comment found without an external reference: "+value + " at line number "+lineNumber);
 			}
 			if (this.lastExternalRef.getComment() != null && !this.lastExternalRef.getComment().isEmpty()) {
-				throw new InvalidSpdxTagFileException("Second reference comment found for the same external reference: "+value);
+				throw new InvalidSpdxTagFileException("Second reference comment found for the same external reference: "+value + " at line number "+lineNumber);
 			}
 			this.lastExternalRef.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
@@ -875,15 +965,15 @@ public class BuildDocument implements TagValueBehavior {
 				annotations.add(lastAnnotation);
 			}
 			this.inAnnotation = true;
-			lastAnnotation = new AnnotationWithId(value);
+			lastAnnotation = new AnnotationWithId(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP"))) {
 			if (lastRelationship != null) {
 				relationships.add(lastRelationship);
 			}
-			lastRelationship = parseRelationship(value);
+			lastRelationship = parseRelationship(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP_COMMENT"))) {
 			if (lastRelationship == null) {
-				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value));
+				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value + " at line number "+lineNumber));
 			}
 			lastRelationship.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_NAME"))) {
@@ -903,6 +993,7 @@ public class BuildDocument implements TagValueBehavior {
 			this.lastSnippet = new SpdxSnippet(null, null, new Annotation[0], new Relationship[0], null, 
 					new AnyLicenseInfo[0], null, null, null, null, null);
 			this.lastSnippet.setId(value);
+			this.lastSnippetLineNumber = lineNumber;
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_COMMENT"))) {
 			pkg.setComment(value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED"))) {
@@ -911,31 +1002,29 @@ public class BuildDocument implements TagValueBehavior {
 			} else if ("FALSE".equals(value.toUpperCase())) {
 				pkg.setFilesAnalyzed(false);
 			} else {
-				throw(new InvalidSpdxTagFileException("Invalid value for files analyzed.  Must be 'true' or 'false'.  Found value: "+value));
+				throw(new InvalidSpdxTagFileException("Invalid value for files analyzed.  Must be 'true' or 'false'.  Found value: "+value+" at line number "+lineNumber));
 			}
-//		} else if (this.inFileDefinition) {
-//			buildFile(this.lastFile, tag, value);
-			//TODO: Delete the above by end of 2017 if no error have been found - not quite sure why that code was there
 		} else {
-			throw(new InvalidSpdxTagFileException("Expecting a file definition, snippet definition or a package property.  Found "+value));
+			throw(new InvalidSpdxTagFileException("Expecting a file definition, snippet definition or a package property.  Found "+value+" at line number "+lineNumber));
 		}
 	}
 
 	/**
 	 * Parse the external reference string
 	 * @param value
+	 * @param lineNumber
 	 * @return
 	 * @throws InvalidSpdxTagFileException 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	private ExternalRef parseExternalRef(String value) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
+	private ExternalRef parseExternalRef(String value, int lineNumber) throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
 		Matcher matcher = EXTERNAL_REF_PATTERN.matcher(value);
 		if (!matcher.find()) {
-			throw new InvalidSpdxTagFileException("Invalid External Ref format: "+value);
+			throw new InvalidSpdxTagFileException("Invalid External Ref format: "+value+" at line number "+lineNumber);
 		}
 		ReferenceCategory referenceCategory = ReferenceCategory.fromTag(matcher.group(1).trim());
 		if (referenceCategory == null) {
-			throw new InvalidSpdxTagFileException("Invalid External Ref category: "+value);
+			throw new InvalidSpdxTagFileException("Invalid External Ref category: "+value+" at line number "+lineNumber);
 		}
 		ReferenceType referenceType = null;
 		String tagType = matcher.group(2).trim();
@@ -957,7 +1046,7 @@ public class BuildDocument implements TagValueBehavior {
 				}
 				referenceType = new ReferenceType(refTypeUri, null, null, null);
 			} catch (URISyntaxException e) {
-				throw new InvalidSpdxTagFileException("Invalid External Ref type: "+value);
+				throw new InvalidSpdxTagFileException("Invalid External Ref type: "+value+" at line number "+lineNumber);
 			}
 		}
 		return new ExternalRef(referenceCategory, referenceType, matcher.group(3), null);
@@ -966,31 +1055,35 @@ public class BuildDocument implements TagValueBehavior {
 	/**
 	 * Creates a Checksum from the parameters specified in the tag value
 	 * @param value
+	 * @param lineNumber
 	 * @return
 	 * @throws InvalidSpdxTagFileException
 	 */
-	public static Checksum parseChecksum(String value) throws InvalidSpdxTagFileException {
+	public static Checksum parseChecksum(String value, int lineNumber) throws InvalidSpdxTagFileException {
 		Matcher matcher = CHECKSUM_PATTERN.matcher(value.trim());
 		if (!matcher.find()) {
-			throw(new InvalidSpdxTagFileException("Invalid checksum: "+value));
+			throw(new InvalidSpdxTagFileException("Invalid checksum: "+value+" at line number "+lineNumber));
 		}
 		ChecksumAlgorithm algorithm = Checksum.CHECKSUM_TAG_TO_ALGORITHM.get(matcher.group(1));
 		if (algorithm == null) {
-			throw(new InvalidSpdxTagFileException("Invalid checksum algorithm: "+value));
+			throw(new InvalidSpdxTagFileException("Invalid checksum algorithm: "+value+" at line number "+lineNumber));
 		}
 		return new Checksum(algorithm, matcher.group(2));
 	}
 
 	/**
 	 * @param file
+	 * @param tag
+	 * @param value
+	 * @param lineNumber
 	 */
-	private void buildFile(SpdxFile file, String tag, String value)
+	private void buildFile(SpdxFile file, String tag, String value, int lineNumber)
 			throws Exception {
 		if (file == null) {
 			if (FILE_TAGS.contains(tag)) {
-				throw(new InvalidSpdxTagFileException("Missing File Name - A file name must be specified before the file properties"));
+				throw(new InvalidSpdxTagFileException("Missing File Name - A file name must be specified before the file properties at line number "+lineNumber));
 			} else {
-				throw(new InvalidSpdxTagFileException("Unrecognized SPDX Tag: "+tag));
+				throw(new InvalidSpdxTagFileException("Unrecognized SPDX Tag: "+tag+" at line number "+lineNumber));
 			}
 		}
 		if (tag.equals(constants.getProperty("PROP_ELEMENT_ID"))) {
@@ -1000,19 +1093,21 @@ public class BuildDocument implements TagValueBehavior {
 			if (fileType == null) {
 				fileType = FileType.fromTag(value.trim().toUpperCase());
 				if (fileType == null) {
-					throw(new InvalidSpdxTagFileException("Unknown file type: "+value));
+					throw(new InvalidSpdxTagFileException("Unknown file type: "+value+" at line number "+lineNumber));
 				} else {
-					this.warningMessages.add("Invalid filetype - needs to be uppercased: "+value);
+					this.warningMessages.add("Invalid filetype - needs to be uppercased: "+value+" at line number "+lineNumber);
 				}
 			}
 			file.addFileType(fileType);
 		} else if (constants.getProperty("PROP_FILE_CHECKSUM").startsWith(tag)) {
-			file.addChecksum(parseChecksum(value));
+			file.addChecksum(parseChecksum(value, lineNumber));
 		} else if (tag.equals(constants.getProperty("PROP_FILE_LICENSE"))) {
 			AnyLicenseInfo licenseSet = LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer());
+			// can not verify any licenses at this point since the extracted license infos may not be set
 			file.setLicenseConcluded(licenseSet);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_SEEN_LICENSE"))) {
 			AnyLicenseInfo fileLicense = (LicenseInfoFactory.parseSPDXLicenseString(value, this.analysis.getDocumentContainer()));
+			// can not verify any licenses at this point since the extracted license infos may not be set
 			List<AnyLicenseInfo> seenLicenses = Lists.newArrayList(file.getLicenseInfoFromFiles());
 			seenLicenses.add(fileLicense);
 			file.setLicenseInfosFromFiles(seenLicenses.toArray(new AnyLicenseInfo[0]));
@@ -1033,19 +1128,19 @@ public class BuildDocument implements TagValueBehavior {
 				annotations.add(lastAnnotation);
 			}
 			this.inAnnotation = true;
-			lastAnnotation = new AnnotationWithId(value);
+			lastAnnotation = new AnnotationWithId(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP"))) {
 			if (lastRelationship != null) {
 				relationships.add(lastRelationship);
 			}
-			lastRelationship = parseRelationship(value);
+			lastRelationship = parseRelationship(value, lineNumber);
 		} else if (tag.equals(constants.getProperty("PROP_RELATIONSHIP_COMMENT"))) {
 			if (lastRelationship == null) {
-				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value));
+				throw(new InvalidSpdxTagFileException("Relationship comment found outside of a relationship: "+value+" at line number "+lineNumber));
 			}
 			lastRelationship.setComment(value);
 		} else {
-			buildProject(file, tag, value);
+			buildProject(file, tag, value, lineNumber);
 		}
 	}
 
@@ -1083,25 +1178,32 @@ public class BuildDocument implements TagValueBehavior {
 	}
 
 	/**
-	 * @param doapProject
+	 * @param file
+	 * @param tag
+	 * @param value
+	 * @param lineNumber
 	 */
 	@SuppressWarnings("deprecation")
-	private void buildProject(SpdxFile file, String tag, String value)
+	private void buildProject(SpdxFile file, String tag, String value, int lineNumber)
 			throws Exception {
 		if (tag.equals(constants.getProperty("PROP_PROJECT_NAME"))) {
+			if (lastProject != null) {
+				verifyElement(lastProject.verify(), "DOAP Project", lastProjectLineNumber);
+			}
 			lastProject = new DoapProject(value, null);
+			lastProjectLineNumber = lineNumber;
 			List<DoapProject> projects = Lists.newArrayList(file.getArtifactOf());
 			projects.add(lastProject);
 			file.setArtifactOf(projects.toArray(new DoapProject[0]));
 		} else {
 			if (tag.equals(constants.getProperty("PROP_PROJECT_HOMEPAGE"))) {
 				if (lastProject == null) {
-					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
+					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties at line number" + lineNumber));
 				}
 				lastProject.setHomePage(value);
 			} else if (tag.equals(constants.getProperty("PROP_PROJECT_URI"))) {
 				if (lastProject == null) {
-					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties"));
+					throw(new InvalidSpdxTagFileException("Missing Project Name - A project name must be provided before the project properties at line number" + lineNumber));
 				}
 				// can not set the URI since it is already created, we need to replace DOAP project
 				DoapProject[] existingProjects = file.getArtifactOf();
@@ -1117,7 +1219,7 @@ public class BuildDocument implements TagValueBehavior {
 				file.setArtifactOf(existingProjects);
 				lastProject = existingProjects[i];
 			} else {
-				throw(new InvalidSpdxTagFileException("Unrecognized tag: "+tag));
+				throw(new InvalidSpdxTagFileException("Unrecognized tag: "+tag+" at line number" + lineNumber));
 			}
 		}
 	}
@@ -1131,6 +1233,9 @@ public class BuildDocument implements TagValueBehavior {
 
 	@Override
 	public void exit() throws Exception {
+		if (inExtractedLicenseDefinition && lastExtractedLicense != null) {
+			verifyElement(lastExtractedLicense.verify(), "Extracted License", lastExtractedLicenseLineNumber, false);
+		}
 		addLastFile();
 		if (this.lastPackage != null) {
 			this.analysis.getDocumentContainer().addElement(this.lastPackage);
@@ -1139,12 +1244,34 @@ public class BuildDocument implements TagValueBehavior {
 		addRelationships();
 		checkSinglePackageDefault();
 		addAnnotations();
-		warningMessages.addAll(analysis.verify());
-//        assertEquals("SpdxDocument", 0, warningMessages);
-		// Moved the responsibility for printing warnings to the caller
-		// The warnings is now passed in as a parameter to the constructor
-		// leaving the commented out code in place until we have tested the change
-		// in the interface - can be removed after Sept. 2015
+		List<SpdxElement> allElements = analysis.getDocumentContainer().findAllElements();
+		for (SpdxElement element:allElements) {
+			if (elementIdLineNumberMap.containsKey(element.getId())) {
+				String prefix = "Element";
+				if (element instanceof SpdxPackage) {
+					prefix = "Package";
+				} else if (element instanceof SpdxSnippet) {
+					prefix = "Snippet";
+				} else if (element instanceof SpdxFile) {
+					prefix = "File";
+				}
+				verifyElement(element.verify(), prefix, elementIdLineNumberMap.get(element.getId()));
+			}
+		}
+		List<String> analysisVerify = analysis.verify();
+		for (String analysisVerifyMsg:analysisVerify) {
+			// add any missing messages
+			boolean found = false;
+			for (String warningMsg:warningMessages) {
+				if (warningMsg.contains(analysisVerifyMsg)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				warningMessages.add(analysisVerifyMsg);
+			}
+		}
 	}
 
 	/**
@@ -1185,12 +1312,13 @@ public class BuildDocument implements TagValueBehavior {
 		for (int i = 0; i < annotations.size(); i++) {
 			String id = annotations.get(i).getId();
 			if (id == null) {
-				this.warningMessages.add("missing SPDXREF: tag in annotation " + annotations.get(i).getAnnotation().getComment());
+				this.warningMessages.add("missing SPDXREF: tag in annotation " + annotations.get(i).getAnnotation().getComment() + 
+						" at line number "+annotations.get(i).getLineNumber());
 				continue;
 			}
 			SpdxElement element = this.analysis.getDocumentContainer().findElementById(id);
 			if (element == null) {
-				this.warningMessages.add("Invalid element reference in annotation: " + id);
+				this.warningMessages.add("Invalid element reference in annotation: " + id + " at line number "+annotations.get(i).getLineNumber());
 				continue;
 			}
 			Annotation[] elementAnnotations = element.getAnnotations();
@@ -1199,6 +1327,7 @@ public class BuildDocument implements TagValueBehavior {
 			}
 			Annotation[] newAnnotations = Arrays.copyOf(elementAnnotations, elementAnnotations.length+1);
 			newAnnotations[elementAnnotations.length] = annotations.get(i).getAnnotation();
+			verifyElement(annotations.get(i).getAnnotation().verify(), "Annotation", annotations.get(i).getLineNumber());
 			element.setAnnotations(newAnnotations);
 		}
 	}
@@ -1216,14 +1345,16 @@ public class BuildDocument implements TagValueBehavior {
 			RelationshipWithId relationship = relationships.get(i);
 			SpdxElement element = this.analysis.getDocumentContainer().findElementById(relationship.getId());
 			if (element == null) {
-				this.warningMessages.add("Missing element for a relationship.  SPDX ID: "+relationship.getId());
+				this.warningMessages.add("Missing element for a relationship.  SPDX ID: "+relationship.getId()+" at line number "+relationship.getLineNumber());
 				continue;
 			}
 			SpdxElement relatedElement = this.analysis.getDocumentContainer().findElementById(relationship.getRelatedId());
 			//Invoked for processing
 			element.getRelationships();
-			element.addRelationship(new Relationship(relatedElement,
-					relationships.get(i).getRelationshipType(), relationships.get(i).getComment()));
+			Relationship newRelationship = new Relationship(relatedElement,
+					relationships.get(i).getRelationshipType(), relationships.get(i).getComment());
+			verifyElement(newRelationship.verify(), "Relationship", relationships.get(i).getLineNumber());
+			element.addRelationship(newRelationship);
 		}
 	}
 	

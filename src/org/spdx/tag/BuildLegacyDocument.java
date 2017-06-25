@@ -16,7 +16,6 @@
  */
 package org.spdx.tag;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -49,7 +48,7 @@ import org.apache.jena.rdf.model.Model;
 /**
  * Translates an tag-value file to a an SPDX Document.
  * 
- * This is the legacy tag-value tranlater for versions 1.2 and earlier
+ * This is the legacy tag-value translator for versions 1.2 and earlier
  * 
  * This has been replaced by BuildDocument which supports the SPDX 2.0 syntax
  * 
@@ -57,7 +56,6 @@ import org.apache.jena.rdf.model.Model;
  */
 @Deprecated
 public class BuildLegacyDocument implements TagValueBehavior {
-	private static final long serialVersionUID = -5490491489627686708L;
 
 	private static final String DEFAULT_SHA1 = "0000000000000000000000000000000000000000";
 	
@@ -94,7 +92,7 @@ public class BuildLegacyDocument implements TagValueBehavior {
 	}
 
 	@Override
-    public void buildDocument(String tag, String value) throws Exception {
+    public void buildDocument(String tag, String value, int lineNumber) throws Exception {
 		tag = tag.trim()+" ";
 		value = trim(value.trim());
 		// document
