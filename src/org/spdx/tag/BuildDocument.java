@@ -735,6 +735,7 @@ public class BuildDocument implements TagValueBehavior {
 			this.lastFile = new SpdxFile(value, null, new Annotation[0], new Relationship[0], null,
 					new AnyLicenseInfo[0], null, null, new FileType[0], new Checksum[0],
 					new String[0] , null, new DoapProject[0]);
+			lastFileLineNumber = lineNumber;
 		} else if (tag.equals(constants.getProperty("PROP_SNIPPET_SPDX_ID"))) {
 			checkAnalysisNull();
 			addLastSnippet();
@@ -1239,6 +1240,7 @@ public class BuildDocument implements TagValueBehavior {
 		addLastFile();
 		if (this.lastPackage != null) {
 			this.analysis.getDocumentContainer().addElement(this.lastPackage);
+			elementIdLineNumberMap.put(this.lastPackage.getId(), this.lastPackageLineNumber);
 		}
 		fixFileAndSnippetDependencies();
 		addRelationships();

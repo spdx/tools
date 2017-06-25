@@ -24,11 +24,6 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.OrLaterOperator;
-import org.spdx.rdfparser.license.SimpleLicensingInfo;
-import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
-import org.spdx.rdfparser.license.SpdxNoneLicense;
-import org.spdx.rdfparser.license.WithExceptionOperator;
 
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
@@ -326,25 +321,6 @@ public class SpdxItem extends SpdxElement {
 		}
 		if (this.copyrightText == null) {
 			retval.add("Missing required copyright text for "+name);
-		}
-		if (this.licenseInfoFromFiles == null || this.licenseInfoFromFiles.length == 0) {
-			retval.add("Missing required license information from files for "+name);
-		} else {
-			boolean foundNonSimpleLic = false;
-			for (int i = 0; i < this.licenseInfoFromFiles.length; i++) {
-				AnyLicenseInfo lic = this.licenseInfoFromFiles[i];
-				if (!(lic instanceof SimpleLicensingInfo ||
-						lic instanceof SpdxNoAssertionLicense ||
-						lic instanceof SpdxNoneLicense ||
-						lic instanceof OrLaterOperator ||
-						lic instanceof WithExceptionOperator)) {
-					foundNonSimpleLic = true;
-					break;
-				}
-			}
-			if (foundNonSimpleLic) {
-				retval.add("license info from files contains complex licenses for "+name);
-			}
 		}
 		addNameToWarnings(retval);
 		return retval;
