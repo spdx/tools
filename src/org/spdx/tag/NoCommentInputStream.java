@@ -144,25 +144,15 @@ public class NoCommentInputStream extends InputStream {
 	}
 	
 	public String readLine() throws IOException {
-		// Exit early on EOF.
+		if (bytesIndex >= currentBytes.length) {
+			readNextLine();
+		}
 		if (currentLine == null) {
 			return null;
 		}
-
-		if (bytesIndex >= currentBytes.length) {
-			readNextLine();
-			if (currentLine == null) {
-				return null;
-			} else {
-				// Before returning bytes from the newly filled buffer, return the new
-				// line character that readLine() embezzled.
-				return "\n";
-			}
-		} else {
-			String retval = currentLine.substring(bytesIndex);
-			readNextLine();
-			return retval;
-		}
+		String retval = currentLine.substring(bytesIndex);
+		bytesIndex = currentBytes.length;
+		return retval;
 	}
 	
 }
