@@ -28,6 +28,11 @@ import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.OrLaterOperator;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
+import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.WithExceptionOperator;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.collect.Maps;
@@ -872,6 +877,26 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			}
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package declared license: "+e.getMessage());
+		}
+		if ((this.licenseInfoFromFiles == null || this.licenseInfoFromFiles.length == 0) 
+				&& filesAnalyzed) {
+			retval.add("Missing required license information from files for "+name);
+		} else {
+			boolean foundNonSimpleLic = false;
+			for (int i = 0; i < this.licenseInfoFromFiles.length; i++) {
+				AnyLicenseInfo lic = this.licenseInfoFromFiles[i];
+				if (!(lic instanceof SimpleLicensingInfo ||
+						lic instanceof SpdxNoAssertionLicense ||
+						lic instanceof SpdxNoneLicense ||
+						lic instanceof OrLaterOperator ||
+						lic instanceof WithExceptionOperator)) {
+					foundNonSimpleLic = true;
+					break;
+				}
+			}
+			if (foundNonSimpleLic) {
+				retval.add("license info from files contains complex licenses for "+name);
+			}
 		}
 		// files depends on if the filesAnalyzed flag
 		try {
