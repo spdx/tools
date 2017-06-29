@@ -111,7 +111,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
 		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
 		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
-	}	
+	}
+	
+	static String DOUBLE_QUOTES_REGEX = "(\\u201C|\\u201D)";
+	static String SINGLE_QUOTES_REGEX = "(\\u2018|\\u2019)";
+	
 	/**
 	 * Convert a node to text which contains various markup information and appends it to the sb
 	 * @param node node to convert
@@ -129,7 +133,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
 		if (node.getNodeType() == Node.TEXT_NODE) {
 			if (includeHtmlTags) {
-				sb.append(StringEscapeUtils.escapeHtml4(node.getNodeValue()));
+				sb.append(StringEscapeUtils.escapeHtml4(fixUpText(node.getNodeValue())));
 			} else {
 				appendNormalizedWhiteSpaceText(sb, node.getNodeValue());
 			}
@@ -420,7 +424,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		StringBuilder sb = new StringBuilder();
 		appendNodeText(licenseElement, true, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, 
 				LICENSE_AND_EXCEPTION_SKIPPED_TAGS, false);
-		return sb.toString();
+		return fixUpText(sb.toString());
 	}
 	
 	/**
@@ -445,7 +449,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		StringBuilder sb = new StringBuilder();
 		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, 
 				LICENSE_AND_EXCEPTION_SKIPPED_TAGS, false);
-		return sb.toString();
+		return fixUpText(sb.toString());
 	}
 	
 	public static String dumpLicenseDom(Element licenseElement) {
@@ -489,7 +493,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	public static Object getHeaderText(Node headerNode) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
 		appendNodeText(headerNode, false, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, false);
-		return sb.toString();
+		return fixUpText(sb.toString());
 	}
 
 	/**
@@ -500,7 +504,15 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	public static String getExampleText(Element exampleElement) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
 		appendNodeText(exampleElement, false, sb, 0, EXAMPLE_UNPROCESSED_TAGS, EXAMPLE_SKIPPED_TAGS, false);
-		return sb.toString();
+		return fixUpText(sb.toString());
+	}
+
+	/**
+	 * @param string
+	 * @return Text normalized for different character variations
+	 */
+	private static String fixUpText(String string) {
+		return string.replaceAll(DOUBLE_QUOTES_REGEX, "\"").replaceAll(SINGLE_QUOTES_REGEX, "'");
 	}
 
 	/**
@@ -512,7 +524,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	public static String getLicenseTextHtml(Element licenseElement) throws LicenseXmlException {
 		StringBuilder sb = new StringBuilder();
 		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, LICENSE_AND_EXCEPTION_SKIPPED_TAGS, true);
-		return sb.toString();
+		return fixUpText(sb.toString());
 	}
 
 }

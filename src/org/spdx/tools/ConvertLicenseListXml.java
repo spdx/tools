@@ -305,7 +305,11 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 				throw new LicenseXmlConverterException("Unrecognized source element tag: "+sourceElement.getTagName());
 			}
 			Element destinationElement = outputXmlDocument.createElementNS(NAMESPACE, tagName);
-			convertMixedBody(sourceElement, destinationElement, outputXmlDocument);
+			if (hasBulletFollowedByParagraph(sourceElement.getChildNodes())) {
+				convertRemovingPragraphAfterBullet(sourceElement, destinationElement, outputXmlDocument);
+			} else {
+				convertMixedBody(sourceElement, destinationElement, outputXmlDocument);
+			}
 			return destinationElement;
 		} else if (source.getNodeType() == Node.ATTRIBUTE_NODE) {
 			throw new LicenseXmlConverterException("Unexpected attribute: "+source.getNodeName());
@@ -318,6 +322,78 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		} else {
 			throw new LicenseXmlConverterException("Unexpected node type: "+source.getNodeType());
 		}
+	}
+
+	/**
+	 * Similar to convertMixed, but removes the paragraph tag after the bullet tag
+	 * @param sourceElement
+	 * @param destinationElement
+	 * @param outputXmlDocument
+	 * @throws LicenseXmlConverterException 
+	 */
+	private static void convertRemovingPragraphAfterBullet(Element sourceElement, Element destinationElement,
+			Document outputXmlDocument) throws LicenseXmlConverterException {
+		if (!sourceElement.getTagName().equals(OLD_LIST_ITEM_TAG)) {
+			throw new LicenseXmlConverterException("Can not convert removing paragraph after bullet for anything other than a list item");
+		}
+		NodeList children = sourceElement.getChildNodes();
+		Element firstElement = null;
+		Element secondElement = null;
+		for (int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
+			if (child.getNodeType() == Node.ELEMENT_NODE) {
+				if (firstElement == null) {
+					firstElement = (Element)child;
+					if (!firstElement.getTagName().equals(OLD_BULLET_TAG)) {
+						throw new LicenseXmlConverterException("Missing bullet tag");
+					}
+					Node convertedNode = convertNode(child, outputXmlDocument);
+					destinationElement.appendChild(convertedNode);
+				} else if (secondElement == null) {
+					secondElement = (Element)child;
+					if (!secondElement.getTagName().equals(OLD_PARAGRAPH_TAG)) {
+						throw new LicenseXmlConverterException("Missing paragraph tag");
+					}
+					NodeList grandChildren = secondElement.getChildNodes();
+					for (int j = 0; j < grandChildren.getLength(); j++) {
+						// this should skip the paragraph tag
+						Node convertedNode = convertNode(grandChildren.item(j), outputXmlDocument);
+						destinationElement.appendChild(convertedNode);
+					}
+				} else {
+					Node convertedNode = convertNode(child, outputXmlDocument);
+					destinationElement.appendChild(convertedNode);
+				}
+			} else {
+				Node convertedNode = convertNode(child, outputXmlDocument);
+				destinationElement.appendChild(convertedNode);
+			}
+		}
+	}
+
+	/**
+	 * Check to see if there is a <b> tag followed by a <p> tag
+	 * @param childNodes
+	 * @return
+	 */
+	private static boolean hasBulletFollowedByParagraph(NodeList childNodes) {
+		Element firstElement = null;
+		Element secondElement = null;
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			if (childNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				Element childElement = (Element)childNodes.item(i);
+				if (firstElement == null) {
+					firstElement = childElement;
+					if (!firstElement.getTagName().equals(OLD_BULLET_TAG)) {
+						return false;
+					}
+				} else if (secondElement == null) {
+					secondElement = childElement;
+					return secondElement.getTagName().equals(OLD_PARAGRAPH_TAG);
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
