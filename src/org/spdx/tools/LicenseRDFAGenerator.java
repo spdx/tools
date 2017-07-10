@@ -20,7 +20,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -588,6 +591,36 @@ public class LicenseRDFAGenerator {
 		tableOfContentsJSON.writeToFile(tocJsonFileCopy);
 		tableOfContentsHTML.writeToFile(tocHtmlFileCopy);
 	}
+	
+	/**
+	 * Copy a file from the resources directory to a destination file
+	 * @param resourceFileName filename of the file in the resources directory
+	 * @param destination target file - warning, this will be overwritten
+	 * @throws IOException 
+	 */
+	private static void copyResourceFile(String resourceFileName, File destination) throws IOException {
+		File resourceFile = new File(resourceFileName);
+		if (resourceFile.exists()) {
+			Files.copy(resourceFile, destination);
+		} else {
+			InputStream is = LicenseRDFAGenerator.class.getClassLoader().getResourceAsStream(resourceFileName);
+			InputStreamReader reader = new InputStreamReader(is);
+			FileWriter writer = new FileWriter(destination);
+			try {
+				char[] buf = new char[2048];
+				int len = reader.read(buf);
+				while (len > 0) {
+					writer.write(buf, 0, len);
+					len = reader.read(buf);
+				}
+			} finally {
+				if (writer != null) {
+					writer.close();
+				}
+				reader.close();
+			}
+		}
+	}
 
 	private static void writeCssFile(File dir) throws IOException {
 		File cssFile = new File(dir.getPath()+ File.separator + CSS_FILE_NAME);
@@ -596,8 +629,7 @@ public class LicenseRDFAGenerator {
 				throw(new IOException("Unable to delete old file"));
 			}
 		}
-		File cssTemplateFile = new File(CSS_TEMPLATE_FILE); 
-		Files.copy(cssTemplateFile, cssFile);		
+		copyResourceFile(CSS_TEMPLATE_FILE, cssFile);
 	}
 	
 	private static void writeSortTableFile(File dir) throws IOException {
@@ -605,8 +637,7 @@ public class LicenseRDFAGenerator {
 		if (sortTableFile.exists()) {
 			return;	// assume we don't need to create it
 		}
-		File sortTableJsFile = new File(SORTTABLE_JS_FILE); 
-		Files.copy(sortTableJsFile, sortTableFile);		
+		copyResourceFile(SORTTABLE_JS_FILE, sortTableFile);
 	}
 	
 	private static String formLicenseHTMLFileName(String id) {
