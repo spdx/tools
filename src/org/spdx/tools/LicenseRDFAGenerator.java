@@ -112,6 +112,7 @@ public class LicenseRDFAGenerator {
 	private static final String RDFXML_FOLDER_NAME = "rdfxml";
 	private static final String RDFTURTLE_FOLDER_NAME = "rdfturtle";
 	private static final String RDFNT_FOLDER_NAME = "rdfnt";
+	private static final String TABLE_OF_CONTENTS_FILE_NAME = "licenses.md";
 	
 	/**
 	 * @param args Arg 0 is either an input spreadsheet or a directory of licenses in XML format, arg 1 is the directory for the output html files
@@ -229,18 +230,26 @@ public class LicenseRDFAGenerator {
 			if (!rdfNt.isDirectory() && !rdfNt.mkdir()) {
 				throw new LicenseGeneratorException("Error: RDF NT folder is not a directory");
 			}
+			File markdownFile = new File(dir.getPath() + File.separator +  TABLE_OF_CONTENTS_FILE_NAME);
+			if (!markdownFile.isFile() && !markdownFile.createNewFile()) {
+				throw new LicenseGeneratorException("Error: Unable to create markdown file");
+			}
 			// Create model container to hold licenses and exceptions
 			LicenseContainer container = new LicenseContainer();
+			// Create a MarkdownTable to hold the licenses and exceptions
+			MarkdownTable markdownTable = new MarkdownTable(version);
 			System.out.print("Processing License List");
 			writeLicenseList(version, releaseDate, licenseProvider, warnings,
 					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder,
-					container, rdfXml, rdfTurtle, rdfNt);
+					container, rdfXml, rdfTurtle, rdfNt, markdownTable);
 			System.out.println();
 			System.out.print("Processing Exceptions");
 			writeExceptionList(version, releaseDate, licenseProvider, warnings,
 					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder,
-					container, rdfXml, rdfTurtle, rdfNt);
+					container, rdfXml, rdfTurtle, rdfNt, markdownTable);
 			writeRdf(container, rdfXml, rdfTurtle, rdfNt, "licenses");
+			markdownTable.writeToFile(markdownFile);
+			
 			writeCssFile(website);
 			writeSortTableFile(website);
 			System.out.println();
@@ -339,6 +348,7 @@ public class LicenseRDFAGenerator {
 	 * @param rdfXmlFolder Folder for the RDF XML files to be written
 	 * @param rdfTurtleFolder Folder for the RDF Turtle files to be written
 	 * @param rdfNtFolder Folder for the RDF NT files to be written
+	 * @param markdown Markdown table to hold a markdown table of contents
 	 * @throws IOException 
 	 * @throws SpreadsheetException 
 	 * @throws LicenseRestrictionException 
@@ -350,7 +360,8 @@ public class LicenseRDFAGenerator {
 			ISpdxListedLicenseProvider licenseProvider,
 			List<String> warnings, File dir, File textFolder,
 			File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder,
-			IModelContainer allLicensesContainer, File rdfXmlFolder, File rdfTurtleFolder, File rdfNtFolder) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
+			IModelContainer allLicensesContainer, File rdfXmlFolder, File rdfTurtleFolder, 
+			File rdfNtFolder, MarkdownTable markdown) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		Set<String> licenseIds = Sets.newHashSet();
@@ -412,7 +423,7 @@ public class LicenseRDFAGenerator {
 				LicenseContainer onlyThisException = new LicenseContainer();
 				exceptionClone.createResource(onlyThisException);
 				writeRdf(allLicensesContainer, rdfXmlFolder, rdfTurtleFolder, rdfNtFolder, exceptionHtmlFileName);
-				
+				markdown.addException(nextException, false);
 				nextException.createResource(allLicensesContainer);	
 			}
 		}
@@ -475,6 +486,7 @@ public class LicenseRDFAGenerator {
 	 * @param rdfXmlFolder Folder for the RDF XML files to be written
 	 * @param rdfTurtleFolder Folder for the RDF Turtle files to be written
 	 * @param rdfNtFolder Folder for the RDF NT files to be written
+	 * @param markdown Markdown table to hold a markdown table of contents
 	 * @throws SpdxListedLicenseException 
 	 * @throws IOException 
 	 * @throws LicenseTemplateRuleException 
@@ -487,7 +499,8 @@ public class LicenseRDFAGenerator {
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings,
 			File dir, File textFolder, File htmlFolder, File templateFolder, 
 			File rdfaFolder, File jsonFolder, IModelContainer container,
-			File rdfXmlFolder, File rdfTurtleFolder, File rdfNtFolder) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
+			File rdfXmlFolder, File rdfTurtleFolder, File rdfNtFolder,
+			MarkdownTable markdown) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseJSONFile licJson = new LicenseJSONFile();
@@ -544,6 +557,7 @@ public class LicenseRDFAGenerator {
 				LicenseContainer onlyThisLicense = new LicenseContainer();
 				licenseClone.createResource(onlyThisLicense);
 				writeRdf(onlyThisLicense, rdfXmlFolder, rdfTurtleFolder, rdfNtFolder, licHtmlFileName);
+				markdown.addLicense(license, false);
 				license.createResource(container);
 			}
 		}
@@ -581,6 +595,7 @@ public class LicenseRDFAGenerator {
 			}
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
 			Files.write(SpdxLicenseTemplateHelper.formatEscapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
+			markdown.addLicense(deprecatedLicense.getLicense(), true);
 		}
 		File tocJsonFile = new File(dir.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
 		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_HTML_FILE_NAME);
