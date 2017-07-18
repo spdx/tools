@@ -206,14 +206,19 @@ public class TagToRDF {
 		NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
 //		TagValueLexer lexer = new TagValueLexer(new DataInputStream(nci));
 //		TagValueParser parser = new TagValueParser(lexer);
-		HandBuiltParser parser = new HandBuiltParser(nci);
-		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
-		parser.setBehavior(new BuildDocument(result, constants, warnings));
-		parser.data();
-		if (result[0] == null) {
-			throw(new RuntimeException("Unexpected error parsing SPDX tag document - the result is null."));
+		try{
+			HandBuiltParser parser = new HandBuiltParser(nci);
+			SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
+			parser.setBehavior(new BuildDocument(result, constants, warnings));
+			parser.data();
+			if (result[0] == null) {
+				throw(new RuntimeException("Unexpected error parsing SPDX tag document - the result is null."));
+			}
+			return result[0];
 		}
-		return result[0];
+		catch (RecognitionException e) {
+			throw(new RecognitionException(e.getMessage()));
+		}
 	}
 
 
