@@ -111,7 +111,7 @@ public class HandBuiltParser {
 				nextLine = textInput.readLine();
 			}
 			if (inTextBlock) {
-				throw(new RecognitionException("Unterminated text block.  Expecting "+END_TEXT));
+				throw(new RecognitionException("Unterminated text block at line " + (textInput.getCurrentLineNo()) + " Expecting "+END_TEXT ));
 			}
 			this.buildDocument.exit();
 		} finally {
