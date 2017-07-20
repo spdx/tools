@@ -827,13 +827,13 @@ public class BuildDocument implements TagValueBehavior {
 				relationshipType, lineNumber);
 	}
 
-	private void checkAnalysisNull() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException {
+	private void checkAnalysisNull() throws InvalidSpdxTagFileException, InvalidSPDXAnalysisException,InvalidFileFormatException {
 		if (this.analysis == null) {
 			if (this.specVersion != null && this.specVersion.compareTo("SPDX-2.0") < 0) {
 				result[0] = new SpdxDocumentContainer(generateDocumentNamespace());
 				this.analysis = result[0].getSpdxDocument();
 			} else {
-				throw(new InvalidSpdxTagFileException("The SPDX Document Namespace must be set before other SPDX document properties are set."));
+				throw(new InvalidFileFormatException("The SPDX Document Namespace must be set before other SPDX document properties are set."));
 			}
 		}
 	}
@@ -1366,7 +1366,7 @@ public class BuildDocument implements TagValueBehavior {
 	 * @throws InvalidSpdxTagFileException 
 	 */
 	@SuppressWarnings("deprecation")
-	private void fixFileAndSnippetDependencies() throws InvalidSPDXAnalysisException, InvalidSpdxTagFileException {
+	private void fixFileAndSnippetDependencies() throws InvalidSPDXAnalysisException, InvalidSpdxTagFileException,InvalidFileFormatException {
 		// be prepared - it is complicate to make this efficient
 		// the HashMap fileDependencyMap contains a map from a file name to all SPDX files which
 		// reference that file name as a dependency

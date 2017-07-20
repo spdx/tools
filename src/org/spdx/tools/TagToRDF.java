@@ -34,6 +34,8 @@ import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.tag.BuildDocument;
 import org.spdx.tag.CommonCode;
 import org.spdx.tag.HandBuiltParser;
+import org.spdx.tag.InvalidFileFormatException;
+import org.spdx.tag.InvalidSpdxTagFileException;
 import org.spdx.tag.NoCommentInputStream;
 
 import antlr.RecognitionException;
@@ -200,7 +202,7 @@ public class TagToRDF {
 	 * @throws Exception
 	 */
 	public static SpdxDocumentContainer convertTagFileToRdf(
-			InputStream spdxTagFile, String outputFormat, List<String> warnings) throws RecognitionException, TokenStreamException, Exception  {
+			InputStream spdxTagFile, String outputFormat, List<String> warnings) throws RecognitionException, TokenStreamException,InvalidSpdxTagFileException,InvalidFileFormatException, Exception  {
 		// read the tag-value constants from a file
 		Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 		NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
@@ -215,9 +217,15 @@ public class TagToRDF {
 				throw(new RuntimeException("Unexpected error parsing SPDX tag document - the result is null."));
 			}
 			return result[0];
-		}
-		catch (RecognitionException e) {
-			throw(new RecognitionException(e.getMessage()));
+		} catch (RecognitionException e) {
+			// error in tag value file
+			throw(new InvalidSpdxTagFileException(e.getMessage()));
+		} catch (InvalidFileFormatException e) {
+			// invalid spdx file format
+			throw(new InvalidFileFormatException(e.getMessage()));
+		} catch (Exception e){
+			// If any other exception - assume this is an RDF/XML file.
+			throw(new Exception(e.getMessage()));
 		}
 	}
 
