@@ -52,6 +52,8 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxPackage;
+import org.spdx.tag.InvalidFileFormatException;
+import org.spdx.tag.InvalidSpdxTagFileException;
 
 import com.google.common.base.Joiner;
 
@@ -76,8 +78,9 @@ public class CompareSpdxDocs {
 
 	/**
 	 * @param args CompareFile1, CompareFile2, optional output file
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		if (args.length < MIN_ARGS) {
 			System.out.println("Insufficient arguments");
 			usage();
@@ -1130,7 +1133,7 @@ public class CompareSpdxDocs {
 	 * @param spdxDocFileName File name of either an RDF or Tag formated SPDX file
 	 * @return
 	 */
-	protected static SpdxDocument openRdfOrTagDoc(String spdxDocFileName, List<String> warnings) throws SpdxCompareException {
+	protected static SpdxDocument openRdfOrTagDoc(String spdxDocFileName, List<String> warnings) throws SpdxCompareException  {
 		File spdxDocFile = new File(spdxDocFileName);
 		if (!spdxDocFile.exists()) {
 			throw(new SpdxCompareException("SPDX File "+spdxDocFileName+" does not exist."));
@@ -1146,6 +1149,9 @@ public class CompareSpdxDocs {
 			retval = convertTagValueToRdf(spdxDocFile, warnings);
 			logger.info("Document identified as SPDX tag/value.");
 		} catch (SpdxCompareException e) {
+			errorDetails = e.getMessage();
+			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: " + errorDetails));
+		} catch (Exception e){
 			// Ignore - assume this is an RDF/XML file.
 			errorDetails = e.getMessage();
 		}
@@ -1155,13 +1161,13 @@ public class CompareSpdxDocs {
 				retval = SPDXDocumentFactory.createSpdxDocument(spdxDocFileName);
 				logger.info("Document identified as SPDX RDF/XML.");
 			} catch (IOException e) {
-				errorDetails += e.getMessage();
+				errorDetails = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			} catch (InvalidSPDXAnalysisException e) {
-				errorDetails += e.getMessage();
+				errorDetails = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			} catch (Exception e) {
-				errorDetails += e.getMessage();
+				errorDetails = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			}
 		}
@@ -1176,18 +1182,24 @@ public class CompareSpdxDocs {
 	 * @param tagValueFile Input file in tag/value format
 	 * @param tempRdfFile File to output the generated RDF file (must already exist - file is overwritten)
 	 */
-	private static SpdxDocument convertTagValueToRdf(File tagValueFile, List<String> warnings) throws SpdxCompareException {
+	private static SpdxDocument convertTagValueToRdf(File tagValueFile, List<String> warnings) throws SpdxCompareException,Exception {
 		FileInputStream in = null;
 		try {
 			in = new FileInputStream(tagValueFile);
 			SpdxDocument result = TagToRDF.convertTagFileToRdf(in, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings).getSpdxDocument();
 			return result;
 		} 
-		catch (RecognitionException e){
+		catch (InvalidSpdxTagFileException e){
+			// error in tag value file
+			throw(new SpdxCompareException(e.getMessage(),e));
+		}
+		catch (InvalidFileFormatException e){
+			// invalid spdx file format
 			throw(new SpdxCompareException(e.getMessage(),e));
 		}
 		catch (Exception e) {
-			throw(new SpdxCompareException("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
+			// Ignore - assume this is an RDF/XML file.
+			throw(new Exception("Error converting tag/value to RDF/XML format: "+e.getMessage(),e));
 		} finally {
 			if (in != null) {
 				try {
