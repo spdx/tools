@@ -1182,7 +1182,7 @@ public class CompareSpdxDocs {
 	 * @param tagValueFile Input file in tag/value format
 	 * @param tempRdfFile File to output the generated RDF file (must already exist - file is overwritten)
 	 */
-	private static SpdxDocument convertTagValueToRdf(File tagValueFile, List<String> warnings) throws SpdxCompareException,Exception {
+	protected static SpdxDocument convertTagValueToRdf(File tagValueFile, List<String> warnings) throws SpdxCompareException,Exception {
 		FileInputStream in = null;
 		try {
 			in = new FileInputStream(tagValueFile);
