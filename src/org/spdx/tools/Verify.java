@@ -16,10 +16,14 @@
 */
 package org.spdx.tools;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.spdx.compare.SpdxCompareException;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxDocument;
 
 /**
@@ -93,6 +97,87 @@ public class Verify {
 				if (!found) {
 					retval.add(verifyMsg);
 				}
+			}
+		}
+		return retval;		
+	}
+	
+	/**
+	 * Verify a tag/value file
+	 * @param filePath File path to the SPDX Tag Value file to be verified
+	 * @return A list of verification errors - if empty, the SPDX file is valid
+	 * @throws SpdxVerificationException Errors where the SPDX Tag Value file can not be parsed or the filename is invalid
+	 */
+	public static List<String> verifyTagFile(String filePath) throws SpdxVerificationException {
+		SpdxDocument doc = null;
+		List<String> parserWarnings = new ArrayList<String>();
+		File spdxDocFile = new File(filePath);
+		if (!spdxDocFile.exists()) {
+			throw(new SpdxVerificationException("SPDX File "+filePath+" does not exist."));
+		}
+		if (!spdxDocFile.canRead()) {
+			throw(new SpdxVerificationException("SPDX File "+filePath+" can not be read."));
+		}
+		try {
+			// Try to open the tag value file
+			doc = CompareSpdxDocs.convertTagValueToRdf(spdxDocFile, parserWarnings);
+		} catch (SpdxCompareException e) {
+			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
+		} catch (Exception e) {
+			throw new SpdxVerificationException("Not a valid SPDX Tag Value File Format.");
+		}
+		List<String> verify = doc.verify();
+		List<String> retval = new ArrayList<String>();
+		if (!verify.isEmpty()) {
+			retval.addAll(parserWarnings);
+			for (String verifyMsg:verify) {	
+				// Add any un-duplicated warnings and errors
+				boolean found = false;
+				for (String parserWarning:parserWarnings) {
+					if (parserWarning.contains(verifyMsg)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					retval.add(verifyMsg);
+				}
+			}
+		}
+		return retval;		
+	}
+	
+	/**
+	 * Verify an RDF/XML file
+	 * @param filePath File path to the SPDX RDF/XML file to be verified
+	 * @return SpdxDocument 
+	 * @throws SpdxVerificationException Errors where the SPDX RDF/XML file can not be parsed or the filename is invalid
+	 */
+	public static List<String> verifyRDFFile(String filePath) throws SpdxVerificationException {
+		SpdxDocument doc = null;
+		File spdxDocFile = new File(filePath);
+		// Check whether file exists and can be read
+		if (!spdxDocFile.exists()) {
+			throw(new SpdxVerificationException("SPDX File "+filePath+" does not exist."));
+		}
+		if (!spdxDocFile.canRead()) {
+			throw(new SpdxVerificationException("SPDX File "+filePath+" can not be read."));
+		}
+		try {
+			// Try to open the file as an RDF/XML file.
+			doc = SPDXDocumentFactory.createSpdxDocument(filePath);
+		} catch (IOException e) {
+			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
+		} catch (InvalidSPDXAnalysisException e) {
+			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
+		} catch (Exception e) {
+			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
+		}
+		List<String> verify = doc.verify();
+		List<String> retval = new ArrayList<String>();
+		if (!verify.isEmpty()) {
+			for (String verifyMsg:verify) {	
+				retval.add(verifyMsg);
 			}
 		}
 		return retval;		
