@@ -1143,17 +1143,19 @@ public class CompareSpdxDocs {
 		}
 
 		SpdxDocument retval = null;
-		String errorDetails = "(no error details available)";
+		String errorDetails1 = "(no error details available)";
+		String errorDetails2 = "(no error details available)";
 		try {
 			// Try to open the file as a tag/value file first.
 			retval = convertTagValueToRdf(spdxDocFile, warnings);
 			logger.info("Document identified as SPDX tag/value.");
 		} catch (SpdxCompareException e) {
-			errorDetails = e.getMessage();
-			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: " + errorDetails));
+			// For invalid Tag/value files
+			errorDetails1 = e.getMessage();
+			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: " + errorDetails1));
 		} catch (Exception e){
 			// Ignore - assume this is an RDF/XML file.
-			errorDetails = e.getMessage();
+			errorDetails1 = e.getMessage();
 		}
 		if (retval == null) {
 			try {
@@ -1161,18 +1163,18 @@ public class CompareSpdxDocs {
 				retval = SPDXDocumentFactory.createSpdxDocument(spdxDocFileName);
 				logger.info("Document identified as SPDX RDF/XML.");
 			} catch (IOException e) {
-				errorDetails = e.getMessage();
+				errorDetails2 = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			} catch (InvalidSPDXAnalysisException e) {
-				errorDetails = e.getMessage();
+				errorDetails2 = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			} catch (Exception e) {
-				errorDetails = e.getMessage();
+				errorDetails2 = e.getMessage();
 				// Ignore - unrecognized files are handled below.
 			}
 		}
 		if (retval == null) {
-			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format: " + errorDetails));
+			throw(new SpdxCompareException("File "+spdxDocFileName+" is not a recognized RDF/XML or tag/value format. While verifying for Tag/Value format: " + errorDetails1 + ". While verifying for RDF/XML format: "+ errorDetails2 ));
 		}
 		return retval;
 	}
@@ -1194,8 +1196,8 @@ public class CompareSpdxDocs {
 			throw(new SpdxCompareException(e.getMessage(),e));
 		}
 		catch (InvalidFileFormatException e){
-			// invalid spdx file format
-			throw(new SpdxCompareException(e.getMessage(),e));
+			// Ignore - invalid file format or RDF/XML file
+			throw(new Exception(e.getMessage(),e));
 		}
 		catch (Exception e) {
 			// Ignore - assume this is an RDF/XML file.
