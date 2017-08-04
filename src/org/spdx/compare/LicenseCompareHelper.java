@@ -95,6 +95,7 @@ public class LicenseCompareHelper {
 		EQUIV_TOKENS.put("copyright-holder", "copyright-owner");   EQUIV_TOKENS.put("copyright-owner", "copyright-holder");
 		EQUIV_TOKENS.put("sub-license", "sublicense"); EQUIV_TOKENS.put("sublicense", "sub-license");
 		EQUIV_TOKENS.put("noninfringement", "non-infringement"); EQUIV_TOKENS.put("non-infringement", "noninfringement");
+		EQUIV_TOKENS.put("(c)", "©");
 	}
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
 	static final String PER_CENT_REGEX = "(?i)per\\scent";
