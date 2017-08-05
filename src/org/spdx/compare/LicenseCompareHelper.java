@@ -17,11 +17,13 @@
 */
 package org.spdx.compare;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.spdx.compare.CompareTemplateOutputHandler.DifferenceDescription;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -50,53 +52,56 @@ public class LicenseCompareHelper {
 		.add("//").add("/*").add("*/").add("/**").add("#").add("##")
 		.add("*").add("\"\"\"").add("=begin").add("=end").build();
 	
-	protected static final Map<String, String> EQUIV_TOKENS = Maps.newHashMap();
+	protected static final Map<String, String> NORMALIZE_TOKENS = Maps.newHashMap();
 	
 	static {
 		//TODO: These should be moved to a property file
-		EQUIV_TOKENS.put("acknowledgement","acknowledgment");   EQUIV_TOKENS.put("acknowledgment","acknowledgement");   
-		EQUIV_TOKENS.put("analog","analogue");   EQUIV_TOKENS.put("analogue","analog");   
-		EQUIV_TOKENS.put("analyze","analyse");   EQUIV_TOKENS.put("analyse","analyze");   
-		EQUIV_TOKENS.put("artifact","artefact");   EQUIV_TOKENS.put("artefact","artifact");   
-		EQUIV_TOKENS.put("authorization","authorisation");   EQUIV_TOKENS.put("authorisation","authorization");   
-		EQUIV_TOKENS.put("authorized","authorised");   EQUIV_TOKENS.put("authorised","authorized");   
-		EQUIV_TOKENS.put("caliber","calibre");   EQUIV_TOKENS.put("calibre","caliber");   
-		EQUIV_TOKENS.put("canceled","cancelled");   EQUIV_TOKENS.put("cancelled","canceled");   
-		EQUIV_TOKENS.put("apitalizations","apitalisations");   EQUIV_TOKENS.put("apitalisations","apitalizations");   
-		EQUIV_TOKENS.put("catalog","catalogue");   EQUIV_TOKENS.put("catalogue","catalog");   
-		EQUIV_TOKENS.put("categorize","categorise");   EQUIV_TOKENS.put("categorise","categorize");   
-		EQUIV_TOKENS.put("center","centre");   EQUIV_TOKENS.put("centre","center");   
-		EQUIV_TOKENS.put("emphasized","emphasised");   EQUIV_TOKENS.put("emphasised","emphasized");   
-		EQUIV_TOKENS.put("favor","favour");   EQUIV_TOKENS.put("favour","favor");   
-		EQUIV_TOKENS.put("favorite","favourite");   EQUIV_TOKENS.put("favourite","favorite");   
-		EQUIV_TOKENS.put("fulfill","fulfil");   EQUIV_TOKENS.put("fulfil","fulfill");   
-		EQUIV_TOKENS.put("fulfillment","fulfilment");   EQUIV_TOKENS.put("fulfilment","fulfillment");   
-		EQUIV_TOKENS.put("initialize","initialise");   EQUIV_TOKENS.put("initialise","initialize");   
-		EQUIV_TOKENS.put("judgement","judgment");   EQUIV_TOKENS.put("judgment","judgement");   
-		EQUIV_TOKENS.put("labeling","labelling");   EQUIV_TOKENS.put("labelling","labeling");   
-		EQUIV_TOKENS.put("labor","labour");   EQUIV_TOKENS.put("labour","labor");   
-		EQUIV_TOKENS.put("license","licence");   EQUIV_TOKENS.put("licence","license");   
-		EQUIV_TOKENS.put("maximize","maximise");   EQUIV_TOKENS.put("maximise","maximize");   
-		EQUIV_TOKENS.put("modeled","modelled");   EQUIV_TOKENS.put("modelled","modeled");   
-		EQUIV_TOKENS.put("modeling","modelling");   EQUIV_TOKENS.put("modelling","modeling");   
-		EQUIV_TOKENS.put("offense","offence");   EQUIV_TOKENS.put("offence","offense");   
-		EQUIV_TOKENS.put("optimize","optimise");   EQUIV_TOKENS.put("optimise","optimize");   
-		EQUIV_TOKENS.put("organization","organisation");   EQUIV_TOKENS.put("organisation","organization");   
-		EQUIV_TOKENS.put("organize","organise");   EQUIV_TOKENS.put("organise","organize");   
-		EQUIV_TOKENS.put("practice","practise");   EQUIV_TOKENS.put("practise","practice");   
-		EQUIV_TOKENS.put("program","programme");   EQUIV_TOKENS.put("programme","program");   
-		EQUIV_TOKENS.put("realize","realise");   EQUIV_TOKENS.put("realise","realize");   
-		EQUIV_TOKENS.put("recognize","recognise");   EQUIV_TOKENS.put("recognise","recognize");   
-		EQUIV_TOKENS.put("signaling","signalling");   EQUIV_TOKENS.put("signalling","signaling");   
-		EQUIV_TOKENS.put("utilization","utilisation");   EQUIV_TOKENS.put("utilisation","utilization");   
-		EQUIV_TOKENS.put("while","whilst");   EQUIV_TOKENS.put("whilst","while");   
-		EQUIV_TOKENS.put("wilfull","wilful");   EQUIV_TOKENS.put("wilful","wilfull");   
-		EQUIV_TOKENS.put("noncommercial","non-commercial");   EQUIV_TOKENS.put("non-commercial","noncommercial");    
-		EQUIV_TOKENS.put("copyright-holder", "copyright-owner");   EQUIV_TOKENS.put("copyright-owner", "copyright-holder");
-		EQUIV_TOKENS.put("sub-license", "sublicense"); EQUIV_TOKENS.put("sublicense", "sub-license");
-		EQUIV_TOKENS.put("noninfringement", "non-infringement"); EQUIV_TOKENS.put("non-infringement", "noninfringement");
-		EQUIV_TOKENS.put("(c)", "©");
+		NORMALIZE_TOKENS.put("acknowledgment","acknowledgement");   
+		NORMALIZE_TOKENS.put("analogue","analog");   
+		NORMALIZE_TOKENS.put("analyse","analyze");   
+		NORMALIZE_TOKENS.put("artefact","artifact");   
+		NORMALIZE_TOKENS.put("authorisation","authorization");   
+		NORMALIZE_TOKENS.put("authorised","authorized");   
+		NORMALIZE_TOKENS.put("calibre","caliber");   
+		NORMALIZE_TOKENS.put("cancelled","canceled");   
+		NORMALIZE_TOKENS.put("apitalisations","apitalizations");   
+		NORMALIZE_TOKENS.put("catalogue","catalog");   
+		NORMALIZE_TOKENS.put("categorise","categorize");   
+		NORMALIZE_TOKENS.put("centre","center");   
+		NORMALIZE_TOKENS.put("emphasised","emphasized");   
+		NORMALIZE_TOKENS.put("favour","favor");   
+		NORMALIZE_TOKENS.put("favourite","favorite");   
+		NORMALIZE_TOKENS.put("fulfil","fulfill");   
+		NORMALIZE_TOKENS.put("fulfilment","fulfillment");   
+		NORMALIZE_TOKENS.put("initialise","initialize");   
+		NORMALIZE_TOKENS.put("judgment","judgement");   
+		NORMALIZE_TOKENS.put("labelling","labeling");   
+		NORMALIZE_TOKENS.put("labour","labor");   
+		NORMALIZE_TOKENS.put("licence","license");   
+		NORMALIZE_TOKENS.put("maximise","maximize");   
+		NORMALIZE_TOKENS.put("modelled","modeled");   
+		NORMALIZE_TOKENS.put("modelling","modeling");   
+		NORMALIZE_TOKENS.put("offence","offense");   
+		NORMALIZE_TOKENS.put("optimise","optimize");   
+		NORMALIZE_TOKENS.put("organisation","organization");   
+		NORMALIZE_TOKENS.put("organise","organize");   
+		NORMALIZE_TOKENS.put("practise","practice");   
+		NORMALIZE_TOKENS.put("programme","program");   
+		NORMALIZE_TOKENS.put("realise","realize");   
+		NORMALIZE_TOKENS.put("recognise","recognize");   
+		NORMALIZE_TOKENS.put("signalling","signaling");   
+		NORMALIZE_TOKENS.put("utilisation","utilization");   
+		NORMALIZE_TOKENS.put("whilst","while");   
+		NORMALIZE_TOKENS.put("wilful","wilfull");   
+		NORMALIZE_TOKENS.put("non-commercial","noncommercial");    
+		NORMALIZE_TOKENS.put("copyright-owner", "copyright-holder");
+		NORMALIZE_TOKENS.put("sublicense", "sub-license");
+		NORMALIZE_TOKENS.put("non-infringement", "noninfringement");
+		NORMALIZE_TOKENS.put("©", "(c)");
+		NORMALIZE_TOKENS.put("copyright", "(c)");
 	}
+	
+	
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
 	static final String PER_CENT_REGEX = "(?i)per\\scent";
 	static final Pattern PER_CENT_PATTERN = Pattern.compile(PER_CENT_REGEX, Pattern.CASE_INSENSITIVE);
@@ -221,12 +226,16 @@ public class LicenseCompareHelper {
 			if (s1.equals(s2)) {
 				return true;
 			} else {
-				// check for equivalent tokens
-				if (EQUIV_TOKENS.get(s1) != null) {
-					return s2.equals(EQUIV_TOKENS.get(s1));
-				} else {
-					return false;
+				// check for equivalent tokens by normalizing the tokens
+				String ns1 = NORMALIZE_TOKENS.get(s1);
+				if (ns1 == null) {
+					ns1 = s1;
 				}
+				String ns2 = NORMALIZE_TOKENS.get(s2);
+				if (ns2 == null) {
+					ns2 = s2;
+				}
+				return ns1.equals(ns2);
 			}
 		}
 	}
@@ -329,18 +338,23 @@ public class LicenseCompareHelper {
 	 * @return True if the license text is the same per the license matching guidelines
 	 * @throws SpdxCompareException
 	 */
-	public static boolean isTextStandardLicense(SpdxListedLicense license, String compareText) throws SpdxCompareException {
+	public static DifferenceDescription isTextStandardLicense(SpdxListedLicense license, String compareText) throws SpdxCompareException {
 		String licenseTemplate = license.getStandardLicenseTemplate();
 		if (licenseTemplate == null || licenseTemplate.trim().isEmpty()) {
-			return isLicenseTextEquivalent(license.getLicenseText(), compareText);
+			licenseTemplate = license.getLicenseText();
 		}
-		CompareTemplateOutputHandler compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		CompareTemplateOutputHandler compareTemplateOutputHandler = null;
+		try {
+			compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		} catch (IOException e1) {
+			throw(new SpdxCompareException("IO Error reading the compare text: "+e1.getMessage(),e1));
+		}
 		try {
 			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, compareTemplateOutputHandler);
 		} catch (LicenseTemplateRuleException e) {
 			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
 		}
-		return compareTemplateOutputHandler.matches();
+		return compareTemplateOutputHandler.getDifferences();
 	}
 	
 	/**
@@ -356,7 +370,7 @@ public class LicenseCompareHelper {
 		List<String> matchingIds  = Lists.newArrayList();
 		for (String stdLicId : stdLicenseIds) {
 			SpdxListedLicense license = LicenseInfoFactory.getListedLicenseById(stdLicId);
-			if (isTextStandardLicense(license, licenseText)) {
+			if (!isTextStandardLicense(license, licenseText).isDifferenceFound()) {
 				matchingIds.add(license.getLicenseId());
 			}
 		}

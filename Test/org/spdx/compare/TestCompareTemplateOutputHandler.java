@@ -63,9 +63,10 @@ public class TestCompareTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.compare.CompareTemplateOutputHandler#CompareTemplateOutputHandler(java.lang.String)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testCompareTemplateOutputHandler() {
+	public void testCompareTemplateOutputHandler() throws Exception {
 		CompareTemplateOutputHandler ctoh = new CompareTemplateOutputHandler("test");
 		assertTrue(ctoh.matches());
 	}
@@ -75,7 +76,7 @@ public class TestCompareTemplateOutputHandler {
 	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
-	public void testOptionalText() throws LicenseTemplateRuleException {
+	public void testOptionalText()  throws Exception {
 		String l1 = "Line 1\n";
 		String l2 = "Line 2\n";
 		String l3 = "Line 3\n";
@@ -127,7 +128,7 @@ public class TestCompareTemplateOutputHandler {
 	 * Test method for {@link org.spdx.compare.CompareTemplateOutputHandler#textEquivalent(java.lang.String)}.
 	 */
 	@Test
-	public void testTextEquivalent() {
+	public void testTextEquivalent() throws Exception {
 		String l1 = "Line 1 with // skippable ## /** stuff\n";
 		String l1S = "Line 1 with skippable stuff\n";
 		String l2 = "## Line 2 with replaceable analogue cancelled stuff\n";
@@ -170,7 +171,7 @@ public class TestCompareTemplateOutputHandler {
 	 * Test method for {@link org.spdx.compare.CompareTemplateOutputHandler#normalText(java.lang.String)}.
 	 */
 	@Test
-	public void testNormalText() {
+	public void testNormalText() throws Exception {
 		String line1 = "this is line one\n";
 		String line2 = "this line 2 is another line\n";
 		String line3 = "yet another third line\n";
@@ -213,7 +214,7 @@ public class TestCompareTemplateOutputHandler {
 	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
-	public void testVariableRule() throws LicenseTemplateRuleException {
+	public void testVariableRule()  throws Exception {
 		String line1 = "this is line one\n";
 		String line2 = "this line 2 is another line\n";
 		String line2Match = "this\\sline\\s.+another\\sline";
