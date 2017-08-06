@@ -17,7 +17,7 @@
 package org.spdx.tools;
 
 /**
- * Default Exception thrown to the Onlien Tool
+ * Default Exception thrown to the Online Tool
  * 
  * @author Rohit Lodha
  *
