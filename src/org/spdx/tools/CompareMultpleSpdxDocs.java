@@ -110,8 +110,56 @@ public class CompareMultpleSpdxDocs {
 			}
 		}
 	}
-
-
+	
+	/**
+	 * 
+	 * @param args args[0] is the output Excel file name, all other args are SPDX document file names
+	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
+	 */
+	public static void onlineFunction(String[] args) throws OnlineToolException{
+		// Arguments length( 14>=args length>=3 ) will checked in the Python Code
+		File outputFile = new File(args[0]);
+		if (outputFile.exists()) {
+			System.out.println("Output file "+args[0]+" already exists.");
+			// Output File name will be checked in the Python code for no clash, but if still found
+			throw new OnlineToolException("Output file "+args[0]+" already exists. Change the name of the result file.");
+		}
+		SpdxDocument[] compareDocs = new SpdxDocument[args.length-1];
+		String[] docNames = new String[args.length-1];
+		@SuppressWarnings("unchecked")
+		List<String>[] verificationErrors = new List[args.length-1];
+		for (int i = 1; i < args.length; i++) {
+			// CompareSpdxDocs.openRdfOrTagDoc and SpdxDocument.verify function already called in Python code- Verify.verify
+			docNames[i-1]  = CompareSpdxDocs.convertDocName(args[i]);
+		}
+		MultiDocumentSpreadsheet outSheet = null;
+		try {
+			outSheet = new MultiDocumentSpreadsheet(outputFile, true, false);
+			outSheet.importVerificationErrors(verificationErrors, docNames);
+			SpdxComparer comparer = new SpdxComparer();
+			comparer.compare(compareDocs);
+			outSheet.importCompareResults(comparer, docNames);
+		} catch (SpreadsheetException e) {
+			System.out.println("Unable to create output spreadsheet: "+e.getMessage());
+			throw new OnlineToolException("Unable to create output spreadsheet: "+e.getMessage());
+		} catch (InvalidSPDXAnalysisException e) {
+			System.out.println("Invalid SPDX analysis: "+e.getMessage());
+			throw new OnlineToolException("Invalid SPDX analysis: "+e.getMessage());
+		} catch (SpdxCompareException e) {
+			System.out.println("Error comparing SPDX documents: "+e.getMessage());
+			throw new OnlineToolException("Error comparing SPDX documents: "+e.getMessage());
+		} finally {
+			if (outSheet != null) {
+				try {
+					outSheet.close();
+				} catch (SpreadsheetException e) {
+					System.out.println("Warning - error closing spreadsheet: "+e.getMessage());
+					throw new OnlineToolException("Warning - error closing spreadsheet: "+e.getMessage());
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 */
