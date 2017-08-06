@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -206,7 +207,7 @@ public class RdfToHtml {
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * 
 	 */
-	public static void onlineFunction(String[] args) throws OnlineToolException{
+	public static List<String> onlineFunction(String[] args) throws OnlineToolException{
 		// Arguments length(args length== 2 ) will checked in the Python Code
 		File spdxFile = new File(args[0]);
 		// Output File name will be checked in the Python code for no clash, but if still found
@@ -234,7 +235,18 @@ public class RdfToHtml {
 		} catch (InvalidSPDXAnalysisException e2) {
 			System.out.println("Invalid SPDX Document: "+e2.getMessage());
 			throw new OnlineToolException("Invalid SPDX Document: "+e2.getMessage());
+		} catch (Exception e) {
+			System.out.println("Error creating SPDX Document: "+e.getMessage());
+			throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 		}
+		List<String> verify = new ArrayList<String>();
+		verify = doc.verify();
+	    if (verify != null && verify.size() > 0) {
+	         System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
+	         for (int i = 0; i < verify.size(); i++) {
+	             System.out.println("\t" + verify.get(i));
+	         }
+	    }
 		String documentName = doc.getName();
 		List<File> filesToCreate = Lists.newArrayList();
 		String docHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + DOC_HTML_FILE_POSTFIX;
@@ -299,6 +311,7 @@ public class RdfToHtml {
 				writer = null;
 			}
 		}
+		return verify;
 	}
 	
 	/**

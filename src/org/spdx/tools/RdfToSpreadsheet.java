@@ -163,8 +163,11 @@ public class RdfToSpreadsheet {
 			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			throw new OnlineToolException("Error creating SPDX Document: "+ex.getMessage());
 		} catch (IOException e) {
-			System.out.print("Unable to open file :"+args[0]+", "+e.getMessage());
-			throw new OnlineToolException("Unable to open file :"+args[0]+", "+e.getMessage());
+			System.out.print("Error creating SPDX Document:"+args[0]+", "+e.getMessage());
+			throw new OnlineToolException("Error creating SPDX Document:"+args[0]+", "+e.getMessage());
+		} catch (Exception e) {
+			System.out.println("Error creating SPDX Document: "+e.getMessage());
+			throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 		}
 		List<String> verify = new ArrayList<String>();
         if (doc != null) {

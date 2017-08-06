@@ -194,14 +194,19 @@ public class RdfToTag {
 			SpdxDocument doc = null;
 			try {
 				doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
-			} catch (Exception ex) {
-				System.out.print("Error creating SPDX Document: "
-						+ ex.getMessage());
-				throw new OnlineToolException("Error creating SPDX Document: "
-						+ ex.getMessage());
+			} catch (InvalidSPDXAnalysisException ex) {
+				System.out.print("Error creating SPDX Document: "+ex.getMessage());
+				throw new OnlineToolException("Error creating SPDX Document: "+ex.getMessage());
+			} catch (IOException e) {
+				System.out.print("Error creating SPDX Document:"+args[0]+", "+e.getMessage());
+				throw new OnlineToolException("Unable to open file :"+args[0]+", "+e.getMessage());
+			} catch (Exception e) {
+				System.out.println("Error creating SPDX Document: "+e.getMessage());
+				throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 			}
+
 			try {
-				//verify = new LinkedList<String>(); // doc.verify();
+				verify = doc.verify();
 				if (verify.size() > 0) {
 					System.out
 							.println("This SPDX Document is not valid due to:");
