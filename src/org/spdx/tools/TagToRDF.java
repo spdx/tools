@@ -177,7 +177,106 @@ public class TagToRDF {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * @param args args[0] is the Tag Value file to be converted, args[1] is the result RDF file name
+	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
+	 * @return Warnings of the conversion, displayed to the user
+	 */
+	public static List<String> onlineFunction(String[] args) throws OnlineToolException{
+		// Arguments length(args length== 2 ) will checked in the Python Code
+		String outputFormat = DEFAULT_OUTPUT_FORMAT;
+		FileInputStream spdxTagStream;
+		try {
+			spdxTagStream = new FileInputStream(args[0]);
+		} catch (FileNotFoundException ex) {
+			System.out.printf("Tag-Value file %1$s does not exists.%n", args[0]);
+			throw new OnlineToolException("Tag-Value file "+ args[0] + " does not exists.");
+		}
+		File spdxRDFFile = new File(args[1]);
+		// Output File name will be checked in the Python code for no clash, but if still found
+		if (spdxRDFFile.exists()) {
+			System.out.printf("Error: File %1$s already exists - please specify a new file.%n",
+							args[1]);
+			try {
+				spdxTagStream.close();
+			} catch (IOException e) {
+				System.out.println("Warning: Unable to close input file on error.");
+				throw new OnlineToolException("Warning: Unable to close input file on error.");
+			}
+			throw new OnlineToolException("Error: File " + args[1] +" already exists - please specify a new file.");
+		}
 
+		try {
+			if (!spdxRDFFile.createNewFile()) {
+				System.out.println("Could not create the new SPDX RDF file "+ args[1]);
+				try {
+					spdxTagStream.close();
+				} catch (IOException e) {
+					System.out.println("Warning: Unable to close input file on error.");
+					throw new OnlineToolException("Warning: Unable to close input file on error.");
+				}
+				throw new OnlineToolException("Could not create the new SPDX RDF file "+ args[1]);
+			}
+		} catch (IOException e1) {
+			System.out.println("Could not create the new SPDX Tag-Value file "+ args[1]);
+			System.out.println("due to error " + e1.getMessage());
+			try {
+				spdxTagStream.close();
+			} catch (IOException e) {
+				System.out.println("Warning: Unable to close input file on error.");
+				throw new OnlineToolException("Warning: Unable to close input file on error.");
+			}
+			throw new OnlineToolException("Could not create the new SPDX Tag-Value file "+ args[1] + "due to error " + e1.getMessage());
+		}
+
+		FileOutputStream out;
+		try {
+			out = new FileOutputStream(spdxRDFFile);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Could not write to the new SPDX RDF file "+ args[1]);
+			System.out.println("due to error " + e1.getMessage());
+			try {
+				spdxTagStream.close();
+			} catch (IOException e) {
+				System.out.println("Warning: Unable to close input file on error.");
+				throw new OnlineToolException("Warning: Unable to close input file on error.");
+			}
+			throw new OnlineToolException("Could not write to the new SPDX RDF file "+ args[1]+ "due to error " + e1.getMessage());
+		}
+		List<String> warnings = new ArrayList<String>();
+		try {
+			convertTagFileToRdf(spdxTagStream, out, outputFormat, warnings);
+			if (!warnings.isEmpty()) {
+				System.out.println("The following warnings and or verification errors were found:");
+				for (String warning:warnings) {
+					System.out.println("\t"+warning);
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Error creating SPDX Analysis: " + e);
+			throw new OnlineToolException("Error creating SPDX Analysis: " + e.getMessage());
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					System.out.println("Error closing RDF file: " + e.getMessage());
+					throw new OnlineToolException("Error closing RDF file: " + e.getMessage());
+				}
+			}
+			if (spdxTagStream != null) {
+				try {
+					spdxTagStream.close();
+				} catch (IOException e) {
+					System.out.println("Error closing Tag/Value file: " + e.getMessage());
+					throw new OnlineToolException("Error closing Tag/Value file: " + e.getMessage());
+				}
+			}
+		}
+		return warnings;
+	}
 	/**
 	 * Convert a Tag File to an RDF output stream
 	 * @param spdxTagFile File containing a tag/value formatted SPDX file
