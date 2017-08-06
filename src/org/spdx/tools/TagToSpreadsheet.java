@@ -32,7 +32,11 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
 import org.spdx.tag.BuildDocument;
 import org.spdx.tag.CommonCode;
 import org.spdx.tag.HandBuiltParser;
+import org.spdx.tag.InvalidFileFormatException;
+import org.spdx.tag.InvalidSpdxTagFileException;
 import org.spdx.tag.NoCommentInputStream;
+
+import antlr.RecognitionException;
 /**
  * Translates an tag-value file to a SPDX Spreadsheet format Usage:
  * TagToSpreadsheet spdxfile.spdx spreadsheetfile.xls where spdxfile.spdx is a
@@ -157,13 +161,23 @@ public class TagToSpreadsheet {
 			HandBuiltParser parser = new HandBuiltParser(nci);
 			parser.setBehavior(new BuildDocument(result, constants, warnings));
 			parser.data();
+			if (result[0] == null) {
+				throw(new OnlineToolException("Unexpected error parsing SPDX tag document - the result is null."));
+			}
 			if (!warnings.isEmpty()) {
 				System.out.println("The following warnings and or verification errors were found:");
 				for (String warning:warnings) {
 					System.out.println("\t"+warning);
 				}
 			}
+		} catch (RecognitionException e) {
+			// error in tag value file
+			throw(new OnlineToolException(e.getMessage()));
+		} catch (InvalidFileFormatException e) {
+			// invalid spdx file format
+			throw(new OnlineToolException(e.getMessage()));
 		} catch (Exception e) {
+			// If any other exception - assume this is an RDF/XML file.
 			System.err.println("Error creating SPDX Analysis: " + e);
 			throw new OnlineToolException("Error creating SPDX Analysis: " + e);
 		}
