@@ -104,100 +104,12 @@ public class RdfToHtml {
 		if (args.length > MAX_ARGS) {
 			System.out.println("Warning: Extra arguments will be ignored");
 			usage();
-		}		
-		File spdxFile = new File(args[0]);
-		if (!spdxFile.exists()) {
-			System.out.println("SPDX File "+args[0]+" does not exist.");
-			usage();
-			System.exit(ERROR);
-		}
-		if (!spdxFile.canRead()) {
-			System.out.println("Can not read SPDX File "+args[0]+".  Check permissions on the file.");
-			usage();
-			System.exit(ERROR);
-		}
-		File outputDirectory = new File(args[1]);
-		if (!outputDirectory.exists()) {
-			if (!outputDirectory.mkdirs()) {
-				System.out.println("Unable to create output directory");
-				System.exit(ERROR);
-			}
-		}
-		SpdxDocument doc = null;
+		}	
 		try {
-			doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
-		} catch (IOException e2) {
-			System.out.println("IO Error creating the SPDX document");
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
 			System.exit(ERROR);
-		} catch (InvalidSPDXAnalysisException e2) {
-			System.out.println("Invalid SPDX Document: "+e2.getMessage());
-			System.exit(ERROR);
-		}
-		String documentName = doc.getName();
-		List<File> filesToCreate = Lists.newArrayList();
-		String docHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + DOC_HTML_FILE_POSTFIX;
-		File docHtmlFile = new File(docHtmlFilePath);
-		filesToCreate.add(docHtmlFile);
-		String snippetHtmlFilePath = outputDirectory.getPath() + File.separator + SNIPPET_FILE_NAME;
-		File snippetHtmlFile = new File(snippetHtmlFilePath);
-		filesToCreate.add(snippetHtmlFile);
-		String licenseHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + LICENSE_HTML_FILE_POSTFIX;
-		File licenseHtmlFile = new File(licenseHtmlFilePath);
-		filesToCreate.add(licenseHtmlFile);
-		String docFilesHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + DOCUMENT_FILE_HTML_FILE_POSTFIX;
-		File docFilesHtmlFile = new File(docFilesHtmlFilePath);
-		filesToCreate.add(docFilesHtmlFile);
-		List<SpdxPackage> pkgs = null;
-		try {
-			pkgs = doc.getDocumentContainer().findAllPackages();
-		} catch (InvalidSPDXAnalysisException e1) {
-			System.out.println("Error getting packages from the SPDX document: "+e1.getMessage());
-			System.exit(ERROR);
-		}
-		Iterator<SpdxPackage> iter = pkgs.iterator();
-		while (iter.hasNext()) {
-			String packageName = iter.next().getName();
-			String packageHtmlFilePath = outputDirectory.getPath() + File.separator + packageName + 
-					PACKAGE_HTML_FILE_POSTFIX;
-			File packageHtmlFile = new File(packageHtmlFilePath);
-			filesToCreate.add(packageHtmlFile);
-			String packageFilesHtmlFilePath = outputDirectory.getPath() + File.separator + packageName + 
-					PACKAGE_FILE_HTML_FILE_POSTFIX;
-			File packageFilesHtmlFile = new File(packageFilesHtmlFilePath);
-			filesToCreate.add(packageFilesHtmlFile);
-		}
-		Iterator<File> fileIter = filesToCreate.iterator();
-		while (fileIter.hasNext()) {
-			File file = fileIter.next();
-			if (file.exists()) {
-				System.out.println("File "+file.getName()+" already exists.");
-				System.exit(ERROR);
-			}
-		}
-		Writer writer = null;
-		try {
-			rdfToHtml(doc, docHtmlFile, licenseHtmlFile, snippetHtmlFile, docFilesHtmlFile);
-		} catch (IOException e) {
-			System.out.println("IO Error opening SPDX Document");
-			usage();
-			System.exit(ERROR);
-		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Invalid SPDX Document: "+e.getMessage());
-			usage();
-			System.exit(ERROR);
-		} catch (MustacheException e) {
-			System.out.println("Unexpected error reading the HTML template: "+e.getMessage());
-			usage();
-			System.exit(ERROR);
-		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-					System.out.println("Warning: error closing HTML file: "+e.getMessage());
-				}
-				writer = null;
-			}
 		}
 	}
 	
@@ -212,17 +124,14 @@ public class RdfToHtml {
 		File spdxFile = new File(args[0]);
 		// Output File name will be checked in the Python code for no clash, but if still found
 		if (!spdxFile.exists()) {
-			System.out.println("SPDX File "+args[0]+" does not exist.");
 			throw new OnlineToolException("SPDX file " + args[0] +" does not exists.");
 		}
 		if (!spdxFile.canRead()) {
-			System.out.println("Can not read SPDX File "+args[0]+".  Check permissions on the file.");
 			throw new OnlineToolException("Can not read SPDX File "+args[0]+".  Check permissions on the file.");
 		}
 		File outputDirectory = new File(args[1]);
 		if (!outputDirectory.exists()) {
 			if (!outputDirectory.mkdirs()) {
-				System.out.println("Unable to create output directory");
 				throw new OnlineToolException("Unable to create output directory");
 			}
 		}
@@ -230,13 +139,10 @@ public class RdfToHtml {
 		try {
 			doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
 		} catch (IOException e2) {
-			System.out.println("IO Error creating the SPDX document");
 			throw new OnlineToolException("IO Error creating the SPDX document");
 		} catch (InvalidSPDXAnalysisException e2) {
-			System.out.println("Invalid SPDX Document: "+e2.getMessage());
 			throw new OnlineToolException("Invalid SPDX Document: "+e2.getMessage());
 		} catch (Exception e) {
-			System.out.println("Error creating SPDX Document: "+e.getMessage());
 			throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 		}
 		List<String> verify = new ArrayList<String>();
@@ -265,7 +171,6 @@ public class RdfToHtml {
 		try {
 			pkgs = doc.getDocumentContainer().findAllPackages();
 		} catch (InvalidSPDXAnalysisException e1) {
-			System.out.println("Error getting packages from the SPDX document: "+e1.getMessage());
 			throw new OnlineToolException("Error getting packages from the SPDX document: "+e1.getMessage());
 		}
 		Iterator<SpdxPackage> iter = pkgs.iterator();
@@ -284,7 +189,6 @@ public class RdfToHtml {
 		while (fileIter.hasNext()) {
 			File file = fileIter.next();
 			if (file.exists()) {
-				System.out.println("File "+file.getName()+" already exists.");
 				throw new OnlineToolException("File "+file.getName()+" already exists.");
 			}
 		}
@@ -292,20 +196,16 @@ public class RdfToHtml {
 		try {
 			rdfToHtml(doc, docHtmlFile, licenseHtmlFile, snippetHtmlFile, docFilesHtmlFile);
 		} catch (IOException e) {
-			System.out.println("IO Error opening SPDX Document");
 			throw new OnlineToolException("IO Error opening SPDX Document");
 		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Invalid SPDX Document: "+e.getMessage());
 			throw new OnlineToolException("Invalid SPDX Document: "+e.getMessage());
 		} catch (MustacheException e) {
-			System.out.println("Unexpected error reading the HTML template: "+e.getMessage());
 			throw new OnlineToolException("Unexpected error reading the HTML template: "+e.getMessage());
 		} finally {
 			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
-					System.out.println("Warning: error closing HTML file: "+e.getMessage());
 					throw new OnlineToolException("Warning: error closing HTML file: "+e.getMessage());
 				}
 				writer = null;
