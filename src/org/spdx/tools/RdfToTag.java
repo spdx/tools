@@ -69,79 +69,12 @@ public class RdfToTag {
 			System.out.printf("Warning: Extra arguments will be ignored%n");
 			usage();
 		}
-		File spdxRdfFile = new File(args[0]);
-		if (!spdxRdfFile.exists()) {
-			System.out.printf("RDF file %1$s does not exists.%n", args[0]);
-			return;
-		}
-		File spdxTagFile = new File(args[1]);
-		if (spdxTagFile.exists()) {
-			System.out
-					.printf("Error: File %1$s already exists - please specify a new file.%n",
-							args[1]);
-			return;
-		}
 		try {
-			if (!spdxTagFile.createNewFile()) {
-				System.out.println("Could not create the new SPDX Tag file "
-						+ args[1]);
-				usage();
-				return;
-			}
-		} catch (IOException e1) {
-			System.out.println("Could not create the new SPDX Tag file "
-					+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
 			usage();
 			return;
-		}
-		PrintWriter out = null;
-		try {
-			try {
-				out = new PrintWriter(spdxTagFile, "UTF-8");
-			} catch (IOException e1) {
-				System.out.println("Could not write to the new SPDX Tag file "
-						+ args[1]);
-				System.out.println("due to error " + e1.getMessage());
-				usage();
-				return;
-			}
-			SpdxDocument doc = null;
-			try {
-				doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
-			} catch (Exception ex) {
-				System.out.print("Error creating SPDX Document: "
-						+ ex.getMessage());
-				return;
-			}
-			try {
-				List<String> verify = new LinkedList<String>(); // doc.verify();
-				if (verify.size() > 0) {
-					System.out
-							.println("This SPDX Document is not valid due to:");
-					for (int i = 0; i < verify.size(); i++) {
-						System.out.println("\t" + verify.get(i));
-					}
-				}
-				// read the tag-value constants from a file
-				Properties constants = CommonCode
-						.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
-				// print document to a file using tag-value format
-				CommonCode.printDoc(doc, out, constants);
-			} catch (InvalidSPDXAnalysisException e) {
-				System.out
-						.print("Error transalting SPDX Document to tag-value format: "
-								+ e.getMessage());
-				return;
-			} catch (Exception e) {
-				System.out.print("Unexpected error displaying SPDX Document: "
-						+ e.getMessage());
-			}
-		} finally {
-			if (out != null) {
-				out.flush();
-				out.close();
-			}
 		}
 	}
 
@@ -156,26 +89,18 @@ public class RdfToTag {
 		File spdxRdfFile = new File(args[0]);
 		// Output File name will be checked in the Python code for no clash, but if still found
 		if (!spdxRdfFile.exists()) {
-			System.out.printf("RDF file %1$s does not exists.%n", args[0]);
 			throw new OnlineToolException("RDF file " + args[0] +" does not exists.");
 		}
 		File spdxTagFile = new File(args[1]);
 		if (spdxTagFile.exists()) {
-			System.out.printf("Error: File %1$s already exists - please specify a new file.%n",
-							args[1]);
 			throw new OnlineToolException("Error: File " +args[1] +" already exists - please specify a new file.");
 		}
 		try {
 			if (!spdxTagFile.createNewFile()) {
-				System.out.println("Could not create the new SPDX Tag file "
-						+ args[1]);
 				throw new OnlineToolException("Could not create the new SPDX Tag file "
 						+ args[1]);
 			}
 		} catch (IOException e1) {
-			System.out.println("Could not create the new SPDX Tag file "
-					+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
 			throw new OnlineToolException("Could not create the new SPDX Tag file " + args[1] + "due to error " + e1.getMessage());
 		}
 		PrintWriter out = null;
@@ -184,9 +109,6 @@ public class RdfToTag {
 			try {
 				out = new PrintWriter(spdxTagFile, "UTF-8");
 			} catch (IOException e1) {
-				System.out.println("Could not write to the new SPDX Tag file "
-						+ args[1]);
-				System.out.println("due to error " + e1.getMessage());
 				throw new OnlineToolException("Could not write to the new SPDX Tag file "
 						+ args[1] +  "due to error " + e1.getMessage());
 				
@@ -195,13 +117,10 @@ public class RdfToTag {
 			try {
 				doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
 			} catch (InvalidSPDXAnalysisException ex) {
-				System.out.print("Error creating SPDX Document: "+ex.getMessage());
 				throw new OnlineToolException("Error creating SPDX Document: "+ex.getMessage());
 			} catch (IOException e) {
-				System.out.print("Error creating SPDX Document:"+args[0]+", "+e.getMessage());
 				throw new OnlineToolException("Unable to open file :"+args[0]+", "+e.getMessage());
 			} catch (Exception e) {
-				System.out.println("Error creating SPDX Document: "+e.getMessage());
 				throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 			}
 
@@ -220,14 +139,9 @@ public class RdfToTag {
 				// print document to a file using tag-value format
 				CommonCode.printDoc(doc, out, constants);
 			} catch (InvalidSPDXAnalysisException e) {
-				System.out
-						.print("Error transalting SPDX Document to tag-value format: "
-								+ e.getMessage());
 				throw new OnlineToolException("Error transalting SPDX Document to tag-value format: "
 						+ e.getMessage());
 			} catch (Exception e) {
-				System.out.print("Unexpected error displaying SPDX Document: "
-						+ e.getMessage());
 				throw new OnlineToolException("Unexpected error displaying SPDX Document: "
 						+ e.getMessage());
 			}

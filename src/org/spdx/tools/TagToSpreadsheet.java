@@ -62,66 +62,12 @@ public class TagToSpreadsheet {
 			usage();
 			return;
 		}
-		FileInputStream spdxTagFile;
 		try {
-			spdxTagFile = new FileInputStream(args[0]);
-		} catch (FileNotFoundException ex) {
-			System.out
-					.printf("Tag-Value file %1$s does not exists.%n", args[0]);
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
+			usage();
 			return;
-		}
-		File spdxSpreadsheetFile = new File(args[1]);
-		if (spdxSpreadsheetFile.exists()) {
-			System.out
-					.println("Spreadsheet file already exists - please specify a new file.");
-			try {
-				spdxTagFile.close();
-			} catch (IOException e) {
-				System.out.println("Warning: Unable to close output SPDX tag file on error: "+e.getMessage());
-			}
-			return;
-		}
-		SpdxDocumentContainer[] result = new SpdxDocumentContainer[1];
-		try {
-			// read the tag-value constants from a file
-			Properties constants = CommonCode.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
-			NoCommentInputStream nci = new NoCommentInputStream(spdxTagFile);
-			HandBuiltParser parser = new HandBuiltParser(nci);
-			List<String> warnings = new ArrayList<String>();
-			parser.setBehavior(new BuildDocument(result, constants, warnings));
-			parser.data();
-			if (!warnings.isEmpty()) {
-				System.out.println("The following warnings and or verification errors were found:");
-				for (String warning:warnings) {
-					System.out.println("\t"+warning);
-				}
-			}
-		} catch (Exception e) {
-			System.err.println("Error creating SPDX Analysis: " + e);
-		}
-		SPDXSpreadsheet ss = null;
-		try {
-			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
-			RdfToSpreadsheet.copyRdfXmlToSpreadsheet(result[0].getSpdxDocument(), ss);
-		} catch (SpreadsheetException e) {
-			System.out.println("Error opening or writing to spreadsheet: "
-					+ e.getMessage());
-		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Error translating the Tag file: "
-					+ e.getMessage());
-		} catch (Exception ex) {
-			System.out
-					.println("Unexpected error translating the tag-value to spreadsheet: "
-							+ ex.getMessage());
-		} finally {
-			if (ss != null) {
-				try {
-					ss.close();
-				} catch (SpreadsheetException e) {
-					System.out.println("Error closing spreadsheet: "
-							+ e.getMessage());
-				}
-			}
 		}
 	}
 	
@@ -137,17 +83,14 @@ public class TagToSpreadsheet {
 		try {
 			spdxTagFile = new FileInputStream(args[0]);
 		} catch (FileNotFoundException ex) {
-			System.out.printf("Tag-Value file %1$s does not exists.%n", args[0]);
 			throw new OnlineToolException("Tag-Value file "+ args[0]+" does not exists.");
 		}
 		File spdxSpreadsheetFile = new File(args[1]);
 		// Output File name will be checked in the Python code for no clash, but if still found
 		if (spdxSpreadsheetFile.exists()) {
-			System.out.println("Spreadsheet file already exists - please specify a new file.");
 			try {
 				spdxTagFile.close();
 			} catch (IOException e) {
-				System.out.println("Warning: Unable to close output SPDX tag file on error: "+e.getMessage());
 				throw new OnlineToolException("Warning: Unable to close output SPDX tag file on error: "+e.getMessage());
 			}
 			throw new OnlineToolException("Spreadsheet file already exists - please specify a new file name.");
@@ -178,7 +121,6 @@ public class TagToSpreadsheet {
 			throw(new OnlineToolException(e.getMessage()));
 		} catch (Exception e) {
 			// If any other exception - assume this is an RDF/XML file.
-			System.err.println("Error creating SPDX Analysis: " + e);
 			throw new OnlineToolException("Error creating SPDX Analysis: " + e);
 		}
 		SPDXSpreadsheet ss = null;
@@ -186,20 +128,16 @@ public class TagToSpreadsheet {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
 			RdfToSpreadsheet.copyRdfXmlToSpreadsheet(result[0].getSpdxDocument(), ss);
 		} catch (SpreadsheetException e) {
-			System.out.println("Error opening or writing to spreadsheet: "+ e.getMessage());
 			throw new OnlineToolException("Error opening or writing to spreadsheet: "+ e.getMessage());
 		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Error translating the Tag file: " + e.getMessage());
 			throw new OnlineToolException("Error translating the Tag file: "+ e.getMessage());
 		} catch (Exception ex) {
-			System.out.println("Unexpected error translating the tag-value to spreadsheet: "+ ex.getMessage());
 			throw new OnlineToolException("Unexpected error translating the tag-value to spreadsheet: "+ ex.getMessage());
 		} finally {
 			if (ss != null) {
 				try {
 					ss.close();
 				} catch (SpreadsheetException e) {
-					System.out.println("Error closing spreadsheet: "+ e.getMessage());
 					throw new OnlineToolException("Error closing spreadsheet: "+ e.getMessage());
 				}
 			}

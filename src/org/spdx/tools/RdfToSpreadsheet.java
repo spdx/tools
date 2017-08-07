@@ -86,55 +86,13 @@ public class RdfToSpreadsheet {
 			usage();
 			return;
 		}
-		File spdxRdfFile = new File(args[0]);
-		if (!spdxRdfFile.exists()) {
-			System.out.printf("Error: File %1$s does not exist.%n", args[0]);
-			return;
-		}
-		File spdxSpreadsheetFile = new File(args[1]);
-		if (spdxSpreadsheetFile.exists()) {
-			System.out.println("Spreadsheet file already exists - please specify a new file.");
-			return;
-		}
-		SpdxDocument doc = null;
 		try {
-			doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
-		} catch (InvalidSPDXAnalysisException ex) {
-			System.out.print("Error creating SPDX Document: "+ex.getMessage());
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
+			usage();
 			return;
-		} catch (IOException e) {
-			System.out.print("Unable to open file :"+args[0]+", "+e.getMessage());
 		}
-        if (doc != null) {
-            SPDXSpreadsheet ss = null;
-            try {
-                ss = new SPDXSpreadsheet(spdxSpreadsheetFile, true, false);
-                copyRdfXmlToSpreadsheet(doc, ss);
-                List<String> verify = doc.verify();
-                if (verify != null && verify.size() > 0) {
-                    System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
-                    for (int i = 0; i < verify.size(); i++) {
-                        System.out.println("\t" + verify.get(i));
-                    }
-                }
-            } catch (SpreadsheetException e) {
-                System.out.println("Error opening or writing to spreadsheet: " + e.getMessage());
-            } catch (InvalidSPDXAnalysisException e) {
-                System.out.println("Error translating the RDF file: " + e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("Unexpected error translating the RDF to spreadsheet: " + ex.getMessage());
-            } finally {
-                if (ss != null) {
-                    try {
-                        ss.close();
-                    } catch (SpreadsheetException e) {
-                        System.out.println("Error closing spreadsheet: " + e.getMessage());
-                    }
-                }
-            }
-        }else{
-            System.out.println("Error creating SPDX document reference, null reference returned");
-        }
     }
 	
 	/**
@@ -148,25 +106,20 @@ public class RdfToSpreadsheet {
 		File spdxRdfFile = new File(args[0]);
 		// Output File name will be checked in the Python code for no clash, but if still found
 		if (!spdxRdfFile.exists()) {
-			System.out.printf("Error: File %1$s does not exist.%n", args[0]);
 			throw new OnlineToolException("Error: File " + args[0] + " does not exist.");
 		}
 		File spdxSpreadsheetFile = new File(args[1]);
 		if (spdxSpreadsheetFile.exists()) {
-			System.out.println("Spreadsheet file already exists - please specify a new file.");
 			throw new OnlineToolException("Spreadsheet file already exists - please specify a new file.");
 		}
 		SpdxDocument doc = null;
 		try {
 			doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
 		} catch (InvalidSPDXAnalysisException ex) {
-			System.out.print("Error creating SPDX Document: "+ex.getMessage());
 			throw new OnlineToolException("Error creating SPDX Document: "+ex.getMessage());
 		} catch (IOException e) {
-			System.out.print("Error creating SPDX Document:"+args[0]+", "+e.getMessage());
 			throw new OnlineToolException("Error creating SPDX Document:"+args[0]+", "+e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Error creating SPDX Document: "+e.getMessage());
 			throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 		}
 		List<String> verify = new ArrayList<String>();
@@ -183,26 +136,21 @@ public class RdfToSpreadsheet {
                     }
                 }
             } catch (SpreadsheetException e) {
-                System.out.println("Error opening or writing to spreadsheet: " + e.getMessage());
                 throw new OnlineToolException("Error opening or writing to spreadsheet: " + e.getMessage());
             } catch (InvalidSPDXAnalysisException e) {
-                System.out.println("Error translating the RDF file: " + e.getMessage());
                 throw new OnlineToolException("Error translating the RDF file: " + e.getMessage());
             } catch (Exception ex) {
-                System.out.println("Unexpected error translating the RDF to spreadsheet: " + ex.getMessage());
                 throw new OnlineToolException("Unexpected error translating the RDF to spreadsheet: " + ex.getMessage());
             } finally {
                 if (ss != null) {
                     try {
                         ss.close();
                     } catch (SpreadsheetException e) {
-                        System.out.println("Error closing spreadsheet: " + e.getMessage());
                         throw new OnlineToolException("Error closing spreadsheet: " + e.getMessage());
                     }
                 }
             }
         }else{
-            System.out.println("Error creating SPDX document reference, null reference returned");
             throw new OnlineToolException("Error creating SPDX document reference, null reference returned");
         }
         return verify;

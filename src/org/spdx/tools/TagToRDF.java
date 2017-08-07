@@ -86,95 +86,12 @@ public class TagToRDF {
 				return;
 			}
 		}
-		FileInputStream spdxTagStream;
 		try {
-			spdxTagStream = new FileInputStream(args[0]);
-		} catch (FileNotFoundException ex) {
-			System.out
-					.printf("Tag-Value file %1$s does not exists.%n", args[0]);
-			return;
-		}
-
-		File spdxRDFFile = new File(args[1]);
-		if (spdxRDFFile.exists()) {
-			System.out
-					.printf("Error: File %1$s already exists - please specify a new file.%n",
-							args[1]);
-			try {
-				spdxTagStream.close();
-			} catch (IOException e) {
-				System.out.println("Warning: Unable to close input file on error.");
-			}
-			return;
-		}
-
-		try {
-			if (!spdxRDFFile.createNewFile()) {
-				System.out.println("Could not create the new SPDX RDF file "
-						+ args[1]);
-				usage();
-				try {
-					spdxTagStream.close();
-				} catch (IOException e) {
-					System.out.println("Warning: Unable to close input file on error.");
-				}
-				return;
-			}
-		} catch (IOException e1) {
-			System.out.println("Could not create the new SPDX Tag-Value file "
-					+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
 			usage();
-			try {
-				spdxTagStream.close();
-			} catch (IOException e) {
-				System.out.println("Warning: Unable to close input file on error.");
-			}
 			return;
-		}
-
-		FileOutputStream out;
-		try {
-			out = new FileOutputStream(spdxRDFFile);
-		} catch (FileNotFoundException e1) {
-			System.out.println("Could not write to the new SPDX RDF file "
-					+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
-			usage();
-			try {
-				spdxTagStream.close();
-			} catch (IOException e) {
-				System.out.println("Warning: Unable to close input file on error.");
-			}
-			return;
-		}
-
-		try {
-			List<String> warnings = new ArrayList<String>();
-			convertTagFileToRdf(spdxTagStream, out, outputFormat, warnings);
-			if (!warnings.isEmpty()) {
-				System.out.println("The following warnings and or verification errors were found:");
-				for (String warning:warnings) {
-					System.out.println("\t"+warning);
-				}
-			}
-		} catch (Exception e) {
-			System.err.println("Error creating SPDX Analysis: " + e);
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					System.out.println("Error closing RDF file: " + e.getMessage());
-				}
-			}
-			if (spdxTagStream != null) {
-				try {
-					spdxTagStream.close();
-				} catch (IOException e) {
-					System.out.println("Error closing Tag/Value file: " + e.getMessage());
-				}
-			}
 		}
 	}
 	
@@ -191,18 +108,14 @@ public class TagToRDF {
 		try {
 			spdxTagStream = new FileInputStream(args[0]);
 		} catch (FileNotFoundException ex) {
-			System.out.printf("Tag-Value file %1$s does not exists.%n", args[0]);
 			throw new OnlineToolException("Tag-Value file "+ args[0] + " does not exists.");
 		}
 		File spdxRDFFile = new File(args[1]);
 		// Output File name will be checked in the Python code for no clash, but if still found
 		if (spdxRDFFile.exists()) {
-			System.out.printf("Error: File %1$s already exists - please specify a new file.%n",
-							args[1]);
 			try {
 				spdxTagStream.close();
 			} catch (IOException e) {
-				System.out.println("Warning: Unable to close input file on error.");
 				throw new OnlineToolException("Warning: Unable to close input file on error.");
 			}
 			throw new OnlineToolException("Error: File " + args[1] +" already exists - please specify a new file.");
@@ -210,22 +123,17 @@ public class TagToRDF {
 
 		try {
 			if (!spdxRDFFile.createNewFile()) {
-				System.out.println("Could not create the new SPDX RDF file "+ args[1]);
 				try {
 					spdxTagStream.close();
 				} catch (IOException e) {
-					System.out.println("Warning: Unable to close input file on error.");
 					throw new OnlineToolException("Warning: Unable to close input file on error.");
 				}
 				throw new OnlineToolException("Could not create the new SPDX RDF file "+ args[1]);
 			}
 		} catch (IOException e1) {
-			System.out.println("Could not create the new SPDX Tag-Value file "+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
 			try {
 				spdxTagStream.close();
 			} catch (IOException e) {
-				System.out.println("Warning: Unable to close input file on error.");
 				throw new OnlineToolException("Warning: Unable to close input file on error.");
 			}
 			throw new OnlineToolException("Could not create the new SPDX Tag-Value file "+ args[1] + "due to error " + e1.getMessage());
@@ -235,12 +143,9 @@ public class TagToRDF {
 		try {
 			out = new FileOutputStream(spdxRDFFile);
 		} catch (FileNotFoundException e1) {
-			System.out.println("Could not write to the new SPDX RDF file "+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
 			try {
 				spdxTagStream.close();
 			} catch (IOException e) {
-				System.out.println("Warning: Unable to close input file on error.");
 				throw new OnlineToolException("Warning: Unable to close input file on error.");
 			}
 			throw new OnlineToolException("Could not write to the new SPDX RDF file "+ args[1]+ "due to error " + e1.getMessage());
@@ -255,14 +160,12 @@ public class TagToRDF {
 				}
 			}
 		} catch (Exception e) {
-			System.err.println("Error creating SPDX Analysis: " + e);
 			throw new OnlineToolException("Error creating SPDX Analysis: " + e.getMessage());
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					System.out.println("Error closing RDF file: " + e.getMessage());
 					throw new OnlineToolException("Error closing RDF file: " + e.getMessage());
 				}
 			}
@@ -270,7 +173,6 @@ public class TagToRDF {
 				try {
 					spdxTagStream.close();
 				} catch (IOException e) {
-					System.out.println("Error closing Tag/Value file: " + e.getMessage());
 					throw new OnlineToolException("Error closing Tag/Value file: " + e.getMessage());
 				}
 			}
