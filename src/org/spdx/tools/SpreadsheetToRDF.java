@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -92,44 +93,53 @@ public class SpreadsheetToRDF {
 			usage();
 			return;
 		}
-		File spdxSpreadsheetFile = new File(args[0]);
-		if (!spdxSpreadsheetFile.exists()) {
-			System.out.printf("Spreadsheet file %1$s does not exists.%n", args[0]);
+		try {
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
+			usage();
 			return;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param args args[0] is the Spreadsheet file to be converted, args[1] is the result RDF file name
+	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
+	 * @return Warnings of the conversion, displayed to the user
+	 */
+	public static List<String> onlineFunction(String[] args) throws OnlineToolException{
+		// Arguments length(args length== 2 ) will checked in the Python Code
+		File spdxSpreadsheetFile = new File(args[0]);
+		if (!spdxSpreadsheetFile.exists()) {
+			throw new OnlineToolException("Spreadsheet file " + "does not exists.");
+		}
 		File spdxRdfFile = new File(args[1]);
+		// Output File name will be checked in the Python code for no clash, but if still found
 		if (spdxRdfFile.exists()) {
-			System.out.printf("Error: File %1$s already exists - please specify a new file.%n", args[1]);
-			return;
+			throw new OnlineToolException("Error: File " + args[1] + " already exists - please specify a new file.");
 		}
 	
 		try {
 			if (!spdxRdfFile.createNewFile()) {
-				System.out.println("Could not create the new SPDX RDF file "+args[1]);
-				usage();
-				return;
+				throw new OnlineToolException("Could not create the new SPDX RDF file "+args[1]);
 			}
 		} catch (IOException e1) {
-			System.out.println("Could not create the new SPDX RDF file "+args[1]);
-			System.out.println("due to error "+e1.getMessage());
-			usage();
-			return;
+			throw new OnlineToolException("Could not create the new SPDX RDF file "+args[1] + "due to error "+e1.getMessage() );
 		}
 		FileOutputStream out;
 		try {
 			out = new FileOutputStream(spdxRdfFile);
 		} catch (FileNotFoundException e1) {
-			System.out.println("Could not write to the new SPDX RDF file "+args[1]);
-			System.out.println("due to error "+e1.getMessage());
-			usage();
-			return;
+			throw new OnlineToolException("Could not write to the new SPDX RDF file "+args[1] +"due to error "+e1.getMessage() );
 		}
 
 		SPDXSpreadsheet ss = null;
+		List<String> verify = new ArrayList<String>();
 		try {
 			ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
 			SpdxDocument analysis = copySpreadsheetToSPDXAnalysis(ss);
-			List<String> verify = analysis.verify();
+			verify = analysis.verify();
 			if (verify.size() > 0) {
 				System.out.println("Warning: The following verification errors were found in the resultant SPDX Document:");
 				for (int i = 0; i < verify.size(); i++) {
@@ -138,27 +148,27 @@ public class SpreadsheetToRDF {
 			}
 			analysis.getDocumentContainer().getModel().write(out, "RDF/XML-ABBREV");
 		} catch (SpreadsheetException e) {
-			System.out.println("Error creating or writing to spreadsheet: "+e.getMessage());
+			throw new OnlineToolException("Error creating or writing to spreadsheet: "+e.getMessage());
 		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Error translating the RDF file: "+e.getMessage());
+			throw new OnlineToolException("Error translating the RDF file: "+e.getMessage());
 		} finally {
 			if (ss != null) {
 				try {
 					ss.close();
 				} catch (SpreadsheetException e) {
-					System.out.println("Error closing spreadsheet: "+e.getMessage());
+					throw new OnlineToolException("Error closing spreadsheet: "+e.getMessage());
 				}
 			}
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					System.out.println("Error closing RDF file: "+e.getMessage());
+					throw new OnlineToolException("Error closing RDF file: "+e.getMessage());
 				}
 			}
 		}
+		return verify;
 	}
-	
 	public static SpdxDocument copySpreadsheetToSPDXAnalysis(SPDXSpreadsheet ss) throws SpreadsheetException, InvalidSPDXAnalysisException {
 		String pkgUrl = ss.getOriginsSheet().getNamespace() + "#" + SpdxRdfConstants.SPDX_DOCUMENT_ID;
 		if (!SpdxVerificationHelper.isValidUri(pkgUrl)) {
