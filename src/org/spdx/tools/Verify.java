@@ -173,13 +173,7 @@ public class Verify {
 		} catch (Exception e) {
 			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
 		}
-		List<String> verify = doc.verify();
-		List<String> retval = new ArrayList<String>();
-		if (!verify.isEmpty()) {
-			for (String verifyMsg:verify) {	
-				retval.add(verifyMsg);
-			}
-		}
+		List<String> retval = doc.verify();
 		return retval;		
 	}
 }

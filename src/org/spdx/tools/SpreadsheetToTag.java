@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -59,51 +60,57 @@ public class SpreadsheetToTag {
 			usage();
 			return;
 		}
-		File spdxSpreadsheetFile = new File(args[0]);
-		if (!spdxSpreadsheetFile.exists()) {
-			System.out.printf("Spreadsheet file %1$s does not exists.%n",
-					args[0]);
+		try {
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
+			usage();
 			return;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param args args[0] is the Spreadsheet file to be converted, args[1] is the result Tag Value file name
+	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
+	 * @return Warnings of the conversion, displayed to the user
+	 */
+	public static List<String> onlineFunction(String[] args) throws OnlineToolException{
+		// Arguments length(args length== 2 ) will checked in the Python Code
+		File spdxSpreadsheetFile = new File(args[0]);
+		if (!spdxSpreadsheetFile.exists()) {
+			throw new OnlineToolException("Spreadsheet file " + args[0] + " does not exists.");
+		}
 		File spdxTagFile = new File(args[1]);
+		// Output File name will be checked in the Python code for no clash, but if still found
 		if (spdxTagFile.exists()) {
-			System.out
-					.printf("Error: File %1$s already exists - please specify a new file.%n",
-							args[1]);
-			return;
+			throw new OnlineToolException("Error: File " + args[1] +" already exists - please specify a new file.");
 		}
 
 		try {
 			if (!spdxTagFile.createNewFile()) {
-				System.out.println("Could not create the new SPDX Tag file "
+				throw new OnlineToolException("Could not create the new SPDX Tag file "
 						+ args[1]);
-				usage();
-				return;
 			}
 		} catch (IOException e1) {
-			System.out.println("Could not create the new SPDX Tag file "
-					+ args[1]);
-			System.out.println("due to error " + e1.getMessage());
-			usage();
-			return;
+			throw new OnlineToolException("Could not create the new SPDX Tag file "
+					+ args[1] + "due to error " + e1.getMessage());
 		}
 		PrintWriter out = null;
+		List<String> verify = new ArrayList<String>();
 		try {
 			try {
 				out = new PrintWriter(spdxTagFile, "UTF-8");
 			} catch (IOException e1) {
-				System.out.println("Could not write to the new SPDX Tag file "
-						+ args[1]);
-				System.out.println("due to error " + e1.getMessage());
-				usage();
-				return;
+				throw new OnlineToolException("Could not write to the new SPDX Tag file "
+						+ args[1] + "due to error " + e1.getMessage());
 			}
 
 			SPDXSpreadsheet ss = null;
 			try {
 				ss = new SPDXSpreadsheet(spdxSpreadsheetFile, false, true);
 				SpdxDocument analysis = SpreadsheetToRDF.copySpreadsheetToSPDXAnalysis(ss);
-				List<String> verify = analysis.verify();
+				verify = analysis.verify();
 				if (verify.size() > 0) {
 					System.out
 							.println("Warning: The following verification errors were found in the resultant SPDX Document:");
@@ -116,20 +123,20 @@ public class SpreadsheetToTag {
 						.getTextFromProperties("org/spdx/tag/SpdxTagValueConstants.properties");
 				CommonCode.printDoc(analysis, out, constants);
 			} catch (SpreadsheetException e) {
-				System.out.println("Error creating or writing to spreadsheet: "
+				throw new OnlineToolException("Error creating or writing to spreadsheet: "
 						+ e.getMessage());
 			} catch (InvalidSPDXAnalysisException e) {
-				System.out.println("Error translating the Tag file: "
+				throw new OnlineToolException("Error translating the Tag file: "
 						+ e.getMessage());
 			} catch (Exception e) {
-				System.out.print("Unexpected error converting SPDX Document: "
+				throw new OnlineToolException("Unexpected error converting SPDX Document: "
 						+ e.getMessage());
 			} finally {
 				if (ss != null) {
 					try {
 						ss.close();
 					} catch (SpreadsheetException e) {
-						System.out.println("Error closing spreadsheet: "
+						throw new OnlineToolException("Error closing spreadsheet: "
 								+ e.getMessage());
 					}
 				}
@@ -140,8 +147,8 @@ public class SpreadsheetToTag {
 				out.close();
 			}
 		}
+		return verify;
 	}
-
 	private static void usage() {
 		System.out
 				.println("Usage: SpreadsheetToTag spreadsheetfile.xls spdxfile.spdx \n"

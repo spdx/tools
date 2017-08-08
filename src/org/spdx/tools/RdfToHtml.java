@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -103,35 +104,55 @@ public class RdfToHtml {
 		if (args.length > MAX_ARGS) {
 			System.out.println("Warning: Extra arguments will be ignored");
 			usage();
-		}		
-		File spdxFile = new File(args[0]);
-		if (!spdxFile.exists()) {
-			System.out.println("SPDX File "+args[0]+" does not exist.");
-			usage();
+		}	
+		try {
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
 			System.exit(ERROR);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param args args[0] is the RDF file to be converted, args[1] is the result HTML file name
+	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
+	 * 
+	 */
+	public static List<String> onlineFunction(String[] args) throws OnlineToolException{
+		// Arguments length(args length== 2 ) will checked in the Python Code
+		File spdxFile = new File(args[0]);
+		// Output File name will be checked in the Python code for no clash, but if still found
+		if (!spdxFile.exists()) {
+			throw new OnlineToolException("SPDX file " + args[0] +" does not exists.");
+		}
 		if (!spdxFile.canRead()) {
-			System.out.println("Can not read SPDX File "+args[0]+".  Check permissions on the file.");
-			usage();
-			System.exit(ERROR);
+			throw new OnlineToolException("Can not read SPDX File "+args[0]+".  Check permissions on the file.");
 		}
 		File outputDirectory = new File(args[1]);
 		if (!outputDirectory.exists()) {
 			if (!outputDirectory.mkdirs()) {
-				System.out.println("Unable to create output directory");
-				System.exit(ERROR);
+				throw new OnlineToolException("Unable to create output directory");
 			}
 		}
 		SpdxDocument doc = null;
 		try {
 			doc = SPDXDocumentFactory.createSpdxDocument(args[0]);
 		} catch (IOException e2) {
-			System.out.println("IO Error creating the SPDX document");
-			System.exit(ERROR);
+			throw new OnlineToolException("IO Error creating the SPDX document");
 		} catch (InvalidSPDXAnalysisException e2) {
-			System.out.println("Invalid SPDX Document: "+e2.getMessage());
-			System.exit(ERROR);
+			throw new OnlineToolException("Invalid SPDX Document: "+e2.getMessage());
+		} catch (Exception e) {
+			throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 		}
+		List<String> verify = new ArrayList<String>();
+		verify = doc.verify();
+	    if (verify != null && verify.size() > 0) {
+	         System.out.println("Warning: The following verifications failed for the resultant SPDX RDF file:");
+	         for (int i = 0; i < verify.size(); i++) {
+	             System.out.println("\t" + verify.get(i));
+	         }
+	    }
 		String documentName = doc.getName();
 		List<File> filesToCreate = Lists.newArrayList();
 		String docHtmlFilePath = outputDirectory.getPath() + File.separator + documentName + DOC_HTML_FILE_POSTFIX;
@@ -150,8 +171,7 @@ public class RdfToHtml {
 		try {
 			pkgs = doc.getDocumentContainer().findAllPackages();
 		} catch (InvalidSPDXAnalysisException e1) {
-			System.out.println("Error getting packages from the SPDX document: "+e1.getMessage());
-			System.exit(ERROR);
+			throw new OnlineToolException("Error getting packages from the SPDX document: "+e1.getMessage());
 		}
 		Iterator<SpdxPackage> iter = pkgs.iterator();
 		while (iter.hasNext()) {
@@ -169,35 +189,29 @@ public class RdfToHtml {
 		while (fileIter.hasNext()) {
 			File file = fileIter.next();
 			if (file.exists()) {
-				System.out.println("File "+file.getName()+" already exists.");
-				System.exit(ERROR);
+				throw new OnlineToolException("File "+file.getName()+" already exists.");
 			}
 		}
 		Writer writer = null;
 		try {
 			rdfToHtml(doc, docHtmlFile, licenseHtmlFile, snippetHtmlFile, docFilesHtmlFile);
 		} catch (IOException e) {
-			System.out.println("IO Error opening SPDX Document");
-			usage();
-			System.exit(ERROR);
+			throw new OnlineToolException("IO Error opening SPDX Document");
 		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Invalid SPDX Document: "+e.getMessage());
-			usage();
-			System.exit(ERROR);
+			throw new OnlineToolException("Invalid SPDX Document: "+e.getMessage());
 		} catch (MustacheException e) {
-			System.out.println("Unexpected error reading the HTML template: "+e.getMessage());
-			usage();
-			System.exit(ERROR);
+			throw new OnlineToolException("Unexpected error reading the HTML template: "+e.getMessage());
 		} finally {
 			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
-					System.out.println("Warning: error closing HTML file: "+e.getMessage());
+					throw new OnlineToolException("Warning: error closing HTML file: "+e.getMessage());
 				}
 				writer = null;
 			}
 		}
+		return verify;
 	}
 	
 	/**

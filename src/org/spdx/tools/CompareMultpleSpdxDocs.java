@@ -57,11 +57,25 @@ public class CompareMultpleSpdxDocs {
 			usage();
 			System.exit(ERROR_STATUS);
 		}
-		File outputFile = new File(args[0]);
-		if (outputFile.exists()) {
-			System.out.println("Output file "+args[0]+" already exists.");
-			usage();
+		try {
+			onlineFunction(args);
+		} catch (OnlineToolException e){
+			System.out.println(e.getMessage());
 			System.exit(ERROR_STATUS);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param args args[0] is the output Excel file name, all other args are SPDX document file names
+	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
+	 */
+	public static void onlineFunction(String[] args) throws OnlineToolException{
+		// Arguments length( 14>=args length>=3 ) will checked in the Python Code
+		File outputFile = new File(args[0]);
+		// Output File name will be checked in the Python code for no clash, but if still found
+		if (outputFile.exists()) {
+			throw new OnlineToolException("Output file "+args[0]+" already exists. Change the name of the result file.");
 		}
 		SpdxDocument[] compareDocs = new SpdxDocument[args.length-1];
 		String[] docNames = new String[args.length-1];
@@ -80,8 +94,7 @@ public class CompareMultpleSpdxDocs {
 					System.out.println("Warning: "+docNames[i-1]+" contains verification errors.");
 				}
 			} catch (SpdxCompareException e) {
-				System.out.println("Error opening SPDX document "+args[i]+": "+e.getMessage());
-				System.exit(ERROR_STATUS);
+				throw new OnlineToolException("Error opening SPDX document "+args[i]+": "+e.getMessage());
 			}
 		}
 		MultiDocumentSpreadsheet outSheet = null;
@@ -92,26 +105,22 @@ public class CompareMultpleSpdxDocs {
 			comparer.compare(compareDocs);
 			outSheet.importCompareResults(comparer, docNames);
 		} catch (SpreadsheetException e) {
-			System.out.println("Unable to create output spreadsheet: "+e.getMessage());
-			System.exit(ERROR_STATUS);
+			throw new OnlineToolException("Unable to create output spreadsheet: "+e.getMessage());
 		} catch (InvalidSPDXAnalysisException e) {
-			System.out.println("Invalid SPDX analysis: "+e.getMessage());
-			System.exit(ERROR_STATUS);
+			throw new OnlineToolException("Invalid SPDX analysis: "+e.getMessage());
 		} catch (SpdxCompareException e) {
-			System.out.println("Error comparing SPDX documents: "+e.getMessage());
-			System.exit(ERROR_STATUS);
+			throw new OnlineToolException("Error comparing SPDX documents: "+e.getMessage());
 		} finally {
 			if (outSheet != null) {
 				try {
 					outSheet.close();
 				} catch (SpreadsheetException e) {
-					System.out.println("Warning - error closing spreadsheet: "+e.getMessage());
+					throw new OnlineToolException("Warning - error closing spreadsheet: "+e.getMessage());
 				}
 			}
 		}
 	}
-
-
+	
 	/**
 	 * 
 	 */
