@@ -56,6 +56,7 @@ public abstract class License extends SimpleLicensingInfo {
 	protected String standardLicenseTemplate;
 	protected String licenseText;
 	protected boolean osiApproved;
+	protected boolean deprecated;
 		
 	/**
 	 * @param name License name
@@ -76,6 +77,7 @@ public abstract class License extends SimpleLicensingInfo {
 		
 		this.osiApproved = osiApproved;
 		this.licenseText = text;
+		this.deprecated = false;
 	}
 	/**
 	 * Constructs an SPDX License from the licenseNode
@@ -140,6 +142,19 @@ public abstract class License extends SimpleLicensingInfo {
 		} else {			
 			this.osiApproved = false;
 		}
+		// Deprecated
+		String deprecatedValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
+		if (deprecatedValue != null) {
+			deprecatedValue = deprecatedValue.trim();
+			if (deprecatedValue.equals("true") || deprecatedValue.equals("1")) {
+				this.deprecated = true;
+			} else if (deprecatedValue.equals("false") || deprecatedValue.equals("0")) {
+				this.deprecated = false;
+			} else {
+				throw(new InvalidSPDXAnalysisException("Invalid value for license deprecated - must be {true, false, 0, 1}"));
+			}
+		}
+		
 	}
 	
 	/* (non-Javadoc)
@@ -165,6 +180,11 @@ public abstract class License extends SimpleLicensingInfo {
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE_VERSION_1);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, this.standardLicenseTemplate);
 		this.templateInHtml = false;	// stored in the clear
+		if (this.deprecated) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, "true");
+		} else {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
+		}
 	}
 
 
@@ -347,6 +367,28 @@ public abstract class License extends SimpleLicensingInfo {
 		return this.osiApproved;
 	}
 	
+	/**
+	 * @return true if this license is marked as being deprecated
+	 */
+	public boolean isDeprecated() {
+		if (this.resource != null && this.refreshOnGet) {
+			String deprecatedValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
+			if (deprecatedValue != null) {
+				deprecatedValue = deprecatedValue.trim();
+				if (deprecatedValue.equals("true") || deprecatedValue.equals("1")) {
+					this.deprecated = true;
+				} else if (deprecatedValue.equals("false") || deprecatedValue.equals("0")){
+					this.deprecated = false;
+				} else {
+					this.deprecated = false;
+				}
+			} else {			
+				this.deprecated = false;
+			}
+		}
+		return this.deprecated;
+	}
+	
 	public void setOsiApproved(boolean osiApproved) {
 		this.osiApproved = osiApproved;
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED_VERSION_1);
@@ -355,7 +397,15 @@ public abstract class License extends SimpleLicensingInfo {
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
 		}
+	}
+	
+	public void setDeprecated(boolean deprecated) {
+		this.deprecated = deprecated;
+		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
 		
+		if (this.deprecated) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, "true");
+		}
 	}
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#clone()
@@ -363,9 +413,11 @@ public abstract class License extends SimpleLicensingInfo {
 	@Override
 	public AnyLicenseInfo clone() {
 		try {
-			return new SpdxListedLicense(this.getName(), this.getLicenseId(),
+			SpdxListedLicense retval = new SpdxListedLicense(this.getName(), this.getLicenseId(),
 					this.getLicenseText(), this.getSeeAlso(), this.getComment(),
 					this.getStandardLicenseHeader(), this.getStandardLicenseTemplate(), this.isOsiApproved());
+			retval.setDeprecated(this.isDeprecated());
+			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
 			throw new AssertionError("Clone should never cause an Invalid SPDX Exception",e);
 		}
@@ -384,6 +436,7 @@ public abstract class License extends SimpleLicensingInfo {
 		this.setSeeAlso(license.getSeeAlso());
 		this.setStandardLicenseHeader(license.getStandardLicenseHeader());
 		this.setStandardLicenseTemplate(this.getStandardLicenseTemplate());
+		this.setDeprecated(license.isDeprecated());
 	}
 	/**
 	 * @param compare
