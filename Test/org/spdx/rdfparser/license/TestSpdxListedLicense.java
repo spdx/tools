@@ -87,7 +87,6 @@ public class TestSpdxListedLicense {
 		}
 		@Override
 		public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 		
@@ -166,6 +165,33 @@ public class TestSpdxListedLicense {
 		assertEquals(0, verify.size());
 	}
 	
+	@Test
+	public void testSetDeprecated() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		String name = "name";
+		String id = "AFL-3.0";
+		String text = "text";
+		String[] sourceUrls = new String[] {"source url2", "source url3"};
+		String comments = "comments1";
+		String standardLicenseHeader = "Standard license header";
+		String template = "template";
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
+				sourceUrls, comments, standardLicenseHeader, template, true);
+		stdl.setDeprecated(true);
+		Resource licResource = stdl.createResource(modelContainer);
+		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
+		assertEquals(true, compLic.isDeprecated());
+		
+		compLic.setDeprecated(false);
+		assertEquals(false, compLic.isDeprecated());
+		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
+		assertEquals(false, compLic2.isDeprecated());
+		List<String> verify = stdl.verify();
+		assertEquals(0, verify.size());
+		verify = compLic.verify();
+		assertEquals(0, verify.size());
+	}
+
 	@Test
 	public void testSetIDandText() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -247,6 +273,7 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, true);
+		stdl.setDeprecated(true);
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 
@@ -261,6 +288,7 @@ public class TestSpdxListedLicense {
 		assertEquals(standardLicenseHeader, lic2.getStandardLicenseHeader());
 		assertEquals(template, lic2.getStandardLicenseTemplate());
 		assertTrue(lic2.getResource() == null);
+		assertEquals(true, lic2.isDeprecated());
 	}
 
 	/**

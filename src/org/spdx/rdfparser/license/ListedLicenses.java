@@ -402,6 +402,7 @@ public class ListedLicenses implements IModelContainer {
             listedLicenseCache = Maps.newHashMap(); // clear the cache
             listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
+            //NOTE: THis includes deprecated licenses - should this be changed to only return non-deprecated licenses?
             Model stdLicenseModel = getListedLicenseModel();
             Node p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
             Triple m = Triple.createMatch(null, p, null);
