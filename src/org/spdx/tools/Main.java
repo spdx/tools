@@ -77,7 +77,7 @@ public class Main {
 						+ "Verify                   inputFile                         TestFiles/SPDXRdfExample.rdf \n"
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
-						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] \n"
+						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] [licenseTestFileDirectory] \n"
 						+ "GenerateVerificationCode sourceDirectory\n"
 						+ "MergeSpdxDocs            masterDocument, mergedDoc1, MergedDoc2, ..., outputFile\n"
 						+ "MatchingStandardLicenses licenseTextFile");
