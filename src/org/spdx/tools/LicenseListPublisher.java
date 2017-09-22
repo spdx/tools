@@ -74,6 +74,8 @@ public class LicenseListPublisher {
 	//TODO: set the real URL once testing is done
 //	private static final String LICENSE_XML_URI = "https://github.com/spdx/license-list-XML.git";
 	private static final String LICENSE_DATA_URI = "https://github.com/goneall/license-list-data.git";
+
+	private static final String LICENSE_TEST_URI = "https://github.com/goneall/license-test-files.git";
 	//TODO: Set the real URL once testing is done
 //	private static final String LICENSE_DATA_URI = "https://github.com/spdx/license-list-data.git";
 	/**
@@ -135,9 +137,11 @@ public class LicenseListPublisher {
 			String gitPassword, boolean ignoreWarnings) throws LicensePublisherException, LicenseGeneratorException {
 		CredentialsProvider githubCredentials = new UsernamePasswordCredentialsProvider(gitUserName, gitPassword);
 		File licenseXmlDir = null;
+		File licenseTestDir = null;
 		File licenseDataDir = null;
 		Git licenseXmlGit = null;
 		Git licenseDataGit = null;
+		Git licenseTestGit = null;
 		try {
 			licenseXmlDir = Files.createTempDirectory("LicenseXML").toFile();
 			System.out.println("Cloning the license XML repository - this could take a while...");
@@ -151,6 +155,20 @@ public class LicenseListPublisher {
 				throw new LicensePublisherException("Release "+release+" not found as a tag in the License List XML repository");
 			}
 			licenseXmlGit.checkout().setName(releaseTag.getName()).call();
+			licenseTestDir = Files.createTempDirectory("LicenseTest").toFile();
+			System.out.println("Cloning the license test repository - this could take a while...");
+			licenseTestGit = Git.cloneRepository()
+					.setCredentialsProvider(githubCredentials)
+					.setDirectory(licenseTestDir)
+					.setURI(LICENSE_TEST_URI)
+					.call();
+			Ref testReleaseTag = licenseTestGit.getRepository().getTags().get(release);
+			if (testReleaseTag != null) {
+				licenseTestGit.checkout().setName(testReleaseTag.getName()).call();
+			} else {
+				// just use the latest
+				licenseTestGit.checkout().call();
+			}
 			licenseDataDir = Files.createTempDirectory("LicenseData").toFile();
 			System.out.println("Cloning the license data repository - this could take a while...");
 			licenseDataGit = Git.cloneRepository()
@@ -164,10 +182,12 @@ public class LicenseListPublisher {
 				dataReleaseTagExists = true;
 				licenseDataGit.checkout().setName(releaseTag.getName()).call();
 			}
+			// checkout the license test directory
+			
 			cleanLicenseDataDir(licenseDataDir);
 			String todayDate = new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime());
 			List<String> warnings = LicenseRDFAGenerator.generateLicenseData(new File(licenseXmlDir.getPath() + File.separator + "src"),
-												licenseDataDir, release, todayDate);
+												licenseDataDir, release, todayDate, licenseTestDir);
 			if (warnings.size() > 0 && !ignoreWarnings) {
 				throw new LicensePublisherException("There are some skipped or invalid license input data.  Publishing aborted.  To ignore, add the --ignore option as the first parameter");
 			}
@@ -201,6 +221,9 @@ public class LicenseListPublisher {
 			}
 			if (licenseDataDir != null) {
 				deleteDir(licenseDataDir);
+			}
+			if (licenseTestDir != null) {
+				deleteDir(licenseTestDir);
 			}
 		}
 	}

@@ -74,7 +74,7 @@ public class CompareTemplateOutputHandler implements
 		}		
 	}
 	
-	class DifferenceDescription {
+	public class DifferenceDescription {
 		private boolean differenceFound;
 		private String differenceMessage;
 		private List<LineColumn> differences;

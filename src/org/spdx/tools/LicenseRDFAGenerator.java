@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.spdx.compare.LicenseCompareHelper;
+import org.spdx.compare.SpdxCompareException;
 import org.spdx.html.ExceptionHtml;
 import org.spdx.html.ExceptionHtmlToc;
 import org.spdx.html.ExceptionTOCJSONFile;
@@ -92,7 +93,7 @@ public class LicenseRDFAGenerator {
 		INVALID_TEXT_CHARS.add('\uFFFD');
 	}
 	static int MIN_ARGS = 2;
-	static int MAX_ARGS = 4;
+	static int MAX_ARGS = 5;
 
 	static final int ERROR_STATUS = 1;
 	static final String CSS_TEMPLATE_FILE = "resources/screen.css";
@@ -148,9 +149,23 @@ public class LicenseRDFAGenerator {
 		if (args.length > 3) {
 			releaseDate = args[3];
 		}
+		File testFileDir = null;
+		if (args.length > 4) {
+			testFileDir = new File(args[4]);
+			if (!testFileDir.exists()) {
+				System.out.println("License test directory "+testFileDir.getName()+" does not exist");
+				usage();
+				System.exit(ERROR_STATUS);
+			}
+			if (!testFileDir.isDirectory()) {
+				System.out.println("License test directory "+testFileDir.getName()+" is not a directory");
+				usage();
+				System.exit(ERROR_STATUS);
+			}
+		}
 
 		try {
-			generateLicenseData(ssFile, dir, version, releaseDate);
+			generateLicenseData(ssFile, dir, version, releaseDate, testFileDir);
 		} catch (LicenseGeneratorException e) {
 			System.out.println(e.getMessage());
 			System.exit(ERROR_STATUS);
@@ -164,11 +179,12 @@ public class LicenseRDFAGenerator {
 	 * @param dir Output directory for the generated results
 	 * @param version Version for the license lise
 	 * @param releaseDate Release data string for the license
+	 * @param testFileDir Directory of license text to test the generated licenses against
 	 * @return warnings
 	 * @throws LicenseGeneratorException 
 	 */
 	public static List<String> generateLicenseData(File ssFile, File dir,
-			String version, String releaseDate) throws LicenseGeneratorException {
+			String version, String releaseDate, File testFileDir) throws LicenseGeneratorException {
 		List<String> warnings = Lists.newArrayList();
 		ISpdxListedLicenseProvider licenseProvider = null;
 		try {
@@ -234,6 +250,10 @@ public class LicenseRDFAGenerator {
 			if (!markdownFile.isFile() && !markdownFile.createNewFile()) {
 				throw new LicenseGeneratorException("Error: Unable to create markdown file");
 			}
+			LicenseTester tester = null;
+			if (testFileDir != null) {
+				tester = new LicenseTester(testFileDir);
+			}
 			// Create model container to hold licenses and exceptions
 			LicenseContainer container = new LicenseContainer();
 			// Create a MarkdownTable to hold the licenses and exceptions
@@ -241,12 +261,12 @@ public class LicenseRDFAGenerator {
 			System.out.print("Processing License List");
 			writeLicenseList(version, releaseDate, licenseProvider, warnings,
 					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder,
-					container, rdfXml, rdfTurtle, rdfNt, markdownTable);
+					container, rdfXml, rdfTurtle, rdfNt, markdownTable, tester);
 			System.out.println();
 			System.out.print("Processing Exceptions");
 			writeExceptionList(version, releaseDate, licenseProvider, warnings,
 					website, textFolder, htmlFolder, templateFolder, rdfaFolder, jsonFolder,
-					container, rdfXml, rdfTurtle, rdfNt, markdownTable);
+					container, rdfXml, rdfTurtle, rdfNt, markdownTable, tester);
 			writeRdf(container, rdfXml, rdfTurtle, rdfNt, "licenses");
 			markdownTable.writeToFile(markdownFile);
 			
@@ -283,6 +303,7 @@ public class LicenseRDFAGenerator {
 			}
 		}
 	}
+
 	/**
 	 * Write the RDF representations of the licenses and exceptions
 	 * @param container Container with the licenses and exceptions
@@ -349,6 +370,7 @@ public class LicenseRDFAGenerator {
 	 * @param rdfTurtleFolder Folder for the RDF Turtle files to be written
 	 * @param rdfNtFolder Folder for the RDF NT files to be written
 	 * @param markdown Markdown table to hold a markdown table of contents
+	 * @param tester License tester used to test the results of licenses
 	 * @throws IOException 
 	 * @throws SpreadsheetException 
 	 * @throws LicenseRestrictionException 
@@ -361,7 +383,7 @@ public class LicenseRDFAGenerator {
 			List<String> warnings, File dir, File textFolder,
 			File htmlFolder, File templateFolder, File rdfaFolder, File jsonFolder,
 			IModelContainer allLicensesContainer, File rdfXmlFolder, File rdfTurtleFolder, 
-			File rdfNtFolder, MarkdownTable markdown) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
+			File rdfNtFolder, MarkdownTable markdown, LicenseTester tester) throws IOException, LicenseRestrictionException, SpreadsheetException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
 		Charset utf8 = Charset.forName("UTF-8");
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		Set<String> licenseIds = Sets.newHashSet();
@@ -424,6 +446,14 @@ public class LicenseRDFAGenerator {
 				exceptionClone.createResource(onlyThisException);
 				writeRdf(allLicensesContainer, rdfXmlFolder, rdfTurtleFolder, rdfNtFolder, exceptionHtmlFileName);
 				markdown.addException(nextException, false);
+				if (tester != null) {
+					List<String> testResults = tester.testException(nextException);
+					if (testResults != null && testResults.size() > 0) {
+						for (String testResult:testResults) {
+							warnings.add("Test for exception "+nextException.getLicenseExceptionId() + " failed: "+testResult);
+						}
+					}
+				}
 				nextException.createResource(allLicensesContainer);	
 			}
 		}
@@ -487,12 +517,14 @@ public class LicenseRDFAGenerator {
 	 * @param rdfTurtleFolder Folder for the RDF Turtle files to be written
 	 * @param rdfNtFolder Folder for the RDF NT files to be written
 	 * @param markdown Markdown table to hold a markdown table of contents
+	 * @param tester license tester to test the results of each license added
 	 * @throws SpdxListedLicenseException 
 	 * @throws IOException 
 	 * @throws LicenseTemplateRuleException 
 	 * @throws MustacheException 
 	 * @throws InvalidSPDXAnalysisException 
 	 * @throws LicenseGeneratorException 
+	 * @throws SpdxCompareException 
 	 * 
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
@@ -500,7 +532,7 @@ public class LicenseRDFAGenerator {
 			File dir, File textFolder, File htmlFolder, File templateFolder, 
 			File rdfaFolder, File jsonFolder, IModelContainer container,
 			File rdfXmlFolder, File rdfTurtleFolder, File rdfNtFolder,
-			MarkdownTable markdown) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException {
+			MarkdownTable markdown, LicenseTester tester) throws SpdxListedLicenseException, IOException, InvalidLicenseTemplateException, MustacheException, InvalidSPDXAnalysisException, LicenseGeneratorException, SpdxCompareException {
 		Charset utf8 = Charset.forName("UTF-8");
 		LicenseHTMLFile licHtml = new LicenseHTMLFile();
 		LicenseJSONFile licJson = new LicenseJSONFile();
@@ -559,6 +591,14 @@ public class LicenseRDFAGenerator {
 				writeRdf(onlyThisLicense, rdfXmlFolder, rdfTurtleFolder, rdfNtFolder, licHtmlFileName);
 				markdown.addLicense(license, false);
 				license.createResource(container);
+				if (tester != null) {
+					List<String> testResults = tester.testLicense(license);
+					if (testResults != null && testResults.size() > 0) {
+						for (String testResult:testResults) {
+							warnings.add("Test for license "+license.getLicenseId() + " failed: "+testResult);
+						}
+					}
+				}
 			}
 		}
 		Iterator<DeprecatedLicenseInfo> depIter = licenseProvider.getDeprecatedLicenseIterator();
@@ -596,6 +636,14 @@ public class LicenseRDFAGenerator {
 			File htmlTextFile = new File(htmlFolder.getPath() + File.separator + licHtmlFileName);
 			Files.write(SpdxLicenseTemplateHelper.formatEscapeHTML(deprecatedLicense.getLicense().getLicenseText()), htmlTextFile, utf8);
 			markdown.addLicense(deprecatedLicense.getLicense(), true);
+			if (tester != null) {
+				List<String> testResults = tester.testLicense(deprecatedLicense.getLicense());
+				if (testResults != null && testResults.size() > 0) {
+					for (String testResult:testResults) {
+						warnings.add("Test for license "+deprecatedLicense.getLicense().getLicenseId() + " failed: "+testResult);
+					}
+				}
+			}
 		}
 		File tocJsonFile = new File(dir.getPath()+File.separator+LICENSE_TOC_JSON_FILE_NAME);
 		File tocHtmlFile = new File(dir.getPath()+File.separator+LICENSE_TOC_HTML_FILE_NAME);

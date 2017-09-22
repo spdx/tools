@@ -31,6 +31,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.License;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.LicenseSet;
 import org.spdx.rdfparser.license.SpdxListedLicense;
@@ -338,7 +339,7 @@ public class LicenseCompareHelper {
 	 * @return True if the license text is the same per the license matching guidelines
 	 * @throws SpdxCompareException
 	 */
-	public static DifferenceDescription isTextStandardLicense(SpdxListedLicense license, String compareText) throws SpdxCompareException {
+	public static DifferenceDescription isTextStandardLicense(License license, String compareText) throws SpdxCompareException {
 		String licenseTemplate = license.getStandardLicenseTemplate();
 		if (licenseTemplate == null || licenseTemplate.trim().isEmpty()) {
 			licenseTemplate = license.getLicenseText();
