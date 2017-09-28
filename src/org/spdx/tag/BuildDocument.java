@@ -1280,8 +1280,9 @@ public class BuildDocument implements TagValueBehavior {
 	 * Makes sure there is a describes relationships for a single package
 	 * SPDX document
 	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSpdxTagFileException 
 	 */
-	private void checkSinglePackageDefault() throws InvalidSPDXAnalysisException {
+	private void checkSinglePackageDefault() throws InvalidSPDXAnalysisException, InvalidSpdxTagFileException {
 		List<SpdxPackage> pkgs = this.analysis.getDocumentContainer().findAllPackages();
 		Relationship[] documentRelationships = this.analysis.getRelationships();
 		List<String> describedElementIds = Lists.newArrayList();
@@ -1295,6 +1296,9 @@ public class BuildDocument implements TagValueBehavior {
 		if (describedElementIds.size() == 0 && pkgs.size() == 0) {
 			// add a relationship for the package as a default
 			// See the spec for the definition of this default behavior
+			if (pkgs.size() == 0) {
+				throw new InvalidSpdxTagFileException("Missing describes relationship - see SPDX specification relationship section under DESCRIBES relationship description for more information");
+			}
 			Relationship describesRelationship = new Relationship(pkgs.get(0),
 					Relationship.RelationshipType.DESCRIBES,
 					"This describes relationship was added as a default relationship by the SPDX Tools Tag parser.");
