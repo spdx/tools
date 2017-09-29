@@ -17,7 +17,6 @@
 
 package org.spdx.tools;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
