@@ -819,7 +819,7 @@ public class BuildDocument implements TagValueBehavior {
 		}
 		RelationshipType relationshipType = null;
 		try {
-			relationshipType = RelationshipType.fromTag(matcher.group(2));
+			relationshipType = RelationshipType.fromTag(matcher.group(2).toUpperCase());
 		} catch (IllegalArgumentException ex) {
 			throw(new InvalidSpdxTagFileException("Invalid relationship type: "+value + " at line number "+lineNumber));
 		}
@@ -1283,27 +1283,20 @@ public class BuildDocument implements TagValueBehavior {
 	 * @throws InvalidSpdxTagFileException 
 	 */
 	private void checkSinglePackageDefault() throws InvalidSPDXAnalysisException, InvalidSpdxTagFileException {
-		List<SpdxPackage> pkgs = this.analysis.getDocumentContainer().findAllPackages();
 		Relationship[] documentRelationships = this.analysis.getRelationships();
-		List<String> describedElementIds = Lists.newArrayList();
 		for (int i = 0; i < documentRelationships.length; i++) {
 			if (documentRelationships[i].getRelationshipType() == Relationship.RelationshipType.DESCRIBES) {
-				if (pkgs.contains(documentRelationships[i])) {
-					describedElementIds.add(documentRelationships[i].getRelatedSpdxElement().getId());
-				}
+				return;	// We found at least one document describes, we don't need to add a default
 			}
 		}
-		if (describedElementIds.size() == 0 && pkgs.size() == 0) {
-			// add a relationship for the package as a default
-			// See the spec for the definition of this default behavior
-			if (pkgs.size() == 0) {
-				throw new InvalidSpdxTagFileException("Missing describes relationship - see SPDX specification relationship section under DESCRIBES relationship description for more information");
-			}
-			Relationship describesRelationship = new Relationship(pkgs.get(0),
-					Relationship.RelationshipType.DESCRIBES,
-					"This describes relationship was added as a default relationship by the SPDX Tools Tag parser.");
-			this.analysis.addRelationship(describesRelationship);
+		List<SpdxPackage> pkgs = this.analysis.getDocumentContainer().findAllPackages();
+		if (pkgs.size() == 0) {
+			throw new InvalidSpdxTagFileException("Missing describes relationship and there is no package to create a default - see SPDX specification relationship section under DESCRIBES relationship description for more information");
 		}
+		Relationship describesRelationship = new Relationship(pkgs.get(0),
+				Relationship.RelationshipType.DESCRIBES,
+				"This describes relationship was added as a default relationship by the SPDX Tools Tag parser.");
+		this.analysis.addRelationship(describesRelationship);
 	}
 
 	/**
