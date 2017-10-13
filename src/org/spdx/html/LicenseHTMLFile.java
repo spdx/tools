@@ -171,6 +171,7 @@ public class LicenseHTMLFile {
 	}
 	/**
 	 * @return
+	 * @throws  
 	 * @throws LicenseTemplateRuleException 
 	 */
 	private Map<String, Object> buildMustachMap() throws InvalidLicenseTemplateException {
@@ -188,6 +189,7 @@ public class LicenseHTMLFile {
 				}
 				retval.put("notes", notes);
 				retval.put("osiApproved", license.isOsiApproved());
+				retval.put("fsfFree", license.isFsfFree());
 				List<FormattedUrl> otherWebPages = Lists.newArrayList();
 				if (license.getSeeAlso() != null && license.getSeeAlso().length > 0) {
 					for (String sourceUrl : license.getSeeAlso()) {

@@ -382,7 +382,7 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @return True if the license is listed by the Free Software Foundation as Free / Libre
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public boolean isFsfFree() throws InvalidSPDXAnalysisException {
+	public boolean isFsfFree() {
 		if (this.resource != null && this.refreshOnGet) {
 			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
 			if (fsfTextValue != null) {
@@ -391,8 +391,6 @@ public abstract class License extends SimpleLicensingInfo {
 					this.fsfFree = true;
 				} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
 					this.fsfFree = false;
-				} else {
-					throw(new InvalidSPDXAnalysisException("Invalid value for FSF Free - must be {true, false, 0, 1}"));
 				}
 			}
 		}
