@@ -288,6 +288,7 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED = "isDeprecated";
 	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED_VERSION = "deprecatedVersion";
 	public static final String LICENSEXML_ATTRIBUTE_OSI_APPROVED = "isOsiApproved";
+	public static final String LICENSEXML_ATTRIBUTE_FSF_FREE = "isFsfFree";
 	public static final String LICENSEXML_ATTRIBUTE_NAME = "name";
 	public static final String LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED = "listVersionAdded";
 	public static final String LICENSEXML_ELEMENT_CROSS_REFS = "crossRefs";

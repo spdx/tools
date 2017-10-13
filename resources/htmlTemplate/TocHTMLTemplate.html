@@ -159,7 +159,7 @@ Note: You can sort by each column by clicking on the column header.
 
       <table class="sortable">
         <thead><tr>
-          <th>Full name</th><th>Identifier</th><th>OSI Approved?</th><th>Text</th>
+          <th>Full name</th><th>Identifier</th><th>FSF Free/Libre?</th><th>OSI Approved?</th><th>Text</th>
         </tr></thead>
 
         <tbody>
@@ -168,6 +168,7 @@ Note: You can sort by each column by clicking on the column header.
             <td><a href="{{&reference}}" rel="rdf:_{{refNumber}}">{{licenseName}}</a></td>
             <td about="{{&reference}}" typeof="spdx:License">
             <code property="spdx:licenseId">{{licenseId}}</code></td>
+            <td style="text-align:center">{{fsfFree}}</td>
             <td style="text-align:center">{{osiApproved}}</td>
             <td><a href="{{&reference}}#licenseText">License Text</a></td>
           </tr>
