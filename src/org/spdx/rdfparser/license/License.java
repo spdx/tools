@@ -56,6 +56,7 @@ public abstract class License extends SimpleLicensingInfo {
 	protected String standardLicenseTemplate;
 	protected String licenseText;
 	protected boolean osiApproved;
+	protected boolean fsfFree;
 	protected boolean deprecated;
 		
 	/**
@@ -71,14 +72,33 @@ public abstract class License extends SimpleLicensingInfo {
 	 */
 	public License(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
+		this(name,id,text,sourceUrl,comments,standardLicenseHeader,template,osiApproved,false);
+	}
+	
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param osiApproved True if this is an OSI Approvied license
+	 * @param fsfFree True if the license is listed by the Free Software Foundation as free / libre
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public License(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfFree) throws InvalidSPDXAnalysisException {
 		super(name, id, comments, sourceUrl);
 		this.standardLicenseHeader = standardLicenseHeader;
 		this.standardLicenseTemplate = template;
 		
 		this.osiApproved = osiApproved;
+		this.fsfFree = fsfFree;
 		this.licenseText = text;
 		this.deprecated = false;
 	}
+	
 	/**
 	 * Constructs an SPDX License from the licenseNode
 	 * @param modelContainer container which includes the license
@@ -142,6 +162,17 @@ public abstract class License extends SimpleLicensingInfo {
 		} else {			
 			this.osiApproved = false;
 		}
+		String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
+		if (fsfTextValue != null) {
+			fsfTextValue = fsfTextValue.trim();
+			if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
+				this.fsfFree = true;
+			} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
+				this.fsfFree = false;
+			} else {
+				throw(new InvalidSPDXAnalysisException("Invalid value for FSF Free - must be {true, false, 0, 1}"));
+			}
+		}
 		// Deprecated
 		String deprecatedValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
 		if (deprecatedValue != null) {
@@ -172,6 +203,11 @@ public abstract class License extends SimpleLicensingInfo {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, "true");
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
+		}		
+		if (this.fsfFree) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE, "true");
+		} else {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
 		}
 		// Headers
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1);
@@ -341,6 +377,29 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 		return retval;
 	}
+	
+	/**
+	 * @return True if the license is listed by the Free Software Foundation as Free / Libre
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public boolean isFsfFree() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && this.refreshOnGet) {
+			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
+			if (fsfTextValue != null) {
+				fsfTextValue = fsfTextValue.trim();
+				if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
+					this.fsfFree = true;
+				} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
+					this.fsfFree = false;
+				} else {
+					throw(new InvalidSPDXAnalysisException("Invalid value for FSF Free - must be {true, false, 0, 1}"));
+				}
+			}
+		}
+		return this.fsfFree;
+	}
+	
+	
 	/**
 	 * @return true if the license is listed as an approved license on the OSI website
 	 */
@@ -396,6 +455,15 @@ public abstract class License extends SimpleLicensingInfo {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, "true");
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
+		}
+	}
+	
+	public void setFsfFree(boolean fsfFree) {
+		this.fsfFree = fsfFree;
+		if (fsfFree) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE, "true");
+		} else {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
 		}
 	}
 	
