@@ -177,7 +177,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_STD_LICENSE_TEMPLATE_VERSION_1 = "licenseTemplate";		// old property name (pre 1.2 spec)
 	public static final String PROP_STD_LICENSE_TEMPLATE = "standardLicenseTemplate";
 	public static final String PROP_STD_LICENSE_OSI_APPROVED = "isOsiApproved";
-	public static final String PROP_STD_LICENSE_FSF_FREE = "isFsfFree";
+	public static final String PROP_STD_LICENSE_FSF_LIBRE = "isFsfLibre";
 	public static final String PROP_STD_LICENSE_OSI_APPROVED_VERSION_1 = "licenseOsiApproved";	// old property name (pre 1.1 spec)
 	public static final String PROP_LICENSE_SET_MEMEBER = "member";
 	public static final String TERM_LICENSE_NOASSERTION = PROP_VALUE_NOASSERTION;
@@ -288,7 +288,7 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED = "isDeprecated";
 	public static final String LICENSEXML_ATTRIBUTE_DEPRECATED_VERSION = "deprecatedVersion";
 	public static final String LICENSEXML_ATTRIBUTE_OSI_APPROVED = "isOsiApproved";
-	public static final String LICENSEXML_ATTRIBUTE_FSF_FREE = "isFsfFree";
+	public static final String LICENSEXML_ATTRIBUTE_FSF_LIBRE = "isFsfLibre";
 	public static final String LICENSEXML_ATTRIBUTE_NAME = "name";
 	public static final String LICENSEXML_ATTRIBUTE_LIST_VERSION_ADDED = "listVersionAdded";
 	public static final String LICENSEXML_ELEMENT_CROSS_REFS = "crossRefs";

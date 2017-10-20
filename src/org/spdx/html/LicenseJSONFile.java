@@ -66,7 +66,7 @@ public class LicenseJSONFile extends AbstractJsonFile {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
 		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.isOsiApproved());
-		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE, license.isFsfFree());
+		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE, license.isFsfLibre());
 		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getName());
 		String[] seeAlsos = license.getSeeAlso();
 		if (seeAlsos != null && seeAlsos.length > 0) {

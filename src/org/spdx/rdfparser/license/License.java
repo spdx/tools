@@ -56,7 +56,7 @@ public abstract class License extends SimpleLicensingInfo {
 	protected String standardLicenseTemplate;
 	protected String licenseText;
 	protected boolean osiApproved;
-	protected boolean fsfFree;
+	protected boolean fsfLibre;
 	protected boolean deprecated;
 		
 	/**
@@ -84,17 +84,17 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
 	 * @param osiApproved True if this is an OSI Approvied license
-	 * @param fsfFree True if the license is listed by the Free Software Foundation as free / libre
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public License(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfFree) throws InvalidSPDXAnalysisException {
+			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
 		super(name, id, comments, sourceUrl);
 		this.standardLicenseHeader = standardLicenseHeader;
 		this.standardLicenseTemplate = template;
 		
 		this.osiApproved = osiApproved;
-		this.fsfFree = fsfFree;
+		this.fsfLibre = fsfLibre;
 		this.licenseText = text;
 		this.deprecated = false;
 	}
@@ -162,13 +162,13 @@ public abstract class License extends SimpleLicensingInfo {
 		} else {			
 			this.osiApproved = false;
 		}
-		String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
+		String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 		if (fsfTextValue != null) {
 			fsfTextValue = fsfTextValue.trim();
 			if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
-				this.fsfFree = true;
+				this.fsfLibre = true;
 			} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
-				this.fsfFree = false;
+				this.fsfLibre = false;
 			} else {
 				throw(new InvalidSPDXAnalysisException("Invalid value for FSF Free - must be {true, false, 0, 1}"));
 			}
@@ -204,10 +204,10 @@ public abstract class License extends SimpleLicensingInfo {
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED);
 		}		
-		if (this.fsfFree) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE, "true");
+		if (this.fsfLibre) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE, "true");
 		} else {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 		}
 		// Headers
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1);
@@ -382,19 +382,19 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @return True if the license is listed by the Free Software Foundation as Free / Libre
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public boolean isFsfFree() {
+	public boolean isFsfLibre() {
 		if (this.resource != null && this.refreshOnGet) {
-			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
+			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 			if (fsfTextValue != null) {
 				fsfTextValue = fsfTextValue.trim();
 				if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
-					this.fsfFree = true;
+					this.fsfLibre = true;
 				} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
-					this.fsfFree = false;
+					this.fsfLibre = false;
 				}
 			}
 		}
-		return this.fsfFree;
+		return this.fsfLibre;
 	}
 	
 	
@@ -456,12 +456,12 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 	}
 	
-	public void setFsfFree(boolean fsfFree) {
-		this.fsfFree = fsfFree;
-		if (fsfFree) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE, "true");
+	public void setFsfLibre(boolean fsfLibre) {
+		this.fsfLibre = fsfLibre;
+		if (fsfLibre) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE, "true");
 		} else {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_FREE);
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 		}
 	}
 	

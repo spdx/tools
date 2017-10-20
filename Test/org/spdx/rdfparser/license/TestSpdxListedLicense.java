@@ -132,7 +132,7 @@ public class TestSpdxListedLicense {
 		assertEquals(notes, compLic.getComment());
 		assertEquals(standardLicenseHeader, compLic.getStandardLicenseHeader());
 		assertEquals(template, compLic.getStandardLicenseTemplate());
-		assertTrue(compLic.isFsfFree());
+		assertTrue(compLic.isFsfLibre());
 		assertTrue(compLic.isOsiApproved());
 	}
 	
@@ -169,7 +169,7 @@ public class TestSpdxListedLicense {
 	}
 	
 	@Test
-	public void testSetFsfFree() throws InvalidSPDXAnalysisException {
+	public void testSetFsfLibre() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
 		String name = "name";
 		String id = "AFL-3.0";
@@ -181,16 +181,16 @@ public class TestSpdxListedLicense {
 		String licenseHtml = "<html>html</html>";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, false, false, licenseHtml);
-		assertFalse(stdl.isFsfFree());
-		stdl.setFsfFree(true);
-		assertTrue(stdl.isFsfFree());
+		assertFalse(stdl.isFsfLibre());
+		stdl.setFsfLibre(true);
+		assertTrue(stdl.isFsfLibre());
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
-		assertTrue(stdl.isFsfFree());
-		compLic.setFsfFree(false);
-		assertFalse(compLic.isFsfFree());
+		assertTrue(stdl.isFsfLibre());
+		compLic.setFsfLibre(false);
+		assertFalse(compLic.isFsfLibre());
 		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
-		assertFalse(compLic2.isFsfFree());
+		assertFalse(compLic2.isFsfLibre());
 		List<String> verify = stdl.verify();
 		assertEquals(0, verify.size());
 		verify = compLic.verify();

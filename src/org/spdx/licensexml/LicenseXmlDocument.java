@@ -178,15 +178,15 @@ public class LicenseXmlDocument {
 		} else {
 			osiApproved = false;
 		}
-		boolean fsfFree;
-		if (licenseElement.hasAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_FSF_FREE)) {
-			fsfFree = "true".equals(licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_FSF_FREE).toLowerCase());
+		boolean fsfLibre;
+		if (licenseElement.hasAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_FSF_LIBRE)) {
+			fsfLibre = "true".equals(licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_FSF_LIBRE).toLowerCase());
 		} else {
-			fsfFree = false;
+			fsfLibre = false;
 		}
 		String licenseHtml = LicenseXmlHelper.getLicenseTextHtml(licenseElement);
 		return new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
-				template, osiApproved, fsfFree, licenseHtml);
+				template, osiApproved, fsfLibre, licenseHtml);
 	}
 
 	/**
