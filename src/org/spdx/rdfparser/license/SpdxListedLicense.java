@@ -48,13 +48,13 @@ public class SpdxListedLicense extends License {
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
 	 * @param osiApproved True if this is an OSI Approvied license
-	 * @param fsfFree True if the license is listed by the Free Software Foundation as free / libre
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
 	 * @param licenseTextHtml HTML version for the license text
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfFree, String licenseTextHtml) throws InvalidSPDXAnalysisException {
-		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfFree);
+			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre, String licenseTextHtml) throws InvalidSPDXAnalysisException {
+		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre);
 		this.licenseTextHtml = licenseTextHtml;
 	}
 	
@@ -84,12 +84,12 @@ public class SpdxListedLicense extends License {
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
 	 * @param osiApproved True if this is an OSI Approvied license
-	 * @param fsfFree True if the license is listed by the Free Software Foundation as free / libre
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfFree) throws InvalidSPDXAnalysisException {
-		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfFree, null);
+			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
+		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre, null);
 	}
 	
 	/**

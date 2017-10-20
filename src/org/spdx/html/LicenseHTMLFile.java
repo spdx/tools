@@ -189,7 +189,7 @@ public class LicenseHTMLFile {
 				}
 				retval.put("notes", notes);
 				retval.put("osiApproved", license.isOsiApproved());
-				retval.put("fsfFree", license.isFsfFree());
+				retval.put("fsfLibre", license.isFsfLibre());
 				List<FormattedUrl> otherWebPages = Lists.newArrayList();
 				if (license.getSeeAlso() != null && license.getSeeAlso().length > 0) {
 					for (String sourceUrl : license.getSeeAlso()) {
