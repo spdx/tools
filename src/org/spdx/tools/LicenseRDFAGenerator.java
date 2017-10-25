@@ -473,7 +473,16 @@ public class LicenseRDFAGenerator {
 	 * @param license
 	 */
 	private static void addExternalMetaData(SpdxListedLicense license) {
-		license.setFsfLibre(FsfLicenseDataParser.getFsfLicenseDataParser().isSpdxLicenseFsfLibre(license.getLicenseId()));
+		Boolean libre = null;
+		try {
+			libre = FsfLicenseDataParser.getFsfLicenseDataParser().isSpdxLicenseFsfLibre(license.getLicenseId());
+		} catch (LicenseGeneratorException e) {
+			System.out.println(e.getMessage());
+			libre = null;
+		}
+		if (libre != null) {
+			license.setFsfLibre(libre);
+		}
 	}
 	
 	/**

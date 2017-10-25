@@ -15,6 +15,23 @@
  */
 package org.spdx.tools.licensegenerator;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
+import org.spdx.tools.LicenseGeneratorException;
+
 /**
  * Singleton class which returns information maintained by the Free Software Foundation
  * 
@@ -25,14 +42,40 @@ package org.spdx.tools.licensegenerator;
  *
  */
 public class FsfLicenseDataParser {
-	
+
 	private static FsfLicenseDataParser fsfLicenseDataParser = null;
-	
-	private FsfLicenseDataParser() {
-		//TODO: Initialize any cached data
+	private static Map<String, String> fsfID;
+
+	private FsfLicenseDataParser() throws LicenseGeneratorException {
+		fsfID = new HashMap<String, String>();
+		URL url;
+		try {
+			url = new URL("https://wking.github.io/fsf-api/licenses.json");
+		} catch (MalformedURLException e) {
+			throw new LicenseGeneratorException("invalid FSF license-list URL", e);
+		}
+		try {
+			Reader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			JSONObject index = (JSONObject)JSONValue.parseWithException(reader);
+			Iterator iterator = index.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Entry entry = (Entry)iterator.next();
+				JSONObject value = (JSONObject)entry.getValue();
+				JSONObject identifiers = (JSONObject)value.get("identifiers");
+				if (identifiers == null) {
+					continue;
+				}
+				String spdx = (String)identifiers.get("spdx");
+				if (spdx != null) {
+					fsfID.put(spdx, (String)entry.getKey());
+				}
+			}
+		} catch (IOException|ParseException e) {
+			throw new LicenseGeneratorException("failure processing FSF license-list", e);
+		}
 	}
-	
-	public static synchronized FsfLicenseDataParser getFsfLicenseDataParser() {
+
+	public static synchronized FsfLicenseDataParser getFsfLicenseDataParser() throws LicenseGeneratorException {
 		if (fsfLicenseDataParser == null) {
 			fsfLicenseDataParser = new FsfLicenseDataParser();
 		}
@@ -44,9 +87,29 @@ public class FsfLicenseDataParser {
 	 * @param spdxLicenseId
 	 * @return
 	 */
-	public boolean isSpdxLicenseFsfLibre(String spdxLicenseId) {
-		// TODO Implement
-		return false;
+	public Boolean isSpdxLicenseFsfLibre(String spdxLicenseId) throws LicenseGeneratorException {
+		String id = fsfID.get(spdxLicenseId);
+		if (id == null) {
+			return null;
+		}
+		URL url;
+		try {
+			url = new URL(String.format("https://wking.github.io/fsf-api/%s.json", id));
+		} catch (MalformedURLException e) {
+			throw new LicenseGeneratorException("invalid FSF license-list URL", e);
+		}
+		JSONArray tags;
+		try {
+			Reader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			JSONObject license = (JSONObject)JSONValue.parseWithException(reader);
+			tags = (JSONArray)license.get("tags");
+		} catch (IOException|ParseException e) {
+			throw new LicenseGeneratorException(String.format("failure processing FSF metadata for %s", id), e);
+		}
+		if (tags == null) {
+			return null;
+		}
+		return tags.contains("libre");
 	}
 
 }
