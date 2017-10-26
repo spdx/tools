@@ -6,6 +6,8 @@ Issues
 ------
 `spdx-tools` has a [project page on GitHub](https://github.com/spdx/tools/) where you can [create an issue](https://github.com/spdx/tools/issues/new) to report a bug, make a suggestion, or propose a substantial change or improvement that you might like to make. You may also wish to contact the SPDX working group technical team through its mailing list, [spdx-tech@lists.spdx.org](mailto:spdx-tech@lists.spdx.org).
 
+If you would like to work on a fix for any issue, please assign the issue to yourself prior to creating a patch.
+
 Patches
 -------
 The source code for `spdx-tools` is hosted on [github.com/spdx/tools](https://github.com/spdx/tools). Please review [open pull requests](https://github.com/spdx/tools/pulls) and [active branches](https://github.com/spdx/tools/branches) before committing time to a substantial revision. Work along similar lines may already be in progress.
