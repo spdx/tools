@@ -205,4 +205,10 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		this.movingParagraph = false;
 		inOptional = false;
 	}
+
+	@Override
+	public void completeParsing() {
+		// Nothing needs to be done - everything is processed inline
+		
+	}
 }

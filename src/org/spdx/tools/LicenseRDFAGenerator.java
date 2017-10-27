@@ -42,6 +42,7 @@ import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet;
 import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 import org.spdx.tools.licensegenerator.FsfLicenseDataParser;
 import org.spdx.tools.licensegenerator.ILicenseFormatWriter;
+import org.spdx.tools.licensegenerator.ILicenseTester;
 import org.spdx.tools.licensegenerator.LicenseHtmlFormatWriter;
 import org.spdx.tools.licensegenerator.LicenseJsonFormatWriter;
 import org.spdx.tools.licensegenerator.LicenseMarkdownFormatWriter;
@@ -49,6 +50,7 @@ import org.spdx.tools.licensegenerator.LicenseRdfFormatWriter;
 import org.spdx.tools.licensegenerator.LicenseRdfaFormatWriter;
 import org.spdx.tools.licensegenerator.LicenseTemplateFormatWriter;
 import org.spdx.tools.licensegenerator.LicenseTextFormatWriter;
+import org.spdx.tools.licensegenerator.SimpleLicenseTester;
 import org.spdx.tools.licensegenerator.SpdxWebsiteFormatWriter;
 import org.spdx.spdxspreadsheet.SpreadsheetException;
 
@@ -251,9 +253,9 @@ public class LicenseRDFAGenerator {
 				throw new LicenseGeneratorException("Error: Unable to create markdown file");
 			}
 			writers.add(new LicenseMarkdownFormatWriter(version, releaseDate, markdownFile));
-			LicenseTester tester = null;
+			ILicenseTester tester = null;
 			if (testFileDir != null) {
-				tester = new LicenseTester(testFileDir);
+				tester = new SimpleLicenseTester(testFileDir);
 			}
 			System.out.print("Processing License List");
 			writeLicenseList(version, releaseDate, licenseProvider, warnings, writers, tester);
@@ -311,7 +313,7 @@ public class LicenseRDFAGenerator {
 	*/
 	private static void writeExceptionList(String version, String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings, List<ILicenseFormatWriter> writers,
-			LicenseTester tester) throws IOException, LicenseRestrictionException, SpreadsheetException, LicenseGeneratorException {
+			ILicenseTester tester) throws IOException, LicenseRestrictionException, SpreadsheetException, LicenseGeneratorException {
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		Set<String> licenseIds = Sets.newHashSet();
 		try {
@@ -419,7 +421,7 @@ public class LicenseRDFAGenerator {
 	 */
 	private static void writeLicenseList(String version, String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings,
-			List<ILicenseFormatWriter> writers, LicenseTester tester) throws LicenseGeneratorException, InvalidSPDXAnalysisException, IOException, SpdxListedLicenseException, SpdxCompareException {
+			List<ILicenseFormatWriter> writers, ILicenseTester tester) throws LicenseGeneratorException, InvalidSPDXAnalysisException, IOException, SpdxListedLicenseException, SpdxCompareException {
 		Iterator<SpdxListedLicense> licenseIter = licenseProvider.getLicenseIterator();
 		Map<String, String> addedLicIdTextMap = Maps.newHashMap();	// keep track for duplicate checking
 		while (licenseIter.hasNext()) {

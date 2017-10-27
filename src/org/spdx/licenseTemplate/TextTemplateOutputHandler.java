@@ -69,4 +69,10 @@ public class TextTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	public String getText() {
 		return this.textString.toString();
 	}
+
+	@Override
+	public void completeParsing() {
+		// // Nothing needs to be done - everything is processed inline
+		
+	}
 }
