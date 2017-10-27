@@ -272,6 +272,12 @@ public class LicenseTemplateRule {
 			throw(new LicenseTemplateRuleException("Missing "+VALUE_SEPARATOR+" for "+keyword));
 		}
 		retval = retval.substring(1).trim();
+		if (retval.startsWith("\"")) {
+			retval = retval.substring(1);
+		}
+		if (retval.endsWith("\"")) {
+			retval = retval.substring(0, retval.length()-1);
+		}
 		return retval;
 	}
 

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.spdx.tools;
+package org.spdx.tools.licensegenerator;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -40,7 +40,7 @@ import org.spdx.rdfparser.license.LicenseException;
  * @author Gary O'Neall
  *
  */
-public class LicenseTester {
+public class LicenseTester implements ILicenseTester {
 	
 	private Map<String,File> licenseIdToTestMap;
 	private static FileFilter testFileFilter = new FileFilter() {
@@ -72,6 +72,7 @@ public class LicenseTester {
 	 * @throws IOException
 	 * @throws SpdxCompareException
 	 */
+	@Override
 	public List<String> testLicense(License license) throws IOException, SpdxCompareException{
 		List<String> retval = new ArrayList<String>();
 		File licenseDir = this.licenseIdToTestMap.get(license.getLicenseId());
@@ -118,6 +119,7 @@ public class LicenseTester {
 	 * @return
 	 * @throws IOException 
 	 */
+	@Override
 	public List<String> testException(LicenseException exception) throws IOException {
 		List<String> retval = new ArrayList<String>();
 		File exceptionDir = this.licenseIdToTestMap.get(exception.getLicenseExceptionId());

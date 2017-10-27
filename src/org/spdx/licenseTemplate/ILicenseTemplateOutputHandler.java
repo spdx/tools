@@ -54,5 +54,10 @@ public interface ILicenseTemplateOutputHandler {
 	 * @param rule
 	 */
 	void endOptional(LicenseTemplateRule rule);
+	
+	/**
+	 * Signals all text has been added and parsing can be completed.
+	 */
+	void completeParsing();
 
 }

@@ -87,6 +87,12 @@ public class TestSpdxLicenseTemplateHelper {
 			endOptionalRule = rule;
 		}
 
+		@Override
+		public void completeParsing() {
+			// // Nothing needs to be done - everything is processed inline
+			
+		}
+
 	}
 
 	static final String LINE1 = "This is the start of the license.\n";

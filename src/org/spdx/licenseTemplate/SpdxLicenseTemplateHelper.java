@@ -65,7 +65,7 @@ public class SpdxLicenseTemplateHelper {
 				templateOutputHandler.variableRule(rule);
 			} else if (rule.getType() == LicenseTemplateRule.RuleType.BEGIN_OPTIONAL) {
 				if (inOptional) {
-					throw(new LicenseTemplateRuleException("Invalid nested optional rule found"));
+					throw(new LicenseTemplateRuleException("Invalid nested optional rule found after text '"+upToTheFind+"'"));
 				} else {
 					inOptional = true;
 					templateOutputHandler.beginOptional(rule);
@@ -75,20 +75,21 @@ public class SpdxLicenseTemplateHelper {
 					inOptional = false;
 					templateOutputHandler.endOptional(rule);
 				} else {
-					throw(new LicenseTemplateRuleException("End optional rule found without a matching begin optional rule"));
+					throw(new LicenseTemplateRuleException("End optional rule found without a matching begin optional rule after text '"+upToTheFind+"'"));
 				}
 			} else {
-				throw(new LicenseTemplateRuleException("Unrecognized rule: "+rule.getType().toString()));
+				throw(new LicenseTemplateRuleException("Unrecognized rule: "+rule.getType().toString()+" after text '"+upToTheFind+"'"));
 			}
 		}
 		if (inOptional) {
-			throw(new LicenseTemplateRuleException("Missing EndOptional rule"));
+			throw(new LicenseTemplateRuleException("Missing EndOptional rule and end of text"));
 		}
 		// copy the rest of the template to the end
 		String restOfTemplate = licenseTemplate.substring(end);
 		if (!restOfTemplate.isEmpty()) {
 			templateOutputHandler.normalText(restOfTemplate);
 		}
+		templateOutputHandler.completeParsing();
 	}
 	
 	/**
