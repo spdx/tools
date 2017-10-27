@@ -33,7 +33,7 @@ public class SpdxLicenseTemplateHelper {
 	
 	static final String START_RULE = "<<";
 	static final String END_RULE = ">>";
-	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*((.|\\s)+?)\\s*"+END_RULE);
+	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*((beginOptional|endOptional|var)(.|\\s)*?)\\s*"+END_RULE);
 	private static final int SPACES_PER_TAB = 5;
 	private static final int MAX_TABS = 4;
 	private static final int[] PIXELS_PER_TAB = new int[] {20, 40, 60, 70};
