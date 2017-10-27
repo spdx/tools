@@ -135,8 +135,8 @@ public class LicenseCompareHelper {
 		if (licenseTextA.equals(licenseTextB)) {
 			return true;
 		}
-		String[] licenseATokens = replaceMultWord(licenseTextA).split(TOKEN_DELIM);
-		String[] licenseBTokens = replaceMultWord(licenseTextB).split(TOKEN_DELIM);
+		String[] licenseATokens = normalizeQuotes(replaceMultWord(licenseTextA)).split(TOKEN_DELIM);
+		String[] licenseBTokens = normalizeQuotes(replaceMultWord(licenseTextB)).split(TOKEN_DELIM);
 		int bTokenCounter = 0;
 		int aTokenCounter = 0;
 		String nextAToken = getTokenAt(licenseATokens, aTokenCounter++);
@@ -178,6 +178,10 @@ public class LicenseCompareHelper {
 		return (nextBToken == null);
 	}
 	
+	private static String normalizeQuotes(String s) {
+		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„", "\"");
+	}
+
 	/**
 	 * replaces all mult-words with a single token using a dash to separate
 	 * @param s
