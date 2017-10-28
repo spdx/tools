@@ -18,6 +18,9 @@ package org.spdx.compare;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,6 +28,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.licenseTemplate.LicenseTemplateRule;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
+import org.spdx.rdfparser.license.LicenseParserException;
+import org.spdx.rdfparser.model.UnitTestHelper;
 import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
 
 /**
@@ -32,6 +38,13 @@ import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
  *
  */
 public class TestCompareTemplateOutputHandler {
+	
+	static final String ADOBE_GLYPH_TEXT = "TestFiles" + File.separator + "Adobe-Glyph.txt";
+	static final String ADOBE_GLYPH_TEMPLATE = "TestFiles" + File.separator + "Adobe-Glyph.template.txt";
+	static final String AFL_3_TEXT = "TestFiles" + File.separator + "AFL-3.0.txt";
+	static final String AFL_3_TEMPLATE = "TestFiles" + File.separator + "AFL-3.0.template.txt";
+	static final String BSDNETBSD_TEXT = "TestFiles" + File.separator + "BSD-2-Clause-NetBSD.txt";
+	static final String BSDNETBSD_TEMPLATE = "TestFiles" + File.separator + "BSD-2-Clause-NetBSD.template.txt";
 
 	/**
 	 * @throws java.lang.Exception
@@ -256,5 +269,32 @@ public class TestCompareTemplateOutputHandler {
 		ctoh.normalText(line3);
 		ctoh.completeParsing();
 		assertTrue(!ctoh.matches());
+	}
+	
+	@Test
+	public void testRegressionAdobeGlyph() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(ADOBE_GLYPH_TEXT);
+		String templateText = UnitTestHelper.fileToText(ADOBE_GLYPH_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		assertTrue(templateOutputHandler.matches());
+	}
+	
+	@Test
+	public void testRegressionAFL3() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(AFL_3_TEXT);
+		String templateText = UnitTestHelper.fileToText(AFL_3_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		assertTrue(templateOutputHandler.matches());
+	}
+	
+	@Test
+	public void testRegressionBsdNetBsd() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(BSDNETBSD_TEXT);
+		String templateText = UnitTestHelper.fileToText(BSDNETBSD_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		assertTrue(templateOutputHandler.matches());
 	}
 }

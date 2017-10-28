@@ -16,6 +16,12 @@
 */
 package org.spdx.rdfparser.model;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
+import com.google.common.io.Files;
+
 /**
  * Helper class for unit tests
  * @author Gary
@@ -82,6 +88,15 @@ public class UnitTestHelper {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * @param filePath Path for file
+	 * @return Text from the file
+	 * @throws IOException 
+	 */
+	public static String fileToText(String filePath) throws IOException {
+		return Files.toString(new File(filePath), Charset.forName("UTF-8"));
 	}
 
 }

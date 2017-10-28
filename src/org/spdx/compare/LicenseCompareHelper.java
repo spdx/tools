@@ -178,8 +178,8 @@ public class LicenseCompareHelper {
 		return (nextBToken == null);
 	}
 	
-	private static String normalizeQuotes(String s) {
-		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„", "\"");
+	public static String normalizeQuotes(String s) {
+		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„", "\"").replaceAll("\\.", "\\. ");	// Adding a space after every period - a bit of a hack to address some licenses that have special characters after a period
 	}
 
 	/**
