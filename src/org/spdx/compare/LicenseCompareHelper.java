@@ -17,7 +17,11 @@
 */
 package org.spdx.compare;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -47,7 +51,13 @@ import com.google.common.collect.Maps;
  */
 public class LicenseCompareHelper {
 	
-	protected static final String TOKEN_DELIM = "\\s";	// white space
+//	protected static final String TOKEN_DELIM = "\\s";	// white space
+	protected static final String TOKEN_SPLIT_REGEX = 		"(^|[^\\s\\.,?]+)((\\s|\\.|,|\\?|$)+)";
+	protected static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
+	
+	protected static final ImmutableSet<String> PUNCTUATION = ImmutableSet.<String>builder()
+			.add(".").add(",").add("?").build();
+	
 	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 	protected static final ImmutableSet<String> SKIPPABLE_TOKENS = ImmutableSet.<String>builder()
 		.add("//").add("/*").add("*/").add("/**").add("#").add("##")
@@ -135,8 +145,10 @@ public class LicenseCompareHelper {
 		if (licenseTextA.equals(licenseTextB)) {
 			return true;
 		}
-		String[] licenseATokens = normalizeQuotes(replaceMultWord(licenseTextA)).split(TOKEN_DELIM);
-		String[] licenseBTokens = normalizeQuotes(replaceMultWord(licenseTextB)).split(TOKEN_DELIM);
+		Map<Integer, LineColumn> tokenToLocationA = new HashMap<Integer, LineColumn>();
+		Map<Integer, LineColumn> tokenToLocationB = new HashMap<Integer, LineColumn>();
+		String[] licenseATokens = tokenizeLicenseText(licenseTextA,tokenToLocationA);
+		String[] licenseBTokens = tokenizeLicenseText(licenseTextB,tokenToLocationB);
 		int bTokenCounter = 0;
 		int aTokenCounter = 0;
 		String nextAToken = getTokenAt(licenseATokens, aTokenCounter++);
@@ -178,8 +190,64 @@ public class LicenseCompareHelper {
 		return (nextBToken == null);
 	}
 	
-	public static String normalizeQuotes(String s) {
-		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„", "\"").replaceAll("\\.", "\\. ");	// Adding a space after every period - a bit of a hack to address some licenses that have special characters after a period
+	private static String normalizeQuotes(String s) {
+		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„", "\"");
+	}
+	
+	/**
+	 * Tokenizes the license text, normalizes quotes, lowercases and converts multi-words for better equiv. comparisons
+	 * @param tokenLocations location for all of the tokens
+	 * @param licenseText
+	 * @return
+	 * @throws IOException 
+	 */
+	public static String[] tokenizeLicenseText(String licenseText, Map<Integer, LineColumn> tokenToLocation) {
+		String textToTokenize = normalizeQuotes(replaceMultWord(licenseText)).toLowerCase();
+		List<String> tokens = new ArrayList<String>();
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new StringReader(textToTokenize));
+			int currentLine = 1;
+			int currentToken = 0;
+			String line = reader.readLine();
+			while (line != null) {
+				Matcher lineMatcher = LicenseCompareHelper.TOKEN_SPLIT_PATTERN.matcher(line);
+				while (lineMatcher.find()) {
+					String token = lineMatcher.group(1).trim();
+					tokens.add(token);
+					tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start(), token.length()));
+					currentToken++;
+					String separator = lineMatcher.group(2).trim();
+					if (LicenseCompareHelper.PUNCTUATION.contains(separator)) {
+						tokens.add(separator);
+						tokenToLocation.put(currentToken, new LineColumn(currentToken, lineMatcher.start()+token.length(), token.length()));
+						currentToken++;
+					}
+				}
+				currentLine++;
+				line = reader.readLine();
+			}
+		} catch (IOException e) {
+			// Don't fill in the lines, take a simpler approach
+			Matcher m = TOKEN_SPLIT_PATTERN.matcher(textToTokenize);
+			while (m.find()) {
+				String word = m.group(1).trim();
+				String seperator = m.group(2).trim();
+				tokens.add(word);
+				if (PUNCTUATION.contains(seperator)) {
+					tokens.add(seperator);
+				}
+			}
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
+		}
+		return tokens.toArray(new String[tokens.size()]);
 	}
 
 	/**
