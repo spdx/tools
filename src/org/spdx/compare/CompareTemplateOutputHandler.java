@@ -182,11 +182,11 @@ public class CompareTemplateOutputHandler implements
 	 * @throws IOException This is not to be expected since we are using StringReaders
 	 */
 	public CompareTemplateOutputHandler(String compareText) throws IOException {
-		this.compareText = compareText;
+		this.compareText = LicenseCompareHelper.normalizeQuotes(compareText);
 		List<String> tokens = new ArrayList<String>();
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new StringReader(compareText));
+			reader = new BufferedReader(new StringReader(this.compareText));
 			int currentLine = 1;
 			int currentToken = 0;
 			String line = reader.readLine();
@@ -371,7 +371,7 @@ public class CompareTemplateOutputHandler implements
 			return retval;
 		}
 		
-		String[] textTokens = firstNormalText.split(LicenseCompareHelper.TOKEN_DELIM);
+		String[] textTokens = LicenseCompareHelper.normalizeQuotes(firstNormalText).split(LicenseCompareHelper.TOKEN_DELIM);
 		// Save state
 		String saveNextComparisonToken = nextCompareToken;
 		int saveCompareTokenCounter = compareTokenCounter;
@@ -379,7 +379,7 @@ public class CompareTemplateOutputHandler implements
 		List<LineColumn> saveDifferences = new ArrayList<LineColumn>();
 		Collections.copy(saveDifferences, this.differences);
 		
-		int nextMatchingStart = compareTokenCounter;
+		int nextMatchingStart = compareTokenCounter-1;
 		boolean found = textEquivalent(textTokens);
 		while (!found && compareTokenCounter < compareTokens.length) {			
 			nextMatchingStart = nextMatchingStart + 1;
@@ -471,7 +471,7 @@ public class CompareTemplateOutputHandler implements
 	 * @return true if the text is equivalent
 	 */
 	protected boolean textEquivalent(String text) {
-		String[] textTokens = text.split(LicenseCompareHelper.TOKEN_DELIM);
+		String[] textTokens = LicenseCompareHelper.normalizeQuotes(text).split(LicenseCompareHelper.TOKEN_DELIM);
 		return textEquivalent(textTokens);
 	}
 
