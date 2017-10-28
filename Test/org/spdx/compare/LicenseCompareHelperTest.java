@@ -17,9 +17,9 @@
 */
 package org.spdx.compare;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.After;
@@ -494,4 +494,25 @@ public class LicenseCompareHelperTest {
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic3, lic4, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic4, lic2, xlationMap));
 	}	
+	
+	@Test
+	public void testTokenizeLicenseText() {
+		String test = "Now is the.time,for?all good men.";
+		Map<Integer, LineColumn> tokenToLocation = new HashMap<Integer, LineColumn>();
+		String[] result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
+		assertEquals(12,result.length);
+		assertEquals("now",result[0]);
+		assertEquals("is",result[1]);
+		assertEquals("the",result[2]);
+		assertEquals(".",result[3]);
+		assertEquals("time",result[4]);
+		assertEquals(",",result[5]);
+		assertEquals("for",result[6]);
+		assertEquals("?",result[7]);
+		assertEquals("all",result[8]);
+		assertEquals("good",result[9]);
+		assertEquals("men",result[10]);
+		assertEquals(".",result[11]);
+		//TODO: Add tests for token locations
+	}
 }

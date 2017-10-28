@@ -16,9 +16,7 @@
 */
 package org.spdx.compare;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,41 +91,6 @@ public class CompareTemplateOutputHandler implements
 			this.normalText = normalText;
 		}
 	}
-
-	class LineColumn {
-		private int line;
-		private int column;
-		private int len;
-		
-		public LineColumn(int line, int column,int len) {
-			this.line = line;
-			this.column = column;
-		}
-
-		public int getLine() {
-			return line;
-		}
-
-		public void setLine(int line) {
-			this.line = line;
-		}
-
-		public int getColumn() {
-			return column;
-		}
-
-		public void setColumn(int column) {
-			this.column = column;
-		}
-
-		public int getLen() {
-			return len;
-		}
-
-		public void setLen(int len) {
-			this.len = len;
-		}		
-	}
 	
 	public class DifferenceDescription {
 		private boolean differenceFound;
@@ -182,42 +145,8 @@ public class CompareTemplateOutputHandler implements
 	 * @throws IOException This is not to be expected since we are using StringReaders
 	 */
 	public CompareTemplateOutputHandler(String compareText) throws IOException {
-		this.compareText = LicenseCompareHelper.normalizeQuotes(compareText);
-		List<String> tokens = new ArrayList<String>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new StringReader(this.compareText));
-			int currentLine = 1;
-			int currentToken = 0;
-			String line = reader.readLine();
-			Pattern delimPattern = Pattern.compile(LicenseCompareHelper.TOKEN_DELIM);
-			while (line != null) {
-				Matcher lineMatcher = delimPattern.matcher(line);
-				int lastColMatched = 0;
-				while (lineMatcher.find()) {
-					String token = line.substring(lastColMatched, lineMatcher.start());
-					if (token.length() > 0) {
-						tokens.add(token);
-						tokenToLocation.put(currentToken, new LineColumn(currentLine, lastColMatched, token.length()));
-						currentToken++;
-					}
-					lastColMatched = lineMatcher.end();
-				}
-				if (lastColMatched < line.length()) {
-					String token = line.substring(lastColMatched, line.length());
-					tokens.add(token);
-					tokenToLocation.put(currentToken, new LineColumn(currentLine, lastColMatched, token.length()));
-					currentToken++;
-				}
-				currentLine++;
-				line = reader.readLine();
-			}
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-		}
-		this.compareTokens = tokens.toArray(new String[tokens.size()]);
+		this.compareText = compareText;
+		this.compareTokens = LicenseCompareHelper.tokenizeLicenseText(this.compareText, tokenToLocation);
 		this.currentInstIndex = 0;
 		this.compareTokenCounter = 0;
 		nextCompareToken = LicenseCompareHelper.getTokenAt(compareTokens, compareTokenCounter++);
@@ -371,7 +300,8 @@ public class CompareTemplateOutputHandler implements
 			return retval;
 		}
 		
-		String[] textTokens = LicenseCompareHelper.normalizeQuotes(firstNormalText).split(LicenseCompareHelper.TOKEN_DELIM);
+		Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(firstNormalText, normalTextLocations);
 		// Save state
 		String saveNextComparisonToken = nextCompareToken;
 		int saveCompareTokenCounter = compareTokenCounter;
@@ -471,7 +401,8 @@ public class CompareTemplateOutputHandler implements
 	 * @return true if the text is equivalent
 	 */
 	protected boolean textEquivalent(String text) {
-		String[] textTokens = LicenseCompareHelper.normalizeQuotes(text).split(LicenseCompareHelper.TOKEN_DELIM);
+		Map<Integer, LineColumn> textLocations = new HashMap<Integer, LineColumn>();
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(text, textLocations);
 		return textEquivalent(textTokens);
 	}
 
