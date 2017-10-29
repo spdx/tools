@@ -52,11 +52,11 @@ import com.google.common.collect.Maps;
 public class LicenseCompareHelper {
 	
 //	protected static final String TOKEN_DELIM = "\\s";	// white space
-	protected static final String TOKEN_SPLIT_REGEX = 		"(^|[^\\s\\.,?]+)((\\s|\\.|,|\\?|$)+)";
+	protected static final String TOKEN_SPLIT_REGEX = 		"(^|[^\\s\\.,?'\"]+)((\\s|\\.|,|\\?|'|\"|$)+)";
 	protected static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
 	
 	protected static final ImmutableSet<String> PUNCTUATION = ImmutableSet.<String>builder()
-			.add(".").add(",").add("?").build();
+			.add(".").add(",").add("?").add("\"").add("'").build();
 	
 	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 	protected static final ImmutableSet<String> SKIPPABLE_TOKENS = ImmutableSet.<String>builder()
@@ -191,7 +191,84 @@ public class LicenseCompareHelper {
 	}
 	
 	private static String normalizeQuotes(String s) {
-		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„", "\"");
+		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„|``", "\"");
+	}
+	
+	/**
+	 * Locate the original text starting with the start token and ending with the end token
+	 * @param fullLicenseText
+	 * @param startToken
+	 * @param endToken
+	 * @param tokenToLocation
+	 * @return
+	 */
+	public static String locateOriginalText(String fullLicenseText, int startToken, int endToken,  
+			Map<Integer, LineColumn> tokenToLocation, String[] tokens) {
+		if (startToken > endToken) {
+			return "";
+		}
+		LineColumn start = tokenToLocation.get(startToken);
+		if (start == null) {
+			return "";
+		}
+		LineColumn end = tokenToLocation.get(endToken+1);
+		// If end == null, then we read to the end
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new StringReader(fullLicenseText));
+			int currentLine = 1;
+			String line = reader.readLine();
+			while (line != null && currentLine < start.getLine()) {
+				currentLine++;
+				line = reader.readLine();
+			}
+			if (line == null) {
+				return "";
+			}
+			if (end == null) {
+				// read until the end of the stream
+				StringBuilder sb = new StringBuilder(line.substring(start.getColumn(), line.length()));
+				currentLine++;
+				line = reader.readLine();
+				while (line != null) {
+					sb.append(line);
+					currentLine++;
+					line = reader.readLine();
+				}
+				return sb.toString();
+			} else if (end.getLine() == currentLine) {
+				return line.substring(start.getColumn(), end.getColumn()-1);
+			} else {
+				StringBuilder sb = new StringBuilder(line.substring(start.getColumn(), line.length()));
+				currentLine++;
+				line = reader.readLine();
+				while (line != null && currentLine < end.getLine()) {
+					sb.append(line);
+					currentLine++;
+					line = reader.readLine();
+				}
+				if (line != null && end.getColumn() > 0) {
+					sb.append(line.substring(0, end.getColumn()-1));
+				}
+				return sb.toString();
+			}			
+		} catch (IOException e) {
+			// just build with spaces - not ideal, but close enough most of the time
+			StringBuilder sb = new StringBuilder(tokens[startToken]);
+			for (int i = startToken+1; i <= endToken; i++) {
+				sb.append(' ');
+				sb.append(tokens[i]);
+			}
+			return sb.toString();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
+		}
 	}
 	
 	/**
@@ -214,13 +291,15 @@ public class LicenseCompareHelper {
 				Matcher lineMatcher = LicenseCompareHelper.TOKEN_SPLIT_PATTERN.matcher(line);
 				while (lineMatcher.find()) {
 					String token = lineMatcher.group(1).trim();
-					tokens.add(token);
-					tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start(), token.length()));
-					currentToken++;
+					if (!token.isEmpty()) {
+						tokens.add(token);
+						tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start(), token.length()));
+						currentToken++;
+					}
 					String separator = lineMatcher.group(2).trim();
 					if (LicenseCompareHelper.PUNCTUATION.contains(separator)) {
 						tokens.add(separator);
-						tokenToLocation.put(currentToken, new LineColumn(currentToken, lineMatcher.start()+token.length(), token.length()));
+						tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start()+token.length(), token.length()));
 						currentToken++;
 					}
 				}

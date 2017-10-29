@@ -45,7 +45,10 @@ public class TestCompareTemplateOutputHandler {
 	static final String AFL_3_TEMPLATE = "TestFiles" + File.separator + "AFL-3.0.template.txt";
 	static final String BSDNETBSD_TEXT = "TestFiles" + File.separator + "BSD-2-Clause-NetBSD.txt";
 	static final String BSDNETBSD_TEMPLATE = "TestFiles" + File.separator + "BSD-2-Clause-NetBSD.template.txt";
-
+	static final String APACHE_1_0_TEXT = "TestFiles" + File.separator + "Apache-1.0.txt";
+	static final String APACHE_1_0_TEMPLATE = "TestFiles" + File.separator + "Apache-1.0.template.txt";
+	static final String BSD_2_CLAUSE_TEXT = "TestFiles" + File.separator + "BSD-2-Clause.txt";
+	static final String BSD_2_CLAUSE_TEMPLATE = "TestFiles" + File.separator + "BSD-2-Clause.template.txt";
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -296,5 +299,27 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		assertTrue(templateOutputHandler.matches());
+	}
+	
+	@Test
+	public void testRegressionApache1() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(APACHE_1_0_TEXT);
+		String templateText = UnitTestHelper.fileToText(APACHE_1_0_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionBsd2Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(BSD_2_CLAUSE_TEXT);
+		String templateText = UnitTestHelper.fileToText(BSD_2_CLAUSE_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
 	}
 }
