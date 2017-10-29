@@ -51,7 +51,7 @@ public class SpdxLicenseTemplateHelper {
 		while (ruleMatcher.find()) {
 			// copy everything up to the start of the find
 			String upToTheFind = licenseTemplate.substring(end, ruleMatcher.start());
-			if (!upToTheFind.isEmpty()) {
+			if (!upToTheFind.trim().isEmpty()) {
 				if (inOptional) {
 					templateOutputHandler.optionalText(upToTheFind);
 				} else {

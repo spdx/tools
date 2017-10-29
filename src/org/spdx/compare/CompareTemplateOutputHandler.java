@@ -260,15 +260,20 @@ public class CompareTemplateOutputHandler implements
 		List<Integer> matchingStartTokens = findNextMatchingStartTokens();
 		boolean matchFound = false;
 		for (int matchingStartToken:matchingStartTokens) {
-			String compareText = buildCompareText(this.compareTokenCounter-1, matchingStartToken);
-			Pattern matchPattern = Pattern.compile(rule.getMatch());
+			String compareText = buildCompareText(this.compareTokenCounter-1, matchingStartToken-1);
+			Pattern matchPattern = Pattern.compile(rule.getMatch(), Pattern.CASE_INSENSITIVE);
 			Matcher matcher = matchPattern.matcher(compareText);
 			if (!matcher.find() || matcher.start() > 0) {
 				continue;
 			} else {
 				matchFound = true;
-				this.compareTokenCounter = matchingStartToken;
-				this.nextCompareToken = compareTokens[this.compareTokenCounter++];
+				int numMatched = numTokensMatched(compareText, matcher.end());
+				this.compareTokenCounter = this.compareTokenCounter + numMatched - 1;
+				if (this.compareTokenCounter < compareTokens.length) {
+					this.nextCompareToken = compareTokens[this.compareTokenCounter++];
+				} else {
+					this.nextCompareToken = null;
+				}
 				break;
 			}
 		}
@@ -278,14 +283,14 @@ public class CompareTemplateOutputHandler implements
 					tokenToLocation.get(this.compareTokenCounter));
 		}
 	}
-	
+
 	/**
 	 * @return Token indexes for the starting tokens which will match the remaining rules
 	 */
 	private List<Integer> findNextMatchingStartTokens() {
 		List<Integer> retval = new ArrayList<Integer>();
 		if (currentInstIndex >= instructionList.size()) {
-			retval.add(compareTokens.length-1);
+			retval.add(compareTokens.length);
 			return retval;
 		}
 		
@@ -340,16 +345,32 @@ public class CompareTemplateOutputHandler implements
 	 * @return
 	 */
 	private String buildCompareText(int startToken, int endToken) {
-		
-		if (startToken > endToken) {
-			return "";
+		return LicenseCompareHelper.locateOriginalText(compareText, startToken, endToken, tokenToLocation, this.compareTokens);
+	}
+	
+	
+	/**
+	 * Determine the number of tokens matched from the compare text
+	 * @param text
+	 * @param end End of matching text
+	 * @return
+	 */
+	private int numTokensMatched(String text, int end) {
+		if (text.trim().isEmpty()) {
+			return 0;
 		}
-		StringBuilder sb = new StringBuilder(compareTokens[startToken]);
-		for (int i = startToken+1; i <= endToken; i++) {
-			sb.append(' ');
-			sb.append(compareTokens[i]);
+		if (end == 0) {
+			return 0;
 		}
-		return sb.toString();
+		Map<Integer, LineColumn> temp = new HashMap<Integer, LineColumn>();
+		return LicenseCompareHelper.tokenizeLicenseText(text.substring(0, end), temp).length;
+//		int numSpaces = 0;
+//		for (int i = 0; i < end; i++) {
+//			if (text.charAt(i) == ' ') {
+//				numSpaces++;
+//			}
+//		}
+//		return numSpaces + 1;
 	}
 
 	/**
