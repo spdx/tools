@@ -51,11 +51,11 @@ import com.google.common.collect.Maps;
  */
 public class LicenseCompareHelper {
 	
-	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'\"]+)((\\s|\\.|,|\\?|'|\"|$)+)";
+	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'();:\"]+)((\\s|\\.|,|\\?|'|\"|\\(|\\)|;|:|$)+)";
 	protected static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
 	
 	protected static final ImmutableSet<String> PUNCTUATION = ImmutableSet.<String>builder()
-			.add(".").add(",").add("?").add("\"").add("'").build();
+			.add(".").add(",").add("?").add("\"").add("'").add("(").add(")").add(";").add(":").build();
 	
 	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 	protected static final ImmutableSet<String> SKIPPABLE_TOKENS = ImmutableSet.<String>builder()
@@ -210,7 +210,7 @@ public class LicenseCompareHelper {
 		if (start == null) {
 			return "";
 		}
-		LineColumn end = tokenToLocation.get(endToken+1);
+		LineColumn end = tokenToLocation.get(endToken);
 		// If end == null, then we read to the end
 		BufferedReader reader = null;
 		try {
@@ -236,7 +236,7 @@ public class LicenseCompareHelper {
 				}
 				return sb.toString();
 			} else if (end.getLine() == currentLine) {
-				return line.substring(start.getColumn(), end.getColumn()-1);
+				return line.substring(start.getColumn(), end.getColumn()+end.getLen());
 			} else {
 				StringBuilder sb = new StringBuilder(line.substring(start.getColumn(), line.length()));
 				currentLine++;
@@ -246,8 +246,8 @@ public class LicenseCompareHelper {
 					currentLine++;
 					line = reader.readLine();
 				}
-				if (line != null && end.getColumn() > 0) {
-					sb.append(line.substring(0, end.getColumn()-1));
+				if (line != null && end.getColumn()+end.getLen() > 0) {
+					sb.append(line.substring(0, end.getColumn()+end.getLen()));
 				}
 				return sb.toString();
 			}			
@@ -296,7 +296,7 @@ public class LicenseCompareHelper {
 						currentToken++;
 					}
 					String fullMatch = lineMatcher.group(0);
-					for (int i = token.length(); i < fullMatch.length(); i++) {
+					for (int i = lineMatcher.group(1).length(); i < fullMatch.length(); i++) {
 						String possiblePunctuation = fullMatch.substring(i, i+1);
 						if (LicenseCompareHelper.PUNCTUATION.contains(possiblePunctuation)) {
 							tokens.add(possiblePunctuation);

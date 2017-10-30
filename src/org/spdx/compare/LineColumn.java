@@ -28,6 +28,7 @@ public class LineColumn {
 	public LineColumn(int line, int column,int len) {
 		this.line = line;
 		this.column = column;
+		this.len = len;
 	}
 
 	public int getLine() {
