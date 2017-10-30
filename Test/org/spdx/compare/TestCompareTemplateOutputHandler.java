@@ -49,6 +49,11 @@ public class TestCompareTemplateOutputHandler {
 	static final String APACHE_1_0_TEMPLATE = "TestFiles" + File.separator + "Apache-1.0.template.txt";
 	static final String BSD_2_CLAUSE_TEXT = "TestFiles" + File.separator + "BSD-2-Clause.txt";
 	static final String BSD_2_CLAUSE_TEMPLATE = "TestFiles" + File.separator + "BSD-2-Clause.template.txt";
+	static final String BSD_4_CLAUSE_UC_TEXT  = "TestFiles" + File.separator + "BSD-4-Clause-UC.txt";
+	static final String BSD_4_CLAUSE_UC_TEMPLATE  = "TestFiles" + File.separator + "BSD-4-Clause-UC.template.txt";
+	static final String BSD_4_CLAUSE_TEXT  = "TestFiles" + File.separator + "BSD-4-Clause.txt";
+	static final String BSD_4_CLAUSE_TEMPLATE  = "TestFiles" + File.separator + "BSD-4-Clause.template.txt";
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -298,7 +303,9 @@ public class TestCompareTemplateOutputHandler {
 		String templateText = UnitTestHelper.fileToText(BSDNETBSD_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
-		assertTrue(templateOutputHandler.matches());
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
 	}
 	
 	@Test
@@ -316,6 +323,28 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionBsd2Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(BSD_2_CLAUSE_TEXT);
 		String templateText = UnitTestHelper.fileToText(BSD_2_CLAUSE_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+
+	@Test
+	public void testRegressionBsd4ClauseUC() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(BSD_4_CLAUSE_UC_TEXT);
+		String templateText = UnitTestHelper.fileToText(BSD_4_CLAUSE_UC_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionBsd4Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(BSD_4_CLAUSE_TEXT);
+		String templateText = UnitTestHelper.fileToText(BSD_4_CLAUSE_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
