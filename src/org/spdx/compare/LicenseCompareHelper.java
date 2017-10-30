@@ -51,8 +51,7 @@ import com.google.common.collect.Maps;
  */
 public class LicenseCompareHelper {
 	
-//	protected static final String TOKEN_DELIM = "\\s";	// white space
-	protected static final String TOKEN_SPLIT_REGEX = 		"(^|[^\\s\\.,?'\"]+)((\\s|\\.|,|\\?|'|\"|$)+)";
+	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'\"]+)((\\s|\\.|,|\\?|'|\"|$)+)";
 	protected static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
 	
 	protected static final ImmutableSet<String> PUNCTUATION = ImmutableSet.<String>builder()
@@ -190,8 +189,8 @@ public class LicenseCompareHelper {
 		return (nextBToken == null);
 	}
 	
-	private static String normalizeQuotes(String s) {
-		return s.replaceAll("‘|’|‛|‚", "'").replaceAll("“|”|‟|„|``", "\"");
+	static String normalizeQuotes(String s) {
+		return s.replaceAll("‘|’|‛|‚|`", "'").replaceAll("''","'").replaceAll("“|”|‟|„|''", "\"");
 	}
 	
 	/**
@@ -296,11 +295,14 @@ public class LicenseCompareHelper {
 						tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start(), token.length()));
 						currentToken++;
 					}
-					String separator = lineMatcher.group(2).trim();
-					if (LicenseCompareHelper.PUNCTUATION.contains(separator)) {
-						tokens.add(separator);
-						tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start()+token.length(), token.length()));
-						currentToken++;
+					String fullMatch = lineMatcher.group(0);
+					for (int i = token.length(); i < fullMatch.length(); i++) {
+						String possiblePunctuation = fullMatch.substring(i, i+1);
+						if (LicenseCompareHelper.PUNCTUATION.contains(possiblePunctuation)) {
+							tokens.add(possiblePunctuation);
+							tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start()+i, 1));
+							currentToken++;
+						}
 					}
 				}
 				currentLine++;

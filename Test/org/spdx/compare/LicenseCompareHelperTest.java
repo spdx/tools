@@ -497,10 +497,10 @@ public class LicenseCompareHelperTest {
 	
 	@Test
 	public void testTokenizeLicenseText() {
-		String test = "Now is the.time,for?all good men.";
+		String test = "Now is the.time,for? \"all\" good men.";
 		Map<Integer, LineColumn> tokenToLocation = new HashMap<Integer, LineColumn>();
 		String[] result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
-		assertEquals(12,result.length);
+		assertEquals(14,result.length);
 		assertEquals("now",result[0]);
 		assertEquals("is",result[1]);
 		assertEquals("the",result[2]);
@@ -509,10 +509,55 @@ public class LicenseCompareHelperTest {
 		assertEquals(",",result[5]);
 		assertEquals("for",result[6]);
 		assertEquals("?",result[7]);
-		assertEquals("all",result[8]);
-		assertEquals("good",result[9]);
-		assertEquals("men",result[10]);
-		assertEquals(".",result[11]);
-		//TODO: Add tests for token locations
+		assertEquals("\"",result[8]);
+		assertEquals("all",result[9]);
+		assertEquals("\"",result[10]);
+		assertEquals("good",result[11]);
+		assertEquals("men",result[12]);
+		assertEquals(".",result[13]);
+		assertEquals(0,tokenToLocation.get(0).getColumn());
+		assertEquals(4,tokenToLocation.get(1).getColumn());
+		assertEquals(7,tokenToLocation.get(2).getColumn());
+		assertEquals(10,tokenToLocation.get(3).getColumn());
+		assertEquals(11,tokenToLocation.get(4).getColumn());
+		assertEquals(15,tokenToLocation.get(5).getColumn());
+		assertEquals(16,tokenToLocation.get(6).getColumn());
+		assertEquals(19,tokenToLocation.get(7).getColumn());
+		assertEquals(21,tokenToLocation.get(8).getColumn());
+		assertEquals(22,tokenToLocation.get(9).getColumn());
+		assertEquals(25,tokenToLocation.get(10).getColumn());
+		assertEquals(27,tokenToLocation.get(11).getColumn());
+		assertEquals(32,tokenToLocation.get(12).getColumn());
+		assertEquals(35,tokenToLocation.get(13).getColumn());
+	}
+	
+	@Test
+	public void regressionTokenString() {
+		String test = "THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDER \"AS IS\" AND";
+		Map<Integer, LineColumn> tokenToLocation = new HashMap<Integer, LineColumn>();
+		String[] result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
+		assertEquals(11, result.length);
+		assertEquals("this",result[0]);
+		assertEquals("software",result[1]);
+		assertEquals("is",result[2]);
+		assertEquals("provided",result[3]);
+		assertEquals("by",result[4]);
+		assertEquals("copyright-holder",result[5]);
+		assertEquals("\"",result[6]);
+		assertEquals("as",result[7]);
+		assertEquals("is",result[8]);
+		assertEquals("\"",result[9]);
+		assertEquals("and",result[10]);
+		assertEquals(0,tokenToLocation.get(0).getColumn());
+		assertEquals(5,tokenToLocation.get(1).getColumn());
+		assertEquals(14,tokenToLocation.get(2).getColumn());
+		assertEquals(17,tokenToLocation.get(3).getColumn());
+		assertEquals(26,tokenToLocation.get(4).getColumn());
+		assertEquals(29,tokenToLocation.get(5).getColumn());
+		assertEquals(46,tokenToLocation.get(6).getColumn());
+		assertEquals(47,tokenToLocation.get(7).getColumn());
+		assertEquals(50,tokenToLocation.get(8).getColumn());
+		assertEquals(52,tokenToLocation.get(9).getColumn());
+		assertEquals(54,tokenToLocation.get(10).getColumn());
 	}
 }

@@ -145,7 +145,7 @@ public class CompareTemplateOutputHandler implements
 	 * @throws IOException This is not to be expected since we are using StringReaders
 	 */
 	public CompareTemplateOutputHandler(String compareText) throws IOException {
-		this.compareText = compareText;
+		this.compareText = LicenseCompareHelper.normalizeQuotes(compareText);
 		this.compareTokens = LicenseCompareHelper.tokenizeLicenseText(this.compareText, tokenToLocation);
 		this.currentInstIndex = 0;
 		this.compareTokenCounter = 0;
@@ -269,11 +269,7 @@ public class CompareTemplateOutputHandler implements
 				matchFound = true;
 				int numMatched = numTokensMatched(compareText, matcher.end());
 				this.compareTokenCounter = this.compareTokenCounter + numMatched - 1;
-				if (this.compareTokenCounter < compareTokens.length) {
-					this.nextCompareToken = compareTokens[this.compareTokenCounter++];
-				} else {
-					this.nextCompareToken = null;
-				}
+				this.nextCompareToken = LicenseCompareHelper.getTokenAt(compareTokens, compareTokenCounter++);
 				break;
 			}
 		}
@@ -306,7 +302,7 @@ public class CompareTemplateOutputHandler implements
 		}
 		
 		Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
-		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(firstNormalText, normalTextLocations);
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeQuotes(firstNormalText), normalTextLocations);
 		// Save state
 		String saveNextComparisonToken = nextCompareToken;
 		int saveCompareTokenCounter = compareTokenCounter;
@@ -423,7 +419,7 @@ public class CompareTemplateOutputHandler implements
 	 */
 	protected boolean textEquivalent(String text) {
 		Map<Integer, LineColumn> textLocations = new HashMap<Integer, LineColumn>();
-		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(text, textLocations);
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeQuotes(text), textLocations);
 		return textEquivalent(textTokens);
 	}
 
