@@ -53,8 +53,8 @@ public class TestCompareTemplateOutputHandler {
 	static final String BSD_4_CLAUSE_UC_TEMPLATE  = "TestFiles" + File.separator + "BSD-4-Clause-UC.template.txt";
 	static final String BSD_4_CLAUSE_TEXT  = "TestFiles" + File.separator + "BSD-4-Clause.txt";
 	static final String BSD_4_CLAUSE_TEMPLATE  = "TestFiles" + File.separator + "BSD-4-Clause.template.txt";
-	static final String CROSSWORD_TEXT  = "TestFiles" + File.separator + "crossword.txt";
-	static final String CROSSWORD_TEMPLATE  = "TestFiles" + File.separator + "crossword.template.txt";
+	static final String CROSSWORD_TEXT  = "TestFiles" + File.separator + "Crossword.txt";
+	static final String CROSSWORD_TEMPLATE  = "TestFiles" + File.separator + "Crossword.template.txt";
 	static final String DFSL_TEXT = "TestFiles" + File.separator + "D-FSL-1.0.txt";
 	static final String DFSL_TEMPLATE = "TestFiles" + File.separator + "D-FSL-1.0.template.txt";
 	/**
