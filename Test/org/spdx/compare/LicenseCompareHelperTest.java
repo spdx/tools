@@ -560,4 +560,18 @@ public class LicenseCompareHelperTest {
 		assertEquals(52,tokenToLocation.get(9).getColumn());
 		assertEquals(54,tokenToLocation.get(10).getColumn());
 	}
+	
+	@Test
+	public void testOddChars() {
+		String test = "COPYRIGHT   I B M   CORPORATION 2002";
+		Map<Integer, LineColumn> tokenToLocation = new HashMap<Integer, LineColumn>();
+		String[] result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
+		assertEquals(6,result.length);
+		assertEquals("copyright", result[0]);
+		assertEquals("i", result[1]);
+		assertEquals("b", result[2]);
+		assertEquals("m", result[3]);
+		assertEquals("corporation", result[4]);
+		assertEquals("2002", result[5]);
+	}
 }
