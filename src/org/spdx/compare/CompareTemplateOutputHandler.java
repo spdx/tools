@@ -145,7 +145,7 @@ public class CompareTemplateOutputHandler implements
 	 * @throws IOException This is not to be expected since we are using StringReaders
 	 */
 	public CompareTemplateOutputHandler(String compareText) throws IOException {
-		this.compareText = LicenseCompareHelper.normalizeQuotes(compareText);
+		this.compareText = LicenseCompareHelper.normalizeText(compareText);
 		this.compareTokens = LicenseCompareHelper.tokenizeLicenseText(this.compareText, tokenToLocation);
 		this.currentInstIndex = 0;
 		this.compareTokenCounter = 0;
@@ -302,7 +302,7 @@ public class CompareTemplateOutputHandler implements
 		}
 		
 		Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
-		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeQuotes(firstNormalText), normalTextLocations);
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(firstNormalText), normalTextLocations);
 		// Save state
 		String saveNextComparisonToken = nextCompareToken;
 		int saveCompareTokenCounter = compareTokenCounter;
@@ -419,7 +419,7 @@ public class CompareTemplateOutputHandler implements
 	 */
 	protected boolean textEquivalent(String text) {
 		Map<Integer, LineColumn> textLocations = new HashMap<Integer, LineColumn>();
-		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeQuotes(text), textLocations);
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(text), textLocations);
 		return textEquivalent(textTokens);
 	}
 

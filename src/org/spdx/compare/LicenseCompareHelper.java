@@ -189,8 +189,13 @@ public class LicenseCompareHelper {
 		return (nextBToken == null);
 	}
 	
-	static String normalizeQuotes(String s) {
-		return s.replaceAll("‘|’|‛|‚|`", "'").replaceAll("''","'").replaceAll("“|”|‟|„|''", "\"");
+	/**
+	 * Normalize quotes and no-break spaces
+	 * @param s
+	 * @return
+	 */
+	static String normalizeText(String s) {
+		return s.replaceAll("‘|’|‛|‚|`", "'").replaceAll("''","'").replaceAll("“|”|‟|„|''", "\"").replaceAll("\\u00A0", " ");
 	}
 	
 	/**
@@ -278,7 +283,7 @@ public class LicenseCompareHelper {
 	 * @throws IOException 
 	 */
 	public static String[] tokenizeLicenseText(String licenseText, Map<Integer, LineColumn> tokenToLocation) {
-		String textToTokenize = normalizeQuotes(replaceMultWord(licenseText)).toLowerCase();
+		String textToTokenize = normalizeText(replaceMultWord(licenseText)).toLowerCase();
 		List<String> tokens = new ArrayList<String>();
 		BufferedReader reader = null;
 		try {
