@@ -51,16 +51,16 @@ import com.google.common.collect.Maps;
  */
 public class LicenseCompareHelper {
 	
-	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'();:\"]+)((\\s|\\.|,|\\?|'|\"|\\(|\\)|;|:|$)+)";
+	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'();:\"/]+)((\\s|\\.|,|\\?|'|\"|\\(|\\)|;|:|/|$)+)";
 	protected static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
 	
 	protected static final ImmutableSet<String> PUNCTUATION = ImmutableSet.<String>builder()
-			.add(".").add(",").add("?").add("\"").add("'").add("(").add(")").add(";").add(":").build();
+			.add(".").add(",").add("?").add("\"").add("'").add("(").add(")").add(";").add(":").add("/").build();
 	
 	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 	protected static final ImmutableSet<String> SKIPPABLE_TOKENS = ImmutableSet.<String>builder()
 		.add("//").add("/*").add("*/").add("/**").add("#").add("##")
-		.add("*").add("\"\"\"").add("=begin").add("=end").build();
+		.add("*").add("**").add("\"\"\"").add("/").add("=begin").add("=end").build();
 	
 	protected static final Map<String, String> NORMALIZE_TOKENS = Maps.newHashMap();
 	
@@ -109,6 +109,7 @@ public class LicenseCompareHelper {
 		NORMALIZE_TOKENS.put("non-infringement", "noninfringement");
 		NORMALIZE_TOKENS.put("©", "(c)");
 		NORMALIZE_TOKENS.put("copyright", "(c)");
+		NORMALIZE_TOKENS.put("\"", "'");
 	}
 	
 	
@@ -195,7 +196,8 @@ public class LicenseCompareHelper {
 	 * @return
 	 */
 	static String normalizeText(String s) {
-		return s.replaceAll("‘|’|‛|‚|`", "'").replaceAll("''","'").replaceAll("“|”|‟|„|''", "\"").replaceAll("\\u00A0", " ");
+		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes then normalize non-breaking spaces to spaces
+		return s.replaceAll("‘|’|‛|‚|`", "'").replaceAll("''","\"").replaceAll("“|”|‟|„", "\"").replaceAll("\\u00A0", " ");
 	}
 	
 	/**
