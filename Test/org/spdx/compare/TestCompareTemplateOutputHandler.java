@@ -57,6 +57,11 @@ public class TestCompareTemplateOutputHandler {
 	static final String CROSSWORD_TEMPLATE  = "TestFiles" + File.separator + "Crossword.template.txt";
 	static final String DFSL_TEXT = "TestFiles" + File.separator + "D-FSL-1.0.txt";
 	static final String DFSL_TEMPLATE = "TestFiles" + File.separator + "D-FSL-1.0.template.txt";
+	static final String CONDOR_1_1_TEXT = "TestFiles" + File.separator + "Condor-1.1.txt";
+	static final String CONDOR_1_1_TEMPLATE = "TestFiles" + File.separator + "Condor-1.1.template.txt";
+	static final String ISC_TEXT = "TestFiles" + File.separator + "ISC.txt";
+	static final String ISC_TEMPLATE = "TestFiles" + File.separator + "ISC.template.txt";
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -370,6 +375,28 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionDFSL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(DFSL_TEXT);
 		String templateText = UnitTestHelper.fileToText(DFSL_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionCondor11() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(CONDOR_1_1_TEXT);
+		String templateText = UnitTestHelper.fileToText(CONDOR_1_1_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionIsc() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(ISC_TEXT);
+		String templateText = UnitTestHelper.fileToText(ISC_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {

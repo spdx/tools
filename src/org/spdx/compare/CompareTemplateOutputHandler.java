@@ -242,11 +242,15 @@ public class CompareTemplateOutputHandler implements
 	 * @param location Location where the difference was found
 	 */
 	private void addDifference(String msg, LineColumn location) {
-		this.differenceExplanation = msg + " starting at line #"+
-				String.valueOf(location.getLine())+ " column #" +
-				String.valueOf(location.getColumn())+"\""+
-				this.nextCompareToken+"\".";
-		this.differences.add(location);
+		if (location != null) {
+			this.differenceExplanation = msg + " starting at line #"+
+					String.valueOf(location.getLine())+ " column #" +
+					String.valueOf(location.getColumn())+"\""+
+					this.nextCompareToken+"\".";
+			this.differences.add(location);
+		} else {
+			this.differenceExplanation = msg + " at end of text";
+		}
 	}
 	
 	/**
@@ -258,6 +262,9 @@ public class CompareTemplateOutputHandler implements
 			return;
 		}
 		List<Integer> matchingStartTokens = findNextMatchingStartTokens();
+		if (differenceFound) {
+			return;
+		}
 		boolean matchFound = false;
 		for (int matchingStartToken:matchingStartTokens) {
 			String compareText = buildCompareText(this.compareTokenCounter-1, matchingStartToken-1);
@@ -322,7 +329,8 @@ public class CompareTemplateOutputHandler implements
 		if (found) {
 			retval.add(nextMatchingStart);
 		} else {
-			retval.add(saveCompareTokenCounter);
+			this.differenceExplanation = "Unable to find the text following a variable template rule '"+firstNormalText + "'";
+			this.addDifference(this.differenceExplanation, this.tokenToLocation.get(saveCompareTokenCounter));
 		}
 		
 		// restore state
