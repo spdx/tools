@@ -573,5 +573,16 @@ public class LicenseCompareHelperTest {
 		assertEquals("m", result[3]);
 		assertEquals("corporation", result[4]);
 		assertEquals("2002", result[5]);
+		test = "Claims      If";
+		result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
+		assertEquals(2, result.length);
+		assertEquals("claims",result[0]);
+		assertEquals("if", result[1]);
+		
+	}
+	
+	@SuppressWarnings("unused")
+	private String stringCharToUnicode(String s, int location) {
+		return "\\u" + Integer.toHexString(s.charAt(location) | 0x10000).substring(1);
 	}
 }

@@ -61,6 +61,12 @@ public class TestCompareTemplateOutputHandler {
 	static final String CONDOR_1_1_TEMPLATE = "TestFiles" + File.separator + "Condor-1.1.template.txt";
 	static final String ISC_TEXT = "TestFiles" + File.separator + "ISC.txt";
 	static final String ISC_TEMPLATE = "TestFiles" + File.separator + "ISC.template.txt";
+	static final String MPL_1_TEXT = "TestFiles" + File.separator + "MPL-1.0.txt";
+	static final String MPL_1_TEMPLATE = "TestFiles" + File.separator + "MPL-1.0.template.txt";
+	static final String RPSL_1_TEXT = "TestFiles" + File.separator + "RPSL-1.0.txt";
+	static final String RPSL_1_TEMPLATE = "TestFiles" + File.separator + "RPSL-1.0.template.txt";
+	static final String RSCPL_TEXT = "TestFiles" + File.separator + "RSCPL.txt";
+	static final String RSCPL_TEMPLATE = "TestFiles" + File.separator + "RSCPL.template.txt";	
 	
 	/**
 	 * @throws java.lang.Exception
@@ -397,6 +403,39 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionIsc() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(ISC_TEXT);
 		String templateText = UnitTestHelper.fileToText(ISC_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionMPL11() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(MPL_1_TEXT);
+		String templateText = UnitTestHelper.fileToText(MPL_1_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionRPSL1() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(RPSL_1_TEXT);
+		String templateText = UnitTestHelper.fileToText(RPSL_1_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.differenceExplanation);
+		}
+	}
+	
+	@Test
+	public void testRegressionRSCPL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(RSCPL_TEXT);
+		String templateText = UnitTestHelper.fileToText(RSCPL_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
