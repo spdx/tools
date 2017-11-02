@@ -371,6 +371,7 @@ public abstract class License extends SimpleLicensingInfo {
 		this.getSeeAlso();
 		this.getStandardLicenseHeader();
 		this.getStandardLicenseTemplate();
+		//TODO Add test for template
 		String licenseText = this.getLicenseText();
 		if (licenseText == null || licenseText.isEmpty()) {
 			retval.add("Missing required license text for " + id);

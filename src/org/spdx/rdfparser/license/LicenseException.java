@@ -55,6 +55,8 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	private String[] seeAlso;
 	private String comment;
 	private String example;
+	private String licenseExceptionTemplate;
+	
 	public LicenseException(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		this.model = modelContainer.getModel();
 		this.exceptionNode = node;
@@ -86,6 +88,17 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			Triple t = tripleIter.next();
 			this.licenseExceptionText = t.getObject().toString(false);
 		}
+		
+		// licenseExceptionTemplate
+		this.licenseExceptionTemplate = null;
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE).asNode();
+		m = Triple.createMatch(exceptionNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			this.licenseExceptionTemplate = t.getObject().toString(false);
+		}
+		
 		// seeAlso
 		List<String> alsourceUrls = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
@@ -153,7 +166,26 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 */
 	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
 			String[] seeAlso, String comment) {
-		this(licenseExceptionId, name, licenseExceptionText, seeAlso, comment, null);
+		this(licenseExceptionId, name, licenseExceptionText, null, seeAlso, comment);
+	}
+	
+	/**
+	 * @param licenseExceptionId Exception ID - short form ID
+	 * @param name Full name of the Exception
+	 * @param licenseExceptionText Text for the Exception
+	 * @param licenseExceptionTemplate License exception template use for matching license exceptions per SPDX license matching guidelines
+	 * @param comment Comments on the exception
+	 * @param example Example of use
+	 * @param seeAlso URL references to external sources for the exception
+	 */
+	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
+			String licenseExceptionTemplate, String[] seeAlso, String comment) {
+		this.licenseExceptionId = licenseExceptionId;
+		this.name = name;
+		this.licenseExceptionText = licenseExceptionText;
+		this.seeAlso = seeAlso;
+		this.comment = comment;
+		this.licenseExceptionTemplate = licenseExceptionTemplate;
 	}
 	
 	/**
@@ -258,6 +290,13 @@ public class LicenseException implements IRdfModel, Cloneable  {
 						SpdxRdfConstants.PROP_EXCEPTION_TEXT);
 				model.removeAll(this.resource, textProperty, null);
 				this.resource.addProperty(textProperty, this.licenseExceptionText);
+			}
+			// licenseExceptionTemplate
+			if (this.licenseExceptionTemplate != null) {
+				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+						SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE);
+				model.removeAll(this.resource, textProperty, null);
+				this.resource.addProperty(textProperty, this.licenseExceptionTemplate);
 			}
 			return this.resource;
 		}
@@ -388,6 +427,30 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	}
 
 	/**
+	 * @return the tempalte
+	 */
+	public String getLicenseExceptionTemplate() {
+		return licenseExceptionTemplate;
+	}
+
+	/**
+	 * @param template the text to set
+	 */
+	public void setLicenseExceptionTemplate(String template) {
+		this.licenseExceptionTemplate = template;
+		if (this.exceptionNode != null) {
+			// delete any previous created
+			Property p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE);
+			model.removeAll(resource, p, null);
+			// add the property
+			if (template != null) {
+				p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE);
+				resource.addProperty(p, template);
+			}
+		}
+	}
+	
+	/**
 	 * @return the sourceUrl
 	 */
 	public String[] getSeeAlso() {
@@ -455,8 +518,10 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	
 	@Override
     public LicenseException clone() {
-		return new LicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),
-				this.seeAlso, this.comment, this.example);
+		LicenseException retval = new LicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),
+				this.getLicenseExceptionTemplate(), this.seeAlso, this.comment);
+		retval.setExample(this.getExample());
+		return retval;
 	}
 
 	/* (non-Javadoc)
@@ -503,6 +568,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		if (this.getLicenseExceptionText() == null || this.getLicenseExceptionText().trim().isEmpty()) {
 			retval.add("Missing required license exception text");
 		}
+		//TODO Add test for template
 		return retval;
 	}
 
@@ -523,6 +589,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
                 Objects.equal(this.comment, lCompare.getComment()) &&
                 Objects.equal(this.example, lCompare.getExample()) &&
                 Objects.equal(this.name, lCompare.getName()) &&
+                Objects.equal(this.licenseExceptionTemplate, lCompare.getLicenseExceptionTemplate()) &&
 				RdfModelHelper.arraysEqual(this.seeAlso, lCompare.getSeeAlso()));
 	}
 	
