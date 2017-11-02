@@ -196,8 +196,13 @@ public class LicenseCompareHelper {
 	 * @return
 	 */
 	static String normalizeText(String s) {
-		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes then normalize non-breaking spaces to spaces
-		return s.replaceAll("‘|’|‛|‚|`", "'").replaceAll("''","\"").replaceAll("“|”|‟|„", "\"").replaceAll("\\u00A0", " ");
+		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes 
+		// then normalize non-breaking spaces to spaces
+		return s.replaceAll("‘|’|‛|‚|`", "'")	// Take care of single quotes first
+				.replaceAll("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
+				.replaceAll("“|”|‟|„", "\"")	// Now we can normalize the double quotes
+				.replaceAll("\\u00A0", " ")		// replace non-breaking spaces with spaces since Java does not handle the former well
+				.replaceAll("\\u2028", "\n");	// replace line separator with newline since Java does not handle the former well
 	}
 	
 	/**

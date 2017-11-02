@@ -327,18 +327,16 @@ public class CompareTemplateOutputHandler implements
 		}
 		
 		if (found) {
-			retval.add(nextMatchingStart);
+			retval.add(nextMatchingStart);		// restore state
+			this.nextCompareToken = saveNextComparisonToken;
+			this.compareTokenCounter = saveCompareTokenCounter;
+			this.differenceExplanation = saveDifferenceExplanation;
+			Collections.copy(this.differences, saveDifferences);
 		} else {
+			this.differenceFound = true;
 			this.differenceExplanation = "Unable to find the text following a variable template rule '"+firstNormalText + "'";
 			this.addDifference(this.differenceExplanation, this.tokenToLocation.get(saveCompareTokenCounter));
 		}
-		
-		// restore state
-		this.nextCompareToken = saveNextComparisonToken;
-		this.compareTokenCounter = saveCompareTokenCounter;
-		this.differenceExplanation = saveDifferenceExplanation;
-		Collections.copy(this.differences, saveDifferences);
-
 		return retval;
 	}
 
@@ -407,15 +405,64 @@ public class CompareTemplateOutputHandler implements
 		if (differenceFound) {
 			return;
 		}
-		if (!textEquivalent(text)) {
-			this.differenceFound = true;
-			if (this.nextCompareToken == null) {
-				LineColumn lastLineColumn = tokenToLocation.get(compareTokens.length-1);
-				// create a zero length location at the end of the file
-				addDifference("End of compare text encountered before the end of the license template",
-						new LineColumn(lastLineColumn.getLine(), lastLineColumn.getColumn()+lastLineColumn.getLen(),0));
+		Map<Integer, LineColumn> textLocations = new HashMap<Integer, LineColumn>();
+		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(text), textLocations);
+		
+		if (!textEquivalent(textTokens)) {
+			// Check for optional text which is less than a token in length - fix issue #114
+			// We need to check if the last token matches considering optional or the last 
+			// two tokens match a single compare token considering optional
+			if (textTokens.length > 1 && nextCompareToken != null && 
+					instructionList.size() > currentInstIndex && 
+					instructionList.get(currentInstIndex).getOptionalText() != null) {
+				String optionalText = instructionList.get(currentInstIndex).getOptionalText().trim();
+				String tokenWithOption = textTokens[textTokens.length-1] + optionalText;
+				if (nextCompareToken.equals(tokenWithOption)) {
+					this.currentInstIndex++;
+					this.nextCompareToken = LicenseCompareHelper.getTokenAt(compareTokens, compareTokenCounter++);
+					this.differenceFound = false;
+				} else {
+					// Check one more scenario where there is a normal text following that is also part of the same token
+					if (instructionList.size() > currentInstIndex+1 && 
+							instructionList.get(currentInstIndex+1).getNormalText() != null) {
+						String normalText = instructionList.get(currentInstIndex+1).getNormalText();
+						Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
+						String[] normalTextTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(normalText), normalTextLocations);
+						String firstNormalText = LicenseCompareHelper.getTokenAt(normalTextTokens, 0);
+						String twoTokensWithOption = tokenWithOption;
+						String twoTokensWithoutOption = textTokens[textTokens.length-1];
+						if (firstNormalText != null) {
+							twoTokensWithOption = twoTokensWithOption + firstNormalText.trim();
+							twoTokensWithoutOption = twoTokensWithoutOption + firstNormalText.trim();
+						}
+						if (nextCompareToken.equals(twoTokensWithoutOption) || nextCompareToken.equals(twoTokensWithOption)) {
+							int startCol = normalTextLocations.get(1).getColumn();
+							if (normalTextLocations.get(1).getLine() > 1) {
+								startCol = normalText.indexOf("\"");
+							}
+							String normalMinusFirstToken = normalText.substring(startCol);
+							instructionList.get(currentInstIndex+1).setNormalText(normalMinusFirstToken);
+							this.currentInstIndex++;
+							this.nextCompareToken = LicenseCompareHelper.getTokenAt(compareTokens, compareTokenCounter++);
+							this.differenceFound = false;
+						}
+					} else {
+						//TODO: Handle the situation where variable text follows the optional text
+						this.differenceFound = true;
+					}
+				}
 			} else {
-				addDifference("Difference found in normal text",tokenToLocation.get(this.compareTokenCounter));
+				this.differenceFound = true;
+			}
+			if (this.differenceFound) {
+				if (this.nextCompareToken == null) {
+					LineColumn lastLineColumn = tokenToLocation.get(compareTokens.length-1);
+					// create a zero length location at the end of the file
+					addDifference("End of compare text encountered before the end of the license template",
+							new LineColumn(lastLineColumn.getLine(), lastLineColumn.getColumn()+lastLineColumn.getLen(),0));
+				} else {
+					addDifference("Difference found in normal text",tokenToLocation.get(this.compareTokenCounter));
+				}
 			}
 		}
 	}
@@ -461,11 +508,9 @@ public class CompareTemplateOutputHandler implements
 				ParseInstruction currentInstruction = instructionList.get(currentInstIndex++);
 				if (currentInstruction.getNormalText() != null) {
 					processNormalText(currentInstruction.getNormalText());
-				}
-				if (currentInstruction.getOptionalText() != null) {
+				} else if (currentInstruction.getOptionalText() != null) {
 					processOptionalText(currentInstruction.getOptionalText());
-				}
-				if (currentInstruction.getRule() != null) {
+				} else if (currentInstruction.getRule() != null) {
 					processVariableRule(currentInstruction.getRule());
 				}
 			}
