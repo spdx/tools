@@ -185,6 +185,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_LICENSE_EXCEPTION_ID = "licenseExceptionId";
 	public static final String PROP_EXAMPLE = "example";
 	public static final String PROP_EXCEPTION_TEXT = "licenseExceptionText";
+	public static final String PROP_EXCEPTION_TEMPLATE = "licenseExceptionTemplate";
 	public static final String PROP_LICENSE_EXCEPTION = "licenseException";
 	public static final String PROP_LIC_ID_DEPRECATED = "isDeprecatedLicenseId";
 	
