@@ -478,7 +478,6 @@ public class LicenseCompareHelperTest {
 		SpdxNoAssertionLicense lic1 = new SpdxNoAssertionLicense();
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
 		SpdxNoneLicense lic3 = new SpdxNoneLicense();
-		SpdxNoneLicense lic4 = new SpdxNoneLicense();
 		Map<String, String> xlationMap = Maps.newHashMap();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic3, xlationMap));
@@ -486,7 +485,6 @@ public class LicenseCompareHelperTest {
 	
 	@Test
 	public void testLicenseEqualsNoneLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
-		SpdxNoAssertionLicense lic1 = new SpdxNoAssertionLicense();
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
 		SpdxNoneLicense lic3 = new SpdxNoneLicense();
 		SpdxNoneLicense lic4 = new SpdxNoneLicense();
