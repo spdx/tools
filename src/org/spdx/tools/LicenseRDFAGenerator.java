@@ -31,6 +31,7 @@ import java.util.Set;
 
 import org.spdx.compare.LicenseCompareHelper;
 import org.spdx.compare.SpdxCompareException;
+import org.spdx.html.InvalidLicenseTemplateException;
 import org.spdx.licensexml.XmlLicenseProvider;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
@@ -310,10 +311,11 @@ public class LicenseRDFAGenerator {
 	 * @throws SpreadsheetException 
 	 * @throws LicenseRestrictionException 
 	 * @throws LicenseGeneratorException 
+	 * @throws InvalidLicenseTemplateException 
 	*/
 	private static void writeExceptionList(String version, String releaseDate,
 			ISpdxListedLicenseProvider licenseProvider, List<String> warnings, List<ILicenseFormatWriter> writers,
-			ILicenseTester tester) throws IOException, LicenseRestrictionException, SpreadsheetException, LicenseGeneratorException {
+			ILicenseTester tester) throws IOException, LicenseRestrictionException, SpreadsheetException, LicenseGeneratorException, InvalidLicenseTemplateException {
 		// Collect license ID's to check for any duplicate ID's being used (e.g. license ID == exception ID)
 		Set<String> licenseIds = Sets.newHashSet();
 		try {

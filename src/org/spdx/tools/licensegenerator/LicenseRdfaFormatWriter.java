@@ -193,7 +193,7 @@ public class LicenseRdfaFormatWriter implements ILicenseFormatWriter {
 
 	@Override
 	public void writeException(LicenseException exception, boolean deprecated, String deprecatedVersion)
-			throws IOException {
+			throws IOException, InvalidLicenseTemplateException {
 		ExceptionHtml exceptionHtml = new ExceptionHtml(exception);
 		String exceptionHtmlFileName = LicenseHtmlFormatWriter.formLicenseHTMLFileName(exception.getLicenseExceptionId());
 		String exceptionHTMLReference = "./"+exceptionHtmlFileName + ".html";

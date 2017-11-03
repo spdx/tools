@@ -19,6 +19,9 @@ package org.spdx.rdfparser.license;
 import java.util.List;
 
 import org.spdx.compare.LicenseCompareHelper;
+import org.spdx.html.InvalidLicenseTemplateException;
+import org.spdx.licenseTemplate.LicenseTemplateRuleException;
+import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
@@ -56,6 +59,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	private String comment;
 	private String example;
 	private String licenseExceptionTemplate;
+	private String exceptionTextHtml = null;
 	
 	public LicenseException(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		this.model = modelContainer.getModel();
@@ -607,5 +611,26 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	@Override
 	public void setSingleObjectForSameNode() {
 		// ignore
+	}
+	
+	/**
+	 * @return HTML fragment containing the Exception Text
+	 * @throws InvalidLicenseTemplateException 
+	 */
+	public String getExceptionTextHtml() throws InvalidLicenseTemplateException {
+		if (exceptionTextHtml == null) {
+			// Format the HTML using the text and template
+			String templateText = this.getLicenseExceptionTemplate();
+			if (templateText != null && !templateText.trim().isEmpty()) {
+				try {
+					exceptionTextHtml = SpdxLicenseTemplateHelper.templateTextToHtml(templateText);
+				} catch(LicenseTemplateRuleException ex) {
+					throw new InvalidLicenseTemplateException("Invalid license rule found in exception text for exception "+getName()+":"+ex.getMessage());
+				}
+			} else {
+				exceptionTextHtml = SpdxLicenseTemplateHelper.formatEscapeHTML(this.getLicenseExceptionText());
+			}
+		}
+		return exceptionTextHtml;
 	}
 }

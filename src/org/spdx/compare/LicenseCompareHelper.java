@@ -36,6 +36,7 @@ import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.License;
+import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.LicenseSet;
 import org.spdx.rdfparser.license.SpdxListedLicense;
@@ -501,7 +502,7 @@ public class LicenseCompareHelper {
 	 * Compares license text to the license text of an SPDX Standard License
 	 * @param license SPDX Standard License to compare
 	 * @param compareText Text to compare to the standard license
-	 * @return True if the license text is the same per the license matching guidelines
+	 * @return any differences found
 	 * @throws SpdxCompareException
 	 */
 	public static DifferenceDescription isTextStandardLicense(License license, String compareText) throws SpdxCompareException {
@@ -517,6 +518,32 @@ public class LicenseCompareHelper {
 		}
 		try {
 			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, compareTemplateOutputHandler);
+		} catch (LicenseTemplateRuleException e) {
+			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
+		}
+		return compareTemplateOutputHandler.getDifferences();
+	}
+	
+	/**
+	 * Compares exception text to the exception text of an SPDX Standard exception
+	 * @param exception SPDX Standard exception to compare
+	 * @param compareText Text to compare to the standard exceptions
+	 * @return any differences found
+	 * @throws SpdxCompareException
+	 */
+	public static DifferenceDescription isTextStandardException(LicenseException exception, String compareText) throws SpdxCompareException {
+		String exceptionTemplate = exception.getLicenseExceptionTemplate();
+		if (exceptionTemplate == null || exceptionTemplate.trim().isEmpty()) {
+			exceptionTemplate = exception.getLicenseExceptionText();
+		}
+		CompareTemplateOutputHandler compareTemplateOutputHandler = null;
+		try {
+			compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		} catch (IOException e1) {
+			throw(new SpdxCompareException("IO Error reading the compare text: "+e1.getMessage(),e1));
+		}
+		try {
+			SpdxLicenseTemplateHelper.parseTemplate(exceptionTemplate, compareTemplateOutputHandler);
 		} catch (LicenseTemplateRuleException e) {
 			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
 		}

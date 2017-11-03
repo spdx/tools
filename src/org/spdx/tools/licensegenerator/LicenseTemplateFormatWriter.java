@@ -93,6 +93,6 @@ public class LicenseTemplateFormatWriter implements ILicenseFormatWriter {
 			licBaseHtmlFileName = "deprecated_" + licBaseHtmlFileName;
 		}
 		File templateFile = new File(templateFolder.getPath() + File.separator + licBaseHtmlFileName + ".template.txt");
-		Files.write(exception.getLicenseExceptionText(), templateFile, utf8);
+		Files.write(exception.getLicenseExceptionTemplate(), templateFile, utf8);
 	}
 }

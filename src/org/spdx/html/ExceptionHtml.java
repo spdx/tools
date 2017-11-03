@@ -48,8 +48,9 @@ public class ExceptionHtml {
 	
 	/**
 	 * @param exception
+	 * @throws InvalidLicenseTemplateException 
 	 */
-	public ExceptionHtml(LicenseException exception) {
+	public ExceptionHtml(LicenseException exception) throws InvalidLicenseTemplateException {
 		List<String> alSourceUrls = Lists.newArrayList();
 		String[] sourceUrls = exception.getSeeAlso();
 		if (sourceUrls != null) {
@@ -59,7 +60,7 @@ public class ExceptionHtml {
 		}
 		mustacheMap.put("name", exception.getName());
 		mustacheMap.put("id", exception.getLicenseExceptionId());
-		mustacheMap.put("text", SpdxLicenseTemplateHelper.formatEscapeHTML(exception.getLicenseExceptionText()));
+		mustacheMap.put("text", exception.getExceptionTextHtml());
 		mustacheMap.put("getSourceUrl", alSourceUrls);
 		mustacheMap.put("notes", exception.getComment());
 		String example = exception.getExample();

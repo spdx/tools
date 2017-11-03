@@ -57,8 +57,14 @@ public class SimpleLicenseTester implements ILicenseTester {
 			retval.add("No test text exists for license exception ID "+exception.getLicenseExceptionId());
 		} else {
 			String compareText = readText(exceptionFile);
-			if (!LicenseCompareHelper.isLicenseTextEquivalent(compareText, exception.getLicenseExceptionText())) {
-				retval.add("License text does not match for license exception ID "+exception.getLicenseExceptionId());
+			DifferenceDescription result;
+			try {
+				result = LicenseCompareHelper.isTextStandardException(exception, compareText);
+				if (result.isDifferenceFound()) {
+					retval.add("Test for exception ID "+exception.getLicenseExceptionId() + " failed due to difference found "+result.getDifferenceMessage());
+				}
+			} catch (SpdxCompareException e) {
+				retval.add("Invalid template found for exception ID "+exception.getLicenseExceptionId()+": "+e.getMessage());
 			}
 		}
 		return retval;
