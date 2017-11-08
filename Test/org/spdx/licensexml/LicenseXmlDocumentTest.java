@@ -53,7 +53,8 @@ public class LicenseXmlDocumentTest {
 			"Last Paragraph Alternate Text Non matching line. Optional text";
 	private static final String TEST_LICENSE_NAME = "Test License";
 	private static final String[] TEST_LICENSE_URLS = new String[] {"http://test/url1","http://test/url2"};
-	private static final String TEST_LICENSE_HEADER = "Test header";
+	private static final String TEST_LICENSE_HEADER = "Test header optional var";
+	private static final String TEST_LICENSE_HEADER_TEMPLATE = "Test header<<beginOptional>> optional<<endOptional>> <<var;name=\"h1test\";original=\"var\";match=\".+\">>";
 	private static final String TEST_LICENSE_TEMPLATE = "Test Copyright\nparagraph 1" +
 			"\n   1.\n   List item 1\n   2.\n   List item 2\n" +
 			"Last Paragraph <<var;name=\"alttest\";original=\"Alternate Text\";match=\".+\">> Non matching line.<<beginOptional>> Optional text<<endOptional>>";
@@ -126,6 +127,7 @@ public class LicenseXmlDocumentTest {
 		assertEquals(TEST_LICENSE_NAME, license.getName());
 		UnitTestHelper.isArraysEqual(TEST_LICENSE_URLS, license.getSeeAlso());
 		assertEquals(TEST_LICENSE_HEADER, license.getStandardLicenseHeader());
+		assertEquals(TEST_LICENSE_HEADER_TEMPLATE, license.getStandardLicenseHeaderTemplate());
 		assertEquals(TEST_LICENSE_TEMPLATE, license.getStandardLicenseTemplate());
 	}
 
