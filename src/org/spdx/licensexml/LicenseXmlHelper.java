@@ -495,6 +495,28 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		appendNodeText(headerNode, false, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, false);
 		return fixUpText(sb.toString());
 	}
+	
+	/**
+	 * @param headerNode
+	 * @return header template where headerNode is the root element
+	 * @throws LicenseXmlException 
+	 */
+	public static Object getHeaderTemplate(Node headerNode) throws LicenseXmlException {
+		StringBuilder sb = new StringBuilder();
+		appendNodeText(headerNode, true, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, false);
+		return fixUpText(sb.toString());
+	}
+	
+	/**
+	 * @param headerNode
+	 * @return header html fragment where headerNode is the root element
+	 * @throws LicenseXmlException 
+	 */
+	public static Object getHeaderTextHtml(Node headerNode) throws LicenseXmlException {
+		StringBuilder sb = new StringBuilder();
+		appendNodeText(headerNode, false, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, true);
+		return fixUpText(sb.toString());
+	}
 
 	/**
 	 * @param exampleElement

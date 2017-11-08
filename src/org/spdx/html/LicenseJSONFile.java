@@ -84,6 +84,11 @@ public class LicenseJSONFile extends AbstractJsonFile {
 		}
 		if (license.getStandardLicenseHeader() != null) {
 			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NOTICE, license.getStandardLicenseHeader().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+			if (license.getStandardLicenseHeaderTemplate() != null) {
+				jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE, license.getStandardLicenseHeaderTemplate().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+			} else {
+				jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE, license.getStandardLicenseHeader().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));
+			}
 		}
 		if (license.getStandardLicenseTemplate() != null) {
 			jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, license.getStandardLicenseTemplate().replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n"));

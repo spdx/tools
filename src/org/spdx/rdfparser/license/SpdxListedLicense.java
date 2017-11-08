@@ -38,6 +38,7 @@ import org.apache.jena.rdf.model.Resource;
 public class SpdxListedLicense extends License {
 	
 	private String licenseTextHtml = null;
+	private String licenseHeaderHtml = null;
 	
 	/**
 	 * @param name License name
@@ -118,6 +119,49 @@ public class SpdxListedLicense extends License {
 		super(modelContainer, licenseNode);
 	}
 	
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param licenseHeaderTemplate optional template for the standard license header
+	 * @param osiApproved True if this is an OSI Approved license
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
+	 * @param licenseTextHtml HTML version for the license text
+	 * @param licenseHeaderHtml HTML version for the standard license header
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, boolean fsfLibre, String licenseTextHtml,
+			String licenseHeaderHtml) throws InvalidSPDXAnalysisException {
+		
+		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
+		this.licenseTextHtml = licenseTextHtml;
+		this.licenseHeaderHtml = licenseHeaderHtml;
+	}
+	
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param licenseHeaderTemplate optional template for the standard license header
+	 * @param osiApproved True if this is an OSI Approved license
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
+		
+		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
+	}
+
 	@Override 
 	public List<String> verify() {
 		List<String> retval = super.verify();
@@ -200,6 +244,37 @@ public class SpdxListedLicense extends License {
 	 */
 	public void setLicenseTextHtml(String licenseTextHtml) {
 		this.licenseTextHtml = licenseTextHtml;
+	}
+	
+	/**
+	 * @return HTML fragment containing the License standard header text
+	 * @throws InvalidLicenseTemplateException 
+	 */
+	public String getLicenseHeaderHtml() throws InvalidLicenseTemplateException {
+		if (licenseHeaderHtml == null) {
+			// Format the HTML using the text and template
+			String templateText = this.getStandardLicenseHeaderTemplate();
+			if (templateText != null && !templateText.trim().isEmpty()) {
+				try {
+					licenseHeaderHtml = SpdxLicenseTemplateHelper.templateTextToHtml(templateText);
+				} catch(LicenseTemplateRuleException ex) {
+					throw new InvalidLicenseTemplateException("Invalid license expression found in standard license header for license "+getName()+":"+ex.getMessage());
+				}
+			} else if (this.getStandardLicenseHeader() == null) {
+				licenseHeaderHtml = "";
+			} else {
+				licenseHeaderHtml = SpdxLicenseTemplateHelper.formatEscapeHTML(this.getStandardLicenseHeader());
+			}
+		}
+		return licenseHeaderHtml;
+	}
+	
+	/**
+	 * Set the licenseHeaderTemplateHtml
+	 * @param licenseHeaderHtml HTML fragment representing the license standard header text
+	 */
+	public void setLicenseHeaderHtml(String licenseHeaderHtml) {
+		this.licenseHeaderHtml = licenseHeaderHtml;
 	}
 
 }

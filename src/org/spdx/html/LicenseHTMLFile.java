@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.spdx.licenseTemplate.LicenseTemplateRuleException;
-import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -203,16 +201,9 @@ public class LicenseHTMLFile {
 				}
 				retval.put("otherWebPages", otherWebPages);
 				retval.put("title", license.getName());
-				String header = license.getStandardLicenseHeader();
+				String header = license.getLicenseHeaderHtml();
 				if (header != null && header.trim().isEmpty()) {
 					header = null;	// so the template will appropriately skip the header text
-				} else if (header != null) {
-					//TODO: May need to add another field for the header template text
-					try {
-						header = SpdxLicenseTemplateHelper.templateTextToHtml(header);
-					} catch(LicenseTemplateRuleException ex) {
-						throw new InvalidLicenseTemplateException("Invalid license expression found in header text for license "+this.license.getName()+":"+ex.getMessage());
-					}
 				}
 				retval.put("licenseHeader", header);
 			}

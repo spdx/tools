@@ -373,4 +373,59 @@ public class TestSpdxListedLicense {
 		stdl2.setLicenseId("Apache-2.0");
 		assertFalse(stdl.equivalent(stdl2));
 	}
+	
+	@Test
+	public void testSetHeaderTemplate() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		String name = "name";
+		String id = "AFL-3.0";
+		String text = "text";
+		String[] sourceUrls = new String[] {"source url2", "source url3"};
+		String notes = "notes";
+		String standardLicenseHeader = "Standard license header";
+		String standardLicenseHeaderTemplate = "Standard license<<beginOptional>>optional<<endOptional>> header";
+		String template = "template";
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
+				sourceUrls, notes, standardLicenseHeader, template, standardLicenseHeaderTemplate, true, true);
+		assertEquals(standardLicenseHeaderTemplate, stdl.getStandardLicenseHeaderTemplate());
+		Resource licResource = stdl.createResource(modelContainer);
+		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
+		assertEquals(standardLicenseHeaderTemplate, compLic.getStandardLicenseHeaderTemplate());
+		
+		String newHeaderTemplate = "New standard license template";
+		compLic.setStandardLicenseHeaderTemplate(newHeaderTemplate);
+		assertEquals(newHeaderTemplate, compLic.getStandardLicenseHeaderTemplate());
+		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
+		assertEquals(newHeaderTemplate, compLic2.getStandardLicenseHeaderTemplate());
+		List<String> verify = stdl.verify();
+		assertEquals(0, verify.size());
+		verify = compLic.verify();
+		assertEquals(0, verify.size());
+	}
+	
+	@Test
+	public void testSetHeaderTemplateHtml() throws InvalidSPDXAnalysisException, InvalidLicenseTemplateException {
+		model = ModelFactory.createDefaultModel();
+		String name = "name";
+		String id = "AFL-3.0";
+		String text = "text";
+		String[] sourceUrls = new String[] {"source url2", "source url3"};
+		String notes = "notes";
+		String standardLicenseHeader = "Standard license header";
+		String standardLicenseHeaderTemplate = "Standard license<<beginOptional>>optional<<endOptional>> header";
+		String template = "template";
+		String standardLicenseHeaderHtml = "<h1>licenseHeader</h1>";
+		String textHtml = "<h1>text</h1>";
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
+				sourceUrls, notes, standardLicenseHeader, template, standardLicenseHeaderTemplate, 
+				true, true, textHtml, standardLicenseHeaderHtml);
+		assertEquals(textHtml, stdl.getLicenseTextHtml());
+		assertEquals(standardLicenseHeaderHtml, stdl.getLicenseHeaderHtml());
+		String newStandardLicenseHeaderHtml = "<h2>licenseHeader2</h2>";
+		String newTextHtml = "<h2>text2</h2>";
+		stdl.setLicenseTextHtml(newTextHtml);
+		stdl.setLicenseHeaderHtml(newStandardLicenseHeaderHtml);
+		assertEquals(newTextHtml, stdl.getLicenseTextHtml());
+		assertEquals(newStandardLicenseHeaderHtml, stdl.getLicenseHeaderHtml());
+	}
 }
