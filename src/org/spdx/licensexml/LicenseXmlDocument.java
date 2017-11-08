@@ -161,15 +161,26 @@ public class LicenseXmlDocument {
 			sourceUrls[i] = urlNodes.item(i).getTextContent();
 		}
 		String licenseHeader = null;
+		String licenseHeaderTemplate = null;
+		String licenseHeaderTemplateHtml = null;
 		NodeList headerNodes = licenseElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
 		if (headerNodes.getLength() > 0) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(LicenseXmlHelper.getHeaderText(headerNodes.item(0)));
+			StringBuilder sbText = new StringBuilder();
+			StringBuilder sbTemplate = new StringBuilder();
+			StringBuilder sbHtml = new StringBuilder();
+			sbText.append(LicenseXmlHelper.getHeaderText(headerNodes.item(0)));
+			sbTemplate.append(LicenseXmlHelper.getHeaderTemplate(headerNodes.item(0)));
+			sbHtml.append(LicenseXmlHelper.getHeaderTextHtml(headerNodes.item(0)));
 			for (int i = 1; i < headerNodes.getLength(); i++) {
-				sb.append('\n');
-				sb.append(LicenseXmlHelper.getHeaderText(headerNodes.item(i)));
+				sbText.append('\n');
+				sbText.append(LicenseXmlHelper.getHeaderText(headerNodes.item(i)));
+				sbTemplate.append('\n');
+				sbTemplate.append(LicenseXmlHelper.getHeaderTemplate(headerNodes.item(i)));
+				sbHtml.append("<br />\n");
+				sbHtml.append(LicenseXmlHelper.getHeaderTextHtml(headerNodes.item(i)));
 			}
-			licenseHeader = sb.toString();
+			licenseHeader = sbText.toString();
+			licenseHeaderTemplate = sbTemplate.toString();
 		}
 		String template = LicenseXmlHelper.getLicenseTemplate(licenseElement);
 		boolean osiApproved;
@@ -186,7 +197,7 @@ public class LicenseXmlDocument {
 		}
 		String licenseHtml = LicenseXmlHelper.getLicenseTextHtml(licenseElement);
 		return new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
-				template, osiApproved, fsfLibre, licenseHtml);
+				template, licenseHeaderTemplate, osiApproved, fsfLibre, licenseHtml, licenseHeaderTemplateHtml);
 	}
 
 	/**

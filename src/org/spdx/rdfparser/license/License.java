@@ -58,6 +58,8 @@ public abstract class License extends SimpleLicensingInfo {
 	protected boolean osiApproved;
 	protected boolean fsfLibre;
 	protected boolean deprecated;
+
+	private String standardLicenseHeaderTemplate;
 		
 	/**
 	 * @param name License name
@@ -83,12 +85,14 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @param comments Optional comments
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
+	 * @param standardLicenseHeaderTemplate optional template for the standard license header
 	 * @param osiApproved True if this is an OSI Approvied license
 	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public License(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
+			String standardLicenseHeader, String template, String standardLicenseHeaderTemplate,
+			boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
 		super(name, id, comments, sourceUrl);
 		this.standardLicenseHeader = standardLicenseHeader;
 		this.standardLicenseTemplate = template;
@@ -97,6 +101,25 @@ public abstract class License extends SimpleLicensingInfo {
 		this.fsfLibre = fsfLibre;
 		this.licenseText = text;
 		this.deprecated = false;
+		this.standardLicenseHeaderTemplate = standardLicenseHeaderTemplate;
+	}
+	
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param osiApproved True if this is an OSI Approvied license
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public License(String name, String id, String text, String[] sourceUrl, String comments,
+			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
+		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, standardLicenseHeader, 
+				osiApproved, fsfLibre);
 	}
 	
 	/**
@@ -109,7 +132,7 @@ public abstract class License extends SimpleLicensingInfo {
 		super(modelContainer, licenseNode);
 		getPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -131,6 +154,10 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 		if (standardLicenseHeader != null) {
 			standardLicenseHeader = StringEscapeUtils.unescapeHtml4(standardLicenseHeader);
+		}
+		standardLicenseHeaderTemplate = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE);
+		if (standardLicenseHeaderTemplate != null) {
+			standardLicenseHeaderTemplate = StringEscapeUtils.unescapeHtml4(standardLicenseHeaderTemplate);
 		}
 		// template
 		this.standardLicenseTemplate = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE);
@@ -212,6 +239,11 @@ public abstract class License extends SimpleLicensingInfo {
 		// Headers
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_VERSION_1);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTICE, standardLicenseHeader);
+		// header template
+		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE);
+		if (this.standardLicenseHeaderTemplate != null) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE, standardLicenseHeaderTemplate);
+		}
 		// Template
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE_VERSION_1);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_TEMPLATE, this.standardLicenseTemplate);
@@ -280,6 +312,30 @@ public abstract class License extends SimpleLicensingInfo {
 			}
 		}
 		return standardLicenseHeader;
+	}
+	
+	/**
+	 * @return standard license header template
+	 */
+	public String getStandardLicenseHeaderTemplate() {
+		if (this.resource != null && this.refreshOnGet) {
+			standardLicenseHeaderTemplate = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE);
+			if (standardLicenseHeaderTemplate != null) {
+				standardLicenseHeaderTemplate = StringEscapeUtils.unescapeHtml4(standardLicenseHeaderTemplate);
+			}
+		}
+		return standardLicenseHeaderTemplate;
+	}
+	
+	/**
+	 * @param standardLicenseHeaderTemplate
+	 */
+	public void setStandardLicenseHeaderTemplate(String standardLicenseHeaderTemplate) {
+		this.standardLicenseHeaderTemplate = standardLicenseHeaderTemplate;
+		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE);
+		if (standardLicenseHeaderTemplate != null) {
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_HEADER_TEMPLATE, standardLicenseHeaderTemplate);
+		}
 	}
 	
 	/**
@@ -372,6 +428,8 @@ public abstract class License extends SimpleLicensingInfo {
 		this.getStandardLicenseHeader();
 		this.getStandardLicenseTemplate();
 		//TODO Add test for template
+		this.getStandardLicenseHeaderTemplate();
+		//TODO add test for license header template
 		String licenseText = this.getLicenseText();
 		if (licenseText == null || licenseText.isEmpty()) {
 			retval.add("Missing required license text for " + id);
@@ -482,7 +540,8 @@ public abstract class License extends SimpleLicensingInfo {
 		try {
 			SpdxListedLicense retval = new SpdxListedLicense(this.getName(), this.getLicenseId(),
 					this.getLicenseText(), this.getSeeAlso(), this.getComment(),
-					this.getStandardLicenseHeader(), this.getStandardLicenseTemplate(), this.isOsiApproved());
+					this.getStandardLicenseHeader(), this.getStandardLicenseTemplate(), 
+					this.getStandardLicenseHeaderTemplate(), this.isOsiApproved(), this.isFsfLibre());
 			retval.setDeprecated(this.isDeprecated());
 			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
@@ -503,6 +562,8 @@ public abstract class License extends SimpleLicensingInfo {
 		this.setSeeAlso(license.getSeeAlso());
 		this.setStandardLicenseHeader(license.getStandardLicenseHeader());
 		this.setStandardLicenseTemplate(this.getStandardLicenseTemplate());
+		this.setStandardLicenseHeaderTemplate(license.getStandardLicenseHeaderTemplate());
+		this.setFsfLibre(license.isFsfLibre());
 		this.setDeprecated(license.isDeprecated());
 	}
 	/**
