@@ -5,8 +5,9 @@
 			<crossRef>http://test/url1</crossRef>
 			<crossRef>http://test/url2</crossRef>
 		</crossRefs>
-		<standardLicenseHeader> 
-    Test header
+  <standardLicenseHeader> 
+    Test header<optional>optional</optional>
+    <alt name="h1test" match=".+">var</alt>
   </standardLicenseHeader>
 		<copyrightText>
 			<p>Test Copyright</p>
