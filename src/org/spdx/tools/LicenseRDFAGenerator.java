@@ -475,8 +475,9 @@ public class LicenseRDFAGenerator {
 	/**
 	 * Update license fields based on information from external metadata
 	 * @param license
+	 * @throws LicenseGeneratorException 
 	 */
-	private static void addExternalMetaData(SpdxListedLicense license) {
+	private static void addExternalMetaData(SpdxListedLicense license) throws LicenseGeneratorException {
 		license.setFsfLibre(FsfLicenseDataParser.getFsfLicenseDataParser().isSpdxLicenseFsfLibre(license.getLicenseId()));
 	}
 	
