@@ -23,7 +23,6 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Map;
 
-import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.license.LicenseException;
 
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -63,11 +62,6 @@ public class ExceptionHtml {
 		mustacheMap.put("text", exception.getExceptionTextHtml());
 		mustacheMap.put("getSourceUrl", alSourceUrls);
 		mustacheMap.put("notes", exception.getComment());
-		String example = exception.getExample();
-		if (example != null && example.trim().isEmpty()) {
-			example = null;
-		}
-		mustacheMap.put("example", example);
 	}
 
 	/**

@@ -179,17 +179,32 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * @param licenseExceptionText Text for the Exception
 	 * @param licenseExceptionTemplate License exception template use for matching license exceptions per SPDX license matching guidelines
 	 * @param comment Comments on the exception
-	 * @param example Example of use
+	 * @param exceptionTextHtml HTML fragment format of the exception text
 	 * @param seeAlso URL references to external sources for the exception
 	 */
 	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
-			String licenseExceptionTemplate, String[] seeAlso, String comment) {
+			String licenseExceptionTemplate, String[] seeAlso, String comment, String exceptionTextHtml) {
 		this.licenseExceptionId = licenseExceptionId;
 		this.name = name;
 		this.licenseExceptionText = licenseExceptionText;
 		this.seeAlso = seeAlso;
 		this.comment = comment;
 		this.licenseExceptionTemplate = licenseExceptionTemplate;
+		this.exceptionTextHtml = exceptionTextHtml;
+	}
+	
+	/**
+	 * @param licenseExceptionId Exception ID - short form ID
+	 * @param name Full name of the Exception
+	 * @param licenseExceptionText Text for the Exception
+	 * @param licenseExceptionTemplate License exception template use for matching license exceptions per SPDX license matching guidelines
+	 * @param comment Comments on the exception
+	 * @param example Example of use
+	 * @param seeAlso URL references to external sources for the exception
+	 */
+	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
+			String licenseExceptionTemplate, String[] seeAlso, String comment) {
+		this(licenseExceptionId, name, licenseExceptionText, licenseExceptionTemplate, seeAlso, comment, null);
 	}
 	
 	/**

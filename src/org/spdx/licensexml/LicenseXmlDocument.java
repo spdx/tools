@@ -220,6 +220,7 @@ public class LicenseXmlDocument {
 		String id = exceptionElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_ID);
 		String text = LicenseXmlHelper.getLicenseText(exceptionElement);
 		String template = LicenseXmlHelper.getLicenseTemplate(exceptionElement);
+		String html = LicenseXmlHelper.getLicenseTextHtml(exceptionElement);
 		NodeList notes = exceptionElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
 		String comment = null;
 		if (notes.getLength() > 0) {
@@ -235,7 +236,7 @@ public class LicenseXmlDocument {
 		for (int i = 0; i < urlNodes.getLength(); i++) {
 			sourceUrls[i] = urlNodes.item(i).getTextContent();
 		}
-		return new LicenseException(id, name, text, template, sourceUrls, comment);
+		return new LicenseException(id, name, text, template, sourceUrls, comment, html);
 	}
 
 	/**
