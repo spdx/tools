@@ -195,6 +195,26 @@ public class TestSpdxListedLicense {
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
+		
+		// Test for null value
+		SpdxListedLicense stdl2 = new SpdxListedLicense(name, id, text,
+				sourceUrls, notes, standardLicenseHeader, template, false, null, licenseHtml);
+		assertTrue(stdl2.getFsfLibre() == null);
+		assertFalse(stdl2.isFsfLibre());
+		assertFalse(stdl2.isNotFsfLibre());
+		Resource licResource2 = stdl2.createResource(modelContainer);
+		SpdxListedLicense compLic3 = new SpdxListedLicense(modelContainer, licResource2.asNode());
+		assertTrue(compLic3.getFsfLibre() == null);
+		assertFalse(compLic3.isFsfLibre());
+		assertFalse(compLic3.isNotFsfLibre());
+		compLic3.setFsfLibre(false);
+		assertFalse(compLic3.getFsfLibre() == null);
+		assertFalse(compLic3.isFsfLibre());
+		assertTrue(compLic3.isNotFsfLibre());
+		SpdxListedLicense compLic4 = new SpdxListedLicense(modelContainer, licResource2.asNode());
+		assertFalse(compLic4.getFsfLibre() == null);
+		assertFalse(compLic4.isFsfLibre());		
+		assertTrue(compLic4.isNotFsfLibre());
 	}
 	
 	@Test

@@ -47,9 +47,9 @@ import com.google.common.collect.Maps;
  */
 public class FsfLicenseDataParser {
 	
-	static final String FSF_JSON_URL = "";	//TODO: Once FSF implements an API, replace this with the actual URL
-	static final String FSF_JSON_FILE_PATH = "resources" + File.separator + "fsf-licenses.json";
-	static final String FSF_JSON_CLASS_PATH = "resources/fsf-licenses.json";
+	static final String FSF_JSON_URL = "https://wking.github.io/fsf-api/licenses-full.json";
+	static final String FSF_JSON_FILE_PATH = "resources" + File.separator + "licenses-full.json";
+	static final String FSF_JSON_CLASS_PATH = "resources/licenses-full.json";
 	
 	private static FsfLicenseDataParser fsfLicenseDataParser = null;
 	private Map<String, Boolean> licenseIdToFsfFree;
@@ -131,15 +131,10 @@ public class FsfLicenseDataParser {
 	/**
 	 * Determines if an SPDX license is designated as FSF Free / Libre by FSF.  Reference https://www.gnu.org/licenses/license-list.en.html
 	 * @param spdxLicenseId
-	 * @return
+	 * @return true if FSF describes the license as free / libre, false if FSF describes the license as not free / libre, null if FSF does not reference the license
 	 */
-	public boolean isSpdxLicenseFsfLibre(String spdxLicenseId) {
-		Boolean retval = this.licenseIdToFsfFree.get(spdxLicenseId);
-		if (retval == null) {
-			return false;
-		} else {
-			return retval;
-		}
+	public Boolean isSpdxLicenseFsfLibre(String spdxLicenseId) {
+		return this.licenseIdToFsfFree.get(spdxLicenseId);
 	}
 
 }
