@@ -39,14 +39,14 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		private final String refNumber;
 		private final String licenseId;
 		private final boolean osiApproved;
-		private final boolean fsfLibre;
+		private final Boolean fsfLibre;
 		private final String licenseName;
 		private final String[] seeAlso;
 		private boolean deprecated;
 		private String licJSONReference;
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean osiApproved, boolean fsfLibre, String licenseName, String[] seeAlso, boolean deprecated, String licJSONReference) {
+				String licenseId, boolean osiApproved, Boolean fsfLibre, String licenseName, String[] seeAlso, boolean deprecated, String licJSONReference) {
 			this.reference = reference;
 			this.refNumber = refNumber;
 			this.licenseId = licenseId;
@@ -88,7 +88,7 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 			return osiApproved;
 		}
 		
-		public boolean isFsfLibre() {
+		public Boolean getFsfLibre() {
 			return fsfLibre;
 		}
 
@@ -124,7 +124,7 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 	public void addLicense(SpdxListedLicense license, String licHTMLReference,
 			String licJSONReference, boolean deprecated) {
 		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				license.getLicenseId(), license.isOsiApproved(), license.isFsfLibre(), license.getName(), 
+				license.getLicenseId(), license.isOsiApproved(), license.getFsfLibre(), license.getName(), 
 				license.getSeeAlso(), deprecated, relativeToAbsolute(licJSONReference)));
 		currentRefNumber++;
 	}
@@ -158,7 +158,9 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 			licenseJSON.put("referenceNumber", license.getRefNumber());
 			licenseJSON.put(SpdxRdfConstants.PROP_LICENSE_ID, license.getLicenseId());
 			licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_OSI_APPROVED, license.getOsiApproved());
-			licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE, license.isFsfLibre());
+			if (license.getFsfLibre() != null) {
+				licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE, license.getFsfLibre());
+			}
 			licenseJSON.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getLicenseName());
 			String[] seeAlsos = license.getSeeAlso();
 			if (seeAlsos != null && seeAlsos.length > 0) {

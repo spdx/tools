@@ -148,7 +148,7 @@ public class LicenseTOCHTMLFile {
 		}
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean isOsiApproved, boolean fsfLibre, String licenseName) {
+				String licenseId, boolean isOsiApproved, Boolean fsfLibre, String licenseName) {
 			this.reference = reference;
 			this.refNumber = refNumber;
 			this.licenseId = licenseId;
@@ -157,7 +157,7 @@ public class LicenseTOCHTMLFile {
 			} else {
 				this.osiApproved = "";
 			}
-			if (fsfLibre) {
+			if (fsfLibre != null && fsfLibre) {
 				this.fsfLibre = "Y";
 			} else {
 				this.fsfLibre = "";
@@ -265,7 +265,7 @@ public class LicenseTOCHTMLFile {
       
 	public void addLicense(SpdxListedLicense license, String licHTMLReference) {
 		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				license.getLicenseId(), license.isOsiApproved(), license.isFsfLibre(), license.getName()));
+				license.getLicenseId(), license.isOsiApproved(), license.getFsfLibre(), license.getName()));
 		currentRefNumber++;
 	}
 

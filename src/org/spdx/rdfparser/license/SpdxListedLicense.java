@@ -49,12 +49,12 @@ public class SpdxListedLicense extends License {
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
 	 * @param osiApproved True if this is an OSI Approvied license
-	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
+	 * @param fsfLibre true if FSF describes the license as free / libre, false if FSF describes the license as not free / libre, null if FSF does not reference the license
 	 * @param licenseTextHtml HTML version for the license text
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre, String licenseTextHtml) throws InvalidSPDXAnalysisException {
+			String standardLicenseHeader, String template, boolean osiApproved, Boolean fsfLibre, String licenseTextHtml) throws InvalidSPDXAnalysisException {
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre);
 		this.licenseTextHtml = licenseTextHtml;
 	}
@@ -157,7 +157,7 @@ public class SpdxListedLicense extends License {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
+			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
 		
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
 	}
