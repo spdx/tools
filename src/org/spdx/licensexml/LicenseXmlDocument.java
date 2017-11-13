@@ -144,6 +144,8 @@ public class LicenseXmlDocument {
 	private SpdxListedLicense getListedLicense(Element licenseElement) throws InvalidSPDXAnalysisException, LicenseXmlException {
 		String name = licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_NAME);
 		String id = licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_ID);
+		boolean deprecated = licenseElement.hasAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_DEPRECATED) &&
+				"true".equals(licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_DEPRECATED).toLowerCase());
 		String text = LicenseXmlHelper.getLicenseText(licenseElement);
 		NodeList notes = licenseElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
 		String comment = null;
@@ -196,8 +198,10 @@ public class LicenseXmlDocument {
 			fsfLibre = false;
 		}
 		String licenseHtml = LicenseXmlHelper.getLicenseTextHtml(licenseElement);
-		return new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
+		SpdxListedLicense retval = new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
 				template, licenseHeaderTemplate, osiApproved, fsfLibre, licenseHtml, licenseHeaderTemplateHtml);
+		retval.setDeprecated(deprecated);
+		return retval;
 	}
 
 	/**

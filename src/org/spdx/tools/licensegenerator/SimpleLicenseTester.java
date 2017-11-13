@@ -17,6 +17,7 @@ package org.spdx.tools.licensegenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ import org.spdx.rdfparser.license.LicenseException;
 public class SimpleLicenseTester implements ILicenseTester {
 	
 	
-
+	private Charset utf8 = Charset.forName("UTF-8");
 	private File testFileDir;
 
 	/**
@@ -72,7 +73,7 @@ public class SimpleLicenseTester implements ILicenseTester {
 	
 	private String readText(File f) throws IOException {
 		StringBuilder text = new StringBuilder();
-		Files.lines(f.toPath()).forEach(line -> {
+		Files.lines(f.toPath(), utf8).forEach(line -> {
 			text.append(line);
 			text.append("\n");
 			});
@@ -86,7 +87,9 @@ public class SimpleLicenseTester implements ILicenseTester {
 		List<String> retval = new ArrayList<String>();
 		File licenseTextFile = new File(testFileDir.getPath() + File.separator + license.getLicenseId() + ".txt");
 		if (!licenseTextFile.exists()) {
-			retval.add("No test text exists for license ID "+license.getLicenseId());
+			if (!license.isDeprecated()) {
+				retval.add("No test text exists for license ID "+license.getLicenseId());
+			}
 		} else {
 			String compareText = readText(licenseTextFile);
 			DifferenceDescription result;
