@@ -18,11 +18,14 @@ package org.spdx.tools.licensegenerator;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
-import com.google.common.io.Files;
 
 /**
  * Writes licenses in a simple text format
@@ -65,8 +68,8 @@ public class LicenseTextFormatWriter implements ILicenseFormatWriter {
 		if (deprecated) {
 			licBaseHtmlFileName = "deprecated_" + licBaseHtmlFileName;
 		}
-		File textFile = new File(textFolder.getPath() + File.separator + licBaseHtmlFileName + ".txt");
-		Files.write(license.getLicenseText(), textFile, utf8);
+		Path textFilePath = Paths.get(textFolder.getPath(), licBaseHtmlFileName + ".txt");
+		Files.write(textFilePath, Arrays.asList(license.getLicenseText().split("\\n")), utf8);
 	}
 
 	@Override
@@ -78,8 +81,9 @@ public class LicenseTextFormatWriter implements ILicenseFormatWriter {
 	@Override
 	public void writeException(LicenseException exception, boolean deprecated, String deprecatedVersion)
 			throws IOException {
+		
 		String exceptionHtmlFileName = LicenseHtmlFormatWriter.formLicenseHTMLFileName(exception.getLicenseExceptionId());
-		File textFile = new File(textFolder.getPath() + File.separator + exceptionHtmlFileName + ".txt");
-		Files.write(exception.getLicenseExceptionText(), textFile, utf8);
+		Path textFilePath = Paths.get(textFolder.getPath(), exceptionHtmlFileName + ".txt");
+		Files.write(textFilePath, Arrays.asList(exception.getLicenseExceptionText().split("\\n")), utf8);
 	}
 }
