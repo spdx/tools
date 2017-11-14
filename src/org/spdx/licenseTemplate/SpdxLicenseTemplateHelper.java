@@ -47,16 +47,12 @@ public class SpdxLicenseTemplateHelper {
 			ILicenseTemplateOutputHandler templateOutputHandler) throws LicenseTemplateRuleException {
 		Matcher ruleMatcher = RULE_PATTERN.matcher(licenseTemplate);
 		int end = 0;
-		boolean inOptional = false;
+		int optionalNestLevel = 0;
 		while (ruleMatcher.find()) {
 			// copy everything up to the start of the find
 			String upToTheFind = licenseTemplate.substring(end, ruleMatcher.start());
 			if (!upToTheFind.trim().isEmpty()) {
-				if (inOptional) {
-					templateOutputHandler.optionalText(upToTheFind);
-				} else {
-					templateOutputHandler.normalText(upToTheFind);
-				}
+				templateOutputHandler.text(upToTheFind);
 			}
 			end = ruleMatcher.end();
 			String ruleString = ruleMatcher.group(1);
@@ -64,30 +60,25 @@ public class SpdxLicenseTemplateHelper {
 			if (rule.getType() == LicenseTemplateRule.RuleType.VARIABLE) {
 				templateOutputHandler.variableRule(rule);
 			} else if (rule.getType() == LicenseTemplateRule.RuleType.BEGIN_OPTIONAL) {
-				if (inOptional) {
-					throw(new LicenseTemplateRuleException("Invalid nested optional rule found after text '"+upToTheFind+"'"));
-				} else {
-					inOptional = true;
-					templateOutputHandler.beginOptional(rule);
-				}
+				templateOutputHandler.beginOptional(rule);
+				optionalNestLevel++;
 			} else if (rule.getType() == LicenseTemplateRule.RuleType.END_OPTIONAL) {
-				if (inOptional) {
-					inOptional = false;
-					templateOutputHandler.endOptional(rule);
-				} else {
+				optionalNestLevel--;
+				if (optionalNestLevel < 0) {
 					throw(new LicenseTemplateRuleException("End optional rule found without a matching begin optional rule after text '"+upToTheFind+"'"));
 				}
+				templateOutputHandler.endOptional(rule);
 			} else {
 				throw(new LicenseTemplateRuleException("Unrecognized rule: "+rule.getType().toString()+" after text '"+upToTheFind+"'"));
 			}
 		}
-		if (inOptional) {
+		if (optionalNestLevel > 0) {
 			throw(new LicenseTemplateRuleException("Missing EndOptional rule and end of text"));
 		}
 		// copy the rest of the template to the end
 		String restOfTemplate = licenseTemplate.substring(end);
 		if (!restOfTemplate.isEmpty()) {
-			templateOutputHandler.normalText(restOfTemplate);
+			templateOutputHandler.text(restOfTemplate);
 		}
 		templateOutputHandler.completeParsing();
 	}

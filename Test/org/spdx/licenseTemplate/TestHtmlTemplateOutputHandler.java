@@ -60,23 +60,6 @@ public class TestHtmlTemplateOutputHandler {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#optionalText(java.lang.String)}.
-	 * @throws LicenseTemplateRuleException
-	 */
-	@Test
-	public void testOptionalText() throws LicenseTemplateRuleException {
-		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
-		String ruleName = "optionalRule";
-
-		LicenseTemplateRule beginRule = new LicenseTemplateRule(ruleName, RuleType.BEGIN_OPTIONAL);
-		htoh.beginOptional(beginRule);
-		String optionalText = "Optional Text";
-		htoh.optionalText(optionalText);
-		String result = htoh.getHtml();
-		assertTrue(result.endsWith(optionalText));
-	}
-
-	/**
 	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#normalText(java.lang.String)}.
 	 */
 	@Test
@@ -84,7 +67,7 @@ public class TestHtmlTemplateOutputHandler {
 		String normalText = "normal text\t\nwith spec chars>";
 		String escapedNormalText = "normal text\t<br/>\nwith spec chars&gt;";
 		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
-		htoh.normalText(normalText);
+		htoh.text(normalText);
 		assertEquals(escapedNormalText,htoh.getHtml());
 	}
 
@@ -148,14 +131,14 @@ public class TestHtmlTemplateOutputHandler {
 		HtmlTemplateOutputHandler htoh = new HtmlTemplateOutputHandler();
 		String beginText = "Begin text\n";
 		String escapedBeginText = "Begin text<br/>\n";
-		htoh.normalText(beginText);
+		htoh.text(beginText);
 
 		String optRuleName = "optionalRule";
 
 		LicenseTemplateRule beginRule = new LicenseTemplateRule(optRuleName, RuleType.BEGIN_OPTIONAL);
 		htoh.beginOptional(beginRule);
 		String optionalText = "Optional Text";
-		htoh.optionalText(optionalText);
+		htoh.text(optionalText);
 		String escapedBeginRuleText = "\n<div id=\"" + optRuleName + "\" class=\"optional-license-text\">\n";
 		String escapedOptionalText = optionalText;
 
@@ -175,7 +158,7 @@ public class TestHtmlTemplateOutputHandler {
 		String escapedEndRuleText = "</div>\n";
 
 		String lastLine = "\nLast Line.&";
-		htoh.normalText(lastLine);
+		htoh.text(lastLine);
 		String escapedLastLine = "<br/>\nLast Line.&amp;";
 
 		String expectedValue = escapedBeginText +escapedBeginRuleText+escapedOptionalText+

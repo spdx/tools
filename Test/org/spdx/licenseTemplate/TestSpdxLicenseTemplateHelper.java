@@ -38,6 +38,8 @@ public class TestSpdxLicenseTemplateHelper {
 	LicenseTemplateRule endOptionalRule;
 
 	public class TestLicenseTemplateOutputHandler implements ILicenseTemplateOutputHandler {
+		
+		int optionalNestLevel = 0;
 
 		public TestLicenseTemplateOutputHandler() {
 			optionalTextString = null;
@@ -48,19 +50,15 @@ public class TestSpdxLicenseTemplateHelper {
 		}
 
 		/* (non-Javadoc)
-		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#optionalText(java.lang.String)
+		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#text(java.lang.String)
 		 */
 		@Override
-		public void optionalText(String text) {
-			optionalTextString = text;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#normalText(java.lang.String)
-		 */
-		@Override
-		public void normalText(String text) {
-			normalTextString = text;
+		public void text(String text) {
+			if (optionalNestLevel > 0) {
+				optionalTextString = text;
+			} else {
+				normalTextString = text;
+			}
 		}
 
 		/* (non-Javadoc)
@@ -77,6 +75,7 @@ public class TestSpdxLicenseTemplateHelper {
 		@Override
 		public void beginOptional(LicenseTemplateRule rule) {
 			optionalRule = rule;
+			this.optionalNestLevel++;
 		}
 
 		/* (non-Javadoc)
@@ -85,6 +84,7 @@ public class TestSpdxLicenseTemplateHelper {
 		@Override
 		public void endOptional(LicenseTemplateRule rule) {
 			endOptionalRule = rule;
+			this.optionalNestLevel--;
 		}
 
 		@Override

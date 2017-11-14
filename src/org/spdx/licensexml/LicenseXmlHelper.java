@@ -38,6 +38,10 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 
 	private static final String INDENT_STRING = "   ";
 
+	private static final String BULLET_ALT_MATCH = ".{0,20}";
+
+	private static final String BULLET_ALT_NAME = "bullet";
+
 	/**
 	 * Tags that do not require any processing - the text for the children will be included
 	 */
@@ -52,11 +56,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	static HashSet<String> LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS = new HashSet<String>();
 	static {
 		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
-		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
+		//LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
 		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
 		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
 		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
-		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+		//LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
 	}
 	
 	static HashSet<String> NOTES_SKIPPED_TAGS = new HashSet<String>();
@@ -143,7 +147,15 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			if (LICENSEXML_ELEMENT_LIST.equals(tagName)) {
 				appendListElements(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_ALT.equals(tagName)) {
-				appendAltText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME)) {
+					throw(new LicenseXmlException("Missing name attribute for variable text"));
+				}
+				String altName = element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME);
+				if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH)) {
+					throw(new LicenseXmlException("Missing match attribute for variable text"));
+				}
+				String match = element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH);
+				appendAltText(element, altName, match, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_OPTIONAL.equals(tagName)) {
 				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_BREAK.equals(tagName)) {
@@ -165,6 +177,15 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				if (includeHtmlTags) {
 					sb.append("</p>\n");
 				}
+			} else if (LICENSEXML_ELEMENT_TITLE_TEXT.equals(tagName)) {
+				
+				//TODO: Don't append optional text if inside an ALT block
+				//appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+			} else if (LICENSEXML_ELEMENT_BULLET.equals(tagName)) {
+				//TODO: Don't append alt text if inside another ALT block
+				//appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (unprocessedTags.contains(tagName)) {
 				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (!skippedTags.contains(tagName)) {
@@ -273,9 +294,6 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	private static void appendOptionalText(Element element,
 			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
 			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
-		if (!LICENSEXML_ELEMENT_OPTIONAL.equals(element.getTagName())) {
-			throw(new LicenseXmlException("Expecting optional tag, found "+element.getTagName()));
-		}
 		StringBuilder childSb = new StringBuilder();
 		if (element.hasChildNodes()) {
 			appendElementChildrenText(element, useTemplateFormat, childSb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
@@ -309,6 +327,8 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	/**
 	 * Add text for an alternative expression
 	 * @param element Element containing the alternative expression
+	 * @param altName Name for the alt / var text
+	 * @param match Regex pattern match string for the alternate text
 	 * @param useTemplateFormat If true, convert any optional or variable elements into the template markup language
 	 * if false, translate to the equivalent text
 	 * @param sb Stringbuilder to append the text to
@@ -318,12 +338,9 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param includeHtmlTags if true, include HTML tags for creating an HTML fragment including the formatting from the original XML element
 	 * @throws LicenseXmlException 
 	 */
-	private static void appendAltText(Element element,
+	private static void appendAltText(Element element, String altName, String match,
 			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
 			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
-		if (!LICENSEXML_ELEMENT_ALT.equals(element.getTagName())) {
-			throw(new LicenseXmlException("Expected alt tag.  Found '"+element.getTagName()+"'"));
-		}
 		StringBuilder originalSb = new StringBuilder();
 		if (element.hasChildNodes()) {
 			appendElementChildrenText(element, useTemplateFormat, originalSb, indentCount, 
@@ -339,17 +356,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				sb.append(' ');
 			}
 			sb.append("<<var;name=\"");
-			if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME)) {
-				throw(new LicenseXmlException("Missing name attribute for variable text"));
-			}
-			sb.append(element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME));
+			sb.append(altName);
 			sb.append("\";original=\"");
 			sb.append(originalSb);
 			sb.append("\";match=\"");
-			if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH)) {
-				throw(new LicenseXmlException("Missing match attribute for variable text"));
-			}
-			sb.append(element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH));
+			sb.append(match);
 			sb.append("\">>");
 		} else if (includeHtmlTags) {
 			sb.append("\n<span class=\"");

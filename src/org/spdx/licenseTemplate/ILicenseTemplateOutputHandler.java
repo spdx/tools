@@ -26,16 +26,10 @@ package org.spdx.licenseTemplate;
 public interface ILicenseTemplateOutputHandler {
 
 	/**
-	 * Text found within an optional text block
+	 * Text for processing
 	 * @param text
 	 */
-	void optionalText(String text);
-
-	/**
-	 * Normal text found with the template (non-optional and not within a variable rule)
-	 * @param text
-	 */
-	void normalText(String text);
+	void text(String text);
 
 	/**
 	 * Variable rule found within the template
