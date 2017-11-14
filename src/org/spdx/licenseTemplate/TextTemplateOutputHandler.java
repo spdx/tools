@@ -27,18 +27,10 @@ public class TextTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	StringBuilder textString = new StringBuilder();
 
 	/* (non-Javadoc)
-	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#optionalText(java.lang.String)
+	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#text(java.lang.String)
 	 */
 	@Override
-	public void optionalText(String text) {
-		textString.append(text);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#normalText(java.lang.String)
-	 */
-	@Override
-	public void normalText(String text) {
+	public void text(String text) {
 		textString.append(text);
 	}
 

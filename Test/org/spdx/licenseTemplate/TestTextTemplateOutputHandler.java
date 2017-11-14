@@ -60,24 +60,13 @@ public class TestTextTemplateOutputHandler {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.licenseTemplate.TextTemplateOutputHandler#optionalText(java.lang.String)}.
-	 */
-	@Test
-	public void testOptionalText() {
-		String test = "test\n";
-		TextTemplateOutputHandler oh = new TextTemplateOutputHandler();
-		oh.optionalText(test);
-		assertEquals(test, oh.getText());
-	}
-
-	/**
 	 * Test method for {@link org.spdx.licenseTemplate.TextTemplateOutputHandler#normalText(java.lang.String)}.
 	 */
 	@Test
 	public void testNormalText() {
 		String test = "test normal\n";
 		TextTemplateOutputHandler oh = new TextTemplateOutputHandler();
-		oh.normalText(test);
+		oh.text(test);
 		assertEquals(test, oh.getText());
 	}
 
@@ -151,7 +140,7 @@ public class TestTextTemplateOutputHandler {
 		LicenseTemplateRule endRule = new LicenseTemplateRule(ruleName, RuleType.END_OPTIONAL,
 				originalText, matchText, exampleText);
 		oh.beginOptional(beginRule);
-		oh.normalText(normalText);
+		oh.text(normalText);
 		oh.endOptional(endRule);
 		assertEquals(normalText, oh.getText());
 	}

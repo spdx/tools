@@ -27,7 +27,10 @@ import java.util.regex.Pattern;
 
 import org.spdx.licenseTemplate.ILicenseTemplateOutputHandler;
 import org.spdx.licenseTemplate.LicenseTemplateRule;
+import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
 import org.spdx.rdfparser.license.LicenseParserException;
+
+import com.google.common.collect.Lists;
 
 /**
  * Compares the output of a parsed license template to text.  The method matches is called after
@@ -40,13 +43,15 @@ public class CompareTemplateOutputHandler implements
 	
 	class ParseInstruction {
 		LicenseTemplateRule rule;
-		String optionalText;
-		String normalText;
+		String text;
+		List<ParseInstruction> subInstructions;
+		ParseInstruction parent;
 		
-		ParseInstruction(LicenseTemplateRule rule, String optionalText, String normalText) {
+		ParseInstruction(LicenseTemplateRule rule, String text, ParseInstruction parent) {
 			this.rule = rule;
-			this.optionalText = optionalText;
-			this.normalText = normalText;
+			this.text = text;
+			this.subInstructions = Lists.newArrayList();
+			this.parent = parent;
 		}
 
 		/**
@@ -64,31 +69,71 @@ public class CompareTemplateOutputHandler implements
 		}
 
 		/**
-		 * @return the optionalText
+		 * @return the text
 		 */
-		public String getOptionalText() {
-			return optionalText;
+		public String getText() {
+			return text;
 		}
 
 		/**
-		 * @param optionalText the optionalText to set
+		 * @param optionalText the text to set
 		 */
-		public void setOptionalText(String optionalText) {
-			this.optionalText = optionalText;
+		public void setText(String text) {
+			this.text = text;
 		}
 
 		/**
-		 * @return the normalText
+		 * Add the instruction to the list of sub-instructions
+		 * @param instruction
 		 */
-		public String getNormalText() {
-			return normalText;
+		public void addSubInstruction(ParseInstruction instruction) {
+			this.subInstructions.add(instruction);
 		}
 
 		/**
-		 * @param normalText the normalText to set
+		 * @return the parent
 		 */
-		public void setNormalText(String normalText) {
-			this.normalText = normalText;
+		public ParseInstruction getParent() {
+			return parent;
+		}
+
+		/**
+		 * @param parent the parent to set
+		 */
+		public void setParent(ParseInstruction parent) {
+			this.parent = parent;
+		}
+
+		/**
+		 * @return the subInstructions
+		 */
+		public List<ParseInstruction> getSubInstructions() {
+			return subInstructions;
+		}
+
+		/**
+		 * @return true iff there are only text instructions as sub instructions
+		 */
+		public boolean onlyText() {
+			if (this.subInstructions.size() < 1) {
+				return false;
+			}
+			for (ParseInstruction subInstr:this.subInstructions) {
+				if (subInstr.getText() == null) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public String toText() {
+			StringBuilder sb = new StringBuilder();
+			for (ParseInstruction subInstr:this.subInstructions) {
+				if (subInstr.getText() != null) {
+					sb.append(subInstr.getText());
+				}
+			}
+			return sb.toString();
 		}
 	}
 	
@@ -132,13 +177,13 @@ public class CompareTemplateOutputHandler implements
 	String compareText = "";
 	Map<Integer, LineColumn> tokenToLocation = new HashMap<Integer, LineColumn>();
 	List<ParseInstruction> instructionList = new ArrayList<ParseInstruction>();
-	StringBuilder optionalText = new StringBuilder();
 	boolean differenceFound = false;
 	int compareTokenCounter = 0;
 	String differenceExplanation = "No difference found";
 	List<LineColumn> differences = new ArrayList<LineColumn>();
 	String nextCompareToken = null;
 	int currentInstIndex = 0;
+	ParseInstruction currentOptionalInstruction = null;	// if we are inside a beingOptional / endOptional bracket, this will hold the optional instruction
 	
 	/**
 	 * @param compareText Text to compare the parsed SPDX license template to
@@ -153,21 +198,15 @@ public class CompareTemplateOutputHandler implements
 	}
 
 	/* (non-Javadoc)
-	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#optionalText(java.lang.String)
+	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#text(java.lang.String)
 	 */
 	@Override
-	public void optionalText(String text) {
-		this.optionalText.append(' ');
-		this.optionalText.append(text);
-	}
-
-
-	/* (non-Javadoc)
-	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#normalText(java.lang.String)
-	 */
-	@Override
-	public void normalText(String text) {
-		this.instructionList.add(new ParseInstruction(null, null, text));
+	public void text(String text) {
+		if (currentOptionalInstruction != null) {
+			currentOptionalInstruction.addSubInstruction(new ParseInstruction(null, text, currentOptionalInstruction));
+		} else {
+			this.instructionList.add(new ParseInstruction(null, text, null));
+		}
 	}
 
 	/* (non-Javadoc)
@@ -175,7 +214,11 @@ public class CompareTemplateOutputHandler implements
 	 */
 	@Override
 	public void variableRule(LicenseTemplateRule rule) {
-		this.instructionList.add(new ParseInstruction(rule, null, null));
+		if (currentOptionalInstruction != null) {
+			currentOptionalInstruction.addSubInstruction(new ParseInstruction(rule, null, currentOptionalInstruction));
+		} else {
+			this.instructionList.add(new ParseInstruction(rule, null, null));
+		}
 	}
 
 
@@ -184,7 +227,13 @@ public class CompareTemplateOutputHandler implements
 	 */
 	@Override
 	public void beginOptional(LicenseTemplateRule rule) {
-		this.optionalText.setLength(0);
+		ParseInstruction optionalInstruction = new ParseInstruction(rule, null, currentOptionalInstruction);
+		if (currentOptionalInstruction != null) {
+			currentOptionalInstruction.addSubInstruction(optionalInstruction);
+		} else {
+			this.instructionList.add(optionalInstruction);
+		}
+		this.currentOptionalInstruction = optionalInstruction;
 	}
 
 	/* (non-Javadoc)
@@ -192,7 +241,9 @@ public class CompareTemplateOutputHandler implements
 	 */
 	@Override
 	public void endOptional(LicenseTemplateRule rule) {
-		this.instructionList.add(new ParseInstruction(null, this.optionalText.toString(), null));
+		if (currentOptionalInstruction != null) {
+			currentOptionalInstruction = currentOptionalInstruction.getParent();
+		}
 	}
 
 	/**
@@ -300,7 +351,7 @@ public class CompareTemplateOutputHandler implements
 		String firstNormalText = null;
 		int i = this.currentInstIndex;
 		while (i < instructionList.size() && firstNormalText == null) {
-			firstNormalText = instructionList.get(i++).getNormalText();
+			firstNormalText = instructionList.get(i++).getText();
 		}
 		
 		if (firstNormalText == null) {
@@ -366,20 +417,13 @@ public class CompareTemplateOutputHandler implements
 		}
 		Map<Integer, LineColumn> temp = new HashMap<Integer, LineColumn>();
 		return LicenseCompareHelper.tokenizeLicenseText(text.substring(0, end), temp).length;
-//		int numSpaces = 0;
-//		for (int i = 0; i < end; i++) {
-//			if (text.charAt(i) == ' ') {
-//				numSpaces++;
-//			}
-//		}
-//		return numSpaces + 1;
 	}
 
 	/**
 	 * Process optional text moving the counter as appropriate if the optional text is found
 	 * @param text
 	 */
-	private void processOptionalText(String text) {
+	private void processOptionalText(ParseInstruction optionalInstruction) {
 		if (differenceFound) {
 			return;
 		}
@@ -388,7 +432,18 @@ public class CompareTemplateOutputHandler implements
 		String saveDifferenceExplanation = this.differenceExplanation;
 		List<LineColumn> saveDifferences = new ArrayList<LineColumn>();
 		Collections.copy(saveDifferences, this.differences);
-		if (!textEquivalent(text)) {
+		boolean foundOptional = false;
+		if (optionalInstruction.onlyText()) {
+			// simple case, we'll just text the text
+			foundOptional = textEquivalent(optionalInstruction.toText());
+		} else {
+			// We need to treat this like a variable block, find the end and process the subinstructions
+			//TODO: Implement
+			foundOptional = true;
+			this.differenceExplanation = "Unsupported nested optional and var rules within an optional block";
+			this.differenceFound = true;
+		}
+		if (!foundOptional) {
 			// reset counters
 			this.nextCompareToken = saveNextComparisonToken;
 			this.compareTokenCounter = saveCompareTokenCounter;
@@ -414,8 +469,11 @@ public class CompareTemplateOutputHandler implements
 			// two tokens match a single compare token considering optional
 			if (textTokens.length > 1 && nextCompareToken != null && 
 					instructionList.size() > currentInstIndex && 
-					instructionList.get(currentInstIndex).getOptionalText() != null) {
-				String optionalText = instructionList.get(currentInstIndex).getOptionalText().trim();
+					instructionList.get(currentInstIndex).getRule() != null &&
+					instructionList.get(currentInstIndex).getRule().getType().equals(RuleType.BEGIN_OPTIONAL) &&
+					instructionList.get(currentInstIndex).getSubInstructions().size() == 1 &&
+					instructionList.get(currentInstIndex).getSubInstructions().get(0).getText() != null) {
+				String optionalText = instructionList.get(currentInstIndex).getSubInstructions().get(0).getText().trim();
 				String tokenWithOption = textTokens[textTokens.length-1] + optionalText;
 				if (nextCompareToken.equals(tokenWithOption)) {
 					this.currentInstIndex++;
@@ -424,8 +482,8 @@ public class CompareTemplateOutputHandler implements
 				} else {
 					// Check one more scenario where there is a normal text following that is also part of the same token
 					if (instructionList.size() > currentInstIndex+1 && 
-							instructionList.get(currentInstIndex+1).getNormalText() != null) {
-						String normalText = instructionList.get(currentInstIndex+1).getNormalText();
+							instructionList.get(currentInstIndex+1).getText() != null) {
+						String normalText = instructionList.get(currentInstIndex+1).getText();
 						Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
 						String[] normalTextTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(normalText), normalTextLocations);
 						String firstNormalText = LicenseCompareHelper.getTokenAt(normalTextTokens, 0);
@@ -441,7 +499,7 @@ public class CompareTemplateOutputHandler implements
 								startCol = normalText.indexOf("\"");
 							}
 							String normalMinusFirstToken = normalText.substring(startCol);
-							instructionList.get(currentInstIndex+1).setNormalText(normalMinusFirstToken);
+							instructionList.get(currentInstIndex+1).setText(normalMinusFirstToken);
 							this.currentInstIndex++;
 							this.nextCompareToken = LicenseCompareHelper.getTokenAt(compareTokens, compareTokenCounter++);
 							this.differenceFound = false;
@@ -506,10 +564,11 @@ public class CompareTemplateOutputHandler implements
 		if (currentInstIndex == 0) {
 			while (currentInstIndex < instructionList.size() && !differenceFound) {
 				ParseInstruction currentInstruction = instructionList.get(currentInstIndex++);
-				if (currentInstruction.getNormalText() != null) {
-					processNormalText(currentInstruction.getNormalText());
-				} else if (currentInstruction.getOptionalText() != null) {
-					processOptionalText(currentInstruction.getOptionalText());
+				if (currentInstruction.getText() != null) {
+					processNormalText(currentInstruction.getText());
+				} else if (currentInstruction.getRule() != null && 
+						currentInstruction.getRule().getType().equals(RuleType.BEGIN_OPTIONAL)) {
+					processOptionalText(currentInstruction);
 				} else if (currentInstruction.getRule() != null) {
 					processVariableRule(currentInstruction.getRule());
 				}

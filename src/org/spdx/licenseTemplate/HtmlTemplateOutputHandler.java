@@ -32,25 +32,20 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	
 	StringBuilder htmlString = new StringBuilder();
 	
-	boolean inOptional = false;
+	int optionalNestLevel = 0;
 	boolean movingParagraph = false;	// true if we need to move the end of a
-										// paragraph tag
 
 	/* (non-Javadoc)
-	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#optionalText(java.lang.String)
+	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#text(java.lang.String)
 	 */
 	@Override
-	public void optionalText(String text) {
-		htmlString.append((SpdxLicenseTemplateHelper.formatEscapeHTML(text, false)));
-	}
-
-	/* (non-Javadoc)
-	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#normalText(java.lang.String)
-	 */
-	@Override
-	public void normalText(String text) {
-		htmlString.append(SpdxLicenseTemplateHelper.formatEscapeHTML(text, this.movingParagraph));
-		this.movingParagraph = false;
+	public void text(String text) {
+		if (optionalNestLevel > 0) {
+			htmlString.append((SpdxLicenseTemplateHelper.formatEscapeHTML(text, false)));
+		} else {
+			htmlString.append(SpdxLicenseTemplateHelper.formatEscapeHTML(text, this.movingParagraph));
+			this.movingParagraph = false;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -163,9 +158,11 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void beginOptional(LicenseTemplateRule rule) {
-		removeEndParagraphTag();
-		this.htmlString.append(formatStartOptionalHTML(rule.getName()));
-		inOptional = true;
+		if (this.optionalNestLevel == 0) {	// We only want to format the top level optional texts
+			removeEndParagraphTag();
+			this.htmlString.append(formatStartOptionalHTML(rule.getName()));
+		}
+		this.optionalNestLevel++;
 	}
 	
 	/**
@@ -201,9 +198,11 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	@Override
 	public void endOptional(LicenseTemplateRule rule) {
-		this.htmlString.append(formatEndOptionalHTML(this.movingParagraph));
-		this.movingParagraph = false;
-		inOptional = false;
+		this.optionalNestLevel--;
+		if (this.optionalNestLevel == 0) {	// we are only formatting the top level optional elements
+			this.htmlString.append(formatEndOptionalHTML(this.movingParagraph));
+			this.movingParagraph = false;
+		}
 	}
 
 	@Override
