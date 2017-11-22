@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
+import org.spdx.rdfparser.license.LicenseParserException;
 
 /**
  * @author Gary O'Neall
@@ -162,9 +163,10 @@ public class TestSpdxLicenseTemplateHelper {
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.SpdxLicenseTemplateHelper#templateToText(java.lang.String)}.
 	 * @throws LicenseTemplateRuleException
+	 * @throws LicenseParserException 
 	 */
 	@Test
-	public void testTemplateToText() throws LicenseTemplateRuleException {
+	public void testTemplateToText() throws LicenseTemplateRuleException, LicenseParserException {
 		String ret = SpdxLicenseTemplateHelper.templateToText(TEMPLATE_TEXT);
 		assertEquals(TEXT_LICENSE, ret);
 	}
@@ -180,7 +182,7 @@ public class TestSpdxLicenseTemplateHelper {
 	}
 
 	@Test
-	public void testParseTemplate() throws LicenseTemplateRuleException {
+	public void testParseTemplate() throws LicenseTemplateRuleException, LicenseParserException {
 		String noText = "";
 		TestLicenseTemplateOutputHandler handler = new TestLicenseTemplateOutputHandler();
 		SpdxLicenseTemplateHelper.parseTemplate(noText, handler);

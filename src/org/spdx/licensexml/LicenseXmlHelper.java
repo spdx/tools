@@ -180,12 +180,12 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			} else if (LICENSEXML_ELEMENT_TITLE_TEXT.equals(tagName)) {
 				
 				//TODO: Don't append optional text if inside an ALT block
-				//appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
-				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				//appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_BULLET.equals(tagName)) {
 				//TODO: Don't append alt text if inside another ALT block
-				//appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
-				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				//appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (unprocessedTags.contains(tagName)) {
 				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (!skippedTags.contains(tagName)) {

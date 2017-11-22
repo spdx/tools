@@ -41,6 +41,8 @@ public class TestCompareTemplateOutputHandler {
 	
 	static final String ADOBE_GLYPH_TEXT = "TestFiles" + File.separator + "Adobe-Glyph.txt";
 	static final String ADOBE_GLYPH_TEMPLATE = "TestFiles" + File.separator + "Adobe-Glyph.template.txt";
+	static final String AAL_TEXT = "TestFiles" + File.separator + "AAL.txt";
+	static final String AAL_TEMPLATE = "TestFiles" + File.separator + "AAL.template.txt";
 	static final String AFL_3_TEXT = "TestFiles" + File.separator + "AFL-3.0.txt";
 	static final String AFL_3_TEMPLATE = "TestFiles" + File.separator + "AFL-3.0.template.txt";
 	static final String BSDNETBSD_TEXT = "TestFiles" + File.separator + "BSD-2-Clause-NetBSD.txt";
@@ -178,30 +180,31 @@ public class TestCompareTemplateOutputHandler {
 		String l4 = "Line 4";
 		String compareText = l1+l2+l3+l4;
 		CompareTemplateOutputHandler ctoh = new CompareTemplateOutputHandler(compareText);
-		assertTrue(ctoh.textEquivalent(l1));
-		assertTrue(ctoh.textEquivalent(l2));
-		assertTrue(ctoh.textEquivalent(l3));
-		assertTrue(ctoh.textEquivalent(l4));
+		int nextToken = ctoh.textEquivalent(l1,0);
+		assertTrue(nextToken > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l2,nextToken)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l3,nextToken)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l4,nextToken)) > 0);
 		// after end of compare string
-		assertTrue(!ctoh.textEquivalent(l4));
+		assertTrue((nextToken = ctoh.textEquivalent(l4,nextToken)) < 0);
 
 		// difference in string
 		ctoh = new CompareTemplateOutputHandler(compareText);
-		assertTrue(!ctoh.textEquivalent(l4));
+		assertTrue((nextToken = ctoh.textEquivalent(l4,0)) < 0);
 
 		// skippable tokens
 		ctoh = new CompareTemplateOutputHandler(compareText);
-		assertTrue(ctoh.textEquivalent(l1S));
-		assertTrue(ctoh.textEquivalent(l2S));
-		assertTrue(ctoh.textEquivalent(l3));
-		assertTrue(ctoh.textEquivalent(l4));
+		assertTrue((nextToken = ctoh.textEquivalent(l1S,0)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l2S,nextToken)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l3,nextToken)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l4,nextToken)) > 0);
 
 		// equivalent tokens
 		ctoh = new CompareTemplateOutputHandler(compareText);
-		assertTrue(ctoh.textEquivalent(l1));
-		assertTrue(ctoh.textEquivalent(l2R));
-		assertTrue(ctoh.textEquivalent(l3));
-		assertTrue(ctoh.textEquivalent(l4));
+		assertTrue((nextToken = ctoh.textEquivalent(l1,0)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l2R,nextToken)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l3,nextToken)) > 0);
+		assertTrue((nextToken = ctoh.textEquivalent(l4,nextToken)) > 0);
 	}
 
 	/**
@@ -218,7 +221,6 @@ public class TestCompareTemplateOutputHandler {
 		ctoh.text(line1);
 		ctoh.text(line2);
 		ctoh.text(line3);
-		ctoh.completeParsing();
 		ctoh.completeParsing();
 		assertTrue(ctoh.matches());
 
@@ -318,7 +320,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -329,7 +331,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -340,7 +342,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 
@@ -351,7 +353,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -362,7 +364,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -373,7 +375,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -384,7 +386,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -395,7 +397,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -406,7 +408,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -417,7 +419,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -428,7 +430,7 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 	
@@ -439,7 +441,18 @@ public class TestCompareTemplateOutputHandler {
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
-			fail(templateOutputHandler.differenceExplanation);
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testRegressionAAL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(AAL_TEXT);
+		String templateText = UnitTestHelper.fileToText(AAL_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
 }
