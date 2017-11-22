@@ -38,6 +38,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.License;
 import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.LicenseParserException;
 import org.spdx.rdfparser.license.LicenseSet;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
@@ -300,7 +301,7 @@ public class LicenseCompareHelper {
 			int currentToken = 0;
 			String line = reader.readLine();
 			while (line != null) {
-				Matcher lineMatcher = LicenseCompareHelper.TOKEN_SPLIT_PATTERN.matcher(line);
+				Matcher lineMatcher = TOKEN_SPLIT_PATTERN.matcher(line);
 				while (lineMatcher.find()) {
 					String token = lineMatcher.group(1).trim();
 					if (!token.isEmpty()) {
@@ -311,7 +312,7 @@ public class LicenseCompareHelper {
 					String fullMatch = lineMatcher.group(0);
 					for (int i = lineMatcher.group(1).length(); i < fullMatch.length(); i++) {
 						String possiblePunctuation = fullMatch.substring(i, i+1);
-						if (LicenseCompareHelper.PUNCTUATION.contains(possiblePunctuation)) {
+						if (PUNCTUATION.contains(possiblePunctuation)) {
 							tokens.add(possiblePunctuation);
 							tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start()+i, 1));
 							currentToken++;
@@ -342,6 +343,43 @@ public class LicenseCompareHelper {
 			}
 		}
 		return tokens.toArray(new String[tokens.size()]);
+	}
+	
+	/**
+	 * @param text
+	 * @return the first token in the license text
+	 */
+	public static String getFirstLicenseToken(String text) {
+		String textToTokenize = normalizeText(replaceMultWord(text)).toLowerCase();
+		Matcher m = TOKEN_SPLIT_PATTERN.matcher(textToTokenize);
+		while (m.find()) {
+			if (!m.group(1).trim().isEmpty()) {
+				return m.group(1).trim();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @param text
+	 * @return true if the text contains a single token
+	 */
+	public static boolean isSingleTokenString(String text) {
+		if (text.contains("\n")) {
+			return false;
+		}
+		Matcher m = TOKEN_SPLIT_PATTERN.matcher(text);
+		boolean found = false;
+		while (m.find()) {
+			if (!m.group(1).trim().isEmpty()) {
+				if (found) {
+					return false;
+				} else {
+					found = true;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -520,6 +558,8 @@ public class LicenseCompareHelper {
 			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, compareTemplateOutputHandler);
 		} catch (LicenseTemplateRuleException e) {
 			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
+		} catch (LicenseParserException e) {
+			throw(new SpdxCompareException("Invalid template found during compare: "+e.getMessage(),e));
 		}
 		return compareTemplateOutputHandler.getDifferences();
 	}
@@ -546,6 +586,8 @@ public class LicenseCompareHelper {
 			SpdxLicenseTemplateHelper.parseTemplate(exceptionTemplate, compareTemplateOutputHandler);
 		} catch (LicenseTemplateRuleException e) {
 			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
+		} catch (LicenseParserException e) {
+			throw(new SpdxCompareException("Invalid template found during compare: "+e.getMessage(),e));
 		}
 		return compareTemplateOutputHandler.getDifferences();
 	}

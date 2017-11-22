@@ -16,6 +16,8 @@
 */
 package org.spdx.licenseTemplate;
 
+import org.spdx.rdfparser.license.LicenseParserException;
+
 /**
  * Handles output for parsed license templates.  The methods are called during parsing
  * to handle the parsed rules and text.
@@ -51,7 +53,8 @@ public interface ILicenseTemplateOutputHandler {
 	
 	/**
 	 * Signals all text has been added and parsing can be completed.
+	 * @throws LicenseParserException 
 	 */
-	void completeParsing();
+	void completeParsing() throws LicenseParserException;
 
 }

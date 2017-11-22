@@ -575,8 +575,22 @@ public class LicenseCompareHelperTest {
 		result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
 		assertEquals(2, result.length);
 		assertEquals("claims",result[0]);
-		assertEquals("if", result[1]);
-		
+		assertEquals("if", result[1]);	
+	}
+	
+	@Test
+	public void testisSingleTokenString() {
+		assertTrue(LicenseCompareHelper.isSingleTokenString(" token "));
+		assertTrue(LicenseCompareHelper.isSingleTokenString("'"));
+		assertTrue(LicenseCompareHelper.isSingleTokenString(" '"));
+		assertTrue(LicenseCompareHelper.isSingleTokenString("' "));
+		assertFalse(LicenseCompareHelper.isSingleTokenString("a and"));
+		assertFalse(LicenseCompareHelper.isSingleTokenString("a\nand"));
+	}
+	
+	@Test
+	public void testFirstLicenseToken() {
+		assertEquals("first", LicenseCompareHelper.getFirstLicenseToken("   first,token that is needed\nnext"));
 	}
 	
 	@SuppressWarnings("unused")

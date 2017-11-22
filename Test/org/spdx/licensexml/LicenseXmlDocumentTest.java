@@ -56,7 +56,7 @@ public class LicenseXmlDocumentTest {
 	private static final String TEST_LICENSE_HEADER = "Test header optional var";
 	private static final String TEST_LICENSE_HEADER_TEMPLATE = "Test header<<beginOptional>> optional<<endOptional>> <<var;name=\"h1test\";original=\"var\";match=\".+\">>";
 	private static final String TEST_LICENSE_TEMPLATE = "Test Copyright\nparagraph 1" +
-			"\n   1.\n   List item 1\n   2.\n   List item 2\n" +
+			"\n   <<var;name=\"bullet\";original=\"1.\";match=\".{0,20}\">>\n   List item 1\n   <<var;name=\"bullet\";original=\"2.\";match=\".{0,20}\">>\n   List item 2\n" +
 			"Last Paragraph <<var;name=\"alttest\";original=\"Alternate Text\";match=\".+\">> Non matching line.<<beginOptional>> Optional text<<endOptional>>";
 
 	private static final String TEST_DEP_LICENSE_COMMENT = "Test dep note";
@@ -68,7 +68,7 @@ public class LicenseXmlDocumentTest {
 	private static final String[] TEST_DEP_LICENSE_URLS = new String[] {"http://test/url1d","http://test/url2d"};
 	private static final String TEST_DEP_LICENSE_HEADER = "Test header dep";
 	private static final String TEST_DEP_LICENSE_TEMPLATE = "Test Copyright dep\nparagraph 1d" +
-			"\n   1.d\n   List item 1d\n   2.d\n   List item 2d\n" +
+			"\n   <<var;name=\"bullet\";original=\"1.d\";match=\".{0,20}\">>\n   List item 1d\n   <<var;name=\"bullet\";original=\"2.d\";match=\".{0,20}\">>\n   List item 2d\n" +
 			"Last Paragraph dep <<var;name=\"alttestd\";original=\"Alternate Text dep\";match=\".+\">> Non matching line dep.<<beginOptional>> Optional text dep<<endOptional>>";
 
 	private static final String TEST_EXCEPTION_COMMENT = "Test note exception";

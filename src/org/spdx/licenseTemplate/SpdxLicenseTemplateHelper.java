@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.spdx.rdfparser.license.LicenseParserException;
 
 /**
  * Implements common conversion methods for processing SPDX license templates
@@ -42,9 +43,10 @@ public class SpdxLicenseTemplateHelper {
 	 * Parses the license template calling the templateOutputHandler for any text and rules found
 	 * @param licenseTemplate License template to be parsed
 	 * @param templateOutputHandler Handles the text, optional text, and variable rules text found
+	 * @throws LicenseParserException 
 	 */
 	public static void parseTemplate(String licenseTemplate,
-			ILicenseTemplateOutputHandler templateOutputHandler) throws LicenseTemplateRuleException {
+			ILicenseTemplateOutputHandler templateOutputHandler) throws LicenseTemplateRuleException, LicenseParserException {
 		Matcher ruleMatcher = RULE_PATTERN.matcher(licenseTemplate);
 		int end = 0;
 		int optionalNestLevel = 0;
@@ -89,10 +91,15 @@ public class SpdxLicenseTemplateHelper {
 	 * @param licenseTemplate
 	 * @return
 	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseParserException 
 	 */
 	public static String templateTextToHtml(String licenseTemplate) throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htmlOutput = new HtmlTemplateOutputHandler();
-		parseTemplate(licenseTemplate, htmlOutput);
+		try {
+			parseTemplate(licenseTemplate, htmlOutput);
+		} catch (LicenseParserException e) {
+			throw new LicenseTemplateRuleException("Parsing error parsing license template",e);
+		}
 		return htmlOutput.getHtml();
 	}
 
@@ -101,10 +108,15 @@ public class SpdxLicenseTemplateHelper {
 	 * @param template
 	 * @return
 	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseParserException 
 	 */
 	public static String templateToText(String template) throws LicenseTemplateRuleException {
 		TextTemplateOutputHandler textOutput = new TextTemplateOutputHandler();
-		parseTemplate(template, textOutput);
+		try {
+			parseTemplate(template, textOutput);
+		} catch (LicenseParserException e) {
+			throw new LicenseTemplateRuleException("Parsing error parsing license template",e);
+		}
 		return textOutput.getText();
 	}
 	

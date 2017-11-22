@@ -62,6 +62,23 @@ public class LicenseTemplateRule {
 		validate();
 	}
 	
+	@Override
+	public String toString() {
+		if (RuleType.VARIABLE.equals(this.type)) {
+			String myName = name;
+			if (myName == null) {
+				myName = "";
+			}
+			return "var: "+myName;
+		} else if (RuleType.BEGIN_OPTIONAL.equals(this.type)) {
+			return "beginOptional";
+		} else if (RuleType.END_OPTIONAL.equals(this.type)) {
+			return "endOptional";
+		} else {
+			return "Unknown";
+		}
+	}
+	
 	/**
 	 * Validates that the LicenseTemplateRule is properly initialized
 	 * @throws LicenseTemplateRuleException 
