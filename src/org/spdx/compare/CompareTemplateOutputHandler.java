@@ -41,6 +41,7 @@ import com.google.common.collect.Maps;
  */
 public class CompareTemplateOutputHandler implements
 		ILicenseTemplateOutputHandler {
+	private static final int MAX_NEXT_NORMAL_TEXT_SEARCH_LENGTH = 15;	// Maximum number of tokens to compare when searching for a normal text match
 	
 	class ParseInstruction {
 		LicenseTemplateRule rule;
@@ -322,11 +323,14 @@ public class CompareTemplateOutputHandler implements
 			
 			Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
 			String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(firstNormalText), normalTextLocations);
+			if (textTokens.length > MAX_NEXT_NORMAL_TEXT_SEARCH_LENGTH) {
+				textTokens = Arrays.copyOf(textTokens, MAX_NEXT_NORMAL_TEXT_SEARCH_LENGTH);
+			}
 			int nextMatchingStart = startToken;
-			int tokenAfterMatch = compareText(textTokens, matchTokens, nextMatchingStart, endToken, this);
+			int tokenAfterMatch = compareText(textTokens, matchTokens, nextMatchingStart, endToken, null);
 			while (tokenAfterMatch < 0 && -tokenAfterMatch <= endToken) {			
 				nextMatchingStart = nextMatchingStart + 1;
-				tokenAfterMatch = compareText(textTokens, matchTokens, nextMatchingStart, endToken, this);
+				tokenAfterMatch = compareText(textTokens, matchTokens, nextMatchingStart, endToken, null);
 			}
 			
 			if (tokenAfterMatch > 0) {
