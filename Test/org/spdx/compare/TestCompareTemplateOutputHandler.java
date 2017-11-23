@@ -69,6 +69,10 @@ public class TestCompareTemplateOutputHandler {
 	static final String RPSL_1_TEMPLATE = "TestFiles" + File.separator + "RPSL-1.0.template.txt";
 	static final String RSCPL_TEXT = "TestFiles" + File.separator + "RSCPL.txt";
 	static final String RSCPL_TEMPLATE = "TestFiles" + File.separator + "RSCPL.template.txt";	
+	static final String HPND_TEXT = "TestFiles" + File.separator + "HPND.txt";
+	static final String HPND_TEMPLATE = "TestFiles" + File.separator + "HPND.template.txt";
+	static final String CECILL2_TEXT = "TestFiles" + File.separator + "CECILL-2.0.txt";
+	static final String CECILL2_TEMPLATE = "TestFiles" + File.separator + "CECILL-2.0.template.txt";
 	
 	/**
 	 * @throws java.lang.Exception
@@ -449,6 +453,28 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionAAL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(AAL_TEXT);
 		String templateText = UnitTestHelper.fileToText(AAL_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testRegressionHPND() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(HPND_TEXT);
+		String templateText = UnitTestHelper.fileToText(HPND_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testRegressionCECILL2() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(CECILL2_TEXT);
+		String templateText = UnitTestHelper.fileToText(CECILL2_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
