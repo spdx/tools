@@ -168,6 +168,9 @@ public class SpdxListedLicense extends License {
 		if (!LicenseInfoFactory.isSpdxListedLicenseID(this.getLicenseId())) {
 			retval.add("License "+this.getLicenseId()+" is not a listed license at spdx.org/licenses");
 		}
+		if (this.isDeprecated()) {
+			retval.add(this.licenseId + " is deprecated.");
+		}
 		return retval;
 	}
 	
