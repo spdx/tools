@@ -98,7 +98,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 */
 	public static String formatReplaceabledHTML(String text, String id) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n<span ");
+		sb.append("\n<div ");
 		if (id != null && !id.trim().isEmpty()) {
 			sb.append("id=\"");
 			sb.append(escapeIdString(id));
@@ -106,9 +106,9 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		}
 		sb.append("class=\"");
 		sb.append(REPLACEABLE_LICENSE_TEXT_CLASS);
-		sb.append("\">");
+		sb.append("\"  style=\"display: inline\">");
 		sb.append(SpdxLicenseTemplateHelper.formatEscapeHTML(text));
-		sb.append("</span>\n");
+		sb.append("</div>\n");
 		return sb.toString();
 	}
 	
@@ -181,7 +181,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		}
 		sb.append("class=\"");
 		sb.append(OPTIONAL_LICENSE_TEXT_CLASS);
-		sb.append("\">\n");
+		sb.append("\"  style=\"display: inline\">\n");
 		return sb.toString();
 	}
 
