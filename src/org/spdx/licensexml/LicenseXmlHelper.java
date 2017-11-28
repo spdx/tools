@@ -311,11 +311,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(childSb);
 			sb.append("<<endOptional>>");
 		} else if (includeHtmlTags) {
-			sb.append("\n<span class=\"");
+			sb.append("\n<div class=\"");
 			sb.append(HtmlTemplateOutputHandler.OPTIONAL_LICENSE_TEXT_CLASS);
-			sb.append("\">");
+			sb.append("\"  style=\"display: inline\">");
 			sb.append(childSb.toString());
-			sb.append("</span>");
+			sb.append("</div>");
 		} else {
 			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
 				sb.append(' ');
@@ -363,11 +363,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(match);
 			sb.append("\">>");
 		} else if (includeHtmlTags) {
-			sb.append("\n<span class=\"");
+			sb.append("\n<div class=\"");
 			sb.append(HtmlTemplateOutputHandler.REPLACEABLE_LICENSE_TEXT_CLASS);
-			sb.append("\">");
+			sb.append("\" style=\"display: inline\">");
 			sb.append(originalSb);
-			sb.append("</span>");
+			sb.append("</div>");
 		} else {
 			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
 				sb.append(' ');
