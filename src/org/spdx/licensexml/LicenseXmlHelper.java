@@ -119,7 +119,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	
 	static HashSet<String> PHRASING_ELEMENTS = new HashSet<String>();
 	static {
-		PHRASING_ELEMENTS.add(LICENSEXML_ELEMENT_ITEM);
+		PHRASING_ELEMENTS.add(LICENSEXML_ELEMENT_LIST);
 		PHRASING_ELEMENTS.add(LICENSEXML_ELEMENT_PARAGRAPH);
 	}
 	
