@@ -324,7 +324,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			}
 			
 			sb.append(HtmlTemplateOutputHandler.OPTIONAL_LICENSE_TEXT_CLASS);
-			sb.append("\"  style=\"display: inline\">");
+			sb.append("\">");
 			sb.append(childSb.toString());
 			if (includesPhrasing(element)) {
 				sb.append("</div>");
@@ -406,7 +406,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				sb.append("\n<var class=\"");
 			}
 			sb.append(HtmlTemplateOutputHandler.REPLACEABLE_LICENSE_TEXT_CLASS);
-			sb.append("\" style=\"display: inline\">");
+			sb.append("\">");
 			sb.append(originalSb);
 			if (includesPhrasing(element)) {
 				sb.append("</div>");
