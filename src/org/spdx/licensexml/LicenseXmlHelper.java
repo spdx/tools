@@ -117,10 +117,10 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
 	}
 	
-	static HashSet<String> PHRASING_ELEMENTS = new HashSet<String>();
+	static HashSet<String> FLOW_CONTROL_ELEMENTS = new HashSet<String>();
 	static {
-		PHRASING_ELEMENTS.add(LICENSEXML_ELEMENT_LIST);
-		PHRASING_ELEMENTS.add(LICENSEXML_ELEMENT_PARAGRAPH);
+		FLOW_CONTROL_ELEMENTS.add(LICENSEXML_ELEMENT_LIST);
+		FLOW_CONTROL_ELEMENTS.add(LICENSEXML_ELEMENT_PARAGRAPH);
 	}
 	
 	static String DOUBLE_QUOTES_REGEX = "(\\u201C|\\u201D)";
@@ -349,7 +349,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			Node child = children.item(i);
 			if (child.getNodeType() == Node.ELEMENT_NODE) {
 				Element eChild = (Element)child;
-				if (PHRASING_ELEMENTS.contains(eChild.getTagName())) {
+				if (FLOW_CONTROL_ELEMENTS.contains(eChild.getTagName())) {
 					return true;
 				} else {
 					if (includesPhrasing(eChild)) {
