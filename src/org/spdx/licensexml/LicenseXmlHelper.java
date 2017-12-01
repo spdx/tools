@@ -166,7 +166,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_BREAK.equals(tagName)) {
 				if (includeHtmlTags) {
-					sb.append("<br />");
+					sb.append("<br>");
 				}
 				addNewline(sb, indentCount);
 				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
