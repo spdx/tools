@@ -317,7 +317,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(childSb);
 			sb.append("<<endOptional>>");
 		} else if (includeHtmlTags) {
-			if (includesPhrasing(element)) {
+			if (includesFlowControl(element)) {
 				sb.append("\n<div class=\"");
 			} else {
 				sb.append("\n<var class=\"");
@@ -326,7 +326,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(HtmlTemplateOutputHandler.OPTIONAL_LICENSE_TEXT_CLASS);
 			sb.append("\">");
 			sb.append(childSb.toString());
-			if (includesPhrasing(element)) {
+			if (includesFlowControl(element)) {
 				sb.append("</div>");
 			} else {
 				sb.append("</var>");
@@ -341,9 +341,9 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 
 	/**
 	 * @param element parent element
-	 * @return true if the element includes any phrasing content per https://www.w3.org/TR/2014/REC-html5-20141028/dom.html#phrasing-content-1
+	 * @return true if the element includes any flow control content per https://www.w3.org/TR/2014/REC-html5-20141028/dom.html#phrasing-content-1
 	 */
-	private static boolean includesPhrasing(Element element) {
+	private static boolean includesFlowControl(Element element) {
 		NodeList children = element.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
@@ -352,7 +352,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				if (FLOW_CONTROL_ELEMENTS.contains(eChild.getTagName())) {
 					return true;
 				} else {
-					if (includesPhrasing(eChild)) {
+					if (includesFlowControl(eChild)) {
 						return true;
 					}
 				}
@@ -400,7 +400,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(match);
 			sb.append("\">>");
 		} else if (includeHtmlTags) {
-			if (includesPhrasing(element)) {
+			if (includesFlowControl(element)) {
 				sb.append("\n<div class=\"");
 			} else {
 				sb.append("\n<var class=\"");
@@ -408,7 +408,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(HtmlTemplateOutputHandler.REPLACEABLE_LICENSE_TEXT_CLASS);
 			sb.append("\">");
 			sb.append(originalSb);
-			if (includesPhrasing(element)) {
+			if (includesFlowControl(element)) {
 				sb.append("</div>");
 			} else {
 				sb.append("</var>");
