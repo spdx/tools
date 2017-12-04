@@ -117,6 +117,12 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
 	}
 	
+	static HashSet<String> FLOW_CONTROL_ELEMENTS = new HashSet<String>();
+	static {
+		FLOW_CONTROL_ELEMENTS.add(LICENSEXML_ELEMENT_LIST);
+		FLOW_CONTROL_ELEMENTS.add(LICENSEXML_ELEMENT_PARAGRAPH);
+	}
+	
 	static String DOUBLE_QUOTES_REGEX = "(\\u201C|\\u201D)";
 	static String SINGLE_QUOTES_REGEX = "(\\u2018|\\u2019)";
 	
@@ -164,9 +170,6 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				}
 				addNewline(sb, indentCount);
 				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
-				if (includeHtmlTags) {
-					sb.append("</br>");
-				}
 			} else if (LICENSEXML_ELEMENT_PARAGRAPH.equals(tagName)) {
 				if (includeHtmlTags) {
 					appendParagraphTag(sb, indentCount);
@@ -311,17 +314,48 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(childSb);
 			sb.append("<<endOptional>>");
 		} else if (includeHtmlTags) {
-			sb.append("\n<span class=\"");
+			if (includesFlowControl(element)) {
+				sb.append("\n<div class=\"");
+			} else {
+				sb.append("\n<var class=\"");
+			}
+			
 			sb.append(HtmlTemplateOutputHandler.OPTIONAL_LICENSE_TEXT_CLASS);
 			sb.append("\">");
 			sb.append(childSb.toString());
-			sb.append("</span>");
+			if (includesFlowControl(element)) {
+				sb.append("</div>");
+			} else {
+				sb.append("</var>");
+			}
 		} else {
 			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
 				sb.append(' ');
 			}
 			sb.append(childSb);
 		}
+	}
+
+	/**
+	 * @param element parent element
+	 * @return true if the element includes any flow control content per https://www.w3.org/TR/2014/REC-html5-20141028/dom.html#phrasing-content-1
+	 */
+	private static boolean includesFlowControl(Element element) {
+		NodeList children = element.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
+			if (child.getNodeType() == Node.ELEMENT_NODE) {
+				Element eChild = (Element)child;
+				if (FLOW_CONTROL_ELEMENTS.contains(eChild.getTagName())) {
+					return true;
+				} else {
+					if (includesFlowControl(eChild)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -363,11 +397,19 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			sb.append(match);
 			sb.append("\">>");
 		} else if (includeHtmlTags) {
-			sb.append("\n<span class=\"");
+			if (includesFlowControl(element)) {
+				sb.append("\n<div class=\"");
+			} else {
+				sb.append("\n<var class=\"");
+			}
 			sb.append(HtmlTemplateOutputHandler.REPLACEABLE_LICENSE_TEXT_CLASS);
 			sb.append("\">");
 			sb.append(originalSb);
-			sb.append("</span>");
+			if (includesFlowControl(element)) {
+				sb.append("</div>");
+			} else {
+				sb.append("</var>");
+			}
 		} else {
 			if (sb.length() > 0 && !Character.isWhitespace(sb.charAt(sb.length()-1))) {
 				sb.append(' ');
