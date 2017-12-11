@@ -421,8 +421,15 @@ public class PackageInfoSheetV2d1 extends PackageInfoSheet {
 		}
 		Cell versionInfoCell = row.getCell(VERSION_COL);
 		String versionInfo;
-		if (versionInfoCell != null && !versionInfoCell.getStringCellValue().isEmpty()) {
-			versionInfo = versionInfoCell.getStringCellValue();
+		if (versionInfoCell != null) {
+			if (versionInfoCell.getCellTypeEnum()== CellType.STRING  && !versionInfoCell.getStringCellValue().isEmpty()) {
+				versionInfo = versionInfoCell.getStringCellValue();
+			} else if (versionInfoCell.getCellTypeEnum() == CellType.NUMERIC) {
+				versionInfo = Double.toString(versionInfoCell.getNumericCellValue());
+			} else {
+				versionInfo = "";
+			}
+			
 		} else {
 			versionInfo = "";
 		}
