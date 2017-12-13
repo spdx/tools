@@ -7,6 +7,8 @@
 package org.spdx.tools;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.spdx.rdfparser.SpdxDocumentContainer;
+import org.spdx.rdfparser.license.ListedLicenses;
 
 /**
  * Dispatch to the individual tools
@@ -54,6 +56,10 @@ public class Main {
 		//	MergeSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("MatchingStandardLicenses")) {
 			MatchingStandardLicenses.main(args);
+		} else if (spdxTool.equalsIgnoreCase("Version")) {
+			System.out.println("SPDX Tool Version: "+SpdxDocumentContainer.CURRENT_IMPLEMENTATION_VERSION + 
+					"; Specification Version: "+SpdxDocumentContainer.CURRENT_SPDX_VERSION + 
+					"; License List Version: "+ListedLicenses.getListedLicenses().getLicenseListVersion());
 		} else {
 			usage();
 		}
@@ -77,8 +83,9 @@ public class Main {
 						+ "Verify                   inputFile                         TestFiles/SPDXRdfExample.rdf \n"
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
-						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls outputDirectory [version] [releasedate] [licenseTestFileDirectory] \n"
+						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls|inputDirectory outputDirectory [version] [releasedate] [licenseTestFileDirectory] \n"
 						+ "GenerateVerificationCode sourceDirectory\n"
+						+ "Version\n"
 						+ "MergeSpdxDocs            masterDocument, mergedDoc1, MergedDoc2, ..., outputFile\n"
 						+ "MatchingStandardLicenses licenseTextFile");
 	}
