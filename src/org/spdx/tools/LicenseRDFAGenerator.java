@@ -97,6 +97,7 @@ public class LicenseRDFAGenerator {
 	static int MAX_ARGS = 5;
 
 	static final int ERROR_STATUS = 1;
+	static final int WARNING_STATUS = 64;
 	static final String CSS_TEMPLATE_FILE = "resources/screen.css";
 	static final String CSS_FILE_NAME = "screen.css";
 	static final String SORTTABLE_JS_FILE = "resources/sorttable.js";
@@ -111,6 +112,14 @@ public class LicenseRDFAGenerator {
 	private static final String RDFTURTLE_FOLDER_NAME = "rdfturtle";
 	private static final String RDFNT_FOLDER_NAME = "rdfnt";
 	private static final String TABLE_OF_CONTENTS_FILE_NAME = "licenses.md";
+	
+	/**
+	 * Any warning messages present in the EXPECTED_WARNINGS will not cause the utility to return a bad status on exit
+	 */
+	private static final Set<String> EXPECTED_WARNINGS = Sets.newHashSet();
+	static {
+		EXPECTED_WARNINGS.add("Duplicates licenses: MPL-2.0, MPL-2.0-no-copyleft-exception");
+	}
 	
 	/**
 	 * @param args Arg 0 is either an input spreadsheet or a directory of licenses in XML format, arg 1 is the directory for the output html files
@@ -162,7 +171,18 @@ public class LicenseRDFAGenerator {
 		}
 
 		try {
-			generateLicenseData(ssFile, dir, version, releaseDate, testFileDir);
+			List<String> warnings = generateLicenseData(ssFile, dir, version, releaseDate, testFileDir);
+			if (warnings != null && warnings.size() > 0) {
+				int numUnexpectedWarnings = warnings.size();
+				for (String warning:warnings) {
+					if (EXPECTED_WARNINGS.contains(warning)) {
+						numUnexpectedWarnings--;
+					}
+				}
+				if (numUnexpectedWarnings > 0) {
+					System.exit(WARNING_STATUS);
+				}
+			}
 		} catch (LicenseGeneratorException e) {
 			System.out.println(e.getMessage());
 			System.exit(ERROR_STATUS);
