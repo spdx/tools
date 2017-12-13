@@ -925,7 +925,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			verificationCode = this.getPackageVerificationCode();
 			if (verificationCode == null && filesAnalyzed) {
 				retval.add("Missing required package verification code for package " + pkgName);
-			} else if (verificationCode != null && !filesAnalyzed) {
+			} else if (verificationCode != null && verificationCode.getValue() != null && !verificationCode.getValue().isEmpty() && !filesAnalyzed) {
 				retval.add("Verification code must not be included when files not analyzed.");
 			} else if (filesAnalyzed) {
 				List<String> verify = verificationCode.verify();
@@ -939,7 +939,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		// supplier
 		String supplier = null;
 		supplier = this.getSupplier();
-		if (supplier != null) {
+		if (supplier != null && !supplier.isEmpty()) {
 			String error = SpdxVerificationHelper.verifySupplier(supplier);
 			if (error != null && !error.isEmpty()) {
 				retval.add("Supplier error - "+error+ " for package "+pkgName);
@@ -947,7 +947,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		}
 		// originator
 		String originator = this.getOriginator();
-		if (originator != null) {
+		if (originator != null && !originator.isEmpty()) {
 			String error = SpdxVerificationHelper.verifyOriginator(originator);
 			if (error != null && !error.isEmpty()) {
 				retval.add("Originator error - "+error+ " for package "+pkgName);
