@@ -33,6 +33,7 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.ListedLicenses;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
@@ -50,6 +51,7 @@ import org.apache.jena.rdf.model.Resource;
  */
 public class SpdxDocument extends SpdxElement {
 	
+	@JsonIgnore
 	private SpdxDocumentContainer documentContainer;
 	SPDXCreatorInformation creationInfo;	//TODO Refactor to RdfModelObject
 	AnyLicenseInfo dataLicense;
@@ -179,6 +181,7 @@ public class SpdxDocument extends SpdxElement {
 		return this.getUri(documentContainer);
 	}
 	
+	@Override
 	public String getDocumentNamespace() throws InvalidSPDXAnalysisException {
 		String[] parts = this.getDocumentUri().split("#");
 		return parts[0];
@@ -546,6 +549,7 @@ public class SpdxDocument extends SpdxElement {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Deprecated
+	@JsonIgnore
 	public SpdxPackage getSpdxPackage() throws InvalidSPDXAnalysisException {
 		SpdxItem[] retval = this.getDocumentDescribes();
 		if (retval.length != 1) {
