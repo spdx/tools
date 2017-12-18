@@ -321,5 +321,13 @@ public class TestSpdxElement {
 		element1.addRelationship(RELATIONSHIP2);
 		assertTrue(UnitTestHelper.isArraysEqual(relationships, element1.getRelationships()));
 	}
-
+	
+	@Test
+	public void testGetDocumentNamespace() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
+		SpdxElement element1 = new SpdxElement(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, new Relationship[0]);
+		element1.createResource(modelContainer);
+		assertEquals(DOCUMENT_NAMESPACE, element1.getDocumentNamespace());
+	}
 }
