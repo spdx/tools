@@ -33,6 +33,12 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.RdfModelObject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+
 /**
  * Type of external reference
  * Note that there are very few required fields for this class in that
@@ -49,8 +55,11 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 	
 	static final Logger logger = LoggerFactory.getLogger(ReferenceType.class);
 
+	@JsonIgnore
 	String contextualExample;
+	@JsonIgnore
 	URL documentation;
+	@JsonIgnore
 	URL externalReferenceSite;
 	URI referenceTypeUri;
 	
