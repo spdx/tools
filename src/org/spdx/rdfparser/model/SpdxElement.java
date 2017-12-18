@@ -31,6 +31,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -279,6 +280,30 @@ public class SpdxElement extends RdfModelObject {
 			}
 		}
 		return relationships;
+	}
+	
+	/**
+	 * @return a list of flat relationships which uses a String relationship ID rather than a relatedSpdxElement - prevents infinite recursion in certain cases
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@JsonGetter("relationships")
+	public FlatRelationship[] getFlatRelationship() throws InvalidSPDXAnalysisException {
+		if (model != null && this.refreshOnGet) {
+			try {
+				Relationship[] refresh = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+						SpdxRdfConstants.PROP_RELATIONSHIP);
+				if (refresh != null && !arraysEquivalent(refresh, this.relationships, true)) {
+					this.relationships = refresh;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid relationships in the model",e);
+			}
+		}
+		FlatRelationship[] retval = new FlatRelationship[relationships.length];
+		for (int i = 0; i < relationships.length; i++) {
+			retval[i] = new FlatRelationship(relationships[i]);
+		}
+		return retval;
 	}
 
 
