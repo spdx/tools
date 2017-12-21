@@ -18,7 +18,14 @@ package org.spdx.rdfparser.model;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfParserHelper;
@@ -27,13 +34,6 @@ import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.util.iterator.ExtendedIterator;
-
 /**
  * An External Reference allows a Package to reference an external source of
  * additional information, metadata, enumerations, asset identifiers, or downloadable content believed to
@@ -44,7 +44,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 public class ExternalRef extends RdfModelObject implements Comparable<ExternalRef> {
 	
-	static final Logger logger = Logger.getLogger(ExternalRef.class);
+	static final Logger logger = LoggerFactory.getLogger(ExternalRef.class);
 	
 	public enum ReferenceCategory {referenceCategory_packageManager, referenceCategory_security,
 		referenceCategory_other;

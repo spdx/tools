@@ -20,12 +20,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
@@ -49,7 +50,7 @@ import com.google.common.collect.Maps;
  */
 public class SnippetSheet extends AbstractSheet {
 	
-	static final Logger logger = Logger.getLogger(SnippetSheet.class);
+	static final Logger logger = LoggerFactory.getLogger(SnippetSheet.class);
 	
 	static final int ID_COL = 0;
 	static final int NAME_COL = ID_COL + 1;

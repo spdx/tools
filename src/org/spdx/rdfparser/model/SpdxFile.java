@@ -20,8 +20,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-import org.apache.log4j.Logger;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
@@ -30,14 +36,9 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * A File represents a named sequence of information 
@@ -47,7 +48,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	
-	static final Logger logger = Logger.getLogger(SpdxFile.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(SpdxFile.class.getName());
 
 	public enum FileType {fileType_application, fileType_archive,
 		fileType_audio, fileType_binary, fileType_documentation,

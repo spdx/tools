@@ -16,16 +16,16 @@
 */
 package org.spdx.rdfparser.license;
 
-import org.apache.log4j.Logger;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
-
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Factory for creating SPDXLicenseInfo objects from a Jena model
@@ -34,7 +34,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 public class LicenseInfoFactory {
 	
-	static final Logger logger = Logger.getLogger(LicenseInfoFactory.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(LicenseInfoFactory.class.getName());
 	
 	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
 	public static final String NONE_LICENSE_NAME = "NONE";
