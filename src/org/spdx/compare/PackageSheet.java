@@ -20,18 +20,18 @@ package org.spdx.compare;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AbstractSheet;
-
 /**
  * Document level fields for comparison spreadsheet
  * Column1 is the document field name, column2 indicates if all docs are equal, 
@@ -41,7 +41,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  */
 public class PackageSheet extends AbstractSheet {
 	
-	static final Logger logger = Logger.getLogger(PackageSheet.class);
+	static final Logger logger = LoggerFactory.getLogger(PackageSheet.class);
 	private static final int COL_WIDTH = 60;
 	protected static final int FIELD_COL = 0;
 	protected static final int EQUALS_COL = 1;

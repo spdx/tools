@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.log4j.Logger;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -31,6 +30,8 @@ import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An Annotation is a comment on an SpdxItem by an agent.
@@ -39,7 +40,7 @@ import org.apache.jena.rdf.model.Resource;
  */
 public class Annotation extends RdfModelObject implements Comparable<Annotation> {
 	
-	static final Logger logger = Logger.getLogger(RdfModelObject.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class.getName());
 
 	public enum AnnotationType {
 		annotationType_other,

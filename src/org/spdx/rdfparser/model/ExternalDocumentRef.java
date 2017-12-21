@@ -18,7 +18,11 @@ package org.spdx.rdfparser.model;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
@@ -27,9 +31,6 @@ import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import org.apache.jena.graph.Node;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
 
 /**
  * Information about an external SPDX document reference including the checksum.  
@@ -46,7 +47,7 @@ import org.apache.jena.rdf.model.Resource;
  */
 public class ExternalDocumentRef extends RdfModelObject implements Comparable<ExternalDocumentRef> {
 
-	static final Logger logger = Logger.getLogger(RdfModelObject.class.getClass());
+	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class.getClass());
 	/**
 	 * Force a refresh for the model on every property get.  This is slower, but
 	 * will make sure that the correct value is returned if there happens to be
