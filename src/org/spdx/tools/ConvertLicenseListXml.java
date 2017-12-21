@@ -186,7 +186,7 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		Document outputXmlDocument = builder.newDocument();
 		convertLicenseXmlDocument(inputXmlDocument, outputXmlDocument);
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = null;;
+		Transformer transformer = null;
 		try {
 			transformer = transformerFactory.newTransformer();
 		} catch (TransformerConfigurationException e) {

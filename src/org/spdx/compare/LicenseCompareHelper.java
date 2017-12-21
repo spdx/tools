@@ -256,11 +256,13 @@ public class LicenseCompareHelper {
 				currentLine++;
 				line = reader.readLine();
 				while (line != null && currentLine < end.getLine()) {
+					sb.append("\n");
 					sb.append(line);
 					currentLine++;
 					line = reader.readLine();
 				}
 				if (line != null && end.getColumn()+end.getLen() > 0) {
+					sb.append("\n");
 					sb.append(line.substring(0, end.getColumn()+end.getLen()));
 				}
 				return sb.toString();
