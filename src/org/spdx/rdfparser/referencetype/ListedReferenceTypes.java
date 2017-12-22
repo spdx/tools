@@ -27,7 +27,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
@@ -42,7 +43,7 @@ import com.google.common.collect.Maps;
  */
 public class ListedReferenceTypes {
 	
-	static final Logger logger = Logger.getLogger(ListedReferenceTypes.class);
+	static final Logger logger = LoggerFactory.getLogger(ListedReferenceTypes.class);
 	private static final ReadWriteLock listedReferenceTypesModificationLock = new ReentrantReadWriteLock();
 	private static final String LISTED_REFERENCE_TYPE__RDF_LOCAL_DIR = "resources" + "/" + "listedexternaltypes";
 	private static final String LISTED_REFERENCE_TYPE_PROPERTIES_FILENAME = LISTED_REFERENCE_TYPE__RDF_LOCAL_DIR + "/" + "listedreferencetypes.properties";

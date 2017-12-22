@@ -18,7 +18,8 @@ package org.spdx.rdfparser.model;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfParserHelper;
@@ -46,7 +47,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 
-	static final Logger logger = Logger.getLogger(Checksum.class);
+	static final Logger logger = LoggerFactory.getLogger(Checksum.class);
 	public enum ChecksumAlgorithm {checksumAlgorithm_sha1, checksumAlgorithm_sha256,
 		checksumAlgorithm_md5};		
 		

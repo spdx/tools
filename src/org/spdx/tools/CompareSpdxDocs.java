@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.compare.SpdxCompareException;
 import org.spdx.compare.SpdxComparer;
 import org.spdx.compare.SpdxComparer.SPDXReviewDifference;
@@ -69,7 +69,7 @@ import antlr.RecognitionException;
  *
  */
 public class CompareSpdxDocs {
-	static final Logger logger = Logger.getLogger(CompareSpdxDocs.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(CompareSpdxDocs.class.getName());
 
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 3;

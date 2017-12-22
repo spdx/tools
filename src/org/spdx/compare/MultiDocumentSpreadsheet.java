@@ -24,9 +24,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.spdxspreadsheet.AbstractSpreadsheet;
@@ -71,7 +72,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	
 	private SpdxFileComparator fileComparator = new SpdxFileComparator();
 
-	static Logger logger = Logger.getLogger(MultiDocumentSpreadsheet.class);
+	static Logger logger = LoggerFactory.getLogger(MultiDocumentSpreadsheet.class);
 	private static final String DOCUMENT_SHEET_NAME = "Document";
 	private DocumentSheet documentSheet;
 	private static final String CREATOR_SHEET_NAME = "Creator";

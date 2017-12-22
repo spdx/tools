@@ -27,7 +27,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXCreatorInformation;
 import org.spdx.rdfparser.SPDXReview;
@@ -70,7 +71,7 @@ import com.google.common.collect.Maps;
  */
 public class SpreadsheetToRDF {
 
-	static final Logger logger = Logger.getLogger(SpreadsheetToRDF.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(SpreadsheetToRDF.class.getName());
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
 	

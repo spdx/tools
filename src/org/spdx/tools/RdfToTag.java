@@ -38,7 +38,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxDocument;
@@ -54,7 +55,7 @@ import org.spdx.tag.CommonCode;
 public class RdfToTag {
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
-	static final Logger logger = Logger.getLogger(RdfToTag.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(RdfToTag.class.getName());
 
 	/**
 	 * @param args

@@ -16,7 +16,8 @@
 */
 package org.spdx.rdfparser.license;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.RdfModelObject;
@@ -35,7 +36,7 @@ import org.apache.jena.rdf.model.Resource;
  */
 public abstract class AnyLicenseInfo extends RdfModelObject {
 	
-	static final Logger logger = Logger.getLogger(AnyLicenseInfo.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(AnyLicenseInfo.class.getName());
 
 	/**
 	 * Create a new LicenseInfo object where the information is copied from

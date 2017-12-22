@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
@@ -31,7 +30,8 @@ import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Publishes a new version of the license list.
  * 
@@ -67,7 +67,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  */
 public class LicenseListPublisher {
 	
-	static final Logger logger = Logger.getLogger(LicenseListPublisher.class);
+	static final Logger logger = LoggerFactory.getLogger(LicenseListPublisher.class);
 	
 	static final int ERROR_STATUS = 1;
 	private static final String LICENSE_XML_URI = "https://github.com/goneall/license-list-XML.git";
