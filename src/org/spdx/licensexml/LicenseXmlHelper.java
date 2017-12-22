@@ -21,7 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.licenseTemplate.HtmlTemplateOutputHandler;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.w3c.dom.Element;
@@ -34,7 +35,7 @@ import org.w3c.dom.NodeList;
  *
  */
 public class LicenseXmlHelper implements SpdxRdfConstants {
-	static final Logger logger = Logger.getLogger(LicenseXmlHelper.class);
+	static final Logger logger = LoggerFactory.getLogger(LicenseXmlHelper.class);
 
 	private static final String INDENT_STRING = "   ";
 

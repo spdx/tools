@@ -16,13 +16,13 @@
 */
 package org.spdx.spdxspreadsheet;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.license.LicenseException;
-
 /**
  * Sheet containing the License Exceptions
  * @author Gary O'Neall
@@ -30,7 +30,7 @@ import org.spdx.rdfparser.license.LicenseException;
  */
 public class LicenseExceptionSheet extends AbstractSheet {
 
-	static final Logger logger = Logger.getLogger(LicenseSheet.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(LicenseSheet.class.getName());
 	static final int NUM_COLS = 6;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;

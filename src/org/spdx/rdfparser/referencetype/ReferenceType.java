@@ -22,16 +22,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 import org.spdx.rdfparser.model.RdfModelObject;
-
-import org.apache.jena.graph.Node;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
 
 /**
  * Type of external reference
@@ -47,7 +47,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 	//TODO: Current implementation only uses the uri field.  Implement additional fields
 	// once the SPDX listed reference type pages are live
 	
-	static final Logger logger = Logger.getLogger(ReferenceType.class);
+	static final Logger logger = LoggerFactory.getLogger(ReferenceType.class);
 
 	String contextualExample;
 	URL documentation;

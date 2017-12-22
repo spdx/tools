@@ -33,7 +33,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.LicenseException;
@@ -51,7 +52,7 @@ import org.xml.sax.SAXParseException;
  *
  */
 public class LicenseXmlDocument {
-	static final Logger logger = Logger.getLogger(LicenseXmlDocument.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(LicenseXmlDocument.class.getName());
 	
 	public static final String LICENSE_XML_SCHEMA_LOCATION = "org/spdx/licensexml/ListedLicense.xsd";
 
