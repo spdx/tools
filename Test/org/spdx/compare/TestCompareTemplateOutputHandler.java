@@ -73,6 +73,8 @@ public class TestCompareTemplateOutputHandler {
 	static final String HPND_TEMPLATE = "TestFiles" + File.separator + "HPND.template.txt";
 	static final String CECILL2_TEXT = "TestFiles" + File.separator + "CECILL-2.0.txt";
 	static final String CECILL2_TEMPLATE = "TestFiles" + File.separator + "CECILL-2.0.template.txt";
+	static final String BSD_1_CLAUSE_TEXT = "TestFiles" + File.separator + "BSD-1-Clause.txt";
+	static final String BSD_1_CLAUSE_TEMPLATE = "TestFiles" + File.separator + "BSD-1-Clause.template.txt";
 	
 	/**
 	 * @throws java.lang.Exception
@@ -475,6 +477,17 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionCECILL2() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(CECILL2_TEXT);
 		String templateText = UnitTestHelper.fileToText(CECILL2_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testRegressionBSD1Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(BSD_1_CLAUSE_TEXT);
+		String templateText = UnitTestHelper.fileToText(BSD_1_CLAUSE_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {

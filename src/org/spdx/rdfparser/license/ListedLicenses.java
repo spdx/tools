@@ -29,14 +29,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.spdx.rdfparser.IModelContainer;
-import org.spdx.rdfparser.InvalidSPDXAnalysisException;
-import org.spdx.rdfparser.SpdxRdfConstants;
-import org.spdx.rdfparser.model.IRdfModel;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
@@ -45,6 +37,15 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.spdx.rdfparser.IModelContainer;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.model.IRdfModel;
+
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import net.rootdev.javardfa.jena.RDFaReader.HTMLRDFaReader;
 /**
@@ -55,7 +56,7 @@ import net.rootdev.javardfa.jena.RDFaReader.HTMLRDFaReader;
 public class ListedLicenses implements IModelContainer {
 	
 	public static final String DEFAULT_LICENSE_LIST_VERSION = "2.0";
-	static final Logger logger = Logger.getLogger(ListedLicenses.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	public static final String LISTED_LICENSE_URI_PREFIX = "http://spdx.org/licenses/";
 	private static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";

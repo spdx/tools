@@ -20,12 +20,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.model.ExternalRef;
@@ -34,7 +35,6 @@ import org.spdx.rdfparser.referencetype.ListedReferenceTypes;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
 import com.google.common.collect.Lists;
-
 /**
  * Package external refs
  * @author Gary O'Neall
@@ -42,7 +42,7 @@ import com.google.common.collect.Lists;
  */
 public class ExternalRefsSheet extends AbstractSheet {
 	
-	static final Logger logger = Logger.getLogger(ExternalRefsSheet.class);
+	static final Logger logger = LoggerFactory.getLogger(ExternalRefsSheet.class);
 	
 	static final int PKG_ID_COL = 0;
 	static final int REF_CATEGORY_COL = PKG_ID_COL + 1;

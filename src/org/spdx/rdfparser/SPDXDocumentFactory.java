@@ -24,12 +24,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-import org.spdx.rdfparser.model.SpdxDocument;
-
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.spdx.rdfparser.model.SpdxDocument;
 
 /**
  * Factory for creating an SPDX Document from a variety of different sources
@@ -39,7 +39,7 @@ import org.apache.jena.util.FileManager;
  */
 public class SPDXDocumentFactory {
 	
-	static final Logger logger = Logger.getLogger(SPDXDocumentFactory.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(SPDXDocumentFactory.class.getName());
 
 	/**
 	 * Create a new SPDX Document populating the data from the existing model

@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.ISpdxListedLicenseProvider;
 import org.spdx.rdfparser.license.LicenseException;
@@ -41,7 +42,7 @@ import com.google.common.io.Files;
  */
 public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 	
-	Logger logger = Logger.getLogger(XmlLicenseProvider.class.getName());
+	Logger logger = LoggerFactory.getLogger(XmlLicenseProvider.class.getName());
 	private List<String> warnings = new ArrayList<String>();
 	
 	class XmlLicenseIterator implements Iterator<SpdxListedLicense> {		

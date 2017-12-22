@@ -21,7 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Gary O'Neall
@@ -33,7 +34,7 @@ import org.apache.log4j.Logger;
  */
 public class NoCommentInputStream extends InputStream {
 	
-	static final Logger logger = Logger.getLogger(NoCommentInputStream.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(NoCommentInputStream.class.getName());
 	private static final CharSequence START_TEXT_TAG = "<text>";
 	private static final CharSequence END_TEXT_TAG = "</text>";
 	private static final char COMMENT_CHAR = '#';
