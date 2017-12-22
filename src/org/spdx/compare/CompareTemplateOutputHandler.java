@@ -356,7 +356,9 @@ public class CompareTemplateOutputHandler implements
 				return 0;
 			}
 			Map<Integer, LineColumn> temp = new HashMap<Integer, LineColumn>();
-			return LicenseCompareHelper.tokenizeLicenseText(text.substring(0, end), temp).length;
+			String subText = text.substring(0, end);
+			String[] tokenizedString = LicenseCompareHelper.tokenizeLicenseText(subText, temp);
+			return tokenizedString.length;
 		}
 
 		/**
@@ -378,7 +380,7 @@ public class CompareTemplateOutputHandler implements
 			}
 			for (int matchingStartToken:matchingStartTokens) {
 				String compareText = LicenseCompareHelper.locateOriginalText(originalText, startToken, matchingStartToken-1, tokenToLocation, matchTokens);
-				Pattern matchPattern = Pattern.compile(rule.getMatch(), Pattern.CASE_INSENSITIVE);
+				Pattern matchPattern = Pattern.compile(rule.getMatch(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 				Matcher matcher = matchPattern.matcher(compareText);
 				if (!matcher.find() || matcher.start() > 0) {
 					continue;

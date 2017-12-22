@@ -27,7 +27,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -35,6 +34,8 @@ import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -49,7 +50,7 @@ import org.spdx.rdfparser.license.SpdxListedLicense;
  */
 public class LicenseSheet extends AbstractSheet {
 	
-	static final Logger logger = Logger.getLogger(LicenseSheet.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(LicenseSheet.class.getName());
 	static final int NUM_COLS = 9;
 	static final int COL_NAME = 0;
 	static final int COL_ID = COL_NAME + 1;

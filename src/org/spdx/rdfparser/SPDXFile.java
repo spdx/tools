@@ -19,13 +19,6 @@ package org.spdx.rdfparser;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
-import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -33,6 +26,14 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.DuplicateExtractedLicenseIdException;
+import org.spdx.rdfparser.license.LicenseInfoFactory;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Contains and SPDXFile object and updates the RDF model.
@@ -45,7 +46,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 @Deprecated
 public class SPDXFile implements Comparable<SPDXFile>, Cloneable {
 	
-	static final Logger logger = Logger.getLogger(SPDXFile.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(SPDXFile.class.getName());
 	IModelContainer modelContainer;
 	private Model model = null;
 	private Resource resource = null;
