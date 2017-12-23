@@ -96,7 +96,7 @@ public class LicenseRDFAGenerator {
 		INVALID_TEXT_CHARS.add('\uFFFD');
 	}
 	static int MIN_ARGS = 2;
-	static int MAX_ARGS = 5;
+	static int MAX_ARGS = 6;
 
 	static final int ERROR_STATUS = 1;
 	static final int WARNING_STATUS = 64;
