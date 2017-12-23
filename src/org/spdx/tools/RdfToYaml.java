@@ -21,7 +21,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SPDXDocumentFactory;
 import org.spdx.rdfparser.model.SpdxDocument;
@@ -41,7 +42,7 @@ public class RdfToYaml {
 	
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
-	static final Logger logger = Logger.getLogger(RdfToYaml.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(RdfToYaml.class);
 	/**
 	 * @param args args[0] is the file path to a valid RDF XML SPDX file, args[1] is the file path to the output YAML format SPDX file
 	 */
