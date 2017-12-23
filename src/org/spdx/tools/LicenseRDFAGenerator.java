@@ -60,6 +60,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
  * Converts input license text and metadata into various output formats.
  * 
@@ -114,14 +116,6 @@ public class LicenseRDFAGenerator {
 	private static final String TABLE_OF_CONTENTS_FILE_NAME = "licenses.md";
 	
 	/**
-	 * Any warning messages present in the EXPECTED_WARNINGS will not cause the utility to return a bad status on exit
-	 */
-	private static final Set<String> EXPECTED_WARNINGS = Sets.newHashSet();
-	static {
-		EXPECTED_WARNINGS.add("Duplicates licenses: MPL-2.0, MPL-2.0-no-copyleft-exception");
-	}
-	
-	/**
 	 * @param args Arg 0 is either an input spreadsheet or a directory of licenses in XML format, arg 1 is the directory for the output html files
 	 */
 	public static void main(String[] args) {
@@ -169,13 +163,37 @@ public class LicenseRDFAGenerator {
 				System.exit(ERROR_STATUS);
 			}
 		}
-
+		String[] ignoredWarnings = new String[0];;
+		if (args.length > 5) {
+			CSVReader reader = null;
+			try {
+				reader = new CSVReader(new StringReader(args[5]));
+				ignoredWarnings = reader.readNext();
+			} catch (IOException e) {
+				System.out.println("IO Error reading ignored errors: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			} finally {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					System.out.println("IO Error closing ignored errors string: "+e.getMessage());
+					System.exit(ERROR_STATUS);
+				}
+			}
+		}
 		try {
 			List<String> warnings = generateLicenseData(ssFile, dir, version, releaseDate, testFileDir);
 			if (warnings != null && warnings.size() > 0) {
 				int numUnexpectedWarnings = warnings.size();
 				for (String warning:warnings) {
-					if (EXPECTED_WARNINGS.contains(warning)) {
+					boolean ignore = false;
+					for (String ignoreStr:ignoredWarnings) {
+						if (warning.equalsIgnoreCase(ignoreStr)) {
+							ignore = true;
+							break;
+						}
+					}
+					if (ignore) {
 						numUnexpectedWarnings--;
 					}
 				}
@@ -551,8 +569,13 @@ public class LicenseRDFAGenerator {
 	
 	private static void usage() {
 		System.out.println("Usage:");
-		System.out.println("LicenseRDFAGenerator licenseSpreadsheet.xls outputDirectory [version] [releasedate]");
-		System.out.println("   Note - if version or release date is not specified, the information will be taken from the spreadsheet.");
+		System.out.println("LicenseRDFAGenerator input outputDirectory [version] [releasedate] [testfiles] [ignoredwarnings]");
+		System.out.println("   Input - either a spreadsheet containing license information or a directory of license XML files");
+		System.out.println("   outputDirectory - Directory to store the output from the license generator");
+		System.out.println("   [version] - Version of the SPDX license list");
+		System.out.println("   [releasedate] - Release date of the SPDX license list");
+		System.out.println("   [testfiles] - Directory of original text files to compare the generated licenses against");
+		System.out.println("   [ignoredwarnings] - Comma separated list of warnings to be ignored");
 	}
 
 }
