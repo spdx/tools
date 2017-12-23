@@ -58,9 +58,11 @@ public class LicenseTester implements ILicenseTester {
 	public LicenseTester(File licenseTestDirectory) {
 		licenseIdToTestMap = new HashMap<String,File>();
 		File[] licenseIdDirs = licenseTestDirectory.listFiles();
-		for (File dir:licenseIdDirs) {
-			if (dir.isDirectory()) {
-				licenseIdToTestMap.put(dir.getName(),dir);
+		if (licenseIdDirs != null) {
+			for (File dir:licenseIdDirs) {
+				if (dir.isDirectory()) {
+					licenseIdToTestMap.put(dir.getName(),dir);
+				}
 			}
 		}
 	}
@@ -82,22 +84,26 @@ public class LicenseTester implements ILicenseTester {
 		File positiveTestDir = new File (licenseDir.getPath() + File.separator + "license" + File.separator + "good");
 		if (positiveTestDir.exists() && positiveTestDir.isDirectory()) {
 			File[] positiveTests = positiveTestDir.listFiles(testFileFilter);
-			for (File test:positiveTests) {
-				String text = readText(test);
-				DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(license, text);
-				if (result.isDifferenceFound()) {
-					retval.add("Test 'positive-"+test.toPath().getFileName()+"' failed due to difference found "+result.getDifferenceMessage());
+			if (positiveTests != null) {
+				for (File test:positiveTests) {
+					String text = readText(test);
+					DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(license, text);
+					if (result.isDifferenceFound()) {
+						retval.add("Test 'positive-"+test.toPath().getFileName()+"' failed due to difference found "+result.getDifferenceMessage());
+					}
 				}
 			}
 		}
 		File negativeTestDir = new File (licenseDir.getPath() + File.separator + "bad");
 		if (negativeTestDir.exists() && negativeTestDir.isDirectory()) {
 			File[] negativeTests = negativeTestDir.listFiles(testFileFilter);
-			for (File test:negativeTests) {
-				String text = readText(test);
-				DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(license, text);
-				if (!result.isDifferenceFound()) {
-					retval.add("Test 'negative-"+test.toPath().getFileName()+"' failed - no difference found");
+			if (negativeTests != null) {
+				for (File test:negativeTests) {
+					String text = readText(test);
+					DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(license, text);
+					if (!result.isDifferenceFound()) {
+						retval.add("Test 'negative-"+test.toPath().getFileName()+"' failed - no difference found");
+					}
 				}
 			}
 		}
@@ -129,20 +135,24 @@ public class LicenseTester implements ILicenseTester {
 		File positiveTestDir = new File (exceptionDir.getPath() + File.separator + "exception" + File.separator + "good");
 		if (positiveTestDir.exists() && positiveTestDir.isDirectory()) {
 			File[] positiveTests = positiveTestDir.listFiles(testFileFilter);
-			for (File test:positiveTests) {
-				String text = readText(test);
-				if (!LicenseCompareHelper.isLicenseTextEquivalent(text, exception.getLicenseExceptionText())) {
-					retval.add("Test 'positive-"+test.toPath().getFileName()+"' failed due to difference found");
+			if (positiveTests != null) {
+				for (File test:positiveTests) {
+					String text = readText(test);
+					if (!LicenseCompareHelper.isLicenseTextEquivalent(text, exception.getLicenseExceptionText())) {
+						retval.add("Test 'positive-"+test.toPath().getFileName()+"' failed due to difference found");
+					}
 				}
 			}
 		}
 		File negativeTestDir = new File (exceptionDir.getPath() + File.separator + "bad");
 		if (negativeTestDir.exists() && negativeTestDir.isDirectory()) {
 			File[] negativeTests = negativeTestDir.listFiles(testFileFilter);
-			for (File test:negativeTests) {
-				String text = readText(test);
-					if (LicenseCompareHelper.isLicenseTextEquivalent(text, exception.getLicenseExceptionText())) {
-					retval.add("Test 'negative-"+test.toPath().getFileName()+"' failed - no difference found");
+			if (negativeTests != null) {
+				for (File test:negativeTests) {
+					String text = readText(test);
+						if (LicenseCompareHelper.isLicenseTextEquivalent(text, exception.getLicenseExceptionText())) {
+						retval.add("Test 'negative-"+test.toPath().getFileName()+"' failed - no difference found");
+					}
 				}
 			}
 		}

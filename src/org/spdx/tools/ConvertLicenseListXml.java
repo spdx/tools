@@ -3,6 +3,7 @@
  */
 package org.spdx.tools;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
@@ -122,8 +123,12 @@ public class ConvertLicenseListXml implements SpdxRdfConstants {
 		if (!Files.isDirectory(outputDir)) {
 			error(args[1]+" is not a directory");
 		}
-		if (outputDir.toFile().listFiles().length > 0) {
-			error("Output directory must be empty");
+		File outputDirFile = outputDir.toFile();
+		if (outputDirFile != null) {
+			File[] directoryFiles = outputDirFile.listFiles();
+			if (directoryFiles != null && directoryFiles.length > 0) {
+				error("Output directory must be empty");
+			}
 		}
 		
 		try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(inputDir, "*.xml")) {
