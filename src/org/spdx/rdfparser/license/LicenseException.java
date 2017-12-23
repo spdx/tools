@@ -449,7 +449,11 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * @return the tempalte
 	 */
 	public String getLicenseExceptionTemplate() {
-		return licenseExceptionTemplate;
+		if (licenseExceptionTemplate == null) {
+			return this.licenseExceptionText;
+		} else {
+			return licenseExceptionTemplate;
+		}
 	}
 
 	/**

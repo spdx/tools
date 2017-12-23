@@ -260,8 +260,10 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 			
 		});
 		
-		for (File subDir:directories) {
-			addXmlFiles(subDir, alFiles);
+		if (directories != null) {
+			for (File subDir:directories) {
+				addXmlFiles(subDir, alFiles);
+			}
 		}
 		
 		File[] localFiles = xmlFileDirectory.listFiles(new FileFilter() {
@@ -273,10 +275,11 @@ public class XmlLicenseProvider implements ISpdxListedLicenseProvider {
 			
 		});
 		
-		for (File file:localFiles) {
-			alFiles.add(file);
+		if (localFiles != null) {
+			for (File file:localFiles) {
+				alFiles.add(file);
+			}
 		}
-
 	}
 
 	/* (non-Javadoc)

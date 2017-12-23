@@ -51,6 +51,7 @@ public class CompareTemplateOutputHandler implements
 
 		private boolean skip = false;	// skip this instruction in matching
 		private boolean skipFirstTextToken = false;	// skip the first text token
+		private DifferenceDescription lastOptionalDifference = null;
 		
 		ParseInstruction(LicenseTemplateRule rule, String text, ParseInstruction parent) {
 			this.rule = rule;
@@ -200,7 +201,7 @@ public class CompareTemplateOutputHandler implements
 					if (nextToken < 0) {
 						int errorLocation = -nextToken;
 						differences.addDifference(tokenToLocation.get(errorLocation), LicenseCompareHelper.getTokenAt(matchTokens, errorLocation), 
-										"Normal text of license does not match");
+										"Normal text of license does not match", text, null, getLastOptionalDifference());
 					}
 					if (this.subInstructions.size() > 0) {
 						throw new LicenseParserException("License template parser error.  Sub expressions are not allows for plain text.");
@@ -227,6 +228,7 @@ public class CompareTemplateOutputHandler implements
 						nextToken = sub.match(matchTokens, nextToken, endToken, originalText, 
 								optionalDifference, tokenToLocation);
 						if (nextToken < 0) {
+							setLastOptionalDifference(optionalDifference);
 							return startToken;	// the optional text didn't match, just return the start token
 						}
 					}
@@ -276,6 +278,8 @@ public class CompareTemplateOutputHandler implements
 				}
 				if (matchLocation > 0) {
 					return matchLocation;	// found a match
+				} else {
+					setLastOptionalDifference(matchDifferences);
 				}
 			}
 			// We didn't find any matches, return the original start token
@@ -337,7 +341,7 @@ public class CompareTemplateOutputHandler implements
 				retval.add(nextMatchingStart);
 			} else {
 				// Can not find the text, report a difference
-				differences.addDifference(tokenToLocation.get(nextMatchingStart), "", "Unable to find the text following a variable template rule '"+firstNormalText + "'");
+				differences.addDifference(tokenToLocation.get(nextMatchingStart), "", "Unable to find the text following a variable template rule '"+firstNormalText + "'", null, rule, getLastOptionalDifference());
 			}
 			return retval;
 		}
@@ -390,8 +394,31 @@ public class CompareTemplateOutputHandler implements
 				}
 			}
 			// if we got here, there was no match found
-			differences.addDifference(tokenToLocation.get(startToken), LicenseCompareHelper.getTokenAt(matchTokens, startToken), "Variable text rule "+rule.getName()+" did not match the compare text");
+			differences.addDifference(tokenToLocation.get(startToken), LicenseCompareHelper.getTokenAt(matchTokens, startToken), "Variable text rule "+rule.getName()+" did not match the compare text",
+					null, rule, getLastOptionalDifference());
 			return -1;
+		}
+
+		/**
+		 * @return The difference description for the last optional rule which did not match
+		 */
+		public DifferenceDescription getLastOptionalDifference() {
+			if (this.lastOptionalDifference != null) {
+				return this.lastOptionalDifference;
+			} else if (this.parent != null) {
+				return parent.getLastOptionalDifference();
+			} else {
+				return null;
+			}
+		}
+		
+		public void setLastOptionalDifference(DifferenceDescription optionalDifference) {
+			if (optionalDifference != null && optionalDifference.getDifferenceMessage() != null && !optionalDifference.getDifferenceMessage().isEmpty()) {
+				this.lastOptionalDifference = optionalDifference;
+				if (this.parent != null) {
+					this.parent.setLastOptionalDifference(optionalDifference);
+				}
+			}
 		}
 
 		/**
@@ -535,6 +562,7 @@ public class CompareTemplateOutputHandler implements
 	}
 	
 	public class DifferenceDescription {
+		private static final int MAX_DIFF_TEXT_LENGTH = 100;
 		private boolean differenceFound;
 		private String differenceMessage;
 		private List<LineColumn> differences;
@@ -575,21 +603,48 @@ public class CompareTemplateOutputHandler implements
 			this.differences = differences;
 		}
 		
-		public void addDifference(LineColumn location, String token, String msg) {
+		/**
+		 * @param location Location in the text of the difference
+		 * @param token Token causing the difference
+		 * @param msg Message for the difference
+		 * @param text Template text being compared to
+		 * @param rule Template rule where difference was found
+		 * @param lastOptionalDifference The difference for the last optional difference that failed
+		 */
+		public void addDifference(LineColumn location, String token, String msg, String text, 
+				LicenseTemplateRule rule, DifferenceDescription lastOptionalDifference) {
 			if (token == null) {
 				token = "";
 			}
 			if (msg == null) {
 				msg = "UNKNOWN (null)";
 			}
+			this.differenceMessage = msg;
 			if (location != null) {
-				this.differenceMessage = msg + " starting at line #"+
+				this.differenceMessage = this.differenceMessage + " starting at line #"+
 						String.valueOf(location.getLine())+ " column #" +
-						String.valueOf(location.getColumn())+"\""+
-						token+"\".";
+						String.valueOf(location.getColumn())+" \""+
+						token+"\"";
 				this.differences.add(location);
 			} else {
-				this.differenceMessage = msg + " at end of text";
+				this.differenceMessage = this.differenceMessage + " at end of text";
+			}
+			if (text != null) {
+				this.differenceMessage = this.differenceMessage + " when comparing to template text \"";
+				if (text.length() > MAX_DIFF_TEXT_LENGTH) {
+					this.differenceMessage = this.differenceMessage + 
+							text.substring(0, MAX_DIFF_TEXT_LENGTH) + "...\"";
+				} else {
+					this.differenceMessage = this.differenceMessage + text + "\"";
+				}
+			}
+			if (rule != null) {
+				this.differenceMessage = this.differenceMessage + " while processing rule " + rule.toString();
+			}
+			if (lastOptionalDifference != null) {
+				this.differenceMessage = this.differenceMessage + 
+						".  Last optional text was not found due to the optional difference: \n\t" + 
+						lastOptionalDifference.getDifferenceMessage();
 			}
 			this.differenceFound = true;
 		}
