@@ -29,6 +29,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
@@ -109,6 +110,7 @@ public class RdfToYaml {
 			}
 			YAMLFactory yamlFactory = new YAMLFactory();
 			ObjectMapper mapper = new ObjectMapper(yamlFactory);
+			mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
 			writer = mapper.writerWithDefaultPrettyPrinter().writeValues(yamlout);
 			writer.write(doc);
 			return doc.verify();
