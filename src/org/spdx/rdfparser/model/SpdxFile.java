@@ -36,6 +36,8 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -46,6 +48,10 @@ import com.google.common.collect.Maps;
  * @author Gary O'Neall
  *
  */
+@JsonPropertyOrder({"name", "id", "fileTypes", "checksums",
+	"licenseConcluded", "licenseInfoFromFiles", "licenseDeclared",
+	"licenseComments", "copyrightText", "artifactOf", 
+	"comment", "noticeText", "fileContributors", "fileDependencies", "annotations", "relationships"})
 public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	
 	static final Logger logger = LoggerFactory.getLogger(SpdxFile.class.getName());
@@ -772,6 +778,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * This method will be removed in a future release
 	 * @return
 	 */
+    @JsonIgnore
     @Deprecated
 	public AnyLicenseInfo getConcludedLicenses() {
 		return this.getLicenseConcluded();
@@ -792,6 +799,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * This method will be removed in a future release
 	 * @return
 	 */
+    @JsonIgnore
     @Deprecated
 	public String[] getContributors() {
 		return this.getFileContributors();
@@ -812,6 +820,7 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 	 * This method will be removed in a future release
 	 * @return
 	 */
+    @JsonIgnore
     @Deprecated
 	public AnyLicenseInfo[] getSeenLicenses() {
 		return this.getLicenseInfoFromFiles();

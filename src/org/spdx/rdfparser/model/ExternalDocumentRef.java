@@ -29,6 +29,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -248,6 +249,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	/**
 	 * @return the spdxDocument
 	 */
+	@JsonIgnore
 	public SpdxDocument getSpdxDocument() {
 		return spdxDocument;
 	}
