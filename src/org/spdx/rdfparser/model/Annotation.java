@@ -25,6 +25,8 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.SpdxVerificationHelper;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
@@ -38,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author Gary O'Neall
  *
  */
+@JsonPropertyOrder({"annotator", "annotationDate", "annotationType"})
 public class Annotation extends RdfModelObject implements Comparable<Annotation> {
 	
 	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class.getName());
@@ -312,6 +315,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	/**
 	 * @return The tag value of the annotation type
 	 */
+	@JsonGetter("annotationType")
 	public String getAnnotationTypeTag() {
 		return this.annotationType.getTag();
 	}

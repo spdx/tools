@@ -27,6 +27,7 @@ import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
 import org.spdx.rdfparser.model.pointer.LineCharPointer;
 import org.spdx.rdfparser.model.pointer.StartEndPointer;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
@@ -39,6 +40,10 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
+@JsonPropertyOrder({"id", "snippetFromFile", "byteRange", "lineRange",
+	"licenseConcluded", "licenseDeclared",
+	"licenseComments", "copyrightText", 
+	"comment", "name", "annotations", "relationships"})
 public class SpdxSnippet extends SpdxItem implements Comparable<SpdxSnippet> {
 
 	private SpdxFile snippetFromFile;
@@ -191,6 +196,17 @@ snippet information applies to.
 			getSnippetFromFileFromModel();
 		}
 		return snippetFromFile;
+	}
+	
+	/**
+	 * @return the snippetFromFile ID
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public String getSnippetFromFileId() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && this.refreshOnGet) {
+			getSnippetFromFileFromModel();
+		}
+		return snippetFromFile.getId();
 	}
 
 	/**
