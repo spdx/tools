@@ -1386,6 +1386,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	/**
 	 * @return the RDF Node (null if not initialized)
 	 */
+	@JsonIgnore
 	public Node getNode() {
 		return this.node;
 	}
@@ -1394,6 +1395,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	/**
 	 * @return Document namespace.  Null if the modelContainer is null
 	 */
+	@JsonIgnore
 	public String getDocumentNamespace() throws InvalidSPDXAnalysisException {
 		if (this.modelContainer == null) {
 			return null;

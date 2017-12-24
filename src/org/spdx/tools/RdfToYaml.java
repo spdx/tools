@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
 /**
  * Converts SPDX RDF Format to YAML
@@ -109,8 +110,9 @@ public class RdfToYaml {
 				throw new OnlineToolException("Error creating SPDX Document: "+e.getMessage(),e);
 			}
 			YAMLFactory yamlFactory = new YAMLFactory();
+			yamlFactory.disable(YAMLGenerator.Feature.USE_NATIVE_TYPE_ID);	// Uses just the name rather than the YAML !< format
 			ObjectMapper mapper = new ObjectMapper(yamlFactory);
-			mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+			mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 			writer = mapper.writerWithDefaultPrettyPrinter().writeValues(yamlout);
 			writer.write(doc);
 			return doc.verify();

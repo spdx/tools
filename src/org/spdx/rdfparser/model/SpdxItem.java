@@ -25,6 +25,8 @@ import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
@@ -146,6 +148,25 @@ public class SpdxItem extends SpdxElement {
 		}
 		return licenseConcluded;
 	}
+	
+	/**
+	 * @return the licenseConcluded in String format
+	 */
+	@JsonGetter("licenseConcluded")
+	public String getLicenseConcludedStr() {
+		if (this.resource != null && this.refreshOnGet) {
+			try {
+				AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+						SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
+				if (refresh == null || !refresh.equals(this.licenseConcluded)) {
+					this.licenseConcluded = refresh;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid licenseConcluded in model",e);
+			}
+		}
+		return licenseConcluded.toString();
+	}
 
 	/**
 	 * @param licenseConcluded the licenseConcluded to set
@@ -172,6 +193,32 @@ public class SpdxItem extends SpdxElement {
 			}
 		}
 		return licenseInfoFromFiles;
+	}
+	
+	/**
+	 * @return the licenseInfoFromFiles in string format
+	 */
+	@JsonGetter("licenseInfoFromFiles")
+	public String[] getLicenseInfoFromFilesStr() {
+		if (this.resource != null && this.refreshOnGet) {
+			try {
+				AnyLicenseInfo[] refresh = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+						getLicenseInfoFromFilesPropertyName());
+				if (!RdfModelHelper.arraysEqual(refresh, this.licenseInfoFromFiles)) {
+					this.licenseInfoFromFiles = refresh;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid licenseDeclared in model",e);
+			}
+		}
+		if (licenseInfoFromFiles == null) {
+			return null;
+		}
+		String[] retval = new String[licenseInfoFromFiles.length];
+		for (int i = 0; i < licenseInfoFromFiles.length; i++) {
+			retval[i] = licenseInfoFromFiles[i].toString();
+		}
+		return retval;
 	}
 
 	/**
@@ -216,6 +263,7 @@ public class SpdxItem extends SpdxElement {
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public String getLicenseComment() {
 		return this.getLicenseComments();
 	}
