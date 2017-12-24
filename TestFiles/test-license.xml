@@ -35,8 +35,9 @@
 			<crossRef>http://test/url2d</crossRef>
 		</crossRefs>
 		<standardLicenseHeader> 
-    Test header dep
-  </standardLicenseHeader>
+    		Test header dep
+  		</standardLicenseHeader>
+  		<notes>Notes second line</notes>
 		<copyrightText>
 			<p>Test Copyright dep</p>
 		</copyrightText>
