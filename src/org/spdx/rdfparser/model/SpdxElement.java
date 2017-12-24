@@ -32,6 +32,9 @@ import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -50,6 +53,11 @@ import com.google.common.collect.Sets;
  * @author Gary O'Neall
  *
  */
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonSubTypes({@Type(value=SpdxDocument.class, name="Document"),
+	@Type(value=SpdxFile.class, name="File"),
+	@Type(value=SpdxPackage.class, name="Package"),
+	@Type(value=SpdxSnippet.class, name="Snippet")})
 public class SpdxElement extends RdfModelObject {
 	
 	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class);
