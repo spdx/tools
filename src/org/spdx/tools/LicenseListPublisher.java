@@ -18,22 +18,44 @@ package org.spdx.tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
+
+import au.com.bytecode.opencsv.CSVReader;
 /**
  * Publishes a new version of the license list.
+ * 
+ * See the createOptions method for a description of the options used, or execute the command without parameters to get a list of the parameters from the command line
  * 
  * The license list data is taken from the github repository spdx/license-list-XML,
  * https://github.com/spdx/license-list-XML
@@ -43,7 +65,7 @@ import org.slf4j.LoggerFactory;
  * 
  * The 2nd and 3rd parameters are the username and passwords for github.
  * 
- * If there are no errors, the license data is published to the github repository
+ * If there are no errors or warnings, the license data is published to the github repository
  * spdx/license-list-data, https://github.com/spdx/license-list-data
  * 
  * The output is tagged by release
@@ -67,54 +89,109 @@ import org.slf4j.LoggerFactory;
  */
 public class LicenseListPublisher {
 	
+	static final Comparator<String> versionComparer = new Comparator<String>() {
+
+		Pattern versionPattern = Pattern.compile("(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$");
+		@Override
+		public int compare(String arg0, String arg1) {
+			Matcher matcher0 = versionPattern.matcher(arg0);
+			Matcher matcher1 = versionPattern.matcher(arg1);
+			if (!matcher0.find()) {
+				if (!matcher1.find()) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}
+			if (!matcher1.find()) {
+				return 1;
+			}
+			String version0 = matcher0.group(0);
+			String version1 = matcher1.group(0);
+			return version0.compareTo(version1);
+		}
+		
+	};
+	
 	static final Logger logger = LoggerFactory.getLogger(LicenseListPublisher.class);
 	
 	static final int ERROR_STATUS = 1;
+	//TODO: set the real URL once testing is done
+//	private static final String LICENSE_XML_URI = "https://github.com/spdx/license-list-XML.git";
 	private static final String LICENSE_XML_URI = "https://github.com/goneall/license-list-XML.git";
 	//TODO: set the real URL once testing is done
 //	private static final String LICENSE_XML_URI = "https://github.com/spdx/license-list-XML.git";
 	private static final String LICENSE_DATA_URI = "https://github.com/goneall/license-list-data.git";
 
-	private static final String LICENSE_TEST_URI = "https://github.com/goneall/license-test-files.git";
+	private static final String TEST_DIRECTORY_PATH = "test/original";
 	//TODO: Set the real URL once testing is done
 //	private static final String LICENSE_DATA_URI = "https://github.com/spdx/license-list-data.git";
 	/**
 	 * @param args Single argument - release name for the license list
 	 */
 	public static void main(String[] args) {
-		if (args.length == 0) {
-			System.out.println("Invalid number of arguments.  Expected 3 arguments");			
-			usage();
+		Options options = createOptions();
+		if (args.length == 1 && "-h".equals(args[0])) {
+			usage(options);
+			System.exit(0);
+		}
+		CommandLineParser parser = new DefaultParser();
+		CommandLine cmdLine = null;
+		try {
+			cmdLine = parser.parse(options, args);
+		} catch (ParseException e1) {
+			System.out.println(e1.getMessage());			
+			usage(options);
 			System.exit(ERROR_STATUS);
 		}
-		boolean ignoreWarnings = false;
-		String release = null;
-		String gitUserName = null;
-		String gitPassword = null;
-		//TODO put the git username and password in the properties or preferences file
-		if ("--ignoreWarnings".equals(args[0])) {
-			if (args.length != 4) {
-				System.out.println("Invalid number of arguments.  Expected 3 arguments");			
-				usage();
-				System.exit(ERROR_STATUS);
-			}
-			ignoreWarnings = true;
-			release = args[1];
-			gitUserName = args[2];
-			gitPassword = args[3];
-		} else {
-			if (args.length != 3) {
-				System.out.println("Invalid number of arguments.  Expected 3 arguments");			
-				usage();
-				System.exit(ERROR_STATUS);
-			}
-			release = args[0];
-			gitUserName = args[1];
-			gitPassword = args[2];
+		if (cmdLine.hasOption("h")) {
+			usage(options);
+			System.exit(0);
 		}
-
+		String outputRepository = cmdLine.getOptionValue("O", LICENSE_DATA_URI);
+		boolean ignoreWarnings = cmdLine.hasOption("I");
+		String[] ignoredWarnings = new String[0];
+		if (cmdLine.hasOption("w")) {
+			CSVReader reader = null;
+			try {
+				reader = new CSVReader(new StringReader(cmdLine.getOptionValue("w").trim()));
+				ignoredWarnings = reader.readNext();
+			} catch (IOException e) {
+				System.out.println("IO Error reading ignored warnings: "+e.getMessage());
+				System.exit(ERROR_STATUS);
+			} finally {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					System.out.println("IO Error closing ignored warnings string: "+e.getMessage());
+					System.exit(ERROR_STATUS);
+				}
+			}
+		}
+		
+		String release = null;
+		if (cmdLine.hasOption("r")) {
+			release = cmdLine.getOptionValue("r");
+		}
+		String gitUserName = cmdLine.getOptionValue("u");
+		String gitPassword = cmdLine.getOptionValue("p");
+		String licenseXmlGitUri = cmdLine.getOptionValue("x",LICENSE_XML_URI);
 		try {
-			publishLicenseList(release, gitUserName, gitPassword, ignoreWarnings);
+			CredentialsProvider githubCredentials = new UsernamePasswordCredentialsProvider(gitUserName, gitPassword);
+			if (cmdLine.hasOption("d")) {
+				File licenseXmlDir = new File(cmdLine.getOptionValue("d").trim());
+				if (!licenseXmlDir.exists()) {
+					System.out.println("License XML directory "+cmdLine.getOptionValue("d")+ " does not exist.");
+					usage(options);
+				}
+				if (!licenseXmlDir.isDirectory()) {
+					System.out.println("License XML directory "+cmdLine.getOptionValue("d")+ " is not a directory.");
+					usage(options);
+				}
+				publishLicenseList(licenseXmlDir, release, githubCredentials, ignoreWarnings, ignoredWarnings, outputRepository);
+			} else {
+				publishLicenseList(licenseXmlGitUri, release, githubCredentials, ignoreWarnings, ignoredWarnings, outputRepository);
+			}			
 			System.out.println("Version "+release+" published to spdx/license-list-data");
 		} catch (LicensePublisherException e) {
 			System.out.println(e.getMessage());
@@ -126,81 +203,97 @@ public class LicenseListPublisher {
 	}
 
 	/**
+	 * @return Options for the LicenseListPublish command
+	 */
+	private static Options createOptions() {
+		Options retval = new Options();
+		retval.addOption(Option.builder("O")
+				.longOpt("outputrepo")
+				.desc("Git repository to output the license list data to.  The git user must have update access to this repository")
+				.hasArg(true)
+				.required(false)
+				.build()
+				);
+		retval.addOption(Option.builder("I")
+				.longOpt("ignoreAllWarnings")
+				.desc("Ignore all warnings")
+				.required(false)
+				.build()
+				);
+		retval.addOption(Option.builder("w")
+				.longOpt("ignoreWarnings")
+				.desc("Ignore specific warning messages")
+				.hasArg(true)
+				.required(false)
+				.build());
+		retval.addOption(Option.builder("u")
+				.longOpt("user")
+				.desc("Github Username")
+				.hasArg(true)
+				.required(true)
+				.build());
+		retval.addOption(Option.builder("p")
+				.longOpt("password")
+				.desc("Github password")
+				.hasArg(true)
+				.required(true)
+				.build());
+		retval.addOption(Option.builder("d")
+				.longOpt("directory")
+				.desc("Input XML directory")
+				.hasArg(true)
+				.required(false)
+				.build());
+		retval.addOption(Option.builder("x")
+				.longOpt("xmlrepo")
+				.desc("Input license XML repository")
+				.hasArg(true)
+				.required(false)
+				.build());
+		retval.addOption(Option.builder("r")
+				.longOpt("release")
+				.desc("License list release tag or version")
+				.required(false)
+				.hasArg(true)
+				.build());
+		retval.addOption(Option.builder("h")
+				.longOpt("help")
+				.desc("Prints out this message")
+				.required(false)
+				.hasArg(false)
+				.build());
+		return retval;
+	}
+
+	/**
 	 * Publish a license list to the license data git repository
 	 * @param release license list release name (must be associatd with a tag in the license-list-xml repo)
-	 * @param gitUserName github username to be used - must have commit access to the license-xml-data repo
-	 * @param gitPassword github password
+	 * @param githubCredentials Credential for the license XML git repository
+	 * @param ignoredWarnings 
+	 * @param outputRepository GIT Repository to output the files to
 	 * @throws LicensePublisherException 
 	 * @throws LicenseGeneratorException 
 	 */
-	private static void publishLicenseList(String release, String gitUserName,
-			String gitPassword, boolean ignoreWarnings) throws LicensePublisherException, LicenseGeneratorException {
-		CredentialsProvider githubCredentials = new UsernamePasswordCredentialsProvider(gitUserName, gitPassword);
+	private static void publishLicenseList(String licenseXmlGithubUri, String release, CredentialsProvider githubCredentials,
+			boolean ignoreWarnings, String[] ignoredWarnings, String outputRepository) throws LicensePublisherException, LicenseGeneratorException {
 		File licenseXmlDir = null;
-		File licenseTestDir = null;
-		File licenseDataDir = null;
 		Git licenseXmlGit = null;
-		Git licenseDataGit = null;
-		Git licenseTestGit = null;
 		try {
 			licenseXmlDir = Files.createTempDirectory("LicenseXML").toFile();
 			System.out.println("Cloning the license XML repository - this could take a while...");
 			licenseXmlGit = Git.cloneRepository()
 					.setCredentialsProvider(githubCredentials)
 					.setDirectory(licenseXmlDir)
-					.setURI(LICENSE_XML_URI)
+					.setURI(licenseXmlGithubUri)
 					.call();
-			Ref releaseTag = licenseXmlGit.getRepository().getTags().get(release);
-			if (releaseTag == null) {
-				throw new LicensePublisherException("Release "+release+" not found as a tag in the License List XML repository");
-			}
-			licenseXmlGit.checkout().setName(releaseTag.getName()).call();
-			licenseTestDir = Files.createTempDirectory("LicenseTest").toFile();
-			System.out.println("Cloning the license test repository - this could take a while...");
-			licenseTestGit = Git.cloneRepository()
-					.setCredentialsProvider(githubCredentials)
-					.setDirectory(licenseTestDir)
-					.setURI(LICENSE_TEST_URI)
-					.call();
-			Ref testReleaseTag = licenseTestGit.getRepository().getTags().get(release);
-			if (testReleaseTag != null) {
-				licenseTestGit.checkout().setName(testReleaseTag.getName()).call();
-			} else {
-				// just use the latest
-				licenseTestGit.checkout().call();
-			}
-			licenseDataDir = Files.createTempDirectory("LicenseData").toFile();
-			System.out.println("Cloning the license data repository - this could take a while...");
-			licenseDataGit = Git.cloneRepository()
-					.setCredentialsProvider(githubCredentials)
-					.setDirectory(licenseDataDir)
-					.setURI(LICENSE_DATA_URI)
-					.call();
-			Ref dataReleaseTag = licenseDataGit.getRepository().getTags().get(release);
-			boolean dataReleaseTagExists = false;
-			if (dataReleaseTag != null) {
-				dataReleaseTagExists = true;
-				licenseDataGit.checkout().setName(releaseTag.getName()).call();
-			}
-			// checkout the license test directory
-			
-			cleanLicenseDataDir(licenseDataDir);
-			String todayDate = new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime());
-			List<String> warnings = LicenseRDFAGenerator.generateLicenseData(new File(licenseXmlDir.getPath() + File.separator + "src"),
-												licenseDataDir, release, todayDate, licenseTestDir);
-			if (warnings.size() > 0 && !ignoreWarnings) {
-				throw new LicensePublisherException("There are some skipped or invalid license input data.  Publishing aborted.  To ignore, add the --ignore option as the first parameter");
-			}
-			licenseDataGit.add().addFilepattern(".").call();
-			licenseDataGit.commit()
-					.setAll(true)
-					.setCommitter("SPDX License List Publisher", "spdx-tech@lists.spdx.org")
-					.setMessage("License List Publisher for "+gitUserName+".  License list version "+release)
-					.call();
-			if (!dataReleaseTagExists) {
-				licenseDataGit.tag().setName(release).setMessage("SPDX License List release "+release).call();
-			}
-			licenseDataGit.push().setCredentialsProvider(githubCredentials).setPushTags().call();
+			if (release != null) {
+				Ref releaseTag = licenseXmlGit.getRepository().getTags().get(release);
+				if (releaseTag == null) {
+					throw new LicensePublisherException("Release "+release+" not found as a tag in the License List XML repository");
+				}
+				licenseXmlGit.checkout().setName(releaseTag.getName()).call();
+			}			
+			publishLicenseList(licenseXmlDir, release, githubCredentials, ignoreWarnings, ignoredWarnings, outputRepository);
 		} catch (IOException e) {
 			throw new LicensePublisherException("I/O Error publishing license list",e);
 		} catch (InvalidRemoteException e) {
@@ -213,17 +306,160 @@ public class LicenseListPublisher {
 			if (licenseXmlGit != null) {
 				licenseXmlGit.close();
 			}
-			if (licenseDataGit != null) {
-				licenseDataGit.close();
-			}
 			if (licenseXmlDir != null) {
 				deleteDir(licenseXmlDir);
+			}
+		}
+	}
+	/**
+	 * Publish a license list to the license data git repository
+	 * @param release license list release name (must be associatd with a tag in the license-list-xml repo)
+	 * @param sourceDirectory Directory containing the source XML files
+	 * @param githubCredentials Credential for the output git repository
+	 * @param ignoredWarnings 
+	 * @param outputRepository URL to the GIT Repository to output the files to
+	 * @throws LicensePublisherException 
+	 * @throws LicenseGeneratorException 
+	 */
+	private static void publishLicenseList(File sourceDirectory, String release, CredentialsProvider githubCredentials,
+			boolean ignoreWarnings, String[] ignoredWarnings, String outputRepository) throws LicensePublisherException, LicenseGeneratorException {		
+		File licenseTestDir = new File(sourceDirectory.getAbsolutePath() + File.separator + TEST_DIRECTORY_PATH);
+		File licenseDataDir = null;
+		Git licenseDataGit = null;
+		try {
+			licenseDataDir = Files.createTempDirectory("LicenseData").toFile();
+			System.out.println("Cloning the license data repository - this could take a while...");
+			licenseDataGit = Git.cloneRepository()
+					.setCredentialsProvider(githubCredentials)
+					.setDirectory(licenseDataDir)
+					.setURI(outputRepository)
+					.call();
+			boolean dataReleaseTagExists = false;
+			if (release != null) {
+				Ref dataReleaseTag = licenseDataGit.getRepository().getTags().get(release);				
+				if (dataReleaseTag != null) {
+					dataReleaseTagExists = true;
+					licenseDataGit.checkout().setName(dataReleaseTag.getName()).call();
+				}
+			}
+			cleanLicenseDataDir(licenseDataDir);
+			String todayDate = new SimpleDateFormat("dd-MMM-yyyy").format(Calendar.getInstance().getTime());
+			String version = null;
+			if (release != null) {
+				version = release;
+			} else {
+				version = getVersionFromGitTag(sourceDirectory);
+			}
+			List<String> warnings = LicenseRDFAGenerator.generateLicenseData(new File(sourceDirectory.getPath() + File.separator + "src"),
+												licenseDataDir, version, todayDate, licenseTestDir);
+			if (warnings.size() > 0 && !ignoreWarnings) {
+				List<String> nonIgnoredWarnings = Lists.newArrayList();
+				for (String warning:warnings) {
+					boolean ignore = false;
+					for (String ignoredWarning:ignoredWarnings) {
+						if (warning.equalsIgnoreCase(ignoredWarning)) {
+							ignore = true;
+							break;
+						}
+					}
+					if (!ignore) {
+						nonIgnoredWarnings.add(warning);
+					}
+				}
+				if (nonIgnoredWarnings.size() > 0) {
+					StringBuilder errorMsg = new StringBuilder("The following errors or warnings occured while processing the license input data:\n");
+					for (String warning:nonIgnoredWarnings) {
+						errorMsg.append(warning);
+						errorMsg.append("\n");
+					}
+					throw new LicensePublisherException(errorMsg.toString());
+				}
+			}
+			licenseDataGit.add().addFilepattern(".").call();
+			String commitMsg = "Auotomated License List Publisher.";
+			if (release != null) {
+				commitMsg += "  License List Version "+release;
+			} else if (version != null) {
+				commitMsg += " for license list tag/commit "+version;
+			}
+			licenseDataGit.commit()
+					.setAll(true)
+					.setCommitter("SPDX License List Publisher", "spdx-tech@lists.spdx.org")
+					.setMessage(commitMsg)
+					.call();
+			if (!dataReleaseTagExists && release != null) {
+				licenseDataGit.tag().setName(release).setMessage("SPDX License List release "+release).call();
+			}
+			licenseDataGit.push().setCredentialsProvider(githubCredentials).setPushTags().call();
+		} catch (IOException e) {
+			throw new LicensePublisherException("I/O Error publishing license list",e);
+		} catch (InvalidRemoteException e) {
+			throw new LicensePublisherException("Invalid remote error trying to access the git repositories",e);
+		} catch (TransportException e) {
+			throw new LicensePublisherException("Transport error trying to access the git repositories",e);
+		} catch (GitAPIException e) {
+			throw new LicensePublisherException("GIT API error trying to access the git repositories",e);
+		} finally {
+			if (licenseDataGit != null) {
+				licenseDataGit.close();
 			}
 			if (licenseDataDir != null) {
 				deleteDir(licenseDataDir);
 			}
 			if (licenseTestDir != null) {
 				deleteDir(licenseTestDir);
+			}
+		}
+	}
+
+	private static String getVersionFromGitTag(File sourceDirectory) throws IOException, GitAPIException {
+		// Search all the commits for all the tags to find the one that matches head
+		// Modeled after jgit cookbook https://github.com/centic9/jgit-cookbook/blob/master/src/main/java/org/dstadler/jgit/porcelain/ListTags.java
+		FileRepositoryBuilder builder = new FileRepositoryBuilder();
+		try (Repository repository = builder.readEnvironment().findGitDir(sourceDirectory).build()) {
+			try (Git git = new Git(repository)) {
+				Ref head = repository.findRef("head");
+				ObjectId headObjectId = head.getObjectId();
+				List<Ref> tagRefs = git.tagList().call();
+				String latestRelease = "";
+				for (Ref tagRef:tagRefs) {
+					if (versionComparer.compare(tagRef.getName(),latestRelease) > 0) {
+						latestRelease = tagRef.getName();
+					}
+					LogCommand log = git.log();
+					Ref peeledTagRef = repository.peel(tagRef);
+					if(peeledTagRef.getPeeledObjectId() != null) {
+                    	log.add(peeledTagRef.getPeeledObjectId());
+                    } else {
+                    	log.add(tagRef.getObjectId());
+                    }
+					Iterable<RevCommit> logs = log.call();
+        			for (RevCommit rev : logs) {
+        				ObjectId revObjectId = rev.getId();
+        				if (revObjectId.equals(headObjectId)) {
+        					String releaseName;
+        					if (tagRef.getName().startsWith("refs/tags/")) {
+        						releaseName = tagRef.getName().substring("refs/tags/".length());
+        					} else {
+        						releaseName = tagRef.getName();
+        					}
+        					return releaseName;
+        				}
+        			}
+				}
+				// Did find a matching tag if we got here, assume that we are on the latest most recent release
+				if (latestRelease.isEmpty()) {
+					return "Unknown";	// We could not find a tag associated with the head branch
+				} else {
+					String releaseName;
+					if (latestRelease.startsWith("refs/tags/")) {
+						releaseName = latestRelease.substring("refs/tags/".length());
+					} else {
+						releaseName = latestRelease;
+					}
+					String qualifier = headObjectId.getName().substring(headObjectId.getName().length()-7);
+					return releaseName + "-" + qualifier;
+				}
 			}
 		}
 	}
@@ -292,12 +528,8 @@ public class LicenseListPublisher {
 	/**
 	 * Print usage
 	 */
-	private static void usage() {
-		System.out.println("Usage:");
-		System.out.println("LicenseListPublisher [--ignoreWarnings] release gitusername gitpassword");
-		System.out.println("where release is the release name of the SPDX License List.  The release must exist as a tag in the spdx/license-list-xml git repository");
-		System.out.println("gituser must have read access to the spdx/license-list-xml repo and read/write access to the spdx/license-list-data repo");
-		System.out.println("The optional --ignoreWarnings will publish even if there are warnings generated.  This must be the first parameter.");
+	private static void usage(Options options) {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("LicenseListPublisher", options);
 	}
-
 }
