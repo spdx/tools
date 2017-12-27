@@ -163,7 +163,7 @@ public class LicenseRDFAGenerator {
 				System.exit(ERROR_STATUS);
 			}
 		}
-		String[] ignoredWarnings = new String[0];;
+		String[] ignoredWarnings = new String[0];
 		if (args.length > 5) {
 			CSVReader reader = null;
 			try {
