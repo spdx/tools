@@ -184,6 +184,7 @@ public class LicenseXmlDocument {
 			}
 			licenseHeader = sbText.toString();
 			licenseHeaderTemplate = sbTemplate.toString();
+			licenseHeaderTemplateHtml = sbHtml.toString();
 		}
 		String template = LicenseXmlHelper.getLicenseTemplate(licenseElement);
 		boolean osiApproved;
