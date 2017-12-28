@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.html.InvalidLicenseTemplateException;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.SpdxListedLicense;
@@ -83,6 +84,7 @@ public class LicenseXmlDocumentTest {
 			"\n   1.e\n   List item 1e\n   2.e\n   List item 2e\n" +
 			"Last Paragraph exc <<var;name=\"altteste\";original=\"Alternate Text exc\";match=\".+\">> Non matching line. e<<beginOptional>> Optional text exc<<endOptional>>";
 	private static final String TEST_DEP_LICENSE_VERSION = "2.2";
+	private static final String AGPL3ONLY_FILE_PATH = "TestFiles" + File.separator + "AGPL-3.0-only.xml";
 
 	/**
 	 * @throws java.lang.Exception
@@ -182,5 +184,16 @@ public class LicenseXmlDocumentTest {
 		Document doc = builder.parse(file);
 		String result = LicenseXmlHelper.dumpLicenseDom((Element) doc.getDocumentElement().getElementsByTagName("license").item(0));
 		assertTrue(result.length() > 0);
+	}
+	
+	@Test
+	public void testRegressionAgpl3Only() throws LicenseXmlException, InvalidSPDXAnalysisException, InvalidLicenseTemplateException {
+		File licenseFile = new File(AGPL3ONLY_FILE_PATH);
+		LicenseXmlDocument doc = new LicenseXmlDocument(licenseFile);
+		List<SpdxListedLicense> licenses = doc.getListedLicenses();
+		assertEquals(1, licenses.size());
+		SpdxListedLicense license = licenses.get(0);
+		String licenseTextHtml = license.getLicenseTextHtml();
+		String licenseHeaderHtml = license.getLicenseHeaderHtml();
 	}
 }
