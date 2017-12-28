@@ -182,20 +182,41 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 					sb.append("</p>\n");
 				}
 			} else if (LICENSEXML_ELEMENT_TITLE_TEXT.equals(tagName)) {
-				
-				//TODO: Don't append optional text if inside an ALT block
+				if (!inALtBlock(element)) {
 				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
-				//appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				} else {
+					appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				}
 			} else if (LICENSEXML_ELEMENT_BULLET.equals(tagName)) {
-				//TODO: Don't append alt text if inside another ALT block
-				appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
-				//appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				if (!inALtBlock(element)) {
+					appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				} else {
+					appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				}
 			} else if (unprocessedTags.contains(tagName)) {
 				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
 			} else if (!skippedTags.contains(tagName)) {
 				throw(new LicenseXmlException("Unknown license element tag name: "+tagName));
 			}
 		}
+	}
+
+	/**
+	 * @param element
+	 * @return true if the element is a child of an alt block
+	 */
+	private static boolean inALtBlock(Element element) {
+		if (LICENSEXML_ELEMENT_ALT.equals(element.getTagName())) {
+			return true;
+		}
+		Node parent = element.getParentNode();
+		while (parent != null) {
+			if (parent.getNodeType() == Node.ELEMENT_NODE && LICENSEXML_ELEMENT_ALT.equals(((Element)(parent)).getTagName())) {
+				return true;
+			}
+			parent = parent.getParentNode();
+		}
+		return false;
 	}
 
 	/**
