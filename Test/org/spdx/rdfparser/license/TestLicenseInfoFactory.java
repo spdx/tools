@@ -286,9 +286,11 @@ public class TestLicenseInfoFactory {
 		String url = "http://www.opensource.org/licenses/BSD-3-Clause";
 		assertEquals(id, lic.getLicenseId());
 		assertEquals(header, lic.getStandardLicenseHeader());
-		String template = readTextFile("TestFiles"+File.separator+"BSD-3-Clause-Template.txt");
+		String template = readTextFile("TestFiles"+File.separator+"BSD-3-Clause.template.txt");
 		String licenseTemplate = lic.getStandardLicenseTemplate();
-		assertEquals(licenseTemplate.replaceAll(" ", "").replaceAll("\n", ""), template.replaceAll(" ", "").replaceAll("\n", ""));
+		String s1 = licenseTemplate.replaceAll(" ", "").replaceAll("\n", "").trim();
+		String s2 = template.replaceAll(" ", "").replaceAll("\n", "").trim();
+		assertEquals(s1, s2);
 		int result = compareStringsIgnoreSpaces(template, licenseTemplate);
 		assertEquals(0, result);
 		assertEquals(note, lic.getComment());

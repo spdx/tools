@@ -168,7 +168,7 @@
       <div property="spdx:isOsiApproved" style="display: none;">{{osiApproved}}</div>
 
       <h2 id="notes">Notes</h2>
-          <p style="margin-left: 20px;">{{notes}}</p>
+          <p style="margin-left: 20px;">{{notes}}{{^notes}}None{{/notes}}</p>
 
       <h2 id="licenseText">Text</h2>
 
@@ -180,6 +180,9 @@
       <div property="spdx:standardLicenseHeader" class="license-text">
         {{^licenseHeader}}<p style="font-style: italic">There is no standard license header for the license</p>{{/licenseHeader}}
         {{&licenseHeader}}
+      </div>
+      <div property="spdx:standardLicenseTemplate" style="display: none;">
+      {{standardLicenseTemplate}}
       </div>
 
     </div> <!-- /page -->
