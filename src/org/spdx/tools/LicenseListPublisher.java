@@ -489,6 +489,7 @@ public class LicenseListPublisher {
 	 */
 	private static void cleanLicenseDataDir(File licenseDataDir) {
 		// Leave the files at the top level and delete files underneath leaving the directories
+		// Skip any directory starting with "."
 		File[] children = licenseDataDir.listFiles();
 		if (children != null) {
 			for (File child:children) {
@@ -500,11 +501,11 @@ public class LicenseListPublisher {
 	}
 
 	/**
-	 * Delete only the files, not the directories
+	 * Delete only the files, not the directories.  Skips files or directories starting with "."
 	 * @param child
 	 */
 	private static void deleteOnlyFiles(File file) {
-		if (file.getName().equals(".git")) {
+		if (file.getName().startsWith(".")) {
 			return;
 		}
 		if (file.isDirectory()) {

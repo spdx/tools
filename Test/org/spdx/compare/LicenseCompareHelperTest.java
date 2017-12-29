@@ -19,12 +19,15 @@ package org.spdx.compare;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.spdx.compare.CompareTemplateOutputHandler.DifferenceDescription;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
@@ -34,6 +37,7 @@ import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.model.UnitTestHelper;
 
 import com.google.common.collect.Maps;
 
@@ -42,6 +46,8 @@ import com.google.common.collect.Maps;
  *
  */
 public class LicenseCompareHelperTest {
+	
+	static final String GPL_2_TEXT = "TestFiles" + File.separator + "GPL-2.0.txt";
 
 	/**
 	 * @throws java.lang.Exception
@@ -586,6 +592,23 @@ public class LicenseCompareHelperTest {
 		assertTrue(LicenseCompareHelper.isSingleTokenString("' "));
 		assertFalse(LicenseCompareHelper.isSingleTokenString("a and"));
 		assertFalse(LicenseCompareHelper.isSingleTokenString("a\nand"));
+	}
+	
+	@Test
+	public void regressionTestMatchingGpl20Only() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
+		String compareText = UnitTestHelper.fileToText(GPL_2_TEXT);
+		DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(LicenseInfoFactory.getListedLicenseById("GPL-2.0-only"), compareText);
+		assertFalse(result.isDifferenceFound());
+	}
+	
+	@Test
+	public void testMatchingStandardLicenseIds() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
+		// This test is too slow!
+//		String compareText = UnitTestHelper.fileToText(GPL_2_TEXT);
+//		String[] result = LicenseCompareHelper.matchingStandardLicenseIds(compareText);
+//		assertEquals(2,result.length);
+//		assertTrue(result[0].startsWith("GPL-2"));
+//		assertTrue(result[1].startsWith("GPL-2"));
 	}
 	
 	@Test
