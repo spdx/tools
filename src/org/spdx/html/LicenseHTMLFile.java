@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -183,8 +184,13 @@ public class LicenseHTMLFile {
 				if (license.getComment() != null && !license.getComment().isEmpty()) {
 					notes = license.getComment();
 				} else {
-					notes = "None";
+					notes = null;
 				}
+				String templateText = license.getStandardLicenseTemplate();
+				if (templateText == null) {
+					templateText = StringEscapeUtils.escapeHtml4(license.getLicenseText());
+				}
+				retval.put("standardLicenseTemplate", templateText);
 				retval.put("notes", notes);
 				retval.put("osiApproved", license.isOsiApproved());
 				retval.put("fsfLibre", license.isFsfLibre());
