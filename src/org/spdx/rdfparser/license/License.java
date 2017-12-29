@@ -51,7 +51,7 @@ public abstract class License extends SimpleLicensingInfo {
 	 * True if the template in the RDF model uses HTML tags.  If this flag is true, the text will
 	 * be converted on import from the model.
 	 */
-	private boolean templateInHtml = true;
+	private boolean templateInHtml = false;
 	protected String standardLicenseHeader;
 	protected String standardLicenseTemplate;
 	protected String licenseText;
