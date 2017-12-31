@@ -173,11 +173,13 @@ public class LicenseRDFAGenerator {
 				System.out.println("IO Error reading ignored errors: "+e.getMessage());
 				System.exit(ERROR_STATUS);
 			} finally {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					System.out.println("IO Error closing ignored errors string: "+e.getMessage());
-					System.exit(ERROR_STATUS);
+				if (reader != null) {
+					try {
+						reader.close();
+					} catch (IOException e) {
+						System.out.println("IO Error closing ignored errors string: "+e.getMessage());
+						System.exit(ERROR_STATUS);
+					}
 				}
 			}
 		}
