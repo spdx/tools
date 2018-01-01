@@ -85,7 +85,7 @@ public class Main {
 						+ "Verify                   inputFile                         TestFiles/SPDXRdfExample.rdf \n"
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
-						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls|inputDirectory outputDirectory [version] [releasedate] [licenseTestFileDirectory] \n"
+						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls|inputDirectory outputDirectory [version] [releasedate] [licenseTestFileDirectory] [warningsToIgnore (either a file or comma separated list)]\n"
 						+ "LicenseListPublisher     -u gitUser -p gitPassword [-r releaseTagOrVersion] [-o outputGitRepository] [--ignoreAllWarnings] [-w warningsToIgnore] [-d inputXmlDirectory] [-x inputXmlRepositoryUrl]"
 						+ "GenerateVerificationCode sourceDirectory\n"
 						+ "Version\n"
