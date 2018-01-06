@@ -168,7 +168,7 @@ public class DoapProject extends RdfModelObject {
 	@Override
 	public List<String> verify() {
 		List<String> retval = Lists.newArrayList();	
-		if (this.homePage != null && !this.homePage.isEmpty()) {
+		if (this.homePage != null && !this.homePage.isEmpty() && !this.getHomePage().equals("UNKNOWN")) {
 			if (!SpdxVerificationHelper.isValidUri(homePage)) {
 				retval.add("Invalid project home page - not a URL");
 			}
