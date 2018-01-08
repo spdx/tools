@@ -313,6 +313,9 @@ public class SnippetSheet extends AbstractSheet {
 	 * @throws SpreadsheetException 
 	 */
 	public SpdxSnippet getSnippet(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
+		if (sheet == null) {
+			return null;
+		}
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
 			return null;

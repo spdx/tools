@@ -319,7 +319,7 @@ public class SpdxItem extends SpdxElement {
 		if (this.licenseConcluded == null) {
 			retval.add("Missing required concluded license for "+name);
 		}
-		if (this.copyrightText == null) {
+		if (this.copyrightText == null || this.copyrightText.isEmpty()) {
 			retval.add("Missing required copyright text for "+name);
 		}
 		addNameToWarnings(retval);
