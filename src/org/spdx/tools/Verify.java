@@ -53,7 +53,7 @@ public class Verify {
 		try {
 			verify = verify(args[0]);
 		} catch (SpdxVerificationException e) {
-			System.out.println(e.getMessage());;
+			System.out.println(e.getMessage());
 			System.exit(ERROR_STATUS);
 		}
 		if (verify.size() > 0) {

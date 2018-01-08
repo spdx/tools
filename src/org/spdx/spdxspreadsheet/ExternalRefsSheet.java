@@ -217,7 +217,7 @@ public class ExternalRefsSheet extends AbstractSheet {
 	 * @return
 	 */
 	public ExternalRef[] getExternalRefsForPkgid(String id, SpdxDocumentContainer container) {
-		if (id == null) {
+		if (id == null || sheet == null) {
 			return new ExternalRef[0];
 		}
 		List<ExternalRef> retval = Lists.newArrayList();
