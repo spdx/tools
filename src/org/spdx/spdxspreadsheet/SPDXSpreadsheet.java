@@ -224,10 +224,10 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		if (retval == null || retval.isEmpty()) {
 			retval = this.annotationsSheet.verify();
 		}
-		if (retval == null || retval.isEmpty()) {
+		if ((retval == null || retval.isEmpty()) && VERSION_2_0_0.compareTo(this.version) < 0) {
 			retval = this.snippetSheet.verify();
 		}
-		if (retval == null || retval.isEmpty()) {
+		if ((retval == null || retval.isEmpty()) && VERSION_2_0_0.compareTo(this.version) < 0) {
 			retval = this.externalRefsSheet.verify();
 		}
 		return retval;
@@ -371,8 +371,12 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		perFileSheet.resizeRows();
 		relationshipsSheet.resizeRows();
 		annotationsSheet.resizeRows();
-		snippetSheet.resizeRows();
-		externalRefsSheet.resizeRows();
+		if (snippetSheet != null) {
+			snippetSheet.resizeRows();
+		}
+		if (externalRefsSheet != null) {
+			externalRefsSheet.resizeRows();
+		}
 //		reviewersSheet.resizeRows(); - Can't resize the review sheet since it uses blank cells
 	}
 }

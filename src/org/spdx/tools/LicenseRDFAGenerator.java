@@ -18,6 +18,7 @@ package org.spdx.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -167,7 +168,12 @@ public class LicenseRDFAGenerator {
 		if (args.length > 5) {
 			CSVReader reader = null;
 			try {
-				reader = new CSVReader(new StringReader(args[5]));
+				File warningsFile = new File(args[5]);
+				if (warningsFile.exists()) {
+					reader = new CSVReader(new FileReader(warningsFile));
+				} else {
+					reader = new CSVReader(new StringReader(args[5]));
+				}
 				ignoredWarnings = reader.readNext();
 			} catch (IOException e) {
 				System.out.println("IO Error reading ignored errors: "+e.getMessage());
@@ -192,6 +198,7 @@ public class LicenseRDFAGenerator {
 					for (String ignoreStr:ignoredWarnings) {
 						if (warning.equalsIgnoreCase(ignoreStr)) {
 							ignore = true;
+							System.out.println("Ignoring warning '"+ignoreStr+"'");
 							break;
 						}
 					}
@@ -577,7 +584,7 @@ public class LicenseRDFAGenerator {
 		System.out.println("   [version] - Version of the SPDX license list");
 		System.out.println("   [releasedate] - Release date of the SPDX license list");
 		System.out.println("   [testfiles] - Directory of original text files to compare the generated licenses against");
-		System.out.println("   [ignoredwarnings] - Comma separated list of warnings to be ignored");
+		System.out.println("   [ignoredwarnings] - Either a file name or a comma separated list of warnings to be ignored");
 	}
 
 }
