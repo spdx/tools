@@ -66,8 +66,12 @@ public class FsfLicenseDataParser {
 
 	static final String FSF_JSON_NAMESPACE = "http://tremily.us/fsf/schema/";
 	static final String PROPERTY_TAGS = "license.jsonldtags";
+	private static final String PROPERTY_KEYWORDS = "keywords";
+	private static final String SCHEMA_ORG_NAMESPACE = "http://schema.org/";
 	private static final String PROPERTY_SPDXID = "license.jsonldspdx";
+	private static final String PROPERTY_IDENTIFIER = "identifier";
 	private static final String PROPERTY_IDENTIFIERS = "license.jsonldidentifiers";
+
 		
 	private static FsfLicenseDataParser fsfLicenseDataParser = null;
 	private Map<String, Boolean> licenseIdToFsfFree;
@@ -112,12 +116,30 @@ public class FsfLicenseDataParser {
 			Model model = ModelFactory.createDefaultModel();
 			model.read(input, null, "JSON-LD");
 			
-			Node p = model.getProperty(FSF_JSON_NAMESPACE, PROPERTY_TAGS).asNode();
+			Node p = model.getProperty(SCHEMA_ORG_NAMESPACE, PROPERTY_KEYWORDS).asNode();
 			Triple m = Triple.createMatch(null, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 			StringWriter sw = new StringWriter();
 			model.write(sw);
 			String debug = sw.toString();
+			
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				if (t.getObject().isLiteral()) {
+					String objectVal = t.getObject().toString(false);
+					if ("libre".equals(objectVal)) {
+						Node subject = t.getSubject();
+						List<String> spdxIds = findSpdxIds(subject, model);
+						for (String spdxId:spdxIds) {
+							this.licenseIdToFsfFree.put(spdxId,true);
+						}
+					}
+				}
+			}
+			// A hack to work around the online version of the full licenses json.ld file may reference the wrong namespace and property
+			p = model.getProperty(FSF_JSON_NAMESPACE, PROPERTY_TAGS).asNode();
+			m = Triple.createMatch(null, p, null);
+			tripleIter = model.getGraph().find(m);	
 			
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
@@ -153,7 +175,25 @@ public class FsfLicenseDataParser {
 	 * @throws LicenseGeneratorException 
 	 */
 	private List<String> findSpdxIds(Node subject, Model model) throws LicenseGeneratorException {
-		Node identifiersProp = model.getProperty(FSF_JSON_NAMESPACE, PROPERTY_IDENTIFIERS).asNode();
+		List<String> retval = findSpdxIds(subject, model, SCHEMA_ORG_NAMESPACE, PROPERTY_IDENTIFIER);
+		if (retval == null || retval.size() == 0) {
+			// Hack in case the a different namespace is used
+			return findSpdxIds(subject, model, FSF_JSON_NAMESPACE, PROPERTY_IDENTIFIERS);
+		} else {
+			return retval;
+		}
+	}
+	
+	/**
+	 * @param subject Subject of the RDF triple which contains the SPDX ID's
+	 * @param model
+	 * @param namespace for the SPDX id property
+	 * @param propertyName for the SPDX id property
+	 * @return all SPDX ID's associated with the subject
+	 * @throws LicenseGeneratorException 
+	 */
+	private List<String> findSpdxIds(Node subject, Model model, String namespace, String propertyName) throws LicenseGeneratorException {
+		Node identifiersProp = model.getProperty(namespace, propertyName).asNode();
 		Triple identifersMatch = Triple.createMatch(subject, identifiersProp, null);
 		ExtendedIterator<Triple> identifiersIterator = model.getGraph().find(identifersMatch);
 		List<String> retval = Lists.newArrayList();
