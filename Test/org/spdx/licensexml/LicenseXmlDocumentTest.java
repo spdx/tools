@@ -60,7 +60,7 @@ public class LicenseXmlDocumentTest {
 			"\n   <<var;name=\"bullet\";original=\"1.\";match=\".{0,20}\">>\n   List item 1\n   <<var;name=\"bullet\";original=\"2.\";match=\".{0,20}\">>\n   List item 2\n" +
 			"Last Paragraph <<var;name=\"alttest\";original=\"Alternate Text\";match=\".+\">> Non matching line.<<beginOptional>> Optional text<<endOptional>>";
 
-	private static final String TEST_DEP_LICENSE_COMMENT = "Test dep note; Notes second line";
+	private static final String TEST_DEP_LICENSE_COMMENT = "Test dep note";
 	private static final String TEST_DEP_LICENSE_ID = "test-dep";
 	private static final String TEST_DEP_LICENSE_TEXT = "Test Copyright dep\nparagraph 1d" +
 			"\n   1.d\n   List item 1d\n   2.d\n   List item 2d\n" +
