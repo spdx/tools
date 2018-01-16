@@ -71,7 +71,6 @@ public class FsfLicenseDataParser {
 	private static final String PROPERTY_SPDXID = "license.jsonldspdx";
 	private static final String PROPERTY_IDENTIFIER = "identifier";
 	private static final String PROPERTY_IDENTIFIERS = "license.jsonldidentifiers";
-
 		
 	private static FsfLicenseDataParser fsfLicenseDataParser = null;
 	private Map<String, Boolean> licenseIdToFsfFree;
@@ -119,10 +118,6 @@ public class FsfLicenseDataParser {
 			Node p = model.getProperty(SCHEMA_ORG_NAMESPACE, PROPERTY_KEYWORDS).asNode();
 			Triple m = Triple.createMatch(null, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
-			StringWriter sw = new StringWriter();
-			model.write(sw);
-			String debug = sw.toString();
-			
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
 				if (t.getObject().isLiteral()) {
