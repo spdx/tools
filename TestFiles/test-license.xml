@@ -1,4 +1,4 @@
-<SPDXLicenseCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.spdx.org/license https://raw.githubusercontent.com/spdx/license-list-XML/schemadev/schema/ListedLicense.xsd" xmlns="http://www.spdx.org/license">
+<SPDXLicenseCollection xmlns="http://www.spdx.org/license">
 	<license name="Test License" licenseId="test-id" isOsiApproved="true">
 		<notes>Test note</notes>
 		<crossRefs>
@@ -9,6 +9,7 @@
     Test header<optional>optional</optional>
     <alt name="h1test" match=".+">var</alt>
   </standardLicenseHeader>
+     <text>
 		<copyrightText>
 			<p>Test Copyright</p>
 		</copyrightText>
@@ -27,6 +28,7 @@
           <alt name="alttest" match=".+">Alternate Text</alt>Non matching line.
           <optional>Optional text</optional>
 		</p>
+	  </text>
 	</license>
 	<license name="Test Deprecated License" licenseId="test-dep" isOsiApproved="false" isDeprecated="true" deprecatedVersion="2.2">
 		<notes>Test dep note</notes>
@@ -37,7 +39,7 @@
 		<standardLicenseHeader> 
     		Test header dep
   		</standardLicenseHeader>
-  		<notes>Notes second line</notes>
+  		<text>
 		<copyrightText>
 			<p>Test Copyright dep</p>
 		</copyrightText>
@@ -56,6 +58,7 @@
           <alt name="alttestd" match=".+">Alternate Text dep</alt>Non matching line dep.
           <optional>Optional text dep</optional>
 		</p>
+		</text>
 	</license>
 	<exception name="Test Exception" licenseId="test-ex">
 		<notes>Test note exception</notes>
@@ -63,6 +66,7 @@
 			<crossRef>http://test/url1e</crossRef>
 			<crossRef>http://test/url2e</crossRef>
 		</crossRefs>
+		<text>
 		<copyrightText>
 			<p>Test Copyrighte</p>
 		</copyrightText>
@@ -81,5 +85,6 @@
           <alt name="altteste" match=".+">Alternate Text exc</alt>Non matching line. e
           <optional>Optional text exc</optional>
 		</p>
+		</text>
 	</exception>
 </SPDXLicenseCollection>
