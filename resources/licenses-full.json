@@ -1,5 +1,24 @@
 {
-  "@context": "https://wking.github.io/fsf-api/schema/licenses.jsonld",
+  "@context": {
+	  "@vocab": "http://tremily.us/fsf/schema/license.jsonld",
+	    "schema": "http://schema.org/",
+	    "identifiers": {
+	      "@id": "schema:identifier"
+	    },
+	    "id": {
+	      "@id": "schema:identifier"
+	    },
+	    "tags": {
+	      "@id": "schema:keywords"
+	    },
+	    "name": {
+	      "@id": "schema:name"
+	    },
+	    "uris": {
+	      "@container": "@list",
+	      "@id": "schema:url"
+	    }
+  },
   "licenses": {
     "ACDL": {
       "name": "Apple's Common Documentation License, Version 1.0",

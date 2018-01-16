@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -63,7 +64,7 @@ public class FsfLicenseDataParser {
 	static final String FSF_JSON_FILE_PATH = "resources" + File.separator + "licenses-full.json";
 	static final String FSF_JSON_CLASS_PATH = "resources/licenses-full.json";
 
-	static final String FSF_JSON_NAMESPACE = "https://wking.github.io/fsf-api/schema/";
+	static final String FSF_JSON_NAMESPACE = "http://tremily.us/fsf/schema/";
 	static final String PROPERTY_TAGS = "license.jsonldtags";
 	private static final String PROPERTY_SPDXID = "license.jsonldspdx";
 	private static final String PROPERTY_IDENTIFIERS = "license.jsonldidentifiers";
@@ -114,6 +115,10 @@ public class FsfLicenseDataParser {
 			Node p = model.getProperty(FSF_JSON_NAMESPACE, PROPERTY_TAGS).asNode();
 			Triple m = Triple.createMatch(null, p, null);
 			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			StringWriter sw = new StringWriter();
+			model.write(sw);
+			String debug = sw.toString();
+			
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
 				if (t.getObject().isLiteral()) {
