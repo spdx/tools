@@ -42,80 +42,33 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	private static final String BULLET_ALT_MATCH = ".{0,20}";
 
 	private static final String BULLET_ALT_NAME = "bullet";
-
-	/**
-	 * Tags that do not require any processing - the text for the children will be included
-	 */
-	static HashSet<String> LICENSE_AND_EXCEPTION_SKIPPED_TAGS = new HashSet<String>();
-	static {
-		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
-		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
-		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
-		LICENSE_AND_EXCEPTION_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
-	}
 	
+	/**
+	 * The text under these elements are included without modification
+	 */
 	static HashSet<String> LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS = new HashSet<String>();
 	static {
 		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
-		//LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
 		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
-		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
-		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
-		//LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TEXT);
+		LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
 	}
 	
-	static HashSet<String> NOTES_SKIPPED_TAGS = new HashSet<String>();
-	static {
-		NOTES_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
-		NOTES_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
-		NOTES_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
-	}
-	
-	static HashSet<String> NOTES_UNPROCESSED_TAGS = new HashSet<String>();
-	static {
-		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
-		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
-		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
-		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
-		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
-		NOTES_UNPROCESSED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
-		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
-	}
-	
-	static HashSet<String> HEADER_SKIPPED_TAGS = new HashSet<String>();
-	static {
-		HEADER_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
-		HEADER_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
-		HEADER_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
-	}
-	
+	/**
+	 * The text under these elements are included without modification
+	 */
 	static HashSet<String> HEADER_UNPROCESSED_TAGS = new HashSet<String>();
 	static {
 		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
 		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
 		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
-		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
-		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
 		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
-		HEADER_UNPROCESSED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
+		HEADER_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
 	}
 	
-	static HashSet<String> EXAMPLE_SKIPPED_TAGS = new HashSet<String>();
+	static HashSet<String> NOTES_UNPROCESSED_TAGS = new HashSet<String>();
 	static {
-		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
-		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REFS);
-		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
-		EXAMPLE_SKIPPED_TAGS.add(SpdxRdfConstants.LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER);
-	}
-	
-	static HashSet<String> EXAMPLE_UNPROCESSED_TAGS = new HashSet<String>();
-	static {
-		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_COPYRIGHT_TEXT);
-		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_TITLE_TEXT);
-		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_ITEM);
-		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_LICENSE);
-		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_EXCEPTION);
-		EXAMPLE_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_BULLET);
+		NOTES_UNPROCESSED_TAGS.add(LICENSEXML_ELEMENT_NOTES);
 	}
 	
 	static HashSet<String> FLOW_CONTROL_ELEMENTS = new HashSet<String>();
@@ -135,13 +88,12 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
 	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
-	 * @param skippedTags Tags that should not be included
 	 * @param includeHtmlTags if true, include HTML tags for creating an HTML fragment including the formatting from the original XML element
 	 * @return
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendNodeText(Node node, boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
-			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
+			boolean includeHtmlTags) throws LicenseXmlException {
 		if (node.getNodeType() == Node.TEXT_NODE) {
 			if (includeHtmlTags) {
 				sb.append(StringEscapeUtils.escapeHtml4(fixUpText(node.getNodeValue())));
@@ -152,7 +104,7 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 			Element element = (Element)node;
 			String tagName = element.getTagName();
 			if (LICENSEXML_ELEMENT_LIST.equals(tagName)) {
-				appendListElements(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendListElements(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_ALT.equals(tagName)) {
 				if (!element.hasAttribute(LICENSEXML_ATTRIBUTE_ALT_NAME)) {
 					throw(new LicenseXmlException("Missing name attribute for variable text"));
@@ -162,40 +114,40 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 					throw(new LicenseXmlException("Missing match attribute for variable text"));
 				}
 				String match = element.getAttribute(LICENSEXML_ATTRIBUTE_ALT_MATCH);
-				appendAltText(element, altName, match, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendAltText(element, altName, match, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_OPTIONAL.equals(tagName)) {
-				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_BREAK.equals(tagName)) {
 				if (includeHtmlTags) {
 					sb.append("<br>");
 				}
 				addNewline(sb, indentCount);
-				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 			} else if (LICENSEXML_ELEMENT_PARAGRAPH.equals(tagName)) {
 				if (includeHtmlTags) {
 					appendParagraphTag(sb, indentCount);
 				} else if (sb.length() > 1) {
 					addNewline(sb, indentCount);
 				}
-				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 				if (includeHtmlTags) {
 					sb.append("</p>\n");
 				}
 			} else if (LICENSEXML_ELEMENT_TITLE_TEXT.equals(tagName)) {
 				if (!inALtBlock(element)) {
-				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+				appendOptionalText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 				} else {
-					appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+					appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 				}
 			} else if (LICENSEXML_ELEMENT_BULLET.equals(tagName)) {
 				if (!inALtBlock(element)) {
-					appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+					appendAltText(element, BULLET_ALT_NAME, BULLET_ALT_MATCH, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 				} else {
-					appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+					appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
 				}
 			} else if (unprocessedTags.contains(tagName)) {
-				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
-			} else if (!skippedTags.contains(tagName)) {
+				appendElementChildrenText(element, useTemplateFormat, sb, indentCount, unprocessedTags, includeHtmlTags);
+			} else {
 				throw(new LicenseXmlException("Unknown license element tag name: "+tagName));
 			}
 		}
@@ -278,17 +230,16 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
 	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
-	 * @param skippedTags Tags that should not be included
 	 * @param includeHtmlTags if true, include HTML tags for creating an HTML fragment including the formatting from the original XML element
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendElementChildrenText(Element element,
 			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
-			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
+			boolean includeHtmlTags) throws LicenseXmlException {
 		NodeList licenseChildNodes = element.getChildNodes();
 		for (int i = 0; i < licenseChildNodes.getLength(); i++) {
 			appendNodeText(licenseChildNodes.item(i),useTemplateFormat, sb, indentCount, 
-					unprocessedTags, skippedTags, includeHtmlTags);
+					unprocessedTags, includeHtmlTags);
 		}	
 	}
 
@@ -312,16 +263,15 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
 	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
-	 * @param skippedTags Tags that should not be included
 	 * @param includeHtmlTags if true, include HTML tags for creating an HTML fragment including the formatting from the original XML element
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendOptionalText(Element element,
 			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
-			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
+			boolean includeHtmlTags) throws LicenseXmlException {
 		StringBuilder childSb = new StringBuilder();
 		if (element.hasChildNodes()) {
-			appendElementChildrenText(element, useTemplateFormat, childSb, indentCount, unprocessedTags, skippedTags, includeHtmlTags);
+			appendElementChildrenText(element, useTemplateFormat, childSb, indentCount, unprocessedTags, includeHtmlTags);
 		} else {
 			childSb.append(element.getTextContent());
 		}
@@ -390,17 +340,16 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param sb Stringbuilder to append the text to
 	 * @param indentCount number of indentations (e.g. number of embedded lists)
 	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
-	 * @param skippedTags Tags that should not be included
 	 * @param includeHtmlTags if true, include HTML tags for creating an HTML fragment including the formatting from the original XML element
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendAltText(Element element, String altName, String match,
 			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
-			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
+			boolean includeHtmlTags) throws LicenseXmlException {
 		StringBuilder originalSb = new StringBuilder();
 		if (element.hasChildNodes()) {
 			appendElementChildrenText(element, useTemplateFormat, originalSb, indentCount, 
-					unprocessedTags, skippedTags, includeHtmlTags);
+					unprocessedTags, includeHtmlTags);
 		} else {
 			originalSb.append(element.getTextContent());
 		}
@@ -447,13 +396,12 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @param sb
 	 * @param indentCount Number of indentations for the text
 	 * @param unprocessedTags Tags that do not require any process - text of the children of that tag should just be appended.
-	 * @param skippedTags Tags that should not be included
 	 * @param includeHtmlTags if true, include HTML tags for creating an HTML fragment including the formatting from the original XML element
 	 * @throws LicenseXmlException 
 	 */
 	private static void appendListElements(Element element,
 			boolean useTemplateFormat, StringBuilder sb, int indentCount, HashSet<String> unprocessedTags,
-			HashSet<String> skippedTags, boolean includeHtmlTags) throws LicenseXmlException {
+			boolean includeHtmlTags) throws LicenseXmlException {
 		if (!LICENSEXML_ELEMENT_LIST.equals(element.getTagName())) {
 			throw(new LicenseXmlException("Invalid list element tag - expected 'list', found '"+element.getTagName()+"'"));
 		}
@@ -467,16 +415,16 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 				if (LICENSEXML_ELEMENT_ITEM.equals(listItem.getTagName())) {
 					if (includeHtmlTags) {
 						sb.append("\n<li>");
-						appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, skippedTags, includeHtmlTags);
+						appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, includeHtmlTags);
 						sb.append("</li>");
 					} else {
 						addNewline(sb, indentCount+1);
-						appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, skippedTags, includeHtmlTags);
+						appendNodeText(listItem, useTemplateFormat, sb, indentCount + 1, unprocessedTags, includeHtmlTags);
 					}
 					
 				} else if (LICENSEXML_ELEMENT_LIST.equals(listItem.getTagName())) {
 					appendListElements(listItem, useTemplateFormat, sb, indentCount+1,
-							unprocessedTags, skippedTags, includeHtmlTags);
+							unprocessedTags, includeHtmlTags);
 				} else {
 					throw(new LicenseXmlException("Expected only list item tags ('item') or lists ('list') in a list, found "+listItem.getTagName()));
 				}
@@ -496,9 +444,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @throws LicenseXmlException 
 	 */
 	public static String getLicenseTemplate(Element licenseElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_TEXT.equals(licenseElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_TEXT+"'"+licenseElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, true, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, 
-				LICENSE_AND_EXCEPTION_SKIPPED_TAGS, false);
+		appendNodeText(licenseElement, true, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, false);
 		return fixUpText(sb.toString());
 	}
 	
@@ -509,8 +459,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @throws LicenseXmlException
 	 */
 	public static String getNoteText(Element licenseElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_NOTES.equals(licenseElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_NOTES+"'"+licenseElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, false, sb, 0, NOTES_UNPROCESSED_TAGS, NOTES_SKIPPED_TAGS, false);
+		appendNodeText(licenseElement, false, sb, 0, NOTES_UNPROCESSED_TAGS, false);
 		return sb.toString();
 	}
 
@@ -521,9 +474,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @throws LicenseXmlException 
 	 */
 	public static String getLicenseText(Element licenseElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_TEXT.equals(licenseElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_TEXT+"'"+licenseElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, 
-				LICENSE_AND_EXCEPTION_SKIPPED_TAGS, false);
+		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, false);
 		return fixUpText(sb.toString());
 	}
 	
@@ -561,46 +516,44 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	}
 
 	/**
-	 * @param headerNode
+	 * @param headerElement
 	 * @return header text where headerNode is the root element
 	 * @throws LicenseXmlException 
 	 */
-	public static Object getHeaderText(Node headerNode) throws LicenseXmlException {
+	public static Object getHeaderText(Element headerElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER.equals(headerElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER+"'"+headerElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(headerNode, false, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, false);
+		appendNodeText(headerElement, false, sb, 0, HEADER_UNPROCESSED_TAGS, false);
 		return fixUpText(sb.toString());
 	}
 	
 	/**
-	 * @param headerNode
+	 * @param headerElement
 	 * @return header template where headerNode is the root element
 	 * @throws LicenseXmlException 
 	 */
-	public static Object getHeaderTemplate(Node headerNode) throws LicenseXmlException {
+	public static Object getHeaderTemplate(Element headerElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER.equals(headerElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER+"'"+headerElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(headerNode, true, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, false);
+		appendNodeText(headerElement, true, sb, 0, HEADER_UNPROCESSED_TAGS, false);
 		return fixUpText(sb.toString());
 	}
 	
 	/**
-	 * @param headerNode
+	 * @param headerElement
 	 * @return header html fragment where headerNode is the root element
 	 * @throws LicenseXmlException 
 	 */
-	public static Object getHeaderTextHtml(Node headerNode) throws LicenseXmlException {
+	public static Object getHeaderTextHtml(Element headerElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER.equals(headerElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_STANDARD_LICENSE_HEADER+"'"+headerElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(headerNode, false, sb, 0, HEADER_UNPROCESSED_TAGS, HEADER_SKIPPED_TAGS, true);
-		return fixUpText(sb.toString());
-	}
-
-	/**
-	 * @param exampleElement
-	 * @return Example text where exampleElement is the root element
-	 * @throws LicenseXmlException 
-	 */
-	public static String getExampleText(Element exampleElement) throws LicenseXmlException {
-		StringBuilder sb = new StringBuilder();
-		appendNodeText(exampleElement, false, sb, 0, EXAMPLE_UNPROCESSED_TAGS, EXAMPLE_SKIPPED_TAGS, false);
+		appendNodeText(headerElement, false, sb, 0, HEADER_UNPROCESSED_TAGS, true);
 		return fixUpText(sb.toString());
 	}
 
@@ -619,8 +572,11 @@ public class LicenseXmlHelper implements SpdxRdfConstants {
 	 * @throws LicenseXmlException 
 	 */
 	public static String getLicenseTextHtml(Element licenseElement) throws LicenseXmlException {
+		if (!LICENSEXML_ELEMENT_TEXT.equals(licenseElement.getTagName())) {
+			throw(new LicenseXmlException("Invalid element tag name - expected '"+LICENSEXML_ELEMENT_TEXT+"'"+licenseElement.getTagName()+"'"));
+		}
 		StringBuilder sb = new StringBuilder();
-		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, LICENSE_AND_EXCEPTION_SKIPPED_TAGS, true);
+		appendNodeText(licenseElement, false, sb, 0, LICENSE_AND_EXCEPTION_UNPROCESSED_TAGS, true);
 		return fixUpText(sb.toString());
 	}
 

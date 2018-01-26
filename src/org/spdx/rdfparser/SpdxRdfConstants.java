@@ -308,5 +308,6 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ATTRIBUTE_ALT_NAME = "name";
 	public static final String LICENSEXML_ATTRIBUTE_ALT_MATCH = "match";
 	public static final String LICENSEXML_ELEMENT_BREAK = "br";
+	public static final String LICENSEXML_ELEMENT_TEXT = "text";
 	
 }
