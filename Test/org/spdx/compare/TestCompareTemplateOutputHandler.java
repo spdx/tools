@@ -75,6 +75,10 @@ public class TestCompareTemplateOutputHandler {
 	static final String CECILL2_TEMPLATE = "TestFiles" + File.separator + "CECILL-2.0.template.txt";
 	static final String BSD_1_CLAUSE_TEXT = "TestFiles" + File.separator + "BSD-1-Clause.txt";
 	static final String BSD_1_CLAUSE_TEMPLATE = "TestFiles" + File.separator + "BSD-1-Clause.template.txt";
+	static final String LPPL_1_3_A_TEXT = "TestFiles" + File.separator + "LPPL-1.3a.txt";
+	static final String LPPL_1_3_A_TEMPLATE = "TestFiles" + File.separator + "LPPL-1.3a.template.txt";
+	static final String LPPL_1_3_C_TEXT = "TestFiles" + File.separator + "LPPL-1.3c.txt";
+	static final String LPPL_1_3_C_TEMPLATE = "TestFiles" + File.separator + "LPPL-1.3c.template.txt";
 	
 	/**
 	 * @throws java.lang.Exception
@@ -488,6 +492,28 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionBSD1Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(BSD_1_CLAUSE_TEXT);
 		String templateText = UnitTestHelper.fileToText(BSD_1_CLAUSE_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testRegressionLppl13a() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(LPPL_1_3_A_TEXT);
+		String templateText = UnitTestHelper.fileToText(LPPL_1_3_A_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testRegressionLppl13c() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(LPPL_1_3_C_TEXT);
+		String templateText = UnitTestHelper.fileToText(LPPL_1_3_C_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
