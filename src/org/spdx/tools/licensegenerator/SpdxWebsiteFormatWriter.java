@@ -218,7 +218,7 @@ public class SpdxWebsiteFormatWriter implements ILicenseFormatWriter {
 		}	
 		licJson.setLicense(license, deprecated);
 		licJson.writeToFile(licJsonFile);
-		tableOfContentsJSON.addLicense(license, licHTMLReference, licJSONReference, false);
+		tableOfContentsJSON.addLicense(license, licHTMLReference, licJSONReference, deprecated);
 		if (deprecated) {
 			tableOfContentsHTML.addDeprecatedLicense(new DeprecatedLicenseInfo(license, deprecatedVersion), licHTMLReference);
 		} else {

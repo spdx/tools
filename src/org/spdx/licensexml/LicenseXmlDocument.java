@@ -17,9 +17,11 @@
 package org.spdx.licensexml;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +56,11 @@ import org.xml.sax.SAXParseException;
 public class LicenseXmlDocument {
 	static final Logger logger = LoggerFactory.getLogger(LicenseXmlDocument.class.getName());
 	
+	public static final String PROP_SCHEMA_FILENAME = "listedLicenseSchema";
+	public static final String LICENSE_XML_SCHEMA_URL = "https://raw.githubusercontent.com/spdx/license-list-XML/master/schema/ListedLicense.xsd";
 	public static final String LICENSE_XML_SCHEMA_LOCATION = "org/spdx/licensexml/ListedLicense.xsd";
 
+	private static Schema _schema = null;	// cache of the license XML schema
 	private Document xmlDocument;
 
 	/**
@@ -81,18 +86,60 @@ public class LicenseXmlDocument {
 		}
 		assertValid(file);
 	}
+	
+	/**
+	 * @return listed license XML schema
+	 * @throws LicenseXmlException
+	 */
+	private synchronized Schema getSchema() throws LicenseXmlException {
+		if (_schema == null) {
+			InputStream schemaIs = null;
+			try {
+				String schemaFilePath = System.getProperty(PROP_SCHEMA_FILENAME);
+				if (schemaFilePath != null) {
+					try {
+					schemaIs = new FileInputStream(schemaFilePath);
+					} catch (IOException e) {
+						logger.error("IO Exception opening specified schema file "+schemaFilePath,e);
+						throw new LicenseXmlException("Invalid license XML schema file");
+					}
+				} else {
+					try {
+						URL schemaUrl = new URL(LICENSE_XML_SCHEMA_URL);
+						schemaIs = schemaUrl.openStream();
+					} catch (Exception e) {
+						logger.warn("Unable to open license XML schema URL, using cached copy",e);
+					}
+					if (schemaIs == null) {
+						schemaIs = LicenseXmlDocument.class.getClassLoader().getResourceAsStream(LICENSE_XML_SCHEMA_LOCATION);			
+					}
+				}
+				Source schemaSource = new StreamSource(schemaIs);
+				SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				_schema = schemaFactory.newSchema(schemaSource);
+			} catch (SAXException e) {
+				logger.error("Invalid schema file",e);
+				throw new LicenseXmlException("Invalid Listed License Schema",e);
+			} finally {
+				if (schemaIs != null) {
+					try {
+						schemaIs.close();
+					} catch (IOException e) {
+						logger.warn("Unable to close Schema stream",e);
+					}
+				}
+			}		
+		}
+		return _schema;
+	}
 
 	/**
 	 * Checks the xmlDocument for a valid file and throws a LicenseXmlException if not valid
 	 */
-	private void assertValid(File licenseXmlFile) throws LicenseXmlException {
-		InputStream schemaIs = null;
-		try {
-			schemaIs = LicenseXmlDocument.class.getClassLoader().getResourceAsStream(LICENSE_XML_SCHEMA_LOCATION);			
+	private void assertValid(File licenseXmlFile) throws LicenseXmlException {		
+		try {			
 			Source xmlSource = new StreamSource(licenseXmlFile);
-			Source schemaSource = new StreamSource(schemaIs);
-			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = schemaFactory.newSchema(schemaSource);
+			Schema schema = getSchema();
 			Validator validator = schema.newValidator();
 			validator.validate(xmlSource);
 		} catch (MalformedURLException e) {
@@ -107,14 +154,6 @@ public class LicenseXmlDocument {
 		} catch (IOException e) {
 			logger.error("IO Error validating license XML file",e);
 			throw new LicenseXmlException("IO Error validating license XML file");
-		} finally {
-			if (schemaIs != null) {
-				try {
-					schemaIs.close();
-				} catch (IOException e) {
-					logger.warn("IO Exception closing schema file: "+e.getMessage());
-				}
-			}
 		}
 	}
 
@@ -147,7 +186,12 @@ public class LicenseXmlDocument {
 		String id = licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_ID);
 		boolean deprecated = licenseElement.hasAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_DEPRECATED) &&
 				"true".equals(licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_DEPRECATED).toLowerCase());
-		String text = LicenseXmlHelper.getLicenseText(licenseElement);
+		NodeList textNodes = licenseElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_TEXT);
+		if (textNodes.getLength() != 1) {
+			throw new LicenseXmlException("Invalid number of text elements.  Expected 1 - found "+textNodes.getLength());
+		}
+		Element textElement = (Element)textNodes.item(0);
+		String text = LicenseXmlHelper.getLicenseText(textElement);
 		NodeList notes = licenseElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
 		String comment = null;
 		if (notes.getLength() > 0) {
@@ -171,22 +215,22 @@ public class LicenseXmlDocument {
 			StringBuilder sbText = new StringBuilder();
 			StringBuilder sbTemplate = new StringBuilder();
 			StringBuilder sbHtml = new StringBuilder();
-			sbText.append(LicenseXmlHelper.getHeaderText(headerNodes.item(0)));
-			sbTemplate.append(LicenseXmlHelper.getHeaderTemplate(headerNodes.item(0)));
-			sbHtml.append(LicenseXmlHelper.getHeaderTextHtml(headerNodes.item(0)));
+			sbText.append(LicenseXmlHelper.getHeaderText((Element)headerNodes.item(0)));
+			sbTemplate.append(LicenseXmlHelper.getHeaderTemplate((Element)headerNodes.item(0)));
+			sbHtml.append(LicenseXmlHelper.getHeaderTextHtml((Element)headerNodes.item(0)));
 			for (int i = 1; i < headerNodes.getLength(); i++) {
 				sbText.append('\n');
-				sbText.append(LicenseXmlHelper.getHeaderText(headerNodes.item(i)));
+				sbText.append(LicenseXmlHelper.getHeaderText((Element)headerNodes.item(i)));
 				sbTemplate.append('\n');
-				sbTemplate.append(LicenseXmlHelper.getHeaderTemplate(headerNodes.item(i)));
+				sbTemplate.append(LicenseXmlHelper.getHeaderTemplate((Element)headerNodes.item(i)));
 				sbHtml.append("<br />\n");
-				sbHtml.append(LicenseXmlHelper.getHeaderTextHtml(headerNodes.item(i)));
+				sbHtml.append(LicenseXmlHelper.getHeaderTextHtml((Element)headerNodes.item(i)));
 			}
 			licenseHeader = sbText.toString();
 			licenseHeaderTemplate = sbTemplate.toString();
 			licenseHeaderTemplateHtml = sbHtml.toString();
 		}
-		String template = LicenseXmlHelper.getLicenseTemplate(licenseElement);
+		String template = LicenseXmlHelper.getLicenseTemplate(textElement);
 		boolean osiApproved;
 		if (licenseElement.hasAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_OSI_APPROVED)) {
 			osiApproved = "true".equals(licenseElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_OSI_APPROVED).toLowerCase());
@@ -199,7 +243,7 @@ public class LicenseXmlDocument {
 		} else {
 			fsfLibre = false;
 		}
-		String licenseHtml = LicenseXmlHelper.getLicenseTextHtml(licenseElement);
+		String licenseHtml = LicenseXmlHelper.getLicenseTextHtml(textElement);
 		SpdxListedLicense retval = new SpdxListedLicense(name, id, text, sourceUrls, comment, licenseHeader, 
 				template, licenseHeaderTemplate, osiApproved, fsfLibre, licenseHtml, licenseHeaderTemplateHtml);
 		retval.setDeprecated(deprecated);
@@ -224,9 +268,14 @@ public class LicenseXmlDocument {
 	private LicenseException getException(Element exceptionElement) throws LicenseXmlException {
 		String name = exceptionElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_NAME);
 		String id = exceptionElement.getAttribute(SpdxRdfConstants.LICENSEXML_ATTRIBUTE_ID);
-		String text = LicenseXmlHelper.getLicenseText(exceptionElement);
-		String template = LicenseXmlHelper.getLicenseTemplate(exceptionElement);
-		String html = LicenseXmlHelper.getLicenseTextHtml(exceptionElement);
+		NodeList textNodes = exceptionElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_TEXT);
+		if (textNodes.getLength() != 1) {
+			throw new LicenseXmlException("Invalid number of text elements.  Expected 1 - found "+textNodes.getLength());
+		}
+		Element textElement = (Element)textNodes.item(0);
+		String text = LicenseXmlHelper.getLicenseText(textElement);
+		String template = LicenseXmlHelper.getLicenseTemplate(textElement);
+		String html = LicenseXmlHelper.getLicenseTextHtml(textElement);
 		NodeList notes = exceptionElement.getElementsByTagName(SpdxRdfConstants.LICENSEXML_ELEMENT_NOTES);
 		String comment = null;
 		if (notes.getLength() > 0) {
