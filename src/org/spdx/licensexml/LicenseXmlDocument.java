@@ -17,9 +17,11 @@
 package org.spdx.licensexml;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +56,11 @@ import org.xml.sax.SAXParseException;
 public class LicenseXmlDocument {
 	static final Logger logger = LoggerFactory.getLogger(LicenseXmlDocument.class.getName());
 	
+	public static final String PROP_SCHEMA_FILENAME = "listedLicenseSchema";
+	public static final String LICENSE_XML_SCHEMA_URL = "https://raw.githubusercontent.com/spdx/license-list-XML/master/schema/ListedLicense.xsd";
 	public static final String LICENSE_XML_SCHEMA_LOCATION = "org/spdx/licensexml/ListedLicense.xsd";
 
+	private static Schema _schema = null;	// cache of the license XML schema
 	private Document xmlDocument;
 
 	/**
@@ -81,18 +86,60 @@ public class LicenseXmlDocument {
 		}
 		assertValid(file);
 	}
+	
+	/**
+	 * @return listed license XML schema
+	 * @throws LicenseXmlException
+	 */
+	private synchronized Schema getSchema() throws LicenseXmlException {
+		if (_schema == null) {
+			InputStream schemaIs = null;
+			try {
+				String schemaFilePath = System.getProperty(PROP_SCHEMA_FILENAME);
+				if (schemaFilePath != null) {
+					try {
+					schemaIs = new FileInputStream(schemaFilePath);
+					} catch (IOException e) {
+						logger.error("IO Exception opening specified schema file "+schemaFilePath,e);
+						throw new LicenseXmlException("Invalid license XML schema file");
+					}
+				} else {
+					try {
+						URL schemaUrl = new URL(LICENSE_XML_SCHEMA_URL);
+						schemaIs = schemaUrl.openStream();
+					} catch (Exception e) {
+						logger.warn("Unable to open license XML schema URL, using cached copy",e);
+					}
+					if (schemaIs == null) {
+						schemaIs = LicenseXmlDocument.class.getClassLoader().getResourceAsStream(LICENSE_XML_SCHEMA_LOCATION);			
+					}
+				}
+				Source schemaSource = new StreamSource(schemaIs);
+				SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				_schema = schemaFactory.newSchema(schemaSource);
+			} catch (SAXException e) {
+				logger.error("Invalid schema file",e);
+				throw new LicenseXmlException("Invalid Listed License Schema",e);
+			} finally {
+				if (schemaIs != null) {
+					try {
+						schemaIs.close();
+					} catch (IOException e) {
+						logger.warn("Unable to close Schema stream",e);
+					}
+				}
+			}		
+		}
+		return _schema;
+	}
 
 	/**
 	 * Checks the xmlDocument for a valid file and throws a LicenseXmlException if not valid
 	 */
-	private void assertValid(File licenseXmlFile) throws LicenseXmlException {
-		InputStream schemaIs = null;
-		try {
-			schemaIs = LicenseXmlDocument.class.getClassLoader().getResourceAsStream(LICENSE_XML_SCHEMA_LOCATION);			
+	private void assertValid(File licenseXmlFile) throws LicenseXmlException {		
+		try {			
 			Source xmlSource = new StreamSource(licenseXmlFile);
-			Source schemaSource = new StreamSource(schemaIs);
-			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = schemaFactory.newSchema(schemaSource);
+			Schema schema = getSchema();
 			Validator validator = schema.newValidator();
 			validator.validate(xmlSource);
 		} catch (MalformedURLException e) {
@@ -107,14 +154,6 @@ public class LicenseXmlDocument {
 		} catch (IOException e) {
 			logger.error("IO Error validating license XML file",e);
 			throw new LicenseXmlException("IO Error validating license XML file");
-		} finally {
-			if (schemaIs != null) {
-				try {
-					schemaIs.close();
-				} catch (IOException e) {
-					logger.warn("IO Exception closing schema file: "+e.getMessage());
-				}
-			}
 		}
 	}
 
