@@ -15,23 +15,23 @@
  */
 package org.spdx.tools.licensegenerator;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.ParseException;
+import org.apache.jena.ext.com.google.common.collect.Lists;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.iterator.ExtendedIterator;
 import org.spdx.tools.LicenseGeneratorException;
 
 import com.google.common.collect.Maps;
@@ -63,7 +63,15 @@ public class FsfLicenseDataParser {
 	static final String DEFAULT_FSF_JSON_URL = "https://wking.github.io/fsf-api/licenses-full.json";
 	static final String FSF_JSON_FILE_PATH = "resources" + File.separator + "licenses-full.json";
 	static final String FSF_JSON_CLASS_PATH = "resources/licenses-full.json";
-	
+
+	static final String FSF_JSON_NAMESPACE = "http://tremily.us/fsf/schema/";
+	static final String PROPERTY_TAGS = "license.jsonldtags";
+	private static final String PROPERTY_KEYWORDS = "keywords";
+	private static final String SCHEMA_ORG_NAMESPACE = "http://schema.org/";
+	private static final String PROPERTY_SPDXID = "license.jsonldspdx";
+	private static final String PROPERTY_IDENTIFIER = "identifier";
+	private static final String PROPERTY_IDENTIFIERS = "license.jsonldidentifiers";
+		
 	private static FsfLicenseDataParser fsfLicenseDataParser = null;
 	private Map<String, Boolean> licenseIdToFsfFree;
 	private boolean useOnlyLocalFile = false;
@@ -73,73 +81,139 @@ public class FsfLicenseDataParser {
 		licenseIdToFsfFree = Maps.newHashMap();
 		useOnlyLocalFile = Boolean.parseBoolean(System.getProperty(PROP_USE_ONLY_LOCAL_FILE, "false"));
 		licenseJsonUrl = System.getProperty(PROP_FSF_FREE_JSON_URL, DEFAULT_FSF_JSON_URL);
-		Reader reader = null;
+		InputStream input = null;
+		ClassLoader oldContextCL = Thread.currentThread().getContextClassLoader();
 		try {
+			Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 			if (!useOnlyLocalFile) {
 				// First, try the URL
 				try {
 					URL url = new URL(licenseJsonUrl);
-					reader = new BufferedReader(new InputStreamReader(url.openStream()));
+					input = url.openStream();
 				} catch (MalformedURLException e) {
-					reader = null;
+					input = null;
 				} catch (IOException e) {
-					reader = null;
+					input = null;
 				}
 			}
-			if (reader == null) {
+			if (input == null) {
 				// try the file system
 				try {
-					reader = new BufferedReader(new FileReader(FSF_JSON_FILE_PATH));
+					input = new FileInputStream(FSF_JSON_FILE_PATH);
 				} catch (FileNotFoundException e) {
-					reader = null;
+					input = null;
 				}
 			}
-			if (reader == null) {
+			if (input == null) {
 				try {
-					reader = new BufferedReader(new FileReader(FSF_JSON_CLASS_PATH));
+					input = new FileInputStream(FSF_JSON_FILE_PATH);
 				} catch (FileNotFoundException e) {
 					throw new LicenseGeneratorException("Unable to open reader for the FSF API");
 				}
 			}
-			JSONObject fsfLicenses = (JSONObject)JSONValue.parseWithException(reader);
-			@SuppressWarnings("unchecked")
-			Iterator<Entry<String, JSONObject>> iter = fsfLicenses.entrySet().iterator();
-			while (iter.hasNext()) {
-				Entry<String, JSONObject> entry = iter.next();
-				JSONObject fsfLicense = (JSONObject)entry.getValue();
-				JSONObject identifiers = (JSONObject)fsfLicense.get("identifiers");
-				if (identifiers != null) {
-					String spdxId = (String)identifiers.get("spdx");
-					if (spdxId != null) {
-						Boolean fsfLibre = false;
-						JSONArray tags = (JSONArray)fsfLicense.get("tags");
-						if (tags != null) {
-							for (Object tag:tags) {
-								if ("libre".equals(tag)) {
-									fsfLibre = true;
-									break;
-								}
-							}
+
+			Model model = ModelFactory.createDefaultModel();
+			model.read(input, null, "JSON-LD");
+			
+			Node p = model.getProperty(SCHEMA_ORG_NAMESPACE, PROPERTY_KEYWORDS).asNode();
+			Triple m = Triple.createMatch(null, p, null);
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				if (t.getObject().isLiteral()) {
+					String objectVal = t.getObject().toString(false);
+					if ("libre".equals(objectVal)) {
+						Node subject = t.getSubject();
+						List<String> spdxIds = findSpdxIds(subject, model);
+						for (String spdxId:spdxIds) {
+							this.licenseIdToFsfFree.put(spdxId,true);
 						}
-						this.licenseIdToFsfFree.put(spdxId, fsfLibre);
 					}
 				}
 			}
-		} catch (IOException e) {
-			throw new LicenseGeneratorException("IO error reading FSF license information");
-		} catch (ParseException e) {
-			throw new LicenseGeneratorException("Parsing error reading FSF license information");
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					throw new LicenseGeneratorException("Unable to close reader for the FSF API");
+			// A hack to work around the online version of the full licenses json.ld file may reference the wrong namespace and property
+			p = model.getProperty(FSF_JSON_NAMESPACE, PROPERTY_TAGS).asNode();
+			m = Triple.createMatch(null, p, null);
+			tripleIter = model.getGraph().find(m);	
+			
+			while (tripleIter.hasNext()) {
+				Triple t = tripleIter.next();
+				if (t.getObject().isLiteral()) {
+					String objectVal = t.getObject().toString(false);
+					if ("libre".equals(objectVal)) {
+						Node subject = t.getSubject();
+						List<String> spdxIds = findSpdxIds(subject, model);
+						for (String spdxId:spdxIds) {
+							this.licenseIdToFsfFree.put(spdxId,true);
+						}
+					}
 				}
 			}
+		} catch(Exception ex) {
+			throw new LicenseGeneratorException("Error parsing FSF license data");
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					throw new LicenseGeneratorException("Unable to close input for the FSF API");
+				}
+			}
+			Thread.currentThread().setContextClassLoader(oldContextCL);
 		}
 	}
 	
+	/**
+	 * @param subject Subject of the RDF triple which contains the SPDX ID's
+	 * @param model
+	 * @return all SPDX ID's associated with the subject
+	 * @throws LicenseGeneratorException 
+	 */
+	private List<String> findSpdxIds(Node subject, Model model) throws LicenseGeneratorException {
+		List<String> retval = findSpdxIds(subject, model, SCHEMA_ORG_NAMESPACE, PROPERTY_IDENTIFIER);
+		if (retval == null || retval.size() == 0) {
+			// Hack in case the a different namespace is used
+			return findSpdxIds(subject, model, FSF_JSON_NAMESPACE, PROPERTY_IDENTIFIERS);
+		} else {
+			return retval;
+		}
+	}
+	
+	/**
+	 * @param subject Subject of the RDF triple which contains the SPDX ID's
+	 * @param model
+	 * @param namespace for the SPDX id property
+	 * @param propertyName for the SPDX id property
+	 * @return all SPDX ID's associated with the subject
+	 * @throws LicenseGeneratorException 
+	 */
+	private List<String> findSpdxIds(Node subject, Model model, String namespace, String propertyName) throws LicenseGeneratorException {
+		Node identifiersProp = model.getProperty(namespace, propertyName).asNode();
+		Triple identifersMatch = Triple.createMatch(subject, identifiersProp, null);
+		ExtendedIterator<Triple> identifiersIterator = model.getGraph().find(identifersMatch);
+		List<String> retval = Lists.newArrayList();
+		while (identifiersIterator.hasNext()) {
+			Node identifiersObject = identifiersIterator.next().getObject();
+			if (identifiersObject == null) {
+				continue;
+			}
+			Node spdxIdProp = model.getProperty(FSF_JSON_NAMESPACE, PROPERTY_SPDXID).asNode();
+			Triple spdxIdMatch = Triple.createMatch(identifiersObject, spdxIdProp, null);
+			ExtendedIterator<Triple> spdxIdIterator = model.getGraph().find(spdxIdMatch);
+			while (spdxIdIterator.hasNext()) {
+				Node spdxIdObject = spdxIdIterator.next().getObject();
+				if (spdxIdObject == null) {
+					continue;
+				}
+				if (!spdxIdObject.isLiteral()) {
+					throw new LicenseGeneratorException("SPDX ID is not a literal");
+				}
+				retval.add(spdxIdObject.toString(false));
+			}
+		}
+		return retval;
+	}
+
 	public static synchronized FsfLicenseDataParser getFsfLicenseDataParser() throws LicenseGeneratorException {
 		if (fsfLicenseDataParser == null) {
 			fsfLicenseDataParser = new FsfLicenseDataParser();
