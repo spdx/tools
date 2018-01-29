@@ -99,11 +99,6 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>1.4.01</version>
-		</dependency>
-		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr</artifactId>
 			<version>3.4</version>
@@ -178,11 +173,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jgit</groupId>
-			<artifactId>org.eclipse.jgit</artifactId>
-			<version>4.7.1.201706071930-r</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

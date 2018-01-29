@@ -45,10 +45,6 @@ public class Main {
 			CompareMultpleSpdxDocs.main(args);
 		} else if (spdxTool.equalsIgnoreCase("CompareSpdxDocs")) {
 			System.out.println("This tool has not been updated to the 2.1 spec.  Please use the CompareMultipleSpdxDocs command.");
-		} else if (spdxTool.equalsIgnoreCase("LicenseRDFAGenerator")) {
-			LicenseRDFAGenerator.main(args);
-		} else if (spdxTool.equalsIgnoreCase("LicenseListPublisher")) {
-			LicenseListPublisher.main(args);
 		} else if (spdxTool.equalsIgnoreCase("Verify")) {
 			Verify.main(args);
 		} else if (spdxTool.equalsIgnoreCase("GenerateVerificationCode")) {
@@ -85,8 +81,6 @@ public class Main {
 						+ "Verify                   inputFile                         TestFiles/SPDXRdfExample.rdf \n"
 						+ "CompareMultipleSpdxDocs  output.xls doc1 doc2 ... docN \n"
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
-						+ "LicenseRDFAGenerator     licenseSpreadsheet.xls|inputDirectory outputDirectory [version] [releasedate] [licenseTestFileDirectory] [warningsToIgnore (either a file or comma separated list)]\n"
-						+ "LicenseListPublisher     -u gitUser -p gitPassword [-r releaseTagOrVersion] [-o outputGitRepository] [--ignoreAllWarnings] [-w warningsToIgnore] [-d inputXmlDirectory] [-x inputXmlRepositoryUrl]"
 						+ "GenerateVerificationCode sourceDirectory\n"
 						+ "Version\n"
 						+ "MergeSpdxDocs            masterDocument, mergedDoc1, MergedDoc2, ..., outputFile\n"
