@@ -48,9 +48,6 @@ public class LicenseExpressionParser {
 	
 	static {
 		OPERATOR_MAP.put("+", Operator.OR_LATER);
-		OPERATOR_MAP.put("AND", Operator.AND);
-		OPERATOR_MAP.put("OR", Operator.OR);
-		OPERATOR_MAP.put("WITH", Operator.WITH);
 		OPERATOR_MAP.put("and", Operator.AND);
 		OPERATOR_MAP.put("or", Operator.OR);
 		OPERATOR_MAP.put("with", Operator.WITH);
@@ -68,9 +65,9 @@ public class LicenseExpressionParser {
 			throw(new LicenseParserException("Empty license expression"));
 		}
 		String[] tokens  = tokenizeExpression(expression);
-		if (tokens.length == 1 && tokens[0].equals(SpdxRdfConstants.NOASSERTION_VALUE)) {
+		if (tokens.length == 1 && tokens[0].toLowerCase().equals(SpdxRdfConstants.NOASSERTION_VALUE.toLowerCase())) {
 			return new SpdxNoAssertionLicense();
-		} else if (tokens.length == 1 && tokens[0].equals(SpdxRdfConstants.NONE_VALUE)) {
+		} else if (tokens.length == 1 && tokens[0].toLowerCase().equals(SpdxRdfConstants.NONE_VALUE.toLowerCase())) {
 			return new SpdxNoneLicense();
 		} else {
 			try {
@@ -129,7 +126,7 @@ public class LicenseExpressionParser {
 			throw(new LicenseParserException("Expected license expression"));
 		}
 		Stack<AnyLicenseInfo> operandStack = new Stack<AnyLicenseInfo>();
-		Stack<Operator> operatorStack = new Stack<Operator>(); 
+		Stack<Operator> operatorStack = new Stack<Operator>();
 		int tokenIndex = 0;
 		String token;
 		while (tokenIndex < tokens.length) {
@@ -143,10 +140,10 @@ public class LicenseExpressionParser {
 				String[] nestedTokens = Arrays.copyOfRange(tokens, tokenIndex, rightParenIndex);
 				operandStack.push(parseLicenseExpression(nestedTokens, container));
 				tokenIndex = rightParenIndex + 1;		
-			} else if (OPERATOR_MAP.get(token) == null) {	// assumed to be a simple licensing type
+			} else if (OPERATOR_MAP.get(token.toLowerCase()) == null) {	// assumed to be a simple licensing type
 				operandStack.push(parseSimpleLicenseToken(token, container));
 			} else {
-				Operator operator = OPERATOR_MAP.get(token);
+				Operator operator = OPERATOR_MAP.get(token.toLowerCase());
 				if (operator == Operator.WITH) {
 					// special processing here since With must be with an exception, not a licenseInfo
 					if (!operatorStack.isEmpty() && Operator.OR_LATER.equals(operatorStack.peek())) {

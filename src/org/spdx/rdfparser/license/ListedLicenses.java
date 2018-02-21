@@ -24,7 +24,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -45,7 +44,6 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import net.rootdev.javardfa.jena.RDFaReader.HTMLRDFaReader;
 /**
@@ -67,7 +65,10 @@ public class ListedLicenses implements IModelContainer {
 	
 	private Model listedLicenseModel = null;
 	
-	Set<String> listdLicenseIds = null;
+	/**
+	 * Map of lowercase listed license ID to proper cased listed license ID
+	 */
+	Map<String, String> listdLicenseIds = null;
 	
 	Map<String, SpdxListedLicense> listedLicenseCache = null;
 	Map<IModelContainer, Map<Node, SpdxListedLicense>> listedLicenseNodeCache = Maps.newHashMap();
@@ -401,7 +402,7 @@ public class ListedLicenses implements IModelContainer {
         listedLicenseModificationLock.writeLock().lock();
         try {
             listedLicenseCache = Maps.newHashMap(); // clear the cache
-            listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
+            listdLicenseIds = Maps.newHashMap(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
             //NOTE: THis includes deprecated licenses - should this be changed to only return non-deprecated licenses?
             Model stdLicenseModel = getListedLicenseModel();
@@ -410,7 +411,7 @@ public class ListedLicenses implements IModelContainer {
             ExtendedIterator<Triple> tripleIter = stdLicenseModel.getGraph().find(m);
             while (tripleIter.hasNext()) {
                 Triple t = tripleIter.next();
-                listdLicenseIds.add(t.getObject().toString(false));
+                listdLicenseIds.put(t.getObject().toString(false).toLowerCase(),t.getObject().toString(false));
             }
             p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION).asNode();
             m = Triple.createMatch(null, p, null);
@@ -435,7 +436,7 @@ public class ListedLicenses implements IModelContainer {
     public boolean isSpdxListedLicenseID(String licenseID) {
         try {
             listedLicenseModificationLock.readLock().lock();
-            return listdLicenseIds.contains(licenseID);
+            return listdLicenseIds.containsKey(licenseID.toLowerCase());
         } finally {
             listedLicenseModificationLock.readLock().unlock();
         }
@@ -481,7 +482,7 @@ public class ListedLicenses implements IModelContainer {
     public String[] getSpdxListedLicenseIds() {
         listedLicenseModificationLock.readLock().lock();
         try {
-            return listdLicenseIds.toArray(new String[listdLicenseIds.size()]);
+            return listdLicenseIds.values().toArray(new String[listdLicenseIds.size()]);
         } finally {
 			listedLicenseModificationLock.readLock().unlock();
         }
@@ -501,7 +502,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
-		return getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId);
+		return getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + this.listdLicenseIds.get(licenseId.toLowerCase()));
 	}
 
 	/**
@@ -567,7 +568,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public boolean spdxElementRefExists(String elementRef) {
-		return(listdLicenseIds.contains(elementRef));
+		return(listdLicenseIds.values().contains(elementRef));
 	}
 
 	/* (non-Javadoc)
@@ -575,7 +576,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public void addSpdxElementRef(String elementRef) {
-		listdLicenseIds.add(elementRef);
+		listdLicenseIds.put(elementRef.toLowerCase(),elementRef);
 	}
 
 	/* (non-Javadoc)

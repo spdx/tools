@@ -39,8 +39,6 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
-import junit.framework.Assert;
-
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -422,6 +420,23 @@ public class TestLicenseInfoFactory {
 	public void testParseSPDXLicenseString() throws InvalidLicenseStringException {
 		String parseString = COMPLEX_LICENSE.toString();
 		AnyLicenseInfo li = LicenseInfoFactory.parseSPDXLicenseString(parseString);
+		if (!li.equals(COMPLEX_LICENSE)) {
+			fail("Parsed license does not equal");
+		}
+	}
+	
+	@Test
+	public void testParseSPDXLicenseStringMixedCase() throws InvalidLicenseStringException {
+		String parseString = COMPLEX_LICENSE.toString();
+		StringBuilder mixedCase = new StringBuilder();
+		for (int i = 0; i < parseString.length(); i++) {
+			if (i % 2 == 0) {
+				mixedCase.append(parseString.substring(i, i+1).toUpperCase());
+			} else {
+				mixedCase.append(parseString.substring(i, i+1).toLowerCase());
+			}
+		}
+		AnyLicenseInfo li = LicenseInfoFactory.parseSPDXLicenseString(mixedCase.toString());
 		if (!li.equals(COMPLEX_LICENSE)) {
 			fail("Parsed license does not equal");
 		}
