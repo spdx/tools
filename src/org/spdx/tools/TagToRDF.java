@@ -103,6 +103,9 @@ public class TagToRDF {
 	public static List<String> onlineFunction(String[] args) throws OnlineToolException{
 		// Arguments length(args length== 2 ) will checked in the Python Code
 		String outputFormat = DEFAULT_OUTPUT_FORMAT;
+		if (args.length > 2) {
+			outputFormat = args[2];
+		}
 		FileInputStream spdxTagStream;
 		try {
 			spdxTagStream = new FileInputStream(args[0]);
