@@ -129,9 +129,13 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 * @param workbook
 	 * @param originSheetName
 	 * @return
+	 * @throws SpreadsheetException 
 	 */
-	private String readVersion(Workbook workbook, String originSheetName) {
+	private String readVersion(Workbook workbook, String originSheetName) throws SpreadsheetException {
 		Sheet sheet = workbook.getSheet(originSheetName);
+		if (sheet == null) {
+			throw new SpreadsheetException("Invalid SPDX spreadsheet.  Sheet "+originSheetName+" does not exist.");
+		}
 		int firstRowNum = sheet.getFirstRowNum();
 		Row dataRow = sheet.getRow(firstRowNum + DocumentInfoSheet.DATA_ROW_NUM);
 		if (dataRow == null) {
