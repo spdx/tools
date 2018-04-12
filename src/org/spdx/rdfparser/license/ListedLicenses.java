@@ -16,6 +16,7 @@
 */
 package org.spdx.rdfparser.license;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,13 +31,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.FileManager;
-import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
@@ -46,8 +45,8 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gson.Gson;
 
-import net.rootdev.javardfa.jena.RDFaReader.HTMLRDFaReader;
 /**
  * Singleton class which holds the listed licenses
  * @author Gary O'Neall
@@ -55,14 +54,14 @@ import net.rootdev.javardfa.jena.RDFaReader.HTMLRDFaReader;
  */
 public class ListedLicenses implements IModelContainer {
 	
-	public static final String DEFAULT_LICENSE_LIST_VERSION = "2.0";
+	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.1";
 	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
+	//TODO ADD THIS BACK BEFORE COMMIT static final String LISTED_LICENSE_ID_URL = "https://spdx.org/licenses/";
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
-	public static final String LISTED_LICENSE_URI_PREFIX = "http://spdx.org/licenses/";
+	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/preview/";
 	private static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
+	private static final String LICENSE_TOC_FILENAME = "licenses.json";
 	
-
-	private static final String LISTED_LICENSE_RDF_LOCAL_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "index.html";
 	private static final String LISTED_LICENSE_PROPERTIES_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "licenses.properties";
 	
 	private Model listedLicenseModel = null;
@@ -85,6 +84,7 @@ public class ListedLicenses implements IModelContainer {
 	//Since modifications should be extremely rare, a single lock for both listed licenses and the model
 	//should be sufficient.
 	private static final ReadWriteLock listedLicenseModificationLock = new ReentrantReadWriteLock();
+	private static final String JSONLD_URL_SUFFIX = ".jsonld";
 	
 	int nextId = 0;
 	
@@ -127,16 +127,20 @@ public class ListedLicenses implements IModelContainer {
             listedLicenseModificationLock.writeLock().unlock();
         }
     }
-    
-    static void readRdfaIntoModel(Model model, InputStream is, String rootUri){
-    	new HTMLRDFaReader().read(model, is, rootUri);
-    }
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.IModelContainer#getModel()
 	 */
 	@Override
 	public Model getModel() {
+		listedLicenseModificationLock.writeLock().lock();
+		try {
+			if (listedLicenseModel == null) {
+				listedLicenseModel = ModelFactory.createDefaultModel();
+			}
+		} finally {
+            listedLicenseModificationLock.writeLock().unlock();
+        }
 		return listedLicenseModel;
 	}
 	
@@ -254,6 +258,9 @@ public class ListedLicenses implements IModelContainer {
 	private String urlToId(URL licenseUrl) {
 		String[] pathParts = licenseUrl.getFile().split("/");
 		String id = pathParts[pathParts.length-1];
+		if (id.endsWith(JSONLD_URL_SUFFIX)) {
+			id = id.substring(0, id.length() - JSONLD_URL_SUFFIX.length());
+		}
 		return id;
 	}
 
@@ -272,8 +279,8 @@ public class ListedLicenses implements IModelContainer {
 					//Accessing the old HTTP urls produces 301.
 					String actualUrl = StringUtils.replaceOnce(uri, "http://", "https://");
 					in = FileManager.get().open(actualUrl);
-					try { 
-						readRdfaIntoModel(retval, in, base);
+					try {
+						retval.read(in, base, "JSON-LD");
 						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 				    	if (retval.isEmpty() || !retval.contains(null, p)) {
 					    	try {
@@ -296,15 +303,14 @@ public class ListedLicenses implements IModelContainer {
 				logger.warn("Unable to open SPDX listed license model.  Using local file copy for SPDX listed licenses");
 			}
 			if (in == null) {
-				// need to fetch from the local file system
-				String id = uri.substring(LISTED_LICENSE_URI_PREFIX.length());
-				String fileName = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + id;
+				// need to fetch from the class
+				String fileName = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + uri.substring(LISTED_LICENSE_URI_PREFIX.length());
 				in = LicenseInfoFactory.class.getResourceAsStream("/" + fileName);
 				if (in == null) {
 					throw(new NoListedLicenseRdfModel("SPDX listed license "+uri+" could not be read."));
 				}
 				try (InputStreamReader reader = new InputStreamReader(in, Charset.forName("UTF-8"))){
-					readRdfaIntoModel(retval, in, uri);
+					retval.read(in, base, "JSON-LD");
 				} catch(Exception ex) {
 					throw(new NoListedLicenseRdfModel("Error reading the spdx listed licenses: "+ex.getMessage(),ex));
 				}
@@ -321,82 +327,9 @@ public class ListedLicenses implements IModelContainer {
 		}
 	}
 	
-	private Model getListedLicenseModel() throws InvalidSPDXAnalysisException {
-		if (listedLicenseModel == null) {
-			loadListedLicenseModel();
-		}
-		return listedLicenseModel;
-	}
-
-	/**
-	 * Load an spdx listed license model from the index page
-	 */
-	private void loadListedLicenseModel() throws InvalidSPDXAnalysisException {
-
-		// Create the initial model from the index page which only contains
-		// the license ID's
-		// We will fill in the licenses into the cache on demand
-		Model myStdLicModel = ModelFactory.createDefaultModel();	// don't use the static model to remove any possible timing windows while we are creating
-
-		InputStream licRdfInput;
-		if (onlyUseLocalLicenses) {
-		    licRdfInput = null;
-		} else {
-			licRdfInput = null;
-		    try {
-		    	licRdfInput = FileManager.get().open(LISTED_LICENSE_URI_PREFIX+"index.html");
-		    	readRdfaIntoModel(myStdLicModel, licRdfInput, LISTED_LICENSE_URI_PREFIX);
-				Property p = myStdLicModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
-		    	if (myStdLicModel.isEmpty() || !myStdLicModel.contains(null, p)) {
-			    	try {
-						licRdfInput.close();
-					} catch (IOException e) {
-						logger.warn("Error closing listed license input");
-					}
-			    	licRdfInput = null;
-		    	}
-		    } catch(Exception ex) {	    	
-	    		logger.warn("Unable to access the SPDX listed licenses at http://www.spdx.org/licenses.  Using local file copy of SPDX listed licenses");
-	    		if (licRdfInput != null) {
-	    			try {
-	    				licRdfInput.close();
-	    			} catch (IOException e) {
-	    				logger.warn("Error closing listed license input");
-	    			}
-	    			licRdfInput = null;	
-	    		}
-	    	}
-	    }	
-		try {
-			if (licRdfInput == null) {
-				// need to load a static copy
-				licRdfInput = FileManager.get().open(LISTED_LICENSE_RDF_LOCAL_FILENAME);
-				if ( licRdfInput == null ) {
-					// try the class loader
-					licRdfInput = LicenseInfoFactory.class.getResourceAsStream("/" + LISTED_LICENSE_RDF_LOCAL_FILENAME);
-				}
-				if (licRdfInput == null) {
-					throw new NoListedLicenseRdfModel("Unable to open SPDX listed license from website or from local file");
-				}
-				try {
-			    	readRdfaIntoModel(myStdLicModel, licRdfInput, LISTED_LICENSE_URI_PREFIX);
-				} catch(Exception ex) {
-					throw new NoListedLicenseRdfModel("Unable to read the SPDX listed license model", ex);
-				}
-			}
-
-			listedLicenseModel = myStdLicModel;	
-		} finally {
-			if (licRdfInput != null) {
-				try {
-					licRdfInput.close();
-				} catch (IOException e) {
-					logger.warn("Unable to close license RDF Input Stream");
-				}
-			}
-		}
-	}
-	
+    /**
+     * Load the listed license IDs from the website or local file cache
+     */
     private void loadListedLicenseIDs() {
         listedLicenseModificationLock.writeLock().lock();
         try {
@@ -404,24 +337,57 @@ public class ListedLicenses implements IModelContainer {
             listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
             //NOTE: THis includes deprecated licenses - should this be changed to only return non-deprecated licenses?
-            Model stdLicenseModel = getListedLicenseModel();
-            Node p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
-            Triple m = Triple.createMatch(null, p, null);
-            ExtendedIterator<Triple> tripleIter = stdLicenseModel.getGraph().find(m);
-            while (tripleIter.hasNext()) {
-                Triple t = tripleIter.next();
-                listdLicenseIds.add(t.getObject().toString(false));
+            InputStream tocStream = null;
+            BufferedReader reader = null;
+            try {
+                if (!this.onlyUseLocalLicenses) {
+                	try {
+						URL tocUrl = new URL(LISTED_LICENSE_URI_PREFIX + LICENSE_TOC_FILENAME);
+						tocStream = tocUrl.openStream();
+					} catch (MalformedURLException e) {
+						logger.error("Json TOC URL invalid, using local TOC file");
+						tocStream = null;
+					} catch (IOException e) {
+						logger.error("I/O error opening Json TOC URL, using local TOC file");
+						tocStream = null;
+					}
+                }
+                if (tocStream == null) {
+                	// fetch from class loader
+                	String fileName = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + LICENSE_TOC_FILENAME;
+                	tocStream = LicenseInfoFactory.class.getResourceAsStream("/" + fileName);
+                }
+                if (tocStream == null) {
+                	logger.error("Unable to load license ID's from JSON TOC file");
+                }
+                reader = new BufferedReader(new InputStreamReader(tocStream));
+                StringBuilder tocJsonStr = new StringBuilder();
+                String line;
+                while((line = reader.readLine()) != null) {
+                	tocJsonStr.append(line);
+                }
+                Gson gson = new Gson();
+                LicenseJsonTOC jsonToc = gson.fromJson(tocJsonStr.toString(), LicenseJsonTOC.class);
+                listdLicenseIds = jsonToc.getLicenseIds();
+                this.licenseListVersion = jsonToc.getLicenseListVersion();
+                
+            } catch (IOException e) {
+				logger.error("I/O error reading JSON TOC file");
+			} finally {
+            	if (reader != null) {
+            		try {
+						reader.close();
+					} catch (IOException e) {
+						logger.warn("Unable to close JSON TOC reader");
+					}
+            	} else if (tocStream != null) {
+            		try {
+						tocStream.close();
+					} catch (IOException e) {
+						logger.warn("Unable to close JSON TOC input stream");
+					}
+            	}
             }
-            p = stdLicenseModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_LIST_VERSION).asNode();
-            m = Triple.createMatch(null, p, null);
-            tripleIter = stdLicenseModel.getGraph().find(m);
-            if (tripleIter.hasNext()) {
-                Triple t = tripleIter.next();
-                String licenseListVersionPropertyValue = t.getObject().toString(false);
-				licenseListVersion = StringUtils.substringBefore(licenseListVersionPropertyValue, " "); //Omit any superfluous data, such as a date
-			}
-        } catch (Exception ex) {
-            logger.error("Error loading SPDX listed license ID's from model.");
         } finally {
             listedLicenseModificationLock.writeLock().unlock();
         }
@@ -501,7 +467,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
-		return getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId);
+		return getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId + JSONLD_URL_SUFFIX);
 	}
 
 	/**

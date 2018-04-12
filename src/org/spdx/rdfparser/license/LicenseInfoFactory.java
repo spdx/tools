@@ -86,7 +86,7 @@ public class LicenseInfoFactory {
 			return new SpdxNoneLicense(modelContainer, node);
 		} else if (node.getURI().equals(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_LICENSE_NOASSERTION)) {
 			return new SpdxNoAssertionLicense(modelContainer, node);
-		} else if (node.getURI().startsWith(ListedLicenses.LISTED_LICENSE_URI_PREFIX)) {
+		} else if (node.getURI().startsWith(ListedLicenses.LISTED_LICENSE_ID_URL)) {
 			// try to fetch the listed license from the model
 			try {
 				return ListedLicenses.getListedLicenses().getLicenseFromStdLicModel(modelContainer, node);
