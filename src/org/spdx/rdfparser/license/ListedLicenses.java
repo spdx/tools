@@ -57,7 +57,7 @@ public class ListedLicenses implements IModelContainer {
 	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.1";
 	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
-	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/";
+	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/preview/";
 	private static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
 	private static final String LICENSE_TOC_FILENAME = "licenses.json";
 	
@@ -335,7 +335,7 @@ public class ListedLicenses implements IModelContainer {
             listedLicenseCache = Maps.newHashMap(); // clear the cache
             listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
-            //NOTE: THis includes deprecated licenses - should this be changed to only return non-deprecated licenses?
+            //NOTE: This includes deprecated licenses - should this be changed to only return non-deprecated licenses?
             InputStream tocStream = null;
             BufferedReader reader = null;
             try {
@@ -466,7 +466,11 @@ public class ListedLicenses implements IModelContainer {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
-		return getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId + JSONLD_URL_SUFFIX);
+		SpdxListedLicense retval = getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId + JSONLD_URL_SUFFIX);
+		if (retval != null) {
+			retval = (SpdxListedLicense)retval.clone();	// We need to clone the license to remove the references to the model in the cache
+		}
+		return retval;
 	}
 
 	/**
