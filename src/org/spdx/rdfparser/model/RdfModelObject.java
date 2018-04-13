@@ -33,6 +33,7 @@ import org.spdx.rdfparser.model.pointer.SinglePointer;
 import org.spdx.rdfparser.model.pointer.StartEndPointer;
 import org.spdx.rdfparser.referencetype.ReferenceType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
@@ -98,10 +99,15 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		PRE_DEFINED_URI_VALUE.put(SpdxRdfConstants.URI_VALUE_NONE, SpdxRdfConstants.NONE_VALUE);
 	}
 	
+	@JsonIgnore
 	protected Model model;
+	@JsonIgnore
 	protected Resource resource;
+	@JsonIgnore
 	protected Node node;
+	@JsonIgnore
 	protected IModelContainer modelContainer;
+	@JsonIgnore
 	static RdfModelObject rdfModelObject;
 	
 	/**
@@ -112,6 +118,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * The property should be set based on if there are more than two objects
 	 * for the same node in the container containing this model
 	 */
+	@JsonIgnore
 	protected boolean refreshOnGet = true;
 	
 	/**
@@ -1147,6 +1154,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
+	
+	/**
+	 * @param nameSpace namespace for the external document reference property
+	 * @param propSpdxExternalDocRef property name for the external document references
+	 * @return all external document references in this document container
+	 * @throws InvalidSPDXAnalysisException
+	 */
 	public ExternalDocumentRef[] findExternalDocRefPropertyValues(
 			String nameSpace, String propertyName)  throws InvalidSPDXAnalysisException {
 		return findExternalDocRefPropertyValues(nameSpace, propertyName,
@@ -1154,9 +1168,11 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 	
 	/**
-	 * @param nameSpace
-	 * @param propSpdxExternalDocRef
-	 * @return
+	 * Find all external document references
+	 * @param nameSpace namespace for the external document reference property
+	 * @param propSpdxExternalDocRef property name for the external document references
+	 * @param extDocModelContainer Document container for the external document reference
+	 * @return all external document references in the external document container that have a property name of propertyName
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public static ExternalDocumentRef[] findExternalDocRefPropertyValues(
@@ -1370,7 +1386,31 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	/**
 	 * @return the RDF Node (null if not initialized)
 	 */
+	@JsonIgnore
 	public Node getNode() {
 		return this.node;
+	}
+	
+
+	/**
+	 * @return Document namespace.  Null if the modelContainer is null
+	 */
+	@JsonIgnore
+	public String getDocumentNamespace() throws InvalidSPDXAnalysisException {
+		if (this.modelContainer == null) {
+			return null;
+		}
+		return this.modelContainer.getDocumentNamespace();
+	}
+	
+	/**
+	 * @param documentNamespace Namespace associated with the external document reference
+	 * @return The id associated with the document namespace or null if not found
+	 */
+	public String DocumentNamespaceToId(String documentNamespace) {
+		if (this.modelContainer == null) {
+			return null;
+		}
+		return this.modelContainer.documentNamespaceToId(documentNamespace);
 	}
 }

@@ -31,6 +31,10 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
 import org.spdx.rdfparser.SpdxRdfConstants;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -49,6 +53,11 @@ import com.google.common.collect.Sets;
  * @author Gary O'Neall
  *
  */
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonSubTypes({@Type(value=SpdxDocument.class, name="Document"),
+	@Type(value=SpdxFile.class, name="File"),
+	@Type(value=SpdxPackage.class, name="Package"),
+	@Type(value=SpdxSnippet.class, name="Snippet")})
 public class SpdxElement extends RdfModelObject {
 	
 	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class);
@@ -279,6 +288,30 @@ public class SpdxElement extends RdfModelObject {
 			}
 		}
 		return relationships;
+	}
+	
+	/**
+	 * @return a list of flat relationships which uses a String relationship ID rather than a relatedSpdxElement - prevents infinite recursion in certain cases
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	@JsonGetter("relationships")
+	public FlatRelationship[] getFlatRelationship() throws InvalidSPDXAnalysisException {
+		if (model != null && this.refreshOnGet) {
+			try {
+				Relationship[] refresh = findRelationshipPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
+						SpdxRdfConstants.PROP_RELATIONSHIP);
+				if (refresh != null && !arraysEquivalent(refresh, this.relationships, true)) {
+					this.relationships = refresh;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Invalid relationships in the model",e);
+			}
+		}
+		FlatRelationship[] retval = new FlatRelationship[relationships.length];
+		for (int i = 0; i < relationships.length; i++) {
+			retval[i] = new FlatRelationship(relationships[i]);
+		}
+		return retval;
 	}
 
 

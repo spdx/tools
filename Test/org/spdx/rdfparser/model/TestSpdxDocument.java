@@ -213,7 +213,6 @@ public class TestSpdxDocument {
 		Assert.assertFalse("Mandatory creation date missing from new SPDX Document.", StringUtils.isBlank(doc.getCreationInfo().getCreated()));
 		String licenseListVersion = doc.getCreationInfo().getLicenseListVersion();
 		Assert.assertTrue(StringUtils.isNotBlank(licenseListVersion));
-
 	}
 
 	/**
@@ -712,5 +711,28 @@ public class TestSpdxDocument {
 			doc.setSpecVersion(ver);
 			assertEquals(ver, doc.getSpecVersion());
 	}
-
+	
+	@Test
+	public void testDocumentNamespaceToId() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {
+			ANNOTATION1, ANNOTATION2	
+		};
+		ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
+				EXTERNAL_REF1, EXTERNAL_REF2
+		};
+		ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {
+				LICENSE1, LICENSE2
+		};
+		SpdxDocument doc = container.getSpdxDocument();
+		doc.setAnnotations(annotations);
+		doc.setComment(DOC_COMMENT1);
+		doc.setCreationInfo(CREATIONINFO1);
+		doc.setDataLicense(CCO_DATALICENSE);
+		doc.setExternalDocumentRefs(externalDocumentRefs);
+		doc.setExtractedLicenseInfos(extractedLicenseInfos);
+		doc.setName(DOC_NAME1);
+		assertEquals(EXTERNAL_REF1.getExternalDocumentId(),doc.DocumentNamespaceToId(EXTERNAL_REF1.getSpdxDocumentNamespace()));
+		assertEquals(EXTERNAL_REF2.getExternalDocumentId(),doc.DocumentNamespaceToId(EXTERNAL_REF2.getSpdxDocumentNamespace()));
+		assertTrue(doc.DocumentNamespaceToId("http://this.is.not/a/valid/namespace") == null);
+	}
 }

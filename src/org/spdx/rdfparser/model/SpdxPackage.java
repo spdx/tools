@@ -35,6 +35,9 @@ import org.spdx.rdfparser.license.SpdxNoneLicense;
 import org.spdx.rdfparser.license.WithExceptionOperator;
 import org.spdx.rdfparser.model.Checksum.ChecksumAlgorithm;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.collect.Maps;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -49,6 +52,11 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  * @author Gary O'Neall
  *
  */
+@JsonPropertyOrder({"name", "id", "versionInfo", "packageFileName", "supplier", "originator",
+	"downloadLocation", "filesAnalyzed", "packageVerificationCode", "checksums",
+	"homepage", "sourceInfo", "licenseConcluded", "licenseInfoFromFiles", "licenseDeclared",
+	"licenseComments", "copyrightText", "summary", "description", "comment", "externalRefs",
+	"annotations", "relationships"})
 public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparable<SpdxPackage> {
 
 	AnyLicenseInfo licenseDeclared;
@@ -352,6 +360,22 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			}
 		}
 		return licenseDeclared;
+	}
+
+	/**
+	 * @return the licenseDeclared as a string
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	@JsonGetter("licenseDeclared")
+	public String getLicenseDeclaredStr() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && refreshOnGet) {
+			AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SPDX_NAMESPACE,
+					PROP_PACKAGE_DECLARED_LICENSE);
+			if (refresh == null || !refresh.equals(this.licenseDeclared)) {
+				this.licenseDeclared = refresh;
+			}
+		}
+		return licenseDeclared.toString();
 	}
 
 	/**
@@ -968,6 +992,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public String getDeclaredName() {
 		return this.getName();
 	}
@@ -977,6 +1002,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public String getDownloadUrl() {
 		return this.getDownloadLocation();
 	}
@@ -986,6 +1012,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public String getShortDescription() {
 		return this.getSummary();
 	}
@@ -995,6 +1022,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public String getFileName() {
 		return this.getPackageFileName();
 	}
@@ -1005,6 +1033,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
+	@JsonIgnore
 	public SpdxPackageVerificationCode getVerificationCode() throws InvalidSPDXAnalysisException {
 		return this.getPackageVerificationCode();
 	}
@@ -1014,6 +1043,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public String getDeclaredCopyright() {
 		return this.getCopyrightText();
 	}
@@ -1024,6 +1054,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
+	@JsonIgnore
 	public AnyLicenseInfo getDeclaredLicense() throws InvalidSPDXAnalysisException {
 		return this.getLicenseDeclared();
 	}
@@ -1033,6 +1064,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @return
 	 */
 	@Deprecated
+	@JsonIgnore
 	public AnyLicenseInfo getConcludedLicenses() {
 		return this.getLicenseConcluded();
 	}

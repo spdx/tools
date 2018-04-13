@@ -33,6 +33,9 @@ import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.ListedLicenses;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.base.Objects;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
@@ -48,8 +51,12 @@ import org.apache.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
+@JsonPropertyOrder({"specVersion", "creationInfo", "spdxVersion", "dataLicense", "id", "name", 
+	"comment", "documentNamespace",	"externalDocumentRefs", "documentDescribes", "extractedLicenseInfos", 
+	"annotations", "relationships", "reviewers"})
 public class SpdxDocument extends SpdxElement {
 	
+	@JsonIgnore
 	private SpdxDocumentContainer documentContainer;
 	SPDXCreatorInformation creationInfo;	//TODO Refactor to RdfModelObject
 	AnyLicenseInfo dataLicense;
@@ -175,10 +182,12 @@ public class SpdxDocument extends SpdxElement {
 	 * @return The unique Document Namespace
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@JsonIgnore
 	public String getDocumentUri() throws InvalidSPDXAnalysisException {
 		return this.getUri(documentContainer);
 	}
 	
+	@Override
 	public String getDocumentNamespace() throws InvalidSPDXAnalysisException {
 		String[] parts = this.getDocumentUri().split("#");
 		return parts[0];
@@ -259,6 +268,23 @@ public class SpdxDocument extends SpdxElement {
 			}
 		}
 		return this.dataLicense;
+	}
+	
+	@JsonGetter("dataLicense")
+	public String getDataLicenseStr() throws InvalidSPDXAnalysisException {
+		if (this.resource != null && this.refreshOnGet) {
+			try {
+				AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+						SpdxRdfConstants.PROP_SPDX_DATA_LICENSE);
+				if (refresh == null || !refresh.equals(this.dataLicense)) {
+					this.dataLicense = refresh;
+				}
+			} catch (InvalidSPDXAnalysisException e) {
+				logger.error("Error getting data license from model");
+				throw(e);
+			}
+		}
+		return this.dataLicense.toString();
 	}
 
 	/**
@@ -525,6 +551,7 @@ public class SpdxDocument extends SpdxElement {
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
+	@JsonIgnore
 	@Deprecated
 	public SPDXCreatorInformation getCreatorInfo() throws InvalidSPDXAnalysisException {
 		return this.getCreationInfo();
@@ -535,6 +562,7 @@ public class SpdxDocument extends SpdxElement {
 	 * This method has been replaced by getComment to match the specification property name
 	 * @return
 	 */
+	@JsonIgnore
 	@Deprecated
 	public String getDocumentComment() {
 		return this.getComment();
@@ -546,6 +574,7 @@ public class SpdxDocument extends SpdxElement {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	@Deprecated
+	@JsonIgnore
 	public SpdxPackage getSpdxPackage() throws InvalidSPDXAnalysisException {
 		SpdxItem[] retval = this.getDocumentDescribes();
 		if (retval.length != 1) {
