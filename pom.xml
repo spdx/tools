@@ -93,12 +93,6 @@
 		released to MVN Central. Hence its use from bintray. This dependency is temporary, until license list rearchitecture
 		to use RDF/XML with content negotiation. -->
 		<dependency>
-		  <groupId>com.yevster.net.rootdev</groupId>
-		  <artifactId>java-rdfa</artifactId>
-		  <version>0.4.3</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr</artifactId>
 			<version>3.4</version>
