@@ -57,7 +57,7 @@ public class ListedLicenses implements IModelContainer {
 	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.1";
 	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
-	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/preview/";
+	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/";
 	private static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
 	private static final String LICENSE_TOC_FILENAME = "licenses.json";
 	
