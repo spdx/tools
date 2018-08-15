@@ -18,6 +18,7 @@ package org.spdx.rdfparser;
 
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -34,6 +35,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 public class SPDXCreatorInformation {
 	
+	@JacksonXmlElementWrapper(useWrapping=false)
 	private String[] creators = null;
 	private String comment = null;
 	private String createdDate = null;
