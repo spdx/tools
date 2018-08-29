@@ -386,7 +386,11 @@ public abstract class License extends SimpleLicensingInfo {
 	public String toString() {
 		// must be only the ID if we want to reuse the 
 		// toString for creating parseable license info strings
-		return this.licenseId;
+		if (this.licenseId == null) {
+			return "NULL LICENSE";
+		} else {
+			return this.licenseId;
+		}
 	}
 
 	@Override
