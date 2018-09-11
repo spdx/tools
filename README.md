@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/spdx/tools.svg?branch=master)](https://travis-ci.org/spdx/tools)
+
 # Overview
 The Software Package Data Exchange (SPDX) specification is a standard format for communicating the components, licenses and copyrights associated with a software package.
 
