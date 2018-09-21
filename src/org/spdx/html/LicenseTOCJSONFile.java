@@ -16,6 +16,8 @@
  */
 package org.spdx.html;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -46,7 +48,8 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		private String licJSONReference;
 		
 		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean osiApproved, Boolean fsfLibre, String licenseName, String[] seeAlso, boolean deprecated, String licJSONReference) {
+				String licenseId, boolean osiApproved, Boolean fsfLibre, String licenseName, String[] seeAlso, 
+				boolean deprecated, String licJSONReference) {
 			this.reference = reference;
 			this.refNumber = refNumber;
 			this.licenseId = licenseId;
@@ -152,6 +155,22 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		jsonObject.put(SpdxRdfConstants.PROP_LICENSE_LIST_VERSION, version);
 		jsonObject.put("releaseDate", releaseDate);
 		JSONArray licensesList = new JSONArray();
+		Collections.sort(listedLicenses, new Comparator<ListedSpdxLicense>() {
+			@Override
+			public int compare(ListedSpdxLicense o1, ListedSpdxLicense o2) {
+				if (o1 == null) {
+					if (o2 == null) {
+						return 0;
+					} else {
+						return -1;
+					}
+				} else if (o2 == null) {
+					return 1;
+				} else {
+					return o1.getLicenseId().compareTo(o2.getLicenseId());
+				}
+			}
+		});
 		for (ListedSpdxLicense license : listedLicenses) {
 			JSONObject licenseJSON = new JSONObject();
 			licenseJSON.put("reference", license.getReference());
