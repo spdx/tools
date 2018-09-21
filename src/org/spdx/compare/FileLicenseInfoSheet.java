@@ -49,10 +49,19 @@ public class FileLicenseInfoSheet extends AbstractFileCompareSheet {
 		if (spdxFile.getLicenseInfoFromFiles() == null || spdxFile.getLicenseInfoFromFiles().length == 0) {
 			return "";
 		}
-		StringBuilder sb = new StringBuilder(spdxFile.getLicenseInfoFromFiles()[0].toString());
+		StringBuilder sb;
+		if (spdxFile.getLicenseInfoFromFiles()[0] == null) {
+			sb = new StringBuilder("NULL");
+		} else {
+			sb = new StringBuilder(spdxFile.getLicenseInfoFromFiles()[0].toString());
+		}
 		for (int i = 1; i < spdxFile.getLicenseInfoFromFiles().length; i++) {
 			sb.append(", ");
-			sb.append(spdxFile.getLicenseInfoFromFiles()[i].toString());
+			if (spdxFile.getLicenseInfoFromFiles()[i] == null) {
+				sb.append("NULL");
+			} else {
+				sb.append(spdxFile.getLicenseInfoFromFiles()[i].toString());
+			}
 		}
 		return sb.toString();
 	}
