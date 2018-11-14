@@ -45,12 +45,6 @@
 	</properties>
 	<repositories>
 		<repository>
-			<!--  Some jena component releases missing from maven central -->
-			<id>jena-releases</id>
-			<name>Apache Jena Releases</name>
-			<url>https://repository.apache.org/content/repositories/releases</url>
-		</repository>
-		<repository>
 			<id>rdfa-bintray</id>
 			<url>https://dl.bintray.com/yevster/maven</url>
 		</repository>
