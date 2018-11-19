@@ -41,18 +41,8 @@
 	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jena.version>3.1.1</jena.version>
+		<jena.version>3.9.0</jena.version>
 	</properties>
-	<repositories>
-		<repository>
-			<id>rdfa-bintray</id>
-			<url>https://dl.bintray.com/yevster/maven</url>
-		</repository>
-		<repository>
-			<id>JBoss 3rd-party</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
-		</repository>
-	</repositories>
 	<dependencies>
 
 
@@ -62,18 +52,6 @@
 		   <artifactId>apache-jena-libs</artifactId>
 		   <version>${jena.version}</version>
 		   <type>pom</type>
-		   <exclusions>
-		   <!--Known vulnearbility. Later version required -->
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-    		</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.11.0.SP5</version>
 		</dependency>
 		<dependency>
 		   <groupId>org.apache.jena</groupId>
@@ -81,11 +59,6 @@
 		   <version>${jena.version}</version>
 		   <type>jar</type>
 		 </dependency>
-		<!-- THE REST -->
-		
-		<!-- The modification of the RDFa reader to use Jena 3 has been accepted but not
-		released to MVN Central. Hence its use from bintray. This dependency is temporary, until license list rearchitecture
-		to use RDF/XML with content negotiation. -->
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr</artifactId>
@@ -260,7 +233,7 @@
 			<plugin>
 				<groupId>org.spdx</groupId>
 					<artifactId>spdx-maven-plugin</artifactId>
-					<version>0.4.0</version>
+					<version>0.5.0</version>
 					<executions>
 						<execution>
 							<id>build-spdx</id>
@@ -385,13 +358,6 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-javadoc-plugin</artifactId>
-			    <configuration>
-			      <additionalparam>-Xdoclint:none</additionalparam>
-			    </configuration>
-			  </plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -399,6 +365,7 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 				<version>2.9</version>
 				<configuration>
 					<quiet>true</quiet>
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -412,50 +379,6 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 					</execution>
 				</executions>
 			</plugin>
-				<plugin>
-        			<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-shade-plugin</artifactId>
-        			<configuration>
-          				<shadedArtifactAttached>true</shadedArtifactAttached>
-          				<shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-          				<transformers>
-            				<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-              					<mainClass>org.spdx.tools.Main</mainClass>
-            				</transformer>
-            				<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-            				<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer" />
-            				<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
-              					<addHeader>false</addHeader>
-              				</transformer>
-          				</transformers>
-          				<filters>
-          					<filter>
-          						<!--  Conflict with HTMLParser 1.4 -->
-          						<artifact>com.yevster.net.rootdev:java-rdfa</artifact>
-          						<excludes>
-          							<exclude>nu/validator/htmlparser/**</exclude>
-          						</excludes>
-          					</filter>
-            				<filter>
-              					<artifact>*:*</artifact>
-              					<excludes>
-                					<exclude>META-INF/*.SF</exclude>
-                					<exclude>META-INF/*.DSA</exclude>
-                					<exclude>META-INF/*.RSA</exclude>
-              					</excludes>
-            				</filter>
-          				</filters>
-        			</configuration>
-        			<executions>
-          				<execution>
-            				<phase>package</phase>
-            				<!--<phase /><!- - Switch off -->
-            				<goals>
-              					<goal>shade</goal>
-            				</goals>
-          				</execution>
-        			</executions>
-      			</plugin>
 		</plugins>
 	</build>
 	<reporting>
