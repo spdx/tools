@@ -7,6 +7,6 @@
 /reports
 /release.properties
 /pom.xml.releaseBackup
-SPDXParser.spdx
+LICENSE.spdx
 maven-eclipse.xml
 dependency-reduced-pom.xml
