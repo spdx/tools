@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.spdx</groupId>
 	<artifactId>spdx-tools</artifactId>
-	<version>2.1.14-SNAPSHOT</version>
+	<version>2.1.14</version>
 	<name>SPDX tools</name>
 	<description>SPDX tools</description>
 	<licenses>
@@ -233,7 +233,7 @@
 			<plugin>
 				<groupId>org.spdx</groupId>
 					<artifactId>spdx-maven-plugin</artifactId>
-					<version>0.5.0</version>
+					<version>0.5.1</version>
 					<executions>
 						<execution>
 							<id>build-spdx</id>
@@ -245,7 +245,7 @@
 					</executions>
 					<configuration>
 						<spdxFile>LICENSE.spdx</spdxFile>
-						<spdxDocumentNamespace>http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT</spdxDocumentNamespace>
+						<spdxDocumentNamespace>http://spdx.org/documents/spdx-tools{$version}</spdxDocumentNamespace>
 						<nonStandardLicenses>
 							<param>
 								<licenseId>LicenseRef-CyberNeko</licenseId>
