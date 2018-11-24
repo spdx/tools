@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.spdx</groupId>
 	<artifactId>spdx-tools</artifactId>
-	<version>2.1.14</version>
+	<version>2.1.15-SNAPSHOT</version>
 	<name>SPDX tools</name>
 	<description>SPDX tools</description>
 	<licenses>
@@ -125,11 +125,6 @@
 		    <version>2.10.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
@@ -159,6 +154,11 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 			<version>2.9.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.cliftonlabs</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 	</dependencies>
 	<profiles>
