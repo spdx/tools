@@ -23,7 +23,7 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Map;
 
-import org.spdx.rdfparser.license.LicenseException;
+import org.spdx.rdfparser.license.ListedLicenseException;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -49,7 +49,7 @@ public class ExceptionHtml {
 	 * @param exception
 	 * @throws InvalidLicenseTemplateException 
 	 */
-	public ExceptionHtml(LicenseException exception) throws InvalidLicenseTemplateException {
+	public ExceptionHtml(ListedLicenseException exception) throws InvalidLicenseTemplateException {
 		List<String> alSourceUrls = Lists.newArrayList();
 		String[] sourceUrls = exception.getSeeAlso();
 		if (sourceUrls != null) {
@@ -62,6 +62,8 @@ public class ExceptionHtml {
 		mustacheMap.put("text", exception.getExceptionTextHtml());
 		mustacheMap.put("getSourceUrl", alSourceUrls);
 		mustacheMap.put("notes", exception.getComment());
+		mustacheMap.put("deprecated", exception.isDeprecated());
+		mustacheMap.put("deprecatedVersion", exception.getDeprecatedVersion());
 	}
 
 	/**
@@ -100,5 +102,4 @@ public class ExceptionHtml {
 			}
 		}
 	}
-
 }

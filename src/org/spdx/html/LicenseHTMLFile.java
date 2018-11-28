@@ -49,9 +49,6 @@ public class LicenseHTMLFile {
 
 	static final Pattern SITE_PATTERN = Pattern.compile("http://(.*)\\.(.*)(\\.org|\\.com|\\.net|\\.info)");
 	
-	private boolean deprecated;
-	private String deprecatedVersion;
-	
 	/**
 	 * Parses a URL and stores the site name and the original URL
 	 * @author Gary O'Neall
@@ -90,14 +87,12 @@ public class LicenseHTMLFile {
 	 * @param isDeprecated True if the license has been deprecated
 	 * @param deprecatedVersion Version since the license has been deprecated (null if not deprecated)
 	 */
-	public LicenseHTMLFile(SpdxListedLicense license,
-			boolean isDeprecated, String deprecatedVersion) {
+	public LicenseHTMLFile(SpdxListedLicense license) {
 		this.license = license;
-		this.deprecated = isDeprecated;
-		this.deprecatedVersion = deprecatedVersion;
 	}
+	
 	public LicenseHTMLFile() {
-		this(null, false, null);
+		this(null);
 	}
 	
 	/**
@@ -112,31 +107,6 @@ public class LicenseHTMLFile {
 	 */
 	public void setLicense(SpdxListedLicense license) {
 		this.license = license;
-	}
-
-	/**
-	 * @return the isDeprecated
-	 */
-	public boolean isDeprecated() {
-		return deprecated;
-	}
-	/**
-	 * @param isDeprecated the isDeprecated to set
-	 */
-	public void setDeprecated(boolean isDeprecated) {
-		this.deprecated = isDeprecated;
-	}
-	/**
-	 * @return the deprecatedVersion
-	 */
-	public String getDeprecatedVersion() {
-		return deprecatedVersion;
-	}
-	/**
-	 * @param deprecatedVersion the deprecatedVersion to set
-	 */
-	public void setDeprecatedVersion(String deprecatedVersion) {
-		this.deprecatedVersion = deprecatedVersion;
 	}
 	
 	public void writeToFile(File htmlFile, String tableOfContentsReference) throws IOException, MustacheException, InvalidLicenseTemplateException {
@@ -215,8 +185,8 @@ public class LicenseHTMLFile {
 				retval.put("licenseHeader", header);
 			}
 		}
-		retval.put("deprecated", this.isDeprecated());
-		retval.put("deprecatedVersion", this.deprecatedVersion);
+		retval.put("deprecated", this.license.isDeprecated());
+		retval.put("deprecatedVersion", this.license.getDeprecatedVersion());
 		return retval;
 	}
 

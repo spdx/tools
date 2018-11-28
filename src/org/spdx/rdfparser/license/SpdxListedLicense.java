@@ -39,6 +39,7 @@ public class SpdxListedLicense extends License {
 	
 	private String licenseTextHtml = null;
 	private String licenseHeaderHtml = null;
+	private String deprecatedVersion = null;
 	
 	/**
 	 * @param name License name
@@ -48,15 +49,20 @@ public class SpdxListedLicense extends License {
 	 * @param comments Optional comments
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
-	 * @param osiApproved True if this is an OSI Approvied license
+	 * @param osiApproved True if this is an OSI Approved license
 	 * @param fsfLibre true if FSF describes the license as free / libre, false if FSF describes the license as not free / libre, null if FSF does not reference the license
 	 * @param licenseTextHtml HTML version for the license text
+	 * @param isDeprecated True if this license has been designated as deprecated by the SPDX legal team
+	 * @param deprecatedVersion License list version when this license was first deprecated (null if not deprecated)
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, Boolean fsfLibre, String licenseTextHtml) throws InvalidSPDXAnalysisException {
+			String standardLicenseHeader, String template, boolean osiApproved, Boolean fsfLibre, 
+			String licenseTextHtml, boolean isDeprecated, String deprecatedVersion) throws InvalidSPDXAnalysisException {
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre);
 		this.licenseTextHtml = licenseTextHtml;
+		this.setDeprecated(isDeprecated);
+		this.deprecatedVersion = deprecatedVersion;
 	}
 	
 	/**
@@ -67,13 +73,13 @@ public class SpdxListedLicense extends License {
 	 * @param comments Optional comments
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
-	 * @param osiApproved True if this is an OSI Approvied license
+	 * @param osiApproved True if this is an OSI Approved license
 	 * @param licenseTextHtml HTML version for the license text
 	 * @throws InvalidSPDXAnalysisException
 	 */	
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved, String licenseTextHtml) throws InvalidSPDXAnalysisException {
-		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, false, licenseTextHtml);
+		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, false, licenseTextHtml, false, null);
 	}
 	
 	/**
@@ -90,7 +96,7 @@ public class SpdxListedLicense extends License {
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
-		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre, null);
+		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre, null, false, null);
 	}
 	
 	/**
@@ -106,7 +112,7 @@ public class SpdxListedLicense extends License {
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
-		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, false, null);
+		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, false, null, false, null);
 	}
 	
 	/**
@@ -278,6 +284,20 @@ public class SpdxListedLicense extends License {
 	 */
 	public void setLicenseHeaderHtml(String licenseHeaderHtml) {
 		this.licenseHeaderHtml = licenseHeaderHtml;
+	}
+	
+	/**
+	 * @return the deprecatedVersion
+	 */
+	public String getDeprecatedVersion() {
+		return deprecatedVersion;
+	}
+
+	/**
+	 * @param deprecatedVersion the deprecatedVersion to set
+	 */
+	public void setDeprecatedVersion(String deprecatedVersion) {
+		this.deprecatedVersion = deprecatedVersion;
 	}
 
 }

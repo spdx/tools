@@ -41,6 +41,95 @@ public class ExceptionHtmlToc {
 	static final String TEMPLATE_CLASS_PATH = "resources" + "/" + "htmlTemplate";
 	static final String TEMPLATE_ROOT_PATH = "resources" + File.separator + "htmlTemplate";
 	static final String HTML_TEMPLATE = "ExceptionsTocHTMLTemplate.html";
+	
+	public static class DeprecatedExceptionRow {
+		private int refNumber;
+		String licenseExceptionId;
+		private String reference;
+		private String exceptionName;
+		private String deprecatedVersion;
+		
+		public DeprecatedExceptionRow(String licenseExceptionId, String exceptionName,
+				int refNumber, String reference, String deprecatedVersion) {
+			this.licenseExceptionId = licenseExceptionId;
+			this.exceptionName = exceptionName;
+			this.refNumber = refNumber;
+			this.reference = reference;
+			this.deprecatedVersion = deprecatedVersion;
+		}
+
+		/**
+		 * @return the licenseExceptionId
+		 */
+		public String getLicenseExceptionId() {
+			return licenseExceptionId;
+		}
+
+
+		/**
+		 * @param licenseExceptionId the licenseExceptionId to set
+		 */
+		public void setLicenseExceptionId(String licenseExceptionId) {
+			this.licenseExceptionId = licenseExceptionId;
+		}
+
+
+		/**
+		 * @return the refNumber
+		 */
+		public int getRefNumber() {
+			return refNumber;
+		}
+
+		/**
+		 * @param refNumber the refNumber to set
+		 */
+		public void setRefNumber(int refNumber) {
+			this.refNumber = refNumber;
+		}
+
+		/**
+		 * @return the reference
+		 */
+		public String getReference() {
+			return reference;
+		}
+
+		/**
+		 * @param reference the reference to set
+		 */
+		public void setReference(String reference) {
+			this.reference = reference;
+		}
+
+		/**
+		 * @return the exceptionName
+		 */
+		public String getExceptionName() {
+			return exceptionName;
+		}
+
+		/**
+		 * @param exceptionName the exceptionName to set
+		 */
+		public void setExceptionName(String exceptionName) {
+			this.exceptionName = exceptionName;
+		}
+
+		/**
+		 * @return the deprecatedVersion
+		 */
+		public String getDeprecatedVersion() {
+			return deprecatedVersion;
+		}
+
+		/**
+		 * @param deprecatedVersion the deprecatedVersion to set
+		 */
+		public void setDeprecatedVersion(String deprecatedVersion) {
+			this.deprecatedVersion = deprecatedVersion;
+		}
+	}
 
 	/**
 	 * Holds the data one of the list rows of exceptions
@@ -119,6 +208,9 @@ public class ExceptionHtmlToc {
 	}
 	
 	List<ExceptionRow> exceptions = Lists.newArrayList();
+	List<DeprecatedExceptionRow> deprecatedExceptions = Lists.newArrayList();
+	
+	int currentRefNum = 1;
 
 	/**
 	 * Add an exception to the table of contents
@@ -130,7 +222,15 @@ public class ExceptionHtmlToc {
 		exceptions.add(new ExceptionRow(
 				StringEscapeUtils.escapeHtml4(exception.getLicenseExceptionId()), 
 				StringEscapeUtils.escapeHtml4(exception.getName()),			
-				exceptions.size()+1, exceptionHTMLReference));
+				currentRefNum++, exceptionHTMLReference));
+	}
+	
+	public void addDeprecatedException(LicenseException exception,
+			String exceptionHTMLReference, String deprecatedVersion) {
+		deprecatedExceptions.add(new DeprecatedExceptionRow(
+				StringEscapeUtils.escapeHtml4(exception.getLicenseExceptionId()), 
+				StringEscapeUtils.escapeHtml4(exception.getName()),			
+				currentRefNum++, exceptionHTMLReference, deprecatedVersion));
 	}
 
 	/**
@@ -145,6 +245,7 @@ public class ExceptionHtmlToc {
 		Map<String, Object> mustacheMap = Maps.newHashMap();
 		mustacheMap.put("version", StringEscapeUtils.escapeHtml4(version));
 		mustacheMap.put("listedExceptions", exceptions);
+		mustacheMap.put("deprecatedExceptions", deprecatedExceptions);
 		FileOutputStream stream = null;
 		OutputStreamWriter writer = null;
 		if (!exceptionTocFile.exists()) {
