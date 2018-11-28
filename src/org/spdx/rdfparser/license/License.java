@@ -584,6 +584,9 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 	}
 	
+	/**
+	 * @param deprecated true if this license is deprecated
+	 */
 	public void setDeprecated(boolean deprecated) {
 		this.deprecated = deprecated;
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
@@ -592,6 +595,7 @@ public abstract class License extends SimpleLicensingInfo {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, "true");
 		}
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#clone()
 	 */
