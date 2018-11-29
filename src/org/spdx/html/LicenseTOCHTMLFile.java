@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.spdx.rdfparser.license.SpdxListedLicense;
-import org.spdx.spdxspreadsheet.SPDXLicenseSpreadsheet.DeprecatedLicenseInfo;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -313,11 +312,11 @@ public class LicenseTOCHTMLFile {
 	 * @param deprecatedLicense
 	 * @param licHTMLReference
 	 */
-	public void addDeprecatedLicense(DeprecatedLicenseInfo deprecatedLicense,
+	public void addDeprecatedLicense(SpdxListedLicense deprecatedLicense,
 			String licHTMLReference) {
 		deprecatedLicenses.add(new DeprecatedLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				deprecatedLicense.getLicense().getLicenseId(), 
-				deprecatedLicense.getLicense().getName(),
+				deprecatedLicense.getLicenseId(), 
+				deprecatedLicense.getName(),
 				deprecatedLicense.getDeprecatedVersion()));
 		currentRefNumber++;
 	}
