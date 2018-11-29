@@ -118,7 +118,7 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		String licenseHtml = "<html>html</html>";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
-				sourceUrls, notes, standardLicenseHeader, template, true, true, licenseHtml);
+				sourceUrls, notes, standardLicenseHeader, template, true, true, licenseHtml, false, null);
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(id, compLic.getLicenseId());
@@ -134,6 +134,7 @@ public class TestSpdxListedLicense {
 		assertEquals(template, compLic.getStandardLicenseTemplate());
 		assertTrue(compLic.isFsfLibre());
 		assertTrue(compLic.isOsiApproved());
+		assertFalse(compLic.isDeprecated());
 	}
 	
 	@Test
@@ -179,8 +180,9 @@ public class TestSpdxListedLicense {
 		String standardLicenseHeader = "Standard license header";
 		String template = "template";
 		String licenseHtml = "<html>html</html>";
+		String deprecatedVersion = "3.2";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
-				sourceUrls, notes, standardLicenseHeader, template, false, false, licenseHtml);
+				sourceUrls, notes, standardLicenseHeader, template, false, false, licenseHtml, false, null);
 		assertFalse(stdl.isFsfLibre());
 		stdl.setFsfLibre(true);
 		assertTrue(stdl.isFsfLibre());
@@ -198,7 +200,7 @@ public class TestSpdxListedLicense {
 		
 		// Test for null value
 		SpdxListedLicense stdl2 = new SpdxListedLicense(name, id, text,
-				sourceUrls, notes, standardLicenseHeader, template, false, null, licenseHtml);
+				sourceUrls, notes, standardLicenseHeader, template, false, null, licenseHtml, true, deprecatedVersion);
 		assertTrue(stdl2.getFsfLibre() == null);
 		assertFalse(stdl2.isFsfLibre());
 		assertFalse(stdl2.isNotFsfLibre());

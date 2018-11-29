@@ -100,6 +100,7 @@ public class TestLicenseException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1);
+		le.setDeprecated(true);
 		Resource leResource = le.createResource(testContainer);
 		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
@@ -107,6 +108,7 @@ public class TestLicenseException {
 		assertEquals(EXCEPTION_TEXT1, le2.getLicenseExceptionText());
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
+		assertTrue(le2.isDeprecated());
 	}
 
 	@Test
@@ -114,6 +116,7 @@ public class TestLicenseException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
 				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_TEMPLATE1, EXCEPTION_SEEALSO1,
 				EXCEPTION_COMMENT1);
+		le.setDeprecated(true);
 		LicenseException le2 = le.clone();
 		assertEquals(EXCEPTION_ID1, le2.getLicenseExceptionId());
 		assertEquals(EXCEPTION_NAME1, le2.getName());
@@ -121,6 +124,7 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 		assertEquals(EXCEPTION_TEMPLATE1, le2.getLicenseExceptionTemplate());
+		assertTrue(le2.isDeprecated());
 		le.createResource(testContainer);
 		LicenseException le3 = le.clone();
 		assertEquals(EXCEPTION_ID1, le3.getLicenseExceptionId());
@@ -129,6 +133,7 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le3.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le3.getComment());
 		assertEquals(EXCEPTION_TEMPLATE1, le3.getLicenseExceptionTemplate());
+		assertTrue(le3.isDeprecated());
 	}
 
 	@Test
@@ -176,7 +181,22 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 	}
-
+	
+	@Test
+	public void testSetDeprecated() throws InvalidSPDXAnalysisException {
+		LicenseException le = new LicenseException(EXCEPTION_ID1,
+				EXCEPTION_NAME1, EXCEPTION_TEXT1, EXCEPTION_SEEALSO1,
+				EXCEPTION_COMMENT1);
+		assertFalse(le.isDeprecated());
+		Resource leResource = le.createResource(testContainer);
+		LicenseException le2 = new LicenseException(testContainer, leResource.asNode());
+		assertFalse(le2.isDeprecated());
+		le2.setDeprecated(true);
+		assertTrue(le2.isDeprecated());
+		LicenseException le3 = new LicenseException(testContainer, leResource.asNode());
+		assertTrue(le3.isDeprecated());
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetExample() throws InvalidSPDXAnalysisException {
