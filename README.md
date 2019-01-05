@@ -12,6 +12,11 @@ see [http://spdx.org/](http://spdx.org/)
 ## Contributing
 See the file CONTRIBUTING.md for information on making contributions to the SPDX tools.
 
+## Issues
+Report any security related issues by sending an email to [spdx-tools-security@lists.spdx.org](mailto:spdx-tools-security@lists.spdx.org)
+
+Non-security related issues should be added to the [SPDX tools issues list](https://github.com/spdx/tools)
+
 ## Syntax
 The command line interface of the spdx tools can be used like this:
 
