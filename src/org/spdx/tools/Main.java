@@ -83,7 +83,6 @@ public class Main {
 						+ "CompareSpdxDocs          doc1 doc2 [output] \n"
 						+ "GenerateVerificationCode sourceDirectory\n"
 						+ "Version\n"
-						+ "MergeSpdxDocs            masterDocument, mergedDoc1, MergedDoc2, ..., outputFile\n"
 						+ "MatchingStandardLicenses licenseTextFile");
 	}
 }
