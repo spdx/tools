@@ -41,12 +41,29 @@
 	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jena.version>3.9.0</jena.version>
+		<jena.version>3.10.0</jena.version>
 	</properties>
 	<dependencies>
-
-
 		<!-- JENA -->
+		<dependency>
+		<!-- Force the dependency version greater or equal to 0.11.0 for Jena - resolves vulnerability -->
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>0.12.0</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+		<!-- Force the dependency version to 2.9.8 for Jena - resolves vulnerability -->
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+		<dependency>
+		<!-- Force the dependency version to 1.18 for Jena - resolves vulnerability -->
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.18</version>
+		</dependency>
 		<dependency>
 		   <groupId>org.apache.jena</groupId>
 		   <artifactId>apache-jena-libs</artifactId>
