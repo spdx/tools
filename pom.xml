@@ -53,12 +53,6 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
-		<!-- Force the dependency version to 2.9.8 for Jena - resolves vulnerability -->
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.8</version>
-		</dependency>
-		<dependency>
 		<!-- Force the dependency version to 1.18 for Jena - resolves vulnerability -->
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
