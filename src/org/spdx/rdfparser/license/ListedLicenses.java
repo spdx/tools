@@ -54,11 +54,11 @@ import com.google.gson.Gson;
  */
 public class ListedLicenses implements IModelContainer {
 	
-	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.1";
+	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.5";
 	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/";
-	private static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
+	static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
 	private static final String LICENSE_TOC_FILENAME = "licenses.json";
 	
 	private static final String LISTED_LICENSE_PROPERTIES_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "licenses.properties";
@@ -462,7 +462,7 @@ public class ListedLicenses implements IModelContainer {
 	
 	/**
 	 * @param licenseId SPDX Listed License ID
-	 * @return SPDX listed license
+	 * @return SPDX listed license or null if the ID is not in the SPDX license list
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
