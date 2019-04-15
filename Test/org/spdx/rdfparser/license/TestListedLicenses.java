@@ -1,7 +1,5 @@
 package org.spdx.rdfparser.license;
 
-import org.junit.Assert;
-
 import static org.junit.Assert.*;
 
 import org.apache.commons.lang3.StringUtils;
