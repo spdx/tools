@@ -269,7 +269,7 @@ public class ListedExceptions implements IModelContainer {
 					in = FileManager.get().open(actualUrl);
 					try {
 						retval.read(in, base, "JSON-LD");
-						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
+						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID);
 				    	if (retval.isEmpty() || !retval.contains(null, p)) {
 					    	try {
 								in.close();

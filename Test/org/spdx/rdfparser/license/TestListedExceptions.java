@@ -24,6 +24,7 @@ public class TestListedExceptions {
 	public void testGetLicenseIbyIdLocal() throws InvalidSPDXAnalysisException {
 		System.setProperty("SPDXParser.OnlyUseLocalLicenses", "true");
 		ListedLicenses.resetListedLicenses();
+		ListedExceptions.resetListedExceptions();
 		try {
 			String id = "Classpath-exception-2.0";
 			assertTrue(ListedExceptions.getListedExceptions().isSpdxListedLExceptionID(id));
@@ -32,6 +33,7 @@ public class TestListedExceptions {
 		} finally {
 			System.setProperty("SPDXParser.OnlyUseLocalLicenses", "false");
 			ListedLicenses.resetListedLicenses();
+			ListedExceptions.resetListedExceptions();
 		}
 	}
 }
