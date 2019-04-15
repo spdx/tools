@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.model.IRdfModel;
-
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -274,5 +274,10 @@ public class TestWithExceptionOperator {
 		assertEquals(le1.getLicenseExceptionId(), le1FromResource.getLicenseExceptionId());
 		assertEquals(le1.getLicenseExceptionText(), le1FromResource.getLicenseExceptionText());
 		assertEquals(le1.getName(), le1FromResource.getName());
+	}
+	
+	@Test
+	public void testClassPathException() throws InvalidSPDXAnalysisException, InvalidLicenseStringException {
+		assertTrue(LicenseInfoFactory.parseSPDXLicenseString("GPL-2.0-only WITH Classpath-exception-2.0").verify().isEmpty());
 	}
 }

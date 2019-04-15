@@ -157,7 +157,12 @@ public class LicenseExpressionParser {
 						throw(new LicenseParserException("Missing exception clause"));
 					}
 					token = tokens[tokenIndex++];
-					LicenseException licenseException = new LicenseException(token);
+					LicenseException licenseException = null;
+					if (LicenseInfoFactory.isSPdxListedExceptionID(token)) {
+						licenseException = LicenseInfoFactory.getListedExceptionById(token);
+					} else {
+						licenseException = new LicenseException(token);
+					}
 					AnyLicenseInfo operand = operandStack.pop();
 					if (operand == null) {
 						throw(new LicenseParserException("Missing license for with clause"));
