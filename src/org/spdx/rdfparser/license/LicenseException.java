@@ -256,7 +256,12 @@ public class LicenseException implements IRdfModel, Cloneable  {
 				}
 			} else {	// create a node
 				Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE_EXCEPTION);
-				this.resource = model.createResource(type);
+				String uri = getUri(modelContainer);
+				if (uri != null) {
+					this.resource = model.createResource(uri, type);
+				} else {
+					this.resource = model.createResource(type);
+				}				
 			}
 			// check to make sure we are not overwriting an existing exception with the same ID
 			if (this.exceptionNode != null) {
@@ -662,5 +667,15 @@ public class LicenseException implements IRdfModel, Cloneable  {
 				this.resource.addProperty(deprecatedProperty, "true");
 			}
 		}
+	}
+	
+	/**
+	 * Get the URI for this RDF object. Null if this is for an anonomous node.
+	 * @param modelContainer
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
+		return null;	// default to anonomous node
 	}
 }

@@ -21,6 +21,7 @@ import org.spdx.licenseTemplate.LicenseTemplateRuleException;
 import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
+import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
  * Exceptions listed in the SPDX license list
@@ -147,5 +148,33 @@ public class ListedLicenseException extends LicenseException {
 	 */
 	public void setExceptionTextHtml(String exceptionTextHtml) {
 		this.exceptionTextHtml = exceptionTextHtml;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.spdx.rdfparser.license.LicenseException#getUri(org.spdx.rdfparser.IModelContainer)
+	 */
+	@Override
+	public String getUri(IModelContainer modelContainer)
+			throws InvalidSPDXAnalysisException {	
+		return this.createListedExceptionUri(this.getLicenseExceptionId());
+	}
+	
+	/**
+	 * Creates a listed exception URI by appending the standard license ID to the URL hosting the SPDX licenses
+	 * @param id listed exception ID
+	 * @return
+	 */
+	private String createListedExceptionUri(String id) {
+		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
+	}
+	
+	@Override
+    public LicenseException clone() {
+		ListedLicenseException retval = new ListedLicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),
+				this.getLicenseExceptionTemplate(), this.getSeeAlso(), this.getComment());
+		retval.setDeprecated(this.isDeprecated());
+		retval.setExample(this.getExample());
+		retval.setExceptionTextHtml(this.exceptionTextHtml);
+		return retval;
 	}
 }
