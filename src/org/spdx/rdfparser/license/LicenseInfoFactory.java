@@ -101,7 +101,7 @@ public class LicenseInfoFactory {
 
 	/**
 	 * @param licenseId SPDX Listed License ID
-	 * @return SPDX listed license
+	 * @return SPDX listed license or null if the ID is not in the SPDX license list
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
@@ -256,5 +256,22 @@ public class LicenseInfoFactory {
 	 */
 	public static String getLicenseListVersion() {
 		return ListedLicenses.getListedLicenses().getLicenseListVersion();
-	}   
+	}
+
+	/**
+	 * @param id exception ID
+	 * @return true if the exception ID is a supported SPDX listed exception
+	 */
+	public static boolean isSPdxListedExceptionID(String id) {
+		return ListedExceptions.getListedExceptions().isSpdxListedLExceptionID(id);
+	}
+
+	/**
+	 * @param id
+	 * @return the standard SPDX license exception or null if the ID is not in the SPDX license list
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public static LicenseException getListedExceptionById(String id) throws InvalidSPDXAnalysisException {
+		return ListedExceptions.getListedExceptions().getListedExceptionById(id);
+	}
 }

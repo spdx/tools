@@ -663,4 +663,20 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			}
 		}
 	}
+	
+	/**
+	 * Copy all of the parameters from another license
+	 * @param exception
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void copyFrom(LicenseException exception) throws InvalidSPDXAnalysisException {
+		this.setComment(exception.getComment());
+		this.setName(exception.getName());
+		this.setSeeAlso(exception.getSeeAlso());
+		this.setDeprecated(exception.isDeprecated());
+		this.setExample(exception.getExample());
+		this.setLicenseExceptionId(exception.getLicenseExceptionId());
+		this.setLicenseExceptionTemplate(exception.getLicenseExceptionTemplate());
+		this.setLicenseExceptionText(exception.getLicenseExceptionText());
+	}
 }

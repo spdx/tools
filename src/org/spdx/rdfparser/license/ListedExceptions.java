@@ -24,7 +24,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -48,82 +47,72 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 
 /**
- * Singleton class which holds the listed licenses
+ * Singleton class which holds the listed exceptions
  * @author Gary O'Neall
  *
  */
-public class ListedLicenses implements IModelContainer {
+public class ListedExceptions implements IModelContainer {
 	
-	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.5";
-	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(ListedExceptions.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
-	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/";
-	static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
-	private static final String LICENSE_TOC_FILENAME = "licenses.json";
+	private static final String EXCEPTION_TOC_FILENAME = "exceptions.json";
 	
-	private static final String LISTED_LICENSE_PROPERTIES_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "licenses.properties";
+	private Model listedExceptionModel = null;
 	
-	private Model listedLicenseModel = null;
+	Set<String> listdExceptionIds = null;
 	
-	Set<String> listdLicenseIds = null;
-	
-	Map<String, SpdxListedLicense> listedLicenseCache = null;
-	Map<IModelContainer, Map<Node, SpdxListedLicense>> listedLicenseNodeCache = Maps.newHashMap();
-	
+	Map<String, ListedLicenseException> listedExceptionCache = null;
+	Map<IModelContainer, Map<Node, ListedLicenseException>> listedExceptionNodeCache = Maps.newHashMap();
 
-    
-	Properties licenseProperties;
     boolean onlyUseLocalLicenses;
 
-    String licenseListVersion = DEFAULT_LICENSE_LIST_VERSION;
+    String licenseListVersion = ListedLicenses.DEFAULT_LICENSE_LIST_VERSION;
 
-	private static volatile ListedLicenses listedLicenses = null;
+	private static volatile ListedExceptions listedExceptions = null;
 	
 	//Lock to ensure thread-safety of all modifications.
 	//Since modifications should be extremely rare, a single lock for both listed licenses and the model
 	//should be sufficient.
-	private static final ReadWriteLock listedLicenseModificationLock = new ReentrantReadWriteLock();
+	private static final ReadWriteLock listedExceptionModificationLock = new ReentrantReadWriteLock();
 	private static final String JSONLD_URL_SUFFIX = ".jsonld";
 	
 	int nextId = 0;
 	
 	/**
-	 * This constructor should only be called by the getListedLicenses method
+	 * This constructor should only be called by the getListedExeptions method
 	 */
-	private ListedLicenses() {
-		licenseProperties = loadLicenseProperties();
-		onlyUseLocalLicenses = Boolean.parseBoolean(
-	            System.getProperty("SPDXParser.OnlyUseLocalLicenses", licenseProperties.getProperty("OnlyUseLocalLicenses", "false")));
-		loadListedLicenseIDs();
+	private ListedExceptions() {
+		onlyUseLocalLicenses = ListedLicenses.getListedLicenses().onlyUseLocalLicenses;
+		loadListedExceptionIDs();
 	}
 	
-    public static ListedLicenses getListedLicenses() {
-        if (listedLicenses == null) {
-            listedLicenseModificationLock.writeLock().lock();
+    public static ListedExceptions getListedExceptions() {
+        if (listedExceptions == null) {
+            listedExceptionModificationLock.writeLock().lock();
             try {
-                if (listedLicenses == null) {
-                    listedLicenses = new ListedLicenses();
+                if (listedExceptions == null) {
+                    listedExceptions = new ListedExceptions();
                 }
             } finally {
-                listedLicenseModificationLock.writeLock().unlock();
+                listedExceptionModificationLock.writeLock().unlock();
             }
         }
-        return listedLicenses;
+        return listedExceptions;
     }
 	
 	/**
-	 * Resets all of the cached license information and reloads the license IDs
+	 * Resets all of the cached exception information and reloads the exception IDs
 	 * NOTE: This method should be used with caution, it will negatively impact
 	 * performance.
 	 * @return
 	 */
-    public static ListedLicenses resetListedLicenses() {
-        listedLicenseModificationLock.writeLock().lock();
+    public static ListedExceptions resetListedExceptions() {
+        listedExceptionModificationLock.writeLock().lock();
         try {
-            listedLicenses = new ListedLicenses();
-            return listedLicenses;
+            listedExceptions = new ListedExceptions();
+            return listedExceptions;
         } finally {
-            listedLicenseModificationLock.writeLock().unlock();
+            listedExceptionModificationLock.writeLock().unlock();
         }
     }
 
@@ -132,62 +121,62 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public Model getModel() {
-		listedLicenseModificationLock.writeLock().lock();
+		listedExceptionModificationLock.writeLock().lock();
 		try {
-			if (listedLicenseModel == null) {
-				listedLicenseModel = ModelFactory.createDefaultModel();
+			if (listedExceptionModel == null) {
+				listedExceptionModel = ModelFactory.createDefaultModel();
 			}
 		} finally {
-            listedLicenseModificationLock.writeLock().unlock();
+            listedExceptionModificationLock.writeLock().unlock();
         }
-		return listedLicenseModel;
+		return listedExceptionModel;
 	}
 	
 	/**
-	 * Get a listed license based on a URI.  The URI can be a file or a web resource.
-	 * The license information is copied into the listedLicenseModel and the license
+	 * Get a listed exception based on a URI.  The URI can be a file or a web resource.
+	 * The exception information is copied into the listedExceptionModel and the exception
 	 * is placed into the cache.
 	 * @param uri
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-    protected SpdxListedLicense getLicenseFromUri(String uri) throws InvalidSPDXAnalysisException {
-        URL licenseUrl = null;
+    protected ListedLicenseException getExceptionFromUri(String uri) throws InvalidSPDXAnalysisException {
+        URL exceptionUrl = null;
         try {
-            licenseUrl = new URL(uri);
+            exceptionUrl = new URL(uri);
         } catch (MalformedURLException e) {
-            throw new InvalidSPDXAnalysisException("Invalid listed license URL: " + e.getMessage());
+            throw new InvalidSPDXAnalysisException("Invalid listed exception URL: " + e.getMessage());
         }
-        String id = urlToId(licenseUrl);
+        String id = urlToId(exceptionUrl);
         //We will not enforce that the cache miss and the subsequent caching of the retrieved license be atomic.
-        listedLicenseModificationLock.readLock().lock();
+        listedExceptionModificationLock.readLock().lock();
         try {
-            if (listedLicenseCache.containsKey(id)) {
-                return listedLicenseCache.get(id);
+            if (listedExceptionCache.containsKey(id)) {
+                return listedExceptionCache.get(id);
             }
         } finally {
-            listedLicenseModificationLock.readLock().unlock();
+            listedExceptionModificationLock.readLock().unlock();
         }
 		String base = LISTED_LICENSE_ID_URL + id;
-		final Model localLicenseModel = getLicenseModel(uri, base);
-		if (localLicenseModel == null) {
-			throw(new InvalidSPDXAnalysisException("No listed license was found at "+uri));
+		final Model localExceptionModel = getExceptionModel(uri, base);
+		if (localExceptionModel == null) {
+			throw(new InvalidSPDXAnalysisException("No listed exception was found at "+uri));
 		}
-		Resource licResource = localLicenseModel.getResource(base);
-		if (licResource == null || !localLicenseModel.containsResource(localLicenseModel.asRDFNode(licResource.asNode()))) {
-			throw(new InvalidSPDXAnalysisException("No listed license was found at "+uri));
+		Resource exceptionResource = localExceptionModel.getResource(base);
+		if (exceptionResource == null || !localExceptionModel.containsResource(localExceptionModel.asRDFNode(exceptionResource.asNode()))) {
+			throw(new InvalidSPDXAnalysisException("No listed exception was found at "+uri));
 		}
-		final String localLicenseNamespace = this.getDocumentNamespace();
-		IModelContainer localLicenseContainer = new IModelContainer() {
+		final String localExceptionNamespace = this.getDocumentNamespace();
+		IModelContainer localExceptionContainer = new IModelContainer() {
 
 			@Override
 			public Model getModel() {
-				return localLicenseModel;
+				return localExceptionModel;
 			}
 
 			@Override
 			public String getDocumentNamespace() {
-				return localLicenseNamespace;
+				return localExceptionNamespace;
 			}
 
 			@Override
@@ -232,30 +221,30 @@ public class ListedLicenses implements IModelContainer {
 			}
 			
 		};
-		SpdxListedLicense retval;
-		if (this.getModel().equals(localLicenseModel)) {
-			retval = new SpdxListedLicense(localLicenseContainer, licResource.asNode());
+		ListedLicenseException retval;
+		if (this.getModel().equals(localExceptionModel)) {
+			retval = new ListedLicenseException(localExceptionContainer, exceptionResource.asNode());
 		} else {	// we need to copy from the local model into this model
-			SpdxListedLicense localLicense = new SpdxListedLicense(localLicenseContainer, licResource.asNode());
-			retval = (SpdxListedLicense)localLicense.clone();
+			ListedLicenseException localException = new ListedLicenseException(localExceptionContainer, exceptionResource.asNode());
+			retval = (ListedLicenseException)localException.clone();
 			retval.createResource(this);
         }
-        listedLicenseModificationLock.writeLock().lock();
+        listedExceptionModificationLock.writeLock().lock();
         try {
-            listedLicenseCache.put(id, retval);
+            listedExceptionCache.put(id, retval);
         } finally {
-            listedLicenseModificationLock.writeLock().unlock();
+            listedExceptionModificationLock.writeLock().unlock();
         }
 		return retval;
 	}
 
 	/**
-	 * Converts a license URL to a license ID
-	 * @param licenseUrl
+	 * Converts an exception URL to a license ID
+	 * @param exceptionUrl
 	 * @return
 	 */
-	private String urlToId(URL licenseUrl) {
-		String[] pathParts = licenseUrl.getFile().split("/");
+	private String urlToId(URL exceptionUrl) {
+		String[] pathParts = exceptionUrl.getFile().split("/");
 		String id = pathParts[pathParts.length-1];
 		if (id.endsWith(JSONLD_URL_SUFFIX)) {
 			id = id.substring(0, id.length() - JSONLD_URL_SUFFIX.length());
@@ -265,16 +254,16 @@ public class ListedLicenses implements IModelContainer {
 
 	/**
 	 * @param uri - URI of the actual resource
-	 * @param base - base for any fragments present in the license model
+	 * @param base - base for any fragments present in the exception model
 	 * @return
 	 * @throws NoListedLicenseRdfModel 
 	 */
-	private Model getLicenseModel(String uri, String base) throws NoListedLicenseRdfModel {
+	private Model getExceptionModel(String uri, String base) throws NoListedLicenseRdfModel {
 		Model retval = ModelFactory.createDefaultModel();
 		InputStream in = null;
 		try {
 			try {
-				if (!(onlyUseLocalLicenses && uri.startsWith(LISTED_LICENSE_URI_PREFIX))) {
+				if (!(onlyUseLocalLicenses && uri.startsWith(ListedLicenses.LISTED_LICENSE_URI_PREFIX))) {
 					//Accessing the old HTTP urls produces 301.
 					String actualUrl = StringUtils.replaceOnce(uri, "http://", "https://");
 					in = FileManager.get().open(actualUrl);
@@ -285,7 +274,7 @@ public class ListedLicenses implements IModelContainer {
 					    	try {
 								in.close();
 							} catch (IOException e) {
-								logger.warn("Error closing listed license input");
+								logger.warn("Error closing listed exception input");
 							}
 					    	in = null;
 				    	}
@@ -299,19 +288,19 @@ public class ListedLicenses implements IModelContainer {
 				}
 			} catch(Exception ex) {
 				in = null;
-				logger.warn("Unable to open SPDX listed license model.  Using local file copy for SPDX listed licenses");
+				logger.warn("Unable to open SPDX listed exception model.  Using local file copy for SPDX listed exceptions");
 			}
 			if (in == null) {
 				// need to fetch from the class
-				String fileName = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + uri.substring(LISTED_LICENSE_URI_PREFIX.length());
+				String fileName = ListedLicenses.LISTED_LICENSE_RDF_LOCAL_DIR + "/" + uri.substring(ListedLicenses.LISTED_LICENSE_URI_PREFIX.length());
 				in = LicenseInfoFactory.class.getResourceAsStream("/" + fileName);
 				if (in == null) {
-					throw(new NoListedLicenseRdfModel("SPDX listed license "+uri+" could not be read."));
+					throw(new NoListedLicenseRdfModel("SPDX listed exception "+uri+" could not be read."));
 				}
 				try (InputStreamReader reader = new InputStreamReader(in, Charset.forName("UTF-8"))){
 					retval.read(in, base, "JSON-LD");
 				} catch(Exception ex) {
-					throw(new NoListedLicenseRdfModel("Error reading the spdx listed licenses: "+ex.getMessage(),ex));
+					throw(new NoListedLicenseRdfModel("Error reading the spdx listed exception: "+ex.getMessage(),ex));
 				}
 			}
 			return retval;
@@ -327,21 +316,19 @@ public class ListedLicenses implements IModelContainer {
 	}
 	
     /**
-     * Load the listed license IDs from the website or local file cache
+     * Load the listed exception IDs from the website or local file cache
      */
-    private void loadListedLicenseIDs() {
-        listedLicenseModificationLock.writeLock().lock();
+    private void loadListedExceptionIDs() {
+        listedExceptionModificationLock.writeLock().lock();
         try {
-            listedLicenseCache = Maps.newHashMap(); // clear the cache
-            listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
-            //TODO: Can the keys of listedLicenseCache be used instead of this set?
-            //NOTE: This includes deprecated licenses - should this be changed to only return non-deprecated licenses?
+            listedExceptionCache = Maps.newHashMap(); // clear the cache
+            listdExceptionIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
             InputStream tocStream = null;
             BufferedReader reader = null;
             try {
                 if (!this.onlyUseLocalLicenses) {
                 	try {
-						URL tocUrl = new URL(LISTED_LICENSE_URI_PREFIX + LICENSE_TOC_FILENAME);
+						URL tocUrl = new URL(ListedLicenses.LISTED_LICENSE_URI_PREFIX + EXCEPTION_TOC_FILENAME);
 						tocStream = tocUrl.openStream();
 					} catch (MalformedURLException e) {
 						logger.error("Json TOC URL invalid, using local TOC file");
@@ -353,11 +340,11 @@ public class ListedLicenses implements IModelContainer {
                 }
                 if (tocStream == null) {
                 	// fetch from class loader
-                	String fileName = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + LICENSE_TOC_FILENAME;
+                	String fileName = ListedLicenses.LISTED_LICENSE_RDF_LOCAL_DIR + "/" + EXCEPTION_TOC_FILENAME;
                 	tocStream = LicenseInfoFactory.class.getResourceAsStream("/" + fileName);
                 }
                 if (tocStream == null) {
-                	logger.error("Unable to load license ID's from JSON TOC file");
+                	logger.error("Unable to load exception ID's from JSON TOC file");
                 }
                 reader = new BufferedReader(new InputStreamReader(tocStream));
                 StringBuilder tocJsonStr = new StringBuilder();
@@ -366,8 +353,8 @@ public class ListedLicenses implements IModelContainer {
                 	tocJsonStr.append(line);
                 }
                 Gson gson = new Gson();
-                LicenseJsonTOC jsonToc = gson.fromJson(tocJsonStr.toString(), LicenseJsonTOC.class);
-                listdLicenseIds = jsonToc.getLicenseIds();
+                ExceptionJsonTOC jsonToc = gson.fromJson(tocJsonStr.toString(), ExceptionJsonTOC.class);
+                listdExceptionIds = jsonToc.getExceptionIds();
                 this.licenseListVersion = jsonToc.getLicenseListVersion();
                 
             } catch (IOException e) {
@@ -388,67 +375,20 @@ public class ListedLicenses implements IModelContainer {
             	}
             }
         } finally {
-            listedLicenseModificationLock.writeLock().unlock();
-        }
-    }
-
-	/**
-	 * @param licenseID
-	 * @return true if the licenseID belongs to an SPDX listed license
-	 * @throws InvalidSPDXAnalysisException 
-	 */
-    public boolean isSpdxListedLicenseID(String licenseID) {
-        try {
-            listedLicenseModificationLock.readLock().lock();
-            return listdLicenseIds.contains(licenseID);
-        } finally {
-            listedLicenseModificationLock.readLock().unlock();
+            listedExceptionModificationLock.writeLock().unlock();
         }
     }
 	
-	/**
-	 * Tries to load properties from LISTED_LICENSE_PROPERTIES_FILENAME, ignoring errors
-	 * encountered during the process (e.g., the properties file doesn't exist, etc.).
-	 * 
-	 * @return a (possibly empty) set of properties
-	 */
-    private static Properties loadLicenseProperties() {
-        listedLicenseModificationLock.writeLock().lock();
-        try {
-            Properties licenseProperties = new Properties();
-            InputStream in = null;
-            try {
-                in = LicenseInfoFactory.class.getResourceAsStream("/" + LISTED_LICENSE_PROPERTIES_FILENAME);
-                if (in != null) {
-                    licenseProperties.load(in);
-                }
-            } catch (IOException e) {
-                // Ignore it and fall through
-                logger.warn("IO Exception reading listed license properties file: " + e.getMessage());
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        logger.warn("Unable to close listed license properties file: " + e.getMessage());
-                    }
-                }
-            }
-            return licenseProperties;
-        } finally {
-            listedLicenseModificationLock.writeLock().unlock();
-        }
-    }
 	
 	/**
-	 * @return Array of all SPDX listed license IDs
+	 * @return Array of all SPDX listed exception IDs
 	 */
-    public String[] getSpdxListedLicenseIds() {
-        listedLicenseModificationLock.readLock().lock();
+    public String[] getSpdxListedExceptionIds() {
+        listedExceptionModificationLock.readLock().lock();
         try {
-            return listdLicenseIds.toArray(new String[listdLicenseIds.size()]);
+            return listdExceptionIds.toArray(new String[listdExceptionIds.size()]);
         } finally {
-			listedLicenseModificationLock.readLock().unlock();
+			listedExceptionModificationLock.readLock().unlock();
         }
     }
 	
@@ -458,53 +398,40 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	public String getLicenseListVersion() {
 		return licenseListVersion;
-	}   
-	
-	/**
-	 * @param licenseId SPDX Listed License ID
-	 * @return SPDX listed license or null if the ID is not in the SPDX license list
-	 * @throws InvalidSPDXAnalysisException
-	 */
-	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
-		SpdxListedLicense retval = getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId + JSONLD_URL_SUFFIX);
-		if (retval != null) {
-			retval = (SpdxListedLicense)retval.clone();	// We need to clone the license to remove the references to the model in the cache
-		}
-		return retval;
 	}
 
 	/**
-	 * Get or create a standard license in the model container copying any
+	 * Get or create a standard exception in the model container copying any
 	 * relevant information from the standard model to the model in the modelContainer
 	 * @param modelContainer
 	 * @param node
 	 * @return
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public AnyLicenseInfo getLicenseFromStdLicModel(
+	public ListedLicenseException getLicenseFromStdLicModel(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
-		Map<Node, SpdxListedLicense> modelNodeCache = this.listedLicenseNodeCache.get(modelContainer);
+		Map<Node, ListedLicenseException> modelNodeCache = this.listedExceptionNodeCache.get(modelContainer);
 		if (modelNodeCache == null) {
 			modelNodeCache = Maps.newHashMap();
-			this.listedLicenseNodeCache.put(modelContainer, modelNodeCache);
+			this.listedExceptionNodeCache.put(modelContainer, modelNodeCache);
 		}
 		if (modelNodeCache.containsKey(node)) {
 			return modelNodeCache.get(node);
 		}
-		SpdxListedLicense retval = new SpdxListedLicense(modelContainer, node);
+		ListedLicenseException retval = new ListedLicenseException(modelContainer, node);
 		if (!this.equals(modelContainer)) {
-			String licenseId = retval.getLicenseId();
-			if (licenseId == null) {
-				URL licenseUrl;
+			String exceptionId = retval.getLicenseExceptionId();
+			if (exceptionId == null) {
+				URL exceptionUrl;
 				try {
-					licenseUrl = new URL(node.getURI());
+					exceptionUrl = new URL(node.getURI());
 				} catch (MalformedURLException e) {
-					throw new InvalidSPDXAnalysisException("Invalid license URL");
+					throw new InvalidSPDXAnalysisException("Invalid exception URL");
 				}
-				licenseId = this.urlToId(licenseUrl);
+				exceptionId = this.urlToId(exceptionUrl);
 			}
 			try {
-				SpdxListedLicense licenseFromModel = getListedLicenseById(licenseId);
+				ListedLicenseException licenseFromModel = getListedExceptionById(exceptionId);
 				retval.copyFrom(licenseFromModel);	// update the local model from the standard model
 			} catch(Exception ex) {
 				// ignore any errors - just don't copy from the license model
@@ -536,7 +463,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public boolean spdxElementRefExists(String elementRef) {
-		return(listdLicenseIds.contains(elementRef));
+		return(listdExceptionIds.contains(elementRef));
 	}
 
 	/* (non-Javadoc)
@@ -544,7 +471,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public void addSpdxElementRef(String elementRef) {
-		listdLicenseIds.add(elementRef);
+		listdExceptionIds.add(elementRef);
 	}
 
 	/* (non-Javadoc)
@@ -552,7 +479,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public String documentNamespaceToId(String externalNamespace) {
-		// Listed licenses do not support external documents
+		// Listed exceptions do not support external documents
 		return null;
 	}
 
@@ -561,7 +488,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public String externalDocumentIdToNamespace(String docId) {
-		// Listed licenses do not support external documents
+		// Listed exceptions do not support external documents
 		return null;
 	}
 
@@ -574,9 +501,9 @@ public class ListedLicenses implements IModelContainer {
 		if (duplicate != null) {
 			return duplicate;
 		} else if (uri == null) {			
-			return listedLicenseModel.createResource(getType(listedLicenseModel));
+			return listedExceptionModel.createResource(getType(listedExceptionModel));
 		} else {
-			return listedLicenseModel.createResource(uri, getType(listedLicenseModel));
+			return listedExceptionModel.createResource(uri, getType(listedExceptionModel));
 		}
 	}
 
@@ -585,7 +512,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @return
 	 */
 	private Resource getType(Model model) {
-		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE);
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE_EXCEPTION);
 	}
 
 	/* (non-Javadoc)
@@ -595,5 +522,31 @@ public class ListedLicenses implements IModelContainer {
 	public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
 		// TODO Refactor and implement
 		return true;
+	}
+
+	/**
+	 * @param id exception ID
+	 * @return true if the exception ID is a supported SPDX listed exception
+	 */
+	public boolean isSpdxListedLExceptionID(String id) {
+        try {
+            listedExceptionModificationLock.readLock().lock();
+            return listdExceptionIds.contains(id);
+        } finally {
+            listedExceptionModificationLock.readLock().unlock();
+        }
+	}
+
+	/**
+	 * @param id
+	 * @return the standard SPDX license exception or null if the ID is not in the SPDX license list
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public ListedLicenseException getListedExceptionById(String id) throws InvalidSPDXAnalysisException {
+		ListedLicenseException retval = getExceptionFromUri(ListedLicenses.LISTED_LICENSE_URI_PREFIX + id + JSONLD_URL_SUFFIX);
+		if (retval != null) {
+			retval = (ListedLicenseException)retval.clone();	// We need to clone the license to remove the references to the model in the cache
+		}
+		return retval;
 	}
 }
