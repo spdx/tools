@@ -259,7 +259,7 @@
 			<plugin>
 				<groupId>org.spdx</groupId>
 					<artifactId>spdx-maven-plugin</artifactId>
-					<version>0.5.1</version>
+					<version>0.5.3</version>
 					<executions>
 						<execution>
 							<id>build-spdx</id>
@@ -270,7 +270,6 @@
 						</execution>
 					</executions>
 					<configuration>
-						<spdxFile>LICENSE.spdx</spdxFile>
 						<spdxDocumentNamespace>http://spdx.org/documents/spdx-tools{$version}</spdxDocumentNamespace>
 						<nonStandardLicenses>
 							<param>
