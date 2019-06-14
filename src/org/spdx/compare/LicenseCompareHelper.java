@@ -28,22 +28,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.spdx.compare.CompareTemplateOutputHandler.DifferenceDescription;
-import org.spdx.licenseTemplate.LicenseTemplateRuleException;
-import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
-import org.spdx.rdfparser.license.License;
-import org.spdx.rdfparser.license.LicenseException;
-import org.spdx.rdfparser.license.LicenseInfoFactory;
-import org.spdx.rdfparser.license.LicenseParserException;
+import org.spdx.rdfparser.license.ISpdxListedException;
+import org.spdx.rdfparser.license.ISpdxListedLicense;
 import org.spdx.rdfparser.license.LicenseSet;
-import org.spdx.rdfparser.license.SpdxListedLicense;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -545,25 +539,8 @@ public class LicenseCompareHelper {
 	 * @return any differences found
 	 * @throws SpdxCompareException
 	 */
-	public static DifferenceDescription isTextStandardLicense(License license, String compareText) throws SpdxCompareException {
-		String licenseTemplate = license.getStandardLicenseTemplate();
-		if (licenseTemplate == null || licenseTemplate.trim().isEmpty()) {
-			licenseTemplate = license.getLicenseText();
-		}
-		CompareTemplateOutputHandler compareTemplateOutputHandler = null;
-		try {
-			compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
-		} catch (IOException e1) {
-			throw(new SpdxCompareException("IO Error reading the compare text: "+e1.getMessage(),e1));
-		}
-		try {
-			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, compareTemplateOutputHandler);
-		} catch (LicenseTemplateRuleException e) {
-			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
-		} catch (LicenseParserException e) {
-			throw(new SpdxCompareException("Invalid template found during compare: "+e.getMessage(),e));
-		}
-		return compareTemplateOutputHandler.getDifferences();
+	public static DifferenceDescription isTextStandardLicense(ISpdxListedLicense license, String compareText) throws SpdxCompareException {
+		return ListedLicenseCompareHelper.isTextStandardLicense(license, compareText);
 	}
 	
 	/**
@@ -573,25 +550,8 @@ public class LicenseCompareHelper {
 	 * @return any differences found
 	 * @throws SpdxCompareException
 	 */
-	public static DifferenceDescription isTextStandardException(LicenseException exception, String compareText) throws SpdxCompareException {
-		String exceptionTemplate = exception.getLicenseExceptionTemplate();
-		if (exceptionTemplate == null || exceptionTemplate.trim().isEmpty()) {
-			exceptionTemplate = exception.getLicenseExceptionText();
-		}
-		CompareTemplateOutputHandler compareTemplateOutputHandler = null;
-		try {
-			compareTemplateOutputHandler = new CompareTemplateOutputHandler(compareText);
-		} catch (IOException e1) {
-			throw(new SpdxCompareException("IO Error reading the compare text: "+e1.getMessage(),e1));
-		}
-		try {
-			SpdxLicenseTemplateHelper.parseTemplate(exceptionTemplate, compareTemplateOutputHandler);
-		} catch (LicenseTemplateRuleException e) {
-			throw(new SpdxCompareException("Invalid template rule found during compare: "+e.getMessage(),e));
-		} catch (LicenseParserException e) {
-			throw(new SpdxCompareException("Invalid template found during compare: "+e.getMessage(),e));
-		}
-		return compareTemplateOutputHandler.getDifferences();
+	public static DifferenceDescription isTextStandardException(ISpdxListedException exception, String compareText) throws SpdxCompareException {
+		return ListedLicenseCompareHelper.isTextStandardException(exception, compareText);
 	}
 	
 	/**
@@ -603,14 +563,6 @@ public class LicenseCompareHelper {
 	 * @throws SpdxCompareException If an error occurs in the comparison
 	 */
 	public static String[] matchingStandardLicenseIds(String licenseText) throws InvalidSPDXAnalysisException, SpdxCompareException {
-		String[] stdLicenseIds = LicenseInfoFactory.getSpdxListedLicenseIds();
-		List<String> matchingIds  = Lists.newArrayList();
-		for (String stdLicId : stdLicenseIds) {
-			SpdxListedLicense license = LicenseInfoFactory.getListedLicenseById(stdLicId);
-			if (!isTextStandardLicense(license, licenseText).isDifferenceFound()) {
-				matchingIds.add(license.getLicenseId());
-			}
-		}
-		return matchingIds.toArray(new String[matchingIds.size()]);
+		return ListedLicenseCompareHelper.matchingStandardLicenseIds(licenseText);
 	}
 }

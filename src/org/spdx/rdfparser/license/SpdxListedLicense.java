@@ -35,7 +35,7 @@ import org.apache.jena.rdf.model.Resource;
  * @author Gary O'Neall
  *
  */
-public class SpdxListedLicense extends License {
+public class SpdxListedLicense extends License implements ISpdxListedLicense {
 	
 	private String licenseTextHtml = null;
 	private String licenseHeaderHtml = null;
