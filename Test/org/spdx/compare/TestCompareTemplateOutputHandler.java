@@ -81,8 +81,8 @@ public class TestCompareTemplateOutputHandler {
 	static final String LPPL_1_3_C_TEMPLATE = "TestFiles" + File.separator + "LPPL-1.3c.template.txt";
 	static final String ODBL_1_TEXT = "TestFiles" + File.separator + "ODbL-1.0.txt";
 	static final String ODBL_1_TEMPLATE = "TestFiles" + File.separator + "ODbL-1.0.template.txt";
-	static final String SLEEPYCAT_TEXT = "TestFiles" + File.separator + "sleepycat.txt";
-	static final String SLEEPYCAT_TEMPLATE = "TestFiles" + File.separator + "sleepycat.template.txt";
+	static final String SLEEPYCAT_TEXT = "TestFiles" + File.separator + "Sleepycat.txt";
+	static final String SLEEPYCAT_TEMPLATE = "TestFiles" + File.separator + "Sleepycat.template.txt";
 
 	/**
 	 * @throws java.lang.Exception
