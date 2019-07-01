@@ -290,7 +290,7 @@ public class CompareTemplateOutputHandler implements
 				DifferenceDescription matchDifferences = new DifferenceDescription();
 				int matchLocation = startToken;
 				for (ParseInstruction sub:subInstructions) {
-					matchLocation = sub.match(matchTokens, matchLocation, matchingStartToken, originalText, 
+					matchLocation = sub.match(matchTokens, matchLocation, matchingStartToken-1, originalText, 
 							matchDifferences, tokenToLocation);
 					if (matchLocation < 0) {
 						break;
@@ -362,7 +362,7 @@ public class CompareTemplateOutputHandler implements
 				}
 				if (optTokenAfterMatch > 0 && !tempDiffDescription.differenceFound && nextOptMatchingStart <= endToken) {
 					// we found a match
-					if (nextOptMatchingStart - optTokenAfterMatch > MIN_TOKENS_NORMAL_TEXT_SEARCH) {
+					if (optTokenAfterMatch - nextOptMatchingStart > MIN_TOKENS_NORMAL_TEXT_SEARCH) {
 						// Only add possible matches if it matched enough tokens
 						//TODO: This approximation of the number of tokens matched may include tokens consumed by a variable match. To make this more accurate, we should count the tokens of just the text nodes a children 
 						retval.add(nextOptMatchingStart);
