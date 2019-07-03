@@ -112,16 +112,21 @@ public class LicenseCompareHelper {
 		NORMALIZE_TOKENS.put("©", "(c)");
 		NORMALIZE_TOKENS.put("copyright", "(c)");
 		NORMALIZE_TOKENS.put("\"", "'");
+		NORMALIZE_TOKENS.put("http://", "https://");
 	}
 	
 	
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
-	static final String PER_CENT_REGEX = "(?i)per\\scent";
-	static final Pattern PER_CENT_PATTERN = Pattern.compile(PER_CENT_REGEX, Pattern.CASE_INSENSITIVE);
-	static final String COPYRIGHT_HOLDER_REGEX = "(?i)copyright\\sholder";
-	static final Pattern COPYRIGHT_HOLDER_PATTERN = Pattern.compile(COPYRIGHT_HOLDER_REGEX, Pattern.CASE_INSENSITIVE);
-	static final String COPYRIGHT_OWNER_REGEX = "(?i)copyright\\sowner";
-	static final Pattern COPYRIGHT_OWNER_PATTERN = Pattern.compile(COPYRIGHT_OWNER_REGEX, Pattern.CASE_INSENSITIVE);
+	static final Pattern PER_CENT_PATTERN = Pattern.compile("per cent", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDER_PATTERN = Pattern.compile("copyright holder", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDERS_PATTERN = Pattern.compile("copyright holders", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNERS_PATTERN = Pattern.compile("copyright owners", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNER_PATTERN = Pattern.compile("copyright owner", Pattern.CASE_INSENSITIVE);
+	static final Pattern PER_CENT_PATTERN_LF = Pattern.compile("per\\s*\\n+\\s*cent", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDERS_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*holders", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*holder", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNERS_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owners", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owner", Pattern.CASE_INSENSITIVE);
 	
 	//TODO: Add equiv for quotes
 	/**
@@ -390,12 +395,27 @@ public class LicenseCompareHelper {
 	 * @return
 	 */
 	private static String replaceMultWord(String s) {
-		Matcher m = COPYRIGHT_HOLDER_PATTERN.matcher(s);
-		String retval = m.replaceAll("copyright-holder");
+		//TODO: There is certainly some room for optimization - perhaps a single regex in a find loop
+		Matcher m = COPYRIGHT_HOLDERS_PATTERN.matcher(s);
+		String retval = m.replaceAll("copyright-holders");
+		m = COPYRIGHT_HOLDERS_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-holders\n");
+		m = COPYRIGHT_OWNERS_PATTERN.matcher(retval);
+		retval = m.replaceAll("copyright-owners");
+		m = COPYRIGHT_OWNERS_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-owners\n");
+		m = COPYRIGHT_HOLDER_PATTERN.matcher(retval);
+		retval = m.replaceAll("copyright-holder");
+		m = COPYRIGHT_HOLDER_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-holder\n");
 		m = COPYRIGHT_OWNER_PATTERN.matcher(retval);
 		retval = m.replaceAll("copyright-owner");
+		m = COPYRIGHT_OWNER_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-owner\n");
 		m = PER_CENT_PATTERN.matcher(retval);
 		retval = m.replaceAll("percent");
+		m = PER_CENT_PATTERN.matcher(retval);
+		retval = m.replaceAll("percent\n");
 		return retval;
 	}
 	
