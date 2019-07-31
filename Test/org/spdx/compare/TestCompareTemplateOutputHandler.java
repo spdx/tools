@@ -85,7 +85,9 @@ public class TestCompareTemplateOutputHandler {
 	static final String SLEEPYCAT_TEMPLATE = "TestFiles" + File.separator + "Sleepycat.template.txt";
 	static final String SSPL_1_0_TEXT = "TestFiles" + File.separator + "SSPL-1.0.txt";
 	static final String SSPL_1_0_TEMPLATE = "TestFiles" + File.separator + "SSPL-1.0.template.txt";
-
+	static final String AGPL_1_0_ONLY_TEXT = "TestFiles" + File.separator + "AGPL-1.0-only.txt";
+	static final String AGPL_1_0_ONLY_TEMPLATE = "TestFiles" + File.separator + "AGPL-1.0-only.template.txt";
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -553,6 +555,17 @@ public class TestCompareTemplateOutputHandler {
 	public void testRegressionSSPL10() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(SSPL_1_0_TEXT);
 		String templateText = UnitTestHelper.fileToText(SSPL_1_0_TEMPLATE);
+		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
+		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
+		if (!templateOutputHandler.matches()) {
+			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
+		}
+	}
+	
+	@Test
+	public void testCompareHttps() throws IOException, LicenseTemplateRuleException, LicenseParserException {
+		String compareText = UnitTestHelper.fileToText(AGPL_1_0_ONLY_TEXT);
+		String templateText = UnitTestHelper.fileToText(AGPL_1_0_ONLY_TEMPLATE);
 		CompareTemplateOutputHandler templateOutputHandler = new CompareTemplateOutputHandler(compareText);
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		if (!templateOutputHandler.matches()) {
