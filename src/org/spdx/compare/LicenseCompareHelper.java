@@ -112,7 +112,6 @@ public class LicenseCompareHelper {
 		NORMALIZE_TOKENS.put("©", "(c)");
 		NORMALIZE_TOKENS.put("copyright", "(c)");
 		NORMALIZE_TOKENS.put("\"", "'");
-		NORMALIZE_TOKENS.put("http://", "https://");
 	}
 	
 	
@@ -206,7 +205,8 @@ public class LicenseCompareHelper {
 		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes 
 		// then normalize non-breaking spaces to spaces
 		return s.replaceAll("‘|’|‛|‚|`", "'")	// Take care of single quotes first
-				.replaceAll("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
+				.replaceAll("http://", "https://") // Normalize the http protocol scheme
+ 				.replaceAll("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
 				.replaceAll("“|”|‟|„", "\"")	// Now we can normalize the double quotes
 				.replaceAll("\\u00A0", " ")		// replace non-breaking spaces with spaces since Java does not handle the former well
 				.replaceAll("\\u2028", "\n");	// replace line separator with newline since Java does not handle the former well
