@@ -209,6 +209,7 @@ public class LicenseCompareHelper {
  				.replaceAll("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
 				.replaceAll("“|”|‟|„", "\"")	// Now we can normalize the double quotes
 				.replaceAll("\\u00A0", " ")		// replace non-breaking spaces with spaces since Java does not handle the former well
+				.replaceAll("—|–","-")			// replace em dash, en dash with simple dash
 				.replaceAll("\\u2028", "\n");	// replace line separator with newline since Java does not handle the former well
 	}
 	
