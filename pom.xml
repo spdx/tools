@@ -55,7 +55,7 @@
 		<!-- Force the dependency version to 1.18 for Jena - resolves vulnerability -->
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>1.18</version>
+			<version>1.19</version>
 		</dependency>
 		<dependency>
 		   <groupId>org.apache.jena</groupId>
