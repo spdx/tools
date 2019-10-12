@@ -628,4 +628,11 @@ public class LicenseCompareHelperTest {
 		DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(LicenseInfoFactory.getListedLicenseById("ZPL-2.1"), compareText);
 		assertFalse(result.isDifferenceFound());
 	}
+	
+	@Test
+	public void testSpaceNormalization() {
+		String t1 = "This is a test of space";
+		String t2 = "This is\u2060a\u2007test\u202Fof space";
+		assertTrue(LicenseCompareHelper.isLicenseTextEquivalent(t1, t2));
+	}
 }
