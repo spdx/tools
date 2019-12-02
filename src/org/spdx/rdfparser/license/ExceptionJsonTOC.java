@@ -28,7 +28,7 @@ import com.google.common.collect.Sets;
  */
 public class ExceptionJsonTOC {
 	
-	class ExceptionJson {
+	class TOCExceptionJson {
 		private String reference;
 		private boolean isDeprecatedLicenseId;
 		private String detailsUrl;
@@ -82,7 +82,7 @@ public class ExceptionJsonTOC {
 	
 
 	private String licenseListVersion;
-	private ExceptionJson[] exceptions;
+	private TOCExceptionJson[] exceptions;
 	private String releaseDate;
 
 	/**
@@ -95,7 +95,7 @@ public class ExceptionJsonTOC {
 	/**
 	 * @return the exceptions
 	 */
-	public ExceptionJson[] getExceptions() {
+	public TOCExceptionJson[] getExceptions() {
 		return exceptions;
 	}
 	
@@ -104,7 +104,7 @@ public class ExceptionJsonTOC {
 		if (exceptions == null) {
 			return retval;
 		}
-		for (ExceptionJson licenseException:exceptions) {
+		for (TOCExceptionJson licenseException:exceptions) {
 			retval.add(licenseException.licenseExceptionId);
 		}
 		return retval;
