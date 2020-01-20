@@ -30,6 +30,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
 /**
+ * 
  * @author Gary O'Neall
  *
  */
