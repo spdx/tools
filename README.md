@@ -11,7 +11,7 @@ The Software Package Data Exchange (SPDX) specification is a standard format for
 These tools are published by the SPDX Workgroup
 see [http://spdx.org/](http://spdx.org/)
 
-See the [https://spdx.org/sites/cpstandard/files/pages/files/spdx_tools-20170327.pdf](SPDX Tools Documentation) for details on how to use the command line tools.
+See the [SPDX Tools Documentation](https://spdx.org/sites/cpstandard/files/pages/files/spdx_tools-20170327.pdf) for details on how to use the command line tools.
 
 ## Contributing
 See the file CONTRIBUTING.md for information on making contributions to the SPDX tools.
