@@ -386,7 +386,11 @@ public abstract class License extends SimpleLicensingInfo {
 	public String toString() {
 		// must be only the ID if we want to reuse the 
 		// toString for creating parseable license info strings
-		return this.licenseId;
+		if (this.licenseId == null) {
+			return "NULL LICENSE";
+		} else {
+			return this.licenseId;
+		}
 	}
 
 	@Override
@@ -580,6 +584,9 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 	}
 	
+	/**
+	 * @param deprecated true if this license is deprecated
+	 */
 	public void setDeprecated(boolean deprecated) {
 		this.deprecated = deprecated;
 		removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
@@ -588,6 +595,7 @@ public abstract class License extends SimpleLicensingInfo {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED, "true");
 		}
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#clone()
 	 */

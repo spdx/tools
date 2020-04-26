@@ -23,7 +23,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,7 +41,6 @@ import com.google.common.io.Files;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.FileManager;
 
@@ -198,42 +196,6 @@ public class TestLicenseInfoFactory {
 	}
 	
 	@Test
-	public void testReadingStandardLicense() throws IOException {
-		try {
-			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-		} catch(java.lang.ClassNotFoundException e) {
-			// do nothing
-		}  
-		String id = "AFL-1.2";
-		String stdLicUri =ListedLicenses.LISTED_LICENSE_URI_PREFIX + id;
-		Model model = ModelFactory.createDefaultModel();
-		InputStream in = null;
-		try {
-			in = FileManager.get().open(stdLicUri);
-			if ( in != null ) {
-				ListedLicenses.readRdfaIntoModel(model, in, stdLicUri);
-			}
-//			String testOutFilename = "C:\\Users\\Source Auditor\\Documents\\SPDX\\testout.test";
-//			File outfile = new File(testOutFilename);
-//			outfile.createNewFile();
-//			OutputStream os = new FileOutputStream(outfile);
-//			OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(os));
-//			model.write(writer);
-//			writer.close();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					
-				}
-			}
-		}
-
-
-	}
-	
-	@Test
 	public void testLocalUri() throws IOException {
 		String id = "BSD-3-Clause";
 		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
@@ -248,31 +210,11 @@ public class TestLicenseInfoFactory {
 			in.close();
 		}
 	}
-	
-	@Test
-	public void testParseLocalUri() throws IOException, ClassNotFoundException {
-		Class.forName("net.rootdev.javardfa.jena.RDFaReader");
-		String id = "BSD-3-Clause";
-		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
-		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
-		String prefix = "http://spdx.org/licenses/BSD-3-Clause";
-		InputStream in = FileManager.get().open(stdLicUri);
-		try {
-			Model retval = ModelFactory.createDefaultModel();
-			ListedLicenses.readRdfaIntoModel(retval, in, prefix);
-			StringWriter writer = new StringWriter();
-			retval.write(writer);
-			Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
-			assertTrue(retval.contains(null, p));
-			
-		} finally {
-			in.close();
-		}
-	}
+
 	@Test
 	public void testGetLicenseFromStdLicModel() throws InvalidSPDXAnalysisException, IOException {
 		String id = "BSD-3-Clause";
-		File licenseHtmlFile = new File("TestFiles" + File.separator + id);
+		File licenseHtmlFile = new File("TestFiles" + File.separator + id + ".jsonld");
 		
 		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
 		SpdxListedLicense lic = ListedLicenses.getListedLicenses().getLicenseFromUri(stdLicUri);

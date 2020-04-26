@@ -19,9 +19,6 @@ package org.spdx.rdfparser.license;
 import java.util.List;
 
 import org.spdx.compare.LicenseCompareHelper;
-import org.spdx.html.InvalidLicenseTemplateException;
-import org.spdx.licenseTemplate.LicenseTemplateRuleException;
-import org.spdx.licenseTemplate.SpdxLicenseTemplateHelper;
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.RdfModelHelper;
@@ -59,7 +56,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	private String comment;
 	private String example;
 	private String licenseExceptionTemplate;
-	private String exceptionTextHtml = null;
+	private boolean deprecated = false;
 	
 	public LicenseException(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		this.model = modelContainer.getModel();
@@ -138,6 +135,27 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			Triple t = tripleIter.next();
 			this.example = t.getObject().toString(false);
 		}
+		// deprecated
+		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED).asNode();
+		m = Triple.createMatch(exceptionNode, p, null);
+		tripleIter = model.getGraph().find(m);	
+		if (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			String deprecatedValue = t.getObject().toString(false).trim();
+			if (deprecatedValue != null && !deprecatedValue.isEmpty()) {
+				if (deprecatedValue.equals("true") || deprecatedValue.equals("1")) {
+					this.deprecated = true;
+				} else if (deprecatedValue.equals("false") || deprecatedValue.equals("0")) {
+					this.deprecated = false;
+				} else {
+					throw(new InvalidSPDXAnalysisException("Invalid value for exception deprecated - must be {true, false, 0, 1}"));
+				}
+			} else {
+				this.deprecated = false;
+			}
+		} else {
+			this.deprecated = false;
+		}
 	}
 
 	/**
@@ -179,32 +197,16 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * @param licenseExceptionText Text for the Exception
 	 * @param licenseExceptionTemplate License exception template use for matching license exceptions per SPDX license matching guidelines
 	 * @param comment Comments on the exception
-	 * @param exceptionTextHtml HTML fragment format of the exception text
 	 * @param seeAlso URL references to external sources for the exception
 	 */
 	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
-			String licenseExceptionTemplate, String[] seeAlso, String comment, String exceptionTextHtml) {
+			String licenseExceptionTemplate, String[] seeAlso, String comment) {
 		this.licenseExceptionId = licenseExceptionId;
 		this.name = name;
 		this.licenseExceptionText = licenseExceptionText;
 		this.seeAlso = seeAlso;
 		this.comment = comment;
 		this.licenseExceptionTemplate = licenseExceptionTemplate;
-		this.exceptionTextHtml = exceptionTextHtml;
-	}
-	
-	/**
-	 * @param licenseExceptionId Exception ID - short form ID
-	 * @param name Full name of the Exception
-	 * @param licenseExceptionText Text for the Exception
-	 * @param licenseExceptionTemplate License exception template use for matching license exceptions per SPDX license matching guidelines
-	 * @param comment Comments on the exception
-	 * @param example Example of use
-	 * @param seeAlso URL references to external sources for the exception
-	 */
-	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText,
-			String licenseExceptionTemplate, String[] seeAlso, String comment) {
-		this(licenseExceptionId, name, licenseExceptionText, licenseExceptionTemplate, seeAlso, comment, null);
 	}
 	
 	/**
@@ -213,7 +215,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * @param licenseExceptionText Text for the Exception
 	 */
 	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText) {
-		this(licenseExceptionId, name, licenseExceptionText, new String[0], "", "");
+		this(licenseExceptionId, name, licenseExceptionText, new String[0], "");
 	}
 	
 	public LicenseException() {
@@ -254,7 +256,12 @@ public class LicenseException implements IRdfModel, Cloneable  {
 				}
 			} else {	// create a node
 				Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_LICENSE_EXCEPTION);
-				this.resource = model.createResource(type);
+				String uri = getUri(modelContainer);
+				if (uri != null) {
+					this.resource = model.createResource(uri, type);
+				} else {
+					this.resource = model.createResource(type);
+				}				
 			}
 			// check to make sure we are not overwriting an existing exception with the same ID
 			if (this.exceptionNode != null) {
@@ -316,6 +323,13 @@ public class LicenseException implements IRdfModel, Cloneable  {
 						SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE);
 				model.removeAll(this.resource, textProperty, null);
 				this.resource.addProperty(textProperty, this.licenseExceptionTemplate);
+			}
+			// deprecated
+			Property deprecatedProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
+			model.removeAll(this.resource, deprecatedProperty, null);
+			if (deprecated) {
+				this.resource.addProperty(deprecatedProperty, "true");
 			}
 			return this.resource;
 		}
@@ -543,6 +557,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
     public LicenseException clone() {
 		LicenseException retval = new LicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),
 				this.getLicenseExceptionTemplate(), this.seeAlso, this.comment);
+		retval.setDeprecated(this.isDeprecated());
 		retval.setExample(this.getExample());
 		return retval;
 	}
@@ -633,23 +648,49 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	}
 	
 	/**
-	 * @return HTML fragment containing the Exception Text
-	 * @throws InvalidLicenseTemplateException 
+	 * @return true if this license is marked as being deprecated
 	 */
-	public String getExceptionTextHtml() throws InvalidLicenseTemplateException {
-		if (exceptionTextHtml == null) {
-			// Format the HTML using the text and template
-			String templateText = this.getLicenseExceptionTemplate();
-			if (templateText != null && !templateText.trim().isEmpty()) {
-				try {
-					exceptionTextHtml = SpdxLicenseTemplateHelper.templateTextToHtml(templateText);
-				} catch(LicenseTemplateRuleException ex) {
-					throw new InvalidLicenseTemplateException("Invalid license rule found in exception text for exception "+getName()+":"+ex.getMessage());
-				}
-			} else {
-				exceptionTextHtml = SpdxLicenseTemplateHelper.formatEscapeHTML(this.getLicenseExceptionText());
+	public boolean isDeprecated() {
+		return this.deprecated;
+	}
+	
+	/**
+	 * @param deprecated true if this license is deprecated
+	 */
+	public void setDeprecated(boolean deprecated) {
+		this.deprecated = deprecated;
+		if (this.exceptionNode != null) {
+			Property deprecatedProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+					SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
+			model.removeAll(this.resource, deprecatedProperty, null);
+			if (deprecated) {
+				this.resource.addProperty(deprecatedProperty, "true");
 			}
 		}
-		return exceptionTextHtml;
+	}
+	
+	/**
+	 * Copy all of the parameters from another license
+	 * @param exception
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public void copyFrom(LicenseException exception) throws InvalidSPDXAnalysisException {
+		this.setComment(exception.getComment());
+		this.setName(exception.getName());
+		this.setSeeAlso(exception.getSeeAlso());
+		this.setDeprecated(exception.isDeprecated());
+		this.setExample(exception.getExample());
+		this.setLicenseExceptionId(exception.getLicenseExceptionId());
+		this.setLicenseExceptionTemplate(exception.getLicenseExceptionTemplate());
+		this.setLicenseExceptionText(exception.getLicenseExceptionText());
+	}
+	/*
+	 * Get the URI for this RDF object. Null if this is for an anonomous node.
+	 * @param modelContainer
+	 * @return
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	protected String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
+		return null;	// default to anonomous node
 	}
 }

@@ -116,12 +116,17 @@ public class LicenseCompareHelper {
 	
 	
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
-	static final String PER_CENT_REGEX = "(?i)per\\scent";
-	static final Pattern PER_CENT_PATTERN = Pattern.compile(PER_CENT_REGEX, Pattern.CASE_INSENSITIVE);
-	static final String COPYRIGHT_HOLDER_REGEX = "(?i)copyright\\sholder";
-	static final Pattern COPYRIGHT_HOLDER_PATTERN = Pattern.compile(COPYRIGHT_HOLDER_REGEX, Pattern.CASE_INSENSITIVE);
-	static final String COPYRIGHT_OWNER_REGEX = "(?i)copyright\\sowner";
-	static final Pattern COPYRIGHT_OWNER_PATTERN = Pattern.compile(COPYRIGHT_OWNER_REGEX, Pattern.CASE_INSENSITIVE);
+	static final Pattern SPACE_PATTERN = Pattern.compile("[\\u202F\\u2007\\u2060]");
+	static final Pattern PER_CENT_PATTERN = Pattern.compile("per cent", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDER_PATTERN = Pattern.compile("copyright holder", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDERS_PATTERN = Pattern.compile("copyright holders", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNERS_PATTERN = Pattern.compile("copyright owners", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNER_PATTERN = Pattern.compile("copyright owner", Pattern.CASE_INSENSITIVE);
+	static final Pattern PER_CENT_PATTERN_LF = Pattern.compile("per\\s*\\n+\\s*cent", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDERS_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*holders", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_HOLDER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*holder", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNERS_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owners", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_OWNER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owner", Pattern.CASE_INSENSITIVE);
 	
 	//TODO: Add equiv for quotes
 	/**
@@ -201,9 +206,11 @@ public class LicenseCompareHelper {
 		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes 
 		// then normalize non-breaking spaces to spaces
 		return s.replaceAll("‘|’|‛|‚|`", "'")	// Take care of single quotes first
-				.replaceAll("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
+				.replaceAll("http://", "https://") // Normalize the http protocol scheme
+ 				.replaceAll("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
 				.replaceAll("“|”|‟|„", "\"")	// Now we can normalize the double quotes
 				.replaceAll("\\u00A0", " ")		// replace non-breaking spaces with spaces since Java does not handle the former well
+				.replaceAll("—|–","-")			// replace em dash, en dash with simple dash
 				.replaceAll("\\u2028", "\n");	// replace line separator with newline since Java does not handle the former well
 	}
 	
@@ -294,7 +301,7 @@ public class LicenseCompareHelper {
 	 * @throws IOException 
 	 */
 	public static String[] tokenizeLicenseText(String licenseText, Map<Integer, LineColumn> tokenToLocation) {
-		String textToTokenize = normalizeText(replaceMultWord(licenseText)).toLowerCase();
+		String textToTokenize = normalizeText(replaceMultWord(replaceSpace(licenseText))).toLowerCase();
 		List<String> tokens = new ArrayList<String>();
 		BufferedReader reader = null;
 		try {
@@ -352,7 +359,7 @@ public class LicenseCompareHelper {
 	 * @return the first token in the license text
 	 */
 	public static String getFirstLicenseToken(String text) {
-		String textToTokenize = normalizeText(replaceMultWord(text)).toLowerCase();
+		String textToTokenize = normalizeText(replaceMultWord(replaceSpace(text))).toLowerCase();
 		Matcher m = TOKEN_SPLIT_PATTERN.matcher(textToTokenize);
 		while (m.find()) {
 			if (!m.group(1).trim().isEmpty()) {
@@ -383,6 +390,16 @@ public class LicenseCompareHelper {
 		}
 		return true;
 	}
+	
+	/**
+	 * Replace different forms of space with a normalized space
+	 * @param s
+	 * @return
+	 */
+	private static String replaceSpace(String s) {
+		Matcher m = SPACE_PATTERN.matcher(s);
+		return m.replaceAll(" ");
+	}
 
 	/**
 	 * replaces all mult-words with a single token using a dash to separate
@@ -390,12 +407,27 @@ public class LicenseCompareHelper {
 	 * @return
 	 */
 	private static String replaceMultWord(String s) {
-		Matcher m = COPYRIGHT_HOLDER_PATTERN.matcher(s);
-		String retval = m.replaceAll("copyright-holder");
+		//TODO: There is certainly some room for optimization - perhaps a single regex in a find loop
+		Matcher m = COPYRIGHT_HOLDERS_PATTERN.matcher(s);
+		String retval = m.replaceAll("copyright-holders");
+		m = COPYRIGHT_HOLDERS_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-holders\n");
+		m = COPYRIGHT_OWNERS_PATTERN.matcher(retval);
+		retval = m.replaceAll("copyright-owners");
+		m = COPYRIGHT_OWNERS_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-owners\n");
+		m = COPYRIGHT_HOLDER_PATTERN.matcher(retval);
+		retval = m.replaceAll("copyright-holder");
+		m = COPYRIGHT_HOLDER_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-holder\n");
 		m = COPYRIGHT_OWNER_PATTERN.matcher(retval);
 		retval = m.replaceAll("copyright-owner");
+		m = COPYRIGHT_OWNER_PATTERN_LF.matcher(retval);
+		retval = m.replaceAll("copyright-owner\n");
 		m = PER_CENT_PATTERN.matcher(retval);
 		retval = m.replaceAll("percent");
+		m = PER_CENT_PATTERN.matcher(retval);
+		retval = m.replaceAll("percent\n");
 		return retval;
 	}
 	

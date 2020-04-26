@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/spdx/tools.svg?branch=master)](https://travis-ci.org/spdx/tools)
+
+ [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/734/badge)](https://bestpractices.coreinfrastructure.org/projects/734)
+
 # Overview
 The Software Package Data Exchange (SPDX) specification is a standard format for communicating the components, licenses and copyrights associated with a software package.
 
@@ -7,8 +11,15 @@ The Software Package Data Exchange (SPDX) specification is a standard format for
 These tools are published by the SPDX Workgroup
 see [http://spdx.org/](http://spdx.org/)
 
+See the [SPDX Tools Documentation](https://spdx.org/sites/cpstandard/files/pages/files/spdx_tools-20170327.pdf) for details on how to use the command line tools.
+
 ## Contributing
 See the file CONTRIBUTING.md for information on making contributions to the SPDX tools.
+
+## Issues
+Report any security related issues by sending an email to [spdx-tools-security@lists.spdx.org](mailto:spdx-tools-security@lists.spdx.org)
+
+Non-security related issues should be added to the [SPDX tools issues list](https://github.com/spdx/tools/issues)
 
 ## Syntax
 The command line interface of the spdx tools can be used like this:
@@ -31,6 +42,7 @@ Example to convert a SPDX file from tag to rdf format:
     java -jar spdx-tools-jar-with-dependencies.jar TagToRDF Examples/SPDXTagExample.tag TagToRDF.rdf
 
 ## Compare utilities
+The following  tools can be used to compare one or more SPDX documents:
 
   * CompareSpdxDocs
 
@@ -45,6 +57,8 @@ Example to convert a SPDX file from tag to rdf format:
         java -jar spdx-tools-jar-with-dependencies.jar CompareMultipleSpdxDocs output.xls doc1 doc2 ... docN
 
 ## SPDX Viewer
+The following tool can be used to "Pretty Print" an SPDX document.
+
   * SPDXViewer
 
 Sample usage:
@@ -52,6 +66,8 @@ Sample usage:
     java -jar spdx-tools-jar-with-dependencies.jar SPDXViewer TestFiles/SPDXRdfExample.rdf
 
 ## Verifier
+The following tool can be used to verify an SPDX document:
+
   * Verify
 
 Sample usage:
@@ -59,11 +75,11 @@ Sample usage:
     java -jar spdx-tools-jar-with-dependencies.jar Verify TestFiles/SPDXRdfExample.rdf
 
 ## Generators
-  * LicenseRDFAGenerator
-
-        java -jar spdx-tools-jar-with-dependencies.jar LicenseRDFAGenerator licenseSpreadsheet.xls outputDirectory [version] [releasedate]
+The following tool can be used to generate an SPDX verification code from a directory of source files:
 
   * GenerateVerificationCode sourceDirectory
+  
+  Sample usage:
 
         java -jar spdx-tools-jar-with-dependencies.jar GenerateVerificationCode sourceDirectory [ignoredFilesRegex]
 
@@ -74,7 +90,7 @@ including info from 3rd Party Software
 See [LICENSE](LICENSE) file for full license text
 
     SPDX-License-Identifier:	Apache-2.0
-    PackageLicenseDeclared:		Apache-2.0
+    PackageLicenseDeclared:	Apache-2.0
 
 # Development
 

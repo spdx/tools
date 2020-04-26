@@ -485,8 +485,12 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		if (numGroups != 1) {
 			throw(new NonNumericLicenseIdException("Invalid license ID found in the non-standard licenses: '"+licenseID+"'"));
 		}
-		int idNum = Integer.decode(matcher.group(1));
-		return idNum;
+		try {
+			int idNum = Integer.parseInt(matcher.group(1));
+			return idNum;
+		} catch (NumberFormatException ex) {
+			throw new NonNumericLicenseIdException("Error parsing number "+matcher.group(1));
+		}
 	}
 	
 	public static String formNonStandardLicenseID(int idNum) {

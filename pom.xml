@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.spdx</groupId>
 	<artifactId>spdx-tools</artifactId>
-	<version>2.1.12-SNAPSHOT</version>
+	<version>2.1.20</version>
 	<name>SPDX tools</name>
 	<description>SPDX tools</description>
 	<licenses>
@@ -41,45 +41,27 @@
 	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jena.version>3.1.1</jena.version>
+		<jena.version>3.12.0</jena.version>
 	</properties>
-	<repositories>
-		<repository>
-			<!--  Some jena component releases missing from maven central -->
-			<id>jena-releases</id>
-			<name>Apache Jena Releases</name>
-			<url>https://repository.apache.org/content/repositories/releases</url>
-		</repository>
-		<repository>
-			<id>rdfa-bintray</id>
-			<url>https://dl.bintray.com/yevster/maven</url>
-		</repository>
-		<repository>
-			<id>JBoss 3rd-party</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
-		</repository>
-	</repositories>
 	<dependencies>
-
-
 		<!-- JENA -->
+		<dependency>
+		<!-- Force the dependency version to 2.9.10.4 so the JSON-LD will work. This can be removed once https://github.com/jsonld-java/jsonld-java/commit/0f251f203649a04faf053c52beddab1d8865be5b is released -->
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.10.4</version>
+		</dependency>
+		<dependency>
+		<!-- Force the dependency version to 1.18 for Jena - resolves vulnerability -->
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.19</version>
+		</dependency>
 		<dependency>
 		   <groupId>org.apache.jena</groupId>
 		   <artifactId>apache-jena-libs</artifactId>
 		   <version>${jena.version}</version>
 		   <type>pom</type>
-		   <exclusions>
-		   <!--Known vulnearbility. Later version required -->
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-    		</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.11.0.SP5</version>
 		</dependency>
 		<dependency>
 		   <groupId>org.apache.jena</groupId>
@@ -87,17 +69,6 @@
 		   <version>${jena.version}</version>
 		   <type>jar</type>
 		 </dependency>
-		<!-- THE REST -->
-		
-		<!-- The modification of the RDFa reader to use Jena 3 has been accepted but not
-		released to MVN Central. Hence its use from bintray. This dependency is temporary, until license list rearchitecture
-		to use RDF/XML with content negotiation. -->
-		<dependency>
-		  <groupId>com.yevster.net.rootdev</groupId>
-		  <artifactId>java-rdfa</artifactId>
-		  <version>0.4.3</version>
-			<type>jar</type>
-		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr</artifactId>
@@ -111,12 +82,12 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>3.15</version>
+			<version>3.17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.15</version>
+			<version>3.17</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
@@ -136,12 +107,12 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.7.2</version>
+			<version>1.11.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>16.0.1</version>
+			<version>24.1.1-jre</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.spullara.mustache.java</groupId>
@@ -164,11 +135,6 @@
 		    <version>2.10.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
@@ -183,6 +149,11 @@
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon-dom</artifactId>
 			<version>8.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.cliftonlabs</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -272,7 +243,7 @@
 			<plugin>
 				<groupId>org.spdx</groupId>
 					<artifactId>spdx-maven-plugin</artifactId>
-					<version>0.4.0</version>
+					<version>0.5.3</version>
 					<executions>
 						<execution>
 							<id>build-spdx</id>
@@ -283,8 +254,7 @@
 						</execution>
 					</executions>
 					<configuration>
-						<spdxFile>LICENSE.spdx</spdxFile>
-						<spdxDocumentNamespace>http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT</spdxDocumentNamespace>
+						<spdxDocumentNamespace>http://spdx.org/documents/spdx-tools{$version}</spdxDocumentNamespace>
 						<nonStandardLicenses>
 							<param>
 								<licenseId>LicenseRef-CyberNeko</licenseId>
@@ -384,6 +354,7 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -397,20 +368,14 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-javadoc-plugin</artifactId>
-			    <configuration>
-			      <additionalparam>-Xdoclint:none</additionalparam>
-			    </configuration>
-			  </plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
-					<quiet>true</quiet>
+					<quiet>true</quiet>				
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -424,7 +389,7 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 					</execution>
 				</executions>
 			</plugin>
-				<plugin>
+			<plugin>
         			<groupId>org.apache.maven.plugins</groupId>
         			<artifactId>maven-shade-plugin</artifactId>
         			<configuration>

@@ -48,6 +48,7 @@ import com.google.common.collect.Maps;
 public class LicenseCompareHelperTest {
 	
 	static final String GPL_2_TEXT = "TestFiles" + File.separator + "GPL-2.0.txt";
+	static final String ZPL_2_1_TEXT = "TestFiles" + File.separator + "ZPL-2.1.txt";
 
 	/**
 	 * @throws java.lang.Exception
@@ -619,5 +620,19 @@ public class LicenseCompareHelperTest {
 	@SuppressWarnings("unused")
 	private String stringCharToUnicode(String s, int location) {
 		return "\\u" + Integer.toHexString(s.charAt(location) | 0x10000).substring(1);
+	}
+	
+	@Test
+	public void regressionTestZpl21() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
+		String compareText = UnitTestHelper.fileToText(ZPL_2_1_TEXT);
+		DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(LicenseInfoFactory.getListedLicenseById("ZPL-2.1"), compareText);
+		assertFalse(result.isDifferenceFound());
+	}
+	
+	@Test
+	public void testSpaceNormalization() {
+		String t1 = "This is a test of space";
+		String t2 = "This is\u2060a\u2007test\u202Fof space";
+		assertTrue(LicenseCompareHelper.isLicenseTextEquivalent(t1, t2));
 	}
 }

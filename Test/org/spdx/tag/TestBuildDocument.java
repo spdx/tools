@@ -151,9 +151,9 @@ public class TestBuildDocument {
 	static final String PACKAGE_SOURCE_INFO = "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.";
 	static final String PACKAGE_SOURCE_INFO_TAG = "PackageSourceInfo: <text>" + PACKAGE_SOURCE_INFO + "</text>";	
 	static final String LICENSE_REF1 = "LicenseRef-1";
-	static final String PACKAGE_LICENSE_CONCLUDED = "(" + LICENSE_REF1 + " OR LGPL-2.0)";
+	static final String PACKAGE_LICENSE_CONCLUDED = "(" + LICENSE_REF1 + " OR LGPL-2.0-only)";
 	static final String PACKAGE_LICENSE_CONCLUDED_TAG = "PackageLicenseConcluded: " + PACKAGE_LICENSE_CONCLUDED;
-	static final String PACKAGE_LICENSE_INFO_FROM_FILES1 = "GPL-2.0";
+	static final String PACKAGE_LICENSE_INFO_FROM_FILES1 = "GPL-2.0-only";
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES1_TAG = "PackageLicenseInfoFromFiles: " + PACKAGE_LICENSE_INFO_FROM_FILES1;
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES2 = LICENSE_REF1;
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES2_TAG = "PackageLicenseInfoFromFiles: " + PACKAGE_LICENSE_INFO_FROM_FILES2;
@@ -162,7 +162,7 @@ public class TestBuildDocument {
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES3_TAG = "PackageLicenseInfoFromFiles: " + PACKAGE_LICENSE_INFO_FROM_FILES3;
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES_TAGS = PACKAGE_LICENSE_INFO_FROM_FILES1_TAG + "\n" + 
 			PACKAGE_LICENSE_INFO_FROM_FILES2_TAG + "\n" + PACKAGE_LICENSE_INFO_FROM_FILES3_TAG;
-	static final String PACKAGE_LICENSE_DECLARED = "(" + LICENSE_REF2 + " AND LGPL-2.0)";
+	static final String PACKAGE_LICENSE_DECLARED = "(" + LICENSE_REF2 + " AND LGPL-2.0-only)";
 	static final String PACKAGE_LICENSE_DECLARED_TAG = "PackageLicenseDeclared: " + PACKAGE_LICENSE_DECLARED;
 	static final String PACKAGE_LICENSE_COMMENT = "The license for this project changed with the release of version x.y.\n" +
 			"The version of the project included here post-dates the license change.";
@@ -255,13 +255,13 @@ public class TestBuildDocument {
 	static final int SNIPPET_LIB_LINE_END = 23;
 	static final String SNIPPET_LIB_LINE_RANGE_TAG = "SnippetLineRange: " + String.valueOf(SNIPPET_LIB_LINE_START) + ":" + 
 			String.valueOf(SNIPPET_LIB_LINE_END);
-	static final String SNIPPET_LIB_CONCLUDED_LICENSE = "GPL-2.0";
+	static final String SNIPPET_LIB_CONCLUDED_LICENSE = "GPL-2.0-only";
 	static final String SNIPPET_LIB_CONCLUDED_LICENSE_TAG = "SnippetLicenseConcluded: " +
 			SNIPPET_LIB_CONCLUDED_LICENSE;
 	static final String SNIPPET_LIB_LICENSE_COMMENT = "Comment on snippet license";
 	static final String SNIPPET_LIB_LICENSE_COMMENT_TAG = "SnippetLicenseComments: " + 
 			SNIPPET_LIB_LICENSE_COMMENT;
-	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET = "LGPL-2.0";
+	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET = "LGPL-2.0-only";
 	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET_TAG = "LicenseInfoInSnippet: " +
 			SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET;
 	static final String SNIPPET_LIB_COPYRIGHT = "Copyright 20082010 John Smith";
