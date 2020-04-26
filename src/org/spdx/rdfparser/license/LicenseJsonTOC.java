@@ -15,9 +15,10 @@
  */
 package org.spdx.rdfparser.license;
 
+import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 
 /**
  * Table of Contents for the listed license list as represented as a JSON index file
@@ -106,13 +107,13 @@ public class LicenseJsonTOC {
 		return licenses;
 	}
 	
-	public Set<String> getLicenseIds() {
-		Set<String> retval = Sets.newHashSet();
+	public Map<String, String> getLicenseIds() {
+		Map<String, String> retval = Maps.newHashMap();
 		if (licenses == null) {
 			return retval;
 		}
 		for (LicenseJson license:licenses) {
-			retval.add(license.licenseId);
+			retval.put(license.licenseId.toLowerCase(), license.licenseId);
 		}
 		return retval;
 	}

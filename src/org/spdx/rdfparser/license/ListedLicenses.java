@@ -43,7 +43,6 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 
 /**
@@ -387,6 +386,8 @@ public class ListedLicenses implements IModelContainer {
 					} catch (IOException e) {
 						logger.warn("Unable to close JSON TOC input stream");
 					}
+            	}
+			}
         } finally {
             listedLicenseModificationLock.writeLock().unlock();
         }
@@ -466,7 +467,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
-		SpdxListedLicense retval = getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId + JSONLD_URL_SUFFIX);
+		SpdxListedLicense retval = getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + listdLicenseIds.get(licenseId.toLowerCase()) + JSONLD_URL_SUFFIX);
 		if (retval != null) {
 			retval = (SpdxListedLicense)retval.clone();	// We need to clone the license to remove the references to the model in the cache
 		}
