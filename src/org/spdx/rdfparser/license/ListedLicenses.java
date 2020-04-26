@@ -25,7 +25,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -44,7 +43,6 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 
 /**
@@ -65,7 +63,10 @@ public class ListedLicenses implements IModelContainer {
 	
 	private Model listedLicenseModel = null;
 	
-	Set<String> listdLicenseIds = null;
+	/**
+	 * Map of lowercase listed license ID to proper cased listed license ID
+	 */
+	Map<String, String> listdLicenseIds = null;
 	
 	Map<String, SpdxListedLicense> listedLicenseCache = null;
 	Map<IModelContainer, Map<Node, SpdxListedLicense>> listedLicenseNodeCache = Maps.newHashMap();
@@ -333,7 +334,7 @@ public class ListedLicenses implements IModelContainer {
         listedLicenseModificationLock.writeLock().lock();
         try {
             listedLicenseCache = Maps.newHashMap(); // clear the cache
-            listdLicenseIds = Sets.newHashSet(); //Clear the listed license IDs to avoid stale licenses.
+            listdLicenseIds = Maps.newHashMap(); //Clear the listed license IDs to avoid stale licenses.
             //TODO: Can the keys of listedLicenseCache be used instead of this set?
             //NOTE: This includes deprecated licenses - should this be changed to only return non-deprecated licenses?
             InputStream tocStream = null;
@@ -386,7 +387,7 @@ public class ListedLicenses implements IModelContainer {
 						logger.warn("Unable to close JSON TOC input stream");
 					}
             	}
-            }
+			}
         } finally {
             listedLicenseModificationLock.writeLock().unlock();
         }
@@ -400,7 +401,7 @@ public class ListedLicenses implements IModelContainer {
     public boolean isSpdxListedLicenseID(String licenseID) {
         try {
             listedLicenseModificationLock.readLock().lock();
-            return listdLicenseIds.contains(licenseID);
+            return listdLicenseIds.containsKey(licenseID.toLowerCase());
         } finally {
             listedLicenseModificationLock.readLock().unlock();
         }
@@ -446,7 +447,7 @@ public class ListedLicenses implements IModelContainer {
     public String[] getSpdxListedLicenseIds() {
         listedLicenseModificationLock.readLock().lock();
         try {
-            return listdLicenseIds.toArray(new String[listdLicenseIds.size()]);
+            return listdLicenseIds.values().toArray(new String[listdLicenseIds.size()]);
         } finally {
 			listedLicenseModificationLock.readLock().unlock();
         }
@@ -466,7 +467,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense getListedLicenseById(String licenseId)throws InvalidSPDXAnalysisException {
-		SpdxListedLicense retval = getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + licenseId + JSONLD_URL_SUFFIX);
+		SpdxListedLicense retval = getLicenseFromUri(LISTED_LICENSE_URI_PREFIX + listdLicenseIds.get(licenseId.toLowerCase()) + JSONLD_URL_SUFFIX);
 		if (retval != null) {
 			retval = (SpdxListedLicense)retval.clone();	// We need to clone the license to remove the references to the model in the cache
 		}
@@ -536,7 +537,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public boolean spdxElementRefExists(String elementRef) {
-		return(listdLicenseIds.contains(elementRef));
+		return(listdLicenseIds.values().contains(elementRef));
 	}
 
 	/* (non-Javadoc)
@@ -544,7 +545,7 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	@Override
 	public void addSpdxElementRef(String elementRef) {
-		listdLicenseIds.add(elementRef);
+		listdLicenseIds.put(elementRef.toLowerCase(),elementRef);
 	}
 
 	/* (non-Javadoc)

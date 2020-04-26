@@ -83,7 +83,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	Set<String> spdxRefs = Sets.newHashSet();
 	
 	/**
-	 * Map of license ID to extracted license info
+	 * Map of lower case license ID to extracted license info
 	 */
 	Map<String, ExtractedLicenseInfo> licenseIdToExtractedLicense = Maps.newHashMap();
 	
@@ -530,7 +530,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		Property p = model.getProperty(SPDX_NAMESPACE, PROP_SPDX_EXTRACTED_LICENSES);
 		Resource s = getResource(getSpdxDocNode());
 		s.addProperty(p, license.createResource(this));		
-		this.licenseIdToExtractedLicense.put(license.getLicenseId(), license);
+		this.licenseIdToExtractedLicense.put(license.getLicenseId().toLowerCase(), license);
 	}
 	
 	/**
@@ -539,7 +539,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public boolean extractedLicenseExists(String id) throws InvalidSPDXAnalysisException {
-		return this.licenseIdToExtractedLicense.containsKey(id);
+		return this.licenseIdToExtractedLicense.containsKey(id.toLowerCase());
 	}
 	
 	/**
@@ -548,7 +548,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public ExtractedLicenseInfo getExtractedLicense(String id) throws InvalidSPDXAnalysisException {
-		return this.licenseIdToExtractedLicense.get(id);
+		return this.licenseIdToExtractedLicense.get(id.toLowerCase());
 	}
 	
 	/**
@@ -567,7 +567,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 				throw new InvalidSPDXAnalysisException("Invalid type for extracted license infos: " + extractedAnyLicenseInfo[i]);
 			}
 			ExtractedLicenseInfo lic = (ExtractedLicenseInfo)extractedAnyLicenseInfo[i];
-			this.licenseIdToExtractedLicense.put(lic.getLicenseId(), lic);
+			this.licenseIdToExtractedLicense.put(lic.getLicenseId().toLowerCase(), lic);
 		}
 	}
 
