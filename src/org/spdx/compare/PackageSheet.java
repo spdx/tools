@@ -74,6 +74,7 @@ public class PackageSheet extends AbstractSheet {
 	protected static final String ID_FIELD_TEXT = "SPDX ID";
 	protected static final String ANNOTATION_FIELD_TEXT = "Annotations";
 	protected static final String RELATIONSHIPS_FIELD_TEXT = "Relationships";
+	protected static final String ATTRIBUTION_FIELD_TEXT = "Attributions";
 	private static final String NO_PACKAGE = "[No Package]";
 	private static final String FILES_ANALYZED_FIELD_TEXT = "Files Analyzed";
 	private static final String EXTERNAL_REFS_FIELD_TEXT = "External Refs";
@@ -298,6 +299,13 @@ public class PackageSheet extends AbstractSheet {
 		} else {
 			setCellDifferentValue(copyrightRow.createCell(EQUALS_COL));
 		}
+		Row attributionRow = this.addRow();
+		attributionRow.createCell(FIELD_COL).setCellValue(ATTRIBUTION_FIELD_TEXT);
+		if (comparer.isAnnotationsEquals()) {
+			setCellEqualValue(attributionRow.createCell(EQUALS_COL), allDocsPresent);
+		} else {
+			setCellDifferentValue(attributionRow.createCell(EQUALS_COL));
+		}
 		Row summaryRow = this.addRow();
 		summaryRow.createCell(FIELD_COL).setCellValue(SUMMARY_FIELD_TEXT);
 		if (comparer.isPackageSummaryEquals()) {
@@ -355,6 +363,7 @@ public class PackageSheet extends AbstractSheet {
 				declaredLicenseRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseDeclared().toString());
 				licenseCommentRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getLicenseComments());
 				copyrightRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getCopyrightText());
+				attributionRow.createCell(FIRST_DOC_COL+i).setCellValue(CompareHelper.attributionsToString(pkg.getAttributionText()));
 				summaryRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getSummary());
 				descriptionRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.getDescription());
 				filesAnalyzedRow.createCell(FIRST_DOC_COL+i).setCellValue(pkg.isFilesAnalyzed());

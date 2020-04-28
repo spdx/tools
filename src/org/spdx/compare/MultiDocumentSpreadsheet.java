@@ -99,6 +99,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private ReviewerSheet reviewerSheet;
 	private static final String FILE_CONTRIBUTOR_SHEET_NAME = "File Contributors";
 	private FileContributorsSheet fileContributorsSheet;
+	private static final String FILE_ATTRIBUTION_SHEET_NAME = "File Attribution";
+	private FileAttributionSheet fileAttributionSheet;
 	private static final String FILE_DEPENDENCIES_SHEET_NAME = "File Dependencies";
 	private FileDependenciesSheet fileDependenciesSheet;
 	private static final String FILE_NOTICE_SHEET_NAME = "File Notices";
@@ -159,6 +161,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileCommentSheet = new FileCommentSheet(this.workbook, FILE_COMMENT_SHEET_NAME);
 		fileNoticeSheet = new FileNoticeSheet(this.workbook, FILE_NOTICE_SHEET_NAME);
 		fileContributorsSheet = new FileContributorsSheet(this.workbook, FILE_CONTRIBUTOR_SHEET_NAME);
+		fileAttributionSheet = new FileAttributionSheet(this.workbook, FILE_ATTRIBUTION_SHEET_NAME);
 		fileDependenciesSheet = new FileDependenciesSheet(this.workbook, FILE_DEPENDENCIES_SHEET_NAME);
 		fileAnnotationSheet = new FileAnnotationSheet(this.workbook, FILE_ANNOTATION_SHEET_NAME);
 		fileRelationshipSheet = new FileRelationshipSheet(this.workbook, FILE_RELATIONSHIP_SHEET);
@@ -202,6 +205,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			FileArtifactOfSheet.create(wb, FILE_ARTIFACT_OF_SHEET_NAME);
 			FileTypeSheet.create(wb, FILE_TYPE_SHEET_NAME);
 			FileContributorsSheet.create(wb, FILE_CONTRIBUTOR_SHEET_NAME);
+			FileAttributionSheet.create(wb, FILE_ATTRIBUTION_SHEET_NAME);
 			FileDependenciesSheet.create(wb, FILE_DEPENDENCIES_SHEET_NAME);
 			FileNoticeSheet.create(wb, FILE_NOTICE_SHEET_NAME);
 			FileAnnotationSheet.create(wb, FILE_ANNOTATION_SHEET_NAME);
@@ -267,6 +271,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileTypeSheet.resizeRows();
 		fileContributorsSheet.importCompareResults(comparer, files, docNames);
 		fileContributorsSheet.resizeRows();
+		fileAttributionSheet.importCompareResults(comparer, files, docNames);
+		fileAttributionSheet.resizeRows();
 		fileDependenciesSheet.importCompareResults(comparer, files, docNames);
 		fileDependenciesSheet.resizeRows();
 		fileNoticeSheet.importCompareResults(comparer, files, docNames);
@@ -299,6 +305,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		verificationSheet.clear();
 		fileCommentSheet.clear();
 		fileContributorsSheet.clear();
+		fileAttributionSheet.clear();
 		fileDependenciesSheet.clear();
 		fileNoticeSheet.clear();
 		snippetSheet.clear();
@@ -365,6 +372,11 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			sb.append(sheetVerify);
 		}
 		sheetVerify = fileContributorsSheet.verify();	
+		if (sheetVerify != null && !sheetVerify.isEmpty()) {
+			sb.append("; ");
+			sb.append(sheetVerify);
+		}
+		sheetVerify = fileAttributionSheet.verify();	
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
