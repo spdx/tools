@@ -362,6 +362,45 @@ public class TestSpdxItem {
 		SpdxItem item2= new SpdxItem(modelContainer, r.asNode());
 		assertEquals(LICENSE_COMMENT2, item2.getLicenseComments());
 	}
+	
+	@Test
+	public void testSetAttributionText() throws InvalidSPDXAnalysisException {
+		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
+		Relationship[] relationships = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
+		String attributionText1 = "attribution1";
+		String attributionText2 = "att2";
+		SpdxItem item = new SpdxItem(ELEMENT_NAME1, ELEMENT_COMMENT1,
+				annotations, relationships, LICENSE1, LICENSES,
+				COPYRIGHT_TEXT1, LICENSE_COMMENT1, new String[] {attributionText1});
+		assertEquals(ELEMENT_NAME1, item.getName());
+		assertEquals(ELEMENT_COMMENT1, item.getComment());
+		assertTrue(UnitTestHelper.isArraysEqual(annotations, item.getAnnotations()));
+		assertTrue(UnitTestHelper.isArraysEqual(relationships, item.getRelationships()));
+		assertEquals(LICENSE1, item.getLicenseConcluded());
+		assertTrue(UnitTestHelper.isArraysEqual(LICENSES, item.getLicenseInfoFromFiles()));
+		assertEquals(COPYRIGHT_TEXT1, item.getCopyrightText());
+		assertEquals(LICENSE_COMMENT1, item.getLicenseComments());
+		assertEquals(attributionText1, item.getAttributionText()[0]);
+		Resource r = item.createResource(modelContainer);
+		item.setAttributionText(new String[]{attributionText1, attributionText2});
+		String[] result = item.getAttributionText();
+		assertEquals(2, result.length);
+		if (result[0].equals(attributionText1)) {
+			assertEquals(attributionText2, result[1]);
+		} else {
+			assertEquals(attributionText1, result[1]);
+			assertEquals(attributionText2, result[0]);
+		} 
+		SpdxItem item2= new SpdxItem(modelContainer, r.asNode());
+		result = item2.getAttributionText();
+		assertEquals(2, result.length);
+		if (result[0].equals(attributionText1)) {
+			assertEquals(attributionText2, result[1]);
+		} else {
+			assertEquals(attributionText1, result[1]);
+			assertEquals(attributionText2, result[0]);
+		} 
+	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxItem#clone()}.

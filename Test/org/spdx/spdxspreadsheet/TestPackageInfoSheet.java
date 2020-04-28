@@ -103,7 +103,7 @@ public class TestPackageInfoSheet {
 				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page1", "Organization: originator1",
 				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1",
-				"Version1", true, new ExternalRef[0]);
+				"Version1", true, new ExternalRef[0], new String[]{"Att1", "att2"});
 		pkgInfo1.setId("SPDXRef-Package1");
 		SpdxPackage pkgInfo2 =  new SpdxPackage("decname1", "Comment1", new Annotation[0],
 				new Relationship[0], testLicense1, testLicenseInfos,
@@ -111,7 +111,7 @@ public class TestPackageInfoSheet {
 				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				"desc1", "http://url1", new SpdxFile[0], "http://www.home.page2", "Organization: originator2",
 				"machinename1", testVerification,  "sourceinfo1", "short desc1", "Person: supplier1",
-				"Version2", false, new ExternalRef[0]);
+				"Version2", false, new ExternalRef[0], new String[]{"Att3"});
 		pkgInfo2.setId("SPDXRef-Package2");
 		Workbook wb = new HSSFWorkbook();
 		PackageInfoSheet.create(wb, "Package Info");
@@ -155,6 +155,10 @@ public class TestPackageInfoSheet {
 		assertEquals(pkgInfo1.getOriginator(), pkgInfo2.getOriginator());
 		assertEquals(pkgInfo1.getHomepage(), pkgInfo2.getHomepage());
 		assertEquals(pkgInfo1.isFilesAnalyzed(), pkgInfo2.isFilesAnalyzed());
+		assertEquals(pkgInfo1.getAttributionText().length, pkgInfo2.getAttributionText().length);
+		for (int i = 0; i < pkgInfo1.getAttributionText().length; i++) {
+			assertEquals(pkgInfo1.getAttributionText()[i], pkgInfo2.getAttributionText()[i]);
+		}
 	}
 
 	/**

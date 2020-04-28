@@ -139,6 +139,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_COPYRIGHT_TEXT = "copyrightText";	
 	public static final String PROP_LIC_COMMENTS = "licenseComments";
 	public static final String PROP_LICENSE_DECLARED = "licenseDeclared";
+	public static final String PROP_ATTRIBUTION_TEXT = "attributionText";
 	
 	// SPDX Package Properties
 	public static final String PROP_PACKAGE_DECLARED_NAME = "name";

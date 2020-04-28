@@ -55,6 +55,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
+import org.spdx.rdfparser.model.SpdxItem;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
@@ -291,6 +292,7 @@ public class BuildDocument implements TagValueBehavior {
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATION_COMMENT").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATION_ID").trim()+" ");
 		this.FILE_TAGS.add(constants.getProperty("PROP_ANNOTATION_TYPE").trim()+" ");
+		this.FILE_TAGS.add(constants.getProperty("PROP_FILE_ATTRIBUTION_TEXT").trim()+" ");
 		
 		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_SPDX_ID").trim()+" ");
 		this.SNIPPET_TAGS.add(constants.getProperty("PROP_SNIPPET_FROM_FILE_ID").trim()+" ");
@@ -340,6 +342,7 @@ public class BuildDocument implements TagValueBehavior {
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_EXTERNAL_REFERENCE").trim()+" ");
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_EXTERNAL_REFERENCE_COMMENT").trim()+" ");
 		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED").trim()+" ");
+		this.PACKAGE_TAGS.add(constants.getProperty("PROP_PACKAGE_ATTRIBUTION_TEXT").trim()+" ");
 
 		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_LICENSE_TEXT").trim()+" ");
 		this.EXTRACTED_LICENSE_TAGS.add(constants.getProperty("PROP_EXTRACTED_TEXT").trim()+" ");
@@ -997,6 +1000,8 @@ public class BuildDocument implements TagValueBehavior {
 			this.lastSnippetLineNumber = lineNumber;
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_COMMENT"))) {
 			pkg.setComment(value);
+		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_ATTRIBUTION_TEXT"))) {
+			addAttributionText(pkg, value);
 		} else if (tag.equals(constants.getProperty("PROP_PACKAGE_FILES_ANALYZED"))) {
 			if ("TRUE".equals(value.toUpperCase())) {
 				pkg.setFilesAnalyzed(true);
@@ -1124,6 +1129,8 @@ public class BuildDocument implements TagValueBehavior {
 			addFileContributor(file, value);
 		} else if (tag.equals(constants.getProperty("PROP_FILE_DEPENDENCY"))) {
 			addFileDependency(file, value);
+		} else if (tag.equals(constants.getProperty("PROP_FILE_ATTRIBUTION_TEXT"))) {
+			addAttributionText(file, value);			
 		} else if (tag.equals(constants.getProperty("PROP_ANNOTATOR"))) {
 			if (lastAnnotation != null) {
 				annotations.add(lastAnnotation);
@@ -1160,6 +1167,23 @@ public class BuildDocument implements TagValueBehavior {
 			contributors[contributors.length-1] = contributor;
 		}
 		file.setFileContributors(contributors);
+	}
+	
+	/**
+	 * Adds a file attribution text to the list of attribution texts for this file
+	 * @param item
+	 * @param attributionText
+	 */
+	private void addAttributionText(SpdxItem item, String attributionText) {
+		String[] attributionTexts = item.getAttributionText();
+		if (attributionTexts == null) {
+			attributionTexts = new String[] {attributionText};
+
+		} else {
+			attributionTexts = Arrays.copyOf(attributionTexts, attributionTexts.length + 1);
+			attributionTexts[attributionTexts.length-1] = attributionText;
+		}
+		item.setAttributionText(attributionTexts);
 	}
 
 	/**

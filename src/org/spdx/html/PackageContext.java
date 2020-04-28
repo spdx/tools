@@ -85,6 +85,13 @@ public class PackageContext {
 		}
 	}
 	
+	public List<String> attributionText() {
+		if (pkg == null || pkg.getAttributionText() == null) {
+			return null;
+		}
+		return Arrays.asList(pkg.getAttributionText());
+	}
+	
 	public String sourceInfo() {
 		if (pkg != null) {
 			return pkg.getSourceInfo();
