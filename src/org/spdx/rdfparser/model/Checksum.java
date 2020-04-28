@@ -49,7 +49,9 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 
 	static final Logger logger = LoggerFactory.getLogger(Checksum.class);
 	public enum ChecksumAlgorithm {checksumAlgorithm_sha1, checksumAlgorithm_sha256,
-		checksumAlgorithm_md5};		
+		checksumAlgorithm_md5, checksumAlgorithm_sha224, checksumAlgorithm_sha384,
+		checksumAlgorithm_sha512, checksumAlgorithm_md2, checksumAlgorithm_md4,
+		checksumAlgorithm_md6};		
 		
 	// Mapping tables for Checksum Algorithms
 	public static final ImmutableMap<ChecksumAlgorithm, String> CHECKSUM_ALGORITHM_TO_TAG = 
@@ -57,12 +59,24 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 				.put(ChecksumAlgorithm.checksumAlgorithm_md5, "MD5:")
 				.put(ChecksumAlgorithm.checksumAlgorithm_sha1, "SHA1:")
 				.put(ChecksumAlgorithm.checksumAlgorithm_sha256, "SHA256:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_sha224, "SHA224:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_sha384, "SHA384:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_sha512, "SHA512:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_md2, "MD2:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_md4, "MD4:")
+				.put(ChecksumAlgorithm.checksumAlgorithm_md6, "MD6:")
 				.build();
 	public static final ImmutableMap<String, ChecksumAlgorithm> CHECKSUM_TAG_TO_ALGORITHM = 
 			new ImmutableMap.Builder<String, ChecksumAlgorithm>()
 			.put("MD5:", ChecksumAlgorithm.checksumAlgorithm_md5)
 			.put("SHA1:", ChecksumAlgorithm.checksumAlgorithm_sha1)
 			.put("SHA256:", ChecksumAlgorithm.checksumAlgorithm_sha256)
+			.put("SHA224:", ChecksumAlgorithm.checksumAlgorithm_sha224)
+			.put("SHA384:", ChecksumAlgorithm.checksumAlgorithm_sha384)
+			.put("SHA512:", ChecksumAlgorithm.checksumAlgorithm_sha512)
+			.put("MD2:", ChecksumAlgorithm.checksumAlgorithm_md2)
+			.put("MD4:", ChecksumAlgorithm.checksumAlgorithm_md4)
+			.put("MD6:", ChecksumAlgorithm.checksumAlgorithm_md6)
 			.build();
 
 	ChecksumAlgorithm algorithm;
