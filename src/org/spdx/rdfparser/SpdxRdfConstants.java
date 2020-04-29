@@ -87,6 +87,8 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_RELATIONSHIP = "Relationship";
 	public static final String CLASS_SPDX_ITEM = "SpdxItem";
 	public static final String CLASS_SPDX_ELEMENT = "SpdxElement";
+	public static final String CLASS_SPDX_NONE_ELEMENT = "SpdxNoneElement";
+	public static final String CLASS_SPDX_NOASSERTION_ELEMENT = "SpdxNoAssertionElement";
 	public static final String CLASS_EXTERNAL_DOC_REF = "ExternalDocumentRef";
 	public static final String CLASS_SPDX_EXTERNAL_REFERENCE = "ExternalRef";
 	public static final String CLASS_SPDX_REFERENCE_TYPE = "ReferenceType";
@@ -133,6 +135,8 @@ public interface SpdxRdfConstants {
 	// SPDX Element Properties 
 	public static final String PROP_ANNOTATION = "annotation";
 	public static final String PROP_RELATIONSHIP = "relationship";
+	public static final String TERM_ELEMENT_NOASSERTION = PROP_VALUE_NOASSERTION;
+	public static final String TERM_ELEMENT_NONE = PROP_VALUE_NONE;
 	
 	// SPDX Item Properties 
 	public static final String PROP_LICENSE_CONCLUDED = "licenseConcluded";

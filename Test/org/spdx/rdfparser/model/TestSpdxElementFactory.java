@@ -223,4 +223,26 @@ public class TestSpdxElementFactory {
 		assertEquals(id, externElement.getId());
 		assertEquals(externalUri, externElement.getUri(modelContainer));
 	}
+	
+	@Test
+	public void testCreateNoneElement() throws InvalidSPDXAnalysisException {
+		SpdxNoneElement el = new SpdxNoneElement();
+		assertEquals(0, el.verify().size());
+		Resource r = el.createResource(modelContainer);
+		SpdxElement result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
+		assertEquals(el, result);
+		assertEquals(SpdxNoneElement.NONE_ELEMENT_ID, result.getId());
+		assertEquals(0, result.verify().size());
+	}
+	
+	@Test
+	public void testCreateNoAssertionElement() throws InvalidSPDXAnalysisException {
+		SpdxNoAssertionElement el = new SpdxNoAssertionElement();
+		assertEquals(0, el.verify().size());
+		Resource r = el.createResource(modelContainer);
+		SpdxElement result = SpdxElementFactory.createElementFromModel(modelContainer, r.asNode());
+		assertEquals(el, result);
+		assertEquals(SpdxNoAssertionElement.NOASSERTION_ELEMENT_ID, result.getId());
+		assertEquals(0, result.verify().size());
+	}
 }

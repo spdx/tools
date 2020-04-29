@@ -56,6 +56,8 @@ import org.spdx.rdfparser.model.SpdxElement;
 import org.spdx.rdfparser.model.SpdxFile;
 import org.spdx.rdfparser.model.SpdxFile.FileType;
 import org.spdx.rdfparser.model.SpdxItem;
+import org.spdx.rdfparser.model.SpdxNoAssertionElement;
+import org.spdx.rdfparser.model.SpdxNoneElement;
 import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.rdfparser.model.SpdxSnippet;
 import org.spdx.rdfparser.model.pointer.ByteOffsetPointer;
@@ -1371,7 +1373,14 @@ public class BuildDocument implements TagValueBehavior {
 				this.warningMessages.add("Missing element for a relationship.  SPDX ID: "+relationship.getId()+" at line number "+relationship.getLineNumber());
 				continue;
 			}
-			SpdxElement relatedElement = this.analysis.getDocumentContainer().findElementById(relationship.getRelatedId());
+			SpdxElement relatedElement = null;
+			if (SpdxNoneElement.NONE_ELEMENT_ID.equals(relationship.getRelatedId())) {
+				relatedElement = new SpdxNoneElement();
+			} else if (SpdxNoAssertionElement.NOASSERTION_ELEMENT_ID.equals(relationship.getRelatedId())) {
+				relatedElement = new SpdxNoAssertionElement();
+			} else {
+				relatedElement = this.analysis.getDocumentContainer().findElementById(relationship.getRelatedId());
+			}
 			//Invoked for processing
 			element.getRelationships();
 			Relationship newRelationship = new Relationship(relatedElement,

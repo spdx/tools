@@ -648,8 +648,8 @@ public class CommonCode {
 			}
 			if (referenceType == null) {
 				referenceType = externalRef.getReferenceType().getReferenceTypeUri().toString();
-				if (referenceType.startsWith(docNamespace)) {
-					referenceType = referenceType.substring(docNamespace.length());
+				if (referenceType.startsWith(docNamespace + "#")) {
+					referenceType = referenceType.substring(docNamespace.length()+1);
 				}
 			}
 		}
