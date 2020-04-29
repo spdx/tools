@@ -711,6 +711,10 @@ public class SpdxFile extends SpdxItem implements Comparable<SpdxFile> {
 				retval.addAll(verify);
 			}			
 		}
+		String sha1 = getSha1();
+		if (sha1 == null || sha1.isEmpty()) {
+			retval.add("Missing required SHA1 hashcode value for "+name);
+		}
 		DoapProject[] projects = this.getArtifactOf();
 		if (projects != null) {
 			for (int i = 0;i < projects.length; i++) {

@@ -85,7 +85,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 
 	/**
 	 * @param spdxDocumentUri Unique URI for the external SPDX document
-	 * @param checksum checksum for the external document
+	 * @param checksum Sha1 checksum for the external document
 	 */
 	public ExternalDocumentRef(String spdxDocumentUri, Checksum checksum, String externalDocumentId) {
 		this.spdxDocumentNamespace = spdxDocumentUri;
@@ -95,7 +95,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	
 	/**
 	 * @param externalDocument SPDX Document being referenced
-	 * @param checksum checksum of the external document
+	 * @param checksum Sha1 checksum of the external document
 	 */
 	public ExternalDocumentRef(SpdxDocument externalDocument, Checksum checksum, String externalDocumentId) {
 		this.spdxDocument = externalDocument;
@@ -140,6 +140,9 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 			retval.add("Missing checksum for external document "+uri);
 		} else {
 			retval.addAll(this.checksum.verify());
+			if (this.checksum.getAlgorithm() != ChecksumAlgorithm.checksumAlgorithm_sha1) {
+				retval.add("Checksum algorithm is not SHA1 for external reference "+uri);
+			}
 		}
 		if (this.externalDocumentId == null) {
 			retval.add("Missing external document ID for document "+uri);
