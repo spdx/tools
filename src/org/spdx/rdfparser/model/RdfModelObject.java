@@ -348,12 +348,16 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			if (t.getObject().isLiteral()) {
-				String sRetval = t.getObject().toString(false);
-				try {
-					return Integer.parseInt(sRetval);
-				} catch (Exception ex) {
-					return null;
+			if (t.getObject().isLiteral()) {		
+				Object retval = t.getObject().getLiteralValue();
+				if (retval instanceof Integer) {
+					return (Integer)retval;
+				} else if (retval instanceof String) {
+					try {
+						return Integer.parseInt((String)retval);
+					} catch (Exception ex) {
+						// ignore - we'll go on to the next object and return null if there are no integers
+					}
 				}
 			}
 		}
