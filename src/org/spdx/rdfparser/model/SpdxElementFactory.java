@@ -67,31 +67,39 @@ public class SpdxElementFactory {
 		if (retval != null) {
 			return retval;
 		}
-		if (!node.isURI() && !node.isBlank()) {
+		if (node.isBlank() ||
+				(node.isURI() && node.getURI().startsWith(modelContainer.getDocumentNamespace()))) {
+			// SPDX element local to this document
+			retval = getElementByType(modelContainer, node);
+			if (retval == null) {
+				retval = guessElementByProperties(modelContainer, node);
+				if (retval == null) {
+					throw(new InvalidSPDXAnalysisException("Unable to determine the SPDX element type from the model"));
+				}
+			}
+			containerNodes.put(node, retval);
+			return retval;
+		} else if (node.isURI()) {
+			if (SpdxNoneElement.NONE_ELEMENT_URI.equals(node.getURI())) {
+				return new SpdxNoneElement();
+			} else if (SpdxNoAssertionElement.NOASSERTION_ELEMENT_URI.equals(node.getURI())) {
+				return new SpdxNoAssertionElement();
+			} else {
+				// assume this is an external document reference
+				String[] uriParts = node.getURI().split("#");
+				if (uriParts.length != 2) {
+					throw(new InvalidSPDXAnalysisException("Invalid element URI: "+node.getURI()));
+				}
+				String docId = modelContainer.documentNamespaceToId(uriParts[0]);
+				if (docId == null) {
+					throw(new InvalidSPDXAnalysisException("No external document reference was found for URI "+node.getURI()));
+				}
+				String externalId = docId + ":" + uriParts[1];
+				return new ExternalSpdxElement(externalId);
+			}
+		} else {
 			throw(new InvalidSPDXAnalysisException("Can not create an SPDX Element from a literal node"));
 		}
-		if (node.isURI() && !node.getURI().startsWith(modelContainer.getDocumentNamespace())) {
-			// assume this is an external document reference
-			String[] uriParts = node.getURI().split("#");
-			if (uriParts.length != 2) {
-				throw(new InvalidSPDXAnalysisException("Invalid element URI: "+node.getURI()));
-			}
-			String docId = modelContainer.documentNamespaceToId(uriParts[0]);
-			if (docId == null) {
-				throw(new InvalidSPDXAnalysisException("No external document reference was found for URI "+node.getURI()));
-			}
-			String externalId = docId + ":" + uriParts[1];
-			return new ExternalSpdxElement(externalId);
-		}
-		retval = getElementByType(modelContainer, node);
-		if (retval == null) {
-			retval = guessElementByProperties(modelContainer, node);
-			if (retval == null) {
-				throw(new InvalidSPDXAnalysisException("Unable to determine the SPDX element type from the model"));
-			}
-		}
-		containerNodes.put(node, retval);
-		return retval;
 	}
 
 	/**

@@ -148,6 +148,18 @@ public class CompareHelper {
 		return sb.toString();
 	}
 
+	public static String attributionsToString(String[] attributionText) {
+		if (attributionText == null || attributionText.length == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(attributionText[0]);
+		for (int i = 1; i < attributionText.length; i++) {
+			sb.append("\n");
+			sb.append(attributionText[i]);
+		}
+		return sb.toString();
+	}
+	
 	public static String relationshipToString(Relationship relationship) {
 		if (relationship == null) {
 			return "";

@@ -578,6 +578,15 @@ public class CommonCode {
 					+ constants.getProperty("PROP_BEGIN_TEXT") 
 					+ pkg.getDescription() + constants.getProperty("PROP_END_TEXT"));
 		}
+		// Attribution text
+		String[] attributionText = pkg.getAttributionText();
+		if (attributionText != null) {
+			for (String att:attributionText) {
+				println(out, constants.getProperty("PROP_PACKAGE_ATTRIBUTION_TEXT")
+						+ constants.getProperty("PROP_BEGIN_TEXT") 
+						+ att + constants.getProperty("PROP_END_TEXT"));
+			}
+		}
 		// External Refs
 		ExternalRef[] externalRefs = pkg.getExternalRefs();
 		if (externalRefs != null && externalRefs.length > 0) {
@@ -639,8 +648,8 @@ public class CommonCode {
 			}
 			if (referenceType == null) {
 				referenceType = externalRef.getReferenceType().getReferenceTypeUri().toString();
-				if (referenceType.startsWith(docNamespace)) {
-					referenceType = referenceType.substring(docNamespace.length());
+				if (referenceType.startsWith(docNamespace + "#")) {
+					referenceType = referenceType.substring(docNamespace.length()+1);
 				}
 			}
 		}
@@ -727,6 +736,15 @@ public class CommonCode {
 					constants.getProperty("PROP_BEGIN_TEXT") +
 					file.getNoticeText() + 
 					constants.getProperty("PROP_END_TEXT"));
+		}
+		// file attribution text
+		String[] attributionText = file.getAttributionText();
+		if (attributionText != null) {
+			for (String att:attributionText) {
+				println(out, constants.getProperty("PROP_FILE_ATTRIBUTION_TEXT") 
+						+ constants.getProperty("PROP_BEGIN_TEXT")
+						+ att + constants.getProperty("PROP_END_TEXT"));
+			}
 		}
 		// file contributors
 		if (file.getFileContributors() != null && file.getFileContributors().length > 0) {

@@ -219,6 +219,13 @@ public class FileContext {
 		return Arrays.asList(spdxFile.getFileContributors());
 	}
 	
+	public List<String> attributionText() {
+		if (spdxFile == null || spdxFile.getAttributionText() == null) {
+			return null;
+		}
+		return Arrays.asList(spdxFile.getAttributionText());
+	}
+	
 	public List<String> fileDependencies() {
 		if (spdxFile == null || spdxFile.getFileContributors() == null) {
 			return null;

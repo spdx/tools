@@ -18,6 +18,7 @@ package org.spdx.rdfparser.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.spdx.rdfparser.IModelContainer;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
@@ -41,6 +42,7 @@ public class SpdxItem extends SpdxElement {
 	AnyLicenseInfo[] licenseInfoFromFiles;
 	String copyrightText;
 	String licenseComments;
+	String[] attributionText = new String[0];
 
 	/**
 	 * Create an SPDX item from a Jena model
@@ -64,6 +66,7 @@ public class SpdxItem extends SpdxElement {
 				SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
 		this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
 				getLicenseInfoFromFilesPropertyName());
+		this.attributionText = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ATTRIBUTION_TEXT);
 	}
 
 	/* (non-Javadoc)
@@ -74,6 +77,27 @@ public class SpdxItem extends SpdxElement {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
+	
+	/**
+	 * @param name Name of the item
+	 * @param comment Optional comment about the item
+	 * @param annotations Optional annotations on the items
+	 * @param relationships Optional relationships with other SPDX elements
+	 * @param licenseConcluded Concluded license for this item
+	 * @param licenseInfoFromFiles License infos from files for this item
+	 * @param copyrightText Copyright text for this item
+	 * @param licenseComment Optional comment on the license
+	 * @param attributionText Optional attribution text
+	 */
+	public SpdxItem(String name, String comment, Annotation[] annotations,
+			Relationship[] relationships,AnyLicenseInfo licenseConcluded, 
+			AnyLicenseInfo[] licenseInfoFromFiles, String copyrightText, 
+			String licenseComment, String[] attributionText) {
+		this(name, comment, annotations, relationships, licenseConcluded, licenseInfoFromFiles,
+				copyrightText, licenseComment);
+		this.attributionText = attributionText;
+	}
+	
 	/**
 	 * @param name Name of the item
 	 * @param comment Optional comment about the item
@@ -118,6 +142,9 @@ public class SpdxItem extends SpdxElement {
 			}
 			if (this.licenseComments != null) {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComments);
+			}
+			if (this.attributionText != null) {
+				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ATTRIBUTION_TEXT, attributionText);
 			}
 		}
 	}
@@ -200,7 +227,28 @@ public class SpdxItem extends SpdxElement {
 		this.copyrightText = copyrightText;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT, copyrightText);
 	}
+	
+	/**
+	 * @param attributionText the attributionText to set
+	 */
+	public void setAttributionText(String[] attributionText)  {
+		if (Objects.isNull(attributionText)) {
+			this.attributionText = new String[0];
+		} else {
+			this.attributionText = attributionText;
+		}
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ATTRIBUTION_TEXT, attributionText);
+	}
 
+	/**
+	 * @return the Attribution Text
+	 */
+	public String[] getAttributionText() {
+		if (this.resource != null && this.refreshOnGet) {
+			this.attributionText = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ATTRIBUTION_TEXT);
+		}
+		return this.attributionText;
+	}
 	/**
 	 * @return the licenseComment
 	 */

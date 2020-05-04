@@ -26,13 +26,13 @@ SPDXID: {{spdxId}}<br />
 Version: {{versionInfo}}<br />
 File name: {{packageFileName}}<br />
 {{#supplier}}
-Supplier: {{supplier}}<br />
+Supplier: {{.}}<br />
 {{/supplier}}
 {{#originator}}
 Originator: {{originator}}<br />
 {{/originator}}
 {{#downloadLocation}}
-Download Location: {{downloadLocation}}<br />
+Download Location: {{.}}<br />
 {{/downloadLocation}}
 {{#packageVerificationCode}}
 <h3>Package Verification Code</h3>
@@ -40,7 +40,7 @@ Value: {{packageVerificationCodeValue}}
 <h4>Skipped Files:</h4>
 <ul>
     {{#packageVerificationCodeExcludedFile}}
-    <li>{{packageVerificationCodeExcludedFile}}</li>
+    <li>{{.}}</li>
     {{/packageVerificationCodeExcludedFile}}
 </ul>
 {{/packageVerificationCode}}
@@ -50,7 +50,7 @@ Value: {{packageVerificationCodeValue}}
 {{/checksum}}
 </ul>
 {{#homePage}}
-Home Page: {{homePage}}<br />
+Home Page: {{.}}<br />
 {{/homePage}}
 {{#sourceInfo}}
 Source Information: {{sourceInfo}}<br />
@@ -59,7 +59,7 @@ Concluded License: {{licenseConcluded}}<br />
 <h3>License information from Files</h3>
 <ul>
 {{#licenseInfoFromFiles}}
-    <li>{{licenseInfoFromFiles}}</li>
+    <li>{{.}}</li>
 {{/licenseInfoFromFiles}}
 </ul>
 Declared License: {{licenseDeclared}}<br />
@@ -78,6 +78,12 @@ Declared License: {{licenseDeclared}}<br />
 
 <h3>Description</h3>
 {{description}}<br />
+<h3>Attribution Text</h3>
+<ul>
+{{#attributionText}}
+<li>{{.}}</li>
+{{/attributionText}}
+</ul>
 <h3>filesAnalyzed</h3>
 {{isFilesAnalyzed}}
 <h3>Files</h3>

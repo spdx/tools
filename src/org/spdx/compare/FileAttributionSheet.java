@@ -20,20 +20,20 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.spdx.rdfparser.model.SpdxFile;
 
 /**
- * Sheet with results for file AttributionText comparison results
+ * Sheet with results for file contributor comparison results
  * @author Gary O'Neall
  *
  */
-public class FileContributorsSheet extends AbstractFileCompareSheet {
+public class FileAttributionSheet extends AbstractFileCompareSheet {
 	
-	private static final int FILE_CONTRIBUTOR_COL_WIDTH = 50;
+	private static final int FILE_ATTRIBUTION_COL_WIDTH = 50;
 	
-	public FileContributorsSheet(Workbook workbook, String sheetName) {
+	public FileAttributionSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
 
 	static void create(Workbook wb, String sheetName) {
-		AbstractFileCompareSheet.create(wb, sheetName, FILE_CONTRIBUTOR_COL_WIDTH);
+		AbstractFileCompareSheet.create(wb, sheetName, FILE_ATTRIBUTION_COL_WIDTH);
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +42,7 @@ public class FileContributorsSheet extends AbstractFileCompareSheet {
 	@Override
 	boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException {
-		return SpdxComparer.stringArraysEqual(fileA.getFileContributors(), fileB.getFileContributors());
+		return SpdxComparer.stringArraysEqual(fileA.getAttributionText(), fileB.getAttributionText());
 	}
 
 	/* (non-Javadoc)
@@ -51,12 +51,12 @@ public class FileContributorsSheet extends AbstractFileCompareSheet {
 	@Override
 	String getFileValue(SpdxFile spdxFile) {
 		StringBuilder sb = new StringBuilder();
-		String[] contributors = spdxFile.getFileContributors();
-		if (contributors != null && contributors.length > 0) {
-			sb.append(contributors[0]);
-			for (int i = 1; i < contributors.length; i++) {
+		String[] attribution = spdxFile.getAttributionText();
+		if (attribution != null && attribution.length > 0) {
+			sb.append(attribution[0]);
+			for (int i = 1; i < attribution.length; i++) {
 				sb.append(", ");
-				sb.append(contributors[i]);
+				sb.append(attribution[i]);
 			}
 		}
 		return sb.toString();

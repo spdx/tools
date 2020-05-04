@@ -56,6 +56,8 @@ public class TestPerFileSheet {
 	static final String[] NONSTD_TEXTS = new String[] {"text1", "text2", "text3", "text4"};
 	static final String[] STD_IDS = new String[] {"AFL-3.0", "CECILL-B", "EUPL-1.0"};
 	static final String[] STD_TEXTS = new String[] {"std text1", "std text2", "std text3"};
+	static final String[] ATTRIBUTIONA = new String[] {"Att1"};
+	static final String[] ATTRIBUTIONB = new String[] {"Att2", "Att3"};
 
 	ExtractedLicenseInfo[] NON_STD_LICENSES;
 	SpdxListedLicense[] STANDARD_LICENSES;
@@ -222,6 +224,7 @@ public class TestPerFileSheet {
 				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				contributors1, noticeText1, testProject2);
 		testFile1.setId("SPDXRef-File1");
+		testFile1.setAttributionText(ATTRIBUTIONA);
 		SpdxFile testFile2 = new SpdxFile("FileName2", fileComment1, new Annotation[0],
 				new Relationship[0], NON_STD_LICENSES[0],
 				testLicenses1,  "copyright (c) 12",
@@ -229,6 +232,7 @@ public class TestPerFileSheet {
 				new Checksum[] {new Checksum(Checksum.ChecksumAlgorithm.checksumAlgorithm_sha1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")},
 				contributors1, noticeText1, testProject3);
 		testFile2.setId("SPDXRef-File2");
+		testFile2.setAttributionText(ATTRIBUTIONB);
 		SpdxFile testFile3 = new SpdxFile("FileName3",  "Comment3", new Annotation[0],
 				new Relationship[0], NON_STD_LICENSES[0],
 				testLicenses1, "copyright (c) 123",
@@ -265,6 +269,7 @@ public class TestPerFileSheet {
 		assertEquals(testFile.getNoticeText(), result.getNoticeText());
 		compareStrings(testFile.getFileContributors(), result.getFileContributors());
 		compareSpdxFiles(testFile.getFileDependencies(), result.getFileDependencies());
+		compareStrings(testFile.getAttributionText(), result.getAttributionText());
 	}
 	
 	/**

@@ -12,49 +12,55 @@
 SPDXID: {{spdxId}}<br />
 <ul>
 {{#fileType}}
-<li>File Type: {{fileType}}</li>
+<li>File Type: {{.}}</li>
 {{/fileType}}
 </ul>
 <h4>Checksums:</h4>
 <ul>
 {{#checksums}}
-<li>{{checksums}}</li>
+<li>{{.}}</li>
 {{/checksums}}
 </ul>
 Concluded License:{{licenseConcluded}}<br />
 <h4>License Information from Files</h4>
 <ul>
 {{#licenseInfoInFile}}
-    <li>{{licenseInfoInFile}}</li>
+    <li>{{.}}</li>
 {{/licenseInfoInFile}}
 </ul>
 {{#licenseComments}}
-License Comments: {{licenseComments}}<br />
+License Comments: {{.}}<br />
 {{/licenseComments}}
 Copyright Text: {{copyrightText}}<br />
 {{#artifactOf}}
 Artifact of Project: {{name}};
 {{#homepage}}
-Artifact of Home Page: {{homepage}};
+Artifact of Home Page: {{.}};
 {{/homepage}}
 Artifact of URI: {{ArtifactOfProjectURI}}<br />
 {{/artifactOf}}
 {{#comment}}
-File comment: {{comment}}<br />
+File comment: {{.}}<br />
 {{/comment}}
 {{#noticeText}}
-Notice Text: {{noticeText}}<br />
+Notice Text: {{.}}<br />
 {{/noticeText}}
 Contributors:<br />
 <ul>
 {{#contributors}}
-<li>{{contributors}}</li>
+<li>{{.}}</li>
 {{/contributors}}
+</ul>
+Attribution Text:<br />
+<ul>
+{{#attributionText}}
+<li>{{.}}</li>
+{{/attributionText}}
 </ul>
 <h4>Dependencies:</h4>
 <ul>
 {{#fileDependencies}}
-<li>{{fileDependencies}}</li>
+<li>{{.}}</li>
 {{/fileDependencies}}
 </ul>
 <h4>Relationships:</h4>

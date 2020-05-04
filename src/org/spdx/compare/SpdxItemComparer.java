@@ -42,6 +42,7 @@ public class SpdxItemComparer {
 	private boolean differenceFound = false;
 	private boolean concludedLicenseEquals = true;
 	private boolean seenLicenseEquals = true;
+	private boolean attributionTextEquals = true;
 	protected String name = null;
 	/**
 	 * Map of unique extractedLicenseInfos between two documents
@@ -116,6 +117,11 @@ public class SpdxItemComparer {
 			// Copyrights
 			if (!SpdxComparer.stringsEqual(spdxItem.getCopyrightText(), itemB.getCopyrightText())) {
 				this.copyrightsEquals = false;
+				this.differenceFound = true;
+			}
+			// Attribution text
+			if (!SpdxComparer.stringArraysEqual(spdxItem.getAttributionText(), itemB.getAttributionText())) {
+				this.attributionTextEquals = false;
 				this.differenceFound = true;
 			}
 			// license comments
@@ -356,6 +362,12 @@ public class SpdxItemComparer {
 		checkInProgress();
 		checkCompareMade();
 		return copyrightsEquals;
+	}
+	
+	public boolean isAttributionTextEquals() throws SpdxCompareException {
+		checkInProgress();
+		checkCompareMade();
+		return attributionTextEquals;
 	}
 
 	/**

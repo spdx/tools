@@ -73,9 +73,24 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 	 * @param annotations
 	 * @param relationships
 	 * @param licenseConcluded
-	 * @param licenseDeclared
+	 * @param licenseInfosFromFiles
 	 * @param copyrightText
 	 * @param licenseComment
+	 * @param licenseDeclared
+	 * @param checksums
+	 * @param description
+	 * @param downloadLocation
+	 * @param files
+	 * @param homepage
+	 * @param originator
+	 * @param packageFileName
+	 * @param packageVerificationCode
+	 * @param sourceInfo
+	 * @param summary
+	 * @param supplier
+	 * @param versionInfo
+	 * @param filesAnalyzed
+	 * @param externalRefs
 	 */
 	public SpdxPackage(String name, String comment, Annotation[] annotations,
 			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
@@ -146,6 +161,50 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
 		getMyPropertiesFromModel();
+	}
+
+	/**
+	 * @param name
+	 * @param comment
+	 * @param annotations
+	 * @param relationships
+	 * @param licenseConcluded
+	 * @param licenseInfosFromFiles
+	 * @param copyrightText
+	 * @param licenseComment
+	 * @param licenseDeclared
+	 * @param checksums
+	 * @param description
+	 * @param downloadLocation
+	 * @param files
+	 * @param homepage
+	 * @param originator
+	 * @param packageFileName
+	 * @param packageVerificationCode
+	 * @param sourceInfo
+	 * @param summary
+	 * @param supplier
+	 * @param versionInfo
+	 * @param filesAnalyzed
+	 * @param externalRefs
+	 * @param attributionText
+	 */
+	public SpdxPackage(String name, String comment, Annotation[] annotations,
+			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
+			AnyLicenseInfo[] licenseInfosFromFiles, String copyrightText,
+			String licenseComment, AnyLicenseInfo licenseDeclared,
+			Checksum[] checksums, String description, String downloadLocation,
+			SpdxFile[] files, String homepage, String originator, String packageFileName,
+			SpdxPackageVerificationCode packageVerificationCode,
+			String sourceInfo, String summary, String supplier,
+			String versionInfo, boolean filesAnalyzed, ExternalRef[] externalRefs, 
+			String[] attributionText) {
+		this(name, comment, annotations, relationships, licenseConcluded, 
+				licenseInfosFromFiles, copyrightText, licenseComment, licenseDeclared,
+				checksums, description, downloadLocation, files, homepage, originator,
+				packageFileName, packageVerificationCode, sourceInfo, summary, supplier,
+				versionInfo, filesAnalyzed, externalRefs);
+		this.attributionText = attributionText;
 	}
 
 	/* (non-Javadoc)

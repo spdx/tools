@@ -71,9 +71,10 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	public static final String ONE_DOT_TWO_SPDX_VERSION = "SPDX-1.2";
 	public static final String TWO_POINT_ZERO_VERSION = "SPDX-2.0";
 	public static final String TWO_POINT_ONE_VERSION = "SPDX-2.1";
-	public static final String CURRENT_SPDX_VERSION = TWO_POINT_ONE_VERSION;
+	public static final String TWO_POINT_TWO_VERSION = "SPDX-2.2";
+	public static final String CURRENT_SPDX_VERSION = TWO_POINT_TWO_VERSION;
 	
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.1.9";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.2.0";
 	
 	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 	
@@ -110,6 +111,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		SUPPORTED_SPDX_VERSIONS.add(ONE_DOT_TWO_SPDX_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(TWO_POINT_ZERO_VERSION);
 		SUPPORTED_SPDX_VERSIONS.add(TWO_POINT_ONE_VERSION);
+		SUPPORTED_SPDX_VERSIONS.add(TWO_POINT_TWO_VERSION);
 	}
 	private Model model;
 	private String documentNamespace;
