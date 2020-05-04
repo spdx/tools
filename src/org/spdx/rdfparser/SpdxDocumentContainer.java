@@ -608,7 +608,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 		} catch (NonNumericLicenseIdException ex) {
 			// just continue
 		}
-		this.licenseIdToExtractedLicense.put(license.getLicenseId(), license);
+		this.licenseIdToExtractedLicense.put(license.getLicenseId().toLowerCase(), license);
 		this.spdxDocument.addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
 				SpdxRdfConstants.PROP_SPDX_EXTRACTED_LICENSES, license);
 	}
