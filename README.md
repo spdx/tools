@@ -83,6 +83,9 @@ The following tool can be used to generate an SPDX verification code from a dire
 
         java -jar spdx-tools-jar-with-dependencies.jar GenerateVerificationCode sourceDirectory [ignoredFilesRegex]
 
+## SPDX Validation Tool
+The SPDX Workgroup provides an online interface to validate, compare, and convert SPDX documents in addition to the command line options above. The [SPDX Validation Tool](http://13.57.134.254/app/) is an all-in-one portal to upload and parse SPDX documents for validation, comparison and conversion and search the SPDX license list. 
+
 # License
 See the [NOTICE](NOTICE) file for licensing information
 including info from 3rd Party Software
