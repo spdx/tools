@@ -1,6 +1,8 @@
 .classpath
 .project
 .settings/
+.factorypath 
+.idea
 *.launch
 /bin
 /target
