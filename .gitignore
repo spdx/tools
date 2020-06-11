@@ -12,3 +12,4 @@
 LICENSE.spdx
 maven-eclipse.xml
 dependency-reduced-pom.xml
+spdx-tools.iml
