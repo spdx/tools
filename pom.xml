@@ -375,7 +375,8 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 				<version>2.9</version>
 				<configuration>
 					<quiet>true</quiet>
-					<source>8</source>		
+					<source>8</source>	
+					<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>	
 					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
