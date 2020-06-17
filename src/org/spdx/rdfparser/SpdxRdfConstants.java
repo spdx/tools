@@ -46,6 +46,12 @@ public interface SpdxRdfConstants {
 	public static final String RDFS_PROP_COMMENT = "comment";
 	public static final String RDFS_PROP_LABEL = "label";
 	public static final String RDFS_PROP_SEE_ALSO = "seeAlso";
+	public static final String RDFS_PROP_SEE_ALSO_URL = "url";
+	public static final String RDFS_PROP_SEE_ALSO_IS_VALID = "isValid";
+	public static final String RDFS_PROP_SEE_ALSO_IS_MATCH = "isMatch";
+	public static final String RDFS_PROP_SEE_ALSO_IS_DEAD = "isDead";
+	public static final String RDFS_PROP_SEE_ALSO_HAS_EXTRA_TEXT = "extraText";
+	public static final String RDFS_PROP_SEE_ALSO_IS_WAYBACK_LINK = "isWayBackLink";
 	
 	// DOAP Class Names
 	public static final String CLASS_DOAP_PROJECT = "Project";

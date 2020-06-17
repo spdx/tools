@@ -20,6 +20,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.SpdxListedLicense;
+import org.spdx.rdfparser.license.UrlHelper;
 
 /**
  * This class holds a JSON details file for a specific license
@@ -74,7 +75,16 @@ public class LicenseJSONFile extends AbstractJsonFile {
 		if (seeAlsos != null && seeAlsos.length > 0) {
 			JSONArray seeAlsoArray = new JSONArray();
 			for (String seeAlso:seeAlsos) {
-				seeAlsoArray.add(seeAlso);
+				JSONObject seeAlsoJsonObject = new JSONObject();
+				boolean isValidUrl = UrlHelper.urlValidator(seeAlso);
+				boolean isDeadUrl = !UrlHelper.urlLinkExists(seeAlso);
+				seeAlsoJsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_URL, seeAlso);
+				seeAlsoJsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_IS_DEAD, isDeadUrl);
+				seeAlsoJsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_IS_VALID, isValidUrl);
+				seeAlsoJsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_IS_MATCH, true);
+				seeAlsoJsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_HAS_EXTRA_TEXT, true);
+				seeAlsoJsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_IS_WAYBACK_LINK, true);
+				seeAlsoArray.add(seeAlsoJsonObject);
 			}
 			jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 		}
