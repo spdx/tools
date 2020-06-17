@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -278,6 +279,7 @@ public class ListedLicenses implements IModelContainer {
 				if (!(onlyUseLocalLicenses && uri.startsWith(LISTED_LICENSE_URI_PREFIX))) {
 					//Accessing the old HTTP urls produces 301.
 					String actualUrl = StringUtils.replaceOnce(uri, "http://", "https://");
+					actualUrl = getNestedURL(actualUrl);
 					in = FileManager.get().open(actualUrl);
 					try {
 						retval.read(in, base, "JSON-LD");
@@ -326,6 +328,32 @@ public class ListedLicenses implements IModelContainer {
 			}
 		}
 	}
+
+	public static String getNestedURL(String stringUrl) throws MalformedURLException {
+		URL url = new URL(stringUrl);
+		try {
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setInstanceFollowRedirects(false);
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+			con.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+			con.addRequestProperty("Referer", "https://www.google.com/");
+			con.connect();
+			int resultCode = con.getResponseCode();
+			if (resultCode == HttpURLConnection.HTTP_SEE_OTHER
+					|| resultCode == HttpURLConnection.HTTP_MOVED_PERM
+					|| resultCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+				String Location = con.getHeaderField("Location");
+				if (Location.startsWith("/")) {
+					Location = url.getProtocol() + "://" + url.getHost() + Location;
+				}
+				return getNestedURL(Location);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return url.toString();
+	}
+	
 	
     /**
      * Load the listed license IDs from the website or local file cache
