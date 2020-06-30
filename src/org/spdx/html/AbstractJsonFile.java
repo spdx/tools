@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.spdx.html;
 
@@ -21,15 +21,15 @@ import com.google.gson.JsonParser;
  *
  */
 public abstract class AbstractJsonFile {
-	
+
 	/**
 	 * @return the JsonObject to be written
 	 */
 	abstract protected JSONObject getJsonObject();
-	
+
 	/**
 	 * @param jsonFile File to write JSON data to
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void writeToFile(File jsonFile) throws IOException {
 		OutputStreamWriter writer = null;
@@ -42,7 +42,7 @@ public abstract class AbstractJsonFile {
 			// Use GSON to create a pretty-printed version of JSON
 			// TODO: We could just move this all from simple-JSON to GSON using a class to store
 			// the license data for GSON conversion
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();			
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			JsonParser jsonParser = new JsonParser();
 			String licenseJsonPretty = gson.toJson(jsonParser.parse(getJsonObject().toJSONString()));
 			writer = new OutputStreamWriter(new FileOutputStream(jsonFile), "UTF-8");
