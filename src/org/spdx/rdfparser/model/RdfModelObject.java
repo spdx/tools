@@ -44,6 +44,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.impl.PropertyImpl;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.json.simple.JSONArray;
 
 /**
  * The superclass for all classes the use the Jena RDF model.
@@ -406,6 +407,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		return retval.toArray(new String[retval.size()]);
 	}
 	
+	
 	/**
 	 * Set a property values for this resource.  Clears any existing resource.
 	 * If the string matches one of the SPDX pre-defined string values, the URI
@@ -429,6 +431,28 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 							this.resource.addProperty(p, valueResource);
 						} else {
 							this.resource.addLiteral(p, values[i]);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	protected void setPropertyValue(String nameSpace, String propertyName,
+			JSONArray values) {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (values != null) {
+				for (int i = 0; i < values.size(); i++) {
+					if (values.get(i) != null) {
+						String valueUri = PRE_DEFINED_VALUE_URI.get(values.get(i));
+						if (valueUri != null) {
+							// this is a pre-defined "special" SPDX value
+							Resource valueResource = this.model.createResource(valueUri);
+							this.resource.addProperty(p, valueResource);
+						} else {
+							this.resource.addLiteral(p, values.get(i));
 						}
 					}
 				}

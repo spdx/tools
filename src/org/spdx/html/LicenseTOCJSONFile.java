@@ -33,9 +33,9 @@ import com.google.common.collect.Lists;
  *
  */
 public class LicenseTOCJSONFile extends AbstractJsonFile {
-	
+
 	public static final String JSON_REFERENCE_FIELD = "detailsUrl";
-	
+
 	private static class ListedSpdxLicense {
 		private final String reference;
 		private final String refNumber;
@@ -46,9 +46,9 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		private final String[] seeAlso;
 		private boolean deprecated;
 		private String licJSONReference;
-		
-		public ListedSpdxLicense(String reference, String refNumber, 
-				String licenseId, boolean osiApproved, Boolean fsfLibre, String licenseName, String[] seeAlso, 
+
+		public ListedSpdxLicense(String reference, String refNumber,
+				String licenseId, boolean osiApproved, Boolean fsfLibre, String licenseName, String[] seeAlso,
 				boolean deprecated, String licJSONReference) {
 			this.reference = reference;
 			this.refNumber = refNumber;
@@ -90,7 +90,7 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		public boolean getOsiApproved() {
 			return osiApproved;
 		}
-		
+
 		public Boolean getFsfLibre() {
 			return fsfLibre;
 		}
@@ -98,15 +98,15 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		public String getLicenseName() {
 			return licenseName;
 		}
-		
+
 		public String[] getSeeAlso() {
 			return this.seeAlso;
 		}
 
 	}
-	
+
 	List<ListedSpdxLicense> listedLicenses = Lists.newArrayList();
-	
+
 	private int currentRefNumber = 1;
 
 	String version;
@@ -116,7 +116,7 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 		this.version = version;
 		this.releaseDate = releaseDate;
 	}
-	
+
 	/**
 	 * Add a license to the JSON table of contents file
 	 * @param license License to be added
@@ -126,8 +126,8 @@ public class LicenseTOCJSONFile extends AbstractJsonFile {
 	 */
 	public void addLicense(SpdxListedLicense license, String licHTMLReference,
 			String licJSONReference, boolean deprecated) {
-		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber), 
-				license.getLicenseId(), license.isOsiApproved(), license.getFsfLibre(), license.getName(), 
+		listedLicenses.add(new ListedSpdxLicense(licHTMLReference, String.valueOf(this.currentRefNumber),
+				license.getLicenseId(), license.isOsiApproved(), license.getFsfLibre(), license.getName(),
 				license.getSeeAlso(), deprecated, relativeToAbsolute(licJSONReference)));
 		currentRefNumber++;
 	}
