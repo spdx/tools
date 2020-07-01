@@ -23,12 +23,12 @@ import com.google.common.collect.Maps;
 /**
  * Table of Contents for the listed license list as represented as a JSON index file
  * at spdx.org/licenses/licenses.json
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class LicenseJsonTOC {
-	
+
 	class LicenseJson {
 		private String reference;
 		private boolean isDeprecatedLicenseId;
@@ -87,7 +87,7 @@ public class LicenseJsonTOC {
 			return isOsiApproved;
 		}
 	}
-	
+
 
 	private String licenseListVersion;
 	private LicenseJson[] licenses;
@@ -106,7 +106,7 @@ public class LicenseJsonTOC {
 	public LicenseJson[] getLicenses() {
 		return licenses;
 	}
-	
+
 	public Map<String, String> getLicenseIds() {
 		Map<String, String> retval = Maps.newHashMap();
 		if (licenses == null) {
@@ -124,6 +124,6 @@ public class LicenseJsonTOC {
 	public String getReleaseDate() {
 		return releaseDate;
 	}
-	
+
 
 }

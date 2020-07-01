@@ -47,23 +47,23 @@ import org.apache.jena.rdf.model.Model;
 
 /**
  * Translates an tag-value file to a an SPDX Document.
- * 
+ *
  * This is the legacy tag-value translator for versions 1.2 and earlier
- * 
+ *
  * This has been replaced by BuildDocument which supports the SPDX 2.0 syntax
- * 
+ *
  * @author Rana Rahal, Protecode Inc.
  */
 @Deprecated
 public class BuildLegacyDocument implements TagValueBehavior {
 
 	private static final String DEFAULT_SHA1 = "0000000000000000000000000000000000000000";
-	
+
 	private Properties constants;
 	private SPDXDocument analysis;
 	private DateFormat format = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 
-	//When we retrieve a list from the SPDXDocument the order changes, therefore keep track of 
+	//When we retrieve a list from the SPDXDocument the order changes, therefore keep track of
 	//the last object that we are looking at so that we can fill in all of it's information
 	private SPDXReview lastReviewer = null;
 	private ExtractedLicenseInfo lastExtractedLicense = null;
@@ -169,6 +169,7 @@ public class BuildLegacyDocument implements TagValueBehavior {
 				values[i] = values[i].trim();
 			}
 			lastExtractedLicense.setSeeAlso(values);
+			// lastExtractedLicense.setSeeAlsoDetails(values);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));
@@ -300,7 +301,7 @@ public class BuildLegacyDocument implements TagValueBehavior {
 		String[] contributors = file.getContributors();
 		if (contributors == null) {
 			contributors = new String[] {contributor};
-			
+
 		} else {
 			contributors = Arrays.copyOf(contributors, contributors.length + 1);
 			contributors[contributors.length-1] = contributor;
@@ -333,7 +334,7 @@ public class BuildLegacyDocument implements TagValueBehavior {
 			lastProject = new DOAPProject(value, null);
 			List<DOAPProject> projects = Lists.newArrayList(file.getArtifactOf());
 			projects.add(lastProject);
-			file.setArtifactOf(projects.toArray(new DOAPProject[0]));			
+			file.setArtifactOf(projects.toArray(new DOAPProject[0]));
 		} else {
 			if (tag.equals(constants.getProperty("PROP_PROJECT_HOMEPAGE"))) {
 				if (lastProject == null) {
@@ -376,10 +377,10 @@ public class BuildLegacyDocument implements TagValueBehavior {
 		List<String> warningMessages = analysis.verify();
 		assertEquals("SPDXDocument", 0, warningMessages);
 	}
-	
+
 	/**
 	 * Go through all of the file dependencies and add them to the file
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void fixFileDependencies() throws InvalidSPDXAnalysisException {
 		// be prepared - it is complicate to make this efficient
@@ -428,10 +429,10 @@ public class BuildLegacyDocument implements TagValueBehavior {
 				System.out.println("\t"+missingIter.next());
 			}
 		}
-		
+
 	}
 
-	
+
 	private static void assertEquals(String name, int expected,
 			List<String> verify) {
 		if (verify.size() > expected) {
