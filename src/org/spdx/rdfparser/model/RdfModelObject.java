@@ -48,22 +48,22 @@ import org.json.simple.JSONArray;
 
 /**
  * The superclass for all classes the use the Jena RDF model.
- * 
+ *
  * There are two different lifecycles for objects that subclass RdfModelObject:
  * - If there is an existing model which already contains this object, use the static
  * method <code>RdfModelObject.createModelObject(ModelContainer container, Node node)</code>
  * where the node contains the property values for the class.  The subclass
- * implementations should implement the population of the Java properties from the 
+ * implementations should implement the population of the Java properties from the
  * model.  From that point forward, using standard getters and setters will keep
  * the Jena model updated along with the Java properties.
- * 
+ *
  * - If creating a new object use the constructor and pass in the initial property
  * values or use setters to set the property values.  To populate the Jena model,
  * invoke the method <code>Resource createResource(IModelContainer modelContainer)</code>.
  * This create a new resource in the model and populate the Jena model from the
  * Java properties.  Once this method has been invoked, all subsequent calls to
  * setters will update both the Java properties and the Jena RDF property values.
- * 
+ *
  * To implement a new RdfModelObject subclass, the following methods must be implemented:
  * - Clone: All concrete classes must implement a clone method which will copy the
  * Java values but not copy the model data.  The clone method can be used to duplicate
@@ -74,47 +74,47 @@ import org.json.simple.JSONArray;
  * - equivalent: Returns true if the parameter has the same property values
  * - A constructor of the form O(Type1 p1, Type2 p2, ...) where p1, p2, ... are Java properties to initialize the Java object.
  * - A constructor of the form O(ModelContainer modelContainer, Node node)
- * 
+ *
  * This class implements several common and helper methods including
  * methods to find and set resources to the model.  The methods to set a resource
- * are named <code>setPropertyValue</code> while the methods to find a 
+ * are named <code>setPropertyValue</code> while the methods to find a
  * resource value is named <code>findTypePropertyValue</code> where where Type
  * is the type of Java object to be found.  If no property value is found, null is returned.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public abstract class RdfModelObject implements IRdfModel, Cloneable {
-	
-	// the following hashmaps translate between pre-defined 
+
+	// the following hashmaps translate between pre-defined
 	// property values and their URI's used to uniquely identify them
 	// in the RDF model
 	static final Map<String, String> PRE_DEFINED_VALUE_URI = Maps.newHashMap();
 	static final Map<String, String> PRE_DEFINED_URI_VALUE = Maps.newHashMap();
-	
+
 	static {
 		PRE_DEFINED_VALUE_URI.put(SpdxRdfConstants.NOASSERTION_VALUE, SpdxRdfConstants.URI_VALUE_NOASSERTION);
 		PRE_DEFINED_URI_VALUE.put(SpdxRdfConstants.URI_VALUE_NOASSERTION, SpdxRdfConstants.NOASSERTION_VALUE);
 		PRE_DEFINED_VALUE_URI.put(SpdxRdfConstants.NONE_VALUE, SpdxRdfConstants.URI_VALUE_NONE);
 		PRE_DEFINED_URI_VALUE.put(SpdxRdfConstants.URI_VALUE_NONE, SpdxRdfConstants.NONE_VALUE);
 	}
-	
+
 	protected Model model;
 	protected Resource resource;
 	protected Node node;
 	protected IModelContainer modelContainer;
 	static RdfModelObject rdfModelObject;
-	
+
 	/**
 	 * Force a refresh for the model on every property get.  This is slower, but
 	 * will make sure that the correct value is returned if there happens to be
 	 * two Java objects using the same RDF properties.
-	 * 
+	 *
 	 * The property should be set based on if there are more than two objects
 	 * for the same node in the container containing this model
 	 */
 	protected boolean refreshOnGet = true;
-	
+
 	/**
 	 * Create an RDF Model Object based on an existing Node
 	 * @param modelContainer Container containing the RDF Model
@@ -134,14 +134,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			throw(new InvalidSPDXAnalysisException("Can not have an model node as a literal"));
 		}
 	}
-	
+
 	/**
-	 * Create an Rdf Model Object without any associated nodes.  It is assumed that 
+	 * Create an Rdf Model Object without any associated nodes.  It is assumed that
 	 * populate model will be called to intialize the model
 	 */
-	public RdfModelObject() {		
+	public RdfModelObject() {
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#createResource(org.apache.jena.rdf.model.Model, java.lang.String)
 	 */
@@ -149,10 +149,10 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		return createResource(modelContainer, true);
 	}
-	
+
 	/**
 	 * @param modelContainer
-	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * @param updateModel If true, update the model from the element.  If false, update the
 	 * element from the model.  This is used for relationships to make sure we don't overwrite
 	 * the original element when setting the related element property value.
 	 * @return
@@ -170,7 +170,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		// we need to wait to set the following to fields since they are checked
 		// by some of the setters
 		this.modelContainer = modelContainer;
-		this.model = modelContainer.getModel();	
+		this.model = modelContainer.getModel();
 		this.resource = modelContainer.createResource(duplicate, uri, getType(model), this);
 
 		this.node = this.resource.asNode();
@@ -181,10 +181,10 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return resource;
 	};
-	
+
 	/**
 	 * Fetch all of the properties from the model and populate the local Java properties
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public abstract void getPropertiesFromModel() throws InvalidSPDXAnalysisException;
 
@@ -195,31 +195,31 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param modelContainer
 	 * @param uri
 	 * @return Any duplicate resource found.  Null if no duplicate resource was found.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
 		return RdfModelHelper.findDuplicateResource(modelContainer, uri);
 	}
-	
+
 	/**
 	 * Get the URI for this RDF object. Null if this is for an anonomous node.
 	 * @param modelContainer
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public abstract String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException;
-	
+
 	/**
 	 * @return the RDF class name for the object
 	 */
 	public abstract Resource getType(Model model);
-	
+
 	/**
 	 * Populate the RDF model from the Java properties
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public abstract void populateModel() throws InvalidSPDXAnalysisException;
-	
+
 	/**
 	 * Returns true if the two resources represent the same node
 	 * @param r1
@@ -244,9 +244,9 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 				return false;
 			}
 			return r1.getURI().equals(r2.getURI());
-		} 
+		}
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof RdfModelObject)) {
@@ -261,7 +261,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return super.equals(o);
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		if (this.resource != null) {
@@ -276,7 +276,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param namespace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SpdxElement[] findMultipleElementPropertyValues(String namespace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -285,22 +285,22 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		List<SpdxElement> retval = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			retval.add(SpdxElementFactory.createElementFromModel(modelContainer, 
+			retval.add(SpdxElementFactory.createElementFromModel(modelContainer,
 					t.getObject()));
 		}
 		return retval.toArray(new SpdxElement[retval.size()]);
 	}
-	
+
 	/**
 	 * Find an SPDX element with a subject of this object
 	 * @param namespace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SpdxElement findElementPropertyValue(String namespace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -311,7 +311,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Find a property value with a subject of this object
 	 * @param namespace Namespace for the property name
@@ -322,7 +322,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		if (this.model == null || this.node == null) {
 			return null;
 		}
-		
+
 		Statement stmt = resource.getProperty(new PropertyImpl(namespace, propertyName));
 		if (stmt == null) return null;
 		else if (stmt.getObject().isLiteral()){
@@ -333,7 +333,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return stmt.getObject().toString();
 		}
 	}
-	
+
 	/**
 	 * Find an integer property value with a subject of this object
 	 * @param namespace Namespace for the property name
@@ -346,10 +346,10 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			if (t.getObject().isLiteral()) {		
+			if (t.getObject().isLiteral()) {
 				Object retval = t.getObject().getLiteralValue();
 				if (retval instanceof Integer) {
 					return (Integer)retval;
@@ -364,11 +364,11 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace RDF Namespace for the property
-	 * @param propertyName RDF Property Name (the RDF 
+	 * @param propertyName RDF Property Name (the RDF
 	 * @param value Integer value to associate to this resource
 	 */
 	protected void setPropertyValue(String nameSpace, String propertyName,
@@ -381,7 +381,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Finds multiple property values with a subject of this object
 	 * @param namespace Namespace for the property name
@@ -395,7 +395,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<String> retval = Lists.newArrayList();
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().isURI() && PRE_DEFINED_URI_VALUE.containsKey(t.getObject().getURI())) {
@@ -406,14 +406,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return retval.toArray(new String[retval.size()]);
 	}
-	
-	
+
+
 	/**
 	 * Set a property values for this resource.  Clears any existing resource.
 	 * If the string matches one of the SPDX pre-defined string values, the URI
 	 * for that value is stored.  Otherwise, it is stored as a literal value.
 	 * @param nameSpace RDF Namespace for the property
-	 * @param propertyName RDF Property Name (the RDF 
+	 * @param propertyName RDF Property Name (the RDF
 	 * @param values Values to associate to this resource
 	 */
 	protected void setPropertyValue(String nameSpace, String propertyName,
@@ -437,7 +437,16 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
+
+	/**
+	 * Set a property values for this resource.  Clears any existing resource.
+	 * If the string matches one of the SPDX pre-defined string values, the URI
+	 * for that value is stored.  Otherwise, it is stored as a literal value.
+	 * @param nameSpace RDF Namespace for the property
+	 * @param propertyName RDF Property Name (the RDF
+	 * @param values Values to associate to this resource
+	 */
 	protected void setPropertyValue(String nameSpace, String propertyName,
 			JSONArray values) {
 		if (model != null && resource != null) {
@@ -459,7 +468,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Set a property values for this resource.  Clears any existing resource.
 	 * @param nameSpace RDF Namespace for the property
@@ -474,13 +483,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			setPropertyValue(nameSpace, propertyName, "false");
 		}
 	}
-	
+
 	/**
 	 * Sets the spdx element property value for this resource
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param element
-	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * @param updateModel If true, update the model from the element.  If false, update the
 	 * element from the model.  This is used for relationships to make sure we don't overwrite
 	 * the original element when setting the related element property value.
 	 * @throws InvalidSPDXAnalysisException
@@ -495,17 +504,17 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 					if (elements[i] != null) {
 						this.resource.addProperty(p, elements[i].createResource(modelContainer, updateModel));
 					}
-				}		
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the spdx element property value for this resource
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param element
-	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * @param updateModel If true, update the model from the element.  If false, update the
 	 * element from the model.  This is used for relationships to make sure we don't overwrite
 	 * the original element when setting the related element property value.
 	 * @throws InvalidSPDXAnalysisException
@@ -520,13 +529,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds an SPDX element property value for this resource without removing the old property values
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param element
-	 * @param updateModel If true, update the model from the element.  If false, update the 
+	 * @param updateModel If true, update the model from the element.  If false, update the
 	 * element from the model.  This is used for relationships to make sure we don't overwrite
 	 * the original element when setting the related element property value.
 	 * @throws InvalidSPDXAnalysisException
@@ -540,7 +549,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds an SPDX element property value for this resource without removing the old property values
 	 * @param nameSpace
@@ -552,17 +561,17 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			SpdxElement element) throws InvalidSPDXAnalysisException {
 		addPropertyValue(nameSpace, propertyName, element, true);
 	}
-	
+
 	protected void setPropertyValue(String nameSpace, String propertyName,
 			SpdxElement element) throws InvalidSPDXAnalysisException {
 		setPropertyValue(nameSpace, propertyName, element, true);
 	}
-	
+
 	protected void setPropertyValue(String nameSpace, String propertyName,
 			SpdxElement[] element) throws InvalidSPDXAnalysisException {
 		setPropertyValue(nameSpace, propertyName, element, true);
 	}
-	
+
 	protected void setPropertyValues(String nameSpace, String propertyName,
 			Annotation[] annotations) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
@@ -575,7 +584,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	protected void addPropertyValue(String nameSpace, String propertyName,
 			Annotation annotation) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
@@ -585,7 +594,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	protected void addPropertyValue(String nameSpace, String propertyName,
 			ExternalRef externalRef) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
@@ -595,13 +604,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Find all annotations with a subject of this object
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected Annotation[] findAnnotationPropertyValues(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -611,20 +620,20 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<Annotation> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new Annotation(this.modelContainer, t.getObject()));
 		}
 		return retval.toArray(new Annotation[retval.size()]);
 	}
-	
+
 	/**
 	 * Find all annotations with a subject of this object
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected Relationship[] findRelationshipPropertyValues(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -634,14 +643,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<Relationship> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new Relationship(this.modelContainer, t.getObject()));
 		}
 		return retval.toArray(new Relationship[retval.size()]);
 	}
-	
+
 	/**
 	 * Find all StartEndPointers assocated with a property
 	 * @param nameSpace
@@ -657,14 +666,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<StartEndPointer> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new StartEndPointer(this.modelContainer, t.getObject()));
 		}
 		return retval.toArray(new StartEndPointer[retval.size()]);
 	}
-	
+
 	/**
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace RDF Namespace for the property
@@ -685,7 +694,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace RDF Namespace for the property
@@ -696,9 +705,9 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			String value) {
 		setPropertyValue(nameSpace, propertyName, new String[] {value});
 	}
-	
+
 	/**
-	 * Removes all property values for this resource. 
+	 * Removes all property values for this resource.
 	 * @param nameSpace RDF Namespace for the property
 	 * @param propertyName RDF Property Name
 	 */
@@ -708,7 +717,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			model.removeAll(this.resource, p, null);
 		}
 	}
-	
+
 
 
 	/**
@@ -716,7 +725,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param relationships
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyValues(String nameSpace,
 			String propertyName, Relationship[] relationships) throws InvalidSPDXAnalysisException {
@@ -730,7 +739,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add a relationship property value
 	 * @param nameSpace
@@ -747,13 +756,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param licenses
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setPropertyValues(String nameSpace,
 			String propertyName, AnyLicenseInfo[] licenses) throws InvalidSPDXAnalysisException {
@@ -769,7 +778,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add a property value of type AnyLicenseInfo without removing the existing property values
 	 * @param nameSpace
@@ -784,25 +793,25 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			this.resource.addProperty(p, license.createResource(this.modelContainer));
 		}
 	}
-	
+
 	/**
 	 * Set a property value for this resource.  Clears any existing resource.
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param license
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyValue(String nameSpace,
 			String propertyName, AnyLicenseInfo license) throws InvalidSPDXAnalysisException {
 		setPropertyValues(nameSpace, propertyName, new AnyLicenseInfo[] {license});
 	}
-	
+
 	/**
 	 * Find a property value with a subject of this object
 	 * @param namespace Namespace for the property name
 	 * @param propertyName Name of the property
 	 * @return The AnyLicenseInfo value of the property or null if no property exists
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public AnyLicenseInfo[] findAnyLicenseInfoPropertyValues(String namespace, String propertyName) throws InvalidSPDXAnalysisException {
 		if (this.model == null || this.node == null) {
@@ -811,7 +820,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<AnyLicenseInfo> retval = Lists.newArrayList();
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
@@ -824,7 +833,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param namespace Namespace for the property name
 	 * @param propertyName Name of the property
 	 * @return The AnyLicenseInfo value of the property or null if no property exists
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public AnyLicenseInfo findAnyLicenseInfoPropertyValue(String namespace, String propertyName) throws InvalidSPDXAnalysisException {
 		AnyLicenseInfo[] licenses = findAnyLicenseInfoPropertyValues(namespace, propertyName);
@@ -834,12 +843,12 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return licenses[0];
 		}
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected Checksum[] findMultipleChecksumPropertyValues(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -849,19 +858,19 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<Checksum> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new Checksum(modelContainer, t.getObject()));
 		}
 		return retval.toArray(new Checksum[retval.size()]);
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected Checksum findChecksumPropertyValue(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -872,13 +881,13 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return checksums[0];
 		}
 	}
-	
+
 	/**
 	 * Add a checksum as a property to this resource
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param checksumValues
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void addPropertyValue(String nameSpace,
 			String propertyName, Checksum checksumValue) throws InvalidSPDXAnalysisException {
@@ -894,7 +903,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param checksumValues
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyValues(String nameSpace,
 			String propertyName, Checksum[] checksumValues) throws InvalidSPDXAnalysisException {
@@ -915,7 +924,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param referenceType
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyValue(String nameSpace,
 			String propertyName, ReferenceType referenceType) throws InvalidSPDXAnalysisException {
@@ -933,7 +942,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected ReferenceType findReferenceTypePropertyValue(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -942,7 +951,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			return new ReferenceType(modelContainer, t.getObject());
@@ -955,7 +964,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param checksumValue
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyValue(String nameSpace,
 			String propertyName, Checksum checksumValue) throws InvalidSPDXAnalysisException {
@@ -963,15 +972,15 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			setPropertyValues(nameSpace, propertyName, new Checksum[0]);
 		} else {
 			setPropertyValues(nameSpace, propertyName, new Checksum[] {checksumValue});
-		}	
+		}
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param checksumValue
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected DoapProject[] findMultipleDoapPropertyValues(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -981,19 +990,19 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<DoapProject> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new DoapProject(modelContainer, t.getObject()));
 		}
 		return retval.toArray(new DoapProject[retval.size()]);
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param doapProjectValues
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected void setPropertyValue(String nameSpace,
 			String propertyName, DoapProject[] doapProjectValues) throws InvalidSPDXAnalysisException {
@@ -1007,7 +1016,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Find a single URI as a property value to this node
 	 * @param namespace
@@ -1023,7 +1032,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			return values[0];
 		}
 	}
-	
+
 	/**
 	 * Find a single URI as a property value to this node
 	 * @param namespace
@@ -1037,17 +1046,17 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		List<String> retval = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
-			if (t.getObject().isURI()) {				
+			if (t.getObject().isURI()) {
 				retval.add(model.expandPrefix(t.getObject().getURI()));
 			}
 		}
 		return retval.toArray(new String[retval.size()]);
 	}
-	
+
 	/**
 	 * Sets a property value as a list of Uris
 	 * @param nameSpace
@@ -1070,7 +1079,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a property value as a list of Uris
 	 * @param nameSpace
@@ -1088,7 +1097,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets a property value as a Uri
 	 * @param nameSpace
@@ -1100,12 +1109,12 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			String propertyName, String uri) throws InvalidSPDXAnalysisException {
 		setPropertyUriValues(nameSpace, propertyName, new String[] {uri});
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SPDXCreatorInformation findCreationInfoPropertyValue(
 			String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
@@ -1114,20 +1123,20 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			return new SPDXCreatorInformation(model, t.getObject());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param creatorInfo
 	 */
-	protected void setPropertyValue(String nameSpace, 
+	protected void setPropertyValue(String nameSpace,
 			String propertyName, SPDXCreatorInformation creatorInfo) {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);
@@ -1137,12 +1146,12 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return a compound pointer as an object for the property
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SinglePointer findSinglePointerPropertyValue(
 			String nameSpace, String propertyName) throws InvalidSPDXAnalysisException {
@@ -1151,21 +1160,21 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			return PointerFactory.getSinglePointerFromModel(modelContainer, t.getObject());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param creatorInfo
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected void setPropertyValue(String nameSpace, 
+	protected void setPropertyValue(String nameSpace,
 			String propertyName, SinglePointer singlePointer) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);
@@ -1180,15 +1189,15 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		return findExternalDocRefPropertyValues(nameSpace, propertyName,
 				this.modelContainer, this.node);
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propSpdxExternalDocRef
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static ExternalDocumentRef[] findExternalDocRefPropertyValues(
-			String nameSpace, String propertyName, IModelContainer extDocModelContainer, 
+			String nameSpace, String propertyName, IModelContainer extDocModelContainer,
 			Node nodeContainingExternalRefs) throws InvalidSPDXAnalysisException {
 		if (extDocModelContainer == null || nodeContainingExternalRefs == null) {
 			return new ExternalDocumentRef[0];
@@ -1197,21 +1206,21 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<ExternalDocumentRef> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(nodeContainingExternalRefs, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new ExternalDocumentRef(extDocModelContainer, t.getObject()));
 		}
 		return retval.toArray(new ExternalDocumentRef[retval.size()]);
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
 	 * @param externalDocRefs
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
-	public void setPropertyValues(String nameSpace, String propertyName, 
+	public void setPropertyValues(String nameSpace, String propertyName,
 			ExternalDocumentRef[] externalDocRefs) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);
@@ -1223,7 +1232,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 
 	/**
 	 * @param nameSpace
@@ -1248,7 +1257,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param nameSpace
 	 * @param propertyName
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SPDXReview[] findReviewPropertyValues(String nameSpace,
 			String propertyName) throws InvalidSPDXAnalysisException {
@@ -1258,14 +1267,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		List<SPDXReview> retval = Lists.newArrayList();
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			retval.add(new SPDXReview(model, t.getObject()));
 		}
 		return retval.toArray(new SPDXReview[retval.size()]);
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
@@ -1279,14 +1288,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			return new SpdxPackageVerificationCode(model, t.getObject());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
@@ -1303,7 +1312,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param nameSpace
 	 * @param propertyName
@@ -1318,7 +1327,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		Node p = model.getProperty(nameSpace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		List<ExternalRef> retval = Lists.newArrayList();
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
@@ -1326,7 +1335,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return retval.toArray(new ExternalRef[retval.size()]);
 	}
-	
+
 	/**
 	 * Set the external refs as a value for the property
 	 * @param nameSpace
@@ -1334,7 +1343,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	 * @param externalRefs
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected void setPropertyValue(String nameSpace, 
+	protected void setPropertyValue(String nameSpace,
 			String propertyName, ExternalRef[] externalRefs) throws InvalidSPDXAnalysisException {
 		if (model != null && resource != null) {
 			Property p = model.createProperty(nameSpace, propertyName);
@@ -1346,7 +1355,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
 	 * order and considering nulls
@@ -1358,7 +1367,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		return RdfModelHelper.arraysEquivalent(array1, array2);
 	}
 
-	
+
 	/**
 	 * Compares the properties of two RdfModelObjects considering possible null values
 	 * @param o1
@@ -1371,7 +1380,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return RdfModelHelper.equivalentConsideringNull(o1, o2);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#setMultipleObjectsForSameNode()
 	 */
@@ -1379,7 +1388,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	public void setMultipleObjectsForSameNode() {
 		this.refreshOnGet = true;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#setSingleObjectForSameNode()
 	 */
@@ -1387,14 +1396,14 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	public void setSingleObjectForSameNode() {
 		this.refreshOnGet = false;
 	}
-	
+
 	/**
 	 * @return true if every get of a property will be refreshsed from the RDF Model - primarily used for unit testing
 	 */
 	public boolean isRefreshOnGet() {
 		return this.refreshOnGet;
 	}
-	
+
 	/**
 	 * @return the RDF Node (null if not initialized)
 	 */

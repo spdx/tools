@@ -46,7 +46,6 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	protected String comment;
 	protected String name;
 	protected String[] seeAlso;
-	// protected String[] seeAlsoDetails;
 	protected JSONArray seeAlsoDetails;
 
 
