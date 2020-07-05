@@ -33,40 +33,48 @@ public interface SpdxRdfConstants {
 	public static final String DOAP_NAMESPACE = "http://usefulinc.com/ns/doap#";
 	public static final String OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 	public static final String RDF_POINTER_NAMESPACE = "http://www.w3.org/2009/pointers#";
-	
+
 	// RDF Properties
 	public static final String RDF_PROP_TYPE = "type";
 	public static final String RDF_PROP_RESOURCE = "resource";
-	
+
 	// OWL Properties
 	public static final String PROP_OWL_SAME_AS = "sameAs";
 
-	
+
 	// RDFS Properties
 	public static final String RDFS_PROP_COMMENT = "comment";
 	public static final String RDFS_PROP_LABEL = "label";
 	public static final String RDFS_PROP_SEE_ALSO = "seeAlso";
 	public static final String RDFS_PROP_SEE_ALSO_DETAILS = "seeAlsoDetails";
-	
+
+	// crossrefs details (seeAlsoDetails) properties
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_IS_VALID = "isValid";
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_WAYBACK_LINK = "isWayBackLink";
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_MATCH = "match";
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_URL = "url";
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_IS_DEAD = "isDead";
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_TIMESTAMP = "timestamp";
+
 	// DOAP Class Names
 	public static final String CLASS_DOAP_PROJECT = "Project";
-	
+
 	// DOAP Project Property Names
 	public static final String PROP_PROJECT_NAME = "name";
 	public static final String PROP_PROJECT_HOMEPAGE = "homepage";
-	
+
 	// Pointer Class Names
 	public static final String CLASS_POINTER_START_END_POINTER = "StartEndPointer";
 	public static final String CLASS_POINTER_BYTE_OFFSET_POINTER = "ByteOffsetPointer";
 	public static final String CLASS_POINTER_LINE_CHAR_POINTER = "LineCharPointer";
-	
+
 	// Pointer Properties
 	public static final String PROP_POINTER_START_POINTER = "startPointer";
 	public static final String PROP_POINTER_END_POINTER = "endPointer";
 	public static final String PROP_POINTER_REFERENCE = "reference";
 	public static final String PROP_POINTER_OFFSET = "offset";
 	public static final String PROP_POINTER_LINE_NUMBER = "lineNumber";
-	
+
 	// SPDX Class Names
 	public static final String CLASS_SPDX_DOCUMENT = "SpdxDocument";
 	public static final String CLASS_SPDX_PACKAGE = "Package";
@@ -94,13 +102,13 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_EXTERNAL_REFERENCE = "ExternalRef";
 	public static final String CLASS_SPDX_REFERENCE_TYPE = "ReferenceType";
 	public static final String CLASS_SPDX_SNIPPET = "Snippet";
-	
+
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
 	public static final String URI_VALUE_NONE = SPDX_NAMESPACE  + PROP_VALUE_NONE;
 	public static final String PROP_VALUE_NOASSERTION = "noassertion";
 	public static final String URI_VALUE_NOASSERTION = SPDX_NAMESPACE + PROP_VALUE_NOASSERTION;
-	
+
 	// SPDX Document Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_SPDX_REVIEWED_BY = "reviewed";
@@ -113,7 +121,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_SPDX_DATA_LICENSE = "dataLicense";
 	public static final String PROP_SPDX_EXTERNAL_DOC_REF = "externalDocumentRef";
 	public static final String SPDX_DOCUMENT_ID = "SPDXRef-DOCUMENT";
-	
+
 	// SPDX CreationInfo Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_CREATION_CREATOR = "creator";
@@ -122,30 +130,30 @@ public interface SpdxRdfConstants {
 	public static final String CREATOR_PREFIX_PERSON = "Person:";
 	public static final String CREATOR_PREFIX_ORGANIZATION = "Organization:";
 	public static final String CREATOR_PREFIX_TOOL = "Tool:";
-	
+
 	// SPDX Checksum Properties
 	public static final String PROP_CHECKSUM_ALGORITHM = "algorithm";
 	public static final String PROP_CHECKSUM_VALUE = "checksumValue";
 	public static final String ALGORITHM_SHA1 = "SHA1";
 	public static final String PROP_CHECKSUM_ALGORITHM_SHA1 = "checksumAlgorithm_sha1";
-	
+
 	// SPDX PackageVerificationCode Properties
 	public static final String PROP_VERIFICATIONCODE_IGNORED_FILES = "packageVerificationCodeExcludedFile";
 	public static final String PROP_VERIFICATIONCODE_VALUE = "packageVerificationCodeValue";
 
-	// SPDX Element Properties 
+	// SPDX Element Properties
 	public static final String PROP_ANNOTATION = "annotation";
 	public static final String PROP_RELATIONSHIP = "relationship";
 	public static final String TERM_ELEMENT_NOASSERTION = PROP_VALUE_NOASSERTION;
 	public static final String TERM_ELEMENT_NONE = PROP_VALUE_NONE;
-	
-	// SPDX Item Properties 
+
+	// SPDX Item Properties
 	public static final String PROP_LICENSE_CONCLUDED = "licenseConcluded";
-	public static final String PROP_COPYRIGHT_TEXT = "copyrightText";	
+	public static final String PROP_COPYRIGHT_TEXT = "copyrightText";
 	public static final String PROP_LIC_COMMENTS = "licenseComments";
 	public static final String PROP_LICENSE_DECLARED = "licenseDeclared";
 	public static final String PROP_ATTRIBUTION_TEXT = "attributionText";
-	
+
 	// SPDX Package Properties
 	public static final String PROP_PACKAGE_DECLARED_NAME = "name";
 	public static final String PROP_PACKAGE_FILE_NAME = "packageFileName";
@@ -166,7 +174,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_PACKAGE_SUPPLIER = "supplier";
 	public static final String PROP_PACKAGE_FILES_ANALYZED = "filesAnalyzed";
 	public static final String PROP_EXTERNAL_REF = "externalRef";
-	
+
 	// SPDX License Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	// the seeAlso property is in the RDFS_PROP_SEE_ALSO property in the rdfs namespace
@@ -195,10 +203,10 @@ public interface SpdxRdfConstants {
 	public static final String PROP_EXCEPTION_TEMPLATE = "licenseExceptionTemplate";
 	public static final String PROP_LICENSE_EXCEPTION = "licenseException";
 	public static final String PROP_LIC_ID_DEPRECATED = "isDeprecatedLicenseId";
-	
+
 	// SpdxElement Properties
 	public static final String PROP_NAME = "name";
-	
+
 	// SPDX File Properties
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
 	public static final String PROP_FILE_NAME = "fileName";
@@ -206,48 +214,48 @@ public interface SpdxRdfConstants {
 	public static final String PROP_FILE_LICENSE = PROP_LICENSE_CONCLUDED;
 	public static final String PROP_FILE_COPYRIGHT = PROP_COPYRIGHT_TEXT;
 	public static final String PROP_FILE_CHECKSUM = "checksum";
-	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";	
+	public static final String PROP_FILE_SEEN_LICENSE = "licenseInfoInFile";
 	public static final String PROP_FILE_LIC_COMMENTS = PROP_LIC_COMMENTS;
 	public static final String PROP_FILE_ARTIFACTOF = "artifactOf";
-	public static final String PROP_FILE_FILE_DEPENDENCY = "fileDependency"; 
+	public static final String PROP_FILE_FILE_DEPENDENCY = "fileDependency";
 	public static final String PROP_FILE_CONTRIBUTOR = "fileContributor";
 	public static final String PROP_FILE_NOTICE = "noticeText";
-	
+
 	// SPDX Snippet Properties
 	public static final String PROP_SNIPPET_FROM_FILE = "snippetFromFile";
 	public static final String PROP_SNIPPET_RANGE = "range";
 	public static final String PROP_LICENSE_INFO_FROM_SNIPPETS = "licenseInfoInSnippet";
-	
+
 	// SPDX File Type Properties
 	public static final String PROP_FILE_TYPE_SOURCE = "fileType_source";
 	public static final String PROP_FILE_TYPE_ARCHIVE = "fileType_archive";
 	public static final String PROP_FILE_TYPE_BINARY = "fileType_binary";
 	public static final String PROP_FILE_TYPE_OTHER = "fileType_other";
-	
+
 	public static final String FILE_TYPE_SOURCE = "SOURCE";
 	public static final String FILE_TYPE_ARCHIVE = "ARCHIVE";
 	public static final String FILE_TYPE_BINARY = "BINARY";
 	public static final String FILE_TYPE_OTHER = "OTHER";
-	
+
 	// SPDX Annotation Properties
 	public static final String PROP_ANNOTATOR = "annotator";
 	public static final String PROP_ANNOTATION_DATE = "annotationDate";
 	public static final String PROP_ANNOTATION_TYPE = "annotationType";
-	
+
 	// SPDX Relationship Properties
 	public static final String PROP_RELATED_SPDX_ELEMENT = "relatedSpdxElement";
 	public static final String PROP_RELATIONSHIP_TYPE = "relationshipType";
-	
+
 	// ExternalDocumentRef properties
 	public static final String PROP_EXTERNAL_DOC_CHECKSUM = "checksum";
 	public static final String PROP_EXTERNAL_SPDX_DOCUMENT = "spdxDocument";
 	public static final String PROP_EXTERNAL_DOC_ID = "externalDocumentId";
-	
+
 	// External Reference properties
 	public static final String PROP_REFERENCE_CATEGORY = "referenceCategory";
 	public static final String PROP_REFERENCE_TYPE = "referenceType";
 	public static final String PROP_REFERENCE_LOCATOR = "referenceLocator";
-	
+
 	// SPDX Review Properties
 	// NOTE: These have all been deprecated as of SPDX 2.0
 	// The comment property is the RDFS_PROP_COMMENT property in the rdfs namespace
@@ -255,38 +263,38 @@ public interface SpdxRdfConstants {
 	public static final String PROP_REVIEW_REVIEWER = "reviewer";
 	@Deprecated
 	public static final String PROP_REVIEW_DATE = "reviewDate";
-	
+
 	// Date format
 	public static final String SPDX_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	public static final String STANDARD_LICENSE_URL = "http://spdx.org/licenses";
-	
+
 	// license ID format
 	public static String NON_STD_LICENSE_ID_PRENUM = "LicenseRef-";
-	public static Pattern LICENSE_ID_PATTERN_NUMERIC = 
+	public static Pattern LICENSE_ID_PATTERN_NUMERIC =
 			Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"(\\d+)$");	// Pattern for numeric only license IDs
 	static Pattern LICENSE_ID_PATTERN = Pattern.compile(NON_STD_LICENSE_ID_PRENUM+"([0-9a-zA-Z\\.\\-\\_]+)\\+?$");
-	
+
 	// SPDX Element Reference format
 	public static String SPDX_ELEMENT_REF_PRENUM = "SPDXRef-";
 	public static Pattern SPDX_ELEMENT_REF_PATTERN = Pattern.compile(SPDX_ELEMENT_REF_PRENUM+"([0-9a-zA-Z\\.\\-\\+]+)$");
-	
+
 	// External Document ID format
 	public static String EXTERNAL_DOC_REF_PRENUM = "DocumentRef-";
 	public static Pattern EXTERNAL_DOC_REF_PATTERN = Pattern.compile(EXTERNAL_DOC_REF_PRENUM+"([0-9a-zA-Z\\.\\-\\+]+)$");
-	public static Pattern EXTERNAL_ELEMENT_REF_PATTERN = Pattern.compile("("+EXTERNAL_DOC_REF_PRENUM+"[0-9a-zA-Z\\.\\-\\+]+):("+SPDX_ELEMENT_REF_PRENUM+"[0-9a-zA-Z\\.\\-\\+]+)$");	
-	
+	public static Pattern EXTERNAL_ELEMENT_REF_PATTERN = Pattern.compile("("+EXTERNAL_DOC_REF_PRENUM+"[0-9a-zA-Z\\.\\-\\+]+):("+SPDX_ELEMENT_REF_PRENUM+"[0-9a-zA-Z\\.\\-\\+]+)$");
+
 	public static Pattern SPDX_VERSION_PATTERN = Pattern.compile("^SPDX-(\\d+)\\.(\\d+)$");
 
 	// Standard value strings
 	public static String NONE_VALUE = "NONE";
 	public static String NOASSERTION_VALUE = "NOASSERTION";
-	
+
 	// data license ID
 	public static final String SPDX_DATA_LICENSE_ID_VERSION_1_0 = "PDDL-1.0";
 	public static final String SPDX_DATA_LICENSE_ID = "CC0-1.0";
-	
+
 	public static final String SPDX_LISTED_REFERENCE_TYPES_PREFIX = "http://spdx.org/rdf/references/";
-	
+
 	// License XML constants
 	public static final String LICENSEXML_URI = "http://www.spdx.org/license";
 	public static final String LICENSEXML_ELEMENT_LICENSE_COLLECTION = "SPDXLicenseCollection";
@@ -315,5 +323,5 @@ public interface SpdxRdfConstants {
 	public static final String LICENSEXML_ATTRIBUTE_ALT_MATCH = "match";
 	public static final String LICENSEXML_ELEMENT_BREAK = "br";
 	public static final String LICENSEXML_ELEMENT_TEXT = "text";
-	
+
 }
