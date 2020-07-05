@@ -31,11 +31,13 @@ import org.apache.jena.rdf.model.AnonId;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
- * The SimpleLicenseInfo class includes all resources that represent 
+ * The SimpleLicenseInfo class includes all resources that represent
  * simple, atomic, licensing information.
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -44,18 +46,19 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	protected String comment;
 	protected String name;
 	protected String[] seeAlso;
-	
+	protected JSONArray seeAlsoDetails;
+
 
 	/**
 	 * @param modelContainer container which includes the license
 	 * @param node RDF Node that defines the SimpleLicensingInfo
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	SimpleLicensingInfo(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
-		getPropertiesFromModel();		
+		getPropertiesFromModel();
 	}
-	
+
 	@Override
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// id
@@ -84,7 +87,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			this.comment = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTES_VERSION_1);
 		}
 	}
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -116,11 +119,11 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		if (id == null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 		} else {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_LICENSE_ID, id);
 		}
 	}
-	
+
 	/**
 	 * @return the name
 	 */
@@ -142,7 +145,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		if (this.node != null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME_VERSION_1);
 			if (name == null) {
-				removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);				
+				removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
 			} else {
 				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME, name);
 			}
@@ -161,7 +164,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		}
 		return comment;
 	}
-	
+
 	/**
 	 * @param comment the comment to set
 	 */
@@ -176,7 +179,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			}
 		}
 	}
-	
+
 	/**
 	 * @return the urls which reference the same license information
 	 */
@@ -209,18 +212,53 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			}
 		}
 	}
-	
+
+	public JSONArray urlsToJsonArray(String[] urls) {
+		JSONArray jsArray = new JSONArray();
+		for (String url:urls) {
+			jsArray.add(url);
+		}
+		return jsArray;
+	}
+
+	/**
+	 * @return the urls which reference the same license information
+	 */
+	public JSONArray getSeeAlsoDetails() {
+		if (this.resource != null && this.refreshOnGet) {
+			String[] seeAlsoArray = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+			this.seeAlsoDetails = urlsToJsonArray(seeAlsoArray);
+		}
+		return seeAlsoDetails;
+	}
+
+
+	/**
+	 * @param seeAlsoUrl the urls which are references to the same license to set
+	 */
+	public void setSeeAlsoDetails(JSONArray seeAlsoUrl) {
+		this.seeAlsoDetails = seeAlsoUrl;
+		if (this.node != null) {
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
+			if (seeAlsoDetails == null) {
+				removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+			} else {
+				setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS, seeAlsoDetails);
+			}
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#findDuplicateResource(org.spdx.rdfparser.IModelContainer, java.lang.String)
 	 */
 	@Override
 	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
-		Property idProperty = modelContainer.getModel().createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+		Property idProperty = modelContainer.getModel().createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_LICENSE_ID);
-		Property typeProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+		Property typeProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 				SpdxRdfConstants.RDF_PROP_TYPE);
 		Triple m = Triple.createMatch(null, idProperty.asNode(), null);
-		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().toString(false).equals(this.licenseId)) {
@@ -238,7 +276,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		}
 		return null;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
@@ -248,7 +286,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		if (this.licenseId == null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
 		} else {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_LICENSE_ID, this.licenseId);
 		}
 		// Comment
@@ -259,7 +297,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		}
 		// name
 		if (name == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);				
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME);
 		} else {
 			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NAME, name);
 		}
@@ -270,7 +308,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlso);
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		if (this.getLicenseId() == null) {
@@ -279,7 +317,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			return this.getLicenseId().hashCode();
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object comp) {
 		if (comp == this) {
@@ -291,7 +329,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		License compl = (License)comp;
 		return compl.getLicenseId().equals(this.getLicenseId());
 	}
-	
+
 	@Override
     public boolean equivalent(IRdfModel compare) {
 		if (compare == this) {
@@ -305,13 +343,13 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
                 Objects.equal(this.name, sCompare.getName()) &&
 				RdfModelHelper.arraysEqual(this.seeAlso, sCompare.getSeeAlso());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
 	public String getUri(IModelContainer modelContainer)
-			throws InvalidSPDXAnalysisException {	
+			throws InvalidSPDXAnalysisException {
 		if (this.node != null && this.node.isURI()) {
 			return this.node.getURI();
 		} else {
