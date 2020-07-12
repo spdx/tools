@@ -53,7 +53,7 @@ public interface SpdxRdfConstants {
 	public static final String RDFS_PROP_SEE_ALSO_DETAILS_WAYBACK_LINK = "isWayBackLink";
 	public static final String RDFS_PROP_SEE_ALSO_DETAILS_MATCH = "match";
 	public static final String RDFS_PROP_SEE_ALSO_DETAILS_URL = "url";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_IS_DEAD = "isDead";
+	public static final String RDFS_PROP_SEE_ALSO_DETAILS_IS_LIVE = "isLive";
 	public static final String RDFS_PROP_SEE_ALSO_DETAILS_TIMESTAMP = "timestamp";
 
 	// DOAP Class Names

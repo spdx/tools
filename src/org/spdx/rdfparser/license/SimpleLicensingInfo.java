@@ -216,7 +216,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	 */
 	public String[] getSeeAlsoDetails() {
 		if (this.resource != null && this.refreshOnGet) {
-			this.seeAlsoDetails = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+			this.seeAlsoDetails = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
 			// The following is added for compatibility with earlier versions
 			String[] moreSeeAlsoDetails = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
 			if (moreSeeAlsoDetails != null && moreSeeAlsoDetails.length > 0) {
@@ -239,9 +239,9 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		if (this.node != null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
 			if (seeAlsoDetails == null) {
-				removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+				removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
 			} else {
-				setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS, seeAlsoDetails);
+				setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, seeAlsoDetails);
 			}
 		}
 	}

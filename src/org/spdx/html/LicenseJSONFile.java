@@ -84,7 +84,7 @@ public class LicenseJSONFile extends AbstractJsonFile {
 			for (String seeAlsoDetail:seeAlsoDetails) {
 				seeAlsoDetailsArray.add(seeAlsoDetail);
 			}
-			jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS, seeAlsoDetailsArray);
+			jsonObject.put(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, seeAlsoDetailsArray);
 		}
 		if (license.getComment() != null && !license.getComment().isEmpty()) {
 			jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, license.getComment());
