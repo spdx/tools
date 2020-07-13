@@ -31,8 +31,6 @@ import org.apache.jena.rdf.model.AnonId;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.iterator.ExtendedIterator;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 /**
  * The SimpleLicenseInfo class includes all resources that represent
@@ -46,7 +44,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	protected String comment;
 	protected String name;
 	protected String[] seeAlso;
-	protected JSONArray seeAlsoDetails;
+	protected String[] seeAlsoDetails;
 
 
 	/**
@@ -213,21 +211,21 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		}
 	}
 
-	public JSONArray urlsToJsonArray(String[] urls) {
-		JSONArray jsArray = new JSONArray();
-		for (String url:urls) {
-			jsArray.add(url);
-		}
-		return jsArray;
-	}
-
 	/**
 	 * @return the urls which reference the same license information
 	 */
-	public JSONArray getSeeAlsoDetails() {
+	public String[] getSeeAlsoDetails() {
 		if (this.resource != null && this.refreshOnGet) {
-			String[] seeAlsoArray = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
-			this.seeAlsoDetails = urlsToJsonArray(seeAlsoArray);
+			this.seeAlsoDetails = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+			// The following is added for compatibility with earlier versions
+			String[] moreSeeAlsoDetails = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
+			if (moreSeeAlsoDetails != null && moreSeeAlsoDetails.length > 0) {
+				int startExtraIndex = this.seeAlsoDetails.length;
+				this.seeAlsoDetails = Arrays.copyOf(this.seeAlsoDetails, startExtraIndex + moreSeeAlsoDetails.length);
+				for (int i = 0; i < moreSeeAlsoDetails.length; i++) {
+					this.seeAlsoDetails[startExtraIndex + i] = moreSeeAlsoDetails[i];
+				}
+			}
 		}
 		return seeAlsoDetails;
 	}
@@ -236,7 +234,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	/**
 	 * @param seeAlsoUrl the urls which are references to the same license to set
 	 */
-	public void setSeeAlsoDetails(JSONArray seeAlsoUrl) {
+	public void setSeeAlsoDetails(String[] seeAlsoUrl) {
 		this.seeAlsoDetails = seeAlsoUrl;
 		if (this.node != null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);

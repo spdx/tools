@@ -614,14 +614,6 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 	}
 
-	public JSONArray urlsToJsonArray(String[] urls) {
-		JSONArray jsArray = new JSONArray();
-		for (String url:urls) {
-			jsArray.add(url);
-		}
-		return jsArray;
-	}
-
 	/**
 	 * Copy all of the parameters from another license
 	 * @param license
@@ -633,7 +625,7 @@ public abstract class License extends SimpleLicensingInfo {
 		this.setName(license.getName());
 		this.setOsiApproved(license.isOsiApproved());
 		this.setSeeAlso(license.getSeeAlso());
-		this.setSeeAlsoDetails(urlsToJsonArray(license.getSeeAlso()));
+		this.setSeeAlsoDetails(license.getSeeAlsoDetails());
 		this.setStandardLicenseHeader(license.getStandardLicenseHeader());
 		this.setStandardLicenseTemplate(this.getStandardLicenseTemplate());
 		this.setStandardLicenseHeaderTemplate(license.getStandardLicenseHeaderTemplate());
