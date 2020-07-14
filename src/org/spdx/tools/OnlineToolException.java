@@ -18,46 +18,46 @@ package org.spdx.tools;
 
 /**
  * Default Exception thrown to the Online Tool
- * 
+ *
  * @author Rohit Lodha
  *
  */
 
 public class OnlineToolException extends Exception {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public OnlineToolException() {
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param arg0
 	 */
 	public OnlineToolException(String arg0) {
 		super(arg0);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param arg0
 	 */
 	public OnlineToolException(Throwable arg0) {
 		super(arg0);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param arg0
 	 * @param arg1
 	 */
 	public OnlineToolException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param arg0
 	 * @param arg1
 	 * @param arg2

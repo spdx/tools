@@ -42,9 +42,9 @@ import com.google.common.collect.Maps;
  * Provides a hashmap which maps the Mustache template strings to SPDX Document
  * methods and strings.  The constants are used in the SpdxHTMLTemplate.html file
  * in the resources directory.
- * 
+ *
  * Note that the Mustache variable names are the tag values in the SPDX specification
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -69,7 +69,7 @@ public class MustacheMap {
 		retval.put("relationships", relationships);
 		ExternalDocumentRef[] sortedDocRefs = doc.getExternalDocumentRefs();
 		Arrays.sort(sortedDocRefs);
-		List<ExternalDocumentRef> externalDocumentReferences = 
+		List<ExternalDocumentRef> externalDocumentReferences =
 				Arrays.asList(sortedDocRefs);
 		retval.put("externalDocRelationships", externalDocumentReferences);
 		retval.put("reviewed", getReviewers(doc));
@@ -88,7 +88,7 @@ public class MustacheMap {
 				}
 				return o1.getId().compareTo(o2.getId());
 			}
-			
+
 		});
 		List<ElementContext> describedPkgs = Lists.newArrayList();
 		List<ElementContext> describedFiles = Lists.newArrayList();
@@ -99,13 +99,13 @@ public class MustacheMap {
 				describedFiles.add(new ElementContext(describedItems[i], spdxIdToUrl));
 			}
 		}
-		
+
 		retval.put("describesPackage", describedPkgs);
 		retval.put("describesFile", describedFiles);
 		retval.put("hasExtractedLicensingInfo", getExtractedLicensingInfo(doc, spdxIdToUrl));
 		return retval;
 	}
-	
+
 	/**
 	 * @param relationships
 	 * @return
@@ -113,15 +113,15 @@ public class MustacheMap {
 	private static List<RelationshipContext> getRelationshipContexts(
 			Relationship[] relationships, Map<String, String> spdxIdToUrl) {
 	    List<RelationshipContext> retval = Lists.newArrayList();
-	    
+
 	    if (relationships != null) {
 	        Arrays.sort(relationships);
-		
+
     		for (Relationship relationship : relationships) {
     		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
     		}
 	    }
-	    
+
 		return retval;
 	}
 
@@ -130,7 +130,7 @@ public class MustacheMap {
 	 * @param files
 	 * @param spdxIdToUrl
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Map<String, Object> buildDocFileMustacheMap(SpdxDocument doc, SpdxFile[] files,
 			Map<String, String> spdxIdToUrl, Map<String, List<SpdxSnippet>> fileIdToSnippets) throws InvalidSPDXAnalysisException {
@@ -151,7 +151,7 @@ public class MustacheMap {
 				}
 				return o1.getId().compareTo(o2.getId());
 			}
-			
+
 		});
 		List<FileContext> describedFiles = Lists.newArrayList();
 		for (int i = 0; i < describedItems.length; i++) {
@@ -162,7 +162,7 @@ public class MustacheMap {
 		retval.put("hasFile", describedFiles);
 		return retval;
 	}
-	
+
 	private static List<ExtractedLicensingInfoContext> getExtractedLicensingInfo(SpdxDocument doc, Map<String, String> spdxIdToUrl) {
 		List<ExtractedLicensingInfoContext> retval = Lists.newArrayList();
 		try {
@@ -182,7 +182,7 @@ public class MustacheMap {
 					}
 					return o1.getLicenseId().compareTo(o2.getLicenseId());
 				}
-				
+
 			});
 			for (int i = 0;i < extractedLicenseInfos.length; i++) {
 				retval.add(new ExtractedLicensingInfoContext(extractedLicenseInfos[i], spdxIdToUrl));
@@ -218,7 +218,7 @@ public class MustacheMap {
 	/**
 	 * @param doc
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static String getDataLicenseName(SpdxDocument doc) throws InvalidSPDXAnalysisException {
 		AnyLicenseInfo dataLicense = doc.getDataLicense();
@@ -227,7 +227,7 @@ public class MustacheMap {
 				return ((SimpleLicensingInfo)dataLicense).getName();
 			} else {
 				return dataLicense.toString();
-			}			
+			}
 		} else {
 			return "NONE";
 		}
@@ -248,7 +248,7 @@ public class MustacheMap {
 	 * @param pkg
 	 * @param spdxIdToUrl
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Map<String, Object> buildPkgFileMap(SpdxPackage pkg,
 			Map<String, String> spdxIdToUrl, Map<String, List<SpdxSnippet>> fileIdToSnippets) throws InvalidSPDXAnalysisException {
@@ -269,7 +269,7 @@ public class MustacheMap {
 				}
 				return o1.getName().compareTo(o2.getName());
 			}
-			
+
 		});
 		List<FileContext> alFiles = Lists.newArrayList();
 		for (int i = 0; i < files.length; i++) {

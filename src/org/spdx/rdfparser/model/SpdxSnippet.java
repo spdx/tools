@@ -44,7 +44,7 @@ public class SpdxSnippet extends SpdxItem implements Comparable<SpdxSnippet> {
 	private SpdxFile snippetFromFile;
 	private StartEndPointer byteRange;
 	private StartEndPointer lineRange;
-	
+
 	/**
 	 * @param name Identify a specific snippet in a human convenient manner
 	 * @param comment This field provides a place for the SPDX document creator to record any general
@@ -68,24 +68,24 @@ snippet information applies to.
 			AnyLicenseInfo[] licenseInfoInFile, String copyrightText,
 			String licenseComment, SpdxFile snippetFromFile, StartEndPointer byteRange,
 			StartEndPointer lineRange) {
-		super(name, comment, annotations, relationships, licenseConcluded, 
+		super(name, comment, annotations, relationships, licenseConcluded,
 				licenseInfoInFile, copyrightText, licenseComment);
 		this.snippetFromFile = snippetFromFile;
 		this.byteRange = byteRange;
 		this.lineRange = lineRange;
 	}
-	
+
 	/**
 	 * @param modelContainer
 	 * @param node
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SpdxSnippet(IModelContainer modelContainer, Node node) 
+	public SpdxSnippet(IModelContainer modelContainer, Node node)
 			throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
 		getMyPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -94,7 +94,7 @@ snippet information applies to.
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
-	
+
 	private void getSnippetFromFileFromModel() throws InvalidSPDXAnalysisException {
 		SpdxElement snippetFromElement = findElementPropertyValue(
 				SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SNIPPET_FROM_FILE);
@@ -109,7 +109,7 @@ snippet information applies to.
 			this.snippetFromFile = (SpdxFile)snippetFromElement;
 		}
 	}
-	
+
 	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		getSnippetFromFileFromModel();
 		getRangesFromModel();
@@ -117,7 +117,7 @@ snippet information applies to.
 
 	/**
 	 * Load the byte and line range properties from the model
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void getRangesFromModel() throws InvalidSPDXAnalysisException {
 		StartEndPointer[] allPointers = findStartEndPointerPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
@@ -148,7 +148,7 @@ snippet information applies to.
 			}
 		}
 	}
-	
+
 	@Override
 	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
 		if (this.snippetFromFile == null) {
@@ -164,8 +164,8 @@ snippet information applies to.
 		Model model = modelContainer.getModel();
 		Node snippetFromFileProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_SNIPPET_FROM_FILE).asNode();
 		Triple fileMatch = Triple.createMatch(null, snippetFromFileProperty, snippetFromFileResource.asNode());
-		
-		ExtendedIterator<Triple> fileMatchIter = model.getGraph().find(fileMatch);	
+
+		ExtendedIterator<Triple> fileMatchIter = model.getGraph().find(fileMatch);
 		while (fileMatchIter.hasNext()) {
 			Triple fileMatchTriple = fileMatchIter.next();
 			SpdxSnippet localSnippet = new SpdxSnippet(modelContainer, fileMatchTriple.getSubject());
@@ -180,11 +180,11 @@ snippet information applies to.
 	public String getLicenseInfoFromFilesPropertyName() {
 		return SpdxRdfConstants.PROP_LICENSE_INFO_FROM_SNIPPETS;
 	}
-	
+
 
 	/**
 	 * @return the snippetFromFile
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxFile getSnippetFromFile() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
@@ -195,11 +195,11 @@ snippet information applies to.
 
 	/**
 	 * @param snippetFromFile the snippetFromFile to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setSnippetFromFile(SpdxFile snippetFromFile) throws InvalidSPDXAnalysisException {
 		this.snippetFromFile = snippetFromFile;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SNIPPET_FROM_FILE, snippetFromFile);
 		// Update the references in the ranges
 		if (this.byteRange != null) {
@@ -222,7 +222,7 @@ snippet information applies to.
 
 	/**
 	 * @return the byteRange
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public StartEndPointer getByteRange() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
@@ -233,7 +233,7 @@ snippet information applies to.
 
 	/**
 	 * @param byteRange the byteRange to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setByteRange(StartEndPointer byteRange) throws InvalidSPDXAnalysisException {
 		if (!(byteRange.getStartPointer() instanceof ByteOffsetPointer)) {
@@ -250,7 +250,7 @@ snippet information applies to.
 
 	/**
 	 * Sets all of the line ranges in the model
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void setRangesInModel() throws InvalidSPDXAnalysisException {
 		List<StartEndPointer> allRanges = Lists.newArrayList();
@@ -260,13 +260,13 @@ snippet information applies to.
 		if (this.lineRange != null) {
 			allRanges.add(lineRange);
 		}
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SNIPPET_RANGE, allRanges.toArray(new StartEndPointer[allRanges.size()]));
 	}
 
 	/**
 	 * @return the lineRange
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public StartEndPointer getLineRange() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
@@ -277,7 +277,7 @@ snippet information applies to.
 
 	/**
 	 * @param lineRange the lineRange to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setLineRange(StartEndPointer lineRange) throws InvalidSPDXAnalysisException {
 		if (!(lineRange.getStartPointer() instanceof LineCharPointer)) {
@@ -291,15 +291,15 @@ snippet information applies to.
 		this.lineRange = lineRange;
 		setRangesInModel();
 	}
-	
+
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SNIPPET_FROM_FILE, snippetFromFile);
 		setRangesInModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
@@ -353,8 +353,8 @@ snippet information applies to.
 				(equivalentConsideringNull(myByteRange, compByteRange));
 		//Note: We don't compare the line range since the byte range is more precise
 	}
-	
-	@Override 
+
+	@Override
 	public SpdxSnippet clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxSnippet)clonedElementIds.get(this.getId());
@@ -363,7 +363,7 @@ snippet information applies to.
 		retval = new SpdxSnippet(name, comment, cloneAnnotations(),
 				null, cloneLicenseConcluded(),
 				cloneLicenseInfosFromFiles(), copyrightText,
-				licenseComments, cloneSnippetFromFile(clonedElementIds), cloneByteRange(), 
+				licenseComments, cloneSnippetFromFile(clonedElementIds), cloneByteRange(),
 				cloneLineRange());
 		clonedElementIds.put(this.getId(), retval);
 		if(retval != null){
@@ -375,7 +375,7 @@ snippet information applies to.
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -387,7 +387,7 @@ snippet information applies to.
 	}
 
 	/**
-	 * @param clonedElementIds 
+	 * @param clonedElementIds
 	 * @return
 	 */
 	private SpdxFile cloneSnippetFromFile(Map<String, SpdxElement> clonedElementIds) {
@@ -407,7 +407,7 @@ snippet information applies to.
 		return this.byteRange.clone();
 	}
 
-	@Override 
+	@Override
 	public SpdxSnippet clone() {
 		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
@@ -436,7 +436,7 @@ snippet information applies to.
 		}
 		return retval;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
@@ -468,9 +468,9 @@ snippet information applies to.
 		} catch (InvalidSPDXAnalysisException e) {
 			logger.error("Error getting compare for snippet",e);
 			return -1;
-		}	
+		}
 	}
-	
+
 	@Override
 	public String toString() {
 		if (name != null && !name.isEmpty()) {

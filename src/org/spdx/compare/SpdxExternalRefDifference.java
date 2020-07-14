@@ -25,19 +25,19 @@ import com.google.common.base.Objects;
 
 /**
  * Contains information on differences between two different External Refs.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class SpdxExternalRefDifference {
-	
+
 	String commentA;
 	String commentB;
 	ReferenceCategory catA;
 	ReferenceCategory catB;
 	private String referenceLocator;
 	private ReferenceType referenceType;
-	
+
 	SpdxExternalRefDifference(ExternalRef externalRefA, ExternalRef externalRefB) throws InvalidSPDXAnalysisException {
 		this.commentA = externalRefA.getComment();
 		this.commentB = externalRefB.getComment();
@@ -49,7 +49,7 @@ public class SpdxExternalRefDifference {
 	public boolean isCommentsEqual() {
 		return SpdxComparer.stringsEqual(this.commentA, this.commentB);
 	}
-	
+
 	public boolean isReferenceCategoriesEqual() {
 		return Objects.equal(catA, catB);
 	}

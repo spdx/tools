@@ -39,23 +39,23 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
 /**
- * An SpdxDocument is a summary of the contents, provenance, ownership and licensing 
- * analysis of a specific software package. 
+ * An SpdxDocument is a summary of the contents, provenance, ownership and licensing
+ * analysis of a specific software package.
  * This is, effectively, the top level of SPDX information.
- * 
+ *
  * Documents always have a model
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class SpdxDocument extends SpdxElement {
-	
+
 	private SpdxDocumentContainer documentContainer;
 	SPDXCreatorInformation creationInfo;	//TODO Refactor to RdfModelObject
 	AnyLicenseInfo dataLicense;
 	String specVersion;
 	@Deprecated	// Replaced by annotations
-	SPDXReview[] reviewers;			
+	SPDXReview[] reviewers;
 
 	/**
 	 * @param documentContainer
@@ -86,15 +86,15 @@ public class SpdxDocument extends SpdxElement {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
-	
+
 	void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		dataLicense = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_DATA_LICENSE);
 		creationInfo = findCreationInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_CREATION_INFO);
-		specVersion = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		specVersion = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_VERSION);
-		reviewers = findReviewPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+		reviewers = findReviewPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY);
 	}
 
@@ -102,7 +102,7 @@ public class SpdxDocument extends SpdxElement {
 	/**
 	 * @return all SPDX items connected directly to this document.  Does not include
 	 * children SPDX items (e.g. files within packages).
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxItem[] getDocumentDescribes() throws InvalidSPDXAnalysisException {
 		Relationship[] allRelationships = this.getRelationships();
@@ -123,7 +123,7 @@ public class SpdxDocument extends SpdxElement {
 		}
 		return refresh;
 	}
-	
+
 	SpdxItem[] getPackagesFromItems(SpdxItem[] items) {
 		int count = 0;
 		for (int i = 0; i < items.length; i++) {
@@ -140,7 +140,7 @@ public class SpdxDocument extends SpdxElement {
 		}
 		return retval;
 	}
-	
+
 	SpdxItem[] getFilesFromItems(SpdxItem[] items) {
 		int count = 0;
 		for (int i = 0; i < items.length; i++) {
@@ -170,15 +170,15 @@ public class SpdxDocument extends SpdxElement {
 			return modelContainer.getDocumentNamespace();
 		}
 	}
-	
+
 	/**
 	 * @return The unique Document Namespace
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public String getDocumentUri() throws InvalidSPDXAnalysisException {
 		return this.getUri(documentContainer);
 	}
-	
+
 	public String getDocumentNamespace() throws InvalidSPDXAnalysisException {
 		String[] parts = this.getDocumentUri().split("#");
 		return parts[0];
@@ -191,7 +191,7 @@ public class SpdxDocument extends SpdxElement {
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_DOCUMENT);
 	}
-	
+
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
@@ -199,14 +199,14 @@ public class SpdxDocument extends SpdxElement {
 				SpdxRdfConstants.PROP_SPDX_DATA_LICENSE, this.dataLicense);
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_CREATION_INFO, this.creationInfo);
-		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_EXTRACTED_LICENSES, this.documentContainer.getExtractedLicenseInfos());
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_VERSION, specVersion);
-		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY, reviewers);
 	}
-	
+
 	/**
 	 * @return the documentContainer
 	 */
@@ -216,7 +216,7 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * @return the creationInfo
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SPDXCreatorInformation getCreationInfo() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
@@ -243,7 +243,7 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * @return the dataLicense
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public AnyLicenseInfo getDataLicense() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
@@ -263,7 +263,7 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * @param dataLicense the dataLicense to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setDataLicense(AnyLicenseInfo dataLicense) throws InvalidSPDXAnalysisException {
 		this.dataLicense = dataLicense;
@@ -273,7 +273,7 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * @return the externalDocumentRefs
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ExternalDocumentRef[] getExternalDocumentRefs() throws InvalidSPDXAnalysisException {
 		return this.documentContainer.getExternalDocumentRefs();
@@ -281,7 +281,7 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * @param externalDocumentRefs the externalDocumentRefs to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs) throws InvalidSPDXAnalysisException {
 		this.documentContainer.setExternalDocumentRefs(externalDocumentRefs);
@@ -289,16 +289,16 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * @return the extractedLicenseInfos
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ExtractedLicenseInfo[] getExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
 		return this.documentContainer.getExtractedLicenseInfos();
 	}
 
-	
+
 	/**
 	 * @param extractedLicenseInfos the extractedLicenseInfos to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setExtractedLicenseInfos(
 			ExtractedLicenseInfo[] extractedLicenseInfos) throws InvalidSPDXAnalysisException {
@@ -308,18 +308,18 @@ public class SpdxDocument extends SpdxElement {
 	/**
 	 * @return the specVersion
 	 */
-	
+
 	public String getSpecVersion() {
 		if (this.resource != null && this.refreshOnGet) {
-			specVersion = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			specVersion = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_SPDX_VERSION);
 		}
 		return specVersion;
 	}
-	
+
 	/**
 	 * @return the reviewers
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
 	public SPDXReview[] getReviewers() throws InvalidSPDXAnalysisException {
@@ -327,7 +327,7 @@ public class SpdxDocument extends SpdxElement {
 			try {
 				// Note - this will always create new objects which may be considered a bug
 				// No intention to fix since the reviewers are deprecated as of 2.0
-				reviewers = findReviewPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				reviewers = findReviewPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_SPDX_REVIEWED_BY);
 			} catch (InvalidSPDXAnalysisException e) {
 				logger.error("Error getting reviews from model");
@@ -343,7 +343,7 @@ public class SpdxDocument extends SpdxElement {
 	@Deprecated
 	public void setReviewers(SPDXReview[] reviewers) {
 		this.reviewers = reviewers;
-		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_REVIEWED_BY, reviewers);
 	}
 
@@ -352,7 +352,7 @@ public class SpdxDocument extends SpdxElement {
 	 */
 	public void setSpecVersion(String specVersion) {
 		this.specVersion = specVersion;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SPDX_VERSION, specVersion);
 	}
 
@@ -372,7 +372,7 @@ public class SpdxDocument extends SpdxElement {
 			String verify = this.documentContainer.verifySpdxVersion(docSpecVersion);
 			if (verify != null) {
 				retval.add(verify);
-			}			
+			}
 		}
 		// creationInfo
 		try {
@@ -411,7 +411,7 @@ public class SpdxDocument extends SpdxElement {
 			retval.add("Invalid extracted licensing info: "+e.getMessage());
 		}
 		// data license
-		if (!docSpecVersion.equals(SpdxDocumentContainer.POINT_EIGHT_SPDX_VERSION) && 
+		if (!docSpecVersion.equals(SpdxDocumentContainer.POINT_EIGHT_SPDX_VERSION) &&
 				!docSpecVersion.equals(SpdxDocumentContainer.POINT_NINE_SPDX_VERSION)) { // added as a mandatory field in 1.0
 			try {
 				AnyLicenseInfo dataLicense = this.getDataLicense();
@@ -421,8 +421,8 @@ public class SpdxDocument extends SpdxElement {
 					if (!(dataLicense instanceof SpdxListedLicense)) {
 						retval.add("Invalid license type for data license - must be an SPDX Listed license");
 					} else {
-						if (docSpecVersion.equals(SpdxDocumentContainer.ONE_DOT_ZERO_SPDX_VERSION)) 
-							{ 
+						if (docSpecVersion.equals(SpdxDocumentContainer.ONE_DOT_ZERO_SPDX_VERSION))
+							{
 							if (!((SpdxListedLicense)dataLicense).getLicenseId().equals(
 									SpdxDocumentContainer.SPDX_DATA_LICENSE_ID_VERSION_1_0)) {
 								retval.add("Incorrect data license for SPDX version 1.0 document - found "+
@@ -435,7 +435,7 @@ public class SpdxDocument extends SpdxElement {
 								retval.add("Incorrect data license for SPDX document - found "+
 										((SpdxListedLicense)dataLicense).getLicenseId()+
 									", expected "+SpdxDocumentContainer.SPDX_DATA_LICENSE_ID);
-							}					
+							}
 						}
 					}
 				}
@@ -466,14 +466,14 @@ public class SpdxDocument extends SpdxElement {
 			for (SpdxElement element:allElements) {
 				if (!element.getId().equals(this.getId())) {
 					retval.addAll(element.verify());
-				}				
+				}
 			}
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid elements: "+e.getMessage());
 		}
 		return retval;
-	} 
-	
+	}
+
 	@Override
 	public boolean equivalent(IRdfModel o) {
 		return this.equivalent(o, true);
@@ -502,7 +502,7 @@ public class SpdxDocument extends SpdxElement {
 			return false;
 		}
 	}
-	
+
 	@Override
 	protected String getNamePropertyName() {
 		return SpdxRdfConstants.PROP_NAME;
@@ -512,7 +512,7 @@ public class SpdxDocument extends SpdxElement {
 
 	/**
 	 * This method has been replaced by getSpecVersion to match the specification property name
-	 * @return 
+	 * @return
 	 */
 	@Deprecated
 	public String getSpdxVersion() {
@@ -523,7 +523,7 @@ public class SpdxDocument extends SpdxElement {
 	/**
 	 * This method has been replaced by getCreationInfo to match the specification property name
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
 	public SPDXCreatorInformation getCreatorInfo() throws InvalidSPDXAnalysisException {
@@ -543,7 +543,7 @@ public class SpdxDocument extends SpdxElement {
 	 * This method has been replaced by getSpdxItems
 	 * This method will fail unless there is one and only 1 SPDX document
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Deprecated
 	public SpdxPackage getSpdxPackage() throws InvalidSPDXAnalysisException {
@@ -555,7 +555,7 @@ public class SpdxDocument extends SpdxElement {
 	}
 	/**
 	 * @param license license to be added to the extracted licensing infos
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void addExtractedLicenseInfos(
 			ExtractedLicenseInfo license) throws InvalidSPDXAnalysisException {

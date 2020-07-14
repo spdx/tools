@@ -39,7 +39,7 @@ public class TestSPDXChecksum {
 	String[] VALUES = new String[] {"Value1", "Value2", "Value3"};
 	SPDXChecksum[] TEST_CHECKSUMS;
 	Model model;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -60,7 +60,7 @@ public class TestSPDXChecksum {
 	}
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXChecksum#setAlgorithm(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 /* - Can not run test due to verifications failurs causing test to fail
 
@@ -84,7 +84,7 @@ public class TestSPDXChecksum {
 */
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXChecksum#setValue(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetValue() throws InvalidSPDXAnalysisException {
@@ -106,7 +106,7 @@ public class TestSPDXChecksum {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXChecksum#createResource(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
@@ -120,7 +120,7 @@ public class TestSPDXChecksum {
 			assertEquals(TEST_CHECKSUMS[i].getValue(), comp.getValue());
 		}
 	}
-	
+
 	@Test
 	public void testFindSpdxChecksum() throws InvalidSPDXAnalysisException {
 		Resource[] checksumResources = new Resource[TEST_CHECKSUMS.length-1];
@@ -133,7 +133,7 @@ public class TestSPDXChecksum {
 		Resource r = SPDXChecksum.findSpdxChecksum(model, TEST_CHECKSUMS[TEST_CHECKSUMS.length-1]);
 		assertTrue(r == null);
 	}
-	
+
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
 		SPDXChecksum checksum = new SPDXChecksum("SHA1", "0123456789abcdef0123456789abcdef01234567");

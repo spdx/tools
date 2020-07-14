@@ -30,22 +30,22 @@ import org.spdx.rdfparser.model.RdfModelObject;
 import org.spdx.rdfparser.model.SpdxElement;
 
 /**
- * A pointing method made up of a unique pointer. This is an abstract single pointer that provides the necessary framework, 
+ * A pointing method made up of a unique pointer. This is an abstract single pointer that provides the necessary framework,
  * but it does not provide any kind of pointer, so more specific subclasses must be used.
  * See http://www.w3.org/2009/pointers and https://www.w3.org/WAI/ER/Pointers/WD-Pointers-in-RDF10-20110427
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public abstract class SinglePointer extends RdfModelObject implements Comparable<SinglePointer> {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(SinglePointer.class);
-	
+
 	/**
 	 * The document within which the pointer is applicable or meaningful.
 	 */
 	protected SpdxElement reference;
-	
+
 	/**
 	 * Create a SinglePointer from the model
 	 * @param modelContainer
@@ -56,7 +56,7 @@ public abstract class SinglePointer extends RdfModelObject implements Comparable
 		super(modelContainer, node);
 		getPropertiesFromModel();
 	}
-	
+
 	public SinglePointer(SpdxElement reference) {
 		super();
 		this.reference = reference;
@@ -120,13 +120,13 @@ public abstract class SinglePointer extends RdfModelObject implements Comparable
 	 */
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
-		this.setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		this.setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_REFERENCE, this.reference);
 	}
 
 	/**
 	 * @return the reference
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxElement getReference() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
@@ -137,19 +137,19 @@ public abstract class SinglePointer extends RdfModelObject implements Comparable
 
 	/**
 	 * @param reference the reference to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setReference(SpdxElement reference) throws InvalidSPDXAnalysisException {
 		this.reference = reference;
-		this.setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		this.setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_REFERENCE, this.reference);
 	}
-	
+
 	@Override
 	public SinglePointer clone() {
 		throw(new RuntimeException("Can not clone an abstract single pointer class"));
 	}
-	
+
 	protected int compareReferences(SinglePointer o) {
 		if (o == null) {
 			return 1;

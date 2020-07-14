@@ -24,49 +24,49 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
  * This SPDX element represents no assertion as to an actual SPDX element.
- * 
+ *
  * This element should only be used on the right hand side of relationships to represent no assertion
  * as to what element the subject is actually related to.
- * 
+ *
  * This element has no properties and a fixed ID of "NOASSERTION".
- *  
+ *
  * @author Gary O'Neall
  */
 public class SpdxNoAssertionElement extends SpdxConstantElement {
 	public static final String NOASSERTION_ELEMENT_ID = "NOASSERTION";
 	public static final int NOASSERTION_ELEMENT_HASHCODE = 491;
 	public static final String NOASSERTION_ELEMENT_URI = SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.TERM_ELEMENT_NOASSERTION;
-	
+
 	public SpdxNoAssertionElement(IModelContainer container, Node elementNode)
 			throws InvalidSPDXAnalysisException {
 		super(container, elementNode);
 	}
-	
+
 	public SpdxNoAssertionElement() {
-		super("NOASSERTION", 
+		super("NOASSERTION",
 				"This is a NOASSERTION element which indicate no assertion is made whether an element is related to this element");
 	}
-	
+
 	@Override
 	public String getId() {
 		return NOASSERTION_ELEMENT_ID;
 	}
-	
+
 	@Override
 	public String toString() {
 		return SpdxRdfConstants.NOASSERTION_VALUE;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return NOASSERTION_ELEMENT_HASHCODE;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		return o instanceof SpdxNoAssertionElement;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
@@ -74,12 +74,12 @@ public class SpdxNoAssertionElement extends SpdxConstantElement {
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_NOASSERTION_ELEMENT);
 	}
-	
+
 	@Override
 	public SpdxNoAssertionElement clone() {
 		return new SpdxNoAssertionElement();
 	}
-	
+
 	@Override
 	public String getUri(IModelContainer modelContainer)
 			throws InvalidSPDXAnalysisException {

@@ -63,7 +63,7 @@ import com.google.common.collect.Maps;
 /**
  * Translates an RDF XML file to a SPDX Spreadsheet format
  * Usage: RdfToSpreadsheet rdfxmlfile.rdf spreadsheetfile.xls
- * where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is 
+ * where rdfxmlfile.rdf is a valid SPDX RDF XML file and spreadsheetfile.xls is
  * the output SPDX spreadsheeet file.
  * @author Gary O'Neall
  *
@@ -94,9 +94,9 @@ public class RdfToSpreadsheet {
 			return;
 		}
     }
-	
+
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the RDF file to be converted, args[1] is the result HTML file name
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * @return Warnings of the conversion, displayed to the user
@@ -155,7 +155,7 @@ public class RdfToSpreadsheet {
         }
         return verify;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static void copyRdfXmlToSpreadsheet(SpdxDocument doc,
 			SPDXSpreadsheet ss) throws InvalidSPDXAnalysisException, SpreadsheetException {
@@ -175,7 +175,7 @@ public class RdfToSpreadsheet {
 		Map<String, Annotation[]> allAnnotations = new TreeMap<String, Annotation[]>();
 		allRelationships.put(doc.getId(), doc.getRelationships());
 		allAnnotations.put(doc.getId(), doc.getAnnotations());
-		List<SpdxElement> allElements = doc.getDocumentContainer().findAllElements();		
+		List<SpdxElement> allElements = doc.getDocumentContainer().findAllElements();
 		for (SpdxElement element:allElements) {
 			allRelationships.put(element.getId(), element.getRelationships());
 			allAnnotations.put(element.getId(), element.getAnnotations());
@@ -189,7 +189,7 @@ public class RdfToSpreadsheet {
 	/**
 	 * Copy external references to the spreadsheet
 	 * @param externalRefsMap
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	private static void copyExternalRefs(Map<String, ExternalRef[]> externalRefsMap,
 			ExternalRefsSheet externalRefSheet, SpdxDocumentContainer container) throws SpreadsheetException {
@@ -258,18 +258,18 @@ public class RdfToSpreadsheet {
 	}
 
 	private static void copyPerFileInfo(List<SpdxFile> fileList,
-			PerFileSheet perFileSheet, Map<String, String> fileIdToPackageId) {            
+			PerFileSheet perFileSheet, Map<String, String> fileIdToPackageId) {
             Collections.sort(fileList);
-            /* Print out sorted files */            
+            /* Print out sorted files */
 		for (SpdxFile file : fileList) {
 			perFileSheet.add(file, fileIdToPackageId.get(file.getId()));
 		}
 	}
-	
+
 	private static void copySnippetInfo(List<SpdxSnippet> snippets,
-			SnippetSheet snippetSheet) throws SpreadsheetException {            
+			SnippetSheet snippetSheet) throws SpreadsheetException {
             Collections.sort(snippets);
-            /* Print out sorted files */            
+            /* Print out sorted files */
 		for (SpdxSnippet snippet : snippets) {
 			snippetSheet.add(snippet);
 		}
@@ -296,10 +296,10 @@ public class RdfToSpreadsheet {
 				}
 				return result;
 			}
-			
+
 		});
 		for(int i = 0; i < nonStandardLicenses.length; i++) {
-			nonStandardLicensesSheet.add(nonStandardLicenses[i].getLicenseId(), nonStandardLicenses[i].getExtractedText(), 
+			nonStandardLicensesSheet.add(nonStandardLicenses[i].getLicenseId(), nonStandardLicenses[i].getExtractedText(),
 					nonStandardLicenses[i].getName(),
 					nonStandardLicenses[i].getSeeAlso(),
 					nonStandardLicenses[i].getComment());

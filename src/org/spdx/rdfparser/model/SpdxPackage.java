@@ -125,7 +125,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		this.filesAnalyzed = filesAnalyzed;
 		this.externalRefs = externalRefs;
 	}
-	
+
 	public SpdxPackage(String name, String comment, Annotation[] annotations,
 			Relationship[] relationships, AnyLicenseInfo licenseConcluded,
 			AnyLicenseInfo[] licenseInfosFromFiles, String copyrightText,
@@ -136,9 +136,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			String sourceInfo, String summary, String supplier,
 			String versionInfo) {
 		this(name, comment, annotations, relationships, licenseConcluded,
-				licenseInfosFromFiles, copyrightText, licenseComment, licenseDeclared, 
-				checksums, description, downloadLocation, files, homepage, 
-				originator, packageFileName, packageVerificationCode, 
+				licenseInfosFromFiles, copyrightText, licenseComment, licenseDeclared,
+				checksums, description, downloadLocation, files, homepage,
+				originator, packageFileName, packageVerificationCode,
 				sourceInfo, summary, supplier, versionInfo, true, new ExternalRef[0]);
 	}
 
@@ -197,9 +197,9 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			SpdxFile[] files, String homepage, String originator, String packageFileName,
 			SpdxPackageVerificationCode packageVerificationCode,
 			String sourceInfo, String summary, String supplier,
-			String versionInfo, boolean filesAnalyzed, ExternalRef[] externalRefs, 
+			String versionInfo, boolean filesAnalyzed, ExternalRef[] externalRefs,
 			String[] attributionText) {
-		this(name, comment, annotations, relationships, licenseConcluded, 
+		this(name, comment, annotations, relationships, licenseConcluded,
 				licenseInfosFromFiles, copyrightText, licenseComment, licenseDeclared,
 				checksums, description, downloadLocation, files, homepage, originator,
 				packageFileName, packageVerificationCode, sourceInfo, summary, supplier,
@@ -261,10 +261,10 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 			} else {
 				throw(new InvalidSPDXAnalysisException("Invalid value for files analyzed - must be {true, false, 0, 1}"));
 			}
-		} else {			
+		} else {
 			this.filesAnalyzed = true;	// Default value is true per the 2.1 specification
 		}
-		this.externalRefs = findExternalRefPropertyValues(SPDX_NAMESPACE, 
+		this.externalRefs = findExternalRefPropertyValues(SPDX_NAMESPACE,
 				PROP_EXTERNAL_REF);
 	}
 
@@ -381,13 +381,13 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 				} else {
 					throw(new InvalidSPDXAnalysisException("Invalid value for files analyzed - must be {true, false, 0, 1}"));
 				}
-			} else {			
+			} else {
 				this.filesAnalyzed = true;	// Default value is true per the 2.1 specification
 			}
 		}
 		return this.filesAnalyzed;
 	}
-	
+
 	/**
 	 * Set files Analyzed for the package
 	 * @param filesAnalyzed
@@ -671,7 +671,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @return the externalRefs
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ExternalRef[] getExternalRefs() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
@@ -683,7 +683,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @param externalRefs the externalRefs to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setExternalRefs(ExternalRef[] externalRefs) throws InvalidSPDXAnalysisException {
 		setPropertyValue(SPDX_NAMESPACE,
@@ -937,7 +937,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 		} catch (InvalidSPDXAnalysisException e) {
 			retval.add("Invalid package declared license: "+e.getMessage());
 		}
-		if ((this.licenseInfoFromFiles == null || this.licenseInfoFromFiles.length == 0) 
+		if ((this.licenseInfoFromFiles == null || this.licenseInfoFromFiles.length == 0)
 				&& filesAnalyzed) {
 			retval.add("Missing required license information from files for "+name);
 		} else {
@@ -1139,7 +1139,7 @@ public class SpdxPackage extends SpdxItem implements SpdxRdfConstants, Comparabl
 
 	/**
 	 * @param externalRef
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void addExternalRef(ExternalRef externalRef) throws InvalidSPDXAnalysisException {
 		if (externalRef == null) {

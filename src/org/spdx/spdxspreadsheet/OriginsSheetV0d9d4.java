@@ -48,10 +48,10 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 	static final int CREATED_COL = CREATED_BY_COL + 1;
 	static final int DATA_LICENSE_COL = CREATED_COL + 1;
 	static final int AUTHOR_COMMENTS_COL = DATA_LICENSE_COL + 1;
-	
+
 	static final int DATA_ROW_NUM = 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, true, true,
 		true, true, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
@@ -59,7 +59,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 	static final int[] COLUMN_WIDTHS = new int[] {20, 20, 30, 16, 40, 70};
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, true, false, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, false, true, false, false};
-	
+
 	public OriginsSheetV0d9d4(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
@@ -82,7 +82,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Origins worksheet";
@@ -135,7 +135,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 		if (sheetNum >= 0) {
 			wb.removeSheetAt(sheetNum);
 		}
-		
+
 		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
@@ -156,44 +156,44 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 		Cell ssVersionCell = dataRow.createCell(SPREADSHEET_VERSION_COL);
 		ssVersionCell.setCellValue(SPDXSpreadsheet.CURRENT_VERSION);
 	}
-	
-	
+
+
 	public void setAuthorComments(String comments) {
 		setDataCellStringValue(AUTHOR_COMMENTS_COL, comments);
 	}
-	
+
 	public void setCreatedBy(String createdBy) {
 		setDataCellStringValue(CREATED_BY_COL, createdBy);
 	}
-	
+
 	public void setDataLicense(String dataLicense) {
 		setDataCellStringValue(DATA_LICENSE_COL, dataLicense);
 	}
-	
+
 	public void setSPDXVersion(String version) {
 		setDataCellStringValue(SPDX_VERSION_COL, version);
 	}
-	
+
 	public void setSpreadsheetVersion(String version) {
 		setDataCellStringValue(SPREADSHEET_VERSION_COL, version);
 	}
-	
+
 	public String getAuthorComments() {
 		return getDataCellStringValue(AUTHOR_COMMENTS_COL);
 	}
-	
+
 	public Date getCreated() {
 		return getDataCellDateValue(CREATED_COL);
 	}
-	
+
 	public String getDataLicense() {
 		return getDataCellStringValue(DATA_LICENSE_COL);
 	}
-	
+
 	public String getSPDXVersion() {
 		return getDataCellStringValue(SPDX_VERSION_COL);
 	}
-	
+
 	public String getSpreadsheetVersion() {
 		return getDataCellStringValue(SPREADSHEET_VERSION_COL);
 	}
@@ -226,7 +226,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 			cell.setCellValue(createdBy[i]);
 		}
 	}
-	
+
 	public String[] getCreatedBy() {
 		// first count rows
 		int numRows = 0;
@@ -275,7 +275,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 	 */
 	@Override
 	public void setLicenseListVersion(String licenseVersion) {
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -318,7 +318,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 			setAuthorComments(comments);
 		}
 		String created = creator.getCreated();
-		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		try {
 			setCreated(dateFormat.parse(created));
 		} catch (ParseException e) {
@@ -340,7 +340,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 			setLicenseListVersion(licenseListVersion);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getSpdxId()
 	 */
@@ -354,7 +354,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 	 */
 	@Override
 	public void setSpdxId(String id) {
-		// not supported in this version 
+		// not supported in this version
 	}
 
 	/* (non-Javadoc)
@@ -370,7 +370,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 	 */
 	@Override
 	public void setDocumentName(String documentName) {
-		// not supported in this version 
+		// not supported in this version
 	}
 
 	/* (non-Javadoc)
@@ -387,7 +387,7 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 	@Override
 	public void setDocumentDescribes(String[] contents) {
 		// Not supported in this version
-		
+
 	}
 
 	/* (non-Javadoc)

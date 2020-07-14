@@ -63,7 +63,7 @@ public class SnippetContext {
 		}
 		return snippet.getId();
 	}
-	
+
 	public String byteRange() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
@@ -79,7 +79,7 @@ public class SnippetContext {
 			return "Error getting SPDX snippet byte range: "+ e.getMessage();
 		}
 	}
-	
+
 	public String lineRange() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
@@ -95,21 +95,21 @@ public class SnippetContext {
 			return "Error getting SPDX snippet line range: "+ e.getMessage();
 		}
 	}
-	
+
 	public String licenseConcluded() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
 		}
 		return snippet.getLicenseConcluded().toString();
 	}
-	
+
 	public String licenseComments() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
 		}
 		return snippet.getLicenseComments();
 	}
-	
+
 	public List<String> licenseInfoInSnippet() {
 		List<String> retval = Lists.newArrayList();
 		if (snippet == null && error != null) {
@@ -123,14 +123,14 @@ public class SnippetContext {
 		}
 		return retval;
 	}
-	
+
 	public String copyrightText() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
 		}
 		return snippet.getCopyrightText();
 	}
-	
+
 	public String comment() {
 		if (snippet != null) {
 			return snippet.getComment();
@@ -138,22 +138,22 @@ public class SnippetContext {
 			return null;
 		}
 	}
-	
+
 	public List<RelationshipContext> snippetRelationships() {
 	    List<RelationshipContext> retval = Lists.newArrayList();
 	    if (this.snippet != null) {
 	    	Relationship[] relationships = snippet.getRelationships();
 		    if (relationships != null) {
 		        Arrays.sort(relationships);
-			
+
 	    		for (Relationship relationship : relationships) {
 	    		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
 	    		}
 		    }
-	    }	    
+	    }
 		return retval;
 	}
-	
+
 	public List<AnnotationContext> snippetAnnotations() {
 		List<AnnotationContext> retval  = Lists.newArrayList();
 		if (this.snippet != null) {
@@ -167,7 +167,7 @@ public class SnippetContext {
 		}
 		return retval;
 	}
-	
+
 	public String snippetFromFile() {
 		if (snippet == null) {
 			return "Error getting SPDX snippet information: "+ (error != null ? error.getMessage() : "null");
@@ -183,5 +183,5 @@ public class SnippetContext {
 			return "Error getting SPDX snippet from file: " + e.getMessage();
 		}
 	}
-	
+
 }

@@ -79,7 +79,7 @@ public class VerificationSheet extends AbstractSheet {
 	 * Import verification errors
 	 * @param verificationErrors Array of verification error message arraylists ordered by docname
 	 * @param docNames Name of documents relating to the errors
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public void importVerificationErrors(
 			List<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {
@@ -94,7 +94,7 @@ public class VerificationSheet extends AbstractSheet {
 		}
 		if (docNames.length > MultiDocumentSpreadsheet.MAX_DOCUMENTS) {
 			throw(new SpreadsheetException("Too many compare documents - must be less than "+String.valueOf(MultiDocumentSpreadsheet.MAX_DOCUMENTS+1)));
-		}			
+		}
 		Row header = sheet.getRow(0);
 		int lastRowCreated = 0;
 		for (int i = 0; i < docNames.length; i++) {

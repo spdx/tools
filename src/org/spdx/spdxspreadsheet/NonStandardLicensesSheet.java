@@ -34,21 +34,21 @@ public abstract class NonStandardLicensesSheet extends AbstractSheet {
 		super(workbook, sheetName);
 		this.version = version;
 	}
-	
+
 	/**
 	 * Retrieve the license identifier for a specific row in the spreadsheet
 	 * @param rowNum
 	 * @return
 	 */
 	public abstract String getIdentifier(int rowNum);
-	
+
 	/**
 	 * Retrieve the extracted text for a specific row in the spreadsheet
 	 * @param rowNum
 	 * @return
 	 */
 	public abstract String getExtractedText(int rowNum);
-	
+
 	/**
 	 * Add a new row to the NonStandardLicenses sheet
 	 * @param identifier License ID

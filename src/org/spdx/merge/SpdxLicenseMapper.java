@@ -43,13 +43,13 @@ import com.google.common.collect.Maps;
 public class SpdxLicenseMapper {
 
 	private Map<SpdxDocument, Map<AnyLicenseInfo, AnyLicenseInfo>> nonStdLicIdMap = Maps.newHashMap();
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public SpdxLicenseMapper(){
 	}
-	
+
 	/**
 	 * Creates a new non-standard license in the outputDoc and creates a mapping
 	 * between the output document non-standard license and the subDoc non standard license
@@ -61,11 +61,11 @@ public class SpdxLicenseMapper {
 	 * @return
 	 */
 	public ExtractedLicenseInfo mappingNewNonStdLic(SpdxDocument outputDoc, SpdxDocument subDoc, ExtractedLicenseInfo subNonStdLicInfo){
-		
+
 		Map<AnyLicenseInfo,AnyLicenseInfo> interMap = Maps.newHashMap();
 		if(docInNonStdLicIdMap(subDoc)){
 			interMap = nonStdLicIdMap.get(subDoc);
-		}    
+		}
 		String NewNonStdLicId = outputDoc.getDocumentContainer().getNextLicenseRef();
 		ExtractedLicenseInfo subCopy = (ExtractedLicenseInfo) subNonStdLicInfo.clone();
 		subNonStdLicInfo.setLicenseId(NewNonStdLicId);
@@ -75,7 +75,7 @@ public class SpdxLicenseMapper {
 
 		return subNonStdLicInfo;
 	}
-	
+
 	/**
 	 * Maps a subDoc nonstandard license to an existing output document nonstandard license
 	 * @param output
@@ -93,14 +93,14 @@ public class SpdxLicenseMapper {
 		interMap.put(outputDocLicense, subLicense);
 		nonStdLicIdMap.put(subDocs, interMap);
 	}
-	
+
 	/**
-	 * a method gets a sub SPDX document and its file information. 
+	 * a method gets a sub SPDX document and its file information.
 	 * Check the non-standard licenses in the file information. Replace the non-standard licenses if this particular license in the HashMap.
 	 * @param spdxDoc
 	 * @param subFileInfo
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxFile replaceNonStdLicInFile(SpdxDocument spdxDoc, SpdxFile subFileInfo) throws InvalidSPDXAnalysisException{
 			AnyLicenseInfo[] subLicInfoInFile = subFileInfo.getLicenseInfoFromFiles();
@@ -111,7 +111,7 @@ public class SpdxLicenseMapper {
 			for(int i = 0; i < subLicInfoInFile.length; i++){
 				boolean foundLicId = false;
 				for(int q = 0; q < orgNonStdLics.length; q++){
-					//if the subfile's orgNonStdLic is found in the subLicInfo, 
+					//if the subfile's orgNonStdLic is found in the subLicInfo,
 					if(subLicInfoInFile[i].equals(orgNonStdLics[q])){
 						foundLicId = true;
 					}
@@ -131,10 +131,10 @@ public class SpdxLicenseMapper {
 			retval.clear();
 			return subFileInfo;
 	}
-	
+
 	/**
 	 * a method gets a sub SPDX document and one of its license (non-standard license). Replace the input license if it is found in the HashMap.
-	 * And return the mapped license. If the input license doesn't in the HashMap, return the original input license. 
+	 * And return the mapped license. If the input license doesn't in the HashMap, return the original input license.
 	 * @param spdxDoc
 	 * @param license
 	 * @return
@@ -149,16 +149,16 @@ public class SpdxLicenseMapper {
 			}
 			if(foundLic){
 				license = idMap.get(orgNonStdLics[i]);
-			}	
+			}
 		}
 		return license;
 	}
 
-	
+
 	/**
-	 * a method gets a sub SPDX document and licenses from declared licenses in document package. 
-	 * Check the object type of input license. If the license is non-standard license, run the license through mapNonStdLicIndMap. 
-	 * Otherwise, return the original input license. 
+	 * a method gets a sub SPDX document and licenses from declared licenses in document package.
+	 * Check the object type of input license. If the license is non-standard license, run the license through mapNonStdLicIndMap.
+	 * Otherwise, return the original input license.
 	 * @param spdxDoc
 	 * @param license
 	 * @return
@@ -181,10 +181,10 @@ public class SpdxLicenseMapper {
 		}else if(license instanceof ExtractedLicenseInfo){
 			license = mapNonStdLicInMap(spdxDoc,license);
 		}
-		return license;	
+		return license;
 	}
 	/**
-	 * 
+	 *
 	 * @param spdxDoc
 	 * @return foundDocMatch
 	 */
@@ -195,9 +195,9 @@ public class SpdxLicenseMapper {
 		}
 		return foundDocMatch;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param spdxDoc
 	 * @return idMap
 	 */
@@ -205,9 +205,9 @@ public class SpdxLicenseMapper {
 		return this.nonStdLicIdMap.get(spdxDoc);
 
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return emptyMap
 	 */
 	public boolean isNonStdLicIdMapEmpty(){
@@ -217,7 +217,7 @@ public class SpdxLicenseMapper {
 		}
 		return emptyMap;
 	}
-	
+
 	public void clearNonStdLicIdMap(){
 		this.nonStdLicIdMap.clear();
 	}

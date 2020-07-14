@@ -47,7 +47,7 @@ import com.google.common.collect.Maps;
  *
  */
 public class SpdxSnippetComparerTest {
-	
+
 	static final String SNIPPET_NAME1 = "snippet1";
 	static final String SNIPPET_NAME2 = "snippet2";
 	static final String COMMENT1 = "comment1";
@@ -56,28 +56,28 @@ public class SpdxSnippetComparerTest {
 	static final String SEEN_LICENSE_STRING = "APSL-2.0";
 	static final String COPYRIGHT_TEXT = "copyrightText";
 	static final String LICENSE_COMMENT = "License comment";
-	
+
 	AnyLicenseInfo CONCLUDED_LICENSE;
 	AnyLicenseInfo[] SEEN_LICENSES;
 	SpdxFile FROM_FILE;
 	SpdxSnippet SNIPPET1;
-	
+
 	Integer OFFSET1_1 = new Integer(2342);
 	ByteOffsetPointer BOP_POINTER1_1;
 	Integer LINE1_1 = new Integer(113);
-	LineCharPointer LCP_POINTER1_1; 
+	LineCharPointer LCP_POINTER1_1;
 	Integer OFFSET2_1 = new Integer(444);
 	ByteOffsetPointer BOP_POINTER2_1;
 	Integer LINE2_1 = new Integer(23422);
-	LineCharPointer LCP_POINTER2_1; 
+	LineCharPointer LCP_POINTER2_1;
 	Integer OFFSET1_2 = new Integer(3542);
 	ByteOffsetPointer BOP_POINTER1_2;
 	Integer LINE1_2 = new Integer(555);
-	LineCharPointer LCP_POINTER1_2; 
+	LineCharPointer LCP_POINTER1_2;
 	Integer OFFSET2_2 = new Integer(2444);
 	ByteOffsetPointer BOP_POINTER2_2;
 	Integer LINE2_2 = new Integer(23428);
-	LineCharPointer LCP_POINTER2_2; 
+	LineCharPointer LCP_POINTER2_2;
 	StartEndPointer BYTE_RANGE1;
 	StartEndPointer BYTE_RANGE2;
 	StartEndPointer LINE_RANGE1;
@@ -88,7 +88,7 @@ public class SpdxSnippetComparerTest {
 		LICENSE_XLATION_MAPAB.put("LicenseRef-2", "LicenseRef-5");
 		LICENSE_XLATION_MAPAB.put("LicenseRef-3", "LicenseRef-6");
 	}
-	
+
 	private static final Map<String, String> LICENSE_XLATION_MAPBA = Maps.newHashMap();
 	private static final String FILE_NAME = "FileName";
 	private static final String FILE_COMMENT = "File Comment";
@@ -96,17 +96,17 @@ public class SpdxSnippetComparerTest {
 	private static final String FILE_LICENSE_COMMENT = "File License Comment";
 	private static final FileType[] FILE_TYPES = new FileType[] {FileType.fileType_source};
 	private static final String FILE_NOTICE = "File Notice";
-	
+
 	static {
 		LICENSE_XLATION_MAPBA.put("LicenseRef-4", "LicenseRef-1");
 		LICENSE_XLATION_MAPBA.put("LicenseRef-5", "LicenseRef-2");
 		LICENSE_XLATION_MAPBA.put("LicenseRef-6", "LicenseRef-3");
 	}
-	
-	static final Checksum CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+
+	static final Checksum CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 			"111bf72bf99b7e471f1a27989667a903658652bb");
 	static final Checksum[] FILE_CHECKSUMS = new Checksum[] {CHECKSUM1};
-	
+
 	private final Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> LICENSE_XLATION_MAP = Maps.newHashMap();
 	private SpdxDocument DOCA;
 	private SpdxDocument DOCB;
@@ -119,7 +119,7 @@ public class SpdxSnippetComparerTest {
 	public void setUp() throws Exception {
 		CONCLUDED_LICENSE = LicenseInfoFactory.parseSPDXLicenseString(CONCLUDED_LICENSE_STRING);
 		SEEN_LICENSES = new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(SEEN_LICENSE_STRING)};
-		FROM_FILE = new SpdxFile(FILE_NAME, FILE_COMMENT, new Annotation[0], new Relationship[0], 
+		FROM_FILE = new SpdxFile(FILE_NAME, FILE_COMMENT, new Annotation[0], new Relationship[0],
 				CONCLUDED_LICENSE, SEEN_LICENSES, FILE_COPYRIGHT, FILE_LICENSE_COMMENT,
 				FILE_TYPES, FILE_CHECKSUMS, new String[0], FILE_NOTICE, new DoapProject[0]);
 		BOP_POINTER1_1 = new ByteOffsetPointer(FROM_FILE, OFFSET1_1);
@@ -134,10 +134,10 @@ public class SpdxSnippetComparerTest {
 		LCP_POINTER2_1 = new LineCharPointer(FROM_FILE, LINE2_1);
 		LCP_POINTER2_2 = new LineCharPointer(FROM_FILE, LINE2_2);
 		LINE_RANGE2 = new StartEndPointer(LCP_POINTER2_1, LCP_POINTER2_2);
-		SNIPPET1 = new SpdxSnippet(SNIPPET_NAME1, COMMENT1, null, null, 
+		SNIPPET1 = new SpdxSnippet(SNIPPET_NAME1, COMMENT1, null, null,
 				CONCLUDED_LICENSE, SEEN_LICENSES, COPYRIGHT_TEXT, LICENSE_COMMENT,
 				FROM_FILE, BYTE_RANGE1, LINE_RANGE1);
-		
+
 		String uri1 = "http://doc/uri1";
 		SpdxDocumentContainer containerA = new SpdxDocumentContainer(uri1);
 		DOCA = containerA.getSpdxDocument();
@@ -158,7 +158,7 @@ public class SpdxSnippetComparerTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void testNoDifference() throws InvalidSPDXAnalysisException, SpdxCompareException {
 
@@ -173,8 +173,8 @@ public class SpdxSnippetComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxSnippetComparer#getSnippetFromFileDifference(org.spdx.rdfparser.model.SpdxDocument, org.spdx.rdfparser.model.SpdxDocument)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetSnippetFromFileDifference() throws InvalidSPDXAnalysisException, SpdxCompareException {
@@ -197,7 +197,7 @@ public class SpdxSnippetComparerTest {
 		assertEquals(FILE_COPYRIGHT, fileDiff.getCopyrightA());
 		assertEquals(newCopyright, fileDiff.getCopyrightB());
 	}
-	
+
 	@Test
 	public void testGetSnippetFromFileDifferentFileName() throws InvalidSPDXAnalysisException, SpdxCompareException {
 
@@ -216,7 +216,7 @@ public class SpdxSnippetComparerTest {
 		assertTrue(comparer.getSnippetFromFileDifference(DOCA, DOCB) == null);
 		assertEquals(FILE_NAME, comparer.getUniqueSnippetFromFile(DOCA, DOCB).getName());
 		assertEquals(newFileName, comparer.getUniqueSnippetFromFile(DOCB, DOCA).getName());
-		
+
 	}
 
 	/**

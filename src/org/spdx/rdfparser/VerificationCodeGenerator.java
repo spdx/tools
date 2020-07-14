@@ -32,24 +32,24 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
- * Generates a package verification code from a directory of source code or an array of <code>SPDXFile</code>s.  
- * 
+ * Generates a package verification code from a directory of source code or an array of <code>SPDXFile</code>s.
+ *
  * A class implementing the IFileChecksumGenerator is supplied as a parameter to the constructor.
  * The method <code>getFileChecksum</code> is called for each file in the directory.  This can
- * be used as a hook to capture all files in the directory and capture the checksum values at 
+ * be used as a hook to capture all files in the directory and capture the checksum values at
  * a file level.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class VerificationCodeGenerator {
 
 	private IFileChecksumGenerator fileChecksumGenerator;
-	
+
 	public VerificationCodeGenerator(IFileChecksumGenerator fileChecksumGenerator) {
 		this.fileChecksumGenerator = fileChecksumGenerator;
 	}
-	
+
 	/**
 	 * Generate the SPDX Package Verification Code from an array of SPDXFiles
 	 * @param spdxFiles Files to generate the VerificationCode from
@@ -71,21 +71,21 @@ public class VerificationCodeGenerator {
 		}
 		List<String> fileChecksums = Lists.newArrayList();
 		for (int i = 0; i < spdxFiles.length; i++) {
-			if (spdxFiles[i] != null && spdxFiles[i].getName() != null && 
+			if (spdxFiles[i] != null && spdxFiles[i].getName() != null &&
 					!skippedFilePathSet.contains(spdxFiles[i].getName())) {
 				fileChecksums.add(spdxFiles[i].getSha1());
 			}
 		}
 		return generatePackageVerificationCode(fileChecksums, skippedFilePaths);
 	}
-	
-	
+
+
 	/**
 	 * Generate the SPDX Package Verification Code from a directory of files included in the archive
 	 * @param sourceDirectory
 	 * @return
-	 * @throws NoSuchAlgorithmException 
-	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
 	 */
 	public SpdxPackageVerificationCode generatePackageVerificationCode(File sourceDirectory, File[] skippedFiles) throws NoSuchAlgorithmException, IOException {
 		// create a sorted list of file paths
@@ -106,7 +106,7 @@ public class VerificationCodeGenerator {
 		}
 		return generatePackageVerificationCode(fileChecksums, skippedFileNames);
 	}
-	
+
 	protected SpdxPackageVerificationCode generatePackageVerificationCode(List<String> fileChecksums,
 			String[] skippedFilePaths) throws NoSuchAlgorithmException {
 		Collections.sort(fileChecksums);
@@ -125,7 +125,7 @@ public class VerificationCodeGenerator {
 	 * @param prefixForRelative The portion of the filepath which preceeds the relative file path for the archive
 	 * @param sourceDirectory
 	 * @param fileNameAndChecksums
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private void collectFileData(String prefixForRelative, File sourceDirectory,
 			List<String> fileNameAndChecksums, Set<String> skippedFiles) throws IOException {
@@ -156,7 +156,7 @@ public class VerificationCodeGenerator {
 	 * @return
 	 */
 	public static String normalizeFilePath(String nonNormalizedFilePath) {
-		String filePath = nonNormalizedFilePath.replace('\\', '/').trim();		
+		String filePath = nonNormalizedFilePath.replace('\\', '/').trim();
 		if (filePath.contains("../")) {
 			// need to remove these references
 			String[] filePathParts = filePath.split("/");
@@ -189,7 +189,7 @@ public class VerificationCodeGenerator {
 	 * @return
 	 */
 	private static String convertChecksumToString(byte[] digest) {
-		StringBuilder sb = new StringBuilder();   
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < digest.length; i++) {
 			String hex = Integer.toHexString(0xff & digest[i]);
 			if (hex.length() < 2) {
@@ -203,8 +203,8 @@ public class VerificationCodeGenerator {
 	 * @param sourceDirectory
 	 * @param skippedFiles
 	 * @return
-	 * @throws NoSuchAlgorithmException 
-	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
 	 */
 	public SpdxPackageVerificationCode generatePackageVerificationCode(
 			File sourceDirectory) throws NoSuchAlgorithmException, IOException {

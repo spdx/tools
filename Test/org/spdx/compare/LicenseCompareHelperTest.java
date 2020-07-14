@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -46,7 +46,7 @@ import com.google.common.collect.Maps;
  *
  */
 public class LicenseCompareHelperTest {
-	
+
 	static final String GPL_2_TEXT = "TestFiles" + File.separator + "GPL-2.0.txt";
 	static final String ZPL_2_1_TEXT = "TestFiles" + File.separator + "ZPL-2.1.txt";
 
@@ -121,7 +121,7 @@ public class LicenseCompareHelperTest {
 		result = LicenseCompareHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 	}
-	
+
 	@Test
 	public void testLicenseMatchCodeComments() {
 		String part1 = " now is the time for all good men\n";
@@ -157,7 +157,7 @@ public class LicenseCompareHelperTest {
 		result = LicenseCompareHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
 	}
-	
+
 	@Test
 	public void testLicenseMatchEquivWords() {
 		// per cent -> percent
@@ -189,28 +189,28 @@ public class LicenseCompareHelperTest {
 		String stdLicNotice = "Notice";
 		String template = "Template";
 		boolean osiApproved = false;
-		SpdxListedLicense lic1 = 
-			new SpdxListedLicense(licName, licId, licText, 
+		SpdxListedLicense lic1 =
+			new SpdxListedLicense(licName, licId, licText,
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
-		SpdxListedLicense lic2 = 
-			new SpdxListedLicense(licName, licId, licText, 
+		SpdxListedLicense lic2 =
+			new SpdxListedLicense(licName, licId, licText,
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
-		
+
 		// try just changing the text - should still equal since the ID's are equal
 		String text2 = "text2";
-		SpdxListedLicense lic3 = 
-			new SpdxListedLicense(licName, licId, text2, 
+		SpdxListedLicense lic3 =
+			new SpdxListedLicense(licName, licId, text2,
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic3, xlation));
 		// now try a different ID
 		String licId2 = "ID2";
-		SpdxListedLicense lic4 = 
-			new SpdxListedLicense(licName, licId2, licText, 
+		SpdxListedLicense lic4 =
+			new SpdxListedLicense(licName, licId2, licText,
 					sourceUrls, notes, stdLicNotice, template, osiApproved);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic4, xlation));
 	}
-	
+
 	@Test
 	public void testLicenseEqualsNonStdLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Map<String, String> xlation = Maps.newHashMap();
@@ -218,26 +218,26 @@ public class LicenseCompareHelperTest {
 		String licText = "Text";
 
 		// same license ID's
-		ExtractedLicenseInfo lic1 = 
+		ExtractedLicenseInfo lic1 =
 			new ExtractedLicenseInfo(licId, licText);
-		ExtractedLicenseInfo lic2 = 
+		ExtractedLicenseInfo lic2 =
 			new ExtractedLicenseInfo(licId, licText);
 		xlation.put(licId, licId);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 		// different license ID, same license
 		xlation.clear();
 		String licId2 = "id2";
-		lic2 = 
+		lic2 =
 			new ExtractedLicenseInfo(licId2, licText);
 		xlation.put(licId, licId2);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 		// different license ID, different license
 		String licId3 = "id3";
-		lic2 = 
+		lic2 =
 			new ExtractedLicenseInfo(licId3, licId2);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlation));
 	}
-	
+
 	@Test
 	public void testLicenseEqualsConjunctiveLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		String licText = "Text";
@@ -265,7 +265,7 @@ public class LicenseCompareHelperTest {
 		};
 		ConjunctiveLicenseSet conj1 = new ConjunctiveLicenseSet(set1);
 		ConjunctiveLicenseSet conj2 = new ConjunctiveLicenseSet(set2);
-		
+
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
 		// different order
 		set2 = new AnyLicenseInfo[] {
@@ -280,9 +280,9 @@ public class LicenseCompareHelperTest {
 				lic4, lic5, lic7
 		};
 		ConjunctiveLicenseSet conj3 = new ConjunctiveLicenseSet(set3);
-		assertFalse(LicenseCompareHelper.isLicenseEqual(conj1, conj3, xlation));		
-	}		
-	
+		assertFalse(LicenseCompareHelper.isLicenseEqual(conj1, conj3, xlation));
+	}
+
 	@Test
 	public void testLicenseEqualsConjunctiveLicenseDifferentOrder() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		String licText = "Text";
@@ -310,9 +310,9 @@ public class LicenseCompareHelperTest {
 		};
 		ConjunctiveLicenseSet conj1 = new ConjunctiveLicenseSet(set1);
 		ConjunctiveLicenseSet conj2 = new ConjunctiveLicenseSet(set2);
-		
+
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
-	
+
 		// busybox-1.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-3 AND LicenseRef-12 AND LicenseRef-4 AND LicenseRef-13 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND LicenseRef-7 AND LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND GPL-2.0+ AND GPL-2.0 AND LicenseRef-17 AND LicenseRef-16 AND BSD-2-Clause-Clear)
 		xlation.clear();
 		String licIdRef14 = "LicenseRef-14";
@@ -377,19 +377,19 @@ public class LicenseCompareHelperTest {
 		xlation.put(licRef16, licRef16);
 		String licRefBSD2Clearid = "BSD-2-Clause";
 		SpdxListedLicense licRefBSD2Clear = LicenseInfoFactory.getListedLicenseById(licRefBSD2Clearid);
-		// busybox-1.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-3 AND 
-		//LicenseRef-12 AND LicenseRef-4 AND LicenseRef-13 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND 
-		//LicenseRef-7 AND LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND 
+		// busybox-1.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-3 AND
+		//LicenseRef-12 AND LicenseRef-4 AND LicenseRef-13 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND
+		//LicenseRef-7 AND LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND
 		//GPL-2.0+ AND GPL-2.0 AND LicenseRef-17 AND LicenseRef-16 AND BSD-2-Clause-Clear)
 
-		AnyLicenseInfo[] bbset1 = new AnyLicenseInfo[] {licref14, licref5, licref6, licref15, licref3, licref12, licref4, 
+		AnyLicenseInfo[] bbset1 = new AnyLicenseInfo[] {licref14, licref5, licref6, licref15, licref3, licref12, licref4,
 				licref13,licref10, licref9, licref11, licref7, licref8, licLGPLPlus, licref1, licref2, licref0, licGPL20Plus,
 				licGPL20, licref17, licref16, licRefBSD2Clear
 		};
 		ConjunctiveLicenseSet bbconj1 = new ConjunctiveLicenseSet(bbset1);
 		// busybox-2.rdf: (LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-12 AND LicenseRef-3
-		//AND LicenseRef-13 AND LicenseRef-4 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND LicenseRef-7 AND 
-		//LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND GPL-2.0+ AND GPL-2.0 AND 
+		//AND LicenseRef-13 AND LicenseRef-4 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND LicenseRef-7 AND
+		//LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND GPL-2.0+ AND GPL-2.0 AND
 		//LicenseRef-17 AND BSD-2-Clause-Clear AND LicenseRef-16)
 
 		AnyLicenseInfo[] bbset2 = new AnyLicenseInfo[] {licref14, licref5, licref6, licref15, licref12, licref3, licref13,
@@ -399,8 +399,8 @@ public class LicenseCompareHelperTest {
 		ConjunctiveLicenseSet bbconj2 = new ConjunctiveLicenseSet(bbset2);
 		assertTrue(LicenseCompareHelper.isLicenseEqual(bbconj1, bbconj2, xlation));
 		assertTrue(LicenseCompareHelper.isLicenseEqual(bbconj2, bbconj1, xlation));
-	}	
-	
+	}
+
 	@Test
 	public void testLicenseEqualsDisjunctiveLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		String licText = "Text";
@@ -428,9 +428,9 @@ public class LicenseCompareHelperTest {
 		};
 		DisjunctiveLicenseSet conj1 = new DisjunctiveLicenseSet(set1);
 		DisjunctiveLicenseSet conj2 = new DisjunctiveLicenseSet(set2);
-		
+
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj1, conj2, xlation));
-		
+
 		String licId7 = "id7";
 		ExtractedLicenseInfo lic7 = new ExtractedLicenseInfo(licId7, licText);
 		AnyLicenseInfo[] set3 = new AnyLicenseInfo[] {
@@ -438,8 +438,8 @@ public class LicenseCompareHelperTest {
 		};
 		DisjunctiveLicenseSet conj3 = new DisjunctiveLicenseSet(set3);
 		assertFalse(LicenseCompareHelper.isLicenseEqual(conj1, conj3, xlation));
-	}	
-	
+	}
+
 	@Test
 	public void testLicenseEqualsComplexLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		String licText = "Text";
@@ -467,7 +467,7 @@ public class LicenseCompareHelperTest {
 		};
 		DisjunctiveLicenseSet conj1 = new DisjunctiveLicenseSet(set1);
 		DisjunctiveLicenseSet conj2 = new DisjunctiveLicenseSet(set2);
-		
+
 		AnyLicenseInfo[] set3 = new AnyLicenseInfo[] {
 				conj1, lic3
 		};
@@ -476,10 +476,10 @@ public class LicenseCompareHelperTest {
 		};
 		ConjunctiveLicenseSet conj3 = new ConjunctiveLicenseSet(set3);
 		ConjunctiveLicenseSet conj4 = new ConjunctiveLicenseSet(set4);
-		
+
 		assertTrue(LicenseCompareHelper.isLicenseEqual(conj3, conj4, xlation));
-	}	
-	
+	}
+
 	@Test
 	public void testLicenseEqualsNoAsserLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxNoAssertionLicense lic1 = new SpdxNoAssertionLicense();
@@ -488,8 +488,8 @@ public class LicenseCompareHelperTest {
 		Map<String, String> xlationMap = Maps.newHashMap();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic1, lic2, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic1, lic3, xlationMap));
-	}	
-	
+	}
+
 	@Test
 	public void testLicenseEqualsNoneLicense() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		SpdxNoAssertionLicense lic2 = new SpdxNoAssertionLicense();
@@ -498,8 +498,8 @@ public class LicenseCompareHelperTest {
 		Map<String, String> xlationMap = Maps.newHashMap();
 		assertTrue(LicenseCompareHelper.isLicenseEqual(lic3, lic4, xlationMap));
 		assertFalse(LicenseCompareHelper.isLicenseEqual(lic4, lic2, xlationMap));
-	}	
-	
+	}
+
 	@Test
 	public void testTokenizeLicenseText() {
 		String test = "Now is the.time,for? \"all\" good men.";
@@ -535,7 +535,7 @@ public class LicenseCompareHelperTest {
 		assertEquals(32,tokenToLocation.get(12).getColumn());
 		assertEquals(35,tokenToLocation.get(13).getColumn());
 	}
-	
+
 	@Test
 	public void regressionTokenString() {
 		String test = "THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDER \"AS IS\" AND";
@@ -565,7 +565,7 @@ public class LicenseCompareHelperTest {
 		assertEquals(52,tokenToLocation.get(9).getColumn());
 		assertEquals(54,tokenToLocation.get(10).getColumn());
 	}
-	
+
 	@Test
 	public void testOddChars() {
 		String test = "COPYRIGHT   I B M   CORPORATION 2002";
@@ -582,9 +582,9 @@ public class LicenseCompareHelperTest {
 		result = LicenseCompareHelper.tokenizeLicenseText(test, tokenToLocation);
 		assertEquals(2, result.length);
 		assertEquals("claims",result[0]);
-		assertEquals("if", result[1]);	
+		assertEquals("if", result[1]);
 	}
-	
+
 	@Test
 	public void testisSingleTokenString() {
 		assertTrue(LicenseCompareHelper.isSingleTokenString(" token "));
@@ -594,14 +594,14 @@ public class LicenseCompareHelperTest {
 		assertFalse(LicenseCompareHelper.isSingleTokenString("a and"));
 		assertFalse(LicenseCompareHelper.isSingleTokenString("a\nand"));
 	}
-	
+
 	@Test
 	public void regressionTestMatchingGpl20Only() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		String compareText = UnitTestHelper.fileToText(GPL_2_TEXT);
 		DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(LicenseInfoFactory.getListedLicenseById("GPL-2.0-only"), compareText);
 		assertFalse(result.isDifferenceFound());
 	}
-	
+
 	@Test
 	public void testMatchingStandardLicenseIds() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		// This test is too slow!
@@ -611,24 +611,24 @@ public class LicenseCompareHelperTest {
 //		assertTrue(result[0].startsWith("GPL-2"));
 //		assertTrue(result[1].startsWith("GPL-2"));
 	}
-	
+
 	@Test
 	public void testFirstLicenseToken() {
 		assertEquals("first", LicenseCompareHelper.getFirstLicenseToken("   first,token that is needed\nnext"));
 	}
-	
+
 	@SuppressWarnings("unused")
 	private String stringCharToUnicode(String s, int location) {
 		return "\\u" + Integer.toHexString(s.charAt(location) | 0x10000).substring(1);
 	}
-	
+
 	@Test
 	public void regressionTestZpl21() throws IOException, InvalidSPDXAnalysisException, SpdxCompareException {
 		String compareText = UnitTestHelper.fileToText(ZPL_2_1_TEXT);
 		DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(LicenseInfoFactory.getListedLicenseById("ZPL-2.1"), compareText);
 		assertFalse(result.isDifferenceFound());
 	}
-	
+
 	@Test
 	public void testSpaceNormalization() {
 		String t1 = "This is a test of space";

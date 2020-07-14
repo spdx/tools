@@ -25,9 +25,9 @@ import org.spdx.rdfparser.model.SpdxFile;
  *
  */
 public class FileRelationshipSheet extends AbstractFileCompareSheet {
-	
+
 	static final int RELATIONSHIP_COL_WIDTH = 60;
-	
+
 	public FileRelationshipSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}

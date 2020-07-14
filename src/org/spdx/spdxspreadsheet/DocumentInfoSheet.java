@@ -33,7 +33,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 public abstract class DocumentInfoSheet extends AbstractSheet {
 	static final int SPREADSHEET_VERSION_COL = 0;
 	static final int DATA_ROW_NUM = 1;
-	
+
 	protected String version;
 
 	public DocumentInfoSheet(Workbook workbook, String sheetName, String version) {
@@ -65,11 +65,11 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 			return new OriginsSheetV2d0(workbook, originSheetName, version);
 		}
 	}
-	
+
 	protected Row getDataRow() {
 		return getDataRow(0);
 	}
-	
+
 	protected Row getDataRow(int rowIndex) {
 		while (firstRowNum + DATA_ROW_NUM + rowIndex > lastRowNum) {
 			addRow();
@@ -80,7 +80,7 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 		}
 		return dataRow;
 	}
-	
+
 	protected Cell getOrCreateDataCell(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
@@ -89,18 +89,18 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 		}
 		return cell;
 	}
-	
+
 	protected void setDataCellStringValue(int colNum, String value) {
 		getOrCreateDataCell(colNum).setCellValue(value);
 	}
-	
+
 	protected void setDataCellDateValue(int colNum, Date value) {
 		Cell cell = getOrCreateDataCell(colNum);
 		cell.setCellValue(value);
 		cell.setCellStyle(dateStyle);
-		
+
 	}
-	
+
 	protected Date getDataCellDateValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
@@ -109,14 +109,14 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 			return cell.getDateCellValue();
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	protected String getDataCellStringValue(int colNum) {
 		Cell cell = getDataRow().getCell(colNum);
 		if (cell == null) {
 			return null;
 		} else {
-			if (cell.getCellTypeEnum() == CellType.NUMERIC) {				
+			if (cell.getCellTypeEnum() == CellType.NUMERIC) {
 				return Double.toString(cell.getNumericCellValue());
 			} else {
 				return cell.getStringCellValue();
@@ -183,12 +183,12 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 	 * @param docComment
 	 */
 	public abstract void setDocumentComment(String docComment);
-	
+
 	/**
 	 * @return
 	 */
 	public abstract String getLicenseListVersion();
-	
+
 	/**
 	 * @param licenseVersion
 	 */
@@ -202,10 +202,10 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 	/**
 	 * Add all origin information from the document
 	 * @param doc
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public abstract void addDocument(SpdxDocument doc) throws SpreadsheetException;
-	
+
 	/**
 	 * @return SPDX Identifier for the document
 	 */
@@ -235,13 +235,13 @@ public abstract class DocumentInfoSheet extends AbstractSheet {
 	public abstract void setDocumentDescribes(String[] contents);
 	/**
 	 * @return External document refs
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public abstract ExternalDocumentRef[] getExternalDocumentRefs() throws SpreadsheetException;
 	/**
 	 * Set the external document refs
 	 * @param externalDocumentRefs
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public abstract void setExternalDocumentRefs(ExternalDocumentRef[] externalDocumentRefs) throws SpreadsheetException;
 }

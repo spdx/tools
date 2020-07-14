@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Annotation extends RdfModelObject implements Comparable<Annotation> {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class.getName());
 
 	public enum AnnotationType {
@@ -79,7 +79,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	String annotator;
 	String comment;
 	String annotationDate;
-	
+
 	public Annotation(String annotator, AnnotationType annotationType, String date,
 			String comment) {
 		super();
@@ -88,12 +88,12 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		this.annotationDate = date;
 		this.comment = comment;
 	}
-	
+
 	public Annotation(IModelContainer modelContainer, Node annotationNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, annotationNode);
 		getPropertiesFromModel();
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
@@ -108,7 +108,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		//Comment
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		//Annotation type
-		String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_ANNOTATION_TYPE);
 		if (annotationTypeUri != null) {
 			String sAnnotationType = annotationTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
@@ -120,7 +120,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 			}
 		}
 	}
-	
+
 	@Override
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_ANNOTATION);
@@ -128,13 +128,13 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 
 	/**
 	 * Populate the model from the properties
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		if (annotationType != null) {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_ANNOTATION_TYPE, 
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_ANNOTATION_TYPE,
 					SpdxRdfConstants.SPDX_NAMESPACE + this.annotationType.toString());
 		}
 		if (annotator != null) {
@@ -184,7 +184,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 	 */
 	public AnnotationType getAnnotationType() {
 		if (this.resource != null && this.refreshOnGet) {
-			String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			String annotationTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_ANNOTATION_TYPE);
 			if (annotationTypeUri != null) {
 				String sAnnotationType = annotationTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
@@ -200,13 +200,13 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 
 	/**
 	 * @param annotationType the annotationType to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setAnnotationType(AnnotationType annotationType) throws InvalidSPDXAnalysisException {
 		this.annotationType = annotationType;
 		if (annotationType != null) {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_ANNOTATION_TYPE, 
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_ANNOTATION_TYPE,
 					SpdxRdfConstants.SPDX_NAMESPACE + annotationType.toString());
 		} else {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION_TYPE);
@@ -261,7 +261,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 
 	/**
 	 * @param date the date to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setAnnotationDate(String date) throws InvalidSPDXAnalysisException {
 		this.annotationDate = date;
@@ -287,7 +287,7 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 
 	@Override
     public Annotation clone() {
-		return new Annotation(this.annotator, this.annotationType, this.annotationDate, 
+		return new Annotation(this.annotator, this.annotationType, this.annotationDate,
 				this.comment);
 	}
 
@@ -305,10 +305,10 @@ public class Annotation extends RdfModelObject implements Comparable<Annotation>
 		Annotation comp = (Annotation)o;
         return (Objects.equal(getAnnotator(), comp.getAnnotator()) &&
                 Objects.equal(getAnnotationType(), comp.getAnnotationType()) &&
-                Objects.equal(getComment(), comp.getComment()) && 
+                Objects.equal(getComment(), comp.getComment()) &&
                 Objects.equal(getAnnotationDate(), comp.getAnnotationDate()));
 	}
-	
+
 	/**
 	 * @return The tag value of the annotation type
 	 */

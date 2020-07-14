@@ -25,9 +25,9 @@ import org.spdx.rdfparser.model.SpdxFile;
  *
  */
 public class FileCommentSheet extends AbstractFileCompareSheet {
-	
+
 	private static final int FILE_COMMENT_COL_WIDTH = 60;
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName

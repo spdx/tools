@@ -27,7 +27,7 @@ import org.spdx.rdfparser.model.SpdxItem;
  *
  */
 public class SpdxItemDifference {
-	
+
 	private String name;
 	private String commentA;
 	private String commentB;
@@ -47,8 +47,8 @@ public class SpdxItemDifference {
 	private boolean annotationsEquals;
 	private Annotation[] uniqueAnnotationsA;
 	private Annotation[] uniqueAnnotationsB;
-	
-	public SpdxItemDifference(SpdxItem itemA, SpdxItem itemB, 
+
+	public SpdxItemDifference(SpdxItem itemA, SpdxItem itemB,
 			boolean concludedLicensesEqual, boolean seenLicensesEqual,
 			AnyLicenseInfo[] uniqueSeenLicensesA,
 			AnyLicenseInfo[] uniqueSeenLicensesB,
@@ -187,15 +187,15 @@ public class SpdxItemDifference {
 	public AnyLicenseInfo[] getUniqueSeenLicensesB() {
 		return uniqueSeenLicensesB;
 	}
-	
+
 	public boolean isCommentsEquals() {
 		return SpdxComparer.stringsEqual(commentA, commentB);
 	}
-	
+
 	public boolean isCopyrightsEqual() {
 		return SpdxComparer.stringsEqual(copyrightA, copyrightB);
 	}
-	
+
 	public boolean isLicenseCommentsEqual() {
 		return SpdxComparer.stringsEqual(licenseCommentsA, licenseCommentsB);
 	}
@@ -241,5 +241,5 @@ public class SpdxItemDifference {
 	public Annotation[] getUniqueAnnotationsB() {
 		return uniqueAnnotationsB;
 	}
-	
+
 }

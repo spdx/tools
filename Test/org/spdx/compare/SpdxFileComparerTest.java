@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -57,13 +57,13 @@ public class SpdxFileComparerTest {
 	File testRDFFile;
 	SpdxDocument DOCA;
 	SpdxDocument DOCB;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.testRDFFile = new File(TEST_RDF_FILE_PATH); 
+		this.testRDFFile = new File(TEST_RDF_FILE_PATH);
 		String uri1 = "http://doc/uri1";
 		SpdxDocumentContainer containerA = new SpdxDocumentContainer(uri1);
 		DOCA = containerA.getSpdxDocument();
@@ -86,8 +86,8 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#SpdxFileComparer()}.
-	 * @throws InvalidLicenseStringException 
-	 * @throws SpdxCompareException 
+	 * @throws InvalidLicenseStringException
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testSpdxFileComparer() throws InvalidLicenseStringException, SpdxCompareException {
@@ -97,9 +97,9 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#compare(org.spdx.rdfparser.SpdxFile, org.spdx.rdfparser.SpdxFile, java.util.HashMap)}.
-	 * @throws SpdxCompareException 
-	 * @throws InvalidLicenseStringException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidLicenseStringException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCompare() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -130,12 +130,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -144,9 +144,9 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isConcludedLicenseEquals()}.
-	 * @throws SpdxCompareException 
-	 * @throws InvalidLicenseStringException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidLicenseStringException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsConcludedLicenseEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -177,12 +177,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -194,7 +194,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isSeenLicenseEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsSeenLicenseEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -228,12 +228,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -245,7 +245,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isArtifactOfEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsArtifactOfEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -282,12 +282,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -295,7 +295,7 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isArtifactOfEquals());
 		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isArtifactOfsEquals());
-		
+
 		// different name
 		fileB.setArtifactOf(new DoapProject[] {proj3});
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -303,7 +303,7 @@ public class SpdxFileComparerTest {
 		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
-		
+
 		// more A
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj3});
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -319,7 +319,7 @@ public class SpdxFileComparerTest {
 		fc.addDocumentFile(DOCB, fileB);
 		assertTrue(fc.isDifferenceFound());
 		assertFalse(fc.isArtifactOfEquals());
-		
+
 		// back to equals (different order)
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj2, proj3});
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -331,7 +331,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#getUniqueSeenLicensesB()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetUniqueSeenLicensesB() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -365,12 +365,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -385,7 +385,7 @@ public class SpdxFileComparerTest {
 		assertEquals(1, diffUnique.length);
 		assertEquals(STD_LIC_ID_CC0, ((License)diffUnique[0]).getLicenseId());
 
-		
+
 		fileA.setLicenseInfosFromFiles(seenLicenseB);
 		fileB.setLicenseInfosFromFiles(seenLicenseA);
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -399,7 +399,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#getUniqueSeenLicensesA()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetUniqueSeenLicensesA() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -433,12 +433,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -452,7 +452,7 @@ public class SpdxFileComparerTest {
 		AnyLicenseInfo[] diffUnique = diff.getUniqueSeenLicensesA();
 		assertEquals(1, diffUnique.length);
 		assertEquals(STD_LIC_ID_CC0, ((License)diffUnique[0]).getLicenseId());
-		
+
 		fileA.setLicenseInfosFromFiles(seenLicenseB);
 		fileB.setLicenseInfosFromFiles(seenLicenseA);
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -466,7 +466,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#getUniqueArtifactOfA()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetUniqueArtifactOfAB() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -503,12 +503,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		// different name
 		fileB.setArtifactOf(new DoapProject[] {proj3});
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -530,8 +530,8 @@ public class SpdxFileComparerTest {
 		diffUnique = diff.getArtifactsOfB();
 		assertEquals(1, diffUnique.length);
 		assertEquals(proj3.getName(), diffUnique[0].getName());
-		
-		
+
+
 		// more A
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj3});
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -557,7 +557,7 @@ public class SpdxFileComparerTest {
 		assertEquals(0, uniqueA.length);
 		assertEquals(1, uniqueB.length);
 		assertEquals(proj2.getName(), uniqueB[0].getName());
-		
+
 		// back to equals (different order)
 		fileA.setArtifactOf(new DoapProject[] {proj1, proj2, proj3});
 		fc = new SpdxFileComparer(LICENSE_XLATION);
@@ -575,7 +575,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isCommentsEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsLicenseCommentsEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -606,12 +606,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -619,18 +619,18 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isLicenseCommmentsEquals());
 		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isLicenseCommentsEqual());
-		
+
 		fileB.setLicenseComments(licenseCommentsA);
 		fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
-		assertTrue(fc.isLicenseCommmentsEquals());		
+		assertTrue(fc.isLicenseCommmentsEquals());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isCopyrightsEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsCopyrightsEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -661,12 +661,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -674,18 +674,18 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isCopyrightsEquals());
 		SpdxFileDifference diff = fc.getFileDifference(DOCA, DOCB);
 		assertFalse(diff.isCopyrightsEqual());
-		
+
 		fileB.setCopyrightText(copyrightA);
 		fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
 		assertFalse(fc.isDifferenceFound());
-		assertTrue(fc.isCopyrightsEquals());	
+		assertTrue(fc.isCopyrightsEquals());
 	}
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isLicenseCommmentsEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsCommmentsEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -716,12 +716,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -740,7 +740,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isChecksumsEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsChecksumsEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -775,18 +775,18 @@ public class SpdxFileComparerTest {
 		String[] fileBContributors = fileAContributors;
 		String fileANotice = "noticeA";
 		String fileBNotice = fileANotice;
-		
+
 		SpdxFile fileA = new SpdxFile(fileNameA, fileCommentA, new Annotation[0],
-				new Relationship[0], concludedLicenseA, seenLicenseA, 
+				new Relationship[0], concludedLicenseA, seenLicenseA,
 				copyrightA, licenseCommentsA, fileTypeA,
 				new Checksum[] {sumA, sumB},
 				fileAContributors, fileANotice, artifactOfA);
 		SpdxFile fileB = new SpdxFile(fileNameB, fileCommentB, new Annotation[0],
-				new Relationship[0], concludedLicenseB, seenLicenseB, 
+				new Relationship[0], concludedLicenseB, seenLicenseB,
 				copyrightB, licenseCommentsB, fileTypeB,
 				new Checksum[] {sumB, sumC},
 				fileBContributors, fileBNotice, artifactOfB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -811,7 +811,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isTypesEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsTypesEquals() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -842,12 +842,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -862,10 +862,10 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isTypesEquals());
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isContributorsEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
@@ -900,19 +900,19 @@ public class SpdxFileComparerTest {
 		String[] fileBContributors = new String[] {"Different", "Contributors", "Entirely"};
 		String fileBNotice = fileANotice;
 		SpdxFile fileA = new SpdxFile(fileNameA, fileCommentA, new Annotation[0],
-				new Relationship[0], concludedLicenseA, seenLicenseA, 
+				new Relationship[0], concludedLicenseA, seenLicenseA,
 				copyrightA, licenseCommentsA, fileTypeA,
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1A)},
 				fileAContributors, fileANotice, artifactOfA);
 		fileA.setFileDependencies(fileADependencies);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB, fileCommentB, new Annotation[0],
-				new Relationship[0], concludedLicenseB, seenLicenseB, 
+				new Relationship[0], concludedLicenseB, seenLicenseB,
 				copyrightB, licenseCommentsB, fileTypeB,
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1B)},
 				fileBContributors, fileBNotice, artifactOfB);
 		fileB.setFileDependencies(fileBDependencies);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -930,7 +930,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isFileDependenciesEquals()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
@@ -965,20 +965,20 @@ public class SpdxFileComparerTest {
 		String[] fileBContributors = fileAContributors;
 		String fileBNotice = fileANotice;
 		SpdxFile fileA = new SpdxFile(fileNameA, fileCommentA, new Annotation[0],
-				new Relationship[0], concludedLicenseA, seenLicenseA, 
+				new Relationship[0], concludedLicenseA, seenLicenseA,
 				copyrightA, licenseCommentsA, fileTypeA,
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1A)},
 				fileAContributors, fileANotice, artifactOfA);
 		fileA.setFileDependencies(fileADependencies);
-		
+
 		SpdxFile[] fileBDependencies = new SpdxFile[] {fileA};
 		SpdxFile fileB = new SpdxFile(fileNameB, fileCommentB, new Annotation[0],
-				new Relationship[0], concludedLicenseB, seenLicenseB, 
+				new Relationship[0], concludedLicenseB, seenLicenseB,
 				copyrightB, licenseCommentsB, fileTypeB,
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1B)},
 				fileBContributors, fileBNotice, artifactOfB);
 		fileB.setFileDependencies(fileBDependencies);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -993,10 +993,10 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isFileDependenciesEquals());
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isNoticeTextEqual()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
@@ -1028,23 +1028,23 @@ public class SpdxFileComparerTest {
 		String[] fileAContributors = new String[] {"ContributorA", "ContributorB"};
 		String fileANotice = "File A Notice";
 		SpdxFile[] fileBDependencies = fileADependencies;
-		
+
 		String[] fileBContributors = fileAContributors;
 		String fileBNotice = "file B Notice which is different";
 		SpdxFile fileA = new SpdxFile(fileNameA, fileCommentA, new Annotation[0],
-				new Relationship[0], concludedLicenseA, seenLicenseA, 
+				new Relationship[0], concludedLicenseA, seenLicenseA,
 				copyrightA, licenseCommentsA, fileTypeA,
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1A)},
 				fileAContributors, fileANotice, artifactOfA);
 		fileA.setFileDependencies(fileADependencies);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB, fileCommentB, new Annotation[0],
-				new Relationship[0], concludedLicenseB, seenLicenseB, 
+				new Relationship[0], concludedLicenseB, seenLicenseB,
 				copyrightB, licenseCommentsB, fileTypeB,
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, sha1B)},
 				fileBContributors, fileBNotice, artifactOfB);
 		fileB.setFileDependencies(fileBDependencies);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -1059,10 +1059,10 @@ public class SpdxFileComparerTest {
 		assertFalse(fc.isDifferenceFound());
 		assertTrue(fc.isNoticeTextEquals());
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#isDifferenceFound()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testIsDifferenceFound() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -1093,12 +1093,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);
@@ -1113,7 +1113,7 @@ public class SpdxFileComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxFileComparer#getFileDifference()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetFileDifference() throws SpdxCompareException, InvalidLicenseStringException, InvalidSPDXAnalysisException {
@@ -1144,12 +1144,12 @@ public class SpdxFileComparerTest {
 				fileTypeA, sha1A, concludedLicenseA,
 				seenLicenseA, licenseCommentsA, copyrightA,
 				artifactOfA, fileCommentA);
-		
+
 		SpdxFile fileB = new SpdxFile(fileNameB,
 				fileTypeB, sha1B, concludedLicenseB,
 				seenLicenseB, licenseCommentsB, copyrightB,
 				artifactOfB, fileCommentB);
-		
+
 		SpdxFileComparer fc = new SpdxFileComparer(LICENSE_XLATION);
 		fc.addDocumentFile(DOCA, fileA);
 		fc.addDocumentFile(DOCB, fileB);

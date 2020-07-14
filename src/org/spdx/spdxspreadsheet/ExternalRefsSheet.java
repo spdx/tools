@@ -41,9 +41,9 @@ import com.google.common.collect.Lists;
  *
  */
 public class ExternalRefsSheet extends AbstractSheet {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(ExternalRefsSheet.class);
-	
+
 	static final int PKG_ID_COL = 0;
 	static final int REF_CATEGORY_COL = PKG_ID_COL + 1;
 	static final int REF_TYPE_COL = REF_CATEGORY_COL + 1;
@@ -52,7 +52,7 @@ public class ExternalRefsSheet extends AbstractSheet {
 
 	static final int USER_DEFINED_COLS = COMMENT_COL + 1;
 	static final int NUM_COLS = USER_DEFINED_COLS + 1;
-	
+
 	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Package ID", "Category",
 		"Type", "Locator", "Comment", "User Defined ..."};
@@ -80,7 +80,7 @@ public class ExternalRefsSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS- 1; i++) { 	// Don't check the last (user defined) column
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for External Refs worksheet";
@@ -106,7 +106,7 @@ public class ExternalRefsSheet extends AbstractSheet {
 			return "Error in verifying External Refs work sheet: "+ex.getMessage();
 		}
 	}
-	
+
 	/**
 	 * @param row
 	 * @return
@@ -133,7 +133,7 @@ public class ExternalRefsSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(externalRefsSheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);
@@ -153,8 +153,8 @@ public class ExternalRefsSheet extends AbstractSheet {
 	/**
 	 * @param packageId Package ID for the package that contains this external ref
 	 * @param externalRef
-	 * @param container 
-	 * @throws SpreadsheetException 
+	 * @param container
+	 * @throws SpreadsheetException
 	 */
 	public void add(String packageId, ExternalRef externalRef, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = addRow();
@@ -182,10 +182,10 @@ public class ExternalRefsSheet extends AbstractSheet {
 	}
 
 	/**
-	 * Convert a reference type to the type used in 
+	 * Convert a reference type to the type used in
 	 * @param referenceType
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected static String refTypeToString(ReferenceType referenceType, SpdxDocumentContainer container) {
 		String retval;
@@ -231,26 +231,26 @@ public class ExternalRefsSheet extends AbstractSheet {
 				if (refCategoryCell != null) {
 					refCategory = ReferenceCategory.fromTag(refCategoryCell.getStringCellValue());
 				}
-				
+
 				Cell refTypeCell = row.getCell(REF_TYPE_COL);
 				ReferenceType refType = null;
 				if (refTypeCell != null) {
 					String refTypeStr = refTypeCell.getStringCellValue();
 					refType = stringToRefType(refTypeStr, container);
 				}
-				
+
 				Cell refLocatorCell = row.getCell(REF_LOCATOR_COL);
 				String refLocator = null;
 				if (refLocatorCell != null) {
 					refLocator = refLocatorCell.getStringCellValue();
 				}
-				
+
 				Cell commentCell = row.getCell(COMMENT_COL);
 				String comment = null;
 				if (commentCell != null) {
 					comment = commentCell.getStringCellValue();
 				}
-				
+
 				retval.add(new ExternalRef(refCategory, refType, refLocator, comment));
 			}
 			row = sheet.getRow(i++);

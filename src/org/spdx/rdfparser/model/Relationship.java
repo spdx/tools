@@ -39,9 +39,9 @@ import com.google.common.collect.Maps;
  *
  */
 public class Relationship extends RdfModelObject implements Comparable<Relationship> {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class);
-	
+
 	public enum RelationshipType {
 		DESCRIBES("relationshipType_describes"),
 		DESCRIBED_BY("relationshipType_describedBy"),
@@ -136,13 +136,13 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	private RelationshipType relationshipType;
 	private String comment;
 	private SpdxElement relatedSpdxElement;
-	
+
 	/**
 	 * @param relatedSpdxElement The SPDX Element that is related
 	 * @param relationshipType Type of relationship - See the specification for a description of the types
 	 * @param comment optional comment for the relationship
 	 */
-	public Relationship(SpdxElement relatedSpdxElement, 
+	public Relationship(SpdxElement relatedSpdxElement,
 			RelationshipType relationshipType, String comment) {
 		super();
 		this.relatedSpdxElement = relatedSpdxElement;
@@ -160,16 +160,16 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 		super(modelContainer, node);
 		getPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
-		this.relatedSpdxElement = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.relatedSpdxElement = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
-		String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 		if (relationshipTypeUri != null) {
 			String relationshipString = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
@@ -216,12 +216,12 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
 		}
 		if (this.relatedSpdxElement != null) {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement, false);
 		}
 		if (this.relationshipType != null) {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, 
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE,
 					SpdxRdfConstants.SPDX_NAMESPACE + this.relationshipType.toString());
 		}
 	}
@@ -238,7 +238,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	 */
 	public RelationshipType getRelationshipType() {
 		if (model != null && this.refreshOnGet) {
-			String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			String relationshipTypeUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 			if (relationshipTypeUri != null) {
 				String relationshipString = relationshipTypeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
@@ -253,16 +253,16 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	}
 	/**
 	 * @param relationshipType the relationshipType to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setRelationshipType(RelationshipType relationshipType) throws InvalidSPDXAnalysisException {
 		this.relationshipType = relationshipType;
 		if (relationshipType != null) {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE, 
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE,
 					SpdxRdfConstants.SPDX_NAMESPACE + this.relationshipType.toString());
 		} else {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_RELATIONSHIP_TYPE);
 		}
 	}
@@ -280,7 +280,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
-		setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE,
 				SpdxRdfConstants.RDFS_PROP_COMMENT, comment);
 	}
 	/**
@@ -289,7 +289,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	public SpdxElement getRelatedSpdxElement() {
 		if (this.resource != null && this.refreshOnGet) {
 			try {
-				SpdxElement refresh = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				SpdxElement refresh = findElementPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT);
 				if (refresh == null || !refresh.equivalent(this.relatedSpdxElement, false)) {
 					this.relatedSpdxElement = refresh;
@@ -302,14 +302,14 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	}
 	/**
 	 * @param relatedSpdxElement the relatedSpdxElement to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setRelatedSpdxElement(SpdxElement relatedSpdxElement) throws InvalidSPDXAnalysisException {
 		this.relatedSpdxElement = relatedSpdxElement;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_RELATED_SPDX_ELEMENT, relatedSpdxElement);
 	}
-	
+
 	@Override
 	public Relationship clone() {
 		return clone(Maps.<String, SpdxElement>newHashMap());
@@ -344,7 +344,7 @@ public class Relationship extends RdfModelObject implements Comparable<Relations
 	public Relationship clone(Map<String, SpdxElement> clonedElementIds) {
 		return new Relationship(this.relatedSpdxElement.clone(clonedElementIds), this.relationshipType, this.comment);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */

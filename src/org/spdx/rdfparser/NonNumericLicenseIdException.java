@@ -17,7 +17,7 @@
 package org.spdx.rdfparser;
 
 /**
- * Exception for non standard license IDs where a numeric value is expected and 
+ * Exception for non standard license IDs where a numeric value is expected and
  * no numeric value is found
  * @author Gary O'Neall
  *
@@ -30,13 +30,13 @@ public class NonNumericLicenseIdException extends InvalidSPDXAnalysisException {
 	public NonNumericLicenseIdException(String msg) {
 		super(msg);
 	}
-	
+
 	public NonNumericLicenseIdException(String msg, Exception inner) {
 		super(msg, inner);
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3276217047461134627L;
 

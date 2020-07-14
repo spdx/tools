@@ -27,7 +27,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  *
  */
 public interface ISpdxListedLicenseProvider {
-	
+
 	public Iterator<SpdxListedLicense> getLicenseIterator() throws SpdxListedLicenseException;
 	public Iterator<ListedLicenseException> getExceptionIterator() throws LicenseRestrictionException, SpreadsheetException;
 	public List<String> getWarnings();

@@ -39,7 +39,7 @@ public class AnnotationsSheet extends AbstractSheet {
 	static final int TYPE_COL = ANNOTATOR_COL + 1;
 	static final int USER_DEFINED_COL = TYPE_COL + 1;
 	static final int NUM_COLS = USER_DEFINED_COL;
-	
+
 	static final String[] HEADER_TITLES = new String[] {"SPDX Identifier being Annotated",
 		"Annotation Comment", "Annotation Date", "Annotator", "Annotation Type",
 		"Optional User Defined Columns..."};
@@ -65,7 +65,7 @@ public class AnnotationsSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for Annotation worksheet";
@@ -97,7 +97,7 @@ public class AnnotationsSheet extends AbstractSheet {
 			Cell cell = row.getCell(i);
 			if (REQUIRED[i] && cell == null) {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in annotation sheet";
-			} 
+			}
 			if (i == TYPE_COL && cell.getStringCellValue() != null) {
 				AnnotationType type = AnnotationType.fromTag(cell.getStringCellValue());
 				if (type == null) {
@@ -135,7 +135,7 @@ public class AnnotationsSheet extends AbstractSheet {
 	 * @param relationship
 	 */
 	public void add(Annotation annotation, String elementId) {
-		Row row = addRow();		
+		Row row = addRow();
 		if (elementId != null) {
 			Cell idCell = row.createCell(ID_COL, CellType.STRING);
 			idCell.setCellValue(elementId);
@@ -153,7 +153,7 @@ public class AnnotationsSheet extends AbstractSheet {
 			row.createCell(TYPE_COL).setCellValue(annotation.getAnnotationType().getTag());
 		}
 	}
-	
+
 	public String getElmementId(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {

@@ -27,18 +27,18 @@ import org.spdx.rdfparser.model.SpdxFile;
 import com.google.common.collect.Lists;
 
 /**
- * Application to merge SPDX files information into one unique result. 
+ * Application to merge SPDX files information into one unique result.
  * @author Gang Ling
  *
  */
 
 public class SpdxFileInfoMerger{
-	
+
 	private SpdxDocument master = null;
 	private SpdxLicenseMapper mapper = null;
-	
+
 	/**
-	 * 
+	 *
 	 * @param master
 	 */
 	public SpdxFileInfoMerger(SpdxDocument master, SpdxLicenseMapper mapper){
@@ -47,28 +47,28 @@ public class SpdxFileInfoMerger{
 	}
 
 	/**
-	 * 
+	 *
 	 * @param subDocs
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxFile[] mergeFileInfo(SpdxDocument[] subDocs)throws InvalidSPDXAnalysisException{
-			
+
 	        //an array to store an deep copy of file information from master document.
 			List <SpdxFile> masterFileInfo = master.getDocumentContainer().findAllFiles();
-			
+
 			//convert masterFileInfo array into an arrayList which will be returned to main class at end
 			List<SpdxFile> retval = Lists.newArrayList((cloneFiles(masterFileInfo)));
-			
+
 			for(int q = 0; q < subDocs.length; q++){
 				//an array to store an deep copy of file information from current child document
 				SpdxFile[] subFileInfo = cloneList(subDocs[q].getDocumentContainer().findAllFiles());
-				
+
 				for(int k = 0; k < subFileInfo.length; k++){
 					boolean foundNameMatch = false;
 					boolean foundSha1Match = false;
 					SpdxFile temp = null;
-					
+
 					//determine if any file name matched
 					for(int p = 0; p < retval.size() ; p++){
 						temp = retval.get(p);
@@ -81,9 +81,9 @@ public class SpdxFileInfoMerger{
 							break;
 						}
 					}
-						//if both name and checksum are not matched, then check the license Ids from child files 
+						//if both name and checksum are not matched, then check the license Ids from child files
 						if(!foundNameMatch && !foundSha1Match){
-							//check whether licIdMap has this particular child document  
+							//check whether licIdMap has this particular child document
 							if(mapper.docInNonStdLicIdMap(subDocs[q])){
 								mapper.replaceNonStdLicInFile(subDocs[q], subFileInfo[k]);
 								retval.add(subFileInfo[k]);
@@ -108,24 +108,24 @@ public class SpdxFileInfoMerger{
 						    	DoapProject[] subArtifactOfA = cloneDoapProject(subFileInfo[k].getArtifactOf());
 						    	DoapProject[] mergedArtifactOf = mergeDOAPInfo(masterArtifactOf, subArtifactOfA);
 						    	temp.setArtifactOf(mergedArtifactOf);//assume the setArtifactOf() runs as over-write data
-						    	
+
 						    }
-						    //if master doesn't have DoapProject information but sub file has 
+						    //if master doesn't have DoapProject information but sub file has
 						    if(!foundMasterDOAP && foundChildDOAP){
 						    	DoapProject[] childArtifactOfB = cloneDoapProject(subFileInfo[k].getArtifactOf());
 						    	temp.setArtifactOf(childArtifactOfB);//assume add artifact and Homepage at same time
 						    }
 						}
-					}			
+					}
 			}
 		SpdxFile[] fileMergeResult = new SpdxFile[retval.size()];
 		retval.toArray(fileMergeResult);
 		retval.clear();
 		return fileMergeResult;
 	}
-		
+
 	/**
-	 * 
+	 *
 	 * @param spdxFile
 	 * @return foundDoapProject
 	 */
@@ -136,16 +136,16 @@ public class SpdxFileInfoMerger{
 		}
 		return foundDoapProject;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param masterArtifactOf
 	 * @param subArtifactOf
 	 * @return
 	 */
 	public DoapProject[] mergeDOAPInfo(DoapProject[] masterArtifactOf, DoapProject[] subArtifactOf){
 		List<DoapProject> retval = Lists.newArrayList(masterArtifactOf);
-		
+
 		for(int l = 0; l < subArtifactOf.length; l++){
 			boolean foundMatch = false;
 			for(int u = 0; u < masterArtifactOf.length; u++){
@@ -163,9 +163,9 @@ public class SpdxFileInfoMerger{
 		retval.clear();
 		return mergedArtifactOf;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param filesArray
 	 * @return clonedFilesArray
 	 */
@@ -178,7 +178,7 @@ public class SpdxFileInfoMerger{
 	}
 
 	/**
-	 * 
+	 *
 	 * @param filesList
 	 * @return clonedFilesArray
 	 */
@@ -189,10 +189,10 @@ public class SpdxFileInfoMerger{
 		}
 		SpdxFile[] clonedFilesArray = new SpdxFile[clonedFilesList.size()];
 		clonedFilesList.toArray(clonedFilesArray);
-		return clonedFilesArray;	
+		return clonedFilesArray;
 	}
 	/**
-	 * 
+	 *
 	 * @param orgProjectArray
 	 * @return clonedProjectArray
 	 */
@@ -201,6 +201,6 @@ public class SpdxFileInfoMerger{
 		for(int j = 0; j < orgProjectArray.length; j++){
 			clonedProjectArray[j] = orgProjectArray[j].clone();
 		}
-		return clonedProjectArray;		
+		return clonedProjectArray;
 	}
 }

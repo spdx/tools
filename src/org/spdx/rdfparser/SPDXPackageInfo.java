@@ -81,10 +81,10 @@ public class SPDXPackageInfo {
 	}
 
 	public SPDXPackageInfo(String declaredName, String versionInfo, String machineName,
-			String sha1, String sourceInfo, AnyLicenseInfo declaredLicense, 
+			String sha1, String sourceInfo, AnyLicenseInfo declaredLicense,
 			AnyLicenseInfo concludedLicense, AnyLicenseInfo[] licensesFromFiles,
 			String licenseComments, String declaredCopyright, String shortDescription,
-			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode, 
+			String description, String url, SpdxPackageVerificationCode spdxPackageVerificationCode,
 			String supplier, String originator, String homePage) {
 		this.declaredName = declaredName;
 		this.fileName = machineName;
@@ -321,7 +321,7 @@ public class SPDXPackageInfo {
 	public String getHomePage() {
 		return this.homePage;
 	}
-	
+
 	/**
 	 * Set the home page for the project
 	 * @param homePage

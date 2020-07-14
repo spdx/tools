@@ -34,11 +34,11 @@ import org.spdx.rdfparser.model.SpdxDocument;
 /**
  * Factory for creating an SPDX Document from a variety of different sources
  * @author Gary O'Neall
- * 
+ *
  *
  */
 public class SPDXDocumentFactory {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(SPDXDocumentFactory.class.getName());
 
 	/**
@@ -48,11 +48,11 @@ public class SPDXDocumentFactory {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static SpdxDocument createSpdxDocument(Model model) throws InvalidSPDXAnalysisException {
-		
+
 		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
 		return docContainer.getSpdxDocument();
 	}
-	
+
 	/**
 	 * Create a new Legacy SPDX Document populating the data from the existing model
 	 * Legacy SPDX documents only specification version 1.2 features
@@ -64,7 +64,7 @@ public class SPDXDocumentFactory {
 	public static SPDXDocument createLegacySpdxDocument(Model model) throws InvalidSPDXAnalysisException {
 		return new SPDXDocument(model);
 	}
-	
+
 	/**
 	 * Create an Legacy SPDX Document from a file - Legacy SPDX documents only specification version 1.2 features
 	 * @param fileNameOrUrl local file name or Url containing the SPDX data.  Can be in RDF/XML or RDFa format
@@ -78,7 +78,7 @@ public class SPDXDocumentFactory {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {
 			logger.warn("Unable to load the RDFaReader Class");
-		}  
+		}
 
 		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
 		if (spdxRdfInput == null)
@@ -86,7 +86,7 @@ public class SPDXDocumentFactory {
 
 		return createLegacySpdxDocument(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
 	}
-	
+
 	/**
 	 * Create an SPDX Document from a file
 	 * @param fileNameOrUrl local file name or Url containing the SPDX data.  Can be in RDF/XML or RDFa format
@@ -99,7 +99,7 @@ public class SPDXDocumentFactory {
 			Class.forName("net.rootdev.javardfa.jena.RDFaReader");
 		} catch(java.lang.ClassNotFoundException e) {
 			logger.warn("Unable to load the RDFaReader Class");
-		}  
+		}
 
 		InputStream spdxRdfInput = FileManager.get().open(fileNameOrUrl);
 		if (spdxRdfInput == null)
@@ -107,30 +107,30 @@ public class SPDXDocumentFactory {
 
 		return createSpdxDocument(spdxRdfInput, figureBaseUri(fileNameOrUrl), fileType(fileNameOrUrl));
 	}
-	
+
 	public static SpdxDocument createSpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		model.read(input, baseUri, fileType);
 		SpdxDocumentContainer docContainer = new SpdxDocumentContainer(model);
 		return docContainer.getSpdxDocument();
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static SPDXDocument createLegacySpdxDocument(InputStream input, String baseUri, String fileType) throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
 		model.read(input, baseUri, fileType);
 		return new SPDXDocument(model);
 	}
-	
+
 	private static String figureBaseUri(String src) {
-		
+
 		URI s = null;
 		try{
 			s = new URI(src);
 		} catch(URISyntaxException e) {
 			s = null;
 		}
-			
+
 		if (s == null || s.getScheme() == null) {
 			// assume this is a file path
 			String filePath = "///" + new File(src).getAbsoluteFile().toString().replace('\\', '/');

@@ -27,16 +27,16 @@ import org.spdx.rdfparser.model.SpdxElement;
  *
  */
 public class RelationshipContext {
-	
+
 	private String relatedElementId;
 	private String comment;
 	private String type;
 	private String elementLink;
-	
+
 	public RelationshipContext() {
-		
+
 	}
-	
+
 	public RelationshipContext(Relationship relationship, Map<String, String> idToUrlMap) {
 		if (relationship == null) {
 			return;

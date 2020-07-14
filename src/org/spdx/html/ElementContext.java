@@ -31,7 +31,7 @@ public class ElementContext {
 	private String id;
 	private String elementLink;
 	String error = null;
-	
+
 	public ElementContext(InvalidSPDXAnalysisException e) {
 		this.error = e.getMessage();
 	}
@@ -70,5 +70,5 @@ public class ElementContext {
 	public void setElementLink(String elementLink) {
 		this.elementLink = elementLink;
 	}
-	
+
 }

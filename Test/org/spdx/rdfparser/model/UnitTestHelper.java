@@ -93,7 +93,7 @@ public class UnitTestHelper {
 	/**
 	 * @param filePath Path for file
 	 * @return Text from the file
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static String fileToText(String filePath) throws IOException {
 		return Files.toString(new File(filePath), Charset.forName("UTF-8"));

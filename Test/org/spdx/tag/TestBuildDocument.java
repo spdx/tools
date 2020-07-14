@@ -56,7 +56,7 @@ import com.google.common.collect.Lists;
  *
  */
 public class TestBuildDocument {
-	
+
 	// Document level
 	static final String SPDX_VERSION = "SPDX-2.1";
 	static final String SPDX_VERSION_TAG = "SPDXVersion: " + SPDX_VERSION;
@@ -68,17 +68,17 @@ public class TestBuildDocument {
 	static final String DOC_SPDXID_TAG = "SPDXID: " + DOC_SPDXID;
 	static final String DOC_COMMENT = "Test document\ncomment";
 	static final String DOC_COMMENT_TAG = "DocumentComment: <text>" + DOC_COMMENT + "</text>";
-	static final String DOC_LEVEL_TAGS = SPDX_VERSION_TAG + "\n" + 
+	static final String DOC_LEVEL_TAGS = SPDX_VERSION_TAG + "\n" +
 			DOC_NAMESPACE_TAG + "\n" + DOC_NAME_TAG + "\n" + DOC_SPDXID_TAG + "\n" +
 			DOC_COMMENT_TAG;
-	
+
 	// External document references
 	static final String EXTERNAL_DOC_REF_NAME = "DocumentRef-spdx-tool-1.2";
 	static final String EXTERNAL_DOC_REF_URI = "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301";
 	static final String EXTERNAL_DOC_REF_SHA1 = "d6a770ba38583ed4bb4525bd96e50461655d2759";
 	static final String EXTERNAL_DOC_REF_TAG = "ExternalDocumentRef: " + EXTERNAL_DOC_REF_NAME +
 			" " + EXTERNAL_DOC_REF_URI + " SHA1: " + EXTERNAL_DOC_REF_SHA1;
-	
+
 	// Creator
 	static final String CREATOR_TOOL = "Tool: LicenseFind-1.0";
 	static final String CREATOR_TOOL_TAG = "Creator: " + CREATOR_TOOL;
@@ -92,9 +92,9 @@ public class TestBuildDocument {
 			"The binaries were created with gcc 4.5.1 and expect to link to\n" +
 			"compatible system run time libraries.";
 	static final String CREATOR_COMMENT_TAG = "CreatorComment: <text>" + CREATOR_COMMENT + "</text>";
-	static final String CREATOR_TAGS = CREATOR_TOOL_TAG + "\n" + CREATOR_ORGANIZATION_TAG + "\n" + 
+	static final String CREATOR_TAGS = CREATOR_TOOL_TAG + "\n" + CREATOR_ORGANIZATION_TAG + "\n" +
 			CREATOR_PERSON_TAG + "\n" + CREATED_TAG + "\n" + CREATOR_COMMENT;
-	
+
 	// Document Annotation
 	static final String DOC_ANNOTATOR = "Person: Jane Doe ()";
 	static final String DOC_ANNOTATOR_TAG = "Annotator: " + DOC_ANNOTATOR;
@@ -105,10 +105,10 @@ public class TestBuildDocument {
 	static final String DOC_ANNOTATION_TYPE = "OTHER";
 	static final String DOC_ANNOTATION_TYPE_TAG = "AnnotationType: " + DOC_ANNOTATION_TYPE;
 	static final String DOC_ANNOTATION_SPDXID_TAG = "SPDXREF: " + DOC_SPDXID;
-	static final String DOC_ANNOTATION_TAGS = DOC_ANNOTATOR_TAG + "\n" + DOC_ANNOTATION_DATE_TAG + "\n" + 
-			DOC_ANNOTATION_COMMENT_TAG + "\n" + DOC_ANNOTATION_TYPE_TAG + "\n" + 
+	static final String DOC_ANNOTATION_TAGS = DOC_ANNOTATOR_TAG + "\n" + DOC_ANNOTATION_DATE_TAG + "\n" +
+			DOC_ANNOTATION_COMMENT_TAG + "\n" + DOC_ANNOTATION_TYPE_TAG + "\n" +
 			DOC_ANNOTATION_SPDXID_TAG;
-	
+
 	// Document Relationships
 	static final String COPY_OF_RELATIONSHIP_TYPE = "COPY_OF";
 	static final String COPY_OF_RELATIONSHIP = "DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement";
@@ -121,7 +121,7 @@ public class TestBuildDocument {
 	static final String DESCRIBES_RELATIONSHIP = PACKAGE_SPDXID;
 	static final String DESCRIBES_RELATIONSHIP_TAG = "Relationship: " + DOC_SPDXID + " " + DESCRIBES_RELATIONSHIP_TYPE + " " + DESCRIBES_RELATIONSHIP;
 	static final String DOC_RELATIONSHIP_TAGS = COPY_OF_RELATIONSHIP_TAG + "\n" + CONTAINS_RELATIONSHIP_TAG + "\n" + DESCRIBES_RELATIONSHIP_TAG;
-	
+
 	// Package
 	static final String PACKAGE_NAME = "glibc";
 	static final String PACKAGE_NAME_TAG = "PackageName: " + PACKAGE_NAME;
@@ -138,7 +138,7 @@ public class TestBuildDocument {
 	static final String PACKAGE_DOWNLOAD_LOCATION_TAG = "PackageDownloadLocation: " + PACKAGE_DOWNLOAD_LOCATION;
 	static final String PACKAGE_VERIFICATION_CODE = "d6a770ba38583ed4bb4525bd96e50461655d2758";
 	static final String PACKAGE_VERIFICATION_EXCLUDES = "(excludes: ./package.spdx)";
-	static final String PACKAGE_VERIFICATION_TAG = "PackageVerificationCode: " + PACKAGE_VERIFICATION_CODE + " " + 
+	static final String PACKAGE_VERIFICATION_TAG = "PackageVerificationCode: " + PACKAGE_VERIFICATION_CODE + " " +
 			PACKAGE_VERIFICATION_EXCLUDES;
 	static final String PACKAGE_CHECKSUM_SHA1 = "85ed0817af83a24ad8da68c2b5094de69833983c";
 	static final String PACKAGE_CHECKSUM_SHA1_TAG = "PackageChecksum: SHA1: " + PACKAGE_CHECKSUM_SHA1;
@@ -149,7 +149,7 @@ public class TestBuildDocument {
 	static final String PACKAGE_HOME_PAGE = "http://ftp.gnu.org/gnu/glibc";
 	static final String PACKAGE_HOME_PAGE_TAG = "PackageHomePage: " + PACKAGE_HOME_PAGE;
 	static final String PACKAGE_SOURCE_INFO = "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.";
-	static final String PACKAGE_SOURCE_INFO_TAG = "PackageSourceInfo: <text>" + PACKAGE_SOURCE_INFO + "</text>";	
+	static final String PACKAGE_SOURCE_INFO_TAG = "PackageSourceInfo: <text>" + PACKAGE_SOURCE_INFO + "</text>";
 	static final String LICENSE_REF1 = "LicenseRef-1";
 	static final String PACKAGE_LICENSE_CONCLUDED = "(" + LICENSE_REF1 + " OR LGPL-2.0-only)";
 	static final String PACKAGE_LICENSE_CONCLUDED_TAG = "PackageLicenseConcluded: " + PACKAGE_LICENSE_CONCLUDED;
@@ -160,7 +160,7 @@ public class TestBuildDocument {
 	static final String LICENSE_REF2 = "LicenseRef-2";
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES3 = LICENSE_REF2;
 	static final String PACKAGE_LICENSE_INFO_FROM_FILES3_TAG = "PackageLicenseInfoFromFiles: " + PACKAGE_LICENSE_INFO_FROM_FILES3;
-	static final String PACKAGE_LICENSE_INFO_FROM_FILES_TAGS = PACKAGE_LICENSE_INFO_FROM_FILES1_TAG + "\n" + 
+	static final String PACKAGE_LICENSE_INFO_FROM_FILES_TAGS = PACKAGE_LICENSE_INFO_FROM_FILES1_TAG + "\n" +
 			PACKAGE_LICENSE_INFO_FROM_FILES2_TAG + "\n" + PACKAGE_LICENSE_INFO_FROM_FILES3_TAG;
 	static final String PACKAGE_LICENSE_DECLARED = "(" + LICENSE_REF2 + " AND LGPL-2.0-only)";
 	static final String PACKAGE_LICENSE_DECLARED_TAG = "PackageLicenseDeclared: " + PACKAGE_LICENSE_DECLARED;
@@ -179,43 +179,43 @@ public class TestBuildDocument {
 	static final String EXTERNAL_REF_SECURITY_CATEGORY = "SECURITY";
 	static final String EXTERNAL_REF_SECURITY_TYPE = "cpe23Type";
 	static final String EXTERNAL_REF_SECURITY_LOCATOR = "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*";
-	static final String PACKAGE_EXTERNAL_REF_SECURITY_TAG = "ExternalRef: " + EXTERNAL_REF_SECURITY_CATEGORY + " " + 
+	static final String PACKAGE_EXTERNAL_REF_SECURITY_TAG = "ExternalRef: " + EXTERNAL_REF_SECURITY_CATEGORY + " " +
 			EXTERNAL_REF_SECURITY_TYPE + " " + EXTERNAL_REF_SECURITY_LOCATOR;
 		static final String PACKAGE_EXTERNAL_REF_SECURITY_COMMENT = "external ref comment for security";
-	static final String PACKAGE_EXTERNAL_REF_SECURITY_COMMENT_TAG = "ExternalRefComment: <text>" + 
+	static final String PACKAGE_EXTERNAL_REF_SECURITY_COMMENT_TAG = "ExternalRefComment: <text>" +
 		PACKAGE_EXTERNAL_REF_SECURITY_COMMENT + "</text>";
 	static final String PACKAGE_EXTERNAL_REF_OTHER_CATEGORY = "OTHER";
 	static final String PACKAGE_EXTERNAL_REF_OTHER_TYPE = "LocationRefacmeforge";
 	static final String PACKAGE_EXTERNAL_REF_OTHER_LOCATOR = "acmecorp/acmenator/4.1.3alpha";
-	
+
 	static final String PACKAGE_EXTERNAL_REF_OTHER_TAG = "ExternalRef: " + PACKAGE_EXTERNAL_REF_OTHER_CATEGORY +
 			" " + PACKAGE_EXTERNAL_REF_OTHER_TYPE + " " + PACKAGE_EXTERNAL_REF_OTHER_LOCATOR;
-	static final String PACKAGE_TAGS = PACKAGE_NAME_TAG + "\n" + PACKAGE_SPDXID_TAG + "\n" + 
-			PACKAGE_VERSION_TAG + "\n" + PACKAGE_FILENAME_TAG + "\n" + 
-			PACKAGE_SUPPLIER_TAG + "\n" + PACKAGE_ORIGINATOR_TAG + "\n" + 
-			PACKAGE_DOWNLOAD_LOCATION_TAG + "\n" + PACKAGE_VERIFICATION_TAG + "\n" + 
-			PACKAGE_CHECKSUM_SHA1_TAG + "\n" + PACKAGE_CHECKSUM_SHA256_TAG + "\n" + 
-			PACKAGE_CHECKSUM_MD5_TAG + "\n" + PACKAGE_HOME_PAGE_TAG + "\n" + 
-			PACKAGE_SOURCE_INFO_TAG + "\n" + PACKAGE_LICENSE_CONCLUDED_TAG + "\n" + 
-			PACKAGE_LICENSE_INFO_FROM_FILES_TAGS + "\n" + PACKAGE_LICENSE_DECLARED_TAG + "\n" + 
-			PACKAGE_LICENSE_COMMENT_TAG + "\n" + PACKAGE_COPYRIGHT_TAG + "\n" + 
+	static final String PACKAGE_TAGS = PACKAGE_NAME_TAG + "\n" + PACKAGE_SPDXID_TAG + "\n" +
+			PACKAGE_VERSION_TAG + "\n" + PACKAGE_FILENAME_TAG + "\n" +
+			PACKAGE_SUPPLIER_TAG + "\n" + PACKAGE_ORIGINATOR_TAG + "\n" +
+			PACKAGE_DOWNLOAD_LOCATION_TAG + "\n" + PACKAGE_VERIFICATION_TAG + "\n" +
+			PACKAGE_CHECKSUM_SHA1_TAG + "\n" + PACKAGE_CHECKSUM_SHA256_TAG + "\n" +
+			PACKAGE_CHECKSUM_MD5_TAG + "\n" + PACKAGE_HOME_PAGE_TAG + "\n" +
+			PACKAGE_SOURCE_INFO_TAG + "\n" + PACKAGE_LICENSE_CONCLUDED_TAG + "\n" +
+			PACKAGE_LICENSE_INFO_FROM_FILES_TAGS + "\n" + PACKAGE_LICENSE_DECLARED_TAG + "\n" +
+			PACKAGE_LICENSE_COMMENT_TAG + "\n" + PACKAGE_COPYRIGHT_TAG + "\n" +
 			PACKAGE_SUMMARY_TAG + "\n" + PACKAGE_DESCRIPTION_TAG + "\n" +
 			PACKAGE_EXTERNAL_REF_SECURITY_TAG + "\n" + PACKAGE_EXTERNAL_REF_SECURITY_COMMENT_TAG + "\n" +
 			PACKAGE_EXTERNAL_REF_OTHER_TAG;
 	static final String PACKAGE_NO_FILES_TAG = "FilesAnalyzed: false";
-	static final String PACKAGE_TAGS_NO_FILES = PACKAGE_NAME_TAG + "\n" + PACKAGE_SPDXID_TAG + "\n" + 
-			PACKAGE_VERSION_TAG + "\n" + PACKAGE_FILENAME_TAG + "\n" + 
-			PACKAGE_SUPPLIER_TAG + "\n" + PACKAGE_ORIGINATOR_TAG + "\n" + 
-			PACKAGE_DOWNLOAD_LOCATION_TAG + "\n" + 
-			PACKAGE_CHECKSUM_SHA1_TAG + "\n" + PACKAGE_CHECKSUM_SHA256_TAG + "\n" + 
-			PACKAGE_CHECKSUM_MD5_TAG + "\n" + PACKAGE_HOME_PAGE_TAG + "\n" + 
-			PACKAGE_SOURCE_INFO_TAG + "\n" + PACKAGE_LICENSE_CONCLUDED_TAG + "\n" + 
-			PACKAGE_LICENSE_INFO_FROM_FILES_TAGS + "\n" + PACKAGE_LICENSE_DECLARED_TAG + "\n" + 
-			PACKAGE_LICENSE_COMMENT_TAG + "\n" + PACKAGE_COPYRIGHT_TAG + "\n" + 
+	static final String PACKAGE_TAGS_NO_FILES = PACKAGE_NAME_TAG + "\n" + PACKAGE_SPDXID_TAG + "\n" +
+			PACKAGE_VERSION_TAG + "\n" + PACKAGE_FILENAME_TAG + "\n" +
+			PACKAGE_SUPPLIER_TAG + "\n" + PACKAGE_ORIGINATOR_TAG + "\n" +
+			PACKAGE_DOWNLOAD_LOCATION_TAG + "\n" +
+			PACKAGE_CHECKSUM_SHA1_TAG + "\n" + PACKAGE_CHECKSUM_SHA256_TAG + "\n" +
+			PACKAGE_CHECKSUM_MD5_TAG + "\n" + PACKAGE_HOME_PAGE_TAG + "\n" +
+			PACKAGE_SOURCE_INFO_TAG + "\n" + PACKAGE_LICENSE_CONCLUDED_TAG + "\n" +
+			PACKAGE_LICENSE_INFO_FROM_FILES_TAGS + "\n" + PACKAGE_LICENSE_DECLARED_TAG + "\n" +
+			PACKAGE_LICENSE_COMMENT_TAG + "\n" + PACKAGE_COPYRIGHT_TAG + "\n" +
 			PACKAGE_SUMMARY_TAG + "\n" + PACKAGE_DESCRIPTION_TAG + "\n" +
 			PACKAGE_EXTERNAL_REF_SECURITY_TAG + "\n" + PACKAGE_EXTERNAL_REF_SECURITY_COMMENT_TAG + "\n" +
 			PACKAGE_EXTERNAL_REF_OTHER_TAG + "\n" + PACKAGE_NO_FILES_TAG;
-	
+
 	// File lib-source
 	static final String FILE_LIB_FILENAME = "./lib-source/commons-lang3-3.1-sources.jar";
 	static final String FILE_LIB_FILENAME_TAG = "FileName: " + FILE_LIB_FILENAME;
@@ -235,31 +235,31 @@ public class TestBuildDocument {
 	static final String FILE_LIB_LICENSE_COMMENT_TAG = "LicenseComments: " + FILE_LIB_LICENSE_COMMENT;
 	static final String FILE_LIB_COPYRIGHT = "Copyright 2001-2011 The Apache Software Foundation";
 	static final String FILE_LIB_COPYRIGHT_TAG = "FileCopyrightText: <text>" + FILE_LIB_COPYRIGHT + "</text>";
-	static final String FILE_LIB_NOTICE = "Apache Commons Lang\n" + 
+	static final String FILE_LIB_NOTICE = "Apache Commons Lang\n" +
 			"Copyright 2001-2011 The Apache Software Foundation";
 	static final String FILE_LIB_NOTICE_TAG = "FileNotice: <text>" + FILE_LIB_NOTICE + "</text>";
-	static final String FILE_LIB_TAGS = FILE_LIB_FILENAME_TAG + "\n" + FILE_LIB_SPDXID_TAG + "\n" + 
-			FILE_LIB_COMMENT_TAG + "\n" + FILE_LIB_FILE_TYPE_TAG + "\n" + FILE_LIB_CHECKSUM_TAG + "\n" + 
-			FILE_LIB_LICENSE_CONCLUDED_TAG + "\n" + FILE_LIB_LICENSE_INFO_TAG + "\n" + 
+	static final String FILE_LIB_TAGS = FILE_LIB_FILENAME_TAG + "\n" + FILE_LIB_SPDXID_TAG + "\n" +
+			FILE_LIB_COMMENT_TAG + "\n" + FILE_LIB_FILE_TYPE_TAG + "\n" + FILE_LIB_CHECKSUM_TAG + "\n" +
+			FILE_LIB_LICENSE_CONCLUDED_TAG + "\n" + FILE_LIB_LICENSE_INFO_TAG + "\n" +
 			FILE_LIB_LICENSE_COMMENT_TAG + "\n" + FILE_LIB_COPYRIGHT_TAG + "\n" + FILE_LIB_NOTICE_TAG;
-	
+
 	// Snippet libSnippet
 	static final String SNIPPET_LIB_ID = "SPDXRef-Snippet";
 	static final String SNIPPET_LIB_ID_TAG = "SnippetSPDXID: ";
 	static final String SNIPPET_LIB_FROM_FILE_TAG = "SnippetFromFileSPDXID: " + FILE_LIB_SPDXID;
 	static final int SNIPPET_LIB_BYTE_START = 310;
 	static final int SNIPPET_LIB_BYTE_END = 420;
-	static final String SNIPPET_LIB_BYTE_RANGE_TAG = "SnippetByteRange: " + String.valueOf(SNIPPET_LIB_BYTE_START) + ":" + 
+	static final String SNIPPET_LIB_BYTE_RANGE_TAG = "SnippetByteRange: " + String.valueOf(SNIPPET_LIB_BYTE_START) + ":" +
 			String.valueOf(SNIPPET_LIB_BYTE_END);
 	static final int SNIPPET_LIB_LINE_START = 5;
 	static final int SNIPPET_LIB_LINE_END = 23;
-	static final String SNIPPET_LIB_LINE_RANGE_TAG = "SnippetLineRange: " + String.valueOf(SNIPPET_LIB_LINE_START) + ":" + 
+	static final String SNIPPET_LIB_LINE_RANGE_TAG = "SnippetLineRange: " + String.valueOf(SNIPPET_LIB_LINE_START) + ":" +
 			String.valueOf(SNIPPET_LIB_LINE_END);
 	static final String SNIPPET_LIB_CONCLUDED_LICENSE = "GPL-2.0-only";
 	static final String SNIPPET_LIB_CONCLUDED_LICENSE_TAG = "SnippetLicenseConcluded: " +
 			SNIPPET_LIB_CONCLUDED_LICENSE;
 	static final String SNIPPET_LIB_LICENSE_COMMENT = "Comment on snippet license";
-	static final String SNIPPET_LIB_LICENSE_COMMENT_TAG = "SnippetLicenseComments: " + 
+	static final String SNIPPET_LIB_LICENSE_COMMENT_TAG = "SnippetLicenseComments: " +
 			SNIPPET_LIB_LICENSE_COMMENT;
 	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET = "LGPL-2.0-only";
 	static final String SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET_TAG = "LicenseInfoInSnippet: " +
@@ -276,7 +276,7 @@ public class TestBuildDocument {
 			SNIPPET_LIB_BYTE_RANGE_TAG + "\n" + SNIPPET_LIB_LINE_RANGE_TAG + "\n" + SNIPPET_LIB_CONCLUDED_LICENSE_TAG + "\n" +
 			SNIPPET_LIB_LICENSE_COMMENT_TAG + "\n" + SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET_TAG + "\n" +
 			SNIPPET_LIB_COPYRIGHT_TAG + "\n" + SNIPPET_LIB_COMMENT_TAG + "\n" + SNIPPET_LIB_NAME_TAG;
-	
+
 	// License Ref 1
 	static final String LICENSE_REF1_LICENSEID_TAG = "LicenseID: " + LICENSE_REF1;
 	static final String LICENSE_REF1_EXTRACTED_TEXT = "/*\n" +
@@ -284,21 +284,21 @@ public class TestBuildDocument {
 			"* All rights reserved.";
 	static final String LICENSE_REF1_EXTRACTED_TEXT_TAG = "ExtractedText: <text>" + LICENSE_REF1_EXTRACTED_TEXT + "</text>";
 	static final String LICENSE_REF1_TAGS = LICENSE_REF1_LICENSEID_TAG + "\n" + LICENSE_REF1_EXTRACTED_TEXT_TAG;
-	
+
 	// License Ref 2
 		static final String LICENSE_REF2_LICENSEID_TAG = "LicenseID: " + LICENSE_REF2;
 		static final String LICENSE_REF2_EXTRACTED_TEXT = "/*This package includes the GRDDL parser developed by Hewlett Pa";
 		static final String LICENSE_REF2_EXTRACTED_TEXT_TAG = "ExtractedText: <text>" + LICENSE_REF2_EXTRACTED_TEXT + "</text>";
 		static final String LICENSE_REF2_TAGS = LICENSE_REF2_LICENSEID_TAG + "\n" + LICENSE_REF2_EXTRACTED_TEXT_TAG;
 
-	String SIMPLE_TAGDOCUMENT = DOC_LEVEL_TAGS + "\n" + EXTERNAL_DOC_REF_TAG + "\n" + 
-			CREATOR_TAGS + "\n" + DOC_ANNOTATION_TAGS + "\n" + DOC_RELATIONSHIP_TAGS + "\n" + 
+	String SIMPLE_TAGDOCUMENT = DOC_LEVEL_TAGS + "\n" + EXTERNAL_DOC_REF_TAG + "\n" +
+			CREATOR_TAGS + "\n" + DOC_ANNOTATION_TAGS + "\n" + DOC_RELATIONSHIP_TAGS + "\n" +
 			PACKAGE_TAGS + "\n" + FILE_LIB_TAGS + "\n" + SNIPPET_LIB_TAGS + "\n" +
 			LICENSE_REF1_TAGS + "\n" + LICENSE_REF2_TAGS;
-	
-	String TAGDOCUMENT_NO_FILES = DOC_LEVEL_TAGS + "\n" + EXTERNAL_DOC_REF_TAG + "\n" + 
-			CREATOR_TAGS + "\n" + DOC_ANNOTATION_TAGS + "\n" + DOC_RELATIONSHIP_TAGS + "\n" + 
-			PACKAGE_TAGS_NO_FILES + "\n" + LICENSE_REF1_TAGS + "\n" + 
+
+	String TAGDOCUMENT_NO_FILES = DOC_LEVEL_TAGS + "\n" + EXTERNAL_DOC_REF_TAG + "\n" +
+			CREATOR_TAGS + "\n" + DOC_ANNOTATION_TAGS + "\n" + DOC_RELATIONSHIP_TAGS + "\n" +
+			PACKAGE_TAGS_NO_FILES + "\n" + LICENSE_REF1_TAGS + "\n" +
 			LICENSE_REF2_TAGS;
 
 	/**
@@ -327,7 +327,7 @@ public class TestBuildDocument {
 		assertEquals(0, warnings.size());
 		assertEquals(0, result[0].getSpdxDocument().verify().size());
 	}
-	
+
 	@Test public void testExternalRefs() throws Exception {
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
 		HandBuiltParser parser = new HandBuiltParser(new NoCommentInputStream(bais));
@@ -349,8 +349,8 @@ public class TestBuildDocument {
 		ExternalRef[] expected = new ExternalRef[] {securityRef, otherRef};
 		assertTrue(UnitTestHelper.isArraysEquivalent(expected, refs));
 	}
-	
-	@Test 
+
+	@Test
 	public void testNoFilesAnalyzedFiles()  throws Exception {
 		InputStream bais = new ByteArrayInputStream(TAGDOCUMENT_NO_FILES.getBytes());
 		HandBuiltParser parser = new HandBuiltParser(new NoCommentInputStream(bais));
@@ -365,8 +365,8 @@ public class TestBuildDocument {
 		SpdxPackage pkg = (SpdxPackage)doc.getDocumentDescribes()[0];
 		assertFalse(pkg.isFilesAnalyzed());
 	}
-	
-	@Test 
+
+	@Test
 	public void testFile()  throws Exception {
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
 		HandBuiltParser parser = new HandBuiltParser(new NoCommentInputStream(bais));
@@ -377,19 +377,19 @@ public class TestBuildDocument {
 		parser.data();
 		List<SpdxFile> files = result[0].findAllFiles();
 		assertEquals(1, files.size());
-		SpdxFile expected = new SpdxFile(FILE_LIB_FILENAME, FILE_LIB_COMMENT, 
+		SpdxFile expected = new SpdxFile(FILE_LIB_FILENAME, FILE_LIB_COMMENT,
 				new Annotation[0], new Relationship[0], LicenseInfoFactory.parseSPDXLicenseString(FILE_LIB_LICENSE_CONCLUDED, result[0]),
 				new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(FILE_LIB_LICENSE_INFO, result[0])},
-				FILE_LIB_COPYRIGHT, FILE_LIB_LICENSE_COMMENT, 
-				new FileType[] {FileType.fromTag(FILE_LIB_FILE_TYPE)}, 
+				FILE_LIB_COPYRIGHT, FILE_LIB_LICENSE_COMMENT,
+				new FileType[] {FileType.fromTag(FILE_LIB_FILE_TYPE)},
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, FILE_LIB_CHECKSUM)},
 				new String[0], FILE_LIB_NOTICE, new DoapProject[0]);
 		assertTrue(expected.equivalent(files.get(0)));
 	}
-	
-	@Test 
+
+	@Test
 	public void testSnippet()  throws Exception {
-		
+
 		InputStream bais = new ByteArrayInputStream(SIMPLE_TAGDOCUMENT.getBytes());
 		HandBuiltParser parser = new HandBuiltParser(new NoCommentInputStream(bais));
 		List<String> warnings = Lists.newArrayList();
@@ -399,18 +399,18 @@ public class TestBuildDocument {
 		parser.data();
 		List<SpdxSnippet> snippets = result[0].findAllSnippets();
 		assertEquals(1, snippets.size());
-		SpdxFile snippetFromFile = new SpdxFile(FILE_LIB_FILENAME, FILE_LIB_COMMENT, 
+		SpdxFile snippetFromFile = new SpdxFile(FILE_LIB_FILENAME, FILE_LIB_COMMENT,
 				new Annotation[0], new Relationship[0], LicenseInfoFactory.parseSPDXLicenseString(FILE_LIB_LICENSE_CONCLUDED, result[0]),
 				new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(FILE_LIB_LICENSE_INFO, result[0])},
-				FILE_LIB_COPYRIGHT, FILE_LIB_LICENSE_COMMENT, 
-				new FileType[] {FileType.fromTag(FILE_LIB_FILE_TYPE)}, 
+				FILE_LIB_COPYRIGHT, FILE_LIB_LICENSE_COMMENT,
+				new FileType[] {FileType.fromTag(FILE_LIB_FILE_TYPE)},
 				new Checksum[] {new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, FILE_LIB_CHECKSUM)},
 				new String[0], FILE_LIB_NOTICE, new DoapProject[0]);
-		StartEndPointer byteRange = new StartEndPointer(new ByteOffsetPointer(snippetFromFile, SNIPPET_LIB_BYTE_START), 
+		StartEndPointer byteRange = new StartEndPointer(new ByteOffsetPointer(snippetFromFile, SNIPPET_LIB_BYTE_START),
 					new ByteOffsetPointer(snippetFromFile, SNIPPET_LIB_BYTE_END));
-		StartEndPointer lineRange = new StartEndPointer(new LineCharPointer(snippetFromFile, SNIPPET_LIB_LINE_START), 
+		StartEndPointer lineRange = new StartEndPointer(new LineCharPointer(snippetFromFile, SNIPPET_LIB_LINE_START),
 				new LineCharPointer(snippetFromFile, SNIPPET_LIB_LINE_END));
-		SpdxSnippet expected = new SpdxSnippet(SNIPPET_LIB_NAME, SNIPPET_LIB_COMMENT, 
+		SpdxSnippet expected = new SpdxSnippet(SNIPPET_LIB_NAME, SNIPPET_LIB_COMMENT,
 				new Annotation[0], new Relationship[0], LicenseInfoFactory.parseSPDXLicenseString(SNIPPET_LIB_CONCLUDED_LICENSE, result[0]),
 				new AnyLicenseInfo[] {LicenseInfoFactory.parseSPDXLicenseString(SNIPPET_LIB_LICENSE_INFO_IN_SNIPPET, result[0])},
 				SNIPPET_LIB_COPYRIGHT, SNIPPET_LIB_LICENSE_COMMENT, snippetFromFile, byteRange,

@@ -24,9 +24,9 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 @Deprecated
 /**
  * This class is provided for backwards compatibility.
- * 
+ *
  * The class org.spdx.rdfparser.license.LicenseInfoFactory should be used.
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -38,7 +38,7 @@ public class SPDXLicenseInfoFactory {
 	public static String getLicenseListVersion() {
 		return LicenseInfoFactory.getLicenseListVersion();
 	}
-	
+
 	/**
 	 * This function has been replaced by LicenseInfoFactory.getListedLicenseById(licenseId)
 	 */
@@ -46,15 +46,15 @@ public class SPDXLicenseInfoFactory {
 	public static SpdxListedLicense getStandardLicenseById(String licenseId) throws InvalidSPDXAnalysisException {
 		return LicenseInfoFactory.getListedLicenseById(licenseId);
 	}
-	
+
 	/**
 	 * This function has been replaced by LicenseInfoFactory.getSpdxListedLicenseIds()
 	 */
-	@Deprecated 
+	@Deprecated
 	public static String[] getStandardLicenseIds() {
 		return LicenseInfoFactory.getSpdxListedLicenseIds();
 	}
-	
+
 	/**
 	 * This function has been replaced by LicenseInfoFactory.isSpdxListedLicenseID(licenseId)
 	 */
@@ -62,7 +62,7 @@ public class SPDXLicenseInfoFactory {
 	public static boolean isStandardLicenseId(String licenseId) {
 		return LicenseInfoFactory.isSpdxListedLicenseID(licenseId);
 	}
-	
+
 	/**
 	 * This function has been replaced by LicenseInfoFactory.parseSPDXLicenseString(String licenseString)
 	 */
@@ -70,6 +70,6 @@ public class SPDXLicenseInfoFactory {
 	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
 		return LicenseInfoFactory.parseSPDXLicenseString(licenseString);
 	}
-	
+
 
 }

@@ -32,7 +32,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
  *
  */
 public class TestReferenceType {
-	
+
 	static final String REFERENCE_TYPE_TEST_URL1 = SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "cpe22Type";
 	static final String REFERENCE_TYPE_TEST_URL2 = SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + "maven";
 
@@ -52,8 +52,8 @@ public class TestReferenceType {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.referencetype.ReferenceType#setReferenceTypeUri(java.net.URI)}.
-	 * @throws URISyntaxException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws URISyntaxException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetReferenceTypeUri() throws InvalidSPDXAnalysisException, URISyntaxException {
@@ -64,7 +64,7 @@ public class TestReferenceType {
 		ref.setReferenceTypeUri(uri2);
 		assertEquals(uri2, ref.getReferenceTypeUri());
 	}
-	
+
 	@Test
 	public void testCompare() throws InvalidSPDXAnalysisException, URISyntaxException {
 		URI uri1 = new URI(REFERENCE_TYPE_TEST_URL1);
@@ -76,7 +76,7 @@ public class TestReferenceType {
 		assertTrue(ref1.compareTo(ref2) < 0);
 		assertTrue(ref2.compareTo(ref1) > 0);
 	}
-	
+
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException, URISyntaxException {
 		URI uri1 = new URI(REFERENCE_TYPE_TEST_URL1);

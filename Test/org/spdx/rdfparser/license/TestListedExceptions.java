@@ -10,7 +10,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
  *         SPDX-License-Identifier: Apache-2.0
  */
 public class TestListedExceptions {
-	
+
 	@Test
 	public void testGetListedExceptionById() throws InvalidSPDXAnalysisException {
 		ListedExceptions.resetListedExceptions();
@@ -19,7 +19,7 @@ public class TestListedExceptions {
 		ListedLicenseException result = ListedExceptions.getListedExceptions().getListedExceptionById(id);
 		assertEquals(id, result.getLicenseExceptionId());
 	}
-	
+
 	@Test
 	public void testGetLicenseIbyIdLocal() throws InvalidSPDXAnalysisException {
 		System.setProperty("SPDXParser.OnlyUseLocalLicenses", "true");

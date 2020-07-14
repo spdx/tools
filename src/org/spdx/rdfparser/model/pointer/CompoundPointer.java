@@ -37,11 +37,11 @@ import org.apache.jena.graph.Node;
  *
  */
 public abstract class CompoundPointer extends RdfModelObject {
-	
+
 	static final Logger logger=LoggerFactory.getLogger(CompoundPointer.class);
-	
+
 	protected SinglePointer startPointer;
-	
+
 	/**
 	 * Create a compoundpointer from an existing RDF node
 	 * @param modelContainer
@@ -52,7 +52,7 @@ public abstract class CompoundPointer extends RdfModelObject {
 		super(modelContainer, node);
 		getPropertiesFromModel();
 	}
-	
+
 	/**
 	 * Create a compound pointer without an RDF model
 	 * @param startPointer
@@ -60,7 +60,7 @@ public abstract class CompoundPointer extends RdfModelObject {
 	public CompoundPointer(SinglePointer startPointer) {
 		this.startPointer = startPointer;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -74,7 +74,7 @@ public abstract class CompoundPointer extends RdfModelObject {
 		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, SpdxRdfConstants.PROP_POINTER_START_POINTER,
 				this.startPointer);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
@@ -91,7 +91,7 @@ public abstract class CompoundPointer extends RdfModelObject {
 
 	/**
 	 * @return the startPointer
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SinglePointer getStartPointer() throws InvalidSPDXAnalysisException {
 		if (model != null && this.refreshOnGet) {
@@ -102,7 +102,7 @@ public abstract class CompoundPointer extends RdfModelObject {
 
 	/**
 	 * @param startPointer the startPointer to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setStartPointer(SinglePointer startPointer) throws InvalidSPDXAnalysisException {
 		this.startPointer = startPointer;

@@ -33,12 +33,12 @@ import org.apache.jena.rdf.model.ResourceFactory;
 public final class RdfModelHelper {
 
 	/**
-	 * 
+	 *
 	 */
 	private RdfModelHelper() {
 		// This is a static class, it should not be instantiated
 	}
-	
+
 	/**
 	 * Compares 2 arrays to see if thier content is the same independent of
 	 * order and considering nulls
@@ -74,7 +74,7 @@ public final class RdfModelHelper {
 	}
 
 	/**
-	 * Strings are considered equivalent if they are equal, 
+	 * Strings are considered equivalent if they are equal,
 	 * or if they are null and/or empty (null and empty strings are considered equivalent)
 	 * linefeeds are also normalized (e.g. \r\n is the same as \r)
 	 * @param s1
@@ -96,7 +96,7 @@ public final class RdfModelHelper {
 			return s1norm.equals(s2norm);
 		}
 	}
-	
+
 	/**
 	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
 	 * order and considering nulls
@@ -132,7 +132,7 @@ public final class RdfModelHelper {
 		return true;
 	}
 
-	
+
 	/**
 	 * Compares the properties of two RdfModelObjects considering possible null values
 	 * @param o1
@@ -154,7 +154,7 @@ public final class RdfModelHelper {
 	 * @param modelContainer
 	 * @param uri
 	 * @return Any duplicate resource found.  Null if no duplicate resource was found.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Resource findDuplicateResource(
 			IModelContainer modelContainer, String uri) {

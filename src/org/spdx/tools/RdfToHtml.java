@@ -68,9 +68,9 @@ import com.google.common.collect.Maps;
  * PackageHTMLTemplate.html - Package level HTML file template
  * FilesHTMLTemplate.html - File level information HTML file template
  * LicensesHTMLTemplate.html - Extracted license information HTML file template
- * 
+ *
  * The template uses Mustache - see http://mustache.github.com/mustache.5.html
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -152,13 +152,13 @@ public class RdfToHtml {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param args
 	 *            args[0] is the RDF file to be converted, args[1] is the result
 	 *            HTML file name
 	 * @throws OnlineToolException
 	 *             Exception caught by JPype and displayed to the user
-	 * 
+	 *
 	 */
 	public static List<String> onlineFunction(String[] args) throws OnlineToolException {
 		if (templateRootPath == null) {
@@ -385,7 +385,7 @@ public class RdfToHtml {
 
 	/**
 	 * Builds a map of SPDX Ids and License IDs to URL's used in the document
-	 * 
+	 *
 	 * @param doc
 	 * @param dirPath
 	 * @return

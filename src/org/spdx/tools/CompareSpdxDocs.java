@@ -64,7 +64,7 @@ import antlr.RecognitionException;
  * Usage: CompareSpdxDoc doc1 doc2 [output]
  * where doc1 and doc2 are two SPDX documents in either RDF/XML  or tag/value format
  * and [output] is an optional SPDX document
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -78,7 +78,7 @@ public class CompareSpdxDocs {
 
 	/**
 	 * @param args CompareFile1, CompareFile2, optional output file
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length < MIN_ARGS) {
@@ -189,7 +189,7 @@ public class CompareSpdxDocs {
 		}
 		System.exit(0);
 	}
-	
+
 	/**
 	 * Converts a file path or URL to a shorter document name
 	 * @param docPath
@@ -223,13 +223,13 @@ public class CompareSpdxDocs {
 
 	/**
 	 * @param comparer
-	 * @param spdxDoc2 
-	 * @param spdxDoc1 
+	 * @param spdxDoc2
+	 * @param spdxDoc1
 	 * @param output
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
 	 */
-	private static void printCompareResults(SpdxComparer comparer, String doc1Name, 
+	private static void printCompareResults(SpdxComparer comparer, String doc1Name,
 			String doc2Name, SpdxDocument spdxDoc1, SpdxDocument spdxDoc2, PrintStream output) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		output.println("Comparing SPDX Documents: "+doc1Name+
 				" and "+doc2Name);
@@ -325,7 +325,7 @@ public class CompareSpdxDocs {
 		// other license information
 		printExtractedLicenseCompareResults(comparer, doc1Name, doc2Name, output);
 		// reviewer
-		printReviewerCompareResults(comparer, doc1Name, doc2Name, output);		
+		printReviewerCompareResults(comparer, doc1Name, doc2Name, output);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class CompareSpdxDocs {
 	/**
 	 * @param externalDocumentRef
 	 * @param output
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printExternalDocumentRef(
 			ExternalDocumentRef externalDocumentRef, PrintStream output) throws InvalidSPDXAnalysisException {
@@ -375,7 +375,7 @@ public class CompareSpdxDocs {
 	 * @param doc1Name
 	 * @param doc2Name
 	 * @param output
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private static void printFileCompareResults(SpdxComparer comparer,
 			String doc1Name, String doc2Name, PrintStream output) throws SpdxCompareException {
@@ -444,7 +444,7 @@ public class CompareSpdxDocs {
 				for (int i = 0; i < uniqueB.length; i++) {
 					printChecksum(uniqueB[i], output);
 				}
-			}		
+			}
 		}
 		if (!spdxFileDifference.isTypeEqual()) {
 			output.println("File types differ for file "+spdxFileDifference.getFileName()+":");
@@ -455,14 +455,14 @@ public class CompareSpdxDocs {
 			output.println("File contributors differ for file "+spdxFileDifference.getFileName()+":");
 			output.println("\t"+doc1Name+":"+spdxFileDifference.getContributorsAAsString());
 			output.println("\t"+doc2Name+":"+spdxFileDifference.getContributorsBAsString());
-		}		
+		}
 		if (!spdxFileDifference.isFileDependenciesEqual()) {
 			output.println("File contributors differ for file "+spdxFileDifference.getFileName()+":");
 			output.println("\t"+doc1Name+"dependencies:"+spdxFileDifference.getFileDependenciesAAsString());
 			output.println("\t"+doc2Name+":"+spdxFileDifference.getFileDependenciesBAsString());
-		}	
+		}
 		if (!spdxFileDifference.isSeenLicensesEquals()) {
-			if (spdxFileDifference.getUniqueSeenLicensesA() != null && 
+			if (spdxFileDifference.getUniqueSeenLicensesA() != null &&
 					spdxFileDifference.getUniqueSeenLicensesA().length > 0) {
 				output.println("The following license information was only found in "+
 						doc1Name+" for file "+spdxFileDifference.getFileName());
@@ -470,7 +470,7 @@ public class CompareSpdxDocs {
 					output.println("\t"+spdxFileDifference.getUniqueSeenLicensesA()[i].toString());
 				}
 			}
-			if (spdxFileDifference.getUniqueSeenLicensesB() != null && 
+			if (spdxFileDifference.getUniqueSeenLicensesB() != null &&
 					spdxFileDifference.getUniqueSeenLicensesB().length > 0) {
 				output.println("The following license information was only found in "+
 						doc2Name+" for file "+spdxFileDifference.getFileName());
@@ -480,7 +480,7 @@ public class CompareSpdxDocs {
 			}
 		}
 		if (!spdxFileDifference.isArtifactOfsEquals()) {
-			if (spdxFileDifference.getUniqueArtifactOfA() != null && 
+			if (spdxFileDifference.getUniqueArtifactOfA() != null &&
 					spdxFileDifference.getUniqueArtifactOfA().length > 0) {
 				output.println("The following artifactOf information was only found in "+
 						doc1Name+" for file "+spdxFileDifference.getFileName());
@@ -488,7 +488,7 @@ public class CompareSpdxDocs {
 					printDoapProject(spdxFileDifference.getUniqueArtifactOfA()[i], output);
 				}
 			}
-			if (spdxFileDifference.getUniqueArtifactOfB() != null && 
+			if (spdxFileDifference.getUniqueArtifactOfB() != null &&
 					spdxFileDifference.getUniqueArtifactOfB().length > 0) {
 				output.println("The following artifactOf information was only found in "+
 						doc2Name+" for file "+spdxFileDifference.getFileName());
@@ -608,8 +608,8 @@ public class CompareSpdxDocs {
 				for (int i = 0; i < inDoc2notInDoc1.length; i++) {
 					printReviewer(inDoc2notInDoc1[i], output);
 				}
-			}  
-			SPDXReviewDifference[] differentReviewerInfo = comparer.getReviewerDifferences(0, 1); 
+			}
+			SPDXReviewDifference[] differentReviewerInfo = comparer.getReviewerDifferences(0, 1);
 			for (int i = 0; i < differentReviewerInfo.length; i++) {
 				// Review date
 				if (!differentReviewerInfo[i].isDateEqual()) {
@@ -645,7 +645,7 @@ public class CompareSpdxDocs {
 	/**
 	 * @param comparer
 	 * @param output
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private static void printExtractedLicenseCompareResults(
 			SpdxComparer comparer, String doc1Name, String doc2Name, PrintStream output) throws SpdxCompareException {
@@ -668,14 +668,14 @@ public class CompareSpdxDocs {
 			for (int i = 0; i < differentLicenses.length; i++) {
 				if (!differentLicenses[i].isCommentsEqual()) {
 					output.println("The comments differ for the extracted license:");
-					
+
 					if (differentLicenses[i].getCommentA() == null || differentLicenses[i].getCommentA().length() == 0) {
 						output.println("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+": [no comment]");
 					} else {
 						output.print("\tId "+differentLicenses[i].getIdA()+" in "+doc1Name+": ");
 						output.println("\""+differentLicenses[i].getCommentA()+"\"");
 					}
-					
+
 					if (differentLicenses[i].getCommentB() == null || differentLicenses[i].getCommentB().length() == 0) {
 						output.println("\tId "+differentLicenses[i].getIdB()+" in "+doc2Name+": [no comment]");
 					} else {
@@ -748,8 +748,8 @@ public class CompareSpdxDocs {
 	/**
 	 * @param comparer
 	 * @param output
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printPackageCompareResults(SpdxComparer comparer,
 			String doc1Name, String doc2Name, SpdxDocument spdxDoc1, SpdxDocument spdxDoc2,
@@ -782,8 +782,8 @@ public class CompareSpdxDocs {
 	 * @param doc1Name
 	 * @param doc2Name
 	 * @param output
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printPackageDifference(
 			SpdxPackageComparer spdxPackageComparer, String doc1Name,
@@ -877,7 +877,7 @@ public class CompareSpdxDocs {
 				for (int i = 0; i < uniqueB.length; i++) {
 					printChecksum(uniqueB[i], output);
 				}
-			}		
+			}
 
 		}
 		// source information
@@ -922,7 +922,7 @@ public class CompareSpdxDocs {
 			if (fromFiles2 != null && fromFiles2.length > 0) {
 				sb.append(Joiner.on(", ").skipNulls().join(fromFiles2));
 			}
-			
+
 			output.println("\t"+doc2Name+": "+sb.toString());
 		}
 		// comments on license
@@ -1046,7 +1046,7 @@ public class CompareSpdxDocs {
 	private static void printVerificationCode(
 			SpdxPackageVerificationCode verificationCode, String docName, PrintStream output) {
 		output.println("Verification code value for "+docName+ ": "+verificationCode.getValue());
-		if (verificationCode.getExcludedFileNames() != null && 
+		if (verificationCode.getExcludedFileNames() != null &&
 				verificationCode.getExcludedFileNames().length > 0) {
 			output.println("The following files were excluded from the verification code for "+docName+":");
 			for (int i = 0; i < verificationCode.getExcludedFileNames().length; i++) {
@@ -1060,8 +1060,8 @@ public class CompareSpdxDocs {
 	 * @param doc1Name
 	 * @param doc2Name
 	 * @param output
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printCreatorCompareResults(SpdxComparer comparer,
 			String doc1Name, String doc2Name, PrintStream output) throws SpdxCompareException, InvalidSPDXAnalysisException {
@@ -1190,7 +1190,7 @@ public class CompareSpdxDocs {
 			in = new FileInputStream(tagValueFile);
 			SpdxDocument result = TagToRDF.convertTagFileToRdf(in, TagToRDF.DEFAULT_OUTPUT_FORMAT, warnings).getSpdxDocument();
 			return result;
-		} 
+		}
 		catch (InvalidSpdxTagFileException e){
 			// error in tag value file
 			throw(new SpdxCompareException(e.getMessage(),e));
@@ -1213,11 +1213,11 @@ public class CompareSpdxDocs {
 		}
 	}
 
-	private static void usage() {		
+	private static void usage() {
 		System.out.println("Usage: CompareSpdxDoc doc1 doc2 [output]");
 		System.out.println("where doc1 and doc2 are file names of valid SPDX documents ");
 		System.out.println("in either tag/value or RDF/XML format");
-		System.out.println("and [output] is an optional output text file name");		
+		System.out.println("and [output] is an optional output text file name");
 	}
 
 }

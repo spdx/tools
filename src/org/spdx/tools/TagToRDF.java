@@ -93,9 +93,9 @@ public class TagToRDF {
 			return;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the Tag Value file to be converted, args[1] is the result RDF file name
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * @return Warnings of the conversion, displayed to the user

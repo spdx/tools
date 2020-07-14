@@ -39,9 +39,9 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class SnippetSheet extends AbstractSheet {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(SnippetSheet.class);
-	
+
 	private static final int COL_WIDTH = 60;
 	protected static final int FIELD_COL = 0;
 	protected static final int EQUALS_COL = 1;
@@ -51,7 +51,7 @@ public class SnippetSheet extends AbstractSheet {
 	protected static final String FIELD_HEADER_TEXT = "Snippet Property";
 	protected static final String EQUALS_HEADER_TEXT = "Equals";
 	private static final String NO_SNIPPET = "[No Snippet]";
-	
+
 	protected static final String COPYRIGHT_FIELD_TEXT = "Copyright";
 	protected static final String LICENSE_COMMENT_FIELD_TEXT = "License Comment";
 	protected static final String DECLARED_LICENSE_FIELD_TEXT = "Declared License";
@@ -68,7 +68,7 @@ public class SnippetSheet extends AbstractSheet {
 	private static final String NO_VALUE = "[No Value]";
 	private static final String BYTE_RANGE_FIELD_TEXT = "Byte Range";
 	private static final String LINE_RANGE_FIELD_TEXT = "Line Range";
-	
+
 	public SnippetSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
@@ -81,7 +81,7 @@ public class SnippetSheet extends AbstractSheet {
 		// Nothing to verify
 		return null;
 	}
-	
+
 	/**
 	 * @param wb
 	 * @param sheetName
@@ -100,13 +100,13 @@ public class SnippetSheet extends AbstractSheet {
 		Cell fieldCell = headerRow.createCell(FIELD_COL);
 		fieldCell.setCellStyle(headerStyle);
 		fieldCell.setCellValue(FIELD_HEADER_TEXT);
-		
+
 		sheet.setColumnWidth(EQUALS_COL, EQUALS_COL_WIDTH * 256);
 		sheet.setDefaultColumnStyle(EQUALS_COL, defaultStyle);
 		Cell equalsCell = headerRow.createCell(EQUALS_COL);
 		equalsCell.setCellStyle(headerStyle);
 		equalsCell.setCellValue(EQUALS_HEADER_TEXT);
-		
+
 		for (int i = FIRST_DOC_COL; i < MultiDocumentSpreadsheet.MAX_DOCUMENTS+FIRST_DOC_COL; i++) {
 			sheet.setColumnWidth(i, COL_WIDTH*256);
 			sheet.setDefaultColumnStyle(i, defaultStyle);
@@ -114,11 +114,11 @@ public class SnippetSheet extends AbstractSheet {
 			cell.setCellStyle(headerStyle);
 		}
 	}
-	
+
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {
@@ -131,7 +131,7 @@ public class SnippetSheet extends AbstractSheet {
 			Cell headerCell = header.getCell(FIRST_DOC_COL+i);
 			headerCell.setCellValue(docNames[i]);
 		}
-		
+
 		SpdxSnippetComparer[] snippetComparers = comparer.getSnippetComparers();
 		Arrays.sort(snippetComparers, new Comparator<SpdxSnippetComparer>() {
 
@@ -139,7 +139,7 @@ public class SnippetSheet extends AbstractSheet {
 			public int compare(SpdxSnippetComparer o1, SpdxSnippetComparer o2) {
 				return o1.toString().compareTo(o2.toString());
 			}
-			
+
 		});
 		for (int i = 0; i < snippetComparers.length; i++) {
 			addSnippetToSheet(snippetComparers[i], comparer.getSpdxDocuments());
@@ -149,8 +149,8 @@ public class SnippetSheet extends AbstractSheet {
 	/**
 	 * @param comparer
 	 * @param docs
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void addSnippetToSheet(SpdxSnippetComparer comparer,
 			SpdxDocument[] docs) throws SpdxCompareException, InvalidSPDXAnalysisException {
@@ -268,7 +268,7 @@ public class SnippetSheet extends AbstractSheet {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param cell
 	 */
@@ -285,7 +285,7 @@ public class SnippetSheet extends AbstractSheet {
 			cell.setCellValue(EQUAL_STRING);
 		} else {
 			cell.setCellValue(MISSING_STRING);
-		}		
+		}
 		cell.setCellStyle(greenWrapped);
 	}
 }

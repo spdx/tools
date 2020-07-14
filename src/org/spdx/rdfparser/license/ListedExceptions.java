@@ -52,15 +52,15 @@ import com.google.gson.Gson;
  *
  */
 public class ListedExceptions implements IModelContainer {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(ListedExceptions.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	private static final String EXCEPTION_TOC_FILENAME = "exceptions.json";
-	
+
 	private Model listedExceptionModel = null;
-	
+
 	Set<String> listdExceptionIds = null;
-	
+
 	Map<String, ListedLicenseException> listedExceptionCache = null;
 	Map<IModelContainer, Map<Node, ListedLicenseException>> listedExceptionNodeCache = Maps.newHashMap();
 
@@ -69,15 +69,15 @@ public class ListedExceptions implements IModelContainer {
     String licenseListVersion = ListedLicenses.DEFAULT_LICENSE_LIST_VERSION;
 
 	private static volatile ListedExceptions listedExceptions = null;
-	
+
 	//Lock to ensure thread-safety of all modifications.
 	//Since modifications should be extremely rare, a single lock for both listed licenses and the model
 	//should be sufficient.
 	private static final ReadWriteLock listedExceptionModificationLock = new ReentrantReadWriteLock();
 	private static final String JSONLD_URL_SUFFIX = ".jsonld";
-	
+
 	int nextId = 0;
-	
+
 	/**
 	 * This constructor should only be called by the getListedExeptions method
 	 */
@@ -85,7 +85,7 @@ public class ListedExceptions implements IModelContainer {
 		onlyUseLocalLicenses = ListedLicenses.getListedLicenses().onlyUseLocalLicenses;
 		loadListedExceptionIDs();
 	}
-	
+
     public static ListedExceptions getListedExceptions() {
         if (listedExceptions == null) {
             listedExceptionModificationLock.writeLock().lock();
@@ -99,7 +99,7 @@ public class ListedExceptions implements IModelContainer {
         }
         return listedExceptions;
     }
-	
+
 	/**
 	 * Resets all of the cached exception information and reloads the exception IDs
 	 * NOTE: This method should be used with caution, it will negatively impact
@@ -131,14 +131,14 @@ public class ListedExceptions implements IModelContainer {
         }
 		return listedExceptionModel;
 	}
-	
+
 	/**
 	 * Get a listed exception based on a URI.  The URI can be a file or a web resource.
 	 * The exception information is copied into the listedExceptionModel and the exception
 	 * is placed into the cache.
 	 * @param uri
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
     protected ListedLicenseException getExceptionFromUri(String uri) throws InvalidSPDXAnalysisException {
         URL exceptionUrl = null;
@@ -219,7 +219,7 @@ public class ListedExceptions implements IModelContainer {
 				// Not implemented
 				return true;
 			}
-			
+
 		};
 		ListedLicenseException retval;
 		if (this.getModel().equals(localExceptionModel)) {
@@ -256,7 +256,7 @@ public class ListedExceptions implements IModelContainer {
 	 * @param uri - URI of the actual resource
 	 * @param base - base for any fragments present in the exception model
 	 * @return
-	 * @throws NoListedLicenseRdfModel 
+	 * @throws NoListedLicenseRdfModel
 	 */
 	private Model getExceptionModel(String uri, String base) throws NoListedLicenseRdfModel {
 		Model retval = ModelFactory.createDefaultModel();
@@ -314,7 +314,7 @@ public class ListedExceptions implements IModelContainer {
 			}
 		}
 	}
-	
+
     /**
      * Load the listed exception IDs from the website or local file cache
      */
@@ -356,7 +356,7 @@ public class ListedExceptions implements IModelContainer {
                 ExceptionJsonTOC jsonToc = gson.fromJson(tocJsonStr.toString(), ExceptionJsonTOC.class);
                 listdExceptionIds = jsonToc.getExceptionIds();
                 this.licenseListVersion = jsonToc.getLicenseListVersion();
-                
+
             } catch (IOException e) {
 				logger.error("I/O error reading JSON TOC file");
 			} finally {
@@ -378,8 +378,8 @@ public class ListedExceptions implements IModelContainer {
             listedExceptionModificationLock.writeLock().unlock();
         }
     }
-	
-	
+
+
 	/**
 	 * @return Array of all SPDX listed exception IDs
 	 */
@@ -391,7 +391,7 @@ public class ListedExceptions implements IModelContainer {
 			listedExceptionModificationLock.readLock().unlock();
         }
     }
-	
+
 	/**
 	 * @return The version of the loaded license list in the form M.N, where M is the major release and N is the minor release.
 	 * If no license list is loaded, returns {@Link DEFAULT_LICENSE_LIST_VERSION}.
@@ -406,7 +406,7 @@ public class ListedExceptions implements IModelContainer {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ListedLicenseException getLicenseFromStdLicModel(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
@@ -500,7 +500,7 @@ public class ListedExceptions implements IModelContainer {
 			Resource type, IRdfModel modelObject) {
 		if (duplicate != null) {
 			return duplicate;
-		} else if (uri == null) {			
+		} else if (uri == null) {
 			return listedExceptionModel.createResource(getType(listedExceptionModel));
 		} else {
 			return listedExceptionModel.createResource(uri, getType(listedExceptionModel));
@@ -540,7 +540,7 @@ public class ListedExceptions implements IModelContainer {
 	/**
 	 * @param id
 	 * @return the standard SPDX license exception or null if the ID is not in the SPDX license list
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ListedLicenseException getListedExceptionById(String id) throws InvalidSPDXAnalysisException {
 		ListedLicenseException retval = getExceptionFromUri(ListedLicenses.LISTED_LICENSE_URI_PREFIX + id + JSONLD_URL_SUFFIX);

@@ -27,7 +27,7 @@ public class DuplicateExtractedLicenseIdException extends
 		InvalidSPDXAnalysisException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 

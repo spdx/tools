@@ -29,21 +29,21 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public interface IRdfModel {
-	
+
 	/**
 	 * Create a resource from the Java model object
 	 * @param modelContainer Contains the Jena model where to create the resource
 	 * @param parentProperty
 	 * @return The created resource
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException;
-	
+
 	/**
 	 * @return List of validation errors for any non SPDX compliant properties.
 	 */
 	public List<String> verify();
-	
+
 	/**
 	 * Returns true if the compare object contains properties which would be equal if they were contained in the same RDF Model
 	 * @param compare

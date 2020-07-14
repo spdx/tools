@@ -43,25 +43,25 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  *
  */
 public abstract class LicenseSet extends AnyLicenseInfo {
-		
+
 	protected Set<AnyLicenseInfo> licenseInfos = Sets.newHashSet();
 
 	/**
 	 * @param modelContainer container which includes the license
 	 * @param licenseInfoNode Node in the RDF model which defines the licenseSet
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public LicenseSet(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(licenseInfoNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.licenseInfos.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -70,7 +70,7 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 		this.licenseInfos.clear();
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.licenseInfos.add(LicenseInfoFactory.getLicenseInfoFromModel(modelContainer, t.getObject()));
@@ -88,7 +88,7 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the members of the license set.  Clears any previous members
 	 * @param licenseInfos New members for the set
@@ -113,7 +113,7 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 			}
 		}
 	}
-	
+
 	/**
 	 * @return Members of the license set
 	 */
@@ -128,8 +128,8 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 		AnyLicenseInfo[] retval = new AnyLicenseInfo[this.licenseInfos.size()];
 		retval = this.licenseInfos.toArray(retval);
 		return retval;
-	}	
-	
+	}
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#verify()
 	 */
@@ -142,7 +142,7 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 		}
 		return retval;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
 	 */
@@ -156,7 +156,7 @@ public abstract class LicenseSet extends AnyLicenseInfo {
 		}
 		return RdfModelHelper.arraysEquivalent(this.getMembers(), ((LicenseSet)compare).getMembers());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#populateModel()
 	 */

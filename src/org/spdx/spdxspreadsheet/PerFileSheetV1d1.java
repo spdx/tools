@@ -58,21 +58,21 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 	static final int ARTIFACT_OF_PROJECT_URL_COL = ARTIFACT_OF_HOMEPAGE_COL + 1;
 	static final int COMMENT_COL = ARTIFACT_OF_PROJECT_URL_COL + 1;
 	static final int USER_DEFINED_COL = COMMENT_COL + 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		false, false, false, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"File Name", "File Type",
 		"File Checksum", "License Concluded", "License Info in File", "License Comments",
-		"File Copyright Text", "Artifact of Project", "Artifact of Homepage", 
+		"File Copyright Text", "Artifact of Project", "Artifact of Homepage",
 		"Artifact of URL", "File Comment", "User Defined Columns..."};
 	static final int[] COLUMN_WIDTHS = new int[] {60, 10, 25, 30, 30, 40,
 		40, 25, 60, 60, 60, 60};
-	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true, 
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true,
 		true, true, true, true, true, true, true, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false, 
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false,
 		false, false, false, false, false, false, false, false, false};
 
-	
+
 	@SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String pkgId) {
 		Row row = addRow();
@@ -105,7 +105,7 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 			row.createCell(COMMENT_COL).setCellValue(fileInfo.getComment());
 		}
 	}
-	
+
 	public SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -198,7 +198,7 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 			return new SpdxFile(name, types, sha1, fileLicenses, seenLicenses, licenseComments, copyright, artifactOf, comment);
 		} catch (InvalidSPDXAnalysisException e) {
 			throw(new SpreadsheetException("Error creating new SPDX file: "+e.getMessage()));
-		}	
+		}
 	}
 
 	/* (non-Javadoc)
@@ -213,7 +213,7 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX File worksheet";
@@ -274,7 +274,7 @@ public class PerFileSheetV1d1 extends PerFileSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);
