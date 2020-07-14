@@ -78,6 +78,17 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 				this.seeAlso[startExtraIndex + i] = moreSeeAlso[i];
 			}
 		}
+		// SourceUrlDetails/seeAlsoDetails
+		this.seeAlsoDetails = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+		// The following is added for compatibility with earlier versions
+		String[] moreSeeAlsoDetails = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
+		if (moreSeeAlsoDetails != null && moreSeeAlsoDetails.length > 0) {
+			int startExtraIndex = this.seeAlsoDetails.length;
+			this.seeAlsoDetails = Arrays.copyOf(this.seeAlsoDetails, startExtraIndex + moreSeeAlsoDetails.length);
+			for (int i = 0; i < moreSeeAlsoDetails.length; i++) {
+				this.seeAlsoDetails[startExtraIndex + i] = moreSeeAlsoDetails[i];
+			}
+		}
 		// comments
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		if (this.comment == null) {
@@ -98,6 +109,22 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		this.name = name;
 		this.comment = comments;
 		this.seeAlso = sourceUrl;
+	}
+
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param comments Optional license comments
+	 * @param sourceUrl Optional reference URL's
+	 * @param sourceUrlDetails Optional reference URL details
+	 */
+	SimpleLicensingInfo(String name, String id, String comments, String[] sourceUrl, String[] sourceUrlDetails) {
+		super();
+		this.licenseId = id;
+		this.name = name;
+		this.comment = comments;
+		this.seeAlso = sourceUrl;
+		this.seeAlsoDetails = sourceUrlDetails;
 	}
 	/**
 	 * @return the id
@@ -304,6 +331,12 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
 		} else {
 			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlso);
+		}
+		// SeeAlsoDetails
+		if (seeAlsoDetails == null) {
+			removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS);
+		} else {
+			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO_DETAILS, seeAlsoDetails);
 		}
 	}
 

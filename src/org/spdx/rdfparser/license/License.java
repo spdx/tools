@@ -113,6 +113,33 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @param comments Optional comments
 	 * @param standardLicenseHeader Optional license header
 	 * @param template Optional template
+	 * @param standardLicenseHeaderTemplate optional template for the standard license header
+	 * @param osiApproved True if this is an OSI Approvied license
+	 * @param fsfLibre true if FSF describes the license as free / libre, false if FSF describes the license as not free / libre, null if FSF does not reference the license
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public License(String name, String id, String text, String[] sourceUrl, String[] sourceUrlDetails, String comments,
+			String standardLicenseHeader, String template, String standardLicenseHeaderTemplate,
+			boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
+		super(name, id, comments, sourceUrl, sourceUrlDetails);
+		this.standardLicenseHeader = standardLicenseHeader;
+		this.standardLicenseTemplate = template;
+
+		this.osiApproved = osiApproved;
+		this.fsfLibre = fsfLibre;
+		this.licenseText = text;
+		this.deprecated = false;
+		this.standardLicenseHeaderTemplate = standardLicenseHeaderTemplate;
+	}
+
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
 	 * @param osiApproved True if this is an OSI Approvied license
 	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
 	 * @throws InvalidSPDXAnalysisException
@@ -604,7 +631,7 @@ public abstract class License extends SimpleLicensingInfo {
 	public AnyLicenseInfo clone() {
 		try {
 			SpdxListedLicense retval = new SpdxListedLicense(this.getName(), this.getLicenseId(),
-					this.getLicenseText(), this.getSeeAlso(), this.getComment(),
+					this.getLicenseText(), this.getSeeAlso(), this.getSeeAlsoDetails(), this.getComment(),
 					this.getStandardLicenseHeader(), this.getStandardLicenseTemplate(),
 					this.getStandardLicenseHeaderTemplate(), this.isOsiApproved(), this.getFsfLibre());
 			retval.setDeprecated(this.isDeprecated());

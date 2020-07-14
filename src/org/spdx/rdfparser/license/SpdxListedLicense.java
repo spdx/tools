@@ -36,11 +36,11 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class SpdxListedLicense extends License {
-	
+
 	private String licenseTextHtml = null;
 	private String licenseHeaderHtml = null;
 	private String deprecatedVersion = null;
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -57,14 +57,14 @@ public class SpdxListedLicense extends License {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
-			String standardLicenseHeader, String template, boolean osiApproved, Boolean fsfLibre, 
+			String standardLicenseHeader, String template, boolean osiApproved, Boolean fsfLibre,
 			String licenseTextHtml, boolean isDeprecated, String deprecatedVersion) throws InvalidSPDXAnalysisException {
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre);
 		this.licenseTextHtml = licenseTextHtml;
 		this.setDeprecated(isDeprecated);
 		this.deprecatedVersion = deprecatedVersion;
 	}
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -76,12 +76,12 @@ public class SpdxListedLicense extends License {
 	 * @param osiApproved True if this is an OSI Approved license
 	 * @param licenseTextHtml HTML version for the license text
 	 * @throws InvalidSPDXAnalysisException
-	 */	
+	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, boolean osiApproved, String licenseTextHtml) throws InvalidSPDXAnalysisException {
 		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, false, licenseTextHtml, false, null);
 	}
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -98,7 +98,7 @@ public class SpdxListedLicense extends License {
 			String standardLicenseHeader, String template, boolean osiApproved, boolean fsfLibre) throws InvalidSPDXAnalysisException {
 		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, fsfLibre, null, false, null);
 	}
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -114,17 +114,17 @@ public class SpdxListedLicense extends License {
 			String standardLicenseHeader, String template, boolean osiApproved) throws InvalidSPDXAnalysisException {
 		this(name, id, text, sourceUrl, comments, standardLicenseHeader, template, osiApproved, false, null, false, null);
 	}
-	
+
 	/**
 	 * Constructs an SPDX License from the licenseNode
 	 * @param modelContainer container which includes the license
 	 * @param licenseNode RDF graph node representing the SPDX License
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxListedLicense(IModelContainer modelContainer, Node licenseNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseNode);
 	}
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -143,12 +143,12 @@ public class SpdxListedLicense extends License {
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, boolean fsfLibre, String licenseTextHtml,
 			String licenseHeaderHtml) throws InvalidSPDXAnalysisException {
-		
+
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
 		this.licenseTextHtml = licenseTextHtml;
 		this.licenseHeaderHtml = licenseHeaderHtml;
 	}
-	
+
 	/**
 	 * @param name License name
 	 * @param id License ID
@@ -164,11 +164,31 @@ public class SpdxListedLicense extends License {
 	 */
 	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String comments,
 			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
-		
+
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
 	}
 
-	@Override 
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param sourceUrlDetails Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param licenseHeaderTemplate optional template for the standard license header
+	 * @param osiApproved True if this is an OSI Approved license
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String[] sourceUrlDetails, String comments,
+			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
+
+		super(name, id, text, sourceUrl, sourceUrlDetails, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
+	}
+
+	@Override
 	public List<String> verify() {
 		List<String> retval = super.verify();
 		if (!LicenseInfoFactory.isSpdxListedLicenseID(this.getLicenseId())) {
@@ -179,8 +199,8 @@ public class SpdxListedLicense extends License {
 		}
 		return retval;
 	}
-	
-	
+
+
 	/**
 	 * Creates a standard license URI by appending the standard license ID to the URL hosting the SPDX licenses
 	 * @param id Standard License ID
@@ -189,7 +209,7 @@ public class SpdxListedLicense extends License {
 	private String createStdLicenseUri(String id) {
 		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
@@ -197,16 +217,16 @@ public class SpdxListedLicense extends License {
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.CLASS_SPDX_LICENSE);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
 	public String getUri(IModelContainer modelContainer)
-			throws InvalidSPDXAnalysisException {	
+			throws InvalidSPDXAnalysisException {
 		return this.createStdLicenseUri(this.licenseId);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#equivalent(org.spdx.rdfparser.model.IRdfModel)
 	 */
@@ -225,10 +245,10 @@ public class SpdxListedLicense extends License {
 			return this.licenseId.equalsIgnoreCase(sCompare.getLicenseId());
 		}
 	}
-	
+
 	/**
 	 * @return HTML fragment containing the License Text
-	 * @throws InvalidLicenseTemplateException 
+	 * @throws InvalidLicenseTemplateException
 	 */
 	public String getLicenseTextHtml() throws InvalidLicenseTemplateException {
 		if (licenseTextHtml == null) {
@@ -246,7 +266,7 @@ public class SpdxListedLicense extends License {
 		}
 		return licenseTextHtml;
 	}
-	
+
 	/**
 	 * Set the licenseTextHtml
 	 * @param licenseTextHtml HTML fragment representing the license text
@@ -254,10 +274,10 @@ public class SpdxListedLicense extends License {
 	public void setLicenseTextHtml(String licenseTextHtml) {
 		this.licenseTextHtml = licenseTextHtml;
 	}
-	
+
 	/**
 	 * @return HTML fragment containing the License standard header text
-	 * @throws InvalidLicenseTemplateException 
+	 * @throws InvalidLicenseTemplateException
 	 */
 	public String getLicenseHeaderHtml() throws InvalidLicenseTemplateException {
 		if (licenseHeaderHtml == null) {
@@ -277,7 +297,7 @@ public class SpdxListedLicense extends License {
 		}
 		return licenseHeaderHtml;
 	}
-	
+
 	/**
 	 * Set the licenseHeaderTemplateHtml
 	 * @param licenseHeaderHtml HTML fragment representing the license standard header text
@@ -285,7 +305,7 @@ public class SpdxListedLicense extends License {
 	public void setLicenseHeaderHtml(String licenseHeaderHtml) {
 		this.licenseHeaderHtml = licenseHeaderHtml;
 	}
-	
+
 	/**
 	 * @return the deprecatedVersion
 	 */
