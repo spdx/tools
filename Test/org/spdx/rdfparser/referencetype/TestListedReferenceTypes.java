@@ -32,7 +32,7 @@ import org.spdx.rdfparser.SpdxRdfConstants;
  *
  */
 public class TestListedReferenceTypes {
-	
+
 	static final String[] LISTED_REFERENCE_TYPE_NAMES = new String[] {
 		"cpe22Type","cpe23Type","maven-central","npm","nuget","bower","debian"
 	};
@@ -54,7 +54,7 @@ public class TestListedReferenceTypes {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.referencetype.ListedReferenceTypes#isListedReferenceType(java.net.URI)}.
-	 * @throws URISyntaxException 
+	 * @throws URISyntaxException
 	 */
 	@Test
 	public void testIsListedReferenceType() throws URISyntaxException {
@@ -70,7 +70,7 @@ public class TestListedReferenceTypes {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.referencetype.ListedReferenceTypes#getListedReferenceUri(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetListedReferenceUri() throws InvalidSPDXAnalysisException {
@@ -80,7 +80,7 @@ public class TestListedReferenceTypes {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.referencetype.ListedReferenceTypes#getListedReferenceName(java.net.URI)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetListedReferenceName() throws URISyntaxException, InvalidSPDXAnalysisException {

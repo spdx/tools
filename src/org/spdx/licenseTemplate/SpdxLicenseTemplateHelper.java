@@ -31,7 +31,7 @@ import org.spdx.rdfparser.license.LicenseParserException;
  *
  */
 public class SpdxLicenseTemplateHelper {
-	
+
 	static final String START_RULE = "<<";
 	static final String END_RULE = ">>";
 	public static final Pattern RULE_PATTERN = Pattern.compile(START_RULE+"\\s*((beginOptional|endOptional|var)(.|\\s)*?)\\s*"+END_RULE);
@@ -43,7 +43,7 @@ public class SpdxLicenseTemplateHelper {
 	 * Parses the license template calling the templateOutputHandler for any text and rules found
 	 * @param licenseTemplate License template to be parsed
 	 * @param templateOutputHandler Handles the text, optional text, and variable rules text found
-	 * @throws LicenseParserException 
+	 * @throws LicenseParserException
 	 */
 	public static void parseTemplate(String licenseTemplate,
 			ILicenseTemplateOutputHandler templateOutputHandler) throws LicenseTemplateRuleException, LicenseParserException {
@@ -84,14 +84,14 @@ public class SpdxLicenseTemplateHelper {
 		}
 		templateOutputHandler.completeParsing();
 	}
-	
+
 	/**
-	 * Converts a license template string to formatted HTML which highlights any 
+	 * Converts a license template string to formatted HTML which highlights any
 	 * rules or tags
 	 * @param licenseTemplate
 	 * @return
-	 * @throws LicenseTemplateRuleException 
-	 * @throws LicenseParserException 
+	 * @throws LicenseTemplateRuleException
+	 * @throws LicenseParserException
 	 */
 	public static String templateTextToHtml(String licenseTemplate) throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htmlOutput = new HtmlTemplateOutputHandler();
@@ -107,8 +107,8 @@ public class SpdxLicenseTemplateHelper {
 	 * Converts template text to standard default text using any default parameters in the rules
 	 * @param template
 	 * @return
-	 * @throws LicenseTemplateRuleException 
-	 * @throws LicenseParserException 
+	 * @throws LicenseTemplateRuleException
+	 * @throws LicenseParserException
 	 */
 	public static String templateToText(String template) throws LicenseTemplateRuleException {
 		TextTemplateOutputHandler textOutput = new TextTemplateOutputHandler();
@@ -119,7 +119,7 @@ public class SpdxLicenseTemplateHelper {
 		}
 		return textOutput.getText();
 	}
-	
+
 	/**
 	 * Escapes and formats text
 	 * @param text unformatted text
@@ -128,7 +128,7 @@ public class SpdxLicenseTemplateHelper {
 	public static String formatEscapeHTML(String text) {
 		return formatEscapeHTML(text, false);
 	}
-	
+
 	/**
 	 * Escapes and formats text
 	 * @param text unformatted text
@@ -139,7 +139,7 @@ public class SpdxLicenseTemplateHelper {
 		String retval = StringEscapeUtils.escapeXml(text);
 		return addHtmlFormatting(retval, inParagraph);
 	}
-	
+
 	/**
 	 * Adds HTML formatting <br> and <p>
 	 * @param text unformatted text
@@ -148,7 +148,7 @@ public class SpdxLicenseTemplateHelper {
 	public static String addHtmlFormatting(String text) {
 		return addHtmlFormatting(text, false);
 	}
-	
+
 	/**
 	 * Adds HTML formatting <br> and <p>
 	 * @param text unformatted text
@@ -162,7 +162,7 @@ public class SpdxLicenseTemplateHelper {
 		int i = 1;
 		while (i < lines.length) {
 			if (lines[i].trim().isEmpty()) {
-				// paragraph boundary 
+				// paragraph boundary
 				if (inParagraph) {
 					result.append("</p>");
 				}
@@ -204,7 +204,7 @@ public class SpdxLicenseTemplateHelper {
 			if (numTabs > MAX_TABS) {
 				numTabs = MAX_TABS;
 			}
-			
+
 			int pixels = PIXELS_PER_TAB[numTabs-1];
 			result.append("<p style=\"margin-left: ");
 			result.append(String.valueOf(pixels));

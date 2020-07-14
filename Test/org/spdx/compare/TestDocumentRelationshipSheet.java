@@ -39,14 +39,14 @@ import org.spdx.rdfparser.model.SpdxElement;
  *
  */
 public class TestDocumentRelationshipSheet {
-	
-	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+
+	static final SpdxElement RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 			"related element comment 1", null, null);
-	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+	static final SpdxElement RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 			"related element comment 2", null, null);
-	static final SpdxElement RELATED_ELEMENT3 = new SpdxElement("relatedElementName3", 
+	static final SpdxElement RELATED_ELEMENT3 = new SpdxElement("relatedElementName3",
 			"related element comment 2", null, null);
-	static final SpdxElement RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
+	static final SpdxElement RELATED_ELEMENT4 = new SpdxElement("relatedElementName4",
 			"related element comment 4", null, null);
 	static final RelationshipType TYPE1 = RelationshipType.AMENDS;
 	static final RelationshipType TYPE2 = RelationshipType.ANCESTOR_OF;
@@ -94,36 +94,36 @@ public class TestDocumentRelationshipSheet {
 		SpdxDocument doc3 = container3.getSpdxDocument();
 		doc1.setName("Name1");
 		doc1.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		doc2.setName("Name2");
 		doc2.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		doc3.setName("Name3");
 		doc3.setCreationInfo(new SPDXCreatorInformation(
-				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z", 
+				new String[] {"Person: CreatorB"}, "2012-01-29T18:30:22Z",
 				"Creator CommentB", "1.17"));
 		Relationship rel1_1 = new Relationship(RELATED_ELEMENT1, TYPE1, "Comment1");
 		Relationship rel1_2 = new Relationship(RELATED_ELEMENT2, TYPE1, "Comment2");
 		Relationship rel1_3 = new Relationship(RELATED_ELEMENT3, TYPE2, "Comment3");
 		Relationship[] rels1 = new Relationship[] {rel1_1, rel1_2, rel1_3};
 		doc1.setRelationships(rels1);
-		
+
 		Relationship rel2_1 = new Relationship(RELATED_ELEMENT1, TYPE1, "Comment4");
 		// missing 2
 		Relationship rel2_3 = new Relationship(RELATED_ELEMENT4, TYPE2, "Comment5");
 		// differen related element for type 2
 		Relationship[] rels2 = new Relationship[] {rel2_1, rel2_3};
 		doc2.setRelationships(rels2);
-		
+
 		Relationship rel3_1 = new Relationship(RELATED_ELEMENT1, TYPE1, "Comment6");
 		Relationship[] rels3 = new Relationship[] {rel3_1};
 		doc3.setRelationships(rels3);
-		
+
 		SpdxComparer comparer = new SpdxComparer();
 		comparer.compare(new SpdxDocument[] {doc1, doc2, doc3});
-		
+
 		String sheetName = "Sheet";
 		HSSFWorkbook wb = new HSSFWorkbook();
 		DocumentRelationshipSheet.create(wb, sheetName);
@@ -142,7 +142,7 @@ public class TestDocumentRelationshipSheet {
 		assertEquals(CompareHelper.relationshipToString(rel2_1), relationshipCell.getStringCellValue());
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 2);
 		assertEquals(CompareHelper.relationshipToString(rel3_1), relationshipCell.getStringCellValue());
-		
+
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+1);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
 		assertEquals(TYPE1.toTag(), typeCell.getStringCellValue());
@@ -152,7 +152,7 @@ public class TestDocumentRelationshipSheet {
 		assertTrue(cellEmpty(relationshipCell));
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 2);
 		assertTrue(cellEmpty(relationshipCell));
-		
+
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+2);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
 		assertEquals(TYPE2.toTag(), typeCell.getStringCellValue());
@@ -162,7 +162,7 @@ public class TestDocumentRelationshipSheet {
 		assertTrue(cellEmpty(relationshipCell));
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 2);
 		assertTrue(cellEmpty(relationshipCell));
-		
+
 		row = sheet.getSheet().getRow(sheet.getFirstDataRow()+3);
 		typeCell = row.getCell(DocumentRelationshipSheet.TYPE_COL);
 		assertEquals(TYPE2.toTag(), typeCell.getStringCellValue());
@@ -173,7 +173,7 @@ public class TestDocumentRelationshipSheet {
 		relationshipCell = row.getCell(DocumentRelationshipSheet.FIRST_RELATIONSHIP_COL + 2);
 		assertTrue(cellEmpty(relationshipCell));
 	}
-	
+
 	/**
 	 * @param cell
 	 * @return

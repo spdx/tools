@@ -142,7 +142,7 @@ public class SpdxLicenseDifference {
 		this.commentsEqual = SpdxComparer.stringsEqual(commentA, commentB);
 		this.sourceUrlsA = licenseA.getSeeAlso();
 		this.sourceUrlsB = licenseB.getSeeAlso();
-		this.sourceUrlsEqual = SpdxComparer.stringArraysEqual(sourceUrlsA, sourceUrlsB);			
+		this.sourceUrlsEqual = SpdxComparer.stringArraysEqual(sourceUrlsA, sourceUrlsB);
 	}
-	
+
 }

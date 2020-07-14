@@ -54,8 +54,8 @@ public class SpdxLicenseInfoMergerTest {
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#SpdxLicenseInfoMerger(org.spdx.rdfparser.SpdxDocument)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testSpdxLicenseInfoMerger() throws IOException, InvalidSPDXAnalysisException {
@@ -68,14 +68,14 @@ public class SpdxLicenseInfoMergerTest {
 			SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument("TestFiles"+File.separator+"SPDXRdfExample-v2.0.rdf");
 			SpdxLicenseInfoMerger licMerger = new SpdxLicenseInfoMerger(doc1, new SpdxLicenseMapper());
 		}catch(InvalidSPDXAnalysisException e){
-			
+
 		}
 	}
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#mergeNonStdLic(org.spdx.rdfparser.SpdxDocument[])}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testMergeNonStdLic() throws IOException, InvalidSPDXAnalysisException {
@@ -95,20 +95,20 @@ public class SpdxLicenseInfoMergerTest {
 			}
 		}
 		assertEquals(num,mergedLicense.length);
-		
+
 	}
 
 	/**
 	 * Test method for {@link org.spdx.merge.SpdxLicenseInfoMerger#cloneNonStdLic(org.spdx.rdfparser.license.ExtractedLicenseInfo[])}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testCloneNonStdLic() throws IOException, InvalidSPDXAnalysisException{
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxDocument doc2 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
 		SpdxLicenseInfoMerger licMerger = new SpdxLicenseInfoMerger(doc1, new SpdxLicenseMapper());
-		ExtractedLicenseInfo[] exceptedResult = doc2.getExtractedLicenseInfos(); 
+		ExtractedLicenseInfo[] exceptedResult = doc2.getExtractedLicenseInfos();
 		ExtractedLicenseInfo[] clonedLicense = licMerger.cloneNonStdLic(exceptedResult);
 		int num = 0;
 		for(int i = 0; i < clonedLicense.length; i++){

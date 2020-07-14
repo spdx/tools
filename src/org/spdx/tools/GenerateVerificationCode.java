@@ -130,7 +130,7 @@ public class GenerateVerificationCode {
 			}
 		} else {
 			System.out.println("No excluded files");
-		}		
+		}
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class GenerateVerificationCode {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private static void usage() {
 		System.out.println("Usage: GenerateVerificationCode sourceDirectory");

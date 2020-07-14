@@ -27,7 +27,7 @@ public class ReviewerContext {
 
 	Exception error = null;
 	SPDXReview review = null;
-	
+
 	/**
 	 * Add a reviewer which will return an error for any of the methods called
 	 * This may be considered a bit of a kludge for the error reporting, so
@@ -44,7 +44,7 @@ public class ReviewerContext {
 	public ReviewerContext(SPDXReview spdxReview) {
 		review = spdxReview;
 	}
-	
+
 	public String reviewer() {
 		if (review != null) {
 			return review.getReviewer();
@@ -64,7 +64,7 @@ public class ReviewerContext {
 			return null;
 		}
 	}
-	
+
 	public String comment() {
 		if (review != null) {
 			return review.getComment();

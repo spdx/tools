@@ -39,16 +39,16 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 /**
  * Represents an SPDX license exception as defined in the License Expression Language
  * Used with the "with" unary expression.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class LicenseException implements IRdfModel, Cloneable  {
-	
+
 	Model model = null;
 	Node exceptionNode = null;
 	Resource resource = null;
-	
+
 	private String licenseExceptionId;
 	private String name;
 	private String licenseExceptionText;
@@ -57,7 +57,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	private String example;
 	private String licenseExceptionTemplate;
 	private boolean deprecated = false;
-	
+
 	public LicenseException(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		this.model = modelContainer.getModel();
 		this.exceptionNode = node;
@@ -66,7 +66,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		// licenseExceptionId
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID).asNode();
 		Triple m = Triple.createMatch(exceptionNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.licenseExceptionId = t.getObject().toString(false);
@@ -75,7 +75,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.name = null;
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_NAME).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.name = t.getObject().toString(false);
@@ -84,27 +84,27 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.licenseExceptionText = null;
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXCEPTION_TEXT).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.licenseExceptionText = t.getObject().toString(false);
 		}
-		
+
 		// licenseExceptionTemplate
 		this.licenseExceptionTemplate = null;
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.licenseExceptionTemplate = t.getObject().toString(false);
 		}
-		
+
 		// seeAlso
 		List<String> alsourceUrls = Lists.newArrayList();
 		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_SEE_ALSO).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			alsourceUrls.add(t.getObject().toString(false));
@@ -113,12 +113,12 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		// comments
 		p = model.getProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (!tripleIter.hasNext()) {
 			// check the old property name for compatibility with pre-1.1 generated RDF files
 			p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_NOTES_VERSION_1).asNode();
 			m = Triple.createMatch(exceptionNode, p, null);
-			tripleIter = model.getGraph().find(m);	
+			tripleIter = model.getGraph().find(m);
 		}
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
@@ -130,7 +130,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.example = null;
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXAMPLE).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.example = t.getObject().toString(false);
@@ -138,7 +138,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		// deprecated
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED).asNode();
 		m = Triple.createMatch(exceptionNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			String deprecatedValue = t.getObject().toString(false).trim();
@@ -177,7 +177,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.comment = comment;
 		this.example = example;
 	}
-	
+
 	/**
 	 * @param licenseExceptionId Exception ID - short form ID
 	 * @param name Full name of the Exception
@@ -190,7 +190,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			String[] seeAlso, String comment) {
 		this(licenseExceptionId, name, licenseExceptionText, null, seeAlso, comment);
 	}
-	
+
 	/**
 	 * @param licenseExceptionId Exception ID - short form ID
 	 * @param name Full name of the Exception
@@ -208,7 +208,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.comment = comment;
 		this.licenseExceptionTemplate = licenseExceptionTemplate;
 	}
-	
+
 	/**
 	 * @param licenseExceptionId Exception ID - short form ID
 	 * @param name Full name of the Exception
@@ -217,11 +217,11 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public LicenseException(String licenseExceptionId, String name, String licenseExceptionText) {
 		this(licenseExceptionId, name, licenseExceptionText, new String[0], "");
 	}
-	
+
 	public LicenseException() {
 		this(null);
 	}
-	
+
 	/**
 	 * @param token
 	 */
@@ -235,10 +235,10 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * return the existing resource.
 	 * @param model
 	 * @return resource created from the model
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Override
-    public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {	
+    public Resource createResource(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		if (this.model != null &&
 				this.exceptionNode != null &&
 				this.resource != null &&
@@ -261,7 +261,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 					this.resource = model.createResource(uri, type);
 				} else {
 					this.resource = model.createResource(type);
-				}				
+				}
 			}
 			// check to make sure we are not overwriting an existing exception with the same ID
 			if (this.exceptionNode != null) {
@@ -275,35 +275,35 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			// add the properties
 			// licenseExceptionId
 			if (this.licenseExceptionId != null) {
-				Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID);
 				model.removeAll(this.resource, idProperty, null);
 				this.resource.addProperty(idProperty,  this.licenseExceptionId);
 			}
 			// name
 			if (this.name != null) {
-				Property nameProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property nameProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_NAME);
 				model.removeAll(this.resource, nameProperty, null);
 				this.resource.addProperty(nameProperty, this.name);
 			}
 			// comment
 			if (this.comment != null) {
-				Property commentProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, 
+				Property commentProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE,
 						SpdxRdfConstants.RDFS_PROP_COMMENT);
 				model.removeAll(this.resource, commentProperty, null);
 				this.resource.addProperty(commentProperty, this.comment);
 			}
 			// example
 			if (this.example != null) {
-				Property exampleProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property exampleProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_EXAMPLE);
 				model.removeAll(this.resource, exampleProperty, null);
 				this.resource.addProperty(exampleProperty, this.example);
 			}
 			// seeAlso
 			if (this.seeAlso != null && this.seeAlso.length > 0) {
-				Property seeAlsoProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, 
+				Property seeAlsoProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE,
 						SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
 				model.removeAll(this.resource, seeAlsoProperty, null);
 				for (int i = 0; i < this.seeAlso.length; i++) {
@@ -312,20 +312,20 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			}
 			// licenseExceptionText
 			if (this.licenseExceptionText != null) {
-				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_EXCEPTION_TEXT);
 				model.removeAll(this.resource, textProperty, null);
 				this.resource.addProperty(textProperty, this.licenseExceptionText);
 			}
 			// licenseExceptionTemplate
 			if (this.licenseExceptionTemplate != null) {
-				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Property textProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_EXCEPTION_TEMPLATE);
 				model.removeAll(this.resource, textProperty, null);
 				this.resource.addProperty(textProperty, this.licenseExceptionTemplate);
 			}
 			// deprecated
-			Property deprecatedProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property deprecatedProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
 			model.removeAll(this.resource, deprecatedProperty, null);
 			if (deprecated) {
@@ -344,7 +344,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public static String getExceptionTextFromModel(Model model, Node exceptionNode) {
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXCEPTION_TEXT).asNode();
 		Triple m = Triple.createMatch(exceptionNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		if (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			return t.getObject().toString(false);
@@ -359,14 +359,14 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * @return Node containing the exception or Null if none found
 	 */
 	public static Node findException(Model model, String id) {
-		Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+		Property idProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_LICENSE_EXCEPTION_ID);
-		Property typeProperty = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+		Property typeProperty = model.getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 				SpdxRdfConstants.RDF_PROP_TYPE);
 		Property exceptionTypeProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.CLASS_SPDX_LICENSE_EXCEPTION);
 		Triple m = Triple.createMatch(null, idProperty.asNode(), null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().toString(false).equals(id)) {
@@ -389,7 +389,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 
 	/**
 	 * @param id the id to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setLicenseExceptionId(String id) throws InvalidSPDXAnalysisException {
 		if (model != null) {
@@ -486,7 +486,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			}
 		}
 	}
-	
+
 	/**
 	 * @return the sourceUrl
 	 */
@@ -500,7 +500,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public void setSeeAlso(String[] url) {
 		this.seeAlso = url;
 		if (this.exceptionNode != null) {
-			Property seeAlsoPropery = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, 
+			Property seeAlsoPropery = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE,
 					SpdxRdfConstants.RDFS_PROP_SEE_ALSO);
 			this.resource.removeAll(seeAlsoPropery);
 			if (url != null) {
@@ -517,11 +517,11 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public String getComment() {
 		return this.comment;
 	}
-	
+
 	public void setComment(String comment) {
 		this.comment = comment;
 		if (this.exceptionNode != null) {
-			Property commentProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, 
+			Property commentProperty = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE,
 					SpdxRdfConstants.RDFS_PROP_COMMENT);
 			model.removeAll(this.resource, commentProperty, null);
 			if (comment != null) {
@@ -537,7 +537,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public String getExample() {
 		return example;
 	}
-	
+
 	@Deprecated
 	public void setExample(String example) {
 		this.example = example;
@@ -552,7 +552,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			}
 		}
 	}
-	
+
 	@Override
     public LicenseException clone() {
 		LicenseException retval = new LicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),
@@ -630,7 +630,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
                 Objects.equal(this.licenseExceptionTemplate, lCompare.getLicenseExceptionTemplate()) &&
 				RdfModelHelper.arraysEqual(this.seeAlso, lCompare.getSeeAlso()));
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#setMultipleObjectsForSameNode()
 	 */
@@ -638,7 +638,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public void setMultipleObjectsForSameNode() {
 		// Do nothing
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#setSingleObjectForSameNode()
 	 */
@@ -646,21 +646,21 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	public void setSingleObjectForSameNode() {
 		// ignore
 	}
-	
+
 	/**
 	 * @return true if this license is marked as being deprecated
 	 */
 	public boolean isDeprecated() {
 		return this.deprecated;
 	}
-	
+
 	/**
 	 * @param deprecated true if this license is deprecated
 	 */
 	public void setDeprecated(boolean deprecated) {
 		this.deprecated = deprecated;
 		if (this.exceptionNode != null) {
-			Property deprecatedProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property deprecatedProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
 			model.removeAll(this.resource, deprecatedProperty, null);
 			if (deprecated) {
@@ -668,11 +668,11 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			}
 		}
 	}
-	
+
 	/**
 	 * Copy all of the parameters from another license
 	 * @param exception
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void copyFrom(LicenseException exception) throws InvalidSPDXAnalysisException {
 		this.setComment(exception.getComment());
@@ -688,7 +688,7 @@ public class LicenseException implements IRdfModel, Cloneable  {
 	 * Get the URI for this RDF object. Null if this is for an anonomous node.
 	 * @param modelContainer
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		return null;	// default to anonomous node

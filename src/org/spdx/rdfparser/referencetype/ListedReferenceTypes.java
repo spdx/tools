@@ -42,7 +42,7 @@ import com.google.common.collect.Maps;
  *
  */
 public class ListedReferenceTypes {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(ListedReferenceTypes.class);
 	private static final ReadWriteLock listedReferenceTypesModificationLock = new ReentrantReadWriteLock();
 	private static final String LISTED_REFERENCE_TYPE__RDF_LOCAL_DIR = "resources" + "/" + "listedexternaltypes";
@@ -53,7 +53,7 @@ public class ListedReferenceTypes {
 	private Properties listedReferenceTypeProperties;
 	List<String> listedReferenceNames = new ArrayList<String>();
 	ConcurrentMap<String, ReferenceType> listedReferenceTypeCache = Maps.newConcurrentMap();
-	
+
 	private ListedReferenceTypes() {
 		listedReferenceTypeProperties  = new Properties();
         InputStream in = null;
@@ -61,7 +61,7 @@ public class ListedReferenceTypes {
             in = LicenseInfoFactory.class.getResourceAsStream("/" + LISTED_REFERENCE_TYPE_PROPERTIES_FILENAME);
             listedReferenceTypeProperties.load(in);
         } catch (IOException e) {
-            logger.warn("IO Exception reading listed reference type properties file: " 
+            logger.warn("IO Exception reading listed reference type properties file: "
             				+ e.getMessage() + ", loading properties from class properties file.");
             try {
             	in = ListedReferenceTypes.class.getClassLoader().getResourceAsStream(LISTED_REFERENCE_TYPE_PROPERTIES_CLASS_PATH);
@@ -80,9 +80,9 @@ public class ListedReferenceTypes {
         }
         loadReferenceTypeNames();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private void loadReferenceTypeNames() {
 		listedReferenceTypesModificationLock.readLock().lock();
@@ -113,7 +113,7 @@ public class ListedReferenceTypes {
         }
         return listedReferenceTypes;
 	}
-	
+
 	/**
 	 * Resets all of the listed reference types and reloads the listed reference ID's
 	 * NOTE: This method should be used with caution, it will negatively impact
@@ -129,7 +129,7 @@ public class ListedReferenceTypes {
         	listedReferenceTypesModificationLock.writeLock().unlock();
         }
     }
-    
+
     /**
      * Returns true if the URI references a valid SPDX listed reference type
      * @param uri
@@ -143,7 +143,7 @@ public class ListedReferenceTypes {
     		return false;
     	}
     }
-    
+
     /**
      * Get the listed reference URI from a listed reference type name used in the tag/value format
      * @param listedReferenceName
@@ -163,7 +163,7 @@ public class ListedReferenceTypes {
     	}
     	return retval;
     }
-    
+
     public ReferenceType getListedReferenceTypeByName(String listedReferenceName) throws InvalidSPDXAnalysisException {
     	ReferenceType retval = this.listedReferenceTypeCache.get(listedReferenceName);
     	if (retval == null) {
@@ -189,6 +189,6 @@ public class ListedReferenceTypes {
     	}
     	return uri.toString().substring(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX.length());
     }
-    
+
     //TODO: Implement accessing the SPDX reference type pages directly similar to the SpdxListedLicenses class
 }

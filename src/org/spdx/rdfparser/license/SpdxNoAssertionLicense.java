@@ -34,7 +34,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class SpdxNoAssertionLicense extends AnyLicenseInfo {
-	
+
 	static final int NO_ASSERTION_HASHCODE = 89;	// prime number - all NoAssertion licenses should have the same hashcode
 
 	/**
@@ -48,7 +48,7 @@ public class SpdxNoAssertionLicense extends AnyLicenseInfo {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public SpdxNoAssertionLicense() {
 		super();
@@ -69,7 +69,7 @@ public class SpdxNoAssertionLicense extends AnyLicenseInfo {
 	public String toString() {
 		return LicenseInfoFactory.NOASSERTION_LICENSE_NAME;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return NO_ASSERTION_HASHCODE;
@@ -116,7 +116,7 @@ public class SpdxNoAssertionLicense extends AnyLicenseInfo {
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		// Nothing to populate
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -125,7 +125,7 @@ public class SpdxNoAssertionLicense extends AnyLicenseInfo {
 	@Override
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// No properties to get
-		
+
 	}
 
 	/* (non-Javadoc)

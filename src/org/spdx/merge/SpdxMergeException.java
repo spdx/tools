@@ -35,7 +35,7 @@ public class SpdxMergeException extends Exception{
 	public SpdxMergeException(Throwable cause) {
 		super(cause);
 	}
-	
+
 	/**
 	 * @param message
 	 * @param cause

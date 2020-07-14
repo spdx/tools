@@ -49,7 +49,7 @@ public class DoapProject extends RdfModelObject {
 	 * @param model Jena model to populate
 	 * @param projectUrl The URL of the DOAP project
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	static DoapProject getExistingProject(IModelContainer modelContainer, String projectUrl) throws InvalidSPDXAnalysisException {
 		Resource projectResource = modelContainer.getModel().createResource(projectUrl);
@@ -66,46 +66,46 @@ public class DoapProject extends RdfModelObject {
 		super(modelContainer, node);
 		getPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
 	@Override
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// name
-		this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+		this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 				SpdxRdfConstants.PROP_PROJECT_NAME);
 		// home page
-		this.homePage = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+		this.homePage = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 				SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 	}
 	/**
-	 * 
+	 *
 	 */
 	public DoapProject(String name, String homePage) {
 		this.name = name;
 		this.homePage = homePage;
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
-		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 				SpdxRdfConstants.PROP_PROJECT_NAME, name);
-		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 				SpdxRdfConstants.PROP_PROJECT_HOMEPAGE, homePage);
 	}
 
-	
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		if (this.resource != null && this.refreshOnGet) {
-			this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+			this.name = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 					SpdxRdfConstants.PROP_PROJECT_NAME);
 		}
 		return name;
@@ -115,7 +115,7 @@ public class DoapProject extends RdfModelObject {
 	 */
 	public void setName(String name) {
 		this.name = name;
-		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 					SpdxRdfConstants.PROP_PROJECT_NAME, name);
 	}
 	/**
@@ -123,7 +123,7 @@ public class DoapProject extends RdfModelObject {
 	 */
 	public String getHomePage() {
 		if (this.resource != null && this.refreshOnGet) {
-			this.homePage = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+			this.homePage = findSinglePropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 					SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 		}
 		return homePage;
@@ -133,7 +133,7 @@ public class DoapProject extends RdfModelObject {
 	 */
 	public void setHomePage(String homePage) {
 		this.homePage = homePage;
-		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.DOAP_NAMESPACE,
 				SpdxRdfConstants.PROP_PROJECT_HOMEPAGE, homePage);
 	}
 	/**
@@ -149,7 +149,7 @@ public class DoapProject extends RdfModelObject {
 	}
 	/**
 	 * @param uri the uri to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setProjectUri(String uri) throws InvalidSPDXAnalysisException {
 		if (this.resource != null) {
@@ -167,7 +167,7 @@ public class DoapProject extends RdfModelObject {
 	 */
 	@Override
 	public List<String> verify() {
-		List<String> retval = Lists.newArrayList();	
+		List<String> retval = Lists.newArrayList();
 		if (this.homePage != null && !this.homePage.isEmpty() && !this.getHomePage().equals("UNKNOWN")) {
 			if (!SpdxVerificationHelper.isValidUri(homePage)) {
 				retval.add("Invalid project home page - not a URL");
@@ -187,7 +187,7 @@ public class DoapProject extends RdfModelObject {
 		return uri;
 	}
 
-	@Override 
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof DoapProject)) {
 			return false;
@@ -201,7 +201,7 @@ public class DoapProject extends RdfModelObject {
 				!compare.getProjectUri().equals(UNKNOWN_URI) && !this.getProjectUri().equals(UNKNOWN_URI)) {
 			return this.getProjectUri().equals(compare.getProjectUri());
 		}
-		if ((compare.getProjectUri() != null && !compare.getProjectUri().equals(UNKNOWN_URI)) || 
+		if ((compare.getProjectUri() != null && !compare.getProjectUri().equals(UNKNOWN_URI)) ||
 				(this.getProjectUri() != null && !this.getProjectUri().equals(UNKNOWN_URI))) {
 			return false;
 		}
@@ -213,7 +213,7 @@ public class DoapProject extends RdfModelObject {
 		// just use the object compares if the above shortcuts did not work out
 		return super.equals(o);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		// need this method to match the equals for proper behavior
@@ -223,9 +223,9 @@ public class DoapProject extends RdfModelObject {
 			return this.getHomePage().hashCode();
 		} else {
 			return super.hashCode();
-		}		
+		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */

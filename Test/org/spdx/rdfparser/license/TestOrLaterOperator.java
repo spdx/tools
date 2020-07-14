@@ -43,7 +43,7 @@ public class TestOrLaterOperator {
 	static final String LICENSE_TEXT2 = "Second licenseText";
 	private SimpleLicensingInfo license1;
 	private SimpleLicensingInfo license2;
-	
+
 	Model model;
 	IModelContainer modelContainer = new IModelContainer() {
 
@@ -87,7 +87,7 @@ public class TestOrLaterOperator {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -99,7 +99,7 @@ public class TestOrLaterOperator {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 
 	/**
@@ -160,7 +160,7 @@ public class TestOrLaterOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.OrLaterOperator#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -172,7 +172,7 @@ public class TestOrLaterOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.OrLaterOperator#clone()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
@@ -188,7 +188,7 @@ public class TestOrLaterOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.OrLaterOperator#setLicense(org.spdx.rdfparser.license.SimpleLicensingInfo)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetLicense() throws InvalidSPDXAnalysisException {
@@ -206,7 +206,7 @@ public class TestOrLaterOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.AnyLicenseInfo#createResource(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
@@ -222,7 +222,7 @@ public class TestOrLaterOperator {
 		assertEquals(LICENSE_ID1, compLic.getLicenseId());
 		assertEquals(LICENSE_TEXT1, compLic.getExtractedText());
 	}
-	
+
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		OrLaterOperator olo1 = new OrLaterOperator(license1);

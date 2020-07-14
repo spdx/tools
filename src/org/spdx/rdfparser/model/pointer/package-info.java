@@ -16,17 +16,17 @@
  */
 /**
  * RDF model classes which implement the proposed W3C Pointer classes.
- * From the W3C documentation, pointers are entities that permit identifying 
- * a portion or segment of a piece of content - making use of the 
+ * From the W3C documentation, pointers are entities that permit identifying
+ * a portion or segment of a piece of content - making use of the
  * Resource Description Framework (RDF). It also describes a number of specific
- *  types of pointers that permit portions of a document to be referred to in 
- *  different ways. When referring to a specific part of, say, a piece of web content, 
- *  it is useful to be able to have a consistent manner by which to refer to a particular 
- *  segment of a web document, to have a variety of ways by which to refer to that 
+ *  types of pointers that permit portions of a document to be referred to in
+ *  different ways. When referring to a specific part of, say, a piece of web content,
+ *  it is useful to be able to have a consistent manner by which to refer to a particular
+ *  segment of a web document, to have a variety of ways by which to refer to that
  *  same segment, and to make the reference robust in the face of changes to that document.
- *  
+ *
  *  Pointers are used to describe SPDX Snippet ranges.
- *  
+ *
  * @author Gary O'Neall
  *
  */

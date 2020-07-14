@@ -26,14 +26,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Gary O'Neall
- * 
+ *
  * Input stream which filters out any SPDX tag/value comments
  * Any new line which begins with a # is skipped until the end of line except
  * if it is within a <text> </text> wrapper
  *
  */
 public class NoCommentInputStream extends InputStream {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(NoCommentInputStream.class.getName());
 	private static final CharSequence START_TEXT_TAG = "<text>";
 	private static final CharSequence END_TEXT_TAG = "</text>";
@@ -49,7 +49,7 @@ public class NoCommentInputStream extends InputStream {
 
 	/**
 	 * @param in Input stream containing the commented data
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public NoCommentInputStream(InputStream in) throws IOException {
 		this.inputStream = in;
@@ -60,7 +60,7 @@ public class NoCommentInputStream extends InputStream {
 
 	/**
 	 * Reads the next line in the input stream, skipping empty lines and comments as necessary.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private void readNextLine() throws IOException {
 		do {
@@ -110,7 +110,7 @@ public class NoCommentInputStream extends InputStream {
 		// Return the current byte from the buffer and increment the index.
 		return (int)currentBytes[bytesIndex++];
 	}
-	
+
 	@Override
 	public void close() {
 		if (this.bufferedReader != null) {
@@ -135,7 +135,7 @@ public class NoCommentInputStream extends InputStream {
 			}
 		}
 	}
-	
+
 	/**
 	 * Searches for the string in the file stored in FileLine and returns the line no. if found.
 	 * @param string to be searched in the file
@@ -143,7 +143,7 @@ public class NoCommentInputStream extends InputStream {
 	public int getCurrentLineNo(){
 		return currentLineNo;
 	}
-	
+
 	public String readLine() throws IOException {
 		if (bytesIndex >= currentBytes.length) {
 			readNextLine();
@@ -155,5 +155,5 @@ public class NoCommentInputStream extends InputStream {
 		bytesIndex = currentBytes.length;
 		return retval;
 	}
-	
+
 }

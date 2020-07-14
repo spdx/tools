@@ -100,7 +100,7 @@ public class SpdxPackageComparerTest {
 	private static final String SUPPLIERA = "Person: Supplier A";
 	private static final String SUPPLIERB = "Person: Supplier B";
 	private static final Map<String, String> LICENSE_XLATION_MAPAB = Maps.newHashMap();
-	
+
 	private static final String[] REFERENCE_LOCATORS = new String[] {
 		"org.apache.tomcat:tomcat:9.0.0.M4", "Microsoft.AspNet.MVC/5.0.0",
 		"cpe:2.3:o:canonical:ubuntu_linux:10.04::lts:*:*:*:*:*"
@@ -120,21 +120,21 @@ public class SpdxPackageComparerTest {
 	};
 
 	ExternalRef[] TEST_REFERENCES;
-	
+
 	static {
 		LICENSE_XLATION_MAPAB.put("LicenseRef-1", "LicenseRef-4");
 		LICENSE_XLATION_MAPAB.put("LicenseRef-2", "LicenseRef-5");
 		LICENSE_XLATION_MAPAB.put("LicenseRef-3", "LicenseRef-6");
 	}
-	
+
 	private static final Map<String, String> LICENSE_XLATION_MAPBA = Maps.newHashMap();
-	
+
 	static {
 		LICENSE_XLATION_MAPBA.put("LicenseRef-4", "LicenseRef-1");
 		LICENSE_XLATION_MAPBA.put("LicenseRef-5", "LicenseRef-2");
 		LICENSE_XLATION_MAPBA.put("LicenseRef-6", "LicenseRef-3");
 	}
-	
+
 	private final Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> LICENSE_XLATION_MAP = Maps.newHashMap();
 
 	private SpdxDocument DOCA;
@@ -146,7 +146,7 @@ public class SpdxPackageComparerTest {
 	private Annotation[] ANNOTATIONSA;
 	@SuppressWarnings("unused")
 	private Annotation[] ANNOTATIONSB;
-	
+
 	private Relationship[] RELATIONSHIPSA;
 	@SuppressWarnings("unused")
 	private Relationship[] RELATIONSHIPSB;
@@ -179,8 +179,8 @@ public class SpdxPackageComparerTest {
 	private SpdxFile[] FILESB_SAME;
 	private SpdxPackageVerificationCode VERIFICATION_CODEA;
 	private SpdxPackageVerificationCode VERIFICATION_CODEB;
-	
-	
+
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -200,70 +200,70 @@ public class SpdxPackageComparerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		ANNOTATION1 = new Annotation("Annotator1", AnnotationType.annotationType_other, 
+		ANNOTATION1 = new Annotation("Annotator1", AnnotationType.annotationType_other,
 				"2010-01-29T18:30:22Z", "AnnotationComment1");
-		ANNOTATION2 = new Annotation("Annotator2", AnnotationType.annotationType_review, 
+		ANNOTATION2 = new Annotation("Annotator2", AnnotationType.annotationType_review,
 				"2011-01-29T18:30:22Z", "AnnotationComment2");
-		ANNOTATION3 = new Annotation("Annotator3", AnnotationType.annotationType_other, 
+		ANNOTATION3 = new Annotation("Annotator3", AnnotationType.annotationType_other,
 				"2012-01-29T18:30:22Z", "AnnotationComment3");
-		ANNOTATION4 = new Annotation("Annotator4", AnnotationType.annotationType_review, 
+		ANNOTATION4 = new Annotation("Annotator4", AnnotationType.annotationType_review,
 				"2013-01-29T18:30:22Z", "AnnotationComment4");
 		ANNOTATIONSA = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		ANNOTATIONSB = new Annotation[] {ANNOTATION3, ANNOTATION4};
-		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 				"related element comment 1", null, null);
-		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 				"related element comment 2", null, null);
-		RELATED_ELEMENT3 = new SpdxElement("relatedElementName3", 
+		RELATED_ELEMENT3 = new SpdxElement("relatedElementName3",
 				"related element comment 3", null, null);
-		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
+		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4",
 				"related element comment 4", null, null);
-		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
 				RelationshipType.CONTAINS, "Relationship Comment1");
-		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
 				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
-		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3, 
+		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3,
 				RelationshipType.DATA_FILE_OF, "Relationship Comment3");
-		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4, 
+		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4,
 				RelationshipType.DISTRIBUTION_ARTIFACT, "Relationship Comment4");
 		RELATIONSHIPSA = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		RELATIONSHIPSB = new Relationship[] {RELATIONSHIP3, RELATIONSHIP4};
-		CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		CHECKSUM1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"111bf72bf99b7e471f1a27989667a903658652bb");
-		CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"222bf72bf99b7e471f1a27989667a903658652bb");
-		CHECKSUM3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		CHECKSUM3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"333bf72bf99b7e471f1a27989667a903658652bb");
-		CHECKSUM4 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		CHECKSUM4 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"444bf72bf99b7e471f1a27989667a903658652bb");
 		CHECKSUMSA = new Checksum[] {CHECKSUM1, CHECKSUM2};
 		CHECKSUMSB = new Checksum[] {CHECKSUM3, CHECKSUM4};
-		
-		FILE1A = new SpdxFile(FILE1_NAME, null, null, null, 
+
+		FILE1A = new SpdxFile(FILE1_NAME, null, null, null,
 				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSA, null, null, null);
-		FILE1B = new SpdxFile(FILE1_NAME, null, null, null, 
+		FILE1B = new SpdxFile(FILE1_NAME, null, null, null,
 				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSA, null, null, null);
-		FILE1B_DIFF_CHECKSUM = new SpdxFile(FILE1_NAME, null, null, null, 
+		FILE1B_DIFF_CHECKSUM = new SpdxFile(FILE1_NAME, null, null, null,
 				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSB, null, null, null);
-		FILE2A = new SpdxFile(FILE2_NAME, null, null, null, 
+		FILE2A = new SpdxFile(FILE2_NAME, null, null, null,
 				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSA, null, null, null);
-		FILE3A = new SpdxFile(FILE3_NAME, null, null, null, 
+		FILE3A = new SpdxFile(FILE3_NAME, null, null, null,
 				LICENSE_CONCLUDEDA, new AnyLicenseInfo[] {LICENSEA1, LICENSEA2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSA, null, null, null);
-		FILE2B = new SpdxFile(FILE2_NAME, null, null, null, 
+		FILE2B = new SpdxFile(FILE2_NAME, null, null, null,
 				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSA, null, null, null);
-		FILE3B = new SpdxFile(FILE3_NAME, null, null, null, 
+		FILE3B = new SpdxFile(FILE3_NAME, null, null, null,
 				LICENSE_CONCLUDEDB, new AnyLicenseInfo[] {LICENSEB1, LICENSEB2},
 				null, null, new FileType[] {FileType.fileType_documentation, FileType.fileType_text},
 				CHECKSUMSA, null, null, null);
@@ -287,14 +287,14 @@ public class SpdxPackageComparerTest {
 		Map<SpdxDocument, Map<String, String>> amap = Maps.newHashMap();
 		amap.put(DOCA, LICENSE_XLATION_MAPBA);
 		LICENSE_XLATION_MAP.put(DOCB, amap);
-		
+
 		TEST_REFERENCES = new ExternalRef[REFERENCE_CATEGORIES.length];
 		for (int i = 0; i < REFERENCE_CATEGORIES.length; i++) {
-			TEST_REFERENCES[i] = new ExternalRef(REFERENCE_CATEGORIES[i], 
+			TEST_REFERENCES[i] = new ExternalRef(REFERENCE_CATEGORIES[i],
 					new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[i]), null, null, null),
 					REFERENCE_LOCATORS[i], COMMENTS[i]);
 		}
-		
+
 		Arrays.sort(TEST_REFERENCES);
 	}
 
@@ -307,20 +307,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#compare(org.spdx.rdfparser.model.SpdxPackage, org.spdx.rdfparser.model.SpdxPackage, java.util.HashMap)}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testCompareSpdxPackageSpdxPackageHashMapOfStringString() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -346,7 +346,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -355,20 +355,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageVersionsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageVersionsEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOB);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -394,7 +394,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertFalse(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -403,20 +403,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageSuppliersEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageSuppliersEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERB, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -442,7 +442,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -451,20 +451,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageDownloadLocationsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageDownloadLocationsEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADB, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADB, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -490,7 +490,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -499,20 +499,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageVerificationCodesEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageVerificationCodesEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEB, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -538,7 +538,7 @@ public class SpdxPackageComparerTest {
 		assertFalse(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -547,20 +547,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageChecksumsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageChecksumsEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSB,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -586,7 +586,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(2, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(2, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -595,20 +595,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageSourceInfosEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageSourceInfosEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOB,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -634,7 +634,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -643,20 +643,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isDeclaredLicensesEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testisDeclaredLicensesEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSEB1, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -682,30 +682,30 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueFiles(DOCB, DOCA).length);
-		
+
 	}
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageSummaryEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageSummaryEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYB, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -731,7 +731,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -740,20 +740,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageDescriptionsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageDescriptionsEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONB, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONB, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -779,7 +779,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -788,20 +788,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageOriginatorsEqual()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageOriginatorsEqual() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORB, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORB,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -827,7 +827,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -836,20 +836,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageHomePagesEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageHomePagesEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEB, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEB, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -875,7 +875,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(0, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -884,20 +884,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#getPkgA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetPkg() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEB, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEB, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -906,26 +906,26 @@ public class SpdxPackageComparerTest {
 		assertEquals(pkgA, pc.getDocPackage(DOCA));
 		assertEquals(pkgB, pc.getDocPackage(DOCB));
 	}
-	
+
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#getUniqueChecksumsA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueChecksumsA() throws SpdxCompareException {
 		Checksum[] checksumsA = new Checksum[] {CHECKSUM1, CHECKSUM2};
 		Checksum[] checksumsB = new Checksum[] {CHECKSUM2, CHECKSUM3};
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, checksumsA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, checksumsB,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -941,22 +941,22 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#getUniqueChecksumsB()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueChecksumsB() throws SpdxCompareException {
 		Checksum[] checksumsA = new Checksum[] {CHECKSUM1, CHECKSUM2};
 		Checksum[] checksumsB = new Checksum[] {CHECKSUM2, CHECKSUM3};
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, checksumsA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, checksumsB,
-				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB_SAME, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -972,20 +972,20 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#isPackageFilesEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsPackageFilesEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESB, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1011,7 +1011,7 @@ public class SpdxPackageComparerTest {
 		assertTrue(pc.isPackageVerificationCodesEquals());
 		assertTrue(pc.isPackageVersionsEquals());
 		assertTrue(pc.isRelationshipsEquals());
-		assertTrue(pc.isSeenLicenseEquals());	
+		assertTrue(pc.isSeenLicenseEquals());
 		assertEquals(0, pc.getUniqueChecksums(DOCA, DOCB).length);
 		assertEquals(0, pc.getUniqueChecksums(DOCB, DOCA).length);
 		assertEquals(1, pc.getUniqueFiles(DOCA, DOCB).length);
@@ -1020,22 +1020,22 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#getFileDifferences()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetFileDifferences() throws SpdxCompareException {
 		SpdxFile[] filesA = new SpdxFile[] {FILE1A, FILE2A, FILE3A};
 		SpdxFile[] filesB = new SpdxFile[] {FILE1B_DIFF_CHECKSUM, FILE2B, FILE3B};
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, filesA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, filesA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1052,22 +1052,22 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#getUniqueFilesA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueFilesA() throws SpdxCompareException {
 		SpdxFile[] filesA = new SpdxFile[] {FILE1A, FILE2A};
 		SpdxFile[] filesB = new SpdxFile[] {FILE2B, FILE3B};
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, filesA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, filesA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1084,22 +1084,22 @@ public class SpdxPackageComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxPackageComparer#getUniqueFilesB()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueFilesB() throws SpdxCompareException {
 		SpdxFile[] filesA = new SpdxFile[] {FILE1A, FILE2A};
 		SpdxFile[] filesB = new SpdxFile[] {FILE2B, FILE3B};
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, filesA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, filesA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, filesB, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1113,19 +1113,19 @@ public class SpdxPackageComparerTest {
 		assertEquals(1, result.length);
 		assertEquals(FILE3B, result[0]);
 	}
-	
+
 	@Test
 	public void testIsFilesAnalyzedEquals() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, new ExternalRef[0]);
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA, false, new ExternalRef[0]);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1136,23 +1136,23 @@ public class SpdxPackageComparerTest {
 	}
 	@Test
 	public void testGetExternalRefDifferences() throws SpdxCompareException, InvalidSPDXAnalysisException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, TEST_REFERENCES);
 		ExternalRef[] externalRefB = new ExternalRef[TEST_REFERENCES.length];
-		
+
 		for (int i = 0; i < TEST_REFERENCES.length; i++) {
 			externalRefB[i] = TEST_REFERENCES[i].clone();
 		}
 		externalRefB[0].setComment("Different comment");
-		
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, externalRefB);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1166,34 +1166,34 @@ public class SpdxPackageComparerTest {
 		assertTrue(result[0].getReferenceType().equivalent(TEST_REFERENCES[0].getReferenceType()));
 		assertFalse(result[0].isCommentsEqual());
 		assertEquals(TEST_REFERENCES[0].getComment(), result[0].getCommentB());
-		assertEquals(externalRefB[0].getComment(), result[0].getCommentA());		
+		assertEquals(externalRefB[0].getComment(), result[0].getCommentA());
 		result = pc.getExternalRefDifferences(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(result[0].getReferenceLocator(), TEST_REFERENCES[0].getReferenceLocator());
 		assertTrue(result[0].getReferenceType().equivalent(TEST_REFERENCES[0].getReferenceType()));
 		assertFalse(result[0].isCommentsEqual());
 		assertEquals(TEST_REFERENCES[0].getComment(), result[0].getCommentB());
-		assertEquals(externalRefB[0].getComment(), result[0].getCommentA());	
+		assertEquals(externalRefB[0].getComment(), result[0].getCommentA());
 	}
-	
+
 	@Test
 	public void testGetUniqueExternalRefs() throws SpdxCompareException {
-		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgA = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDA, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, TEST_REFERENCES);
 		ExternalRef[] externalRefB = new ExternalRef[TEST_REFERENCES.length-1];
-		
+
 		for (int i = 0; i < TEST_REFERENCES.length-1; i++) {
 			externalRefB[i] = TEST_REFERENCES[i].clone();
 		}
 
-		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA, 
+		SpdxPackage pkgB = new SpdxPackage(NAMEA, COMMENTA, ANNOTATIONSA,
 				RELATIONSHIPSA, LICENSE_CONCLUDEDB, LICENSE_INFO_FROM_FILESB,
 				COPYRIGHTA, LICENSE_COMMENTA, LICENSE_DECLAREDB, CHECKSUMSA,
-				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA, 
+				DESCRIPTIONA, DOWNLOADA, FILESA, HOMEPAGEA, ORIGINATORA,
 				PACKAGE_FILENAMEA, VERIFICATION_CODEA, SOURCEINFOA,
 				SUMMARYA, SUPPLIERA, VERSIONINFOA, true, externalRefB);
 		SpdxPackageComparer pc = new SpdxPackageComparer(LICENSE_XLATION_MAP);
@@ -1206,6 +1206,6 @@ public class SpdxPackageComparerTest {
 		assertTrue(TEST_REFERENCES[TEST_REFERENCES.length-1].equivalent(result[0]));
 		result = pc.getUniqueExternalRefs(DOCB, DOCA);
 		assertEquals(0, result.length);
-		
+
 	}
 }

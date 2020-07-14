@@ -37,7 +37,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class SpdxItem extends SpdxElement {
-	
+
 	AnyLicenseInfo licenseConcluded;
 	AnyLicenseInfo[] licenseInfoFromFiles;
 	String copyrightText;
@@ -55,16 +55,16 @@ public class SpdxItem extends SpdxElement {
 		super(modelContainer, node);
 		getMyPropertiesFromModel();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		this.copyrightText = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT);
 		this.licenseComments = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS);
-		this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.licenseConcluded = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
-		this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.licenseInfoFromFiles = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				getLicenseInfoFromFilesPropertyName());
 		this.attributionText = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ATTRIBUTION_TEXT);
 	}
@@ -77,7 +77,7 @@ public class SpdxItem extends SpdxElement {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
-	
+
 	/**
 	 * @param name Name of the item
 	 * @param comment Optional comment about the item
@@ -90,14 +90,14 @@ public class SpdxItem extends SpdxElement {
 	 * @param attributionText Optional attribution text
 	 */
 	public SpdxItem(String name, String comment, Annotation[] annotations,
-			Relationship[] relationships,AnyLicenseInfo licenseConcluded, 
-			AnyLicenseInfo[] licenseInfoFromFiles, String copyrightText, 
+			Relationship[] relationships,AnyLicenseInfo licenseConcluded,
+			AnyLicenseInfo[] licenseInfoFromFiles, String copyrightText,
 			String licenseComment, String[] attributionText) {
 		this(name, comment, annotations, relationships, licenseConcluded, licenseInfoFromFiles,
 				copyrightText, licenseComment);
 		this.attributionText = attributionText;
 	}
-	
+
 	/**
 	 * @param name Name of the item
 	 * @param comment Optional comment about the item
@@ -109,8 +109,8 @@ public class SpdxItem extends SpdxElement {
 	 * @param licenseComment Optional comment on the license
 	 */
 	public SpdxItem(String name, String comment, Annotation[] annotations,
-			Relationship[] relationships,AnyLicenseInfo licenseConcluded, 
-			AnyLicenseInfo[] licenseInfoFromFiles, String copyrightText, 
+			Relationship[] relationships,AnyLicenseInfo licenseConcluded,
+			AnyLicenseInfo[] licenseInfoFromFiles, String copyrightText,
 			String licenseComment) {
 		super(name, comment, annotations, relationships);
 		this.licenseConcluded = licenseConcluded;
@@ -121,7 +121,7 @@ public class SpdxItem extends SpdxElement {
 		this.copyrightText = copyrightText;
 		this.licenseComments = licenseComment;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
@@ -130,11 +130,11 @@ public class SpdxItem extends SpdxElement {
 		super.populateModel();
 		if (this.resource != null) {
 			if (this.licenseConcluded != null) {
-				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_LICENSE_CONCLUDED, licenseConcluded);
 			}
 			if (this.licenseInfoFromFiles != null) {
-				setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						getLicenseInfoFromFilesPropertyName(), licenseInfoFromFiles);
 			}
 			if (this.copyrightText != null) {
@@ -162,7 +162,7 @@ public class SpdxItem extends SpdxElement {
 	public AnyLicenseInfo getLicenseConcluded() {
 		if (this.resource != null && this.refreshOnGet) {
 			try {
-				AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+				AnyLicenseInfo refresh = findAnyLicenseInfoPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_LICENSE_CONCLUDED);
 				if (refresh == null || !refresh.equals(this.licenseConcluded)) {
 					this.licenseConcluded = refresh;
@@ -176,7 +176,7 @@ public class SpdxItem extends SpdxElement {
 
 	/**
 	 * @param licenseConcluded the licenseConcluded to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setLicenseConcluded(AnyLicenseInfo licenseConcluded) throws InvalidSPDXAnalysisException {
 		this.licenseConcluded = licenseConcluded;
@@ -184,12 +184,12 @@ public class SpdxItem extends SpdxElement {
 	}
 
 	/**
-	 * @return the licenseInfoFromFiles 
+	 * @return the licenseInfoFromFiles
 	 */
 	public AnyLicenseInfo[] getLicenseInfoFromFiles() {
 		if (this.resource != null && this.refreshOnGet) {
 			try {
-				AnyLicenseInfo[] refresh = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				AnyLicenseInfo[] refresh = findAnyLicenseInfoPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						getLicenseInfoFromFilesPropertyName());
 				if (!RdfModelHelper.arraysEqual(refresh, this.licenseInfoFromFiles)) {
 					this.licenseInfoFromFiles = refresh;
@@ -206,7 +206,7 @@ public class SpdxItem extends SpdxElement {
 	 */
 	public void setLicenseInfosFromFiles(AnyLicenseInfo[] licenseInfoFromFiles)  throws InvalidSPDXAnalysisException {
 		this.licenseInfoFromFiles = licenseInfoFromFiles;
-		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 				getLicenseInfoFromFilesPropertyName(), licenseInfoFromFiles);
 	}
 
@@ -227,7 +227,7 @@ public class SpdxItem extends SpdxElement {
 		this.copyrightText = copyrightText;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_COPYRIGHT_TEXT, copyrightText);
 	}
-	
+
 	/**
 	 * @param attributionText the attributionText to set
 	 */
@@ -258,7 +258,7 @@ public class SpdxItem extends SpdxElement {
 		}
 		return licenseComments;
 	}
-	
+
 	/**
 	 * This has been replaced by getLicenseComments to match the latest SPDX 2.0 spec
 	 * @return
@@ -275,7 +275,7 @@ public class SpdxItem extends SpdxElement {
 		this.licenseComments = licenseComments;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_COMMENTS, licenseComments);
 	}
-	
+
 	/**
 	 * This has been replaced by setLicenseComments to match the latest SPDX 2.0 spec
 	 */
@@ -291,12 +291,12 @@ public class SpdxItem extends SpdxElement {
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + SpdxRdfConstants.CLASS_SPDX_ITEM);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o) {
 		return this.equivalent(o, true);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o, boolean testRelationships) {
 		if (o == this) {
@@ -314,15 +314,15 @@ public class SpdxItem extends SpdxElement {
 				arraysEquivalent(this.getLicenseInfoFromFiles(), comp.getLicenseInfoFromFiles(), testRelationships) &&
 				RdfModelHelper.stringsEquivalent(this.getLicenseComments(), comp.getLicenseComments()));
 	}
-	
+
 	protected AnyLicenseInfo cloneLicenseConcluded() {
 		if (this.licenseConcluded == null) {
 			return null;
 		}
 		return this.licenseConcluded.clone();
 	}
-	
-	
+
+
 	protected AnyLicenseInfo[] cloneLicenseInfosFromFiles() {
 		if (this.licenseInfoFromFiles == null) {
 			return new AnyLicenseInfo[0];
@@ -333,20 +333,20 @@ public class SpdxItem extends SpdxElement {
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public SpdxItem clone() {
 		//NOTE: We don't call super.clone since we must handle the special case avoiding infinite recursion
 		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
-	
+
 	@Override
     public SpdxItem clone(Map<String, SpdxElement> clonedElementIds) {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return (SpdxItem)clonedElementIds.get(this.getId());
 		}
 		SpdxItem retval =  new SpdxItem(this.name, this.comment, cloneAnnotations(),null,
-				cloneLicenseConcluded(), cloneLicenseInfosFromFiles(), this.copyrightText, 
+				cloneLicenseConcluded(), cloneLicenseInfosFromFiles(), this.copyrightText,
 				this.licenseComments);
 		clonedElementIds.put(this.getId(), retval);
 		try {
@@ -356,7 +356,7 @@ public class SpdxItem extends SpdxElement {
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public List<String> verify() {
 		List<String> retval = super.verify();

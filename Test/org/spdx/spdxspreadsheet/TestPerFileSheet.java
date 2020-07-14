@@ -63,17 +63,17 @@ public class TestPerFileSheet {
 	SpdxListedLicense[] STANDARD_LICENSES;
 	DisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
 	ConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
-	
+
 	ConjunctiveLicenseSet COMPLEX_LICENSE;
-	
+
 	Resource[] NON_STD_LICENSES_RESOURCES;
 	Resource[] STANDARD_LICENSES_RESOURCES;
 	Resource[] DISJUNCTIVE_LICENSES_RESOURCES;
 	Resource[] CONJUNCTIVE_LICENSES_RESOURCES;
 	Resource COMPLEX_LICENSE_RESOURCE;
-	
+
 	Model model;
-	
+
 	IModelContainer modelContainer = new IModelContainer() {
 
 		@Override
@@ -93,7 +93,7 @@ public class TestPerFileSheet {
 
 		@Override
 		public void addSpdxElementRef(String elementRef) {
-			
+
 		}
 
 		@Override
@@ -117,7 +117,7 @@ public class TestPerFileSheet {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -129,7 +129,7 @@ public class TestPerFileSheet {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 
 	/**
@@ -141,17 +141,17 @@ public class TestPerFileSheet {
 		for (int i = 0; i < NONSTD_IDS.length; i++) {
 			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(NONSTD_IDS[i], NONSTD_TEXTS[i]);
 		}
-		
+
 		STANDARD_LICENSES = new SpdxListedLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
-			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i), 
-					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i), "URL2 "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
+			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i),
+					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i), "URL2 "+String.valueOf(i)}, "Notes "+String.valueOf(i),
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
-		
+
 		DISJUNCTIVE_LICENSES = new DisjunctiveLicenseSet[3];
 		CONJUNCTIVE_LICENSES = new ConjunctiveLicenseSet[2];
-		
+
 		DISJUNCTIVE_LICENSES[0] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
 		});
@@ -171,7 +171,7 @@ public class TestPerFileSheet {
 				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
 		});
 		model = ModelFactory.createDefaultModel();
-		
+
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
 			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
@@ -200,8 +200,8 @@ public class TestPerFileSheet {
 
 	/**
 	 * Test method for {@link org.spdx.spdxspreadsheet.PerFileSheetV09d3#add(org.spdx.rdfparser.SpdxFile)}.
-	 * @throws SpreadsheetException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpreadsheetException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
@@ -212,7 +212,7 @@ public class TestPerFileSheet {
 		AnyLicenseInfo[] testLicenses1 = new AnyLicenseInfo[] {COMPLEX_LICENSE};
 		AnyLicenseInfo[] testLicenses2 = new AnyLicenseInfo[] {NON_STD_LICENSES[0]};
 		DoapProject[] testProject2 = new DoapProject[] {new DoapProject("artifactof 2", "home page2")};
-		DoapProject[] testProject3 = new DoapProject[] {new DoapProject("artifactof 3", "home page3"), 
+		DoapProject[] testProject3 = new DoapProject[] {new DoapProject("artifactof 3", "home page3"),
 				new DoapProject("artifactof 4", "home page4")};
 		String fileComment1 = "comment 1";
 		String[] contributors1 = new String[] {"Contrib1", "Contrib2"};
@@ -271,11 +271,11 @@ public class TestPerFileSheet {
 		compareSpdxFiles(testFile.getFileDependencies(), result.getFileDependencies());
 		compareStrings(testFile.getAttributionText(), result.getAttributionText());
 	}
-	
+
 	/**
 	 * @param files1
 	 * @param files2
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void compareSpdxFiles(SpdxFile[] files1,
 			SpdxFile[] files2) throws InvalidSPDXAnalysisException {
@@ -379,7 +379,7 @@ public class TestPerFileSheet {
 			fail(ver);
 		}
 	}
-	
+
 	@Test
 	public void testCsv() {
 		String[] strings = new String[] {"Test1", "\"Quoted test2\"", "", "Test4 with, comma"};

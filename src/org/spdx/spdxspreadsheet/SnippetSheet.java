@@ -49,9 +49,9 @@ import com.google.common.collect.Maps;
  *
  */
 public class SnippetSheet extends AbstractSheet {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(SnippetSheet.class);
-	
+
 	static final int ID_COL = 0;
 	static final int NAME_COL = ID_COL + 1;
 	static final int SNIPPET_FROM_FILE_ID_COL = NAME_COL + 1;
@@ -64,7 +64,7 @@ public class SnippetSheet extends AbstractSheet {
 	static final int COMMENT_COL = COPYRIGHT_COL + 1;
 	static final int USER_DEFINED_COLS = COMMENT_COL + 1;
 	static final int NUM_COLS = USER_DEFINED_COLS + 1;
-	
+
 	static final boolean[] REQUIRED = new boolean[] {true, false, true, true, false,
 		false, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"ID", "Name", "From File ID",
@@ -76,9 +76,9 @@ public class SnippetSheet extends AbstractSheet {
 		true, true, true, true, true, true};
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, true, true, true,
 		false, false, false, false, false, false};
-	
+
 	private static Pattern NUMBER_RANGE_PATTERN = Pattern.compile("(\\d+):(\\d+)");
-	
+
 	/**
 	 * Hashmap of the snippet ID to SPDX snipet
 	 */
@@ -103,7 +103,7 @@ public class SnippetSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS- 1; i++) { 	// Don't check the last (user defined) column
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Snippet worksheet";
@@ -180,7 +180,7 @@ public class SnippetSheet extends AbstractSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);
@@ -196,10 +196,10 @@ public class SnippetSheet extends AbstractSheet {
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
-	
+
 	/**
 	 * @param snippet
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public void add(SpdxSnippet snippet) throws SpreadsheetException {
 		Row row = addRow();
@@ -271,7 +271,7 @@ public class SnippetSheet extends AbstractSheet {
 	/**
 	 * @param byteRange
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private String rangeToStr(StartEndPointer rangePointer) throws InvalidSPDXAnalysisException {
 		SinglePointer startPointer = rangePointer.getStartPointer();
@@ -310,7 +310,7 @@ public class SnippetSheet extends AbstractSheet {
 	 * The ID from the Snippet From File can be obtained through the <code> getSnippetFileId(int rowNum)</code> method
 	 * @param rowNum
 	 * @return Snippet at the row rowNum or null if the row does not exist
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public SpdxSnippet getSnippet(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		if (sheet == null) {
@@ -441,7 +441,7 @@ public class SnippetSheet extends AbstractSheet {
 			}
 		}
 		SpdxSnippet retval = new SpdxSnippet(name, comment, new Annotation[0], new Relationship[0],
-				concludedLicense, seenLicenses, copyright, licenseComments, snippetFromFile, 
+				concludedLicense, seenLicenses, copyright, licenseComments, snippetFromFile,
 				byteRange, lineRange);
 		try {
 			retval.setId(id);
@@ -457,7 +457,7 @@ public class SnippetSheet extends AbstractSheet {
 	 * Get the SpdxFromFileSNippet for the given row
 	 * @param rowNum
 	 * @return
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public String getSnippetFileId(int rowNum) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);

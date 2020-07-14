@@ -40,27 +40,27 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  */
 public class testExternalRefsSheet {
 	static final String DOCUMENT_NAMSPACE = "http://local/document/namespace";
-	
+
 	static final String LOCAL_REFERENCE_TYPE_NAME = "localType";
 	static final String FULL_REFRENCE_TYPE_URI = "http://this/is/not/in/the/document#here";
-	
+
 	static final String PKG1_ID = "SPDXRef-pkg1";
 	static final String PKG2_ID = "SPDXRef-pkg2";
-	
+
 	static final String CPE32_NAME = "cpe23Type";
 	static final String MAVEN_NAME = "maven-central";
-	
+
 	ReferenceType REFERENCE_TYPE_CPE32;
 	ReferenceType REFERENCE_TYPE_MAVEN;
 	ReferenceType REFERENCE_TYPE_LOCAL_TO_PACKAGE;
 	ReferenceType REFERENCE_TYPE_FULL_URI;
-	
+
 	ExternalRef EXTERNAL_PKG1_REF1;
 	ExternalRef EXTERNAL_PKG1_REF2;
 	ExternalRef EXTERNAL_PKG1_REF3;
 	ExternalRef EXTERNAL_PKG2_REF1;
 	ExternalRef EXTERNAL_PKG2_REF2;
-	
+
 	SpdxDocumentContainer container;
 
 	/**
@@ -74,7 +74,7 @@ public class testExternalRefsSheet {
 				new URI(FULL_REFRENCE_TYPE_URI), null, null, null);
 		REFERENCE_TYPE_LOCAL_TO_PACKAGE = new ReferenceType(
 				new URI(DOCUMENT_NAMSPACE + "#" + LOCAL_REFERENCE_TYPE_NAME), null, null, null);
-		
+
 		EXTERNAL_PKG1_REF1 = new ExternalRef(ReferenceCategory.referenceCategory_security,
 				REFERENCE_TYPE_CPE32, "LocatorPkg1Ref1", "CommentPkg1Ref1");
 		EXTERNAL_PKG1_REF2 = new ExternalRef(ReferenceCategory.referenceCategory_packageManager,
@@ -85,7 +85,7 @@ public class testExternalRefsSheet {
 				REFERENCE_TYPE_CPE32, "LocatorPkg2Ref1", "CommentPk21Ref1");
 		EXTERNAL_PKG2_REF2 = new ExternalRef(ReferenceCategory.referenceCategory_other,
 				REFERENCE_TYPE_FULL_URI, "LocatorPkg2Ref2", "CommentPkg2Ref2");
-		
+
 		container = new SpdxDocumentContainer(DOCUMENT_NAMSPACE);
 	}
 
@@ -109,7 +109,7 @@ public class testExternalRefsSheet {
 
 	/**
 	 * Test method for {@link org.spdx.spdxspreadsheet.ExternalRefsSheet#add(java.lang.String, org.spdx.rdfparser.model.ExternalRef, org.spdx.rdfparser.SpdxDocumentContainer)}.
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	@Test
 	public void testAddGet() throws SpreadsheetException {
@@ -122,15 +122,15 @@ public class testExternalRefsSheet {
 		externalRefsSheet.add(PKG1_ID, EXTERNAL_PKG1_REF3, container);
 		externalRefsSheet.add(PKG2_ID, EXTERNAL_PKG2_REF2, container);
 		assertTrue(externalRefsSheet.verify() == null);
-		
+
 		ExternalRef[] expectedPkg1 = new ExternalRef[] {EXTERNAL_PKG1_REF1,
 				EXTERNAL_PKG1_REF2, EXTERNAL_PKG1_REF3};
 		ExternalRef[] expectedPkg2 = new ExternalRef[] {EXTERNAL_PKG2_REF1,
 				EXTERNAL_PKG2_REF2};
-		
+
 		ExternalRef[] result = externalRefsSheet.getExternalRefsForPkgid(PKG1_ID, container);
 		assertTrue(UnitTestHelper.isArraysEquivalent(expectedPkg1, result));
-		
+
 		result = externalRefsSheet.getExternalRefsForPkgid(PKG2_ID, container);
 		assertTrue(UnitTestHelper.isArraysEquivalent(expectedPkg2, result));
 	}
@@ -145,7 +145,7 @@ public class testExternalRefsSheet {
 		assertEquals(LOCAL_REFERENCE_TYPE_NAME, ExternalRefsSheet.refTypeToString(REFERENCE_TYPE_LOCAL_TO_PACKAGE, container));
 		assertEquals(FULL_REFRENCE_TYPE_URI, ExternalRefsSheet.refTypeToString(REFERENCE_TYPE_FULL_URI, container));
 	}
-	
+
 	@Test
 	public void testStringToReferenceType() {
 		assertTrue(REFERENCE_TYPE_CPE32.equivalent(ExternalRefsSheet.stringToRefType(CPE32_NAME, container)));

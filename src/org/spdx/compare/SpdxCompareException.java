@@ -24,7 +24,7 @@ package org.spdx.compare;
 public class SpdxCompareException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 

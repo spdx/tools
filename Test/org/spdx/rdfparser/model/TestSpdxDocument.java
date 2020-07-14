@@ -50,7 +50,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestSpdxDocument {
-	
+
 	private static final String CONTAINER_NAMESPACE = "http://spdx.org/spdx/docs/abcd-e";
 	private static final String ANNOTATOR1 = "Person: Annotator1";
 	private static final String ANNOTATOR2 = "Person: Annotator2";
@@ -77,10 +77,10 @@ public class TestSpdxDocument {
 	private static final String DOC_NAME1 = "DocName1";
 	private static final String DOCID1 = "DocumentRef-1";
 	private static final String DOCID2 = "DocumentRef-2";
-	
+
 	AnyLicenseInfo CCO_DATALICENSE;
 	private SpdxDocumentContainer container;
-	
+
 	private Annotation ANNOTATION1;
 	private Annotation ANNOTATION2;
 	private SPDXCreatorInformation CREATIONINFO1;
@@ -101,7 +101,7 @@ public class TestSpdxDocument {
 	SpdxPackage PACKAGE1;
 	SpdxPackage PACKAGE2;
 	SpdxPackage PACKAGE3;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -131,53 +131,53 @@ public class TestSpdxDocument {
 		CHECKSUM2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, SHA1_VALUE2);
 		EXTERNAL_REF1 = new ExternalDocumentRef(REFERENCED_DOC_URI1, CHECKSUM1, DOCID1);
 		EXTERNAL_REF2 = new ExternalDocumentRef(REFERENCED_DOC_URI2, CHECKSUM2, DOCID2);
-		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 				"related element comment 1", null, null);
-		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 				"related element comment 2", null, null);
-		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
 				RelationshipType.CONTAINS, "Relationship Comment1");
-		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
 				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
 		REVIEWER1 = new SPDXReview("Reviewer1", DATE1, "Reviewer Comment 1");
 		REVIEWER2 = new SPDXReview("Reviewer2", DATE2, "Reviewer Comment 2");
-		FILE1 = new SpdxFile("FileName1", "FileComment 1", 
-				null, null,LICENSE1, new ExtractedLicenseInfo[] {LICENSE2}, 
-				"File Copyright1", "License Comment1", new FileType[] {FileType.fileType_archive}, 
+		FILE1 = new SpdxFile("FileName1", "FileComment 1",
+				null, null,LICENSE1, new ExtractedLicenseInfo[] {LICENSE2},
+				"File Copyright1", "License Comment1", new FileType[] {FileType.fileType_archive},
 				new Checksum[] {CHECKSUM1},
-				new String[] {"File Contrib1"}, "File Notice1", 
+				new String[] {"File Contrib1"}, "File Notice1",
 				new DoapProject[] {new DoapProject("Project1", "http://project.home.page/one")});
-		FILE2 = new SpdxFile("FileName2", "FileComment 2", 
-				null, null,LICENSE2, new ExtractedLicenseInfo[] {LICENSE3}, 
-				"File Copyright2", "License Comment2", new FileType[] {FileType.fileType_source}, 
+		FILE2 = new SpdxFile("FileName2", "FileComment 2",
+				null, null,LICENSE2, new ExtractedLicenseInfo[] {LICENSE3},
+				"File Copyright2", "License Comment2", new FileType[] {FileType.fileType_source},
 				new Checksum[] {CHECKSUM2},
-				new String[] {"File Contrib2"}, "File Notice2", 
+				new String[] {"File Contrib2"}, "File Notice2",
 				new DoapProject[] {new DoapProject("Project2", "http://project.home.page/two")});
-		FILE3 = new SpdxFile("FileName3", "FileComment 3", 
-				null, null,LICENSE3, new ExtractedLicenseInfo[] {LICENSE1}, 
-				"File Copyright3", "License Comment3", new FileType[] {FileType.fileType_text}, 
+		FILE3 = new SpdxFile("FileName3", "FileComment 3",
+				null, null,LICENSE3, new ExtractedLicenseInfo[] {LICENSE1},
+				"File Copyright3", "License Comment3", new FileType[] {FileType.fileType_text},
 				new Checksum[] {CHECKSUM1},
-				new String[] {"File Contrib3"}, "File Notice3", 
+				new String[] {"File Contrib3"}, "File Notice3",
 				new DoapProject[] {new DoapProject("Project3", "http://project.home.page/three")});
-		PACKAGE1 = new SpdxPackage("Package 1", "Package Comments1", 
-				null, null,LICENSE1, new SimpleLicensingInfo[] { LICENSE2}, 
+		PACKAGE1 = new SpdxPackage("Package 1", "Package Comments1",
+				null, null,LICENSE1, new SimpleLicensingInfo[] { LICENSE2},
 				"Pkg Copyright1", "Pkg License Comment 1", LICENSE2, new Checksum[] {CHECKSUM1},
-				"Pkg Description 1", "Downlodlocation1", new SpdxFile[] {FILE1}, 
-				"http://home.page/one", "Person: originator1", "packagename1", 
+				"Pkg Description 1", "Downlodlocation1", new SpdxFile[] {FILE1},
+				"http://home.page/one", "Person: originator1", "packagename1",
 				new SpdxPackageVerificationCode("0000e1c67a2d28fced849ee1bb76e7391b93eb12", new String[] {"excludedfile1", "excluedfiles2"}),
 				"sourceinfo1", "summary1", "Person: supplier1", "version1");
-		PACKAGE2 = new SpdxPackage("Package 2", "Package Comments2", 
-				null, null,LICENSE2, new SimpleLicensingInfo[] { LICENSE3}, 
+		PACKAGE2 = new SpdxPackage("Package 2", "Package Comments2",
+				null, null,LICENSE2, new SimpleLicensingInfo[] { LICENSE3},
 				"Pkg Copyright2", "Pkg License Comment 2", LICENSE3, new Checksum[] {CHECKSUM2},
-				"Pkg Description 2", "Downlodlocation2", new SpdxFile[] {FILE2, FILE3}, 
-				"http://home.page/two", "Person: originator2", "packagename2", 
+				"Pkg Description 2", "Downlodlocation2", new SpdxFile[] {FILE2, FILE3},
+				"http://home.page/two", "Person: originator2", "packagename2",
 				new SpdxPackageVerificationCode("2222e1c67a2d28fced849ee1bb76e7391b93eb12", new String[] {"excludedfile3", "excluedfiles4"}),
 				"sourceinfo2", "summary2", "Person: supplier2", "version2");
-		PACKAGE3 = new SpdxPackage("Package 3", "Package Comments3", 
-				null, null,LICENSE1, new SimpleLicensingInfo[] { LICENSE2}, 
+		PACKAGE3 = new SpdxPackage("Package 3", "Package Comments3",
+				null, null,LICENSE1, new SimpleLicensingInfo[] { LICENSE2},
 				"Pkg Copyright3", "Pkg License Comment 3", LICENSE3, new Checksum[] {CHECKSUM1},
-				"Pkg Description 3", "Downlodlocation3", new SpdxFile[] {FILE3}, 
-				"http://home.page/three", "Person: originator3", "packagename3", 
+				"Pkg Description 3", "Downlodlocation3", new SpdxFile[] {FILE3},
+				"http://home.page/three", "Person: originator3", "packagename3",
 				new SpdxPackageVerificationCode("3333e1c67a2d28fced849ee1bb76e7391b93eb12", new String[] {"excludedfile4", "excluedfiles5"}),
 				"sourceinfo3", "summary3", "Person: supplier3", "version3");
 	}
@@ -218,13 +218,13 @@ public class TestSpdxDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#populateModel()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testPopulateModel() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-			ANNOTATION1, ANNOTATION2	
+			ANNOTATION1, ANNOTATION2
 		};
 		ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 				EXTERNAL_REF1, EXTERNAL_REF2
@@ -251,7 +251,7 @@ public class TestSpdxDocument {
 		relationships.add(RELATIONSHIP2);
 		doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
 		for (int i = 0; i < items.length; i++) {
-			Relationship rel = new Relationship(items[i], 
+			Relationship rel = new Relationship(items[i],
 					Relationship.RelationshipType.DESCRIBES, "");
 			relationships.add(rel);
 			doc.addRelationship(rel);
@@ -267,7 +267,7 @@ public class TestSpdxDocument {
 		assertTrue(UnitTestHelper.isArraysEquivalent(relationships.toArray(new Relationship[relationships.size()]), doc.getRelationships()));
 		assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc.getReviewers()));
 		assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
-		
+
 		Model model = container.getModel();
 		SpdxDocumentContainer container2 = new SpdxDocumentContainer(model);
 		SpdxDocument doc2 = container2.getSpdxDocument();
@@ -285,13 +285,13 @@ public class TestSpdxDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#equivalent(IRdfModel)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -320,7 +320,7 @@ public class TestSpdxDocument {
 			relationships.add(RELATIONSHIP2);
 			doc.setRelationships(relationships.toArray(new Relationship[relationships.size()]));
 			for (int i = 0; i < items.length; i++) {
-				Relationship rel = new Relationship(items[i], 
+				Relationship rel = new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, "");
 				relationships.add(rel);
 				doc.addRelationship(rel);
@@ -336,9 +336,9 @@ public class TestSpdxDocument {
 			assertTrue(UnitTestHelper.isArraysEquivalent(relationships.toArray(new Relationship[relationships.size()]), doc.getRelationships()));
 			assertTrue(UnitTestHelper.isArraysEqual(reviewers, doc.getReviewers()));
 			assertTrue(UnitTestHelper.isArraysEquivalent(items, doc.getDocumentDescribes()));
-			
+
 			assertTrue(doc.equivalent(doc));
-			
+
 			String container2Uri = "http://spdx.org/spdx/2ndoc/2342";
 			SpdxDocumentContainer container2 = new SpdxDocumentContainer(container2Uri);
 			SpdxDocument doc2 = container2.getSpdxDocument();
@@ -378,21 +378,21 @@ public class TestSpdxDocument {
 			doc2.setReviewers(reviewers);
 			assertTrue(doc.equivalent(doc2));
 			// Items
-			doc2.addRelationship(new Relationship(FILE3, 
+			doc2.addRelationship(new Relationship(FILE3,
 					Relationship.RelationshipType.DESCRIBES, ""));
-			doc2.addRelationship(new Relationship(PACKAGE3, 
+			doc2.addRelationship(new Relationship(PACKAGE3,
 					Relationship.RelationshipType.DESCRIBES, ""));
 			assertFalse(doc.equivalent(doc2));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -416,7 +416,7 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			List<String> result = doc.verify();
@@ -464,17 +464,17 @@ public class TestSpdxDocument {
 	@Test
 	public void testGetDocumentContainer() {
 		assertEquals(container, container.getSpdxDocument().getDocumentContainer());
-		
+
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setCreationInfo(org.spdx.rdfparser.SPDXCreatorInformation)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetCreationInfo() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -498,7 +498,7 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertEquals(CREATIONINFO1, doc.getCreationInfo());
@@ -508,12 +508,12 @@ public class TestSpdxDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setDataLicense(org.spdx.rdfparser.license.AnyLicenseInfo)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetDataLicense() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -537,10 +537,10 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
-			
+
 			assertEquals(CCO_DATALICENSE, doc.getDataLicense());
 			SpdxListedLicense lic = LicenseInfoFactory.getListedLicenseById("Apache-2.0");
 			doc.setDataLicense(lic);
@@ -549,12 +549,12 @@ public class TestSpdxDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setExternalDocumentRefs(org.spdx.rdfparser.model.ExternalDocumentRef[])}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetExternalDocumentRefs() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -578,7 +578,7 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertTrue(UnitTestHelper.isArraysEquivalent(externalDocumentRefs, doc.getExternalDocumentRefs()));
@@ -591,12 +591,12 @@ public class TestSpdxDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setExtractedLicenseInfos(org.spdx.rdfparser.license.ExtractedLicenseInfo[])}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -620,7 +620,7 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
@@ -634,7 +634,7 @@ public class TestSpdxDocument {
 	@Test
 	public void testAddExtractedLicenseInfos() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -658,7 +658,7 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
 			assertTrue(UnitTestHelper.isArraysEqual(extractedLicenseInfos, doc.getExtractedLicenseInfos()));
@@ -674,12 +674,12 @@ public class TestSpdxDocument {
 	}
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxDocument#setSpecVersion(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetSpecVersion() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {
-				ANNOTATION1, ANNOTATION2	
+				ANNOTATION1, ANNOTATION2
 			};
 			ExternalDocumentRef[] externalDocumentRefs = new ExternalDocumentRef[] {
 					EXTERNAL_REF1, EXTERNAL_REF2
@@ -703,10 +703,10 @@ public class TestSpdxDocument {
 			doc.setName(DOC_NAME1);
 			doc.setRelationships(relationships);
 			for (int i = 0; i < items.length; i++) {
-				doc.addRelationship(new Relationship(items[i], 
+				doc.addRelationship(new Relationship(items[i],
 						Relationship.RelationshipType.DESCRIBES, ""));
 			}
-			
+
 			assertEquals(SpdxDocumentContainer.CURRENT_SPDX_VERSION, doc.getSpecVersion());
 			String ver = "2.1";
 			doc.setSpecVersion(ver);

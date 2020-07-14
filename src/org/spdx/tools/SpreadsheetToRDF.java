@@ -63,8 +63,8 @@ import com.google.common.collect.Maps;
 
 /**
  * Converts a spreadsheet to an SPDX RDF Analysis file
- * Usage: SpreadsheetToRDF spreadsheetfile.xls rdfxmlfile.rdf 
- * where spreadsheetfile.xls is a valid SPDX Spreadsheet and 
+ * Usage: SpreadsheetToRDF spreadsheetfile.xls rdfxmlfile.rdf
+ * where spreadsheetfile.xls is a valid SPDX Spreadsheet and
  * rdfxmlfile.rdf is the output SPDX RDF Analysis file.
  * @author Gary O'Neall
  *
@@ -74,14 +74,14 @@ public class SpreadsheetToRDF {
 	static final Logger logger = LoggerFactory.getLogger(SpreadsheetToRDF.class.getName());
 	static final int MIN_ARGS = 2;
 	static final int MAX_ARGS = 2;
-	
+
 	private static final ThreadLocal<DateFormat> format = new ThreadLocal<DateFormat>(){
 	    @Override
 	    protected DateFormat initialValue() {
 	        return new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 	    }
 	  };
-	
+
 	/**
 	 * @param args
 	 */
@@ -102,9 +102,9 @@ public class SpreadsheetToRDF {
 			return;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the Spreadsheet file to be converted, args[1] is the result RDF file name
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * @return Warnings of the conversion, displayed to the user
@@ -120,7 +120,7 @@ public class SpreadsheetToRDF {
 		if (spdxRdfFile.exists()) {
 			throw new OnlineToolException("Error: File " + args[1] + " already exists - please specify a new file.");
 		}
-	
+
 		try {
 			if (!spdxRdfFile.createNewFile()) {
 				throw new OnlineToolException("Could not create the new SPDX RDF file "+args[1]);
@@ -207,8 +207,8 @@ public class SpreadsheetToRDF {
 	 * @param snippetSheet
 	 * @param analysis
 	 * @param fileIdToFile
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpreadsheetException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpreadsheetException
 	 */
 	private static void copyPerSnippetInfo(SnippetSheet snippetSheet,
 			SpdxDocument analysis, Map<String, SpdxFile> fileIdToFile) throws InvalidSPDXAnalysisException, SpreadsheetException {
@@ -224,8 +224,8 @@ public class SpreadsheetToRDF {
 	/**
 	 * @param relationshipsSheet
 	 * @param analysis
-	 * @throws SpreadsheetException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpreadsheetException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void copyRelationshipInfo(
 			RelationshipsSheet relationshipsSheet, SpdxDocument analysis) throws SpreadsheetException, InvalidSPDXAnalysisException {
@@ -244,8 +244,8 @@ public class SpreadsheetToRDF {
 	/**
 	 * @param annotationsSheet
 	 * @param analysis
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpreadsheetException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpreadsheetException
 	 */
 	private static void copyAnnotationInfo(AnnotationsSheet annotationsSheet,
 			SpdxDocument analysis) throws InvalidSPDXAnalysisException, SpreadsheetException {
@@ -259,7 +259,7 @@ public class SpreadsheetToRDF {
 			annotation = annotationsSheet.getAnnotation(i);
 			id = annotationsSheet.getElmementId(i);
 		}
-		
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -307,9 +307,9 @@ public class SpreadsheetToRDF {
 		int firstRow = nonStandardLicensesSheet.getFirstDataRow();
 		ExtractedLicenseInfo[] nonStdLicenses = new ExtractedLicenseInfo[numNonStdLicenses];
 		for (int i = 0; i < nonStdLicenses.length; i++) {
-			nonStdLicenses[i] = new ExtractedLicenseInfo(nonStandardLicensesSheet.getIdentifier(firstRow+i), 
+			nonStdLicenses[i] = new ExtractedLicenseInfo(nonStandardLicensesSheet.getIdentifier(firstRow+i),
 					nonStandardLicensesSheet.getExtractedText(firstRow+i),
-					nonStandardLicensesSheet.getLicenseName(firstRow+i), 
+					nonStandardLicensesSheet.getLicenseName(firstRow+i),
 					nonStandardLicensesSheet.getCrossRefUrls(firstRow+i),
 					nonStandardLicensesSheet.getComment(firstRow+i));
 		}

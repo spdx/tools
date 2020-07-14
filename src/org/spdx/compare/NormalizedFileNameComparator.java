@@ -29,7 +29,7 @@ import java.util.Comparator;
 public class NormalizedFileNameComparator implements Comparator<String>, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	static final char DOS_SEPARATOR = '\\';
@@ -44,7 +44,7 @@ public class NormalizedFileNameComparator implements Comparator<String>, Seriali
 		String normalizedFileName2 = normalizeFileName(fileName2);
 		return normalizedFileName1.compareTo(normalizedFileName2);
 	}
-	
+
 	/**
 	 * Returns true if fileName2 matches fileName1 except for leading file name directories
 	 * @param fileName1
@@ -69,7 +69,7 @@ public class NormalizedFileNameComparator implements Comparator<String>, Seriali
 		char schar = compareName1.charAt(compareName1.length()-compareName2.length()-1);
 		return (schar == UNIX_SEPARATOR);
 	}
-	
+
 	public static String normalizeFileName(String fileName) {
 		String retval = fileName.replace(DOS_SEPARATOR, UNIX_SEPARATOR);
 		if (!retval.startsWith(RELATIVE_DIR)) {

@@ -181,7 +181,7 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 	}
-	
+
 	@Test
 	public void testSetDeprecated() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,
@@ -196,7 +196,7 @@ public class TestLicenseException {
 		LicenseException le3 = new LicenseException(testContainer, leResource.asNode());
 		assertTrue(le3.isDeprecated());
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testSetExample() throws InvalidSPDXAnalysisException {
@@ -327,7 +327,7 @@ public class TestLicenseException {
 		assertStringsEquals(EXCEPTION_SEEALSO1, le2.getSeeAlso());
 		assertEquals(EXCEPTION_COMMENT1, le2.getComment());
 	}
-	
+
 	@Test
 	public void testSetSeeAlso() throws InvalidSPDXAnalysisException {
 		LicenseException le = new LicenseException(EXCEPTION_ID1,

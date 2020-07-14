@@ -66,7 +66,7 @@ public class TestSPDXDocument {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
     /**
      * Test method for {@link org.spdx.rdfparser.SPDXDocument#SPDXAnalysis(org.apache.jena.rdf.model.Model)}.
      */
@@ -99,8 +99,8 @@ public class TestSPDXDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setSpdxVersion(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testSetSpdxVersion() throws InvalidSPDXAnalysisException, IOException {
@@ -129,11 +129,11 @@ public class TestSPDXDocument {
 			// ignore
 		}
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setDocumentComment(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testSetDocumentComment() throws InvalidSPDXAnalysisException, IOException {
@@ -150,11 +150,11 @@ public class TestSPDXDocument {
 		String afterComment = doc.getDocumentComment();
 		assertEquals(COMMENT_STRING, afterComment);
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setCreator(java.lang.String[])}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testSetCreationInfo() throws InvalidSPDXAnalysisException, IOException {
@@ -189,7 +189,7 @@ public class TestSPDXDocument {
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
 		String[] testCreatedBy2 = new String[] {
-				"Person: second created", 
+				"Person: second created",
 				"Organization: another",
 				"Tool: and another"};
 		String testLicVersion2 = "1.16";
@@ -221,8 +221,8 @@ public class TestSPDXDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setReviewers(java.lang.String[])}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testSetReviewers() throws InvalidSPDXAnalysisException, IOException {
@@ -247,8 +247,8 @@ public class TestSPDXDocument {
 		verify = resultreviewedBy[0].verify();
 		assertEquals(0, verify.size());
 		String date2 = format.format(new Date());
-		SPDXReview[] testreviewedBy2 = new SPDXReview[] {new SPDXReview("Person: review1", date2, "comment-1"), 
-				new SPDXReview("Person: review2", date1, "comment2"), 
+		SPDXReview[] testreviewedBy2 = new SPDXReview[] {new SPDXReview("Person: review1", date2, "comment-1"),
+				new SPDXReview("Person: review2", date1, "comment2"),
 				new SPDXReview("Person: review3", date2, "comment3")};
 		for (int i = 0; i < testreviewedBy2.length; i++) {
 			verify = testreviewedBy2[i].verify();
@@ -274,7 +274,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri);
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -307,8 +307,8 @@ public class TestSPDXDocument {
 	}
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#getSpdxPackage()}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testGetSpdxPackage() throws InvalidSPDXAnalysisException, IOException {
@@ -328,7 +328,7 @@ public class TestSPDXDocument {
 		if (!afterCreate.contains("uniquepackagename")) {
 			fail("missing uri in RDF document");
 		}
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -356,7 +356,7 @@ public class TestSPDXDocument {
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testPackageCloneRequiredFields() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
@@ -366,7 +366,7 @@ public class TestSPDXDocument {
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
 
-		// test with just the required fields		
+		// test with just the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		final String copyright = "Copyright";
@@ -401,7 +401,7 @@ public class TestSPDXDocument {
 		pkg.setSupplier(supplier);
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
-		
+
 		Model cloneModel = ModelFactory.createDefaultModel();
 		SPDXDocument cloneDoc = new SPDXDocument(cloneModel);
 		String cloneDocUri = "https://clone.somesite.com/documentname";
@@ -440,7 +440,7 @@ public class TestSPDXDocument {
 			writer.close();
 		}
 	}
-	
+
 	@Test
 	public void testPackageCloneAllFields() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
@@ -456,9 +456,9 @@ public class TestSPDXDocument {
 		ExtractedLicenseInfo[] extractedLicenseInfos = new ExtractedLicenseInfo[] {nonStdLic1, nonStdLic2};
 		SpdxListedLicense stdLic1 = LicenseInfoFactory.getListedLicenseById("Apache-2.0");
 		AnyLicenseInfo[] licenseInfosFromFile = new AnyLicenseInfo[] {stdLic1, nonStdLic1, nonStdLic2};
-		
+
 		doc.setExtractedLicenseInfos(extractedLicenseInfos);
-		
+
 		pkg.setConcludedLicenses(stdLic1);
 		final String copyright = "Copyright";
 		pkg.setDeclaredCopyright(copyright);
@@ -508,7 +508,7 @@ public class TestSPDXDocument {
 		pkg.setVersionInfo(versionInfo);
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
-		
+
 		Model cloneModel = ModelFactory.createDefaultModel();
 		SPDXDocument cloneDoc = new SPDXDocument(cloneModel);
 		String cloneDocUri = "https://clone.somesite.com/documentname";
@@ -557,7 +557,7 @@ public class TestSPDXDocument {
 			writer.close();
 		}
 	}
-	
+
 	/**
 	 * @param spdxFile
 	 * @param spdxFile2
@@ -661,7 +661,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri);
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -684,7 +684,7 @@ public class TestSPDXDocument {
 		pkg.setVerificationCode(
 				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
 						skippedFiles));
-		
+
 		// person
 		String personString = "Person: somone";
 		pkg.setOriginator(personString);
@@ -711,7 +711,7 @@ public class TestSPDXDocument {
 			// ignore
 		}
 	}
-	
+
 	@Test
 	public void testSetSupplier() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -720,7 +720,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri);
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -743,7 +743,7 @@ public class TestSPDXDocument {
 		pkg.setVerificationCode(
 				new SpdxPackageVerificationCode("0123456789abcdef0123456789abcdef01234567",
 						skippedFiles));
-		
+
 		// person
 		String personString = "Person: somone";
 		pkg.setSupplier(personString);
@@ -773,8 +773,8 @@ public class TestSPDXDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#setExtractedLicenseInfos(org.spdx.rdfparser.license.SpdxListedLicense[])}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testSetNonStandardLicenses() throws InvalidSPDXAnalysisException, IOException {
@@ -824,8 +824,8 @@ public class TestSPDXDocument {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXDocument#createSpdxAnalysis(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws IOException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws IOException
 	 */
 	@Test
 	public void testcreateSpdxDocument() throws InvalidSPDXAnalysisException, IOException {
@@ -841,13 +841,13 @@ public class TestSPDXDocument {
 		doc.getModel().write(writer);
 		String afterCreate = writer.toString();
 		if (!afterCreate.contains(testUri)) {
-//			fail("Uri string not present after spdx document create");	
+//			fail("Uri string not present after spdx document create");
 			// these don't actually match becuase there is some extra escaping going on in the URL string
 		}
 		String uriResult = doc.getSpdxDocUri();
 		assertEquals(testUri, uriResult);
 	}
-	
+
 	@Test
 	public void testSpdxPackageDeclaredLicense() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -862,7 +862,7 @@ public class TestSPDXDocument {
 		assertEquals(declaredLicenses, result);
 		assertEquals(TEST_LICENSE_ID, ((ExtractedLicenseInfo)result).getLicenseId());
 	}
-	
+
 	@Test
 	public void testSpdxPackageHomePage() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -905,7 +905,7 @@ public class TestSPDXDocument {
 			fail("second license not found");
 		}
 	}
-	
+
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
@@ -924,7 +924,7 @@ public class TestSPDXDocument {
 		if (!afterCreate.contains("uniquepackagename")) {
 			fail("missing uri in RDF document");
 		}
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -961,9 +961,9 @@ public class TestSPDXDocument {
 		doc.setExtractedLicenseInfos(new ExtractedLicenseInfo[] {new ExtractedLicenseInfo(SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM+"11", "Text")});
 		doc.setSpdxVersion(SPDXDocument.CURRENT_SPDX_VERSION);
 		verify = doc.verify();
-		assertEquals(0, verify.size());		
+		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testNoneValues() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -976,7 +976,7 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl(SpdxRdfConstants.NONE_VALUE);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DOWNLOAD_URL).asNode();
 		Triple m = Triple.createMatch(null, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			assertTrue(t.getObject().isURI());
@@ -986,7 +986,7 @@ public class TestSPDXDocument {
 		pkg.setDeclaredCopyright(SpdxRdfConstants.NONE_VALUE);
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_COPYRIGHT).asNode();
 		m = Triple.createMatch(null, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			assertTrue(t.getObject().isURI());
@@ -994,7 +994,7 @@ public class TestSPDXDocument {
 		}
 		assertEquals(SpdxRdfConstants.NONE_VALUE, doc.getSpdxPackage().getDeclaredCopyright());
 	}
-	
+
 	@Test
 	public void testNoAssertionValues() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1007,7 +1007,7 @@ public class TestSPDXDocument {
 		pkg.setDownloadUrl(SpdxRdfConstants.NOASSERTION_VALUE);
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DOWNLOAD_URL).asNode();
 		Triple m = Triple.createMatch(null, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			assertTrue(t.getObject().isURI());
@@ -1017,7 +1017,7 @@ public class TestSPDXDocument {
 		pkg.setDeclaredCopyright(SpdxRdfConstants.NOASSERTION_VALUE);
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_DECLARED_COPYRIGHT).asNode();
 		m = Triple.createMatch(null, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			assertTrue(t.getObject().isURI());
@@ -1025,7 +1025,7 @@ public class TestSPDXDocument {
 		}
 		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, doc.getSpdxPackage().getDeclaredCopyright());
 	}
-	
+
 	@Test
 	public void testDataLicense() throws InvalidSPDXAnalysisException, InvalidLicenseStringException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1049,7 +1049,7 @@ public class TestSPDXDocument {
 			// expected - do nothing
 		}
 	}
-	
+
 	@Test
 	public void testReferencesFile() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1058,7 +1058,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri);
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -1087,11 +1087,11 @@ public class TestSPDXDocument {
 						skippedFiles));
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
-		
+
 		// OK - now we can test to see if the files are there
 		SPDXFile[] pkgFiles = pkg.getFiles();
 		SPDXFile[] docFiles = doc.getFileReferences();
-		
+
 		assertEquals(testFiles.length, docFiles.length);
 		for (int i = 0; i < testFiles.length; i++) {
 			boolean found = false;
@@ -1104,7 +1104,7 @@ public class TestSPDXDocument {
 			assertTrue(found);
 		}
 	}
-	
+
 	@Test
 	public void testAddFile() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1113,7 +1113,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri);
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -1143,10 +1143,10 @@ public class TestSPDXDocument {
 						skippedFiles));
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
-		
+
 		// OK - now we can test to see if the files are there
 		SPDXFile[] pkgFiles = pkg.getFiles();
-		
+
 		assertEquals(testFiles.length, pkgFiles.length);
 		for (int i = 0; i < testFiles.length; i++) {
 			boolean found = false;
@@ -1159,7 +1159,7 @@ public class TestSPDXDocument {
 			assertTrue(found);
 		}
 	}
-	
+
 	@Test
 	public void testRemoveFile() throws InvalidSPDXAnalysisException, IOException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1168,7 +1168,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri);
 		String testPkgUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;uniquepackagename";
 		doc.createSpdxPackage(testPkgUri);
-		// add the required fields		
+		// add the required fields
 		SPDXPackage pkg = doc.getSpdxPackage();
 		pkg.setConcludedLicenses(new SpdxNoneLicense());
 		pkg.setDeclaredCopyright("Copyright");
@@ -1197,7 +1197,7 @@ public class TestSPDXDocument {
 						skippedFiles));
 		verify = pkg.verify();
 		assertEquals(0, verify.size());
-		
+
 		// Remove one the first file
 		pkg.removeFile(testFiles[0].getName());
 		// OK - now we can test to see if the files are there
@@ -1222,7 +1222,7 @@ public class TestSPDXDocument {
 			}
 		}
 		assertFalse(found);
-		
+
 		assertEquals(testFiles.length-1, refFiles.length);
 		for (int i = 1; i < testFiles.length; i++) {
 			found = false;
@@ -1243,7 +1243,7 @@ public class TestSPDXDocument {
 		}
 		assertFalse(found);
 	}
-	
+
 	@Test
 	public void testSpdxDocVersions() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1260,7 +1260,7 @@ public class TestSPDXDocument {
 		doc.createSpdxAnalysis(testDocUri, SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION);
 		assertEquals(SPDXDocument.ONE_DOT_ZERO_SPDX_VERSION, doc.getSpdxVersion());
 		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0, doc.getDataLicense().getLicenseId());
-		
+
 		// current version
 		model = ModelFactory.createDefaultModel();
 		doc = new SPDXDocument(model);
@@ -1268,7 +1268,7 @@ public class TestSPDXDocument {
 		assertEquals(SPDXDocument.CURRENT_SPDX_VERSION, doc.getSpdxVersion());
 		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, doc.getDataLicense().getLicenseId());
 	}
-	
+
 	@Test
 	public void testextractedLicenseExists() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1281,23 +1281,23 @@ public class TestSPDXDocument {
 		String NON_STD_LIC_NAME1 = "licenseName1";
 		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
 		String NON_STD_LIC_COMMENT1 = "License 1 comment";
-		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1,
 				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
-		
+
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 
 		ExtractedLicenseInfo[] emptyLic = doc.getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
 		assertTrue(!doc.extractedLicenseExists(NON_STD_LIC_ID1));
-		
+
 		doc.addNewExtractedLicenseInfo(lic1);
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
-		
+
 		ExtractedLicenseInfo lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
 		assertTrue(doc.extractedLicenseExists(lic2.getLicenseId()));
 	}
-	
+
 	@Test
 	public void addNewExtractedLicenseInfoLicense() throws InvalidSPDXAnalysisException {
 		Model model = ModelFactory.createDefaultModel();
@@ -1310,14 +1310,14 @@ public class TestSPDXDocument {
 		String NON_STD_LIC_NAME1 = "licenseName1";
 		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
 		String NON_STD_LIC_COMMENT1 = "License 1 comment";
-		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1,
 				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
 		String NON_STD_LIC_ID2 = "LicenseRef-623";
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 		String NON_STD_LIC_NAME2 = "licenseName2";
 		String[] NON_STD_LIC_REFERENCES2 = new String[] {"ref2"};
 		String NON_STD_LIC_COMMENT2 = "License 2 comment";
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(NON_STD_LIC_ID2, NON_STD_LIC_TEXT2, 
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(NON_STD_LIC_ID2, NON_STD_LIC_TEXT2,
 				NON_STD_LIC_NAME2, NON_STD_LIC_REFERENCES2, NON_STD_LIC_COMMENT2);
 		ExtractedLicenseInfo[] emptyLic = doc.getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
@@ -1337,7 +1337,7 @@ public class TestSPDXDocument {
 			fail("second license not found");
 		}
 	}
-	
+
 	@Test
 	public void testGetElementRefNumber() {
 		int refNum1 = 5532;
@@ -1350,9 +1350,9 @@ public class TestSPDXDocument {
 		result = SPDXDocument.getElementRefNumber(ref2);
 		assertEquals(refNum2, result);
 		result = SPDXDocument.getElementRefNumber(invalidRef);
-		assertEquals(-1, result);		
+		assertEquals(-1, result);
 	}
-	
+
 	@Test
 	public void testGetDocumentNamespace() throws InvalidSPDXAnalysisException {
 		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
@@ -1366,9 +1366,9 @@ public class TestSPDXDocument {
 		doc = new SPDXDocument(model);
 		doc.createSpdxAnalysis(docUri + "#SPDXDocument");
 		result = doc.getDocumentNamespace();
-		assertEquals(docUri + "#", result);	
+		assertEquals(docUri + "#", result);
 	}
-	
+
 	@Test
 	public void testGetNextSpdxRef() throws InvalidSPDXAnalysisException {
 		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
@@ -1391,7 +1391,7 @@ public class TestSPDXDocument {
 		expected = SpdxRdfConstants.SPDX_ELEMENT_REF_PRENUM + String.valueOf(3);
 		assertEquals(expected, nextSpdxElementRef);	// original SPDX doc should maintain its own
 	}
-	
+
 	@Test
 	public void testAddClonedFileWithUri() throws InvalidSPDXAnalysisException {
 		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
@@ -1402,7 +1402,7 @@ public class TestSPDXDocument {
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		
+
 		String fileUri = docA.getDocumentNamespace()+docA.getNextSpdxElementRef();
 		SPDXFile clonedFile = testFile.clone(docA, fileUri);
 		docA.getSpdxPackage().addFile(clonedFile);
@@ -1411,7 +1411,7 @@ public class TestSPDXDocument {
 		assertEquals(clonedFile, result[0]);
 		assertEquals(fileUri, result[0].getResource().getURI());
 	}
-	
+
 	@Test
 	public void testAddClonedFileNoUri() throws InvalidSPDXAnalysisException {
 		String docUri = "http://www.spdx.org/spdxdocs/uniquenameofsomesort";
@@ -1420,11 +1420,11 @@ public class TestSPDXDocument {
 		SPDXDocument docA = new SPDXDocument(model);
 		docA.createSpdxAnalysis(docUri);
 		docA.createSpdxPackage(docA.getDocumentNamespace() + docA.getNextSpdxElementRef());
-		
+
 		SPDXFile testFile = new SPDXFile("filename", "BINARY", "0123456789abcdef0123456789abcdef01234567",
 				new SpdxNoneLicense(), new AnyLicenseInfo[] {new SpdxNoneLicense()}, "license comment",
 				"file copyright", new DOAPProject[0]);
-		
+
 		SPDXFile clonedFile = testFile.clone();
 		docA.getSpdxPackage().addFile(clonedFile);
 		SPDXFile[] result = docA.getSpdxPackage().getFiles();

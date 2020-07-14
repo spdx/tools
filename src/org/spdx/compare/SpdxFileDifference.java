@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -55,7 +55,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	private String spdxIdB;
 
 	@SuppressWarnings("deprecation")
-	public SpdxFileDifference(SpdxFile fileA, SpdxFile fileB, 
+	public SpdxFileDifference(SpdxFile fileA, SpdxFile fileB,
 			boolean concludedLicensesEqual, boolean seenLicensesEqual,
 			AnyLicenseInfo[] uniqueSeenLicensesA,
 			AnyLicenseInfo[] uniqueSeenLicensesB,
@@ -73,7 +73,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 			Annotation[] uniqueAnnotationsB
 			) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		super(fileA, fileB, concludedLicensesEqual, seenLicensesEqual,
-				uniqueSeenLicensesA, uniqueSeenLicensesB, 
+				uniqueSeenLicensesA, uniqueSeenLicensesB,
 				relationshipsEquals, uniqueRelationshipA,  uniqueRelationshipB,
 				annotationsEquals, uniqueAnnotationsA,uniqueAnnotationsB);
 		this.artifactsOfA = fileA.getArtifactOf();
@@ -88,7 +88,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 		this.uniqueArtifactOfA = uniqueArtifactOfA2;
 		this.uniqueArtifactOfB = uniqueArtifactOfB2;
 		this.fileTypeA = fileA.getFileTypes();
-		this.fileTypeB = fileB.getFileTypes();	
+		this.fileTypeB = fileB.getFileTypes();
 		this.contributorsA = fileA.getFileContributors();
 		this.contributorsB = fileB.getFileContributors();
 		this.noticeA = fileA.getNoticeText();
@@ -101,7 +101,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 		this.spdxIdA = fileA.getId();
 		this.spdxIdB = fileB.getId();
 	}
-	
+
 	/**
 	 * @return the fileName
 	 */
@@ -145,7 +145,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	public DoapProject[] getUniqueArtifactOfB() {
 		return uniqueArtifactOfB;
 	}
-	
+
 	/**
 	 * @return the fileTypeA
 	 */
@@ -159,15 +159,15 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	public FileType[] getFileTypeB() {
 		return fileTypeB;
 	}
-	
+
 	public boolean isContributorsEqual() {
 		return SpdxComparer.stringArraysEqual(this.contributorsA, this.contributorsB);
 	}
-	
+
 	public boolean isNoticeTextsEqual() {
 		return SpdxComparer.stringsEqual(this.noticeA, this.noticeB);
 	}
-	
+
 	public boolean isFileDependenciesEqual() {
 		return SpdxComparer.stringArraysEqual(this.dependantFileNamesA, this.dependantFileNamesB);
 	}
@@ -192,16 +192,16 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	public String getContributorsAAsString() {
 		return stringArrayToString(this.contributorsA);
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public String getContributorsBAsString() {
 		return stringArrayToString(this.contributorsB);
 	}
-	
-	
-	
+
+
+
 	static String stringArrayToString(String[] s) {
 		StringBuilder sb = new StringBuilder();
 		if (s != null && s.length > 0) {
@@ -216,7 +216,7 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	public String getFileDependenciesAAsString() {
 		return stringArrayToString(this.dependantFileNamesA);
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -300,12 +300,12 @@ public class SpdxFileDifference extends SpdxItemDifference {
 	public String getSpdxIdA() {
 		return this.spdxIdA;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public String getSpdxIdB() {
 		return this.spdxIdB;
 	}
-	
+
 }

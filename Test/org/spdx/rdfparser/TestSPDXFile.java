@@ -61,17 +61,17 @@ public class TestSPDXFile {
 	SpdxListedLicense[] STANDARD_LICENSES;
 	DisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
 	ConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
-	
+
 	ConjunctiveLicenseSet COMPLEX_LICENSE;
-	
+
 	Resource[] NON_STD_LICENSES_RESOURCES;
 	Resource[] STANDARD_LICENSES_RESOURCES;
 	Resource[] DISJUNCTIVE_LICENSES_RESOURCES;
 	Resource[] CONJUNCTIVE_LICENSES_RESOURCES;
 	Resource COMPLEX_LICENSE_RESOURCE;
-	
+
 	Model model;
-	
+
 	IModelContainer modelContainer = new IModelContainer() {
 		@Override
 		public String getNextSpdxElementRef() {
@@ -106,7 +106,7 @@ public class TestSPDXFile {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -117,7 +117,7 @@ public class TestSPDXFile {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 
 	/**
@@ -129,17 +129,17 @@ public class TestSPDXFile {
 		for (int i = 0; i < NONSTD_IDS.length; i++) {
 			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(NONSTD_IDS[i], NONSTD_TEXTS[i]);
 		}
-		
+
 		STANDARD_LICENSES = new SpdxListedLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
-			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i), 
-					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
+			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i),
+					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i),
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
-		
+
 		DISJUNCTIVE_LICENSES = new DisjunctiveLicenseSet[3];
 		CONJUNCTIVE_LICENSES = new ConjunctiveLicenseSet[2];
-		
+
 		DISJUNCTIVE_LICENSES[0] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
 		});
@@ -159,7 +159,7 @@ public class TestSPDXFile {
 				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
 		});
 		model = ModelFactory.createDefaultModel();
-		
+
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
 			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
@@ -188,8 +188,8 @@ public class TestSPDXFile {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXFile#populateModel(org.apache.jena.rdf.model.Resource, org.apache.jena.rdf.model.Model)}.
-	 * @throws IOException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws IOException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testPopulateModel() throws IOException, InvalidSPDXAnalysisException {
@@ -205,21 +205,21 @@ public class TestSPDXFile {
 		writer.close();
 		Resource pkgResource = model.getResource(pkgUri);
 		Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_PACKAGE_FILE);
-		
+
 		AnyLicenseInfo[] declaredLic = new AnyLicenseInfo[] {COMPLEX_LICENSE};
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
-		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments");
-		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments");
 		SPDXFile[] fileDependencies = new SPDXFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
 		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
@@ -256,7 +256,7 @@ public class TestSPDXFile {
 		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
 		Triple m = Triple.createMatch(null, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			assertTrue(t.getObject().isURI());
@@ -265,7 +265,7 @@ public class TestSPDXFile {
 		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		assertEquals(SpdxRdfConstants.NONE_VALUE, file2.getCopyright());
 	}
-	
+
 	@Test
 	public void testNoassertionCopyright() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -275,7 +275,7 @@ public class TestSPDXFile {
 		Resource fileResource = file.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_FILE_COPYRIGHT).asNode();
 		Triple m = Triple.createMatch(null, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			assertTrue(t.getObject().isURI());
@@ -284,7 +284,7 @@ public class TestSPDXFile {
 		SPDXFile file2 = new SPDXFile(modelContainer, fileResource.asNode());
 		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, file2.getCopyright());
 	}
-	
+
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -303,7 +303,7 @@ public class TestSPDXFile {
 		file2.setComment(COMMENT3);
 		assertEquals(file2.getComment(), COMMENT3);
 	}
-	
+
 	@Test
 	public void testSetContributors() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -313,7 +313,7 @@ public class TestSPDXFile {
 		String CONTRIBUTOR2 = "Contributor 2";
 		String CONTRIBUTOR3 = "Contributor 3";
 		String[] contributors = new String[] {CONTRIBUTOR1, CONTRIBUTOR2, CONTRIBUTOR3};
-		
+
 		String CONTRIBUTOR4 = "Contributor 4";
 		String[] oneContributor = new String[] {CONTRIBUTOR4};
 		SPDXFile file = new SPDXFile("filename", "BINARY", "sha1", COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NOASSERTION_VALUE, new DOAPProject[0], "",
@@ -330,7 +330,7 @@ public class TestSPDXFile {
 		file2.setContributors(new String[0]);
 		assertEquals(0, file2.getContributors().length);
 	}
-	
+
 	@Test
 	public void testSetNoticeText() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -354,7 +354,7 @@ public class TestSPDXFile {
 			fail("nto null notice text");
 		}
 	}
-	
+
 	/**
 	 * @param s1
 	 * @param s2
@@ -402,7 +402,7 @@ public class TestSPDXFile {
 	}
 
 	/**
-	 * Compares the content of the two arrays and asserts that they are equal ignoring the 
+	 * Compares the content of the two arrays and asserts that they are equal ignoring the
 	 * order of the elements in the array
 	 * @param files1
 	 * @param files2
@@ -422,7 +422,7 @@ public class TestSPDXFile {
 			assertTrue(found);
 		}
 	}
-	
+
 	@Test
 	public void testFindFileResource() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -438,7 +438,7 @@ public class TestSPDXFile {
 		Resource file1Resource = file1.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
 		SPDXFile file2 = new SPDXFile(FILE2_NAME, "BINARY", FILE2_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
 		Resource file2Resource = file2.createResource(doc, doc.getDocumentNamespace() + doc.getNextSpdxElementRef());
-		
+
 		SPDXFile testFile1 = new SPDXFile(FILE1_NAME, "BINARY", FILE1_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
 		SPDXFile testFile2 = new SPDXFile(FILE2_NAME, "BINARY", FILE2_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
 		SPDXFile testFile3 = new SPDXFile(FILE3_NAME, "BINARY", FILE1_SHA1, COMPLEX_LICENSE, CONJUNCTIVE_LICENSES, "", SpdxRdfConstants.NONE_VALUE, new DOAPProject[0]);
@@ -456,22 +456,22 @@ public class TestSPDXFile {
 			fail("Should be null due to different checksums");
 		}
 	}
-	
+
 	@Test
 	public void testCloneSimple() throws InvalidSPDXAnalysisException, IOException {
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
-		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments");
-		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments");
 		SPDXFile[] fileDependencies = new SPDXFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
 		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
@@ -500,27 +500,27 @@ public class TestSPDXFile {
 		verify = toFile.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testCloneModelSimple() throws InvalidSPDXAnalysisException, IOException {
-	
+
 		AnyLicenseInfo[] seenLic = new AnyLicenseInfo[] {STANDARD_LICENSES[0]};
 		String[] contributors = new String[] {"Contrib1", "Contrib2"};
 		DOAPProject[] artifactOfs = new DOAPProject[] {new DOAPProject("Artifactof Project", "ArtifactOf homepage")};
-		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile fileDep1 = new SPDXFile("fileDep1", "SOURCE", "1123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments");
-		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile fileDep2 = new SPDXFile("fileDep2", "BINARY", "2123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments");
 		SPDXFile[] fileDependencies = new SPDXFile[] {fileDep1, fileDep2};
 		String fileNotice = "File Notice";
-		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567", 
-				COMPLEX_LICENSE, seenLic, "License comments", 
+		SPDXFile file = new SPDXFile("fileName", "SOURCE", "0123456789abcdef0123456789abcdef01234567",
+				COMPLEX_LICENSE, seenLic, "License comments",
 				"Copyrights", artifactOfs, "file comments", fileDependencies, contributors, fileNotice);
 		List<String> verify = file.verify();
 		assertEquals(0, verify.size());
-		
+
 		model = ModelFactory.createDefaultModel();
 		SPDXDocument toDoc1 = new SPDXDocument(model);
 		String testDocUri = "https://my/test/doc1";

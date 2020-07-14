@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -40,7 +40,7 @@ public class FileConcludedSheet extends AbstractFileCompareSheet {
 	static void create(Workbook wb, String sheetName) {
 		AbstractFileCompareSheet.create(wb, sheetName, LICENSE_COL_WIDTH);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.compare.AbstractFileCompareSheet#getFileValue(org.spdx.rdfparser.SpdxFile)
 	 */

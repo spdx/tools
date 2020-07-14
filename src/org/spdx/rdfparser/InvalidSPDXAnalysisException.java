@@ -23,7 +23,7 @@ package org.spdx.rdfparser;
  */
 public class InvalidSPDXAnalysisException extends Exception {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -8042590523688807173L;
 	public InvalidSPDXAnalysisException(String msg) {

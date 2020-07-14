@@ -24,12 +24,12 @@ package org.spdx.html;
 public class InvalidLicenseTemplateException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 *
 	 */
 	public InvalidLicenseTemplateException() {
 		// TODO Auto-generated constructor stub

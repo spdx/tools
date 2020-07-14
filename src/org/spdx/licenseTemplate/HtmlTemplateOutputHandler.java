@@ -23,15 +23,15 @@ package org.spdx.licenseTemplate;
  *
  */
 public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler {
-	
+
 	public static final String REPLACEABLE_LICENSE_TEXT_CLASS = "replacable-license-text";
 	public static final String OPTIONAL_LICENSE_TEXT_CLASS = "optional-license-text";
 	static final String END_PARAGRAPH_TAG = "</p>";
-	
+
 	private static final String STARTS_WITH_LETTER_REGEX = "[A-Za-z].*";
-	
+
 	StringBuilder htmlString = new StringBuilder();
-	
+
 	int optionalNestLevel = 0;
 	boolean movingParagraph = false;	// true if we need to move the end of a
 
@@ -56,7 +56,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		removeEndParagraphTag();
 		htmlString.append(formatReplaceabledHTML(rule.getOriginal(), rule.getName()));
 	}
-	
+
 	/**
 	 * Adds back an end paragraph tag if it was removed
 	 */
@@ -89,11 +89,11 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 			this.htmlString.delete(this.htmlString.length()-END_PARAGRAPH_TAG.length(), this.htmlString.length());
 		}
 	}
-	
+
 	/**
 	 * Format HTML for a replaceable string
 	 * @param text text for the optional license string
-	 * @param id ID used for the div 
+	 * @param id ID used for the div
 	 * @return
 	 */
 	public static String formatReplaceabledHTML(String text, String id) {
@@ -111,7 +111,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		sb.append("</span>\n");
 		return sb.toString();
 	}
-	
+
 
 	/**
 	 * Escape the ID string to conform to the legal characters for an HTML ID string
@@ -164,11 +164,11 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		}
 		this.optionalNestLevel++;
 	}
-	
+
 	/**
 	 * Format HTML for an optional string
 	 * @param text text for the optional license string
-	 * @param id ID used for the div 
+	 * @param id ID used for the div
 	 * @return
 	 */
 	public static String formatStartOptionalHTML(String id) {
@@ -192,7 +192,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 			return "</div>\n";
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.licenseTemplate.ILicenseTemplateOutputHandler#endOptional(org.spdx.licenseTemplate.LicenseTemplateRule)
 	 */
@@ -208,6 +208,6 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	@Override
 	public void completeParsing() {
 		// Nothing needs to be done - everything is processed inline
-		
+
 	}
 }

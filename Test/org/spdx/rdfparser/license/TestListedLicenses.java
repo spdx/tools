@@ -20,14 +20,14 @@ public class TestListedLicenses {
 		assertTrue("Number expected before the point in license list version (" + licenseListversion + ")", StringUtils.isNumeric(StringUtils.substringBefore(licenseListversion, ".")));
 		assertTrue("Number expected after the point in license list version (" + licenseListversion + ")", StringUtils.isNumeric(StringUtils.substringAfter(licenseListversion, ".")));
 	}
-	
+
 	@Test
 	public void testGetListedLicenseById() throws InvalidSPDXAnalysisException {
 		String id = "Apache-2.0";
 		SpdxListedLicense result = ListedLicenses.getListedLicenses().getListedLicenseById(id);
 		assertEquals(id, result.getLicenseId());
 	}
-	
+
 	@Test
 	public void testGetLicenseIbyIdLocal() throws InvalidSPDXAnalysisException {
 		System.setProperty("SPDXParser.OnlyUseLocalLicenses", "true");

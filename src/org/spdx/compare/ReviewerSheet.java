@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -34,16 +34,16 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  * Sheet of Reviewer comparisons between SPDX documents
  * Columns 1 through N are for reviewers in each of the documents
  * Format of the reviewer is ReviewerName [date] (comment)
- 
+
  * @author Gary O'Neall
  *
  */
 public class ReviewerSheet extends AbstractSheet {
-	
+
 	private static final class ReviewerComparator implements Comparator<SPDXReview>, Serializable {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -60,12 +60,12 @@ public class ReviewerSheet extends AbstractSheet {
 				retval = o1.getComment().compareTo(o2.getComment());
 			}
 			return retval;
-		}		
+		}
 	}
-	
+
 	private ReviewerComparator reviewerComparator = new ReviewerComparator();
 	static final int COL_WIDTH = 40;
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName
@@ -106,8 +106,8 @@ public class ReviewerSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {
@@ -131,7 +131,7 @@ public class ReviewerSheet extends AbstractSheet {
 					this.addRow();
 				}
 				reviewerCell = sheet.getRow(j+1).createCell(i);
-				
+
 				sb.setLength(0);
 				sb.append(reviewers[j].getReviewer());
 				sb.append("[");

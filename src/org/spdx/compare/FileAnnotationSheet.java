@@ -25,9 +25,9 @@ import org.spdx.rdfparser.model.SpdxFile;
  *
  */
 public class FileAnnotationSheet extends AbstractFileCompareSheet {
-	
+
 	static final int ANNOTATION_COL_WIDTH = 80;
-	
+
 	public FileAnnotationSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}

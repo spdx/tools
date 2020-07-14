@@ -24,14 +24,14 @@ import org.spdx.rdfparser.model.Annotation;
  *
  */
 public class AnnotationContext {
-	
+
 	private String date;
 	private String type;
 	private String annotator;
 	private String comment;
 
 	public AnnotationContext(Annotation annotation) {
-		
+
 		this.date = annotation.getAnnotationDate().toString();
 		this.type = annotation.getAnnotationType().getTag();
 		this.annotator = annotation.getAnnotator();

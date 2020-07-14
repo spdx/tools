@@ -40,19 +40,19 @@ import com.google.common.collect.Lists;
  *
  */
 public class PackageContext {
-	
+
 	private SpdxPackage pkg = null;
 	private Map<String, String> spdxIdToUrl;
 
 	/**
 	 * @param doc
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public PackageContext(SpdxPackage pkg, Map<String, String> spdxIdToUrl) throws InvalidSPDXAnalysisException {
 		this.pkg = pkg;
 		this.spdxIdToUrl = spdxIdToUrl;
 	}
-	
+
 	public String name() {
 		if (this.pkg != null) {
 			return pkg.getName();
@@ -68,7 +68,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String downloadLocation() {
 		if (pkg != null) {
 			return pkg.getDownloadLocation();
@@ -76,7 +76,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String summary() {
 		if (pkg != null) {
 			return pkg.getSummary();
@@ -84,14 +84,14 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public List<String> attributionText() {
 		if (pkg == null || pkg.getAttributionText() == null) {
 			return null;
 		}
 		return Arrays.asList(pkg.getAttributionText());
 	}
-	
+
 	public String sourceInfo() {
 		if (pkg != null) {
 			return pkg.getSourceInfo();
@@ -99,7 +99,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String packageFileName() {
 		if (pkg != null) {
 			return pkg.getPackageFileName();
@@ -107,7 +107,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String supplier() {
 		if (pkg != null) {
 			return pkg.getSupplier();
@@ -115,7 +115,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String originator() {
 		if (pkg != null) {
 			return pkg.getOriginator();
@@ -123,7 +123,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String description() {
 		if (pkg != null) {
 			return pkg.getDescription();
@@ -131,7 +131,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public VerificationCodeContext packageVerificationCode() {
 		if (pkg == null) {
 			return null;
@@ -148,7 +148,7 @@ public class PackageContext {
 		}
 
 	}
-	
+
 	public List<String> checksum() {
 		if (pkg != null) {
 			List<String> retval = Lists.newArrayList();
@@ -171,7 +171,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String copyrightText() {
 		if (pkg != null) {
 			return pkg.getCopyrightText();
@@ -179,7 +179,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String licenseDeclared() {
 		if (pkg != null) {
 			try {
@@ -196,7 +196,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String licenseConcluded() {
 		if (pkg != null) {
 			AnyLicenseInfo info = pkg.getLicenseConcluded();
@@ -209,7 +209,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String licenseComments() {
 		if (pkg != null) {
 			return pkg.getLicenseComments();
@@ -217,7 +217,7 @@ public class PackageContext {
 			return null;
 		}
 	}
-	
+
 	public String homePage() {
 		if (pkg != null) {
 			return pkg.getHomepage();
@@ -225,7 +225,7 @@ public class PackageContext {
 			return  null;
 		}
 	}
-	
+
 	public List<String> licenseInfoFromFiles() {
 		List<String> retval = Lists.newArrayList();
 		if (pkg != null) {
@@ -240,14 +240,14 @@ public class PackageContext {
 		Collections.sort(retval);
 		return retval;
 	}
-	
+
 	public String spdxId() {
 		if (pkg == null) {
 			return null;
 		}
 		return pkg.getId();
 	}
-	
+
 	public List<ElementContext> hasFile() {
 		List<ElementContext> retval = Lists.newArrayList();
 		if (pkg != null) {
@@ -278,7 +278,7 @@ public class PackageContext {
             }} );
 		return retval;
 	}
-	
+
 	public boolean isFilesAnalyzed() {
 		if (this.pkg == null) {
 			return true;
@@ -289,21 +289,21 @@ public class PackageContext {
 			return true;
 		}
 	}
-	
+
 	public List<RelationshipContext> packageRelationships() {
 		    List<RelationshipContext> retval = Lists.newArrayList();
 		    Relationship[] relationships = pkg.getRelationships();
 		    if (relationships != null) {
 		        Arrays.sort(relationships);
-			
+
 	    		for (Relationship relationship : relationships) {
 	    		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
 	    		}
 		    }
-		    
+
 			return retval;
 	}
-	
+
 	public List<AnnotationContext> packageAnnotations() {
 		List<AnnotationContext> retval  = Lists.newArrayList();
 		Annotation[] annotations = pkg.getAnnotations();
@@ -315,7 +315,7 @@ public class PackageContext {
 		}
 		return retval;
 	}
-	
+
 	public List<ExternalRefContext> externalRefs() {
 		List<ExternalRefContext> retval  = Lists.newArrayList();
 		if (this.pkg != null) {
@@ -329,7 +329,7 @@ public class PackageContext {
 				}
 			} catch (InvalidSPDXAnalysisException e) {
 				// Return an empty list
-			}	
+			}
 		}
 		return retval;
 	}

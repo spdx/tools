@@ -16,10 +16,10 @@
  */
 /**
  * Classes related to external reference types.
- * 
+ *
  * The ListedExternalReferenceTypes class should be used to access any SPDX maintined
  * listed external reference types.
- * 
+ *
  * @author Gary O'Neall
  *
  */

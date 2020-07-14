@@ -56,21 +56,21 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 	static final int ARTIFACT_OF_PROJECT_COL = SEEN_COPYRIGHT_COL + 1;
 	static final int ARTIFACT_OF_HOMEPAGE_COL = ARTIFACT_OF_PROJECT_COL + 1;
 	static final int ARTIFACT_OF_PROJECT_URL_COL = ARTIFACT_OF_HOMEPAGE_COL + 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, false, false,
 		false, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"File Name", "File Type",
 		"File Checksum", "License Concluded", "License Info in File", "License Comments",
-		"File Copyright Text", "Artifact of Project", "Artifact of Homepage", 
+		"File Copyright Text", "Artifact of Project", "Artifact of Homepage",
 		"Artifact of URL"};
 	static final int[] COLUMN_WIDTHS = new int[] {60, 10, 25, 30, 30, 40,
 		40, 25, 60, 60};
-	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true, 
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, true,
 		true, true, true, true, true, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false, 
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, false,
 		false, false, false, false, false, false, false};
 
-	
+
 	@SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String packageIds) {
 		Row row = addRow();
@@ -100,7 +100,7 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			row.createCell(LIC_INFO_IN_FILE_COL).setCellValue(PackageInfoSheetV09d2.licensesToString(fileInfo.getLicenseInfoFromFiles()));
 		}
 	}
-	
+
 	public SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -171,7 +171,7 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			if (uriCell != null) {
 				uri = uriCell.getStringCellValue();
 			}
-			
+
 			DoapProject project = new DoapProject(projectName, homePage);
 			if (uri != null && !uri.isEmpty()) {
 				try {
@@ -188,7 +188,7 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			return new SpdxFile(name, types, sha1, fileLicenses, seenLicenses, licenseComments, copyright, artifactOf, "");
 		} catch (InvalidSPDXAnalysisException e) {
 			throw(new SpreadsheetException("Error creating new SPDX file: "+e.getMessage()));
-		}	
+		}
 	}
 
 	/* (non-Javadoc)
@@ -203,7 +203,7 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX File worksheet";
@@ -264,7 +264,7 @@ public class PerFileSheetV09d3 extends PerFileSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);

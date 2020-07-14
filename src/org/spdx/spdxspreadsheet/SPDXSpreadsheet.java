@@ -30,14 +30,14 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * A spreadsheet containing information on an SPDX Document.
- * 
+ *
  * The spreadsheet contains 4 sheets:
  *   - Origins - Information about the origin of the SPDX Document (Version, createdby, ...)
  *   - Package Info - Information about the package itself
  *   - Non-standard licenses - text from any non-standard licenses found
  *   - Per File Info - Information about each file in the document
  *   - Reviewers - Information on any organizations who have reviewed the documents
- *   
+ *
  *   See notes below on version management
  * @author Gary O'Neall
  *
@@ -69,7 +69,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 							.add(VERSION_2_1_0)
 							.build();
 	public static final String UNKNOWN_VERSION = "UNKNOWN";
-	
+
 	private DocumentInfoSheet documentInfoSheet;
 	static final String DOCUMENT_INFO_NAME = "Document Info";
 	private PackageInfoSheet packageInfoSheet;
@@ -89,8 +89,8 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	private ExternalRefsSheet externalRefsSheet;
 	static final String EXTERNAL_REFS_SHEET_NAME = "External Refs";
 	private String version;
-	
-	
+
+
 	/**
 	 * Creates a new spreadsheet based on an existing file.  Handles all version compatibilities
 	 * @param spreadsheetFile
@@ -101,7 +101,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public SPDXSpreadsheet(File spreadsheetFile, boolean create,
 			boolean readonly) throws SpreadsheetException {
 		super(spreadsheetFile, create, readonly);
-		this.version = readVersion(this.workbook, DOCUMENT_INFO_NAME);	
+		this.version = readVersion(this.workbook, DOCUMENT_INFO_NAME);
 		if (this.version.equals(UNKNOWN_VERSION)) {
 			throw(new SpreadsheetException("The version for the SPDX spreadsheet could not be read."));
 		}
@@ -132,7 +132,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	 * @param workbook
 	 * @param originSheetName
 	 * @return
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	private String readVersion(Workbook workbook, String originSheetName) throws SpreadsheetException {
 		Sheet sheet = workbook.getSheet(originSheetName);
@@ -150,7 +150,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 		}
 		return versionCell.getStringCellValue();
 	}
-	
+
 	/**
 	 * @param versionToCheck
 	 * @return
@@ -310,7 +310,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public void setReviewersSheet(ReviewersSheet reviewersSheet) {
 		this.reviewersSheet = reviewersSheet;
 	}
-	
+
 	public RelationshipsSheet getRelationshipsSheet() {
 		return relationshipsSheet;
 	}
@@ -339,7 +339,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public void setPerFileSheet(PerFileSheet perFileSheet) {
 		this.perFileSheet = perFileSheet;
 	}
-	
+
 	/**
 	 * @return the snippetSheet
 	 */
@@ -353,7 +353,7 @@ public class SPDXSpreadsheet extends AbstractSpreadsheet {
 	public void setSnippetSheet(SnippetSheet snippetSheet) {
 		this.snippetSheet = snippetSheet;
 	}
-	
+
 	/**
 	 * @return the externalRefsSheet
 	 */

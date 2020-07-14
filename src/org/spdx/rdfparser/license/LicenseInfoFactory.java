@@ -33,13 +33,13 @@ import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
  *
  */
 public class LicenseInfoFactory {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(LicenseInfoFactory.class.getName());
-	
+
 	public static final String NOASSERTION_LICENSE_NAME = "NOASSERTION";
 	public static final String NONE_LICENSE_NAME = "NONE";
 
-	
+
 	/**
 	 * Create the appropriate SPDXLicenseInfo from the model and node provided.
 	 * The appropriate SPDXLicenseInfo subclass object will be chosen based on
@@ -70,13 +70,13 @@ public class LicenseInfoFactory {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Obtains an SPDX license by a URI - could be a listed license or a predefined license type
 	 * @param document
 	 * @param node
 	 * @return License Info for the license or NULL if no external listed license info could be found
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static AnyLicenseInfo getLicenseInfoByUri(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		if (!node.isURI()) {
@@ -112,7 +112,7 @@ public class LicenseInfoFactory {
 	 * @param document
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static AnyLicenseInfo getLicenseInfoById(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		Node licenseIdPredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID).asNode();
@@ -142,11 +142,11 @@ public class LicenseInfoFactory {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static AnyLicenseInfo getLicenseInfoByType(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		// find the subclass
-		Node rdfTypePredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+		Node rdfTypePredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
 		Triple m = Triple.createMatch(node, rdfTypePredicate, null);
 		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);	// find the type(s)
@@ -190,18 +190,18 @@ public class LicenseInfoFactory {
 	 * Syntax - A license set must start and end with a parenthesis "("
 	 * 			A conjunctive license set will have and AND after the first
 	 *				licenseInfo term
-	 * 			A disjunctive license set will have an OR after the first 
+	 * 			A disjunctive license set will have an OR after the first
 	 *				licenseInfo term
 	 *			If there is no And or Or, then it is converted to a simple
 	 *				license type
-	 *			A space or tab must be used between license ID's and the 
+	 *			A space or tab must be used between license ID's and the
 	 *				keywords AND and OR
 	 *			A licenseID must NOT be "AND" or "OR"
 	 * @param licenseString String conforming to the syntax
 	 * @param container Container containing any extractedLicenseInfos - if any extractedLicenseInfos by ID already exist, they will be used.  If
 	 * none exist for an ID, they will be added.  If null, a simple Java object will be created for the extractedLicenseInfo.
 	 * @return an SPDXLicenseInfo created from the string
-	 * @throws InvalidLicenseStringException 
+	 * @throws InvalidLicenseStringException
 	 */
 	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString, SpdxDocumentContainer container) throws InvalidLicenseStringException {
 		try {
@@ -218,16 +218,16 @@ public class LicenseInfoFactory {
 	 * Syntax - A license set must start and end with a parenthesis "("
 	 * 			A conjunctive license set will have and AND after the first
 	 *				licenseInfo term
-	 * 			A disjunctive license set will have an OR after the first 
+	 * 			A disjunctive license set will have an OR after the first
 	 *				licenseInfo term
 	 *			If there is no And or Or, then it is converted to a simple
 	 *				license type
-	 *			A space or tab must be used between license ID's and the 
+	 *			A space or tab must be used between license ID's and the
 	 *				keywords AND and OR
 	 *			A licenseID must NOT be "AND" or "OR"
 	 * @param licenseString String conforming to the syntax
 	 * @return an SPDXLicenseInfo created from the string
-	 * @throws InvalidLicenseStringException 
+	 * @throws InvalidLicenseStringException
 	 */
 	public static AnyLicenseInfo parseSPDXLicenseString(String licenseString) throws InvalidLicenseStringException {
 		return parseSPDXLicenseString(licenseString, null);
@@ -238,19 +238,19 @@ public class LicenseInfoFactory {
 	/**
 	 * @param licenseID
 	 * @return true if the licenseID belongs to an SPDX listed license
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static boolean isSpdxListedLicenseID(String licenseID)  {
 		return ListedLicenses.getListedLicenses().isSpdxListedLicenseID(licenseID);
 	}
-	
+
 	/**
 	 * @return Array of all SPDX listed license IDs
 	 */
 	public static String[] getSpdxListedLicenseIds() {
 		return ListedLicenses.getListedLicenses().getSpdxListedLicenseIds();
 	}
-	
+
 	/**
 	 * @return Version of the license list being used by the SPDXLicenseInfoFactory
 	 */
@@ -269,7 +269,7 @@ public class LicenseInfoFactory {
 	/**
 	 * @param id
 	 * @return the standard SPDX license exception or null if the ID is not in the SPDX license list
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static LicenseException getListedExceptionById(String id) throws InvalidSPDXAnalysisException {
 		return ListedExceptions.getListedExceptions().getListedExceptionById(id);

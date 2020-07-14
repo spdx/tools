@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -41,7 +41,7 @@ import com.google.common.collect.Maps;
 
 /**
  * Compares two SPDX files.  The <code>compare(fileA, fileB)</code> method will perform the comparison and
- * store the results.  <code>isDifferenceFound()</code> will return true of any 
+ * store the results.  <code>isDifferenceFound()</code> will return true of any
  * differences were found.
  * @author Gary O'Neall
  *
@@ -64,7 +64,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	 */
 	private Map<SpdxDocument, Map<SpdxDocument, Checksum[]>> uniqueChecksums = Maps.newHashMap();
 
-	
+
 	/**
 	 * Compares two DOAP projects based on the name, then by the home page,
 	 * then by the URI
@@ -74,7 +74,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 	private static class DoapComparator implements Comparator<DoapProject>, Serializable {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -91,18 +91,18 @@ public class SpdxFileComparer extends SpdxItemComparer {
 				retval = SpdxComparer.compareStrings(arg0.getProjectUri(), arg1.getProjectUri());
 			}
 			return retval;
-		}	
+		}
 	}
-	
+
 	private Comparator<DoapProject> doapComparer = new DoapComparator();
 	private boolean checksumsEquals = true;
 	private boolean typesEquals = true;
 
-	
+
 	public SpdxFileComparer(Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap) {
 		super(extractedLicenseIdMap);
 	}
-	
+
 	/**
 	 * Add a file to the comparer and compare to the existing files
 	 * @param spdxDocument document containing the file
@@ -153,13 +153,13 @@ public class SpdxFileComparer extends SpdxItemComparer {
 		super.addDocumentItem(spdxDocument, spdxFile);
 		inProgress = false;
 	}
-	
+
 	/**
 	 * Compare the checks for a new file being added to the existing
 	 * package checksums filling in the unique checksums map
 	 * @param spdxDocument
 	 * @param checksums
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void compareNewFileChecksums(SpdxDocument spdxDocument,
 			Checksum[] checksums) throws SpdxCompareException {
@@ -220,7 +220,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 		}
 		return retval;
 	}
-	
+
 	public SpdxFile getFile(SpdxDocument spdxDocument) throws SpdxCompareException {
 		checkInProgress();
 		checkCompareMade();
@@ -234,7 +234,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 
 	/**
 	 * @return the artifactOfEquals
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isArtifactOfEquals() throws SpdxCompareException {
 		checkInProgress();
@@ -272,13 +272,13 @@ public class SpdxFileComparer extends SpdxItemComparer {
 		checkCompareMade();
 		return checksumsEquals;
 	}
-	
+
 	/**
 	 * Get the checksums which are present in the file contained document A but not in document B
 	 * @param docA
 	 * @param docB
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public Checksum[] getUniqueChecksums(SpdxDocument docA, SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
@@ -337,13 +337,13 @@ public class SpdxFileComparer extends SpdxItemComparer {
 				this.differenceFound = true;
 				this.artifactOfEquals = false;
 			}
-			uniqueDocArtifactOf.put(entry.getKey(), 
+			uniqueDocArtifactOf.put(entry.getKey(),
 					alDocUnique.toArray(new DoapProject[alDocUnique.size()]));
-			uniqueCompareArtifactOf.put(spdxDocument, 
+			uniqueCompareArtifactOf.put(spdxDocument,
 					alCompareUnique.toArray(new DoapProject[alCompareUnique.size()]));
 		}
 	}
-	
+
 	private void compareArtifactOf(DoapProject[] artifactOfA,
 			DoapProject[] artifactOfB, List<DoapProject> alUniqueA,
 			List<DoapProject> alUniqueB) {
@@ -351,7 +351,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 		Arrays.sort(artifactOfB, doapComparer);
 		int aIndex = 0;
 		int bIndex = 0;
-		
+
 		while (aIndex < artifactOfA.length || bIndex < artifactOfB.length) {
 			if (aIndex >= artifactOfA.length) {
 				alUniqueB.add(artifactOfB[bIndex]);
@@ -364,7 +364,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 				if (compare == 0) {
 					// both names are equal - check other fields
 					aIndex++;
-					bIndex++;	
+					bIndex++;
 				} else if (compare > 0) {
 					// artifactOfA is greater than artifactOfB
 					alUniqueB.add(artifactOfB[bIndex]);
@@ -380,8 +380,8 @@ public class SpdxFileComparer extends SpdxItemComparer {
 
 	/**
 	 * checks to make sure there is not a compare in progress
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws SpdxCompareException
+	 *
 	 */
 	@Override
     protected void checkInProgress() throws SpdxCompareException {
@@ -390,11 +390,11 @@ public class SpdxFileComparer extends SpdxItemComparer {
 			throw(new SpdxCompareException("File compare in progress - can not obtain compare results until compare has completed"));
 		}
 	}
-	
+
 	private void checkCompareMade() throws SpdxCompareException {
 		if (this.documentItem.size() < 1) {
 			throw(new SpdxCompareException("Trying to obgain results of a file compare before a file compare has been performed"));
-		}	
+		}
 	}
 	/**
 	 * @return the fileDependenciesEquals
@@ -425,7 +425,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Override
     public boolean isDifferenceFound() throws SpdxCompareException {
@@ -466,7 +466,7 @@ public class SpdxFileComparer extends SpdxItemComparer {
 					uniqueArtifactOfB.length == 0;
 			Checksum[] uniqueChecksumsA = this.getUniqueChecksums(docA, docB);
 			Checksum[] uniqueChecksumsB = this.getUniqueChecksums(docB, docA);
-			boolean checksumsEquals = uniqueChecksumsA.length == 0 && 
+			boolean checksumsEquals = uniqueChecksumsA.length == 0 &&
 					uniqueChecksumsB.length == 0;
 			Relationship[] uniqueRelationshipA = this.getUniqueRelationship(docA, docB);
 			Relationship[] uniqueRelationshipB = this.getUniqueRelationship(docB, docA);
@@ -476,16 +476,16 @@ public class SpdxFileComparer extends SpdxItemComparer {
 			Annotation[] uniqueAnnotationsB = this.getUniqueAnnotations(docB, docA);
 			boolean annotationsEquals = uniqueAnnotationsA.length == 0 &&
 					uniqueAnnotationsB.length == 0;
-			
-			return new SpdxFileDifference(fileA, fileB, 
+
+			return new SpdxFileDifference(fileA, fileB,
 					fileA.getLicenseConcluded().equals(fileB.getLicenseConcluded()),
-					licenseInfoInFilesEquals, uniqueLicenseInfoInFilesA, uniqueLicenseInfoInFilesB,					
-					artifactOfEquals, uniqueArtifactOfA, uniqueArtifactOfB, 
-					checksumsEquals, uniqueChecksumsA, uniqueChecksumsB, 				
+					licenseInfoInFilesEquals, uniqueLicenseInfoInFilesA, uniqueLicenseInfoInFilesB,
+					artifactOfEquals, uniqueArtifactOfA, uniqueArtifactOfB,
+					checksumsEquals, uniqueChecksumsA, uniqueChecksumsB,
 					relationshipsEquals, uniqueRelationshipB, uniqueRelationshipB,
 					annotationsEquals, uniqueAnnotationsA, uniqueAnnotationsB);
 		} catch (InvalidSPDXAnalysisException e) {
 			throw (new SpdxCompareException("Error reading SPDX file propoerties: "+e.getMessage(),e));
 		}
-	}	
+	}
 }

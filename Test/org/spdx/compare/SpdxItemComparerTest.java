@@ -63,21 +63,21 @@ public class SpdxItemComparerTest {
 	private static final AnyLicenseInfo LICENSE_CONCLUDEDB = LICENSEB1;
 	private static final String NAMEA = "NameA";
 	private static final Map<String, String> LICENSE_XLATION_MAPAB = Maps.newHashMap();
-	
+
 	static {
 		LICENSE_XLATION_MAPAB.put("LicenseRef-1", "LicenseRef-4");
 		LICENSE_XLATION_MAPAB.put("LicenseRef-2", "LicenseRef-5");
 		LICENSE_XLATION_MAPAB.put("LicenseRef-3", "LicenseRef-6");
 	}
-	
+
 	private static final Map<String, String> LICENSE_XLATION_MAPBA = Maps.newHashMap();
-	
+
 	static {
 		LICENSE_XLATION_MAPBA.put("LicenseRef-4", "LicenseRef-1");
 		LICENSE_XLATION_MAPBA.put("LicenseRef-5", "LicenseRef-2");
 		LICENSE_XLATION_MAPBA.put("LicenseRef-6", "LicenseRef-3");
 	}
-	
+
 	private final Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> LICENSE_XLATION_MAP = Maps.newHashMap();
 
 	private SpdxDocument DOCA;
@@ -96,7 +96,7 @@ public class SpdxItemComparerTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	
+
 	private Annotation ANNOTATION1;
 	private Annotation ANNOTATION2;
 	private Annotation ANNOTATION3;
@@ -104,7 +104,7 @@ public class SpdxItemComparerTest {
 	private Annotation[] ANNOTATIONSA;
 	@SuppressWarnings("unused")
 	private Annotation[] ANNOTATIONSB;
-	
+
 	private Relationship[] RELATIONSHIPSA;
 	@SuppressWarnings("unused")
 	private Relationship[] RELATIONSHIPSB;
@@ -122,31 +122,31 @@ public class SpdxItemComparerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		ANNOTATION1 = new Annotation("Annotator1", AnnotationType.annotationType_other, 
+		ANNOTATION1 = new Annotation("Annotator1", AnnotationType.annotationType_other,
 				"2010-01-29T18:30:22Z", "AnnotationComment1");
-		ANNOTATION2 = new Annotation("Annotator2", AnnotationType.annotationType_review, 
+		ANNOTATION2 = new Annotation("Annotator2", AnnotationType.annotationType_review,
 				"2011-01-29T18:30:22Z", "AnnotationComment2");
-		ANNOTATION3 = new Annotation("Annotator3", AnnotationType.annotationType_other, 
+		ANNOTATION3 = new Annotation("Annotator3", AnnotationType.annotationType_other,
 				"2012-01-29T18:30:22Z", "AnnotationComment3");
-		ANNOTATION4 = new Annotation("Annotator4", AnnotationType.annotationType_review, 
+		ANNOTATION4 = new Annotation("Annotator4", AnnotationType.annotationType_review,
 				"2013-01-29T18:30:22Z", "AnnotationComment4");
 		ANNOTATIONSA = new Annotation[] {ANNOTATION1, ANNOTATION2};
 		ANNOTATIONSB = new Annotation[] {ANNOTATION3, ANNOTATION4};
-		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1", 
+		RELATED_ELEMENT1 = new SpdxElement("relatedElementName1",
 				"related element comment 1", null, null);
-		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2", 
+		RELATED_ELEMENT2 = new SpdxElement("relatedElementName2",
 				"related element comment 2", null, null);
-		RELATED_ELEMENT3 = new SpdxElement("relatedElementName3", 
+		RELATED_ELEMENT3 = new SpdxElement("relatedElementName3",
 				"related element comment 3", null, null);
-		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4", 
+		RELATED_ELEMENT4 = new SpdxElement("relatedElementName4",
 				"related element comment 4", null, null);
-		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1, 
+		RELATIONSHIP1 = new Relationship(RELATED_ELEMENT1,
 				RelationshipType.CONTAINS, "Relationship Comment1");
-		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2, 
+		RELATIONSHIP2 = new Relationship(RELATED_ELEMENT2,
 				RelationshipType.DYNAMIC_LINK, "Relationship Comment2");
-		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3, 
+		RELATIONSHIP3 = new Relationship(RELATED_ELEMENT3,
 				RelationshipType.DATA_FILE_OF, "Relationship Comment3");
-		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4, 
+		RELATIONSHIP4 = new Relationship(RELATED_ELEMENT4,
 				RelationshipType.DISTRIBUTION_ARTIFACT, "Relationship Comment4");
 		RELATIONSHIPSA = new Relationship[] {RELATIONSHIP1, RELATIONSHIP2};
 		RELATIONSHIPSB = new Relationship[] {RELATIONSHIP3, RELATIONSHIP4};
@@ -173,7 +173,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#compare(org.spdx.rdfparser.model.SpdxItem, org.spdx.rdfparser.model.SpdxItem, java.util.HashMap)}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testCompare() throws SpdxCompareException {
@@ -196,7 +196,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isConcludedLicenseEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsConcludedLicenseEquals() throws SpdxCompareException {
@@ -219,7 +219,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isSeenLicenseEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsSeenLicenseEquals() throws SpdxCompareException {
@@ -242,7 +242,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getUniqueSeenLicensesB()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueSeenLicensesB() throws SpdxCompareException {
@@ -266,7 +266,7 @@ public class SpdxItemComparerTest {
 		AnyLicenseInfo[] result = comparer.getUniqueSeenLicenses(DOCB, DOCA);
 		assertEquals(1, result.length);
 		assertEquals(LICENSEB2, result[0]);
-		
+
 		itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
@@ -280,7 +280,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getUniqueSeenLicensesA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueSeenLicensesA() throws SpdxCompareException {
@@ -304,7 +304,7 @@ public class SpdxItemComparerTest {
 		AnyLicenseInfo[] result = comparer.getUniqueSeenLicenses(DOCA, DOCB);
 		assertEquals(1, result.length);
 		assertEquals(LICENSEA2, result[0]);
-		
+
 		itemA = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
 				LICENSE_CONCLUDEDA, LICENSE_INFO_FROM_FILESA, COPYRIGHTA, LICENSE_COMMENTA);
 		itemB = new SpdxItem(NAMEA, COMMENTA, ANNOTATIONSA, RELATIONSHIPSA,
@@ -317,7 +317,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isCommentsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsCommentsEquals() throws SpdxCompareException {
@@ -340,7 +340,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isCopyrightsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsCopyrightsEquals() throws SpdxCompareException {
@@ -363,7 +363,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isLicenseCommmentsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsLicenseCommmentsEquals() throws SpdxCompareException {
@@ -386,7 +386,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getItemA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetItem() throws SpdxCompareException {
@@ -404,7 +404,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isRelationshipsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsRelationshipsEquals() throws SpdxCompareException {
@@ -429,7 +429,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getUniqueRelationshipA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueRelationshipA() throws SpdxCompareException {
@@ -465,7 +465,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getUniqueRelationshipB()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueRelationshipB() throws SpdxCompareException {
@@ -501,7 +501,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#isAnnotationsEquals()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testIsAnnotationsEquals() throws SpdxCompareException {
@@ -526,7 +526,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getUniqueAnnotationsA()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueAnnotationsA() throws SpdxCompareException {
@@ -562,7 +562,7 @@ public class SpdxItemComparerTest {
 
 	/**
 	 * Test method for {@link org.spdx.compare.SpdxItemComparer#getUniqueAnnotationsB()}.
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Test
 	public void testGetUniqueAnnotationsB() throws SpdxCompareException {

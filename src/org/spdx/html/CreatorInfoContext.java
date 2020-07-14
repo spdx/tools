@@ -27,20 +27,20 @@ import com.google.common.collect.Lists;
 /**
  * Mustache Context for converting an SPDX Document for use in the SpdxHTMLTemplate
  * The constants are used in the SpdxHTMLTemplate.html file in the resources directory.
- * 
+ *
  * Note that the Mustache variable names are the tag values in the SPDX specification
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class CreatorInfoContext {
-	
+
 	private SpdxDocument doc;
-	
+
 	public CreatorInfoContext(SpdxDocument doc2) {
 		this.doc = doc2;
 	}
-	
+
 	public String created() {
 		try {
 			return doc.getCreationInfo().getCreated();
@@ -48,7 +48,7 @@ public class CreatorInfoContext {
 			return "Error getting creator created date: "+e.getMessage();
 		}
 	}
-	
+
 	public String licenseListVersion() {
 		String retval;
 		try {
@@ -61,7 +61,7 @@ public class CreatorInfoContext {
 		}
 		return retval;
 	}
-	
+
 	public List<String> creator() {
 		List<String> creators = Lists.newArrayList();
 		try {
@@ -77,7 +77,7 @@ public class CreatorInfoContext {
 		}
 		return creators;
 	}
-	
+
 	public String comment() {
 		try {
 			if (doc.getCreationInfo() != null) {

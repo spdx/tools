@@ -31,11 +31,11 @@ public class JavaSha1ChecksumGenerator implements IFileChecksumGenerator {
 	static final String SHA1_ALGORITHM = "SHA-1";
 	static final String PACKAGE_VERIFICATION_CHARSET = "UTF-8";
 	private MessageDigest digest = null;
-	
+
 	public JavaSha1ChecksumGenerator() throws NoSuchAlgorithmException {
 		this.digest = MessageDigest.getInstance(SHA1_ALGORITHM);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.IFileChecksumGenerator#getFileChecksum(java.io.File)
 	 */
@@ -51,7 +51,7 @@ public class JavaSha1ChecksumGenerator implements IFileChecksumGenerator {
 				numBytes = in.read(buffer);
 			}
 			byte[] digestBytes = digest.digest();
-			StringBuilder sb = new StringBuilder();   
+			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < digestBytes.length; i++) {
 				String hex = Integer.toHexString(0xff & digestBytes[i]);
 				if (hex.length() < 2) {
