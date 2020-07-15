@@ -52,43 +52,43 @@ import com.google.gson.Gson;
  *
  */
 public class ListedLicenses implements IModelContainer {
-	
+
 	public static final String DEFAULT_LICENSE_LIST_VERSION = "3.5";
 	static final Logger logger = LoggerFactory.getLogger(ListedLicenses.class.getName());
 	static final String LISTED_LICENSE_ID_URL = "http://spdx.org/licenses/";
 	public static final String LISTED_LICENSE_URI_PREFIX = "https://spdx.org/licenses/";
 	static final String LISTED_LICENSE_RDF_LOCAL_DIR = "resources" + "/" + "stdlicenses";
 	private static final String LICENSE_TOC_FILENAME = "licenses.json";
-	
+
 	private static final String LISTED_LICENSE_PROPERTIES_FILENAME = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + "licenses.properties";
-	
+
 	private Model listedLicenseModel = null;
-	
+
 	/**
 	 * Map of lowercase listed license ID to proper cased listed license ID
 	 */
 	Map<String, String> listdLicenseIds = null;
-	
+
 	Map<String, SpdxListedLicense> listedLicenseCache = null;
 	Map<IModelContainer, Map<Node, SpdxListedLicense>> listedLicenseNodeCache = Maps.newHashMap();
-	
 
-    
+
+
 	Properties licenseProperties;
     boolean onlyUseLocalLicenses;
 
     String licenseListVersion = DEFAULT_LICENSE_LIST_VERSION;
 
 	private static volatile ListedLicenses listedLicenses = null;
-	
+
 	//Lock to ensure thread-safety of all modifications.
 	//Since modifications should be extremely rare, a single lock for both listed licenses and the model
 	//should be sufficient.
 	private static final ReadWriteLock listedLicenseModificationLock = new ReentrantReadWriteLock();
 	private static final String JSONLD_URL_SUFFIX = ".jsonld";
-	
+
 	int nextId = 0;
-	
+
 	/**
 	 * This constructor should only be called by the getListedLicenses method
 	 */
@@ -98,7 +98,7 @@ public class ListedLicenses implements IModelContainer {
 	            System.getProperty("SPDXParser.OnlyUseLocalLicenses", licenseProperties.getProperty("OnlyUseLocalLicenses", "false")));
 		loadListedLicenseIDs();
 	}
-	
+
     public static ListedLicenses getListedLicenses() {
         if (listedLicenses == null) {
             listedLicenseModificationLock.writeLock().lock();
@@ -112,7 +112,7 @@ public class ListedLicenses implements IModelContainer {
         }
         return listedLicenses;
     }
-	
+
 	/**
 	 * Resets all of the cached license information and reloads the license IDs
 	 * NOTE: This method should be used with caution, it will negatively impact
@@ -144,14 +144,14 @@ public class ListedLicenses implements IModelContainer {
         }
 		return listedLicenseModel;
 	}
-	
+
 	/**
 	 * Get a listed license based on a URI.  The URI can be a file or a web resource.
 	 * The license information is copied into the listedLicenseModel and the license
 	 * is placed into the cache.
 	 * @param uri
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
     protected SpdxListedLicense getLicenseFromUri(String uri) throws InvalidSPDXAnalysisException {
         URL licenseUrl = null;
@@ -232,7 +232,7 @@ public class ListedLicenses implements IModelContainer {
 				// Not implemented
 				return true;
 			}
-			
+
 		};
 		SpdxListedLicense retval;
 		if (this.getModel().equals(localLicenseModel)) {
@@ -269,7 +269,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @param uri - URI of the actual resource
 	 * @param base - base for any fragments present in the license model
 	 * @return
-	 * @throws NoListedLicenseRdfModel 
+	 * @throws NoListedLicenseRdfModel
 	 */
 	private Model getLicenseModel(String uri, String base) throws NoListedLicenseRdfModel {
 		Model retval = ModelFactory.createDefaultModel();
@@ -353,8 +353,8 @@ public class ListedLicenses implements IModelContainer {
 		}
 		return url.toString();
 	}
-	
-	
+
+
     /**
      * Load the listed license IDs from the website or local file cache
      */
@@ -398,7 +398,7 @@ public class ListedLicenses implements IModelContainer {
                 LicenseJsonTOC jsonToc = gson.fromJson(tocJsonStr.toString(), LicenseJsonTOC.class);
                 listdLicenseIds = jsonToc.getLicenseIds();
                 this.licenseListVersion = jsonToc.getLicenseListVersion();
-                
+
             } catch (IOException e) {
 				logger.error("I/O error reading JSON TOC file");
 			} finally {
@@ -424,7 +424,7 @@ public class ListedLicenses implements IModelContainer {
 	/**
 	 * @param licenseID
 	 * @return true if the licenseID belongs to an SPDX listed license
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
     public boolean isSpdxListedLicenseID(String licenseID) {
         try {
@@ -434,11 +434,11 @@ public class ListedLicenses implements IModelContainer {
             listedLicenseModificationLock.readLock().unlock();
         }
     }
-	
+
 	/**
 	 * Tries to load properties from LISTED_LICENSE_PROPERTIES_FILENAME, ignoring errors
 	 * encountered during the process (e.g., the properties file doesn't exist, etc.).
-	 * 
+	 *
 	 * @return a (possibly empty) set of properties
 	 */
     private static Properties loadLicenseProperties() {
@@ -468,7 +468,7 @@ public class ListedLicenses implements IModelContainer {
             listedLicenseModificationLock.writeLock().unlock();
         }
     }
-	
+
 	/**
 	 * @return Array of all SPDX listed license IDs
 	 */
@@ -480,15 +480,15 @@ public class ListedLicenses implements IModelContainer {
 			listedLicenseModificationLock.readLock().unlock();
         }
     }
-	
+
 	/**
 	 * @return The version of the loaded license list in the form M.N, where M is the major release and N is the minor release.
 	 * If no license list is loaded, returns {@Link DEFAULT_LICENSE_LIST_VERSION}.
 	 */
 	public String getLicenseListVersion() {
 		return licenseListVersion;
-	}   
-	
+	}
+
 	/**
 	 * @param licenseId SPDX Listed License ID
 	 * @return SPDX listed license or null if the ID is not in the SPDX license list
@@ -508,7 +508,7 @@ public class ListedLicenses implements IModelContainer {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public AnyLicenseInfo getLicenseFromStdLicModel(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
@@ -602,7 +602,7 @@ public class ListedLicenses implements IModelContainer {
 			Resource type, IRdfModel modelObject) {
 		if (duplicate != null) {
 			return duplicate;
-		} else if (uri == null) {			
+		} else if (uri == null) {
 			return listedLicenseModel.createResource(getType(listedLicenseModel));
 		} else {
 			return listedLicenseModel.createResource(uri, getType(listedLicenseModel));

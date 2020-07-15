@@ -24,12 +24,12 @@ package org.spdx.rdfparser.license;
 public class LicenseRestrictionException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 *
 	 */
 	public LicenseRestrictionException() {
 

@@ -47,7 +47,7 @@ public class VerificationCodeGeneratorTest {
     //TODO: The sha1 result seems to have changed since release 2.0 - This was likely due to changes in the line feeds, but it should be confirmed that a bug was not introduced
 //    private static final Object SHA1_RESULT = "70cb878c77a515720a00b2de3108ddea538600d0";
     private static final String SHA1_RESULT = "70cb878c77a515720a00b2de3108ddea538600d0";
-    
+
     private static String[] SPDX_FILE_NAMES = new String[] {
             "file/path/abc-not-skipped.java", "file/path/skipped.spdx", "file/path/not-skipped"
     };
@@ -92,7 +92,7 @@ public class VerificationCodeGeneratorTest {
      * Test method for
      * {@link org.spdx.rdfparser.VerificationCodeGenerator#generatePackageVerificationCode(java.io.File, java.io.File[])}
      * .
-     * 
+     *
      * @throws NoSuchAlgorithmException
      * @throws IOException
      */

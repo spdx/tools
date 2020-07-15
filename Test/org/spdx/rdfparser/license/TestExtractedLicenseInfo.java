@@ -78,7 +78,7 @@ public class TestExtractedLicenseInfo {
 
 		@Override
 		public void addSpdxElementRef(String elementRef) {
-			
+
 		}
 
 		@Override
@@ -96,7 +96,7 @@ public class TestExtractedLicenseInfo {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -108,7 +108,7 @@ public class TestExtractedLicenseInfo {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 	/**
 	 * @throws java.lang.Exception
@@ -142,7 +142,7 @@ public class TestExtractedLicenseInfo {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#SPDXNonStandardLicense(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSPDXNonStandardLicenseModelNode() throws InvalidSPDXAnalysisException {
@@ -167,7 +167,7 @@ public class TestExtractedLicenseInfo {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#setExtractedText(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetText() throws InvalidSPDXAnalysisException {
@@ -185,7 +185,7 @@ public class TestExtractedLicenseInfo {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.ExtractedLicenseInfo#setComment(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
@@ -202,7 +202,7 @@ public class TestExtractedLicenseInfo {
 		@SuppressWarnings("unused")
 		String rdfstring = writer.toString();
 		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
-		assertEquals(COMMENT2, lic3.getComment());	
+		assertEquals(COMMENT2, lic3.getComment());
 	}
 	@Test
 	public void testSetLicenseName() throws InvalidSPDXAnalysisException {
@@ -215,7 +215,7 @@ public class TestExtractedLicenseInfo {
 		ExtractedLicenseInfo lic3 = new ExtractedLicenseInfo(modelContainer, licResource.asNode());
 		assertEquals(LICENSENAME2, lic3.getName());
 	}
-	
+
 	@Test
 	public void testSetSourceUrls() throws InvalidSPDXAnalysisException {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1);
@@ -256,14 +256,14 @@ public class TestExtractedLicenseInfo {
 		}
 		return true;
 	}
-	
+
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
-		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1, 
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1,
 				LICENSENAME1, SOURCEURLS1, COMMENT1);
 		@SuppressWarnings("unused")
 		Resource licResource = lic.createResource(modelContainer);
-		
+
 		ExtractedLicenseInfo lic2 = (ExtractedLicenseInfo)lic.clone();
 
 		assertEquals(ID1, lic2.getLicenseId());
@@ -273,7 +273,7 @@ public class TestExtractedLicenseInfo {
 		assertTrue(compareArrayContent(SOURCEURLS1, lic2.getSeeAlso()));
 		assertTrue(lic2.getResource() == null);
 	}
-	
+
 	@Test
 	public void testBackwardsCompatibility() throws IOException, InvalidSPDXAnalysisException {
 		SpdxDocument doc1 = SPDXDocumentFactory.createSpdxDocument(TEST_RDF_FILE_PATH);
@@ -281,13 +281,13 @@ public class TestExtractedLicenseInfo {
 		doc1.setExtractedLicenseInfos(extractedLicenses);
 		doc1.getExtractedLicenseInfos();
 	}
-	
+
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
-		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1, 
+		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(ID1, TEXT1,
 				LICENSENAME1, SOURCEURLS1, COMMENT1);
 		assertTrue(lic.equivalent(lic));
-		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(ID1, TEXT1+"    ", 
+		ExtractedLicenseInfo lic2 = new ExtractedLicenseInfo(ID1, TEXT1+"    ",
 				LICENSENAME2, SOURCEURLS2, COMMENT2);;
 		assertTrue(lic.equivalent(lic2));
 		lic2.setExtractedText(TEXT2);

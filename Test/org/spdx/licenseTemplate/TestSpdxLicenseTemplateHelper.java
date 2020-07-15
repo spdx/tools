@@ -39,7 +39,7 @@ public class TestSpdxLicenseTemplateHelper {
 	LicenseTemplateRule endOptionalRule;
 
 	public class TestLicenseTemplateOutputHandler implements ILicenseTemplateOutputHandler {
-		
+
 		int optionalNestLevel = 0;
 
 		public TestLicenseTemplateOutputHandler() {
@@ -91,7 +91,7 @@ public class TestSpdxLicenseTemplateHelper {
 		@Override
 		public void completeParsing() {
 			// // Nothing needs to be done - everything is processed inline
-			
+
 		}
 
 	}
@@ -163,7 +163,7 @@ public class TestSpdxLicenseTemplateHelper {
 	/**
 	 * Test method for {@link org.spdx.licenseTemplate.SpdxLicenseTemplateHelper#templateToText(java.lang.String)}.
 	 * @throws LicenseTemplateRuleException
-	 * @throws LicenseParserException 
+	 * @throws LicenseParserException
 	 */
 	@Test
 	public void testTemplateToText() throws LicenseTemplateRuleException, LicenseParserException {

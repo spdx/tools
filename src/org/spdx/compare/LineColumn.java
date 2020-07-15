@@ -24,7 +24,7 @@ public class LineColumn {
 	private int line;
 	private int column;
 	private int len;
-	
+
 	public LineColumn(int line, int column,int len) {
 		this.line = line;
 		this.column = column;
@@ -53,5 +53,5 @@ public class LineColumn {
 
 	public void setLen(int len) {
 		this.len = len;
-	}		
+	}
 }

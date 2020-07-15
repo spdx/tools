@@ -38,31 +38,31 @@ import org.spdx.rdfparser.model.RdfModelObject;
  * Note that there are very few required fields for this class in that
  * the external reference type does not need to be provided in the SPDX
  * document for the document to be valid.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class ReferenceType extends RdfModelObject implements Comparable<ReferenceType> {
-	
+
 	//TODO: Current implementation only uses the uri field.  Implement additional fields
 	// once the SPDX listed reference type pages are live
-	
+
 	static final Logger logger = LoggerFactory.getLogger(ReferenceType.class);
 
 	String contextualExample;
 	URL documentation;
 	URL externalReferenceSite;
 	URI referenceTypeUri;
-	
+
 	/**
 	 * Create a reference type from basic values
 	 * @param uri Unique resource identifier for the reference type resource
 	 * @param contextualExample Example for the reference type
 	 * @param documentation URL pointing to documentation
 	 * @param externalReferenceSite URL pointing to the reference site
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
-	public ReferenceType(URI uri, String contextualExample, URL documentation, 
+	public ReferenceType(URI uri, String contextualExample, URL documentation,
 			URL externalReferenceSite) throws InvalidSPDXAnalysisException {
 		this.referenceTypeUri = uri;
 		this.contextualExample = contextualExample;
@@ -73,7 +73,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 	/**
 	 * @param modelContainer
 	 * @param object
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ReferenceType(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
@@ -110,7 +110,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 
 	/**
 	 * @return the contextualExample
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public String getContextualExample() throws InvalidSPDXAnalysisException {
 		throw new InvalidSPDXAnalysisException("This field is not implemented.");
@@ -118,7 +118,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 
 	/**
 	 * @param contextualExample the contextualExample to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setContextualExample(String contextualExample) throws InvalidSPDXAnalysisException {
 		throw new InvalidSPDXAnalysisException("This field is not implemented.");
@@ -126,7 +126,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 
 	/**
 	 * @return the documentation
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public URL getDocumentation() throws InvalidSPDXAnalysisException {
 		throw new InvalidSPDXAnalysisException("This field is not implemented.");
@@ -134,7 +134,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 
 	/**
 	 * @param documentation the documentation to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setDocumentation(URL documentation) throws InvalidSPDXAnalysisException {
 		throw new InvalidSPDXAnalysisException("This field is not implemented.");
@@ -142,7 +142,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 
 	/**
 	 * @return the externalReferenceSite
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public URL getExternalReferenceSite() throws InvalidSPDXAnalysisException {
 		throw new InvalidSPDXAnalysisException("This field is not implemented.");
@@ -150,7 +150,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 
 	/**
 	 * @param externalReferenceSite the externalReferenceSite to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setExternalReferenceSite(URL externalReferenceSite) throws InvalidSPDXAnalysisException {
 		throw new InvalidSPDXAnalysisException("This field is not implemented.");
@@ -232,7 +232,7 @@ public class ReferenceType extends RdfModelObject implements Comparable<Referenc
 		}
 		return this.getReferenceTypeUri().compareTo(o.getReferenceTypeUri());
 	}
-	
+
 	@Override
 	public String toString() {
 		if (this.referenceTypeUri == null) {

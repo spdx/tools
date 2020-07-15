@@ -42,7 +42,7 @@ import antlr.RecognitionException;
  * TagToSpreadsheet spdxfile.spdx spreadsheetfile.xls where spdxfile.spdx is a
  * valid SPDX tag-value file and spreadsheetfile.xls is the output SPDX
  * spreadsheeet file.
- * 
+ *
  * @author Rana Rahal, Protecode Inc.
  */
 public class TagToSpreadsheet {
@@ -70,9 +70,9 @@ public class TagToSpreadsheet {
 			return;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the Tag Value file to be converted, args[1] is the result spreadsheet file name
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * @return Warnings of the conversion, display to the user
@@ -144,8 +144,8 @@ public class TagToSpreadsheet {
 		}
 		return warnings;
 	}
-	
-	
+
+
 	private static void usage() {
 		System.out
 				.println("Usage: TagToSpreadsheet spdxfile.spdx spreadsheetfile.xls \n"

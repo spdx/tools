@@ -94,12 +94,12 @@ public class TestChecksum {
 	 */
 	@Test
 	public void testGetType() {
-		
+
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Checksum#populateModel()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testPopulateModel() throws InvalidSPDXAnalysisException {
@@ -113,7 +113,7 @@ public class TestChecksum {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Checksum#equivalent(org.spdx.rdfparser.model.RdfModelObject)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
@@ -152,7 +152,7 @@ public class TestChecksum {
 	 */
 	@Test
 	public void testChecksumChecksumAlgorithmString() {
-		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, 
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5,
 				MD5_VALUE1);
 		assertEquals(ChecksumAlgorithm.checksumAlgorithm_md5, c1.getAlgorithm());
 		assertEquals(MD5_VALUE1, c1.getValue());
@@ -199,7 +199,7 @@ public class TestChecksum {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.Checksum#clone()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {

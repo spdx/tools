@@ -38,7 +38,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 	/**
 	 * @param modelContainer container which includes the license
 	 * @param licenseInfoNode Node that defines the disjunctive license set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public DisjunctiveLicenseSet(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
@@ -69,7 +69,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 		sb.append(')');
 		return sb.toString();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int retval = 41;	// Prime number
@@ -79,7 +79,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 		}
 		return retval;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#equals(java.lang.Object)
 	 */
@@ -105,7 +105,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 				if (li.equals(compInfos[i])) {
 					found = true;
 					break;
-				} 
+				}
 			}
 			if (!found) {
 				return false;
@@ -113,7 +113,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 		}
 		return true;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#clone()
 	 */
@@ -127,7 +127,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 		}
 		return new DisjunctiveLicenseSet(clonedSet);
 	}
-	
+
 	/**
 	 * Disjunctive license sets can contain other conjunctive license sets as members.  Logically,
 	 * the members of these "sub-disjunctive license sets" could be direct members and have the same
@@ -184,7 +184,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 				if (li.equivalent(compInfos[i])) {
 					found = true;
 					break;
-				} 
+				}
 			}
 			if (!found) {
 				return false;

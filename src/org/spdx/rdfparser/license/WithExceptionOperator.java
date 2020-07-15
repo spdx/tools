@@ -38,15 +38,15 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  *
  */
 public class WithExceptionOperator extends AnyLicenseInfo {
-	
+
 	private AnyLicenseInfo license;
 	private LicenseException exception;
-	
+
 	/**
 	 * Create a WithExceptionOperator from a node in an existing RDF model
 	 * @param modelContainer contains the model
 	 * @param licenseInfoNode Node which defines the WithExceptionOperator
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public WithExceptionOperator(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
@@ -71,7 +71,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		r.addProperty(exceptionProperty, exceptionResource);
 		return r;
 	}
-	
+
 	/**
 	 * @return the license
 	 */
@@ -79,7 +79,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		if (this.resource != null && this.refreshOnGet) {
 			Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 			Triple m = Triple.createMatch(node, p, null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
 				AnyLicenseInfo anyLicense;
@@ -91,7 +91,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 					this.license = anyLicense;
 				} catch (InvalidSPDXAnalysisException e) {
 					logger.warn("Error getting license info - using stored value",e);
-				}				
+				}
 			}
 		}
 		return license;
@@ -100,7 +100,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 
 	/**
 	 * @param license the license to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setLicense(AnyLicenseInfo license) throws InvalidSPDXAnalysisException {
 		this.license = license;
@@ -123,7 +123,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		if (this.resource != null && this.refreshOnGet) {
 			Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION).asNode();
 			Triple m = Triple.createMatch(node, p, null);
-			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+			ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 			while (tripleIter.hasNext()) {
 				Triple t = tripleIter.next();
 				try {
@@ -139,7 +139,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 
 	/**
 	 * @param exception the exception to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setException(LicenseException exception) throws InvalidSPDXAnalysisException {
 		this.exception = exception;
@@ -292,7 +292,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (this.license != null) {
@@ -306,7 +306,7 @@ public class WithExceptionOperator extends AnyLicenseInfo {
 		}
 		p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_EXCEPTION).asNode();
 		m = Triple.createMatch(node, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (this.exception != null) {

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -34,7 +34,7 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class DocumentSheet extends AbstractSheet {
-	
+
 	int NUM_COLS = 12;
 	int DOCUMENT_NAME_COL = 0;
 	int SPDX_VERSION_COL = DOCUMENT_NAME_COL + 1;
@@ -49,15 +49,15 @@ public class DocumentSheet extends AbstractSheet {
 	int ANNOTATION_COL = LICENSE_LIST_VERSION_COL + 1;
 	int RELATIONSHIP_COL = ANNOTATION_COL + 1;
 
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, true,
 		true, true, true, false, true, false, false, false, false};
-	static final String[] HEADER_TITLES = new String[] {"Document Name", "SPDX Version", 
+	static final String[] HEADER_TITLES = new String[] {"Document Name", "SPDX Version",
 		"Data License", "ID", "Document Namespace", "Document Describes",
 		"Document Comment", "Creation Date", "Creator Comment", "Lic. List. Ver.",
 		"Annotations", "Relationships"};
-	
-	static final int[] COLUMN_WIDTHS = new int[] {30, 15, 15, 15, 60, 40, 60, 
+
+	static final int[] COLUMN_WIDTHS = new int[] {30, 15, 15, 15, 60, 40, 60,
 		22, 60, 22, 80, 80};
 	private static final String DIFFERENT_STRING = "Diff";
 	private static final String EQUAL_STRING = "Equals";
@@ -83,7 +83,7 @@ public class DocumentSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Package Info worksheet";
@@ -121,7 +121,7 @@ public class DocumentSheet extends AbstractSheet {
 	 * Import compare results from a comparison
 	 * @param comparer Comparer which compared the documents
 	 * @param docNames Document names - order must be the same as the documents provided
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames)  throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {
@@ -148,7 +148,7 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void importRelationships(SpdxComparer comparer) throws SpdxCompareException {
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(ANNOTATION_COL);
@@ -165,7 +165,7 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void importAnnotations(SpdxComparer comparer) throws SpdxCompareException {
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(RELATIONSHIP_COL);
@@ -182,8 +182,8 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void importDocumentDescribes(SpdxComparer comparer) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(SPDX_DOCUMENT_CONTENT_COL);
@@ -200,8 +200,8 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void importDocumentNamespace(SpdxComparer comparer) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(DOCUMENT_NAMESPACE_COL);
@@ -217,7 +217,7 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void importSpdxId(SpdxComparer comparer) throws SpdxCompareException {
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(SPDX_IDENTIFIER_COL);
@@ -233,8 +233,8 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void importLicenseListVersions(SpdxComparer comparer) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		Cell cell = sheet.getRow(getFirstDataRow()).createCell(LICENSE_LIST_VERSION_COL);
@@ -254,8 +254,8 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void importSpdxVersion(SpdxComparer comparer) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		// comparison row
@@ -316,8 +316,8 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void importCreatorComment(SpdxComparer comparer) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		// comparison row
@@ -336,8 +336,8 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void importCreationDate(SpdxComparer comparer) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		// comparison row
@@ -372,7 +372,7 @@ public class DocumentSheet extends AbstractSheet {
 
 	/**
 	 * @param docNames
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void importDocumentNames(SpdxComparer comparer) throws SpdxCompareException {
 		// comparison row

@@ -61,17 +61,17 @@ public class TestLicenseInfoFactory {
 	SpdxListedLicense[] STANDARD_LICENSES;
 	DisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
 	ConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
-	
+
 	ConjunctiveLicenseSet COMPLEX_LICENSE;
-	
+
 	Resource[] NON_STD_LICENSES_RESOURCES;
 	Resource[] STANDARD_LICENSES_RESOURCES;
 	Resource[] DISJUNCTIVE_LICENSES_RESOURCES;
 	Resource[] CONJUNCTIVE_LICENSES_RESOURCES;
 	Resource COMPLEX_LICENSE_RESOURCE;
-	
+
 	Model model;
-	
+
 	IModelContainer modelContainer = new IModelContainer() {
 
 		@Override
@@ -96,7 +96,7 @@ public class TestLicenseInfoFactory {
 
 		@Override
 		public void addSpdxElementRef(String elementRef) {
-	
+
 		}
 
 		@Override
@@ -114,7 +114,7 @@ public class TestLicenseInfoFactory {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -126,7 +126,7 @@ public class TestLicenseInfoFactory {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 
 	/**
@@ -138,17 +138,17 @@ public class TestLicenseInfoFactory {
 		for (int i = 0; i < NONSTD_IDS.length; i++) {
 			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(NONSTD_IDS[i], NONSTD_TEXTS[i]);
 		}
-		
+
 		STANDARD_LICENSES = new SpdxListedLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
-			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i), 
-					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
+			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i),
+					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i)}, "Notes "+String.valueOf(i),
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
-		
+
 		DISJUNCTIVE_LICENSES = new DisjunctiveLicenseSet[3];
 		CONJUNCTIVE_LICENSES = new ConjunctiveLicenseSet[2];
-		
+
 		DISJUNCTIVE_LICENSES[0] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
 		});
@@ -168,7 +168,7 @@ public class TestLicenseInfoFactory {
 				DISJUNCTIVE_LICENSES[2], NON_STD_LICENSES[2], CONJUNCTIVE_LICENSES[1]
 		});
 		model = ModelFactory.createDefaultModel();
-		
+
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
 			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(modelContainer);
@@ -194,7 +194,7 @@ public class TestLicenseInfoFactory {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void testLocalUri() throws IOException {
 		String id = "BSD-3-Clause";
@@ -215,7 +215,7 @@ public class TestLicenseInfoFactory {
 	public void testGetLicenseFromStdLicModel() throws InvalidSPDXAnalysisException, IOException {
 		String id = "BSD-3-Clause";
 		File licenseHtmlFile = new File("TestFiles" + File.separator + id + ".jsonld");
-		
+
 		String stdLicUri = "file://" + licenseHtmlFile.getAbsolutePath().replace('\\', '/').replace(" ", "%20");
 		SpdxListedLicense lic = ListedLicenses.getListedLicenses().getLicenseFromUri(stdLicUri);
 		if (lic == null) {
@@ -285,7 +285,7 @@ public class TestLicenseInfoFactory {
 	 * Reads in a text file - assumes UTF-8 encoding
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private String readTextFile(String filePath) throws IOException {
 		File file = new File(filePath);
@@ -304,7 +304,7 @@ public class TestLicenseInfoFactory {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.LicenseInfoFactory#getLicenseInfoFromModel(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetLicenseInfoFromModel() throws InvalidSPDXAnalysisException {
@@ -356,7 +356,7 @@ public class TestLicenseInfoFactory {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.LicenseInfoFactory#parseSPDXLicenseString(java.lang.String)}.
-	 * @throws InvalidLicenseStringException 
+	 * @throws InvalidLicenseStringException
 	 */
 	@Test
 	public void testParseSPDXLicenseString() throws InvalidLicenseStringException {
@@ -366,7 +366,7 @@ public class TestLicenseInfoFactory {
 			fail("Parsed license does not equal");
 		}
 	}
-	
+
 	@Test
 	public void testParseSPDXLicenseStringMixedCase() throws InvalidLicenseStringException {
 		String parseString = COMPLEX_LICENSE.toString();
@@ -383,7 +383,7 @@ public class TestLicenseInfoFactory {
 			fail("Parsed license does not equal");
 		}
 	}
-	
+
 	@Test
 	public void testSpecialLicenses() throws InvalidLicenseStringException, InvalidSPDXAnalysisException {
 		// NONE
@@ -401,7 +401,7 @@ public class TestLicenseInfoFactory {
 		verify = comp.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testDifferentLicenseOrder() throws InvalidLicenseStringException {
 		AnyLicenseInfo order1 = LicenseInfoFactory.parseSPDXLicenseString("(LicenseRef-14 AND LicenseRef-5 AND LicenseRef-6 AND LicenseRef-15 AND LicenseRef-3 AND LicenseRef-12 AND LicenseRef-4 AND LicenseRef-13 AND LicenseRef-10 AND LicenseRef-9 AND LicenseRef-11 AND LicenseRef-7 AND LicenseRef-8 AND LGPL-2.1+ AND LicenseRef-1 AND LicenseRef-2 AND LicenseRef-0 AND GPL-2.0+ AND GPL-2.0 AND LicenseRef-17 AND LicenseRef-16 AND BSD-2-Clause-Clear)");

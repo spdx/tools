@@ -45,7 +45,7 @@ import org.spdx.tag.InvalidSpdxTagFileException;
  *
  */
 public class OriginsSheetV2d0 extends DocumentInfoSheet {
-	
+
 	static final int NUM_COLS = 14;
 	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
 	static final int DATA_LICENSE_COL = SPDX_VERSION_COL + 1;
@@ -55,27 +55,27 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 	static final int NAMESPACE_COL = DOCUMENT_NAME_COL + 1;
 	static final int DOCUMENT_DESCRIBES_COL = NAMESPACE_COL + 1;
 	static final int EXTERNAL_DOC_REFS_COL = DOCUMENT_DESCRIBES_COL + 1;
-	static final int DOCUMENT_COMMENT_COL = EXTERNAL_DOC_REFS_COL + 1;	
+	static final int DOCUMENT_COMMENT_COL = EXTERNAL_DOC_REFS_COL + 1;
 	static final int CREATED_BY_COL = DOCUMENT_COMMENT_COL + 1;
-	static final int CREATED_COL = CREATED_BY_COL + 1;	
+	static final int CREATED_COL = CREATED_BY_COL + 1;
 	static final int AUTHOR_COMMENTS_COL = CREATED_COL + 1;
 	static final int USER_DEFINED_COL = AUTHOR_COMMENTS_COL + 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, true, true, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, true, true,
 		false, true, true, true, false, false, true, true, false, false};
 
 	static final String[] HEADER_TITLES = new String[] {"Spreadsheet Version",
 		"SPDX Version", "Data License", "SPDX Identifier", "License List Version",
 		"Document Name", "Document Namespace", "Document Contents",
-		"External Document References", "Document Comment", "Creator", "Created",   
+		"External Document References", "Document Comment", "Creator", "Created",
 		"Creator Comment", "Optional User Defined Columns..."};
 	static final int[] COLUMN_WIDTHS = new int[] {20, 16, 20, 20, 16, 40, 80,
 		50, 140, 70, 60, 20, 70, 60};
-	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, false, 
+	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, false,
 		false, true, true, true, true, true, true, false, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, true, true, 
+	static final boolean[] CENTER_NOWRAP = new boolean[] {true, true, true, true,
 		true, false, false, false, false, false, false, true, false, false};
-	
+
 	public OriginsSheetV2d0(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
@@ -99,7 +99,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS-1; i++) {	// don't check the last col - which is the user defined column
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Origins worksheet";
@@ -149,7 +149,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 		if (sheetNum >= 0) {
 			wb.removeSheetAt(sheetNum);
 		}
-		
+
 		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
@@ -170,45 +170,45 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 		Cell ssVersionCell = dataRow.createCell(SPREADSHEET_VERSION_COL);
 		ssVersionCell.setCellValue(SPDXSpreadsheet.CURRENT_VERSION);
 	}
-	
 
-	
+
+
 	public void setAuthorComments(String comments) {
 		setDataCellStringValue(AUTHOR_COMMENTS_COL, comments);
 	}
-	
+
 	public void setCreatedBy(String createdBy) {
 		setDataCellStringValue(CREATED_BY_COL, createdBy);
 	}
-	
+
 	public void setDataLicense(String dataLicense) {
 		setDataCellStringValue(DATA_LICENSE_COL, dataLicense);
 	}
-	
+
 	public void setSPDXVersion(String version) {
 		setDataCellStringValue(SPDX_VERSION_COL, version);
 	}
-	
+
 	public void setSpreadsheetVersion(String version) {
 		setDataCellStringValue(SPREADSHEET_VERSION_COL, version);
 	}
-	
+
 	public String getAuthorComments() {
 		return getDataCellStringValue(AUTHOR_COMMENTS_COL);
 	}
-	
+
 	public Date getCreated() {
 		return getDataCellDateValue(CREATED_COL);
 	}
-	
+
 	public String getDataLicense() {
 		return getDataCellStringValue(DATA_LICENSE_COL);
 	}
-	
+
 	public String getSPDXVersion() {
 		return getDataCellStringValue(SPDX_VERSION_COL);
 	}
-	
+
 	public String getSpreadsheetVersion() {
 		return getDataCellStringValue(SPREADSHEET_VERSION_COL);
 	}
@@ -246,7 +246,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 			}
 		}
 	}
-	
+
 	public String[] getCreatedBy() {
 		// first count rows
 		int numRows = 0;
@@ -297,7 +297,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 	public void setLicenseListVersion(String licenseVersion) {
 		setDataCellStringValue(LICENSE_LIST_VERSION_COL, licenseVersion);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.OriginsSheet#getNamespace()
 	 */
@@ -341,7 +341,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 		if (created == null) {
 			throw(new SpreadsheetException("Missing created date"));
 		}
-		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);	
+		DateFormat dateFormat = new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT);
 		try {
 			setCreated(dateFormat.parse(created));
 		} catch (ParseException e) {
@@ -539,7 +539,7 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 			return;
 		}
 		try {
-			setDataCellStringValue(EXTERNAL_DOC_REFS_COL, 
+			setDataCellStringValue(EXTERNAL_DOC_REFS_COL,
 					externalDocRefToStr(externalDocumentRefs[0]));
 		} catch (InvalidSPDXAnalysisException e) {
 			throw(new SpreadsheetException("Error getting external document reference",e));
@@ -570,14 +570,14 @@ public class OriginsSheetV2d0 extends DocumentInfoSheet {
 	/**
 	 * @param externalDocumentRef
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private String externalDocRefToStr(ExternalDocumentRef externalDocumentRef) throws InvalidSPDXAnalysisException {
 		if (externalDocumentRef == null) {
 			return "";
 		}
 		return externalDocumentRef.getExternalDocumentId() +
-				" " + externalDocumentRef.getSpdxDocumentNamespace() + 
+				" " + externalDocumentRef.getSpdxDocumentNamespace() +
 				" " + Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(externalDocumentRef.getChecksum().getAlgorithm()) +
 				" " + externalDocumentRef.getChecksum().getValue();
 	}

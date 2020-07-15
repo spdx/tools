@@ -39,7 +39,7 @@ public class SPDXReview implements Comparable<SPDXReview> {
 	private Model model = null;
 	private Node reviewerNode = null;
 	private Resource reviewerResource = null;
-	
+
 	@SuppressWarnings("deprecation")
 	public SPDXReview(Model model, Node reviewerNode) throws InvalidSPDXAnalysisException {
 		this.model = model;
@@ -51,11 +51,11 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		} else {
 			throw(new InvalidSPDXAnalysisException("Can not have a Review node as a literal"));
 		}
-		
+
 		//reviewer
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_REVIEWER).asNode();
 		Triple m = Triple.createMatch(reviewerNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.reviewer = t.getObject().toString(false);
@@ -63,7 +63,7 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		//Date
 		p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_DATE).asNode();
 		m = Triple.createMatch(reviewerNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.reviewDate = t.getObject().toString(false);
@@ -71,13 +71,13 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		//Comment
 		p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT).asNode();
 		m = Triple.createMatch(reviewerNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.comment = t.getObject().toString(false);
 		}
 	}
-	
+
 	/**
 	 * @param reviewer
 	 * @param date
@@ -105,8 +105,8 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		this.model = model;
 		this.reviewerNode = reviewResource.asNode();
 		this.reviewerResource = reviewResource;
-		
-		// Reviewer		
+
+		// Reviewer
 		if (reviewer != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_REVIEWER);
 			reviewResource.addProperty(p, reviewer);
@@ -116,8 +116,8 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		if (reviewDate != null) {
 			Property p = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REVIEW_DATE);
 			reviewResource.addProperty(p, reviewDate);
-		}	
-		
+		}
+
 		// Comment
 		if (comment != null) {
 			Property p = model.createProperty(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
@@ -188,7 +188,7 @@ public class SPDXReview implements Comparable<SPDXReview> {
 			}
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int retval = 41;	// prime number
@@ -203,7 +203,7 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
@@ -214,7 +214,7 @@ public class SPDXReview implements Comparable<SPDXReview> {
 		}
 		SPDXReview comp = (SPDXReview)o;
 		if (this.getReviewer() == null) {
-			if (comp.getReviewer() != null) {			
+			if (comp.getReviewer() != null) {
 				return false;
 			}
 		} else {

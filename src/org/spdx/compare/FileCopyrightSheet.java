@@ -27,9 +27,9 @@ import com.google.common.base.Objects;
  *
  */
 public class FileCopyrightSheet extends AbstractFileCompareSheet {
-	
+
 	static final int COPYRIGHT_COL_WIDTH = 60;
-	
+
 	public FileCopyrightSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}

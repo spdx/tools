@@ -30,14 +30,14 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
 /**
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class ByteOffsetPointer extends SinglePointer {
-	
+
 	private Integer offset;
-	
+
 	public ByteOffsetPointer(SpdxElement reference, int offset) {
 		super(reference);
 		this.offset = offset;
@@ -62,12 +62,12 @@ public class ByteOffsetPointer extends SinglePointer {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
-	
+
 	/**
 	 * Get the local properties just associated with this class
 	 */
 	private void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
-		this.offset = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		this.offset = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_OFFSET);
 	}
 
@@ -87,11 +87,11 @@ public class ByteOffsetPointer extends SinglePointer {
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.RDF_POINTER_NAMESPACE + SpdxRdfConstants.CLASS_POINTER_BYTE_OFFSET_POINTER);
 	}
-	
+
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
-		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_OFFSET, this.offset);
 	}
 
@@ -112,7 +112,7 @@ public class ByteOffsetPointer extends SinglePointer {
 	 */
 	public Integer getOffset() {
 		if (this.resource != null && this.refreshOnGet) {
-			this.offset = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+			this.offset = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 					SpdxRdfConstants.PROP_POINTER_OFFSET);
 		}
 		return offset;
@@ -123,10 +123,10 @@ public class ByteOffsetPointer extends SinglePointer {
 	 */
 	public void setOffset(Integer offset) {
 		this.offset = offset;
-		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_OFFSET, this.offset);
 	}
-	
+
 	@Override
 	public List<String> verify() {
 		List<String> retval = super.verify();
@@ -137,8 +137,8 @@ public class ByteOffsetPointer extends SinglePointer {
 		}
 		return retval;
 	}
-	
-	@Override 
+
+	@Override
 	public ByteOffsetPointer clone() {
 		SpdxElement newReference = null;
 		if (this.reference != null) {
@@ -169,7 +169,7 @@ public class ByteOffsetPointer extends SinglePointer {
 		}
 		return this.offset.compareTo(compByteOffset);
 	}
-	
+
 	@Override
 	public String toString() {
 		if (this.offset != null) {

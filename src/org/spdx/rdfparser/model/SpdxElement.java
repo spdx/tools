@@ -37,22 +37,22 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * An SpdxElement is any thing described in SPDX, either a document or an SpdxItem. 
+ * An SpdxElement is any thing described in SPDX, either a document or an SpdxItem.
  * SpdxElements can be related to other SpdxElements.
- * 
+ *
  * All subclasses should override getType, equals and hashCode.
- * 
+ *
  * If a subproperty is used for the name property name, getNamePropertyName should be overridden.
- * 
+ *
  * If absolute URIs are required, getUri should be overriden.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class SpdxElement extends RdfModelObject {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(RdfModelObject.class);
-	
+
 	protected Annotation[] annotations;
 	protected String comment;
 	protected String name;
@@ -62,13 +62,13 @@ public class SpdxElement extends RdfModelObject {
 	 * the unique URI for the item.  The URI is the namespace of the modelContainer + id
 	 */
 	private String id;
-	
+
 	public SpdxElement(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
 		getPropertiesFromModel();
 		SpdxElementFactory.addToCreatedElements(modelContainer, node, this);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -118,7 +118,7 @@ public class SpdxElement extends RdfModelObject {
 			this.relationships = new Relationship[0];
 		}
 	}
-	
+
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		if (this.resource != null) {
@@ -147,7 +147,7 @@ public class SpdxElement extends RdfModelObject {
 		List<String> retval = Lists.newArrayList();
 		if (this.name == null) {
 			if (!(this instanceof SpdxSnippet)) {
-				// TODO: Move this down into the subclasses where they belong - 
+				// TODO: Move this down into the subclasses where they belong -
 				// a bit of a quick fix while working on SPDX 2.1 changes
 				retval.add("Missing required name for type "+this.getClass().getName());
 			}
@@ -159,12 +159,12 @@ public class SpdxElement extends RdfModelObject {
 				for (String annotationError:annotationErrors) {
 					retval.add("Annotation error for SPDX element "+localName+": "+annotationError);
 				}
-				
+
 			}
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Add the name of the element to all strings in the list
 	 * @param warnings
@@ -189,7 +189,7 @@ public class SpdxElement extends RdfModelObject {
 	public Annotation[] getAnnotations() {
 		if (model != null && this.refreshOnGet) {
 			try {
-				Annotation[] refresh = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, 
+				Annotation[] refresh = findAnnotationPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_ANNOTATION);
 				if (refresh == null || !arraysEquivalent(refresh, this.annotations, true)) {
 					this.annotations = refresh;
@@ -204,7 +204,7 @@ public class SpdxElement extends RdfModelObject {
 
 	/**
 	 * @param annotations the annotations to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setAnnotations(Annotation[] annotations) throws InvalidSPDXAnalysisException {
 		if (annotations == null) {
@@ -255,7 +255,7 @@ public class SpdxElement extends RdfModelObject {
 
 	/**
 	 * Set the name
-	 * @param name the name to set 
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -284,7 +284,7 @@ public class SpdxElement extends RdfModelObject {
 
 	/**
 	 * @param relationships the relationships to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setRelationships(Relationship[] relationships) throws InvalidSPDXAnalysisException {
 		if (relationships == null) {
@@ -294,7 +294,7 @@ public class SpdxElement extends RdfModelObject {
 		}
 		setPropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationships);
 	}
-	
+
 	/**
 	 * The ID is a unique identify for the SPDX element.  It is only required
 	 * if this element is to be used outside of the RDF model containing the element.
@@ -331,7 +331,7 @@ public class SpdxElement extends RdfModelObject {
 		}
 		this.id = id;
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getUri(org.spdx.rdfparser.IModelContainer)
@@ -371,7 +371,7 @@ public class SpdxElement extends RdfModelObject {
 		}
 		return clonedAnnotations;
 	}
-	
+
 	protected Relationship[] cloneRelationships(Map<String, SpdxElement> clonedElementIds) {
 		if (this.relationships == null) {
 			return null;
@@ -382,15 +382,15 @@ public class SpdxElement extends RdfModelObject {
 		}
 		return clonedRelationships;
 	}
-	
+
 	@Override
 	public SpdxElement clone() {
 		//NOTE: We don't call super.clone since we must handle the special case avoiding infinite recursion
 		return clone(Maps.<String, SpdxElement>newHashMap());
 	}
-	
+
 	/**
-	 * Clones this element, but prevents infinite recursion by 
+	 * Clones this element, but prevents infinite recursion by
 	 * keeping track of all elements which have been cloned
 	 * @param clonedElementIds element ID's fo all elements which have been cloned
 	 * @return
@@ -399,7 +399,7 @@ public class SpdxElement extends RdfModelObject {
 		if (clonedElementIds.containsKey(this.getId())) {
 			return clonedElementIds.get(this.getId());
 		}
-		SpdxElement retval = new SpdxElement(this.name, this.comment, cloneAnnotations(), 
+		SpdxElement retval = new SpdxElement(this.name, this.comment, cloneAnnotations(),
 				null);
 		clonedElementIds.put(this.getId(), retval);
 		try {
@@ -409,7 +409,7 @@ public class SpdxElement extends RdfModelObject {
 		}
 		return retval;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#equivalent(org.spdx.rdfparser.model.RdfModelObject)
 	 */
@@ -433,15 +433,15 @@ public class SpdxElement extends RdfModelObject {
 			return false;
 		}
 		SpdxElement comp = (SpdxElement)o;
-		
+
 		if (testRelationships && !arraysEquivalent(comp.getRelationships(), this.getRelationships(), false)) {
 			return false;
 		}
         return (Objects.equal(comp.getName(), this.getName()) &&
                 arraysEquivalent(comp.getAnnotations(), this.getAnnotations(), testRelationships) && RdfModelHelper.stringsEquivalent(comp.getComment(), this.getComment()));
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
 		if (this.name == null) {
@@ -450,22 +450,22 @@ public class SpdxElement extends RdfModelObject {
 			return this.name;
 		}
 	}
-	
+
 	/**
 	 * @param describesRelationship
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void addRelationship(Relationship relationship) throws InvalidSPDXAnalysisException {
 		if (relationship != null) {
 			this.relationships = Arrays.copyOf(this.relationships, this.relationships.length + 1);
 			this.relationships[this.relationships.length-1] = relationship;
 			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_RELATIONSHIP, relationship);
-		} 		
+		}
 	}
 
 	/**
 	 * @param annotation
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void addAnnotation(Annotation annotation) throws InvalidSPDXAnalysisException {
 		if (annotation != null) {
@@ -474,8 +474,8 @@ public class SpdxElement extends RdfModelObject {
 			addPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_ANNOTATION, annotation);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Compares 2 arrays to see if the property values for the element RdfModelObjects are the same independent of
 	 * order and considering nulls
@@ -525,7 +525,7 @@ public class SpdxElement extends RdfModelObject {
 							break;
 						}
 					}
-				}	
+				}
 			}
 			if (!found) {
 				return false;
@@ -533,7 +533,7 @@ public class SpdxElement extends RdfModelObject {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Compares the properties of two RdfModelObjects considering possible null values
 	 * @param o1

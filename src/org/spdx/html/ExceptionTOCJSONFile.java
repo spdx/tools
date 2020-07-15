@@ -32,9 +32,9 @@ import com.google.common.collect.Lists;
  *
  */
 public class ExceptionTOCJSONFile extends AbstractJsonFile {
-	
+
 	public static final String JSON_REFERENCE_FIELD = "detailsUrl";
-	
+
 	private static class ListedSpdxException {
 		private final String reference;
 		private final String refNumber;
@@ -43,8 +43,8 @@ public class ExceptionTOCJSONFile extends AbstractJsonFile {
 		private final String[] seeAlso;
 		private boolean deprecated;
 		private String excJSONReference;
-		
-		public ListedSpdxException(String reference, String refNumber, 
+
+		public ListedSpdxException(String reference, String refNumber,
 				String exceptionId, String name, String[] seeAlso, boolean deprecated, String excJSONReference) {
 			this.reference = reference;
 			this.refNumber = refNumber;
@@ -84,15 +84,15 @@ public class ExceptionTOCJSONFile extends AbstractJsonFile {
 		public String getName() {
 			return name;
 		}
-		
+
 		public String[] getSeeAlso() {
 			return this.seeAlso;
 		}
 
 	}
-	
+
 	List<ListedSpdxException> listedExceptions = Lists.newArrayList();
-	
+
 	private int currentRefNumber = 1;
 
 	String version;
@@ -102,7 +102,7 @@ public class ExceptionTOCJSONFile extends AbstractJsonFile {
 		this.version = version;
 		this.releaseDate = releaseDate;
 	}
-	
+
 	/**
 	 * Add a license to the JSON table of contents file
 	 * @param exception License Exception to be added
@@ -112,8 +112,8 @@ public class ExceptionTOCJSONFile extends AbstractJsonFile {
 	 */
 	public void addException(LicenseException exception, String excHTMLReference,
 			String excJSONReference, boolean deprecated) {
-		listedExceptions.add(new ListedSpdxException(excHTMLReference, String.valueOf(this.currentRefNumber), 
-				exception.getLicenseExceptionId(), exception.getName(), 
+		listedExceptions.add(new ListedSpdxException(excHTMLReference, String.valueOf(this.currentRefNumber),
+				exception.getLicenseExceptionId(), exception.getName(),
 				exception.getSeeAlso(),
 				deprecated, relativeToAbsolute(excJSONReference)));
 		currentRefNumber++;

@@ -44,7 +44,7 @@ public class TestDOAPProject {
 	String[] HOMEPAGES = new String[] {null, "hp 2", ""};
 	DOAPProject[] TEST_PROJECTS;
 	Model model;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -65,7 +65,7 @@ public class TestDOAPProject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.DOAPProject#setName(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetName() throws InvalidSPDXAnalysisException {
@@ -87,7 +87,7 @@ public class TestDOAPProject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.DOAPProject#setHomePage(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetHomePage() throws InvalidSPDXAnalysisException {
@@ -110,7 +110,7 @@ public class TestDOAPProject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.DOAPProject#getProjectUri()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetProjectUri() throws InvalidSPDXAnalysisException {
@@ -137,7 +137,7 @@ public class TestDOAPProject {
 	 */
 	private void copyProperties(Resource resource, Resource resource2) {
 		Triple m = Triple.createMatch(resource.asNode(), null, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			Property p = model.createProperty(t.getPredicate().getURI());
@@ -152,7 +152,7 @@ public class TestDOAPProject {
 	}
 	/**
 	 * Test method for {@link org.spdx.rdfparser.DOAPProject#createResource(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
@@ -166,7 +166,7 @@ public class TestDOAPProject {
 			assertEquals(TEST_PROJECTS[i].getHomePage(), comp.getHomePage());
 		}
 	}
-	
+
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
 		List<String> verify;
@@ -184,7 +184,7 @@ public class TestDOAPProject {
 			assertEquals(0, verify.size());
 		}
 	}
-	
+
 	@Test
 	public void testClone() {
 		Resource[] projectResources = new Resource[TEST_PROJECTS.length];

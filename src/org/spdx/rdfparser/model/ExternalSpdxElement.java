@@ -29,19 +29,19 @@ import com.google.common.collect.Lists;
 
 /**
  * This is an SPDX element which is in an external document.
- * 
+ *
  * The only fields required to be valid are the id and externalDocumentId.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class ExternalSpdxElement extends SpdxElement {
-	
-	
+
+
 	/**
 	 * @param id SPDX ID used for referencing this external element.  Format ExternalSPDXRef:SPDXID
-	 * @throws InvalidSPDXAnalysisException 
-	 * 
+	 * @throws InvalidSPDXAnalysisException
+	 *
 	 */
 	public ExternalSpdxElement(String id) throws InvalidSPDXAnalysisException {
 		super(null, null, null, null);
@@ -50,7 +50,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		}
 		this.setId(id);
 	}
-	
+
 	@Override
 	public void setId(String id) throws InvalidSPDXAnalysisException {
 		if (id != null && !SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(id).matches()) {
@@ -58,7 +58,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		}
 		super.setId(id);
 	}
-	
+
 	/**
 	 * @return external document ID for the external reference
 	 * @throws InvalidSPDXAnalysisException
@@ -70,7 +70,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		}
 		return matcher.group(1);
 	}
-	
+
 	/**
 	 * @return element ID used in the external document
 	 * @throws InvalidSPDXAnalysisException
@@ -82,7 +82,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		}
 		return matcher.group(2);
 	}
-	
+
 	@Override
     public String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
 		Matcher matcher = SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(this.getId());
@@ -95,12 +95,12 @@ public class ExternalSpdxElement extends SpdxElement {
 		}
 		return externalDocumentUri + "#" + matcher.group(2);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o) {
 		return this.equivalent(o, true);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o, boolean testRelationships) {
 		if (o == this) {
@@ -115,7 +115,7 @@ public class ExternalSpdxElement extends SpdxElement {
 		}
         return (Objects.equal(this.getId(), comp.getId()));
 	}
-	
+
 	@Override
 	public ExternalSpdxElement clone() {
 		try {
@@ -124,18 +124,18 @@ public class ExternalSpdxElement extends SpdxElement {
 			throw new AssertionError("Clone should never cause an Invalid SPDX Exception",e);
 		}
 	}
-	
+
 	@Override
 	public List<String> verify() {
 		// we don't want to call super.verify since we really don't require those fields
 		List<String> retval = Lists.newArrayList();
 		String id = this.getId();
-		if (!SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(id).matches()) {				
+		if (!SpdxRdfConstants.EXTERNAL_ELEMENT_REF_PATTERN.matcher(id).matches()) {
 			retval.add("Invalid id format for an external document reference.  Must be of the form ExternalSPDXRef:SPDXID");
 		}
 		return retval;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -143,7 +143,7 @@ public class ExternalSpdxElement extends SpdxElement {
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// Do nothing
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */

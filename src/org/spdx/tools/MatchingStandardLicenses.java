@@ -39,7 +39,7 @@ public class MatchingStandardLicenses {
 	 * This class should not be instantiated.  Call the main method to invoke.
 	 */
 	private MatchingStandardLicenses() {
-		
+
 	}
 
 	static int MIN_ARGS = 1;
@@ -55,13 +55,13 @@ public class MatchingStandardLicenses {
 			System.exit(ERROR_STATUS);
 		}
 		File textFile = new File(args[0]);
-		
+
 		if (!textFile.exists()) {
 			System.out.println("Text file "+textFile.getName()+" does not exist");
 			usage();
 			System.exit(ERROR_STATUS);
-		}		
-		
+		}
+
 		String licenseText = null;
 		try {
 			licenseText = readAll(textFile);
@@ -69,7 +69,7 @@ public class MatchingStandardLicenses {
 			System.out.println("Error reading file: "+e.getMessage());
 			System.exit(ERROR_STATUS);
 		}
-		
+
 		String[] matchingLicenseIds = null;
 		try {
 			matchingLicenseIds = LicenseCompareHelper.matchingStandardLicenseIds(licenseText);
@@ -80,7 +80,7 @@ public class MatchingStandardLicenses {
 			System.out.println("Error comparing licenses: "+e.getMessage());
 			System.exit(ERROR_STATUS);
 		}
-		
+
 		if (matchingLicenseIds == null || matchingLicenseIds.length == 0) {
 			System.out.println("No standard licenses matched.");
 		} else {
@@ -98,7 +98,7 @@ public class MatchingStandardLicenses {
 	/**
 	 * @param textFile
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private static String readAll(File textFile) throws IOException {
 		return Files.toString(textFile, Charset.defaultCharset());

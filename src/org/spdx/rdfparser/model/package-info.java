@@ -16,10 +16,10 @@
  */
 /**
  * Model for the SPDX 2.0+ specification.
- * 
- * The model classes implement the RDF interfaces to store the class 
+ *
+ * The model classes implement the RDF interfaces to store the class
  * properties in a Jena RDF model using the <code>IRdfModel</code> interface.
- * 
+ *
  * All RDF Model objects are subclasses of <code>RdfModelObject</code>.
  * See the documentation for that class for details on the overall design for
  * classes in this package.

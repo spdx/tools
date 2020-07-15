@@ -31,14 +31,14 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  *
  */
 public final class PointerFactory {
-	
+
 	/**
 	 * Get the pointer from the model determining the subclass from the information in the
 	 * model.
 	 * @param modelContainer
 	 * @param object
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static SinglePointer getSinglePointerFromModel(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
@@ -63,11 +63,11 @@ public final class PointerFactory {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static SinglePointer getElementByType(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
-		Node rdfTypePredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+		Node rdfTypePredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
 		Triple m = Triple.createMatch(node, rdfTypePredicate, null);
 		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);	// find the type(s)
@@ -103,7 +103,7 @@ public final class PointerFactory {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static SinglePointer guessElementByProperties(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
@@ -117,7 +117,7 @@ public final class PointerFactory {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns true if a value for a property exists for the subject node
 	 * @param modelContainer
@@ -130,7 +130,7 @@ public final class PointerFactory {
 			Node node, String namespace, String propertyName) {
 		Node p = modelContainer.getModel().getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);
 		return tripleIter.hasNext();
 	}
 

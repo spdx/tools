@@ -39,7 +39,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestConjunctiveLicenseSet {
-	
+
 	String[] IDS = new String[] {"LicenseRef-id1", "LicenseRef-id2", "LicenseRef-id3", "LicenseRef-id4"};
 	String[] TEXTS = new String[] {"text1", "text2", "text3", "text4"};
 	ExtractedLicenseInfo[] NON_STD_LICENSES;
@@ -68,7 +68,7 @@ public class TestConjunctiveLicenseSet {
 
 		@Override
 		public void addSpdxElementRef(String elementRef) {
-			
+
 		}
 
 		@Override
@@ -86,7 +86,7 @@ public class TestConjunctiveLicenseSet {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -98,7 +98,7 @@ public class TestConjunctiveLicenseSet {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 
 	/**
@@ -130,7 +130,7 @@ public class TestConjunctiveLicenseSet {
 		verify = cls.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testCreateDisjunctive() throws InvalidSPDXAnalysisException {
 		DisjunctiveLicenseSet cls = new DisjunctiveLicenseSet(NON_STD_LICENSES);
@@ -142,7 +142,7 @@ public class TestConjunctiveLicenseSet {
 		verify = cls.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testCloneConjunctive() throws InvalidSPDXAnalysisException {
 		ConjunctiveLicenseSet cls = new ConjunctiveLicenseSet(NON_STD_LICENSES);
@@ -156,7 +156,7 @@ public class TestConjunctiveLicenseSet {
 		assertEquals(0, verify.size());
 		assertTrue(cls2.getResource() == null);
 	}
-	
+
 	@Test
 	public void testCloneDisjunctive() throws InvalidSPDXAnalysisException {
 		DisjunctiveLicenseSet cls = new DisjunctiveLicenseSet(NON_STD_LICENSES);

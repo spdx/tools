@@ -33,7 +33,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  * Usage: CompareSpdxDoc output.xls doc1 doc2 doc3 ... docN
  * where output.xls is a file name for the output spreadsheet file
  * and docX are SPDX document files to compare.  Document files can be either in RDF/XML  or tag/value format
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -64,9 +64,9 @@ public class CompareMultpleSpdxDocs {
 			System.exit(ERROR_STATUS);
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the output Excel file name, all other args are SPDX document file names
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 */
@@ -83,7 +83,7 @@ public class CompareMultpleSpdxDocs {
 		List<String>[] verificationErrors = new List[args.length-1];
 		for (int i = 1; i < args.length; i++) {
 			try {
-				List<String> warnings = new ArrayList<String>();	
+				List<String> warnings = new ArrayList<String>();
 				compareDocs[i-1] = CompareSpdxDocs.openRdfOrTagDoc(args[i], warnings);
 				if (!warnings.isEmpty()) {
 					System.out.println("Verification errors were found in "+args[i].trim()+".  See verification errors sheet for details.");
@@ -120,15 +120,15 @@ public class CompareMultpleSpdxDocs {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static void usage() {
 		System.out.println("Usage: CompareMultipleSpdxDoc output.xls doc1 doc2 ... docN");
 		System.out.println("where output.xls is a file name for the output spreadsheet file");
 		System.out.println("and doc1 through docN are file names of valid SPDX documents ");
-		System.out.println("in either tag/value or RDF/XML format");	
+		System.out.println("in either tag/value or RDF/XML format");
 	}
 
 }

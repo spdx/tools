@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.spdx.tools;
 
@@ -10,7 +10,7 @@ package org.spdx.tools;
 public class SpdxVerificationException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 

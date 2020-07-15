@@ -33,7 +33,7 @@ public class ExtractedLicensingInfoContext {
 	private Exception error = null;
 	private ExtractedLicenseInfo license = null;
 	private String licenseLink;
-	
+
 	/**
 	 * @param e
 	 */
@@ -43,15 +43,15 @@ public class ExtractedLicensingInfoContext {
 
 	/**
 	 * @param spdxNonStandardLicense
-	 * @param spdxIdToUrl 
+	 * @param spdxIdToUrl
 	 */
 	public ExtractedLicensingInfoContext(ExtractedLicenseInfo spdxNonStandardLicense, Map<String, String> spdxIdToUrl) {
 		this.license = spdxNonStandardLicense;
 		if (this.license != null) {
 			this.licenseLink = spdxIdToUrl.get(this.license.getLicenseId());
-		}	
+		}
 	}
-	
+
 	public String licenseId() {
 		if (this.license == null && this.error != null) {
 			return "Error getting non-standard license: "+error.getMessage();
@@ -62,7 +62,7 @@ public class ExtractedLicensingInfoContext {
 			return null;
 		}
 	}
-	
+
 	public String extractedText() {
 		if (this.license == null && this.error != null) {
 			return "Error getting non-standard license: "+error.getMessage();
@@ -73,7 +73,7 @@ public class ExtractedLicensingInfoContext {
 			return null;
 		}
 	}
-	
+
 	public String comment() {
 		if (this.license == null && this.error != null) {
 			return "Error getting non-standard license: "+error.getMessage();
@@ -84,7 +84,7 @@ public class ExtractedLicensingInfoContext {
 			return null;
 		}
 	}
-	
+
 	public String licenseName() {
 		if (this.license == null && this.error != null) {
 			return "Error getting non-standard license: "+error.getMessage();
@@ -95,7 +95,7 @@ public class ExtractedLicensingInfoContext {
 			return null;
 		}
 	}
-	
+
 	public List<String> crossReferenceUrls() {
 		List<String> retval = Lists.newArrayList();
 		if (this.license != null) {
@@ -120,7 +120,7 @@ public class ExtractedLicensingInfoContext {
 	public void setLicenseLink(String licenseLink) {
 		this.licenseLink = licenseLink;
 	}
-	
-	
+
+
 
 }

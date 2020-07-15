@@ -27,7 +27,7 @@ import org.spdx.rdfparser.model.SpdxFile;
 public class FileNoticeSheet extends AbstractFileCompareSheet {
 
 	private static final int FILE_NOTICE_COL_WIDTH = 60;
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName

@@ -65,6 +65,6 @@ public class TextTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	@Override
 	public void completeParsing() {
 		// // Nothing needs to be done - everything is processed inline
-		
+
 	}
 }

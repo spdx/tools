@@ -43,7 +43,7 @@ public class CompareTemplateOutputHandler implements
 		ILicenseTemplateOutputHandler {
 	private static final int MAX_NEXT_NORMAL_TEXT_SEARCH_LENGTH = 15;	// Maximum number of tokens to compare when searching for a normal text match
 	private static final int MIN_TOKENS_NORMAL_TEXT_SEARCH = 3;	// Minimum number of tokens to match of normal text to match after a variable block to bound greedy regex var text
-	
+
 	class ParseInstruction {
 		LicenseTemplateRule rule;
 		String text;
@@ -53,15 +53,15 @@ public class CompareTemplateOutputHandler implements
 		private boolean skip = false;	// skip this instruction in matching
 		private boolean skipFirstTextToken = false;	// skip the first text token
 		private DifferenceDescription lastOptionalDifference = null;
-		
+
 		ParseInstruction(LicenseTemplateRule rule, String text, ParseInstruction parent) {
 			this.rule = rule;
 			this.text = text;
 			this.subInstructions = Lists.newArrayList();
 			this.parent = parent;
 		}
-		
-		@Override 
+
+		@Override
 		public String toString() {
 			if (this.rule != null) {
 				return this.rule.toString();
@@ -113,7 +113,7 @@ public class CompareTemplateOutputHandler implements
 		public void addSubInstruction(ParseInstruction instruction) {
 
 			if (instruction.getRule() != null && RuleType.VARIABLE.equals(instruction.getRule().getType()) &&
-					subInstructions.size() > 0 && 
+					subInstructions.size() > 0 &&
 					subInstructions.get(subInstructions.size()-1).getRule() != null &&
 							RuleType.VARIABLE.equals(subInstructions.get(subInstructions.size()-1).getRule().getType())) {
 				// Maybe this is a little bit of a hack, but merge any var instructions so that
@@ -173,7 +173,7 @@ public class CompareTemplateOutputHandler implements
 			}
 			return sb.toString();
 		}
-		
+
 		/**
 		 * Attempt to match this instruction against a tokenized array
 		 * @param matchTokens Tokens to match the instruction against
@@ -183,13 +183,13 @@ public class CompareTemplateOutputHandler implements
 		 * @param differenceDescription Description of differences found
 		 * @param nextNormalText if there is a nextOptionalText, this would be the normal text that follows the optional text
 		 * @return Next token index after the match or -1 if no match was found
-		 * @throws LicenseParserException 
+		 * @throws LicenseParserException
 		 */
 		public int match(String[] matchTokens, int startToken, int endToken, String originalText,
 				DifferenceDescription differences, Map<Integer, LineColumn> tokenToLocation) throws LicenseParserException {
 			return match(matchTokens, startToken, endToken, originalText, differences, tokenToLocation, false);
 		}
-		
+
 		/**
 		 * Attempt to match this instruction against a tokenized array
 		 * @param matchTokens Tokens to match the instruction against
@@ -200,7 +200,7 @@ public class CompareTemplateOutputHandler implements
 		 * @param nextNormalText if there is a nextOptionalText, this would be the normal text that follows the optional text
 		 * @param ignoreOptionalDifferences if true, don't record any optional differences
 		 * @return Next token index after the match or -1 if no match was found
-		 * @throws LicenseParserException 
+		 * @throws LicenseParserException
 		 */
 		public int match(String[] matchTokens, int startToken, int endToken, String originalText,
 				DifferenceDescription differences, Map<Integer, LineColumn> tokenToLocation, boolean ignoreOptionalDifferences) throws LicenseParserException {
@@ -218,7 +218,7 @@ public class CompareTemplateOutputHandler implements
 					nextToken = compareText(textTokens, matchTokens, nextToken, endToken, this);
 					if (nextToken < 0) {
 						int errorLocation = -nextToken;
-						differences.addDifference(tokenToLocation.get(errorLocation), LicenseCompareHelper.getTokenAt(matchTokens, errorLocation), 
+						differences.addDifference(tokenToLocation.get(errorLocation), LicenseCompareHelper.getTokenAt(matchTokens, errorLocation),
 										"Normal text of license does not match", text, null, getLastOptionalDifference());
 					}
 					if (this.subInstructions.size() > 0) {
@@ -227,7 +227,7 @@ public class CompareTemplateOutputHandler implements
 				} else {
 					// just process the sub instructions
 					for (ParseInstruction sub:subInstructions) {
-						nextToken = sub.match(matchTokens, nextToken, endToken, originalText, differences, 
+						nextToken = sub.match(matchTokens, nextToken, endToken, originalText, differences,
 								tokenToLocation, ignoreOptionalDifferences);
 						if (nextToken < 0) {
 							return nextToken;
@@ -243,25 +243,25 @@ public class CompareTemplateOutputHandler implements
 					// optimization, don't go through the effort to subset the text
 					for (ParseInstruction sub:subInstructions) {
 						DifferenceDescription optionalDifference = new DifferenceDescription();
-						nextToken = sub.match(matchTokens, nextToken, endToken, originalText, 
+						nextToken = sub.match(matchTokens, nextToken, endToken, originalText,
 								optionalDifference, tokenToLocation);
 						if (nextToken < 0) {
 							if (!ignoreOptionalDifferences) {
 								setLastOptionalDifference(optionalDifference);
-							}					
+							}
 							return startToken;	// the optional text didn't match, just return the start token
 						}
 					}
 				} else {
-					List<Integer> matchingNormalTextStartTokens = this.parent.findNextNonVarTextStartTokens(this, matchTokens, 
+					List<Integer> matchingNormalTextStartTokens = this.parent.findNextNonVarTextStartTokens(this, matchTokens,
 							startToken, endToken, originalText, differences, tokenToLocation);
-					nextToken = matchOptional(matchingNormalTextStartTokens, matchTokens, 
+					nextToken = matchOptional(matchingNormalTextStartTokens, matchTokens,
 							nextToken, endToken, originalText, differences, tokenToLocation, ignoreOptionalDifferences);
 				}
 			} else if (this.rule.getType().equals(RuleType.VARIABLE)) {
-				List<Integer> matchingNormalTextStartTokens = this.parent.findNextNonVarTextStartTokens(this, matchTokens, 
+				List<Integer> matchingNormalTextStartTokens = this.parent.findNextNonVarTextStartTokens(this, matchTokens,
 						startToken, endToken, originalText, differences, tokenToLocation);
-				nextToken = matchVariable(matchingNormalTextStartTokens, matchTokens, 
+				nextToken = matchVariable(matchingNormalTextStartTokens, matchTokens,
 						nextToken, endToken, originalText, differences, tokenToLocation);
 			} else {
 				throw new LicenseParserException("Unexpected parser state - instruction is not root, optional, variable or text");
@@ -281,7 +281,7 @@ public class CompareTemplateOutputHandler implements
 		 * @param tokenToLocation Map of token index to line/column where the token was found in the original text
 		 *  @param ignoreOptionalDifferences if true, don't record any optional differences
 		 * @return the index of the token after the find or -1 if the text did not match
-		 * @throws LicenseParserException 
+		 * @throws LicenseParserException
 		 */
 		private int matchOptional(List<Integer> matchingStartTokens,
 				String[] matchTokens, int startToken, int endToken, String originalText,
@@ -290,7 +290,7 @@ public class CompareTemplateOutputHandler implements
 				DifferenceDescription matchDifferences = new DifferenceDescription();
 				int matchLocation = startToken;
 				for (ParseInstruction sub:subInstructions) {
-					matchLocation = sub.match(matchTokens, matchLocation, matchingStartToken-1, originalText, 
+					matchLocation = sub.match(matchTokens, matchLocation, matchingStartToken-1, originalText,
 							matchDifferences, tokenToLocation);
 					if (matchLocation < 0) {
 						break;
@@ -298,7 +298,7 @@ public class CompareTemplateOutputHandler implements
 				}
 				if (matchLocation > 0) {
 					return matchLocation;	// found a match
-				} else if (!ignoreOptionalDifferences) {				
+				} else if (!ignoreOptionalDifferences) {
 					setLastOptionalDifference(matchDifferences);
 				}
 			}
@@ -316,7 +316,7 @@ public class CompareTemplateOutputHandler implements
 		 * @param differences Information on any differences found
 		 * @param tokenToLocation Map of match token indexes to line/column locations
 		 * @return List of indexes for the start tokens for the next non variable text that matches
-		 * @throws LicenseParserException 
+		 * @throws LicenseParserException
 		 */
 		private List<Integer> findNextNonVarTextStartTokens(ParseInstruction afterChild,
 				String[] matchTokens, int startToken, int endToken, String originalText,
@@ -354,7 +354,7 @@ public class CompareTemplateOutputHandler implements
 				DifferenceDescription tempDiffDescription = new DifferenceDescription();
 				int nextOptMatchingStart = nextMatchingStart;
 				int optTokenAfterMatch = subInstructions.get(optionalSub).match(matchTokens, nextOptMatchingStart, endToken, originalText, tempDiffDescription, tokenToLocation, true);
-				while (optTokenAfterMatch <= nextOptMatchingStart && -optTokenAfterMatch <= endToken 
+				while (optTokenAfterMatch <= nextOptMatchingStart && -optTokenAfterMatch <= endToken
 						&& !tempDiffDescription.differenceFound && nextOptMatchingStart <= endToken) {
 					// while we didn't find a match
 					nextOptMatchingStart++;
@@ -364,7 +364,7 @@ public class CompareTemplateOutputHandler implements
 					// we found a match
 					if (optTokenAfterMatch - nextOptMatchingStart > MIN_TOKENS_NORMAL_TEXT_SEARCH) {
 						// Only add possible matches if it matched enough tokens
-						//TODO: This approximation of the number of tokens matched may include tokens consumed by a variable match. To make this more accurate, we should count the tokens of just the text nodes a children 
+						//TODO: This approximation of the number of tokens matched may include tokens consumed by a variable match. To make this more accurate, we should count the tokens of just the text nodes a children
 						retval.add(nextOptMatchingStart);
 					}
 					nextMatchingStart = optTokenAfterMatch;
@@ -375,7 +375,7 @@ public class CompareTemplateOutputHandler implements
 				retval.add(endToken+1);
 				return retval;
 			}
-			
+
 			Map<Integer, LineColumn> normalTextLocations = new HashMap<Integer, LineColumn>();
 			String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(subInstructions.get(firstNormalTextIndex).getText()), normalTextLocations);
 			if (textTokens.length > MAX_NEXT_NORMAL_TEXT_SEARCH_LENGTH) {
@@ -385,7 +385,7 @@ public class CompareTemplateOutputHandler implements
 			int tokenAfterMatch = compareText(textTokens, matchTokens, nextMatchingStart, endToken, null);
 			boolean foundEnoughTokens = false;
 			while (!foundEnoughTokens && nextMatchingStart <= endToken && !differences.differenceFound) {
-				while (tokenAfterMatch < 0 && -tokenAfterMatch <= endToken) {			
+				while (tokenAfterMatch < 0 && -tokenAfterMatch <= endToken) {
 					nextMatchingStart = nextMatchingStart + 1;
 					tokenAfterMatch = compareText(textTokens, matchTokens, nextMatchingStart, endToken, null);
 				}
@@ -427,7 +427,7 @@ public class CompareTemplateOutputHandler implements
 			}
 			return retval;
 		}
-		
+
 		/**
 		 * Determine the number of tokens matched from the compare text
 		 * @param text
@@ -458,9 +458,9 @@ public class CompareTemplateOutputHandler implements
 		 * @param tokenToLocation Map of token index to line/column where the token was found in the original text
 		 * @return the index of the token after the find or -1 if the text did not match
 		 */
-		private int matchVariable(List<Integer> matchingStartTokens, String[] matchTokens, int startToken, int endToken, 
+		private int matchVariable(List<Integer> matchingStartTokens, String[] matchTokens, int startToken, int endToken,
 				String originalText, DifferenceDescription differences, Map<Integer, LineColumn> tokenToLocation) {
-			
+
 			if (differences.isDifferenceFound()) {
 				return -1;
 			}
@@ -493,7 +493,7 @@ public class CompareTemplateOutputHandler implements
 				return null;
 			}
 		}
-		
+
 		public void setLastOptionalDifference(DifferenceDescription optionalDifference) {
 			if (optionalDifference != null && optionalDifference.getDifferenceMessage() != null && !optionalDifference.getDifferenceMessage().isEmpty()) {
 				this.lastOptionalDifference = optionalDifference;
@@ -582,11 +582,11 @@ public class CompareTemplateOutputHandler implements
 			ParseInstruction nextInst = parent.findFollowingInstruction(this);
 			nextInst.setSkip(true);
 		}
-		
+
 		public boolean getSkip() {
 			return this.skip ;
 		}
-		
+
 		public void setSkip(boolean skip) {
 			this.skip = skip;
 		}
@@ -634,7 +634,7 @@ public class CompareTemplateOutputHandler implements
 		public void setSkipFirstToken(boolean skipFirstTextToken) {
 			this.skipFirstTextToken = skipFirstTextToken;
 		}
-		
+
 		/**
 		 * @return true if the first text token should be skipped
 		 */
@@ -642,13 +642,13 @@ public class CompareTemplateOutputHandler implements
 			return this.skipFirstTextToken;
 		}
 	}
-	
+
 	public class DifferenceDescription {
 		private static final int MAX_DIFF_TEXT_LENGTH = 100;
 		private boolean differenceFound;
 		private String differenceMessage;
 		private List<LineColumn> differences;
-		
+
 		public DifferenceDescription(boolean differenceFound, String differenceMessage, List<LineColumn> differences) {
 			this.differenceFound = differenceFound;
 			this.differenceMessage = differenceMessage;
@@ -684,7 +684,7 @@ public class CompareTemplateOutputHandler implements
 		public void setDifferences(List<LineColumn> differences) {
 			this.differences = differences;
 		}
-		
+
 		/**
 		 * @param location Location in the text of the difference
 		 * @param token Token causing the difference
@@ -693,7 +693,7 @@ public class CompareTemplateOutputHandler implements
 		 * @param rule Template rule where difference was found
 		 * @param lastOptionalDifference The difference for the last optional difference that failed
 		 */
-		public void addDifference(LineColumn location, String token, String msg, String text, 
+		public void addDifference(LineColumn location, String token, String msg, String text,
 				LicenseTemplateRule rule, DifferenceDescription lastOptionalDifference) {
 			if (token == null) {
 				token = "";
@@ -714,7 +714,7 @@ public class CompareTemplateOutputHandler implements
 			if (text != null) {
 				this.differenceMessage = this.differenceMessage + " when comparing to template text \"";
 				if (text.length() > MAX_DIFF_TEXT_LENGTH) {
-					this.differenceMessage = this.differenceMessage + 
+					this.differenceMessage = this.differenceMessage +
 							text.substring(0, MAX_DIFF_TEXT_LENGTH) + "...\"";
 				} else {
 					this.differenceMessage = this.differenceMessage + text + "\"";
@@ -724,8 +724,8 @@ public class CompareTemplateOutputHandler implements
 				this.differenceMessage = this.differenceMessage + " while processing rule " + rule.toString();
 			}
 			if (lastOptionalDifference != null) {
-				this.differenceMessage = this.differenceMessage + 
-						".  Last optional text was not found due to the optional difference: \n\t" + 
+				this.differenceMessage = this.differenceMessage +
+						".  Last optional text was not found due to the optional difference: \n\t" +
 						lastOptionalDifference.getDifferenceMessage();
 			}
 			this.differenceFound = true;
@@ -739,7 +739,7 @@ public class CompareTemplateOutputHandler implements
 	DifferenceDescription differences = new DifferenceDescription();
 	ParseInstruction currentOptionalInstruction = null;
 	boolean parsingComplete = false;
-	
+
 	/**
 	 * @param compareText Text to compare the parsed SPDX license template to
 	 * @throws IOException This is not to be expected since we are using StringReaders
@@ -748,7 +748,7 @@ public class CompareTemplateOutputHandler implements
 		this.compareText = LicenseCompareHelper.normalizeText(compareText);
 		this.compareTokens = LicenseCompareHelper.tokenizeLicenseText(this.compareText, tokenToLocation);
 	}
-	
+
 	/**
 	 * @param textTokens
 	 * @param matchTokens
@@ -772,7 +772,7 @@ public class CompareTemplateOutputHandler implements
 				if (nextTextToken != null) {
 					return -matchTokenCounter;	// there is more stuff in the compare license text, so not equiv.
 				}
-			} else if (LicenseCompareHelper.tokensEquivalent(nextTextToken, nextMatchToken)) { 
+			} else if (LicenseCompareHelper.tokensEquivalent(nextTextToken, nextMatchToken)) {
 				// just move onto the next set of tokens
 				nextTextToken = LicenseCompareHelper.getTokenAt(textTokens, textTokenCounter++);
 				if (nextTextToken != null) {
@@ -791,7 +791,7 @@ public class CompareTemplateOutputHandler implements
 					nextTextToken = LicenseCompareHelper.getTokenAt(textTokens, textTokenCounter++);
 					if (nextTextToken != null) {
 						nextMatchToken = LicenseCompareHelper.getTokenAt(compareTokens, matchTokenCounter++);
-					}	
+					}
 				} else {
 					if (textTokenCounter == textTokens.length &&
 							instruction != null &&
@@ -881,7 +881,7 @@ public class CompareTemplateOutputHandler implements
 	/**
 	 * Performs the actual parsing if it has not been completed.  NOTE: This should only be called after all text has been added.
 	 * @return true if no differences were found
-	 * @throws LicenseParserException 
+	 * @throws LicenseParserException
 	 */
 	public boolean matches() throws LicenseParserException {
 		if (!parsingComplete) {
@@ -889,7 +889,7 @@ public class CompareTemplateOutputHandler implements
 		}
 		return !this.differences.isDifferenceFound();
 	}
-	
+
 	/**
 	 * @return details on the differences found
 	 */
@@ -915,7 +915,7 @@ public class CompareTemplateOutputHandler implements
 	public int textEquivalent(String text, int startToken) {
 		Map<Integer, LineColumn> textLocations = new HashMap<Integer, LineColumn>();
 		String[] textTokens = LicenseCompareHelper.tokenizeLicenseText(LicenseCompareHelper.normalizeText(text), textLocations);
-		return this.compareText(textTokens, this.compareTokens, startToken, this.compareTokens.length-1, null);	
+		return this.compareText(textTokens, this.compareTokens, startToken, this.compareTokens.length-1, null);
 	}
 
 }

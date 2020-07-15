@@ -24,7 +24,7 @@ import org.apache.jena.rdf.model.Resource;
 
 /**
  * Interface for a a class that contains an RDF model
- * 
+ *
  * @author Gary O'Neall
  *
  */
@@ -58,12 +58,12 @@ public interface IModelContainer {
 	 * This must be called for all new element references to prevent
 	 * duplication of elements.
 	 * @param elementRef
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	void addSpdxElementRef(String elementRef) throws InvalidSPDXAnalysisException;
 
 	/**
-	 * Translate an external document namespace URI to an external document ID 
+	 * Translate an external document namespace URI to an external document ID
 	 * @param externalNamespace
 	 * @return
 	 */

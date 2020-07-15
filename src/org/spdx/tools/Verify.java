@@ -32,7 +32,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
  *
  */
 public class Verify {
-	
+
 	static final int MIN_ARGS = 1;
 	static final int MAX_ARGS = 1;
 	static final int ERROR_STATUS = 1;
@@ -66,7 +66,7 @@ public class Verify {
 			System.out.println("This SPDX Document is valid.");
 		}
 	}
-	
+
 	/**
 	 * Verify a tag/value or SPDX file
 	 * @param filePath File path to the SPDX file to be verified
@@ -85,7 +85,7 @@ public class Verify {
 		List<String> retval = new ArrayList<String>();
 		if (!verify.isEmpty()) {
 			retval.addAll(parserWarnings);
-			for (String verifyMsg:verify) {	
+			for (String verifyMsg:verify) {
 				// Add any un-duplicated warnings and errors
 				boolean found = false;
 				for (String parserWarning:parserWarnings) {
@@ -99,9 +99,9 @@ public class Verify {
 				}
 			}
 		}
-		return retval;		
+		return retval;
 	}
-	
+
 	/**
 	 * Verify a tag/value file
 	 * @param filePath File path to the SPDX Tag Value file to be verified
@@ -130,7 +130,7 @@ public class Verify {
 		List<String> retval = new ArrayList<String>();
 		if (!verify.isEmpty()) {
 			retval.addAll(parserWarnings);
-			for (String verifyMsg:verify) {	
+			for (String verifyMsg:verify) {
 				// Add any un-duplicated warnings and errors
 				boolean found = false;
 				for (String parserWarning:parserWarnings) {
@@ -144,13 +144,13 @@ public class Verify {
 				}
 			}
 		}
-		return retval;		
+		return retval;
 	}
-	
+
 	/**
 	 * Verify an RDF/XML file
 	 * @param filePath File path to the SPDX RDF/XML file to be verified
-	 * @return SpdxDocument 
+	 * @return SpdxDocument
 	 * @throws SpdxVerificationException Errors where the SPDX RDF/XML file can not be parsed or the filename is invalid
 	 */
 	public static List<String> verifyRDFFile(String filePath) throws SpdxVerificationException {
@@ -174,6 +174,6 @@ public class Verify {
 			throw new SpdxVerificationException("Unable to parse the file: "+e.getMessage(),e);
 		}
 		List<String> retval = doc.verify();
-		return retval;		
+		return retval;
 	}
 }

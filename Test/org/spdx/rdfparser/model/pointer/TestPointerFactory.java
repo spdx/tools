@@ -68,7 +68,7 @@ public class TestPointerFactory {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.PointerFactory#getSinglePointerFromModel(org.spdx.rdfparser.IModelContainer, org.apache.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetSinglePointerFromModel() throws InvalidSPDXAnalysisException {
@@ -83,16 +83,16 @@ public class TestPointerFactory {
 		assertTrue(result instanceof ByteOffsetPointer);
 		assertTrue(REFERENCED1.equivalent(result.getReference()));
 		assertEquals(new Integer(byteOffset), ((ByteOffsetPointer)result).getOffset());
-		
+
 		result = PointerFactory.getSinglePointerFromModel(modelContainer, lcpResource.asNode());
 		assertTrue(result instanceof LineCharPointer);
 		assertTrue(REFERENCED2.equivalent(result.getReference()));
 		assertEquals(new Integer(lineOffset), ((LineCharPointer)result).getLineNumber());
 	}
-	
+
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.PointerFactory#getSinglePointerFromModel(org.spdx.rdfparser.IModelContainer, org.apache.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetSinglePointerFromModelByProperties() throws InvalidSPDXAnalysisException {
@@ -104,16 +104,16 @@ public class TestPointerFactory {
 		Resource lcpResource = lcp.createResource(modelContainer);
 
 		// remove the types
-		Property rdfTypeProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+		Property rdfTypeProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 				SpdxRdfConstants.RDF_PROP_TYPE);
 		bopResource.removeAll(rdfTypeProperty);
 		lcpResource.removeAll(rdfTypeProperty);
-		
+
 		SinglePointer result = PointerFactory.getSinglePointerFromModel(modelContainer, bopResource.asNode());
 		assertTrue(result instanceof ByteOffsetPointer);
 		assertTrue(REFERENCED1.equivalent(result.getReference()));
 		assertEquals(new Integer(byteOffset), ((ByteOffsetPointer)result).getOffset());
-		
+
 		result = PointerFactory.getSinglePointerFromModel(modelContainer, lcpResource.asNode());
 		assertTrue(result instanceof LineCharPointer);
 		assertTrue(REFERENCED2.equivalent(result.getReference()));

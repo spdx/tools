@@ -36,7 +36,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 	static final int CROSS_REF_URL_COL = LICENSE_NAME_COL + 1;
 	static final int COMMENT_COL = CROSS_REF_URL_COL + 1;
 	static final int USER_DEFINED_COL = COMMENT_COL + 1;
-	
+
 	static boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"Identifier", "Extracted Text",
 		"License Name", "Cross Reference URLs", "Comment", "User Defined Columns..."};
@@ -45,11 +45,11 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 	static final boolean[] CENTER_NOWRAP = new boolean[] {true, false, true, false, false, false};
 	private static final int MAX_CELL_CONTENT_SIZE = 32700;
 
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName
-	 * @param version 
+	 * @param version
 	 */
 	public NonStandardLicensesSheetV1d1(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
@@ -67,7 +67,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS-1; i++) {	// Don't check the user defined column which is always last
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for non-standard Licenses worksheet";
@@ -78,7 +78,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 			int rowNum = firstRowNum + 1;
 			while (!done) {
 				Row row = sheet.getRow(rowNum);
-				if (row == null || row.getCell(firstCellNum) == null || 
+				if (row == null || row.getCell(firstCellNum) == null ||
 						row.getCell(firstCellNum).getStringCellValue() == null ||
 						row.getCell(firstCellNum).getStringCellValue().trim().isEmpty()) {
 					done = true;
@@ -111,7 +111,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 		}
 		return null;
 	}
-	
+
 	/*
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name
 	 */
@@ -121,7 +121,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);		
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 
@@ -138,7 +138,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
-	
+
 	public void add(String identifier, String extractedTextIn, String licenseName,
 			String[] crossRefUrls, String comment) {
 		Row row = addRow();
@@ -172,8 +172,8 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 			commentCell.setCellValue(comment);
 		}
 	}
-	
-	
+
+
 	public String getIdentifier(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -185,7 +185,7 @@ public class NonStandardLicensesSheetV1d1 extends NonStandardLicensesSheet {
 		}
 		return idCell.getStringCellValue();
 	}
-	
+
 	public String getExtractedText(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {

@@ -38,7 +38,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestLineCharPointer {
-	
+
 	String REFERENCED_ELEMENT_NAME1 = "Element1";
 	String REFERENCED_ELEMENT_NAME2 = "Element2";
 	SpdxElement REFERENCED1;
@@ -48,7 +48,7 @@ public class TestLineCharPointer {
 
 	Model model;
 	IModelContainer modelContainer;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -71,7 +71,7 @@ public class TestLineCharPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.LineCharPointer#getType(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetType() throws InvalidSPDXAnalysisException {
@@ -83,7 +83,7 @@ public class TestLineCharPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.LineCharPointer#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -104,7 +104,7 @@ public class TestLineCharPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.LineCharPointer#equivalent(org.spdx.rdfparser.model.IRdfModel)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
@@ -127,7 +127,7 @@ public class TestLineCharPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.LineCharPointer#setLineNumber(java.lang.Integer)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetLineNumber() throws InvalidSPDXAnalysisException {
@@ -144,7 +144,7 @@ public class TestLineCharPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.SinglePointer#setReference(org.spdx.rdfparser.model.SpdxElement)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetReference() throws InvalidSPDXAnalysisException {
@@ -170,7 +170,7 @@ public class TestLineCharPointer {
 		lcp2.getReference().setName("New Name");
 		assertFalse(lcp2.equivalent(lcp));
 	}
-	
+
 	@Test
 	public void testCompareTo() {
 		LineCharPointer lcp = new LineCharPointer(REFERENCED1, 15);

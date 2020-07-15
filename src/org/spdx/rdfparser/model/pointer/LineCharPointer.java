@@ -34,7 +34,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class LineCharPointer extends SinglePointer {
-	
+
 	private Integer lineNumber;
 
 	/**
@@ -47,7 +47,7 @@ public class LineCharPointer extends SinglePointer {
 		super(modelContainer, node);
 		getMyPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -56,12 +56,12 @@ public class LineCharPointer extends SinglePointer {
 		super.getPropertiesFromModel();
 		getMyPropertiesFromModel();
 	}
-	
+
 	/**
 	 * Get the local properties just associated with this class
 	 */
 	private void getMyPropertiesFromModel() throws InvalidSPDXAnalysisException {
-		this.lineNumber = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		this.lineNumber = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_LINE_NUMBER);
 	}
 
@@ -89,11 +89,11 @@ public class LineCharPointer extends SinglePointer {
 	public Resource getType(Model model) {
 		return model.createResource(SpdxRdfConstants.RDF_POINTER_NAMESPACE + SpdxRdfConstants.CLASS_POINTER_LINE_CHAR_POINTER);
 	}
-	
+
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		super.populateModel();
-		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_LINE_NUMBER, this.lineNumber);
 	}
 
@@ -102,7 +102,7 @@ public class LineCharPointer extends SinglePointer {
 	 */
 	public Integer getLineNumber() {
 		if (this.resource != null && this.refreshOnGet) {
-			this.lineNumber = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+			this.lineNumber = findIntPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 					SpdxRdfConstants.PROP_POINTER_LINE_NUMBER);
 		}
 		return lineNumber;
@@ -113,10 +113,10 @@ public class LineCharPointer extends SinglePointer {
 	 */
 	public void setLineNumber(Integer lineNumber) {
 		this.lineNumber = lineNumber;
-		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE,
 				SpdxRdfConstants.PROP_POINTER_LINE_NUMBER, this.lineNumber);
 	}
-	
+
 	@Override
 	public boolean equivalent(IRdfModel o) {
 		if (!super.equivalent(o)) {
@@ -139,7 +139,7 @@ public class LineCharPointer extends SinglePointer {
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public LineCharPointer clone() {
 		SpdxElement newReference = null;

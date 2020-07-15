@@ -75,7 +75,7 @@ public class TestExternalReference {
 		modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		TEST_REFERENCES = new ExternalRef[REFERENCE_CATEGORIES.length];
 		for (int i = 0; i < REFERENCE_CATEGORIES.length; i++) {
-			TEST_REFERENCES[i] = new ExternalRef(REFERENCE_CATEGORIES[i], 
+			TEST_REFERENCES[i] = new ExternalRef(REFERENCE_CATEGORIES[i],
 					new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[i]), null, null, null),
 					REFERENCE_LOCATORS[i], COMMENTS[i]);
 		}
@@ -90,7 +90,7 @@ public class TestExternalReference {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#getPropertiesFromModel()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetPropertiesFromModel() throws InvalidSPDXAnalysisException {
@@ -99,20 +99,20 @@ public class TestExternalReference {
 		assertEquals(COMMENTS[0], externalRef.getComment());
 		assertEquals(REFERENCE_CATEGORIES[0], externalRef.getReferenceCategory());
 		assertEquals(REFERENCE_LOCATORS[0], externalRef.getReferenceLocator());
-		assertEquals(REFERENCE_TYPE_NAMES[0], 
+		assertEquals(REFERENCE_TYPE_NAMES[0],
 				ListedReferenceTypes.getListedReferenceTypes().getListedReferenceName(externalRef.getReferenceType().getReferenceTypeUri()));
 	}
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#findDuplicateResource(org.spdx.rdfparser.IModelContainer, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testFindDuplicateResource() throws InvalidSPDXAnalysisException {
 		Resource r = this.TEST_REFERENCES[0].createResource(modelContainer);
 		Node referenceLocatorProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REFERENCE_LOCATOR).asNode();
 		Triple referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, null);
-		ExtendedIterator<Triple> referenceMatchIter = model.getGraph().find(referenceLocatorMatch);	
+		ExtendedIterator<Triple> referenceMatchIter = model.getGraph().find(referenceLocatorMatch);
 		int numExternalRefs = 0;
 		while (referenceMatchIter.hasNext()) {
 			referenceMatchIter.next();
@@ -124,7 +124,7 @@ public class TestExternalReference {
 		assertEquals(r, r2);
 		referenceLocatorProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REFERENCE_LOCATOR).asNode();
 		referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, null);
-		referenceMatchIter = model.getGraph().find(referenceLocatorMatch);	
+		referenceMatchIter = model.getGraph().find(referenceLocatorMatch);
 		numExternalRefs = 0;
 		while (referenceMatchIter.hasNext()) {
 			referenceMatchIter.next();
@@ -135,7 +135,7 @@ public class TestExternalReference {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#getUri(org.spdx.rdfparser.IModelContainer)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetUri() throws InvalidSPDXAnalysisException {
@@ -155,26 +155,26 @@ public class TestExternalReference {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#verify()}.
-	 * @throws URISyntaxException 
+	 * @throws URISyntaxException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException, URISyntaxException {
 		for (int i = 0; i < TEST_REFERENCES.length; i++) {
 			assertEquals(0, TEST_REFERENCES[i].verify().size());
 		}
-		ExternalRef noCategory = new ExternalRef(null, 
+		ExternalRef noCategory = new ExternalRef(null,
 				new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[0]), null, null, null),
 				REFERENCE_LOCATORS[0], COMMENTS[0]);
 		assertEquals(1, noCategory.verify().size());
-		ExternalRef noReferenceType = new ExternalRef(REFERENCE_CATEGORIES[0], 
+		ExternalRef noReferenceType = new ExternalRef(REFERENCE_CATEGORIES[0],
 				null,
 				REFERENCE_LOCATORS[0], COMMENTS[0]);
 		assertEquals(1, noReferenceType.verify().size());
-		ExternalRef noRferenceLocator = new ExternalRef(REFERENCE_CATEGORIES[0], 
+		ExternalRef noRferenceLocator = new ExternalRef(REFERENCE_CATEGORIES[0],
 				new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[0]), null, null, null),
 				null, COMMENTS[0]);
 		assertEquals(1, noRferenceLocator.verify().size());
-		ExternalRef noComment = new ExternalRef(REFERENCE_CATEGORIES[0], 
+		ExternalRef noComment = new ExternalRef(REFERENCE_CATEGORIES[0],
 				new ReferenceType(new URI(SpdxRdfConstants.SPDX_LISTED_REFERENCE_TYPES_PREFIX + REFERENCE_TYPE_NAMES[0]), null, null, null),
 				REFERENCE_LOCATORS[0], null);
 		assertEquals(0, noComment.verify().size());
@@ -246,7 +246,7 @@ public class TestExternalReference {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.ExternalRef#setReferenceType(java.lang.String)}.
-	 * @throws URISyntaxException 
+	 * @throws URISyntaxException
 	 */
 	@Test
 	public void testSetReferenceType() throws InvalidSPDXAnalysisException, URISyntaxException {
@@ -290,7 +290,7 @@ public class TestExternalReference {
 			assertEquals(changedLocators[i], TEST_REFERENCES[i].getReferenceLocator());
 		}
 	}
-	
+
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		Resource[] externalRefResources = new Resource[TEST_REFERENCES.length];

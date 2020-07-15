@@ -51,29 +51,29 @@ import com.google.common.collect.Sets;
 /**
  * Performs a comparison between two or more SPDX documents and holds the results of the comparison
  * The main function to perform the comparison is <code>compare(spdxdoc1, spdxdoc2)</code>
- * 
+ *
  * For reviewers, the comparison results are separated into unique reviewers for a give document
- * which can be obtained by the method <code>getUniqueReviewers(index1, index2)</code>.  The 
- * uniqueness is determined by the reviewer name.  If two documents contain reviewers with the 
+ * which can be obtained by the method <code>getUniqueReviewers(index1, index2)</code>.  The
+ * uniqueness is determined by the reviewer name.  If two documents contain reviewers with the
  * same name but different dates or comments, the reviews are considered to be the same review
  * with different data.  The differences for these reviews can be obtained through the method
  * <code>getReviewerDifferences(index1, index2)</code>
- * 
+ *
  * For files, the comparison results are separated into unique files based on the file names
  * which can be obtained by the method <code>getUniqueFiles(index1, index2)</code>.  If two
  * documents contain files with the same name, but different data, the differences for these
  * files can be obtained through the method <code>getFileDifferences(index1, index2)</code>
- * 
- * Multi-threading considerations: This class is "mostly" threadsafe in that the calls to 
+ *
+ * Multi-threading considerations: This class is "mostly" threadsafe in that the calls to
  * perform the comparison are synchronized and a flag is used to throw an error for any
  * calls to getters when a compare is in progress.  There is a small theoretical window in the
  * getters where the compare operation is started in the middle of a get operation.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class SpdxComparer {
-	
+
 	/**
 	 * Contains the results of a comparison between two SPDXReviews where
 	 * the reviewer name is the same but there is a difference in the
@@ -82,7 +82,7 @@ public class SpdxComparer {
 	 *
 	 */
 	public static class SPDXReviewDifference {
-		
+
 		boolean commentsEqual;
 		boolean datesEqual;
 		String comment1;
@@ -124,7 +124,7 @@ public class SpdxComparer {
 		 * Get the reviewer date for one of the two reviews compared
 		 * @param i if 0, the review date of the first reviewer, if 1, it is the second reviewer
 		 * @return
-		 * @throws SpdxCompareException 
+		 * @throws SpdxCompareException
 		 */
 		public String getDate(int i) throws SpdxCompareException {
 			if (i == 0) {
@@ -147,7 +147,7 @@ public class SpdxComparer {
 		 * Get the reviewer comment for one of the two reviews compared
 		 * @param i if 0, the review date of the first reviewer, if 1, it is the second reviewer
 		 * @return
-		 * @throws SpdxCompareException 
+		 * @throws SpdxCompareException
 		 */
 		public String getComment(int i) throws SpdxCompareException {
 			if (i == 0) {
@@ -158,41 +158,41 @@ public class SpdxComparer {
 				throw(new SpdxCompareException("Invalid index for get reviewer date"));
 			}
 		}
-		
-	}
-	
 
-	
+	}
+
+
+
 	private SpdxDocument[] spdxDocs = null;
 	private boolean differenceFound = false;
 	private boolean compareInProgress = false;
-	
+
 	// Document level results
 	private boolean spdxVersionsEqual = true;
 	private boolean documentCommentsEqual = true;
 	private boolean dataLicenseEqual = true;
 	private boolean licenseListVersionEquals = true;
 	private boolean documentContentsEquals = true;
-	
+
 	// Reviewer results
 	/**
 	 * Holds a map of all SPDX documents which have reviewers unique relative to other SPDX document
-	 * based on the reviewer name.  The results of the map is another map of all SPDX documents in 
+	 * based on the reviewer name.  The results of the map is another map of all SPDX documents in
 	 * the comparison which do not contain some of the reviewers in the key document.  See the
 	 * implementation of compareReviewers for details
 	 */
 	private Map<SpdxDocument, Map<SpdxDocument, SPDXReview[]>> uniqueReviews = Maps.newHashMap();
-	
+
 	/**
 	 * Holds a map of any SPDX documents which have reviewer differenes.  A reviewer difference
 	 * is an SPDXReview with the same reviewer name but a different reviewer date or comment
 	 */
 	private Map<SpdxDocument, Map<SpdxDocument, SPDXReviewDifference[]>> reviewerDifferences = Maps.newHashMap();
-	
+
 	// Extracted Licensing Info results
 	/**
 	 * Holds a map of all SPDX documents which have extracted license infos unique relative to other SPDX document
-	 * based on the reviewer name.  The results of the map is another map of all SPDX documents in 
+	 * based on the reviewer name.  The results of the map is another map of all SPDX documents in
 	 * the comparison which do not contain some of the reviewers in the key document.  See the
 	 * implementation of compareReviewers for details
 	 */
@@ -203,23 +203,23 @@ public class SpdxComparer {
 	private Map<SpdxDocument, Map<SpdxDocument, SpdxLicenseDifference[]>> licenseDifferences = Maps.newHashMap();
 	/**
 	 * Maps the license ID's for the extracted license infos of the documents being compared.  License ID's are mapped based on the text
-	 * being equivalent 
+	 * being equivalent
 	 */
 	private Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap = Maps.newHashMap();
 
 	private boolean creatorInformationEquals;
-	
+
 	private Map<SpdxDocument, Map<SpdxDocument, String[]>> uniqueCreators = Maps.newHashMap();
-	
+
 	// file compare results
 	/**
 	 * Holds a map of all SPDX documents which have files unique relative to other SPDX document
-	 * based on the file name.  The results of the map is another map of all SPDX documents in 
+	 * based on the file name.  The results of the map is another map of all SPDX documents in
 	 * the comparison which do not contain some of the files in the key document.  See the
 	 * implementation of compareFiles for details
 	 */
 	private Map<SpdxDocument, Map<SpdxDocument, SpdxFile[]>> uniqueFiles = Maps.newHashMap();
-	
+
 	/**
 	 * Holds a map of any SPDX documents which have file differences.  A file difference
 	 * is an SPDXReview with the same filename name but a different file property
@@ -229,17 +229,17 @@ public class SpdxComparer {
 	// Package compare results
 	/**
 	 * Holds a map of all SPDX documents which have packages unique relative to other SPDX document
-	 * based on the package name and package version.  The results of the map is another map of all SPDX documents in 
+	 * based on the package name and package version.  The results of the map is another map of all SPDX documents in
 	 * the comparison which do not contain some of the packages in the key document.  See the
 	 * implementation of comparePackages for details
 	 */
 	private Map<SpdxDocument, Map<SpdxDocument, SpdxPackage[]>> uniquePackages = Maps.newHashMap();
-	
+
 	/**
 	 * Map of package names to package comparisons
 	 */
 	private Map<String, SpdxPackageComparer> packageComparers = Maps.newHashMap();
-	
+
 	// Annotation comparison results
 	private Map<SpdxDocument, Map<SpdxDocument, Annotation[]>> uniqueDocumentAnnotations = Maps.newHashMap();
 
@@ -248,15 +248,15 @@ public class SpdxComparer {
 
 	// External Document References comparison results
 	private Map<SpdxDocument, Map<SpdxDocument, ExternalDocumentRef[]>> uniqueExternalDocumentRefs = Maps.newHashMap();
-	
+
 	// Snippet references comparison results
 	private Map<SpdxDocument, Map<SpdxDocument, SpdxSnippet[]>> uniqueSnippets = Maps.newHashMap();
 	private Map<String, SpdxSnippetComparer>  snippetComparers = Maps.newHashMap();
-	
+
 	public SpdxComparer() {
-		
+
 	}
-	
+
 	/**
 	 * Compares 2 SPDX documents
 	 * @param spdxDoc1
@@ -267,25 +267,25 @@ public class SpdxComparer {
 	public void compare(SpdxDocument spdxDoc1, SpdxDocument spdxDoc2) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		compare(new SpdxDocument[] {spdxDoc1, spdxDoc2});
 	}
-	
+
 	/**
 	 * Compares multiple SPDX documents
 	 * @param spdxDocuments
-	 * @throws SpdxCompareException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpdxCompareException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public synchronized void compare(SpdxDocument[] spdxDocuments) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		//TODO: Add a monitor function which allows for cancel
 		clearCompareResults();
 		this.spdxDocs = spdxDocuments;
 		differenceFound = false;
-		performCompare();	
+		performCompare();
 	}
 
 	/**
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
+	 *
 	 */
 	private void performCompare() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		compareInProgress = true;
@@ -300,12 +300,12 @@ public class SpdxComparer {
 		compareDocumentAnnotations();
 		compareDocumentRelationships();
 		compareExternalDocumentRefs();
-		compareInProgress = false;	
+		compareInProgress = false;
 	}
 
 	/**
 	 * Compare the snippets in the documents
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void compareSnippets() throws SpdxCompareException {
 		// This will be a complete NXN comparison of all documents filling in the uniqueSnippets map
@@ -352,7 +352,7 @@ public class SpdxComparer {
 		}
 		if (!_isSnippetsEqualsNoCheck()) {
 			this.differenceFound = true;
-		}		
+		}
 	}
 
 	/**
@@ -392,7 +392,7 @@ public class SpdxComparer {
 	 * @param spdxDocument
 	 * @param snippets
 	 * @param extractedLicenseIdMap2
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void addSnippetComparers(
 			SpdxDocument spdxDocument,
@@ -409,8 +409,8 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * @throws InvalidSPDXAnalysisException 
-	 * 
+	 * @throws InvalidSPDXAnalysisException
+	 *
 	 */
 	private void compareExternalDocumentRefs() throws InvalidSPDXAnalysisException {
 		// this will be a N x N comparison of all external document relationships to fill the
@@ -431,7 +431,7 @@ public class SpdxComparer {
 				// find any external refs in A that are not in B
 				ExternalDocumentRef[] uniqueA = findUniqueExternalDocumentRefs(externalDocRefsA, externalDocRefsB);
 				if (uniqueA != null && uniqueA.length > 0) {
-					uniqueAMap.put(spdxDocs[j], uniqueA);					
+					uniqueAMap.put(spdxDocs[j], uniqueA);
 				}
 			}
 			if (uniqueAMap.keySet().size() > 0) {
@@ -440,7 +440,7 @@ public class SpdxComparer {
 		}
 		if (!this._isExternalDcoumentRefsEqualsNoCheck()) {
 			this.differenceFound = true;
-		}	
+		}
 	}
 
 	/**
@@ -465,7 +465,7 @@ public class SpdxComparer {
 				// find any creators in A that are not in B
 				Relationship[] uniqueA = findUniqueRelationships(relationshipsA, relationshipsB);
 				if (uniqueA != null && uniqueA.length > 0) {
-					uniqueAMap.put(spdxDocs[j], uniqueA);					
+					uniqueAMap.put(spdxDocs[j], uniqueA);
 				}
 			}
 			if (uniqueAMap.keySet().size() > 0) {
@@ -474,7 +474,7 @@ public class SpdxComparer {
 		}
 		if (!this._isDocumentRelationshipsEqualsNoCheck()) {
 			this.differenceFound = true;
-		}	
+		}
 	}
 
 	/**
@@ -499,7 +499,7 @@ public class SpdxComparer {
 				// find any creators in A that are not in B
 				Annotation[] uniqueA = findUniqueAnnotations(annotationsA, annotationsB);
 				if (uniqueA != null && uniqueA.length > 0) {
-					uniqueAMap.put(spdxDocs[j], uniqueA);					
+					uniqueAMap.put(spdxDocs[j], uniqueA);
 				}
 			}
 			if (uniqueAMap.keySet().size() > 0) {
@@ -508,13 +508,13 @@ public class SpdxComparer {
 		}
 		if (!this._isDocumentAnnotationsEqualsNoCheck()) {
 			this.differenceFound = true;
-		}	
+		}
 	}
 
 	/**
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
+	 *
 	 */
 	private void compareFiles() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		this.uniqueFiles.clear();
@@ -560,12 +560,12 @@ public class SpdxComparer {
 			this.differenceFound = true;
 		}
 	}
-	
+
 	/**
 	 * Add all files found in the related elements (including descendant related elements)
 	 * @param element
 	 * @param files
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private void addAllRelatedFiles(SpdxElement element, Set<SpdxFile> files,
 			Set<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
@@ -576,11 +576,11 @@ public class SpdxComparer {
 		Relationship[] relationships = element.getRelationships();
 		if (relationships != null) {
 			for (int j = 0; j < relationships.length; j++) {
-				if (relationships[j] != null && 
+				if (relationships[j] != null &&
 						relationships[j].getRelatedSpdxElement() instanceof SpdxFile &&
 						!files.contains(relationships[j].getRelatedSpdxElement())) {
 					files.add((SpdxFile)(relationships[j].getRelatedSpdxElement()));
-				} else if (relationships[j] != null && 
+				} else if (relationships[j] != null &&
 						relationships[j].getRelatedSpdxElement() instanceof SpdxPackage) {
 					SpdxFile[] pkgFiles = ((SpdxPackage)(relationships[j].getRelatedSpdxElement())).getFiles();
 					if (pkgFiles != null) {
@@ -594,14 +594,14 @@ public class SpdxComparer {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add all packages found in the related elements (including descendant related elements)
 	 * @param element
 	 * @param pkgs
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
-	private void addAllRelatedPackages(SpdxElement element, 
+	private void addAllRelatedPackages(SpdxElement element,
 			Set<SpdxPackage> pkgs,
 			Set<SpdxElement> visitedElements) throws InvalidSPDXAnalysisException {
 		if (element == null || visitedElements.contains(element)) {
@@ -611,24 +611,24 @@ public class SpdxComparer {
 		Relationship[] relationships = element.getRelationships();
 		if (relationships != null) {
 			for (int j = 0; j < relationships.length; j++) {
-				if (relationships[j] != null && 
+				if (relationships[j] != null &&
 						relationships[j].getRelatedSpdxElement() instanceof SpdxPackage &&
 						!pkgs.contains(relationships[j].getRelatedSpdxElement())) {
 					pkgs.add((SpdxPackage)(relationships[j].getRelatedSpdxElement()));
 				}
 				// recursively add all of the related files to this relationships
-				addAllRelatedPackages(relationships[j].getRelatedSpdxElement(), 
+				addAllRelatedPackages(relationships[j].getRelatedSpdxElement(),
 						pkgs, visitedElements);
 			}
 		}
 	}
-	
+
 	/**
-	 * Collect all of the packages present in the SPDX document including packages 
+	 * Collect all of the packages present in the SPDX document including packages
 	 * embedded in other relationships within documents
 	 * @param spdxDocument
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SpdxPackage[] collectAllPackages(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
 		Set<SpdxPackage> retval = Sets.newHashSet();
@@ -638,7 +638,7 @@ public class SpdxComparer {
 				retval.add((SpdxPackage)items[i]);
 			}
 			addAllRelatedPackages(items[i], retval, Sets.<SpdxElement>newHashSet());
-		}	
+		}
 		return retval.toArray(new SpdxPackage[retval.size()]);
 	}
 
@@ -647,14 +647,14 @@ public class SpdxComparer {
 	 * and files embedded in packages
 	 * @param spdxDocument
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected SpdxFile[] collectAllFiles(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
 		Set<SpdxFile> retval = Sets.newHashSet();
 		SpdxItem[] items = spdxDocument.getDocumentDescribes();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] instanceof SpdxFile) {
-				retval.add((SpdxFile)items[i]);			
+				retval.add((SpdxFile)items[i]);
 			} else if (items[i] instanceof SpdxPackage) {
 				SpdxFile[] pkgFiles = ((SpdxPackage)items[i]).getFiles();
 				for (int j = 0; j < pkgFiles.length; j++) {
@@ -662,7 +662,7 @@ public class SpdxComparer {
 				}
 			}
 			addAllRelatedFiles(items[i], retval, Sets.<SpdxElement>newHashSet());
-		}	
+		}
 		return retval.toArray(new SpdxFile[retval.size()]);
 	}
 
@@ -672,12 +672,12 @@ public class SpdxComparer {
 	 * @param filesA
 	 * @param filesB
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	static SpdxFileDifference[] findFileDifferences(SpdxDocument docA, SpdxDocument docB,
-			SpdxFile[] filesA, SpdxFile[] filesB, 
+			SpdxFile[] filesA, SpdxFile[] filesB,
 			Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> licenseIdXlationMap) throws SpdxCompareException {
-		
+
 		List<SpdxFileDifference> alRetval = Lists.newArrayList();
 		int aIndex = 0;
 		int bIndex = 0;
@@ -774,8 +774,8 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * @throws InvalidSPDXAnalysisException 
-	 * 
+	 * @throws InvalidSPDXAnalysisException
+	 *
 	 */
 	private void compareCreators() throws InvalidSPDXAnalysisException {
 		this.creatorInformationEquals = true;
@@ -800,7 +800,7 @@ public class SpdxComparer {
 				// find any creators in A that are not in B
 				String[] uniqueA = findUniqueString(creatorsA, creatorsB);
 				if (uniqueA != null && uniqueA.length > 0) {
-					uniqueAMap.put(spdxDocs[j], uniqueA);					
+					uniqueAMap.put(spdxDocs[j], uniqueA);
 				}
 				// compare creator comments
 				if (!stringsEqual(creatorInfoA.getComment(), creatorInfoB.getComment())) {
@@ -823,7 +823,7 @@ public class SpdxComparer {
 		}
 		if (!this.creatorInformationEquals) {
 			this.differenceFound = true;
-		}	
+		}
 	}
 
 	/**
@@ -836,8 +836,8 @@ public class SpdxComparer {
 		if (stringsA == null) {
 			return new String[0];
 		}
-		if (stringsB == null) {	
-			return Arrays.copyOf(stringsA, stringsA.length);	
+		if (stringsB == null) {
+			return Arrays.copyOf(stringsA, stringsA.length);
 		}
 		List<String> al = Lists.newArrayList();
 		for (int i = 0; i < stringsA.length; i++) {
@@ -857,7 +857,7 @@ public class SpdxComparer {
 
 	/**
 	 * Compares the SPDX documents and sets the appropriate flags
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void comparePackages() throws SpdxCompareException {
 		if (this.spdxDocs == null || this.spdxDocs.length < 1) {
@@ -903,15 +903,15 @@ public class SpdxComparer {
 		}
 		if (!_isPackagesEqualsNoCheck()) {
 			this.differenceFound = true;
-		}		
+		}
 	}
 
 	/**
 	 * add all the document packages to the multi-comparer
 	 * @param spdxDocument
 	 * @param pkgs
-	 * @param extractedLicenseIdMap 
-	 * @throws SpdxCompareException 
+	 * @param extractedLicenseIdMap
+	 * @throws SpdxCompareException
 	 */
 	private void addPackageComparers(SpdxDocument spdxDocument,
 			SpdxPackage[] pkgs, Map<SpdxDocument, Map<SpdxDocument, Map<String, String>>> extractedLicenseIdMap) throws SpdxCompareException {
@@ -934,7 +934,7 @@ public class SpdxComparer {
 	 * @param doc2 Index of the SPDX document for license2
 	 * @param license2
 	 * @return true if the licenses are equivalent
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean compareLicense(int doc1,
 			AnyLicenseInfo license1, int doc2,
@@ -969,16 +969,16 @@ public class SpdxComparer {
 		if (!stringsEqual(verificationCode.getValue(), verificationCode2.getValue())) {
 			return false;
 		}
-		if (!stringArraysEqual(verificationCode.getExcludedFileNames(), 
+		if (!stringArraysEqual(verificationCode.getExcludedFileNames(),
 				verificationCode2.getExcludedFileNames())) {
 			return false;
 		}
-		return true;		
+		return true;
 	}
 
 	/**
 	 * Compare the document level fields and sets the difference found depending on any differences
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void compareDocumentFields() throws SpdxCompareException {
 		compareDataLicense();
@@ -989,7 +989,7 @@ public class SpdxComparer {
 			this.differenceFound = true;
 		}
 	}
-	
+
 	private void compareDocumentContents() throws SpdxCompareException {
 		documentContentsEquals = true;
 		try {
@@ -1010,8 +1010,8 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws SpdxCompareException
+	 *
 	 */
 	private void compareSpdxVerions() throws SpdxCompareException {
 		String docVer1;
@@ -1026,8 +1026,8 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws SpdxCompareException
+	 *
 	 */
 	private void compareDocumentComments() throws SpdxCompareException {
 		String comment1 = this.spdxDocs[0].getComment();
@@ -1042,8 +1042,8 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws SpdxCompareException
+	 *
 	 */
 	private void compareDataLicense() throws SpdxCompareException {
 		try {
@@ -1061,11 +1061,11 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * Compares the extracted license infos in all documents and builds the 
+	 * Compares the extracted license infos in all documents and builds the
 	 * maps for translating IDs as well as capturing any differences between the
 	 * extracted licensing information
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
 	 */
 	private void compareExtractedLicenseInfos() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		for (int i = 0; i < spdxDocs.length; i++) {
@@ -1130,7 +1130,7 @@ public class SpdxComparer {
 			boolean foundMatch = false;
 			boolean foundTextMatch = false;
 			for (int q = 0; q < extractedLicensesB.length; q++) {
-				if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicensesA[k].getExtractedText(), 
+				if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicensesA[k].getExtractedText(),
 						extractedLicensesB[q].getExtractedText())) {
 					foundTextMatch = true;
 					if (!foundMatch) {
@@ -1162,7 +1162,7 @@ public class SpdxComparer {
 	private boolean nonTextLicenseFieldsEqual(
 			ExtractedLicenseInfo spdxNonStandardLicenseA,
 			ExtractedLicenseInfo spdxNonStandardLicenseB) {
-		
+
 		// license name
 		if (!stringsEqual(spdxNonStandardLicenseA.getName(),
 				spdxNonStandardLicenseB.getName())) {
@@ -1190,7 +1190,7 @@ public class SpdxComparer {
 	 * @return
 	 */
 	static boolean stringArraysEqual(String[] stringsA, String[] stringsB) {
-		
+
 		if (stringsA == null) {
 			if (stringsB != null) {
 				return false;
@@ -1220,7 +1220,7 @@ public class SpdxComparer {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * returns true if the two objects are equal considering nulls
 	 * @param o1
@@ -1233,7 +1233,7 @@ public class SpdxComparer {
 		}
 		return o1.equals(o2);
 	}
-	
+
 	public static boolean elementsEquivalent(RdfModelObject elementA, RdfModelObject elementB) {
 		if (elementA == null) {
 			return elementB == null;
@@ -1297,7 +1297,7 @@ public class SpdxComparer {
 		}
 		return (compA.equals(compB));
 	}
-	
+
 	/**
 	 * Compares two strings including trimming the string and taking into account
 	 * they may be null.  Null is considered a smaller value
@@ -1322,8 +1322,8 @@ public class SpdxComparer {
 	/**
 	 * Compares the reviewers for all documents and creates the differences hasmaps related
 	 * to the reviewers
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
 	 */
 	private void compareReviewers() throws InvalidSPDXAnalysisException, SpdxCompareException {
 		// this will be a N x N comparison of all reviewer data to fill in the
@@ -1350,7 +1350,7 @@ public class SpdxComparer {
 				// find any reviewers in A that are not in B
 				SPDXReview[] uniqueA = findUniqueReviewers(reviewA, reviewB);
 				if (uniqueA != null && uniqueA.length > 0) {
-					uniqueAMap.put(spdxDocs[j], uniqueA);					
+					uniqueAMap.put(spdxDocs[j], uniqueA);
 				}
 				//Find any reviewers that are the same reviewer but have different dates or comments
 				SPDXReviewDifference[] reviewerDifferences = findReviewerDifferences(reviewA, reviewB);
@@ -1391,7 +1391,7 @@ public class SpdxComparer {
 					boolean commentsEqual = reviewA[i].getComment().trim().equals(reviewB[j].getComment().trim());
 					boolean datesEqual = reviewA[i].getReviewDate().equals(reviewB[j].getReviewDate());
 					if (commentsEqual && datesEqual) {
-						reviewDifferent = false;	// note that we may have a situation where a previous 
+						reviewDifferent = false;	// note that we may have a situation where a previous
 						// entry was found with the same reviewer name and a different comment/date
 						// in that situation, we should report no difference since a matching entry was found
 						break;
@@ -1399,7 +1399,7 @@ public class SpdxComparer {
 						reviewDifferent = true;
 						differentReviewerIndex = j;
 					}
-				} 
+				}
 			}
 			if (reviewDifferent) {
 				retval.add(new SPDXReviewDifference(reviewA[i], reviewB[differentReviewerIndex]));
@@ -1433,7 +1433,7 @@ public class SpdxComparer {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void clearCompareResults() {
 		this.differenceFound = false;
@@ -1454,7 +1454,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isSpdxVersionEqual() throws SpdxCompareException {
 		checkInProgress();
@@ -1464,8 +1464,8 @@ public class SpdxComparer {
 
 	/**
 	 * checks to make sure there is not a compare in progress
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws SpdxCompareException
+	 *
 	 */
 	private void checkInProgress() throws SpdxCompareException {
 		if (compareInProgress) {
@@ -1475,7 +1475,7 @@ public class SpdxComparer {
 
 	/**
 	 * Validates that the spdx dcouments field has been initialized
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private void checkDocsField() throws SpdxCompareException {
 		if (this.spdxDocs == null) {
@@ -1485,7 +1485,7 @@ public class SpdxComparer {
 			throw(new SpdxCompareException("Insufficient documents compared - must provide at least 2 SPDX documents"));
 		}
 	}
-	
+
 	private void checkDocsIndex(int index) throws SpdxCompareException {
 		if (this.spdxDocs == null) {
 			throw(new SpdxCompareException("No compare has been performed"));
@@ -1501,7 +1501,7 @@ public class SpdxComparer {
 	/**
 	 * @param docIndex Reference to which document number - 0 is the first document parameter in compare
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SpdxDocument getSpdxDoc(int docIndex) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1519,7 +1519,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isDataLicenseEqual() throws SpdxCompareException {
 		checkInProgress();
@@ -1529,7 +1529,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isDocumentCommentsEqual() throws SpdxCompareException {
 		checkInProgress();
@@ -1539,15 +1539,15 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isReviewersEqual() throws SpdxCompareException {
 		checkInProgress();
 		checkDocsField();
 		return _isReviewersEqualNoCheck();
 	}
-	
-	
+
+
 	/**
 	 * @return
 	 */
@@ -1579,7 +1579,7 @@ public class SpdxComparer {
 		// if we got to here - they are equal
 		return true;
 	}
-	
+
 	private boolean _isExternalDcoumentRefsEqualsNoCheck() {
 		Iterator<Entry<SpdxDocument, Map<SpdxDocument, ExternalDocumentRef[]>>> iter = this.uniqueExternalDocumentRefs.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -1600,7 +1600,7 @@ public class SpdxComparer {
 		return _isExternalDcoumentRefsEqualsNoCheck();
 	}
 
-	
+
 	public boolean isExtractedLicensingInfosEqual() throws SpdxCompareException {
 		checkInProgress();
 		checkDocsField();
@@ -1612,7 +1612,7 @@ public class SpdxComparer {
 	 */
 	private boolean _isExtractedLicensingInfoEqualsNoCheck() {
 		// check for unique extraced license infos
-		Iterator<Entry<SpdxDocument, Map<SpdxDocument, ExtractedLicenseInfo[]>>> uniqueIter = 
+		Iterator<Entry<SpdxDocument, Map<SpdxDocument, ExtractedLicenseInfo[]>>> uniqueIter =
 			this.uniqueExtractedLicenses.entrySet().iterator();
 		while (uniqueIter.hasNext()) {
 			Entry<SpdxDocument, Map<SpdxDocument, ExtractedLicenseInfo[]>> entry = uniqueIter.next();
@@ -1644,7 +1644,7 @@ public class SpdxComparer {
 	 * @param docindex1
 	 * @param docindex2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SPDXReview[] getUniqueReviewers(int docindex1, int docindex2) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1671,7 +1671,7 @@ public class SpdxComparer {
 	 * @param docindex1
 	 * @param docindex2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SPDXReviewDifference[] getReviewerDifferences(int docindex1, int docindex2) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1686,7 +1686,7 @@ public class SpdxComparer {
 		SPDXReviewDifference[] retval = doc1Differences.get(spdxDocs[docindex2]);
 		if (retval == null) {
 			return new SPDXReviewDifference[0];
-		} 
+		}
 		return retval;
 	}
 
@@ -1696,7 +1696,7 @@ public class SpdxComparer {
 	 * @param docIndexA
 	 * @param docIndexB
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public ExtractedLicenseInfo[] getUniqueExtractedLicenses(int docIndexA, int docIndexB) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1722,7 +1722,7 @@ public class SpdxComparer {
 	 * @param docIndexA
 	 * @param docIndexB
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SpdxLicenseDifference[] getExtractedLicenseDifferences(int docIndexA, int docIndexB) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1744,7 +1744,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isCreatorInformationEqual() throws SpdxCompareException {
 		this.checkDocsField();
@@ -1757,7 +1757,7 @@ public class SpdxComparer {
 	 * @param doc1index
 	 * @param doc2index
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public String[] getUniqueCreators(int doc1index, int doc2index) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1776,17 +1776,17 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isfilesEquals() throws SpdxCompareException {
 		this.checkDocsField();
 		this.checkInProgress();
 		return this._isFilesEqualsNoCheck();
 	}
-	
+
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isPackagesEquals() throws SpdxCompareException {
 		this.checkDocsField();
@@ -1818,7 +1818,7 @@ public class SpdxComparer {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @return
 	 * @throws SpdxCompareException
@@ -1859,7 +1859,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private boolean _isPackagesEqualsNoCheck() throws SpdxCompareException {
 		Iterator<Entry<SpdxDocument, Map<SpdxDocument, SpdxPackage[]>>> iter = this.uniquePackages.entrySet().iterator();
@@ -1884,7 +1884,7 @@ public class SpdxComparer {
 	 * @param docindex1
 	 * @param docindex2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SpdxFile[] getUniqueFiles(int docindex1, int docindex2) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1908,7 +1908,7 @@ public class SpdxComparer {
 	 * @param docindex1
 	 * @param docindex2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SpdxFileDifference[] getFileDifferences(int docindex1, int docindex2) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1925,13 +1925,13 @@ public class SpdxComparer {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Return any files which are in spdx document index 1 but not in spdx document index 2
 	 * @param docindex1
 	 * @param docindex2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SpdxPackage[] getUniquePackages(int docindex1, int docindex2) throws SpdxCompareException {
 		this.checkDocsField();
@@ -1948,7 +1948,7 @@ public class SpdxComparer {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Return any external document references which are in spdx document index 1 but not in spdx document index 2
 	 * @param docindex1
@@ -1994,7 +1994,7 @@ public class SpdxComparer {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Return any document annotations which are in spdx document index 1 but not in spdx document index 2
 	 * @param docindex1
@@ -2017,10 +2017,10 @@ public class SpdxComparer {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * @return Package comparers where there is at least one difference
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public SpdxPackageComparer[] getPackageDifferences() throws SpdxCompareException {
 		Collection<SpdxPackageComparer> comparers = this.packageComparers.values();
@@ -2031,7 +2031,7 @@ public class SpdxComparer {
 				count++;
 			}
 		}
-		SpdxPackageComparer[] retval = new SpdxPackageComparer[count];		
+		SpdxPackageComparer[] retval = new SpdxPackageComparer[count];
 		iter = comparers.iterator();
 		int i = 0;
 		while (iter.hasNext()) {
@@ -2042,7 +2042,7 @@ public class SpdxComparer {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * @return all package comparers
 	 */
@@ -2060,7 +2060,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isLicenseListVersionEqual() throws SpdxCompareException {
 		this.checkDocsField();
@@ -2098,7 +2098,7 @@ public class SpdxComparer {
 		}
 		return retval.toArray(new Checksum[retval.size()]);
 	}
-	
+
 	/**
 	 * Find any SPDX annotations which are in annotationsA but not in annotationsB
 	 * @param annotationsA
@@ -2164,7 +2164,7 @@ public class SpdxComparer {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Find unique relationships that are present in relationshipsA but not relationshipsB
 	 * @param relationshipsA
@@ -2196,13 +2196,13 @@ public class SpdxComparer {
 		}
 		return retval.toArray(new Relationship[retval.size()]);
 	}
-	
+
 	/**
 	 * Find unique relationships that are present in relationshipsA but not relationshipsB
 	 * @param externalDocRefsA
 	 * @param externalDocRefsB
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static ExternalDocumentRef[] findUniqueExternalDocumentRefs(
 			ExternalDocumentRef[] externalDocRefsA, ExternalDocumentRef[] externalDocRefsB) throws InvalidSPDXAnalysisException {
@@ -2242,7 +2242,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isDocumentContentsEquals() throws SpdxCompareException {
 		checkInProgress();
@@ -2251,7 +2251,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public boolean isSnippetsEqual() throws SpdxCompareException {
 		this.checkDocsField();
@@ -2261,7 +2261,7 @@ public class SpdxComparer {
 
 	/**
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private boolean _isSnippetsEqualsNoCheck() throws SpdxCompareException {
 		Iterator<Entry<SpdxDocument, Map<SpdxDocument, SpdxSnippet[]>>> iter = this.uniqueSnippets.entrySet().iterator();

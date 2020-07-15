@@ -31,7 +31,7 @@ import com.google.common.collect.Maps;
 
 /**
  * Compares two SPDX snippets.  The <code>compare(snippetA, snippetB)</code> method will perform the comparison and
- * store the results.  <code>isDifferenceFound()</code> will return true of any 
+ * store the results.  <code>isDifferenceFound()</code> will return true of any
  * differences were found.
  * @author Gary O'Neall
  *
@@ -64,7 +64,7 @@ public class SpdxSnippetComparer extends SpdxItemComparer {
 	 * @param spdxDocument document containing the package
 	 * @param snippet snippet to be added
 	 * @param licenseXlationMap A mapping between the license IDs from licenses in fileA to fileB
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 * @param spdxDocument
 	 * @param snippet
 	 */
@@ -117,15 +117,15 @@ public class SpdxSnippetComparer extends SpdxItemComparer {
 		inProgress = false;
 		super.addDocumentItem(spdxDocument, snippet);
 	}
-	
+
 	/**
 	 * Compares the snippetFromFiles and updates the properties isSnippetFromFilesEquals,
 	 * uniqueSnippetFromFiles, and snippetFromFilesDifferences
 	 * @param fromFile
 	 * @param fromFile2
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
-	private void compareSnippetFromFiles(SpdxDocument spdxDocument, SpdxFile fromFile, 
+	private void compareSnippetFromFiles(SpdxDocument spdxDocument, SpdxFile fromFile,
 			SpdxDocument document2, SpdxFile fromFile2) throws SpdxCompareException {
 		if (fromFile == null) {
 			if (fromFile2 != null) {
@@ -183,18 +183,18 @@ public class SpdxSnippetComparer extends SpdxItemComparer {
 
 	/**
 	 * @return the differenceFound
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	@Override
     public boolean isDifferenceFound() throws SpdxCompareException {
 		checkInProgress();
 		return differenceFound || super.isDifferenceFound();
-	} 
-	
+	}
+
 	/**
 	 * checks to make sure there is not a compare in progress
-	 * @throws SpdxCompareException 
-	 * 
+	 * @throws SpdxCompareException
+	 *
 	 */
 	@Override
     protected void checkInProgress() throws SpdxCompareException {
@@ -203,7 +203,7 @@ public class SpdxSnippetComparer extends SpdxItemComparer {
 		}
 		super.checkInProgress();
 	}
-	
+
 	/**
 	 * Get any file difference for the Spdx Snippet From File between the two SPDX documents
 	 * If the fileName is different, the they are considered unique files and the getUniqueSnippetFromFile should be called
@@ -212,7 +212,7 @@ public class SpdxSnippetComparer extends SpdxItemComparer {
 	 * @param docB
 	 * @return the file difference or null if there is no file difference
 	 */
-	public SpdxFileDifference getSnippetFromFileDifference(SpdxDocument docA, 
+	public SpdxFileDifference getSnippetFromFileDifference(SpdxDocument docA,
 			SpdxDocument docB) throws SpdxCompareException {
 		checkInProgress();
 		Map<SpdxDocument, SpdxFileDifference> differenceMap = this.snippetFromFileDifferences.get(docA);

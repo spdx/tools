@@ -18,7 +18,7 @@ package org.spdx.tag;
 
 /**
  * Translates an tag-value file to a an SPDX Document.
- * 
+ *
  * @author Rana Rahal, Protecode Inc.
  */
 

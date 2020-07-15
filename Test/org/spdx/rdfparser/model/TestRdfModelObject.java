@@ -77,16 +77,16 @@ public class TestRdfModelObject {
 	static final String TEST_PROPVALUE3 = "value3";
 	static final String TEST_PROPVALUE4 = "value4";
 	static final String STANDARD_LICENSE_ID1 = "Apache-1.0";
-	
+
 	class EmptyRdfModelObject extends RdfModelObject {
 
 		String uri = null;
-		
+
 		public EmptyRdfModelObject(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 			super(modelContainer, node);
 		}
 		/**
-		 * 
+		 *
 		 */
 		public EmptyRdfModelObject() {
 			super();
@@ -117,23 +117,23 @@ public class TestRdfModelObject {
 			// Just populate one of the properties
 			this.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, TEST_PROPVALUE1);
 		}
-		
+
 		@Override
         public String findSinglePropertyValue(String namespace, String propertyName) {
 			return super.findSinglePropertyValue(namespace, propertyName);
 		}
-		
+
 		@Override
         public String[] findMultiplePropertyValues(String namespace,String propertyName) {
 			return super.findMultiplePropertyValues(namespace, propertyName);
 		}
-		
+
 		@Override
         public void setPropertyValue(String nameSpace, String propertyName,
 				String[] values) {
 			super.setPropertyValue(nameSpace, propertyName, values);
 		}
-		
+
 		@Override
         public void setPropertyValue(String nameSpace, String propertyName,
 				String value) {
@@ -169,9 +169,9 @@ public class TestRdfModelObject {
 		 */
 		@Override
 		public void getPropertiesFromModel() {
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class TestRdfModelObject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#RdfModelObject(org.apache.jena.rdf.model.Model, org.apache.jena.graph.Node)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testRdfModelObjectModelNode() throws InvalidSPDXAnalysisException {
@@ -220,7 +220,7 @@ public class TestRdfModelObject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#createResource(org.apache.jena.rdf.model.Model, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
@@ -234,7 +234,7 @@ public class TestRdfModelObject {
 		assertTrue(r.isURIResource());
 		Node p = model.getProperty(TEST_NAMESPACE, TEST_PROPNAME1).asNode();
 		Triple m = Triple.createMatch(r.asNode(), p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		assertTrue(tripleIter.hasNext());
 		Triple t = tripleIter.next();
 		assertEquals(TEST_PROPVALUE1,t.getObject().toString(false));
@@ -245,7 +245,7 @@ public class TestRdfModelObject {
 		assertFalse(anon.isURIResource());
 		p = model.getProperty(TEST_NAMESPACE, TEST_PROPNAME1).asNode();
 		m = Triple.createMatch(anon.asNode(), p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		assertTrue(tripleIter.hasNext());
 		t = tripleIter.next();
 		assertEquals(TEST_PROPVALUE1,t.getObject().toString(false));
@@ -254,7 +254,7 @@ public class TestRdfModelObject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#findSinglePropertyValue(java.lang.String, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetFindSinglePropertyValue() throws InvalidSPDXAnalysisException {
@@ -274,7 +274,7 @@ public class TestRdfModelObject {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.RdfModelObject#findMultiplePropertyValues(java.lang.String, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetFindMultipePropertyValues() throws InvalidSPDXAnalysisException {
@@ -305,7 +305,7 @@ public class TestRdfModelObject {
 			fail("Wrong values");
 		}
 	}
-	
+
 	@Test
 	public void testFindSetAnnotationsPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -341,7 +341,7 @@ public class TestRdfModelObject {
 		result = empty.findAnnotationPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(0, result.length);
 	}
-	
+
 	@Test
 	public void testAddPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -374,7 +374,7 @@ public class TestRdfModelObject {
 			assertEquals(result[0], an2);
 		}
 	}
-	
+
 	@Test
 	public void testFindSetElementsPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -396,7 +396,7 @@ public class TestRdfModelObject {
 		result = empty.findElementPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(element2, result);
 	}
-	
+
 	@Test
 	public void testAddElementsPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -440,7 +440,7 @@ public class TestRdfModelObject {
 		assertEquals(1, result.length);
 		assertEquals(relationship1, result[0]);
 	}
-	
+
 	@Test
 	public void testFindSetRelationshipPropertyValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -477,7 +477,7 @@ public class TestRdfModelObject {
 		result = empty.findRelationshipPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(0, result.length);
 	}
-	
+
 	@Test
 	public void testFindSetAnyLicenseInfos() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -497,7 +497,7 @@ public class TestRdfModelObject {
 		result = empty.findAnyLicenseInfoPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(lic2, result);
 	}
-	
+
 	@Test
 	public void testAddAnyLicenseInfos() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -520,7 +520,7 @@ public class TestRdfModelObject {
 		assertTrue(UnitTestHelper.isArraysEqual(new AnyLicenseInfo[] {lic1, lic2},
 				result));
 	}
-	
+
 	@Test
 	public void testFindSetAnyLicenseInfosMultiple() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -543,7 +543,7 @@ public class TestRdfModelObject {
 			assertEquals(lic1, result[1]);
 		}
 	}
-	
+
 	@Test
 	public void testSpecialValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -563,7 +563,7 @@ public class TestRdfModelObject {
 		result = empty.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
 		assertEquals(SpdxRdfConstants.NOASSERTION_VALUE, result);
 	}
-	
+
 	@Test
 	public void testFindSetPropertyUriValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -575,7 +575,7 @@ public class TestRdfModelObject {
 		String result = empty.findUriPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(uri, result);
 	}
-	
+
 	@Test
 	public void testFindSetPropertyUriValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -589,7 +589,7 @@ public class TestRdfModelObject {
 		String[] result = empty.findUriPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(uris, result));
 	}
-	
+
 	@Test
 	public void testAddSetPropertyUriValues() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -609,7 +609,7 @@ public class TestRdfModelObject {
 		result = empty.findUriPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(uris, result));
 	}
-	
+
 	@Test
 	public void testFindSetPropertyDaopValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -624,16 +624,16 @@ public class TestRdfModelObject {
 		DoapProject[] result = empty.findMultipleDoapPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(projects, result));
 	}
-	
+
 	@Test
 	public void testFindSetPropertyChecksumValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
-		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"1123456789abcdef0123456789abcdef01234567");
-		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, 
+		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5,
 				"2123456789abcdef0123456789abcdef01234567");
 		c2.createResource(modelContainer);
 		Checksum result = empty.findChecksumPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
@@ -645,16 +645,16 @@ public class TestRdfModelObject {
 		result = empty.findChecksumPropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
 		assertEquals(c2, result);
 	}
-	
+
 	@Test
 	public void testAddPropertyChecksumValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
-		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"1123456789abcdef0123456789abcdef01234567");
-		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5, 
+		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_md5,
 				"2123456789abcdef0123456789abcdef01234567");
 		c2.createResource(modelContainer);
 		Checksum[] result = empty.findMultipleChecksumPropertyValues(TEST_NAMESPACE, TEST_PROPNAME2);
@@ -668,7 +668,7 @@ public class TestRdfModelObject {
 		assertEquals(2, result.length);
 		assertTrue(UnitTestHelper.isArraysEquivalent(new Checksum[] {c1, c2}, result));
 	}
-	
+
 	@Test
 	public void testDuplicate() throws InvalidSPDXAnalysisException {
 		// Same URI node
@@ -695,7 +695,7 @@ public class TestRdfModelObject {
 		assertEquals(uri, r3.getURI());
 		result = empty3.findSinglePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
 		assertEquals(TEST_PROPVALUE2, result);
-		assertEquals(r, r3);	
+		assertEquals(r, r3);
 		EmptyRdfModelObject empty4 = new EmptyRdfModelObject();
 		String uri2 = "http://another.uri.this/that#mine";
 		empty4.setUri(uri2);
@@ -706,7 +706,7 @@ public class TestRdfModelObject {
 		assertTrue(result == null);
 
 	}
-	
+
 	@Test public void testEquals() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -725,8 +725,8 @@ public class TestRdfModelObject {
 		EmptyRdfModelObject empty4 = new EmptyRdfModelObject(modelContainer, r2.asNode());
 		assertTrue(empty2.equals(empty4));
 	}
-	
-	@Test 
+
+	@Test
 	public void testHashcode() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
@@ -746,7 +746,7 @@ public class TestRdfModelObject {
 		EmptyRdfModelObject empty4 = new EmptyRdfModelObject(modelContainer, r2.asNode());
 		assertTrue(empty2.hashCode() == empty4.hashCode());
 	}
-	
+
 	@Test
 	public void testFindSetSpdxCreatorInfo() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -754,13 +754,13 @@ public class TestRdfModelObject {
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
 		SPDXCreatorInformation creatorInfo = new SPDXCreatorInformation(
-				new String[] {"PERSON: me", "TOOL: TEst"}, "2011-03-13T00:00:00Z", 
+				new String[] {"PERSON: me", "TOOL: TEst"}, "2011-03-13T00:00:00Z",
 				"Comment", "listVersion");
 		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, creatorInfo);
 		SPDXCreatorInformation result = empty.findCreationInfoPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(creatorInfo, result);
 	}
-	
+
 	@Test
 	public void testFindSetSpdxReviewers() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -774,18 +774,18 @@ public class TestRdfModelObject {
 		empty.setPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1, reviewers);
 		SPDXReview[] result = empty.findReviewPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(reviewers, result));
-	}	
+	}
 	@Test
 	public void testFindSetExternalDocReferences() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
 		IModelContainer modelContainer = new ModelContainerForTest(model, "http://testnamespace.com");
 		Resource r = model.createResource();
 		EmptyRdfModelObject empty = new EmptyRdfModelObject(modelContainer, r.asNode());
-		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		Checksum c1 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"1123456789abcdef0123456789abcdef01234567");
-		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		Checksum c2 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"2123456789abcdef0123456789abcdef01234567");
-		Checksum c3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1, 
+		Checksum c3 = new Checksum(ChecksumAlgorithm.checksumAlgorithm_sha1,
 				"3333456789abcdef0123456789abcdef01234567");
 		String docUri1 = "http://spdx.org/docs/my/doc1";
 		String docUri2 = "http://spdx.org/docs/my/doc2";
@@ -801,7 +801,7 @@ public class TestRdfModelObject {
 		ExternalDocumentRef[] result = empty.findExternalDocRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(refs, result));
 	}
-	
+
 	@Test
 	public void testFindSetVerifiationCode() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -813,10 +813,10 @@ public class TestRdfModelObject {
 		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, ver);
 		SpdxPackageVerificationCode result = empty.findVerificationCodePropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(ver.getValue(), result.getValue());
-		assertTrue(UnitTestHelper.isArraysEqual(ver.getExcludedFileNames(), 
+		assertTrue(UnitTestHelper.isArraysEqual(ver.getExcludedFileNames(),
 				result.getExcludedFileNames()));
 	}
-	
+
 	@Test
 	public void testSetFindPropertyValueReferenceType() throws InvalidSPDXAnalysisException, URISyntaxException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -835,7 +835,7 @@ public class TestRdfModelObject {
 		result = empty.findReferenceTypePropertyValue(TEST_NAMESPACE, TEST_PROPNAME2);
 		assertEquals(ref2, result);
 	}
-	
+
 	@Test
 	public void testSetFindPropertyValueExternalRefs() throws InvalidSPDXAnalysisException, URISyntaxException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -869,12 +869,12 @@ public class TestRdfModelObject {
 			assertEquals(ref1, result[1]);
 			assertEquals(ref2, result[0]);
 		}
-		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, new ExternalRef[] {});	
+		empty.setPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1, new ExternalRef[] {});
 		result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		result = empty.findExternalRefPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(0, result.length);
 	}
-	
+
 	@Test
 	public void testSetFindPropertyValueSinglePointer() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -897,7 +897,7 @@ public class TestRdfModelObject {
 		result = empty.findSinglePointerPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(point2.equivalent(result));
 	}
-	
+
 	@Test
 	public void testSetFindIntegerPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -910,7 +910,7 @@ public class TestRdfModelObject {
 		result = empty.findIntPropertyValue(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(new Integer(18), result);
 	}
-	
+
 	@Test
 	public void testSetFindStartEndPointerPropertyValue() throws InvalidSPDXAnalysisException {
 		final Model model = ModelFactory.createDefaultModel();
@@ -929,7 +929,7 @@ public class TestRdfModelObject {
 		SinglePointer point3 = new ByteOffsetPointer(refElement2, offset2);
 		SinglePointer point4 = new LineCharPointer(refElement2, line2);
 		StartEndPointer sep2 = new StartEndPointer(point3, point4);
-		
+
 		StartEndPointer[] seps = new StartEndPointer[] {sep1, sep2};
 		StartEndPointer[] result = empty.findStartEndPointerPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertEquals(0, result.length);
@@ -938,7 +938,7 @@ public class TestRdfModelObject {
 		result = empty.findStartEndPointerPropertyValues(TEST_NAMESPACE, TEST_PROPNAME1);
 		assertTrue(UnitTestHelper.isArraysEqual(seps, result));
 	}
-	
+
 	@Test
 	public void testAddPropertyExternalRef() throws InvalidSPDXAnalysisException, URISyntaxException {
 		final Model model = ModelFactory.createDefaultModel();

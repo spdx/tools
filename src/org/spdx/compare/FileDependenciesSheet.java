@@ -27,9 +27,9 @@ import org.spdx.rdfparser.model.SpdxFile;
  *
  */
 public class FileDependenciesSheet extends AbstractFileCompareSheet {
-	
+
 	private static final int FILE_DEPENDENCIES_COL_WIDTH = 60;
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName
@@ -37,7 +37,7 @@ public class FileDependenciesSheet extends AbstractFileCompareSheet {
 	public FileDependenciesSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
-	
+
 	static void create(Workbook wb, String sheetName) {
 		AbstractFileCompareSheet.create(wb, sheetName, FILE_DEPENDENCIES_COL_WIDTH);
 	}

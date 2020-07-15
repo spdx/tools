@@ -33,27 +33,27 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
- * An ExtractedLicensingInfo represents a license or licensing notice that was found in the package. 
- * Any license text that is recognized as a license may be represented as a License 
+ * An ExtractedLicensingInfo represents a license or licensing notice that was found in the package.
+ * Any license text that is recognized as a license may be represented as a License
  * rather than an ExtractedLicensingInfo.
  * @author Gary O'Neall
  *
  */
 public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Comparable<ExtractedLicenseInfo> {
-	
+
 	private String extractedText;
 
-	
+
 	/**
 	 * @param modelContainer container which includes the license
 	 * @param licenseInfoNode Node that defines the ExtractedLicenseInfo
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ExtractedLicenseInfo(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
 		getPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -82,7 +82,7 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Compara
 	public ExtractedLicenseInfo(String licenseID, String licenseText) {
 		this(licenseID, licenseText, null, null, null);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#populateModel()
 	 */
@@ -98,7 +98,7 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Compara
 		}
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT, this.extractedText);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getType(org.apache.jena.rdf.model.Model)
 	 */
@@ -113,11 +113,11 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Compara
 	 */
 	@Override
 	public String toString() {
-		// must be only the ID if we are to use this to create 
+		// must be only the ID if we are to use this to create
 		// parseable license strings
 		return this.licenseId;
 	}
-	
+
 	/**
 	 * @return the text
 	 */
@@ -135,9 +135,9 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Compara
 		this.extractedText = text;
 		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_EXTRACTED_TEXT, text);
 	}
-	
 
-	@Override 
+
+	@Override
 	public int hashCode() {
 		if (this.getLicenseId() == null) {
 			return 0;
@@ -162,7 +162,7 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Compara
 		if (this.licenseId == null) {
 			return (comp.getLicenseId() == null);
 		} else {
-			return (this.licenseId.equalsIgnoreCase(comp.getLicenseId()));			
+			return (this.licenseId.equalsIgnoreCase(comp.getLicenseId()));
 		}
 	}
 
@@ -213,7 +213,7 @@ public class ExtractedLicenseInfo extends SimpleLicensingInfo implements Compara
 	 */
 	@Override
 	public AnyLicenseInfo clone() {
-		return new ExtractedLicenseInfo(this.getLicenseId(), this.getExtractedText(), this.getName(), 
+		return new ExtractedLicenseInfo(this.getLicenseId(), this.getExtractedText(), this.getName(),
 				this.getSeeAlso(), this.getComment());
 	}
 

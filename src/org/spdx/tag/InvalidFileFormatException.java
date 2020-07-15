@@ -18,14 +18,14 @@ package org.spdx.tag;
 
 /**
  * Exceptions for invalid SPDX file format
- * 
+ *
  * @author Rohit Lodha
  *
  */
 public class InvalidFileFormatException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	public InvalidFileFormatException() {
 	}

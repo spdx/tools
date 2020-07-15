@@ -27,13 +27,13 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class RdfParserHelper {
-	
+
 	/**
 	 * Convert a node to a resource
 	 * @param cmodel
 	 * @param cnode
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Resource convertToResource(Model cmodel, Node cnode) throws InvalidSPDXAnalysisException {
 		if (cnode.isBlank()) {

@@ -25,12 +25,12 @@ import org.spdx.rdfparser.SpdxRdfConstants;
 
 /**
  * Exceptions listed in the SPDX license list
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class ListedLicenseException extends LicenseException {
-	
+
 	private String deprecatedVersion = null;
 	private String exceptionTextHtml = null;
 
@@ -69,7 +69,7 @@ public class ListedLicenseException extends LicenseException {
 	 * @param deprecatedVersion
 	 */
 	public ListedLicenseException(String licenseExceptionId, String name, String licenseExceptionText,
-			String licenseExceptionTemplate, String[] seeAlso, String comment, 
+			String licenseExceptionTemplate, String[] seeAlso, String comment,
 			String exceptionTextHtml, boolean isDeprecated, String deprecatedVersion) {
 		super(licenseExceptionId, name, licenseExceptionText, licenseExceptionTemplate, seeAlso, comment);
 		this.exceptionTextHtml = exceptionTextHtml;
@@ -124,7 +124,7 @@ public class ListedLicenseException extends LicenseException {
 
 	/**
 	 * @return HTML fragment containing the Exception Text
-	 * @throws InvalidLicenseTemplateException 
+	 * @throws InvalidLicenseTemplateException
 	 */
 	public String getExceptionTextHtml() throws InvalidLicenseTemplateException {
 		if (exceptionTextHtml == null) {
@@ -149,16 +149,16 @@ public class ListedLicenseException extends LicenseException {
 	public void setExceptionTextHtml(String exceptionTextHtml) {
 		this.exceptionTextHtml = exceptionTextHtml;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.LicenseException#getUri(org.spdx.rdfparser.IModelContainer)
 	 */
 	@Override
 	public String getUri(IModelContainer modelContainer)
-			throws InvalidSPDXAnalysisException {	
+			throws InvalidSPDXAnalysisException {
 		return this.createListedExceptionUri(this.getLicenseExceptionId());
 	}
-	
+
 	/**
 	 * Creates a listed exception URI by appending the standard license ID to the URL hosting the SPDX licenses
 	 * @param id listed exception ID
@@ -167,7 +167,7 @@ public class ListedLicenseException extends LicenseException {
 	private String createListedExceptionUri(String id) {
 		return SpdxRdfConstants.STANDARD_LICENSE_URL + "/" + id;
 	}
-	
+
 	@Override
     public LicenseException clone() {
 		ListedLicenseException retval = new ListedLicenseException(this.getLicenseExceptionId(), this.getName(), this.getLicenseExceptionText(),

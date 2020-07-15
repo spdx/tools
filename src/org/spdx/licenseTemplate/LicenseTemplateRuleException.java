@@ -23,14 +23,14 @@ package org.spdx.licenseTemplate;
  */
 public class LicenseTemplateRuleException extends Exception {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	public LicenseTemplateRuleException(String msg) {
 		super(msg);
 	}
-	
+
 	public LicenseTemplateRuleException(String msg, Throwable inner) {
 		super(msg, inner);
 	}

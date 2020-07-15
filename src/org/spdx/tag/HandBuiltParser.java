@@ -26,13 +26,13 @@ import antlr.RecognitionException;
  * SPDX tag files.  It replaces the current ANTL based parser which has a defect
  * where any lines starting with a text ending with a : is treated as a tag even
  * if it is in <text> </text>
- * 
+ *
  * The interface is similar to the generated ANTLR code
  * @author Gary O'Neall
  *
  */
 public class HandBuiltParser {
-	
+
 	private static final String END_TEXT = "</text>";
 	private static final String START_TEXT = "<text>";
 	Pattern tagPattern = Pattern.compile("^\\w+:");
@@ -57,7 +57,7 @@ public class HandBuiltParser {
 
 	/**
 	 * parses the data
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void data() throws Exception {
 		try {
@@ -68,7 +68,7 @@ public class HandBuiltParser {
 			while (nextLine != null) {
 				if (inTextBlock) {
 					if (nextLine.indexOf(START_TEXT)>0){
-						throw(new RecognitionException("Found a text block inside another text block at line " + 
+						throw(new RecognitionException("Found a text block inside another text block at line " +
 									(textInput.getCurrentLineNo()) + ".  Expecting "+END_TEXT));
 					}
 					int endText = nextLine.indexOf(END_TEXT);
@@ -102,7 +102,7 @@ public class HandBuiltParser {
 							this.buildDocument.buildDocument(tag, value, textInput.getCurrentLineNo());
 							tag = "";
 							value = "";
-							
+
 						}
 					} else {
 						// note - we just ignore any lines that do not start with a tag
@@ -119,5 +119,5 @@ public class HandBuiltParser {
 		}
 	}
 
-	
+
 }

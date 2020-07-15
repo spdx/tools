@@ -31,21 +31,21 @@ import com.google.common.collect.Maps;
 
 /**
  * A parser for the SPDX License Expressions as documented in the SPDX appendix.
- * 
- * This is a static help class.  The primary method is parseLicenseExpression which 
+ *
+ * This is a static help class.  The primary method is parseLicenseExpression which
  * returns an AnyLicenseInfo.
  * @author Gary O'Neall
  *
  */
 public class LicenseExpressionParser {
-	
+
 	enum Operator {
-		OR_LATER, WITH, AND, OR	//NOTE: These must be in precedence order 
+		OR_LATER, WITH, AND, OR	//NOTE: These must be in precedence order
 	};
 	static final String LEFT_PAREN = "(";
 	static final String RIGHT_PAREN = ")";
 	static final Map<String, Operator> OPERATOR_MAP = Maps.newHashMap();
-	
+
 	static {
 		OPERATOR_MAP.put("+", Operator.OR_LATER);
 		OPERATOR_MAP.put("and", Operator.AND);
@@ -57,8 +57,8 @@ public class LicenseExpressionParser {
 	 * @param expression Expression to be parsed
 	 * @param container Container containing any extractedLicenseInfos - if any extractedLicenseInfos by ID already exist, they will be used.  If
 	 * none exist for an ID, they will be added.  If null, a simple Java object will be created for the extractedLicenseInfo.
-	 * @return 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	static AnyLicenseInfo parseLicenseExpression(String expression, SpdxDocumentContainer container) throws InvalidSPDXAnalysisException {
 		if (expression == null || expression.trim().isEmpty()) {
@@ -119,7 +119,7 @@ public class LicenseExpressionParser {
 	 * @param tokens
 	 * @param container
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static AnyLicenseInfo parseLicenseExpression(String[] tokens, SpdxDocumentContainer container) throws InvalidSPDXAnalysisException {
 		if (tokens == null || tokens.length == 0) {
@@ -139,7 +139,7 @@ public class LicenseExpressionParser {
 				}
 				String[] nestedTokens = Arrays.copyOfRange(tokens, tokenIndex, rightParenIndex);
 				operandStack.push(parseLicenseExpression(nestedTokens, container));
-				tokenIndex = rightParenIndex + 1;		
+				tokenIndex = rightParenIndex + 1;
 			} else if (OPERATOR_MAP.get(token.toLowerCase()) == null) {	// assumed to be a simple licensing type
 				operandStack.push(parseSimpleLicenseToken(token, container));
 			} else {
@@ -167,10 +167,10 @@ public class LicenseExpressionParser {
 					if (!((operand instanceof SimpleLicensingInfo) || (operand instanceof OrLaterOperator))) {
 						throw(new LicenseParserException("License with exception is not of type SimpleLicensingInfo or OrLaterOperator"));
 					}
-					operandStack.push(new WithExceptionOperator(operand, licenseException));			
+					operandStack.push(new WithExceptionOperator(operand, licenseException));
 				} else {
 					// process in order of prcedence using the shunting yard algorithm
-					while (!operatorStack.isEmpty() && 
+					while (!operatorStack.isEmpty() &&
 							operatorStack.peek().ordinal() <= operator.ordinal()) {
 						Operator tosOperator = operatorStack.pop();
 						evaluateExpression(tosOperator, operandStack);
@@ -219,9 +219,9 @@ public class LicenseExpressionParser {
 	 * Converts a string token into its equivalent license
 	 * checking for a listed license
 	 * @param token
-	 * @param container 
+	 * @param container
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static AnyLicenseInfo parseSimpleLicenseToken(String token, SpdxDocumentContainer container) throws InvalidSPDXAnalysisException {
 		if (LicenseInfoFactory.isSpdxListedLicenseID(token)) {
@@ -246,7 +246,7 @@ public class LicenseExpressionParser {
 	 * Evaluate the given operator using paramaeters in the parameter stack
 	 * @param operator
 	 * @param operandStack
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void evaluateExpression(Operator operator,
 			Stack<AnyLicenseInfo> operandStack) throws InvalidSPDXAnalysisException {
@@ -265,7 +265,7 @@ public class LicenseExpressionParser {
 				throw(new LicenseParserException("Missing operands for the "+operator.toString()+" operator"));
 			}
 			operandStack.push(evaluateBinary(operator, operand1, operand2));
-		}		
+		}
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class LicenseExpressionParser {
 	 * @param operand1
 	 * @param operand2
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static AnyLicenseInfo evaluateBinary(Operator tosOperator,
 			AnyLicenseInfo operand1, AnyLicenseInfo operand2) throws InvalidSPDXAnalysisException {

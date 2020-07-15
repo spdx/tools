@@ -55,8 +55,8 @@ public class Main {
 		} else if (spdxTool.equalsIgnoreCase("MatchingStandardLicenses")) {
 			MatchingStandardLicenses.main(args);
 		} else if (spdxTool.equalsIgnoreCase("Version")) {
-			System.out.println("SPDX Tool Version: "+SpdxDocumentContainer.CURRENT_IMPLEMENTATION_VERSION + 
-					"; Specification Version: "+SpdxDocumentContainer.CURRENT_SPDX_VERSION + 
+			System.out.println("SPDX Tool Version: "+SpdxDocumentContainer.CURRENT_IMPLEMENTATION_VERSION +
+					"; Specification Version: "+SpdxDocumentContainer.CURRENT_SPDX_VERSION +
 					"; License List Version: "+ListedLicenses.getListedLicenses().getLicenseListVersion());
 		} else {
 			usage();

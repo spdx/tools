@@ -23,14 +23,14 @@ package org.spdx.rdfparser.license;
 public class LicenseCsvException extends SpdxListedLicenseException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6979572232573954539L;
 
 	public LicenseCsvException(String msg) {
 		super(msg);
 	}
-	
+
 	public LicenseCsvException(String msg, Throwable inner) {
 		super(msg, inner);
 	}

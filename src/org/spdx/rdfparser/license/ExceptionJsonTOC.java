@@ -22,12 +22,12 @@ import com.google.common.collect.Sets;
 /**
  * Table of Contents for the listed exception list as represented as a JSON index file
  * at spdx.org/licenses/exceptions.json
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class ExceptionJsonTOC {
-	
+
 	class TOCExceptionJson {
 		private String reference;
 		private boolean isDeprecatedLicenseId;
@@ -79,7 +79,7 @@ public class ExceptionJsonTOC {
 			return seeAlso;
 		}
 	}
-	
+
 
 	private String licenseListVersion;
 	private TOCExceptionJson[] exceptions;
@@ -98,7 +98,7 @@ public class ExceptionJsonTOC {
 	public TOCExceptionJson[] getExceptions() {
 		return exceptions;
 	}
-	
+
 	public Set<String> getExceptionIds() {
 		Set<String> retval = Sets.newHashSet();
 		if (exceptions == null) {
@@ -116,6 +116,6 @@ public class ExceptionJsonTOC {
 	public String getReleaseDate() {
 		return releaseDate;
 	}
-	
+
 
 }
