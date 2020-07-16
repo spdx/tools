@@ -43,12 +43,12 @@ public class SpdxPackageInfoMerger {
 
 	    @Deprecated
 		private SpdxPackage packageInfoResult = null;
-		
+
 		private List<SpdxPackage> packagesResult = null;
 		private SpdxDocument[] subDocs = null;
 		private SpdxLicenseMapper mapper = null;
-		
-		/** 
+
+		/**
 		 * @param masterPackagesInfo
 		 * @param subDocs
 		 */
@@ -58,7 +58,7 @@ public class SpdxPackageInfoMerger {
 			this.subDocs = subDocs.clone();
 			this.mapper = mapper;
 		}
-		
+
 		/** A method to merge all packages' information from sub list documents into master document
 		 * @param subDocs
 		 * @param fileMergeResult
@@ -67,10 +67,10 @@ public class SpdxPackageInfoMerger {
 		 */
 		public List <SpdxPackage> mergePackagesInfo(SpdxFile[] fileMergeResult)
 				throws InvalidSPDXAnalysisException, NoSuchAlgorithmException, InvalidLicenseStringException{
-			
+
 			List<SpdxPackage> retval = Lists.newArrayList(clonePackages(packagesResult));
-			
-			for(int i = 0; i < subDocs.length; i++){				
+
+			for(int i = 0; i < subDocs.length; i++){
 				List<SpdxPackage> subPackagesInfo = subDocs[i].getDocumentContainer().findAllPackages();
 				SpdxPackage tempPackage = null;
 				for(int p = 0; p < subPackagesInfo.size(); p++){
@@ -79,7 +79,7 @@ public class SpdxPackageInfoMerger {
 					SpdxPackage masterPackage = null;
 					Integer index = null;
 	                tempPackage = subPackagesInfo.get(p);
-	                
+
 	                for(int q = 0; q < retval.size(); q++){
 	                	if(retval.get(q).getName().equalsIgnoreCase(tempPackage.getName())) {
                             foundNameMatch = true;
@@ -112,72 +112,72 @@ public class SpdxPackageInfoMerger {
 	                	 }
 	                	 AnyLicenseInfo[] mergedLicFromFile = licList.toArray(new AnyLicenseInfo[licList.size()]);
 	                	 masterPackage.setLicenseInfosFromFiles(mergedLicFromFile);
-	                	 
+
 	                	 //process to generate new verification code
 	                	 String[] skippedFiles = collectSkippedFiles(masterPackage,tempPackage);
 	                	 VerificationCodeGenerator verCodeGenerator = new VerificationCodeGenerator(new JavaSha1ChecksumGenerator());
 	                	 SpdxPackageVerificationCode newCode = verCodeGenerator.generatePackageVerificationCode(fileMergeResult, skippedFiles);
 	                	 masterPackage.setPackageVerificationCode(newCode);
-	                	 
+
 	                	 //process to merge package supplier info
 	                	 String supplierInfo = stringCombiner(masterPackage.getSupplier(),tempPackage.getSupplier());
 	                	 masterPackage.setSupplier(supplierInfo);
-	                	 
+
 	                	 //process to merge package originator
 	                	 String originator = stringCombiner(masterPackage.getOriginator(), tempPackage.getOriginator());
 	                	 masterPackage.setOriginator(originator);
-	                	 
+
 	                	 //process to merge home page
 	                	 String homePage = stringCombiner(masterPackage.getHomepage(), tempPackage.getHomepage());
 	                	 masterPackage.setHomepage(homePage);
-	                	 
+
 	                	 //process to merge package download location
 	                	 String downloadLocation = stringCombiner(masterPackage.getDownloadLocation(), tempPackage.getDownloadLocation());
 	                	 masterPackage.setDownloadLocation(downloadLocation);
-	                	 
+
 	                	 //process to merge source info
 	                	 String sourceInfo = stringCombiner(masterPackage.getSourceInfo(), tempPackage.getSourceInfo());
 	                	 masterPackage.setSourceInfo(sourceInfo);
-	                	 
+
 	                	 //process to merge license declared
 	                	 AnyLicenseInfo licDeclared1 = masterPackage.getLicenseDeclared();
 	                	 AnyLicenseInfo licDeclared2 = mapper.mapLicenseInfo(subDocs[i], tempPackage.getLicenseDeclared());
 	                	 AnyLicenseInfo licDeclared = licsCombiner(licDeclared1, licDeclared2);
 	                	 masterPackage.setLicenseDeclared(licDeclared);
-	                	 
+
 	                	 //process to merge license concluded
 	                	 AnyLicenseInfo licConcluded1 = masterPackage.getLicenseConcluded();
 	                	 AnyLicenseInfo licConcluded2 = mapper.mapLicenseInfo(subDocs[i], tempPackage.getLicenseConcluded());
 	                	 AnyLicenseInfo licConcluded = licsCombiner(licConcluded1, licConcluded2);
 	                	 masterPackage.setLicenseConcluded(licConcluded);
-	                	 
+
 	                	 //process to merge license comments
 	                	 String licenseComments = stringCombiner(masterPackage.getLicenseComments(), tempPackage.getLicenseComments());
 	                	 masterPackage.setLicenseComments(licenseComments);
-	                	 
+
 	                	 //process to merge summary
 	                	 String summary = stringCombiner(masterPackage.getSummary(), tempPackage.getSummary());
 	                	 masterPackage.setSummary(summary);
-	                	 
+
 	                	 //process to merge description
 	                	 String description = stringCombiner(masterPackage.getDescription(), tempPackage.getDescription());
 	                	 masterPackage.setDescription(description);
-	                	 
+
 	                	 //process to merge user defined columns
 	                	 String usrDefined = stringCombiner(masterPackage.getComment(), tempPackage.getComment());
 	                	 masterPackage.setComment(usrDefined);
 
 	                	 retval.set(index, masterPackage);
 	                }
-	                
+
 				}
-				
+
 			}
 			return packagesResult;
 		}
-        
+
 	    /** A method to check license from file information through mapLicenseInfo function. If it is a
-	     * non-standard license, check this particular license in the Mapper class. Replace the current 
+	     * non-standard license, check this particular license in the Mapper class. Replace the current
 	     * license value with the return value from the mapNonStdLicInMap method. After all, all the declared
 	     * license should remain the same and non-standard license should replaced with updated id
 	     * @param doc
@@ -191,11 +191,11 @@ public class SpdxPackageInfoMerger {
 					AnyLicenseInfo tempLicense = mapper.mapNonStdLicInMap(doc, licFromFile[k]);
 					licFromFile[k] = tempLicense;
 				}
-			}			
+			}
 			return licFromFile;
 		}
-		
-		/** A method to clone the packages in the list 
+
+		/** A method to clone the packages in the list
 		 * @param packagesArray
 		 * @return clonedPackagesArray
 		 */
@@ -206,7 +206,7 @@ public class SpdxPackageInfoMerger {
 			}
 			return clonedPackagesList;
 		}
-		
+
 		/**
 		 * A method to combine two string variables into one string
 		 * @param line1
@@ -229,7 +229,7 @@ public class SpdxPackageInfoMerger {
 			}
 			return buffer.toString();
 		}
-		
+
 		/**
 		 * A method to combine two licenses into one
 		 * @param lic1
@@ -237,7 +237,7 @@ public class SpdxPackageInfoMerger {
 		 * @return
 		 * @throws InvalidLicenseStringException
 		 */
-		public AnyLicenseInfo licsCombiner(AnyLicenseInfo lic1, AnyLicenseInfo lic2) 
+		public AnyLicenseInfo licsCombiner(AnyLicenseInfo lic1, AnyLicenseInfo lic2)
 				throws InvalidLicenseStringException{
 			StringBuilder buffer = new StringBuilder(lic1.toString());
 			if(!lic1.equals(lic2)){
@@ -245,7 +245,7 @@ public class SpdxPackageInfoMerger {
 			}
 			return LicenseInfoFactory.parseSPDXLicenseString(buffer.toString());
 		}
-		
+
 		/**
 		 * A method to collect all skipped files from input SPDX package.
 		 * @return excludedFileNamesArray
@@ -255,7 +255,7 @@ public class SpdxPackageInfoMerger {
 			List<String> excludedFileNamesList = Lists.newArrayList();
 			String[] retval = sub.getPackageVerificationCode().getExcludedFileNames();
 			String[] skippedFileInMain = main.getPackageVerificationCode().getExcludedFileNames();
-			
+
 			if(skippedFileInMain.length == 0 && retval.length == 0){
 				String[] excludedFileNamesArray = new String[0];
 				return excludedFileNamesArray;
@@ -287,7 +287,7 @@ public class SpdxPackageInfoMerger {
 
 		@Deprecated
 		/**
-		 * 
+		 *
 		 * @param subDocs
 		 * @return
 		 * @throws InvalidSPDXAnalysisException
@@ -295,7 +295,7 @@ public class SpdxPackageInfoMerger {
 		public String translateSubDelcaredLicsIntoComments(SpdxDocument[] subDocs) throws InvalidSPDXAnalysisException{
 			SpdxLicenseMapper mapper = new SpdxLicenseMapper();
 				if(!mapper.isNonStdLicIdMapEmpty()){
-					StringBuilder buffer = new StringBuilder(packageInfoResult.getLicenseComments() 
+					StringBuilder buffer = new StringBuilder(packageInfoResult.getLicenseComments()
 							+ ". This package merged several packages and the sub-package contain the following licenses:");
 
 					for(int k = 0; k < subDocs.length; k++){
@@ -303,7 +303,7 @@ public class SpdxPackageInfoMerger {
 						 List<SpdxPackage> tempList = subDocs[k].getDocumentContainer().findAllPackages();
 						  for(int h = 0; h < tempList.size(); h++){
 							AnyLicenseInfo license = tempList.get(h).getLicenseDeclared();
-							AnyLicenseInfo result = mapper.mapLicenseInfo(subDocs[k], license); 
+							AnyLicenseInfo result = mapper.mapLicenseInfo(subDocs[k], license);
 							buffer.append(tempList.get(h).getPackageFileName());
 							buffer.append(" (" + result.toString() + ") ");
 						  }
@@ -314,7 +314,7 @@ public class SpdxPackageInfoMerger {
 							buffer.append(" (" + tempList.get(q).getLicenseDeclared().toString() + ") ");
 						  }
 						}
-					}			
+					}
 					return buffer.toString();
 			}else{
 				return packageInfoResult.getLicenseComments();

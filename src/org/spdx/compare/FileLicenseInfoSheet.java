@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -29,7 +29,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 public class FileLicenseInfoSheet extends AbstractFileCompareSheet {
 
 	private static final int LICENSE_COL_WIDTH = 60;
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName

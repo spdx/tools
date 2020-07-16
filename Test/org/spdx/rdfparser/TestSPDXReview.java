@@ -44,7 +44,7 @@ public class TestSPDXReview {
 	String[] COMMENTS = new String[] {"", "comment1", null};
 	SPDXReview[] TEST_REVIEWS;
 	Model model;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -66,7 +66,7 @@ public class TestSPDXReview {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXReview#createResource(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
@@ -86,7 +86,7 @@ public class TestSPDXReview {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXReview#setReviewer(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetReviewer() throws InvalidSPDXAnalysisException {
@@ -111,7 +111,7 @@ public class TestSPDXReview {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXReview#setReviewDate(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetReviewDate() throws InvalidSPDXAnalysisException {
@@ -136,7 +136,7 @@ public class TestSPDXReview {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SPDXReview#setComment(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {

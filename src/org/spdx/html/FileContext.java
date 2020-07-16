@@ -35,12 +35,12 @@ import com.google.common.collect.Lists;
 
 /**
  * Context for describing SPDX Files
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class FileContext {
-	
+
 	SpdxFile spdxFile = null;
 	Exception error = null;
 	private Map<String, String> spdxIdToUrl;
@@ -62,7 +62,7 @@ public class FileContext {
 	public FileContext(InvalidSPDXAnalysisException e) {
 		this.error = e;
 	}
-	
+
 	public String fileName() {
 		if (spdxFile == null && error != null) {
 			return "Error getting SPDX file information: "+ error.getMessage();
@@ -73,14 +73,14 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	public String spdxId() {
 		if (spdxFile == null) {
 			return "Error getting SPDX file information: "+ (error != null ? error.getMessage() : "null");
 		}
 		return spdxFile.getId();
 	}
-	
+
 	public List<String> checksums() {
 		if (spdxFile == null) {
 			List<String> retval = Lists.newArrayList();
@@ -99,15 +99,15 @@ public class FileContext {
 		Collections.sort(retval);
 		return retval;
 	}
-	
+
 	public List<String> fileType() {
 		if (spdxFile == null && error != null) {
 			List<String> retval = Lists.newArrayList();
 			retval.add("Error getting SPDX file information: "+error.getMessage());
 			return retval;
 		} else {
-			if (spdxFile != null && spdxFile.getFileTypes() != null && 
-					spdxFile.getFileTypes().length > 0) {	
+			if (spdxFile != null && spdxFile.getFileTypes() != null &&
+					spdxFile.getFileTypes().length > 0) {
 				List<String> retval = Lists.newArrayList();
 				FileType[] fileTypes = spdxFile.getFileTypes();
 				for (int i = 0; i < fileTypes.length; i++) {
@@ -120,7 +120,7 @@ public class FileContext {
 			}
 		}
 	}
-	
+
 	public String checksum() {
 		if (spdxFile == null && error != null) {
 			return "Error getting SPDX file information: "+error.getMessage();
@@ -131,7 +131,7 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	public String licenseConcluded() {
 		if (spdxFile == null && error != null) {
 			return "Error getting SPDX file information: "+error.getMessage();
@@ -142,7 +142,7 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	public String licenseComments() {
 		if (spdxFile == null && error != null) {
 			return "Error getting SPDX file information: "+error.getMessage();
@@ -153,7 +153,7 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	public List<String> licenseInfoInFile() {
 		List<String> retval = Lists.newArrayList();
 		if (spdxFile == null && error != null) {
@@ -167,7 +167,7 @@ public class FileContext {
 		}
 		return retval;
 	}
-	
+
 	public String copyrightText() {
 		if (spdxFile == null && error != null) {
 			return "Error getting SPDX file information: "+error.getMessage();
@@ -178,7 +178,7 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public List<ProjectContext> artifactOf() {
 		List<ProjectContext> retval = Lists.newArrayList();
@@ -195,7 +195,7 @@ public class FileContext {
 		}
 		return retval;
 	}
-	
+
 	public String comment() {
 		if (spdxFile != null) {
 			return spdxFile.getComment();
@@ -203,7 +203,7 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	public String noticeText() {
 		if (spdxFile != null) {
 			return spdxFile.getNoticeText();
@@ -211,21 +211,21 @@ public class FileContext {
 			return null;
 		}
 	}
-	
+
 	public List<String> contributors() {
 		if (spdxFile == null || spdxFile.getFileContributors() == null) {
 			return null;
 		}
 		return Arrays.asList(spdxFile.getFileContributors());
 	}
-	
+
 	public List<String> attributionText() {
 		if (spdxFile == null || spdxFile.getAttributionText() == null) {
 			return null;
 		}
 		return Arrays.asList(spdxFile.getAttributionText());
 	}
-	
+
 	public List<String> fileDependencies() {
 		if (spdxFile == null || spdxFile.getFileContributors() == null) {
 			return null;
@@ -238,22 +238,22 @@ public class FileContext {
 		}
 		return retval;
 	}
-	
+
 	public List<RelationshipContext> fileRelationships() {
 	    List<RelationshipContext> retval = Lists.newArrayList();
 	    if (this.spdxFile != null) {
 		    Relationship[] relationships = spdxFile.getRelationships();
 		    if (relationships != null) {
 		        Arrays.sort(relationships);
-			
+
 	    		for (Relationship relationship : relationships) {
 	    		    retval.add(new RelationshipContext(relationship, spdxIdToUrl));
 	    		}
 		    }
-	    }    
+	    }
 		return retval;
 	}
-	
+
 	public List<AnnotationContext> fileAnnotations() {
 		List<AnnotationContext> retval  = Lists.newArrayList();
 		if (this.spdxFile != null) {
@@ -263,11 +263,11 @@ public class FileContext {
 				for (Annotation annotation : annotations) {
 					retval.add(new AnnotationContext(annotation));
 				}
-			}	
+			}
 		}
 		return retval;
 	}
-	
+
 	public List<ElementContext> fileSnippets() {
 		List<ElementContext> retval = Lists.newArrayList();
 		if (this.spdxFile != null) {
@@ -276,7 +276,7 @@ public class FileContext {
 				for (SpdxSnippet snippet:snippets) {
 					retval.add(new ElementContext(snippet, spdxIdToUrl));
 				}
-			}	
+			}
 		}
 		return retval;
 	}

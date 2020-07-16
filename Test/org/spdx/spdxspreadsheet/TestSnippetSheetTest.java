@@ -62,9 +62,9 @@ public class TestSnippetSheetTest {
 	SpdxListedLicense[] STANDARD_LICENSES;
 	DisjunctiveLicenseSet[] DISJUNCTIVE_LICENSES;
 	ConjunctiveLicenseSet[] CONJUNCTIVE_LICENSES;
-	
+
 	ConjunctiveLicenseSet COMPLEX_LICENSE;
-	
+
 	Resource[] NON_STD_LICENSES_RESOURCES;
 	Resource[] STANDARD_LICENSES_RESOURCES;
 	Resource[] DISJUNCTIVE_LICENSES_RESOURCES;
@@ -84,17 +84,17 @@ public class TestSnippetSheetTest {
 			NON_STD_LICENSES[i] = new ExtractedLicenseInfo(NONSTD_IDS[i], NONSTD_TEXTS[i]);
 			spdxContainer.addNewExtractedLicenseInfo(NON_STD_LICENSES[i]);
 		}
-		
+
 		STANDARD_LICENSES = new SpdxListedLicense[STD_IDS.length];
 		for (int i = 0; i < STD_IDS.length; i++) {
-			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i), 
-					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i), "URL2 "+String.valueOf(i)}, "Notes "+String.valueOf(i), 
+			STANDARD_LICENSES[i] = new SpdxListedLicense("Name "+String.valueOf(i),
+					STD_IDS[i], STD_TEXTS[i], new String[] {"URL "+String.valueOf(i), "URL2 "+String.valueOf(i)}, "Notes "+String.valueOf(i),
 					"LicHeader "+String.valueOf(i), "Template "+String.valueOf(i), true);
 		}
-		
+
 		DISJUNCTIVE_LICENSES = new DisjunctiveLicenseSet[3];
 		CONJUNCTIVE_LICENSES = new ConjunctiveLicenseSet[2];
-		
+
 		DISJUNCTIVE_LICENSES[0] = new DisjunctiveLicenseSet(new AnyLicenseInfo[] {
 				NON_STD_LICENSES[0], NON_STD_LICENSES[1], STANDARD_LICENSES[1]
 		});
@@ -113,7 +113,7 @@ public class TestSnippetSheetTest {
 		COMPLEX_LICENSE = new ConjunctiveLicenseSet(new AnyLicenseInfo[] {
 				DISJUNCTIVE_LICENSES[2], DISJUNCTIVE_LICENSES[1]
 		});
-		
+
 		NON_STD_LICENSES_RESOURCES = new Resource[NON_STD_LICENSES.length];
 		for (int i = 0; i < NON_STD_LICENSES.length; i++) {
 			NON_STD_LICENSES_RESOURCES[i] = NON_STD_LICENSES[i].createResource(spdxContainer);
@@ -139,7 +139,7 @@ public class TestSnippetSheetTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void testLicenseEquiv() throws InvalidLicenseStringException {
 		String complexStr = COMPLEX_LICENSE.toString();
@@ -160,8 +160,8 @@ public class TestSnippetSheetTest {
 
 	/**
 	 * Test method for {@link org.spdx.spdxspreadsheet.SnippetSheet#getSnippet(int, org.spdx.rdfparser.SpdxDocumentContainer)}.
-	 * @throws SpreadsheetException 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws SpreadsheetException
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testAddGet() throws SpreadsheetException, InvalidSPDXAnalysisException {
@@ -198,18 +198,18 @@ public class TestSnippetSheetTest {
 		StartEndPointer lineRange2 = new StartEndPointer(new LineCharPointer(testFile2, 55),
 				new LineCharPointer(testFile2, 1213));
 		SpdxSnippet snippet1 = new SpdxSnippet("snippet1", comment1, new Annotation[0],
-				new Relationship[0], COMPLEX_LICENSE, testLicenses1, "copyright (c) 1", 
+				new Relationship[0], COMPLEX_LICENSE, testLicenses1, "copyright (c) 1",
 				"license comments 1", testFile1, byteRange1, lineRange1);
 		snippet1.setId("SPDXRef-snippet1");
 		snippet1.createResource(spdxContainer);
 		SpdxSnippet snippet2 = new SpdxSnippet("snippet2", comment2, new Annotation[0],
-				new Relationship[0], NON_STD_LICENSES[0], testLicenses2, "copyright (c) 2", 
+				new Relationship[0], NON_STD_LICENSES[0], testLicenses2, "copyright (c) 2",
 				"license comments 2", testFile2, byteRange2, lineRange2);
 		snippet2.setId("SPDXRef-snippet2");
 		snippet2.createResource(spdxContainer);
 		snippetSheet.add(snippet1);
 		snippetSheet.add(snippet2);
-		
+
 		SpdxSnippet result1 = snippetSheet.getSnippet(1, spdxContainer);
 		SpdxSnippet result2 = snippetSheet.getSnippet(2, spdxContainer);
 		SpdxSnippet result3 = snippetSheet.getSnippet(3, spdxContainer);

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -36,7 +36,7 @@ public class FileChecksumSheet extends AbstractFileCompareSheet {
 	public FileChecksumSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
-	
+
 	static void create(Workbook wb, String sheetName) {
 		AbstractFileCompareSheet.create(wb, sheetName, CHECKSUM_COL_WIDTH);
 	}

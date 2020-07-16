@@ -38,14 +38,14 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestByteOffsetPointer {
-	
+
 	String REFERENCED_ELEMENT_NAME1 = "Element1";
 	String REFERENCED_ELEMENT_NAME2 = "Element2";
 	SpdxElement REFERENCED1;
 	SpdxElement REFERENCED2;
 	Resource REFERENCED_RESOURCE1;
 	Resource REFERENCED_RESOURCE2;
-	
+
 	Model model;
 	IModelContainer modelContainer;
 	/**
@@ -70,7 +70,7 @@ public class TestByteOffsetPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.ByteOffsetPointer#getType(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetType() throws InvalidSPDXAnalysisException {
@@ -82,7 +82,7 @@ public class TestByteOffsetPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.ByteOffsetPointer#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -103,7 +103,7 @@ public class TestByteOffsetPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.ByteOffsetPointer#equivalent(org.spdx.rdfparser.model.IRdfModel)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
@@ -126,7 +126,7 @@ public class TestByteOffsetPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.ByteOffsetPointer#setOffset(java.lang.Integer)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetOffset() throws InvalidSPDXAnalysisException {
@@ -143,7 +143,7 @@ public class TestByteOffsetPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.SinglePointer#setReference(org.spdx.rdfparser.model.SpdxElement)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetReference() throws InvalidSPDXAnalysisException {
@@ -168,7 +168,7 @@ public class TestByteOffsetPointer {
 		bop2.getReference().setName("New Name");
 		assertFalse(bop.equivalent(bop2));
 	}
-	
+
 	@Test
 	public void testCompareTo() {
 		ByteOffsetPointer bop = new ByteOffsetPointer(REFERENCED1, 15);

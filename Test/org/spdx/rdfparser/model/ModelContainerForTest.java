@@ -41,7 +41,7 @@ public class ModelContainerForTest implements IModelContainer {
 	Map<String, String> externalNamespaceToId = Maps.newHashMap();
 	Map<String, String> externalIdToNamespace = Maps.newHashMap();
 	/**
-	 * 
+	 *
 	 */
 	public ModelContainerForTest(Model model, String namespace) {
 		this.model = model;
@@ -103,7 +103,7 @@ public class ModelContainerForTest implements IModelContainer {
 	public String externalDocumentIdToNamespace(String docId) {
 		return this.externalIdToNamespace.get(docId);
 	}
-	
+
 	public void addExternalDocReference(String docId, String docNamespace) {
 		this.externalIdToNamespace.put(docId, docNamespace);
 		this.externalNamespaceToId.put(docNamespace, docId);
@@ -119,7 +119,7 @@ public class ModelContainerForTest implements IModelContainer {
 		modelObject.setMultipleObjectsForSameNode();
 		if (duplicate != null) {
 			return duplicate;
-		} else if (uri == null) {			
+		} else if (uri == null) {
 			return model.createResource(type);
 		} else {
 			return model.createResource(uri, type);

@@ -25,9 +25,9 @@ import org.spdx.rdfparser.model.SpdxFile;
  *
  */
 public class FileContributorsSheet extends AbstractFileCompareSheet {
-	
+
 	private static final int FILE_CONTRIBUTOR_COL_WIDTH = 50;
-	
+
 	public FileContributorsSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}

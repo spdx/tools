@@ -30,7 +30,7 @@ import org.junit.Test;
  *
  */
 public class TestExamples {
-	
+
 	private static final String EXAMPLES_DIRECTORY = "Examples";
 
 	/**

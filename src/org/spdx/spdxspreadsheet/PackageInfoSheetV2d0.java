@@ -63,22 +63,22 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 	int USER_DEFINED_COL = FULL_DESC_COL + 1;
 	int NUM_COLS = USER_DEFINED_COL;
 
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false, false, true, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, false, false, false, false, false, true,
 		true, true, false, false, true, true, true, false, true, false, false, false};
-	static final String[] HEADER_TITLES = new String[] {"Package Name", "SPDX Identifier", "Package Version", 
+	static final String[] HEADER_TITLES = new String[] {"Package Name", "SPDX Identifier", "Package Version",
 		"Package FileName", "Package Supplier", "Package Originator", "Home Page",
 		"Package Download Location", "Package Checksum", "Package Verification Code",
-		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files", 
+		"Verification Code Excluded Files", "Source Info", "License Declared", "License Concluded", "License Info From Files",
 		"License Comments", "Package Copyright Text", "Summary", "Description", "User Defined Columns..."};
-	
+
 	static final int[] COLUMN_WIDTHS = new int[] {30, 17, 17, 30, 30, 30, 50, 50, 75, 60, 40, 30,
 		40, 40, 90, 50, 50, 50, 80, 50};
 
 	/**
 	 * @param workbook
 	 * @param sheetName
-	 * @param version 
+	 * @param version
 	 */
 	public PackageInfoSheetV2d0(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
@@ -99,7 +99,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS - 1; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX Package Info worksheet";
@@ -204,7 +204,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			cell.setCellValue(HEADER_TITLES[i]);
 		}
 	}
-	
+
 	public void add(SpdxPackage pkgInfo) throws InvalidSPDXAnalysisException {
 		Row row = addRow();
 		Cell nameCell = row.createCell(NAME_COL);
@@ -282,7 +282,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 			homePageCell.setCellValue(pkgInfo.getHomepage());
 		}
 	}
-	
+
 	public SpdxPackage[] getPackages(SpdxDocumentContainer container) throws SpreadsheetException {
 		SpdxPackage[] retval = new SpdxPackage[getNumDataRows()];
 		for (int i = 0; i < retval.length; i++) {
@@ -290,7 +290,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		}
 		return retval;
 	}
-	
+
 	private SpdxPackage getPackage(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -307,7 +307,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		String declaredName = nameCell.getStringCellValue();
 		String id = row.getCell(ID_COL).getStringCellValue();
 		Cell machineNameCell = row.getCell(MACHINE_NAME_COL);
-		
+
 		String machineName = null;
 		if (machineNameCell != null) {
 			machineName = row.getCell(MACHINE_NAME_COL).getStringCellValue();
@@ -327,7 +327,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		} else {
 			sourceInfo = "";
 		}
-		AnyLicenseInfo declaredLicenses = 
+		AnyLicenseInfo declaredLicenses =
 				LicenseInfoFactory.parseSPDXLicenseString(row.getCell(DECLARED_LICENSE_COL).getStringCellValue(), container);
 		AnyLicenseInfo concludedLicense;
 		Cell concludedLicensesCell = row.getCell(CONCLUDED_LICENSE_COL);
@@ -366,7 +366,7 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		String url = row.getCell(DOWNLOAD_URL_COL).getStringCellValue();
 		String packageVerificationValue = row.getCell(FILE_VERIFICATION_VALUE_COL).getStringCellValue();
 		String[] excludedFiles;
-		
+
 		Cell excludedFilesCell = row.getCell(VERIFICATION_EXCLUDED_FILES_COL);
 		String excludedFilesStr = null;
 		if (excludedFilesCell != null) {
@@ -410,10 +410,10 @@ public class PackageInfoSheetV2d0 extends PackageInfoSheet {
 		}
 		SpdxPackageVerificationCode verificationCode = new SpdxPackageVerificationCode(packageVerificationValue, excludedFiles);
 		SpdxPackage retval = new SpdxPackage(declaredName, "", new Annotation[0],
-				new Relationship[0], concludedLicense, licenseInfosFromFiles, 
-				declaredCopyright, licenseComment, declaredLicenses, checksums, 
-				description, url, new SpdxFile[0], homePage, originator, 
-				machineName, verificationCode, sourceInfo, shortDesc, supplier, 
+				new Relationship[0], concludedLicense, licenseInfosFromFiles,
+				declaredCopyright, licenseComment, declaredLicenses, checksums,
+				description, url, new SpdxFile[0], homePage, originator,
+				machineName, verificationCode, sourceInfo, shortDesc, supplier,
 				versionInfo);
 		try {
 			retval.setId(id);

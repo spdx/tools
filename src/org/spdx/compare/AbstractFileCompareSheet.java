@@ -26,14 +26,14 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
 
 /**
  * Abstract worksheet for any comparison involving files.
- * 
+ *
  * The first column is the file path, second column indicates if all documents are equal,
  * columns 3 through N are for the values of the individual documents
  * @author Gary O'Neall
  *
  */
 public abstract class AbstractFileCompareSheet extends AbstractSheet {
-	
+
 	static final int FILENAME_COL_WIDTH = 80;
 	static final int DIFF_COL_WIDTH = 10;
 	static final int FILENAME_COL = 0;
@@ -45,7 +45,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	static final String EQUAL_VALUE = "Equal";
 	static final String NO_FILE_VALUE = "[No File]";
 	private static final int MAX_VALUE_LENGTH = 32000;
-	
+
 	private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 
 	/**
@@ -64,7 +64,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 		// Nothing to verify
 		return null;
 	}
-	
+
 	/**
 	 * @param wb
 	 * @param sheetName
@@ -88,7 +88,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 		Cell diffHeaderCell = row.createCell(DIFF_COL);
 		diffHeaderCell.setCellStyle(headerStyle);
 		diffHeaderCell.setCellValue(DIFF_TITLE);
-		
+
 		for (int i = FIRST_DOCUMENT_COL; i < MultiDocumentSpreadsheet.MAX_DOCUMENTS + FIRST_DOCUMENT_COL; i++) {
 			sheet.setColumnWidth(i, columnWidth*256);
 			sheet.setDefaultColumnStyle(i, defaultStyle);
@@ -96,7 +96,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 			cell.setCellStyle(headerStyle);
 		}
 	}
-	
+
 	/**
 	 * @param files Array of SPDX document files - arrays must be sorted
 	 * @param docNames Document names.  Much match the documents in the files.
@@ -129,14 +129,14 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 			// fill in the data cells and see if all values match
 			for (int i = 0; i < files.length; i++) {
 				Cell cell = currentRow.createCell(i + FIRST_DOCUMENT_COL);
-				if (fileIndexes[i] < files[i].length && 
+				if (fileIndexes[i] < files[i].length &&
 						normalizedFileNameComparator.compare(files[i][fileIndexes[i]].getName(), fileName) == 0) {
 					String val = getFileValue(files[i][fileIndexes[i]]);
-					if (allValuesMatch && lastFile != null && 
+					if (allValuesMatch && lastFile != null &&
 							!valuesMatch(comparer, lastFile, lastDocIndex, files[i][fileIndexes[i]], i)) {
 						allValuesMatch = false;
 					}
-					lastFile = files[i][fileIndexes[i]];	
+					lastFile = files[i][fileIndexes[i]];
 					if (val.length() > MAX_VALUE_LENGTH) {
 						val = val.substring(0, MAX_VALUE_LENGTH-9) + "[more...]";
 					}
@@ -163,7 +163,7 @@ public abstract class AbstractFileCompareSheet extends AbstractSheet {
 	 * @param fileB
 	 * @param docIndexB
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	abstract boolean valuesMatch(SpdxComparer comparer, SpdxFile fileA, int docIndexA,
 			SpdxFile fileB, int docIndexB) throws SpdxCompareException;

@@ -38,7 +38,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestStartEndPointer {
-	
+
 	String REFERENCED_ELEMENT_NAME1 = "Element1";
 	String REFERENCED_ELEMENT_NAME2 = "Element2";
 	SpdxElement REFERENCED1;
@@ -48,15 +48,15 @@ public class TestStartEndPointer {
 	Integer OFFSET1 = new Integer(342);
 	ByteOffsetPointer BOP_POINTER1;
 	Integer LINE1 = new Integer(113);
-	LineCharPointer LCP_POINTER1; 
+	LineCharPointer LCP_POINTER1;
 	Integer OFFSET2 = new Integer(444);
 	ByteOffsetPointer BOP_POINTER2;
 	Integer LINE2 = new Integer(23422);
-	LineCharPointer LCP_POINTER2; 
+	LineCharPointer LCP_POINTER2;
 
 	Model model;
 	IModelContainer modelContainer;
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -83,7 +83,7 @@ public class TestStartEndPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.StartEndPointer#getPropertiesFromModel()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetPropertiesFromModel() throws InvalidSPDXAnalysisException {
@@ -96,7 +96,7 @@ public class TestStartEndPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.StartEndPointer#getType(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetType() throws InvalidSPDXAnalysisException {
@@ -108,7 +108,7 @@ public class TestStartEndPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.StartEndPointer#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -137,7 +137,7 @@ public class TestStartEndPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.StartEndPointer#setStartPointer(org.spdx.rdfparser.model.pointer.SinglePointer)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetStartPointer() throws InvalidSPDXAnalysisException {
@@ -156,7 +156,7 @@ public class TestStartEndPointer {
 		result = sop.getStartPointer();
 		assertTrue(BOP_POINTER2.equivalent(result));
 	}
-	
+
 	@Test
 	public void testSetEndPointer() throws InvalidSPDXAnalysisException {
 		StartEndPointer sop = new StartEndPointer(BOP_POINTER1, LCP_POINTER1);
@@ -177,7 +177,7 @@ public class TestStartEndPointer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.pointer.StartEndPointer#equivalent(org.spdx.rdfparser.model.IRdfModel)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
@@ -195,7 +195,7 @@ public class TestStartEndPointer {
 		sop4.createResource(modelContainer);
 		assertFalse(sop.equivalent(sop4));
 		assertFalse(sop4.equivalent(sop));
-		
+
 		ByteOffsetPointer pointerClone = BOP_POINTER1.clone();
 		StartEndPointer sop5 = new StartEndPointer(pointerClone, LCP_POINTER1);
 		sop5.createResource(modelContainer);
@@ -203,7 +203,7 @@ public class TestStartEndPointer {
 		pointerClone.setOffset(1131);
 		assertFalse(sop5.equivalent(sop));
 	}
-	
+
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		StartEndPointer sop = new StartEndPointer(BOP_POINTER1, LCP_POINTER1);

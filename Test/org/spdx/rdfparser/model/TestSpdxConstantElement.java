@@ -38,9 +38,9 @@ import org.spdx.rdfparser.model.SpdxNoneElement;
  *
  */
 public class TestSpdxConstantElement {
-	
+
 	Model model;
-	
+
 	IModelContainer modelContainer;
 
 	/**
@@ -61,7 +61,7 @@ public class TestSpdxConstantElement {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.model.SpdxConstantElement#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -161,7 +161,7 @@ public class TestSpdxConstantElement {
 	public void testAddAnnotation() throws InvalidSPDXAnalysisException {
 		SpdxNoneElement el = new SpdxNoneElement();
 		try {
-			el.addAnnotation(new Annotation("Person: me", AnnotationType.annotationType_review, 
+			el.addAnnotation(new Annotation("Person: me", AnnotationType.annotationType_review,
 					new SimpleDateFormat(SpdxRdfConstants.SPDX_DATE_FORMAT).format(new Date()), "c"));
 			fail("This should have failed");
 		} catch(Exception ex) {

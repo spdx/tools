@@ -35,7 +35,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public abstract class AnyLicenseInfo extends RdfModelObject {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(AnyLicenseInfo.class.getName());
 
 	/**
@@ -43,7 +43,7 @@ public abstract class AnyLicenseInfo extends RdfModelObject {
 	 * the model at the LicenseInfo node
 	 * @param modelContainer container which includes the license
 	 * @param licenseInfoNode
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	AnyLicenseInfo(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
@@ -53,22 +53,22 @@ public abstract class AnyLicenseInfo extends RdfModelObject {
 	AnyLicenseInfo() {
 		super();
 	}
-	
+
 	@Override
 	public abstract void populateModel() throws InvalidSPDXAnalysisException;
-	
+
 	// force subclasses to implement toString
 	@Override
     public abstract String toString();
-	
+
 	// force subclasses to implement equals
 	@Override
     public abstract boolean equals(Object o);
-	
+
 	// force subclasses to implement hashcode
 	@Override
     public abstract int hashCode();
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */

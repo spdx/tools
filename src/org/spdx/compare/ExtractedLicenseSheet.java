@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -39,11 +39,11 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class ExtractedLicenseSheet extends AbstractSheet {
-	
+
 	private static final class ExtractedLicenseComparator implements Comparator<AnyLicenseInfo>, Serializable {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -73,9 +73,9 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 			} else {
 				return -1;
 			}
-		}	
+		}
 	}
-	
+
 	ExtractedLicenseComparator extractedLicenseComparator = new ExtractedLicenseComparator();
 
 	private static final int EXTRACTED_TEXT_COL = 0;
@@ -129,8 +129,8 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {
@@ -157,7 +157,7 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 				if (extractedLicenses[i].length > licenseIndexes[i]) {
 					if  (extractedLicenses[i][licenseIndexes[i]] instanceof ExtractedLicenseInfo) {
 						String compareExtractedText = ((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]).getExtractedText();
-						if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicenseText, 
+						if (LicenseCompareHelper.isLicenseTextEquivalent(extractedLicenseText,
 								compareExtractedText)) {
 							Cell licenseIdCell = currentRow.createCell(FIRST_LIC_ID_COL+i);
 							licenseIdCell.setCellValue(formatLicenseInfo((ExtractedLicenseInfo)extractedLicenses[i][licenseIndexes[i]]));
@@ -170,7 +170,7 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 			}
 		}
 	}
-	
+
 	/**
 	 * Formats the license information for the license ID cell
 	 * @param license
@@ -225,7 +225,7 @@ public class ExtractedLicenseSheet extends AbstractSheet {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Returns true if the license indexes is greater than the size of the licenseInfos for all documents
 	 * @param licenseInfos

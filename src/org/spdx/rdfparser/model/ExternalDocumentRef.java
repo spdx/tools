@@ -33,9 +33,9 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 /**
- * Information about an external SPDX document reference including the checksum.  
+ * Information about an external SPDX document reference including the checksum.
  * This allows for verification of the external references.
- * 
+ *
  * Since an SPDX document must be in its own container, there are a few special
  * considerations for this class:
  *   - model, node, and resource are associated with the document making an external reference,
@@ -58,7 +58,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	String spdxDocumentNamespace;
 	String externalDocumentId;
 	SpdxDocument spdxDocument = null;
-	
+
 	/**
 	 * @param modelContainer
 	 * @param node
@@ -69,7 +69,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 		super(modelContainer, node);
 		getPropertiesFromModel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.RdfModelObject#getPropertiesFromModel()
 	 */
@@ -79,7 +79,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM);
 		this.spdxDocumentNamespace = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
-		this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID);
 	}
 
@@ -92,7 +92,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 		this.checksum = checksum;
 		this.externalDocumentId = externalDocumentId;
 	}
-	
+
 	/**
 	 * @param externalDocument SPDX Document being referenced
 	 * @param checksum Sha1 checksum of the external document
@@ -167,7 +167,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 */
 	@Override
 	public Resource getType(Model model) {
-		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE + 
+		return model.createResource(SpdxRdfConstants.SPDX_NAMESPACE +
 				SpdxRdfConstants.CLASS_EXTERNAL_DOC_REF);
 	}
 
@@ -176,21 +176,21 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 */
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
-		this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
+		this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+				SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT,
 				this.spdxDocumentNamespace);
-		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM,
 				this.checksum);
-		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID, this.externalDocumentId);
 	}
-	
-	
+
+
 
 	/**
 	 * @return the checksum
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public Checksum getChecksum() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && refreshOnGet) {
@@ -206,11 +206,11 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 
 	/**
 	 * @param checksum the checksum to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setChecksum(Checksum checksum) throws InvalidSPDXAnalysisException {
 		this.checksum = checksum;
-		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_CHECKSUM,
 				this.checksum);
 	}
@@ -230,16 +230,16 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 
 	/**
 	 * @param spdxDocumentNamespace the spdxDocumentNamespace to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setSpdxDocumentNamespace(String spdxDocumentNamespace) throws InvalidSPDXAnalysisException {
 		this.spdxDocumentNamespace = spdxDocumentNamespace;
 		if (this.spdxDocumentNamespace == null) {
-			this.removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			this.removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT);
 		} else {
-			this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT, 
+			this.setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_EXTERNAL_SPDX_DOCUMENT,
 					this.spdxDocumentNamespace);
 		}
 	}
@@ -255,7 +255,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 
 	/**
 	 * @param spdxDocument the spdxDocument to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setSpdxDocument(SpdxDocument spdxDocument) throws InvalidSPDXAnalysisException {
 		this.spdxDocument = spdxDocument;
@@ -284,7 +284,7 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 			return false;
 		}
 	}
-	
+
 	@Override
 	public ExternalDocumentRef clone() {
 		return new ExternalDocumentRef(this.spdxDocumentNamespace, this.checksum.clone(),
@@ -298,18 +298,18 @@ public class ExternalDocumentRef extends RdfModelObject implements Comparable<Ex
 	 */
 	public String getExternalDocumentId() {
 		if (this.resource != null && refreshOnGet) {
-			this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			this.externalDocumentId = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_EXTERNAL_DOC_ID);
 		}
 		return this.externalDocumentId;
 	}
-	
+
 	/**
 	 * @param externalDocumentId
 	 */
 	public void setExternalDocumentId(String externalDocumentId) {
 		this.externalDocumentId = externalDocumentId;
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_EXTERNAL_DOC_ID, externalDocumentId);
 	}
 

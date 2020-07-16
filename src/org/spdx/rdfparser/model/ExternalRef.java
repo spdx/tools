@@ -38,14 +38,14 @@ import com.google.common.collect.Lists;
  * An External Reference allows a Package to reference an external source of
  * additional information, metadata, enumerations, asset identifiers, or downloadable content believed to
  * be relevant to the Package.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class ExternalRef extends RdfModelObject implements Comparable<ExternalRef> {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(ExternalRef.class);
-	
+
 	public enum ReferenceCategory {referenceCategory_packageManager, referenceCategory_security,
 		referenceCategory_other, referenceCategory_persistenId;
 		public String getTag() {
@@ -72,12 +72,12 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 			}
 		}
 	}
-	
+
 	private ReferenceCategory referenceCategory;
 	private ReferenceType referenceType;
 	private String referenceLocator;
 	private String comment;
-	
+
 	/**
 	 * @param referenceCategory Category for the external reference
 	 * @param referenceType Reference type as defined in the SPDX appendix
@@ -92,7 +92,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		this.referenceLocator = referenceLocator;
 		this.comment = comment;
 	}
-	
+
 	/**
 	 * @param modelContainer Container for the RDF model
 	 * @param node Node for this external references
@@ -155,7 +155,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	@Override
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// referenceCategory
-		String categoryUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		String categoryUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_REFERENCE_CATEGORY);
 		if (categoryUri != null && !categoryUri.isEmpty()) {
 			if (!categoryUri.startsWith(SpdxRdfConstants.SPDX_NAMESPACE)) {
@@ -170,10 +170,10 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 			}
 		}
 		// referenceType
-		this.referenceType = findReferenceTypePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.referenceType = findReferenceTypePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_REFERENCE_TYPE);
 		// referenceLocator
-		this.referenceLocator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		this.referenceLocator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_REFERENCE_LOCATOR);
 		// comment
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE,
@@ -205,18 +205,18 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		// referenceCategory
 		if (this.referenceCategory == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_CATEGORY);
 		} else {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_REFERENCE_CATEGORY, 
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_REFERENCE_CATEGORY,
 					SpdxRdfConstants.SPDX_NAMESPACE + this.referenceCategory.toString());
 		}
 		// referenceType
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_REFERENCE_TYPE, this.referenceType);
 		// referenceLocator
-		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+		setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_REFERENCE_LOCATOR, this.referenceLocator);
 		// comment
 		setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE,
@@ -228,7 +228,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	 */
 	@Override
 	public int compareTo(ExternalRef o) {
-		
+
 		ReferenceType myReferenceType = null;
 		int retval = 0;
 		try {
@@ -246,7 +246,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 			if (compRefType != null) {
 				retval = 1;
 			}
-		} else if (compRefType == null) { 
+		} else if (compRefType == null) {
 			retval = -1;
 		} else {
 			retval = myReferenceType.compareTo(compRefType);
@@ -257,7 +257,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 				if (o.getReferenceLocator() != null) {
 					retval = 1;
 				}
-			} else if (o.getReferenceLocator() == null) { 
+			} else if (o.getReferenceLocator() == null) {
 				retval = -1;
 			} else {
 				retval = myReferenceLocator.compareTo(o.getReferenceLocator());
@@ -288,13 +288,13 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public ExternalRef clone() {
 		return new ExternalRef(this.referenceCategory, this.referenceType,
 				this.referenceLocator, this.comment);
 	}
-	
+
 	/**
 	 * @return the comment
 	 */
@@ -305,7 +305,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		}
 		return this.comment;
 	}
-	
+
 	public void setComment(String comment) {
 		if (this.comment == null) {
 			removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE,
@@ -322,7 +322,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	 */
 	public ReferenceCategory getReferenceCategory() {
 		if (this.resource != null && this.refreshOnGet) {
-			String categoryUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			String categoryUri = findUriPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_CATEGORY);
 			if (categoryUri != null && !categoryUri.isEmpty()) {
 				if (!categoryUri.startsWith(SpdxRdfConstants.SPDX_NAMESPACE)) {
@@ -345,27 +345,27 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 
 	/**
 	 * @param referenceCategory the referenceCategory to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setReferenceCategory(ReferenceCategory referenceCategory) throws InvalidSPDXAnalysisException {
 		this.referenceCategory = referenceCategory;
 		if (referenceCategory == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_CATEGORY);
 		} else {
-			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_REFERENCE_CATEGORY, 
+			setPropertyUriValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_REFERENCE_CATEGORY,
 					SpdxRdfConstants.SPDX_NAMESPACE + this.referenceCategory.toString());
 		}
 	}
 
 	/**
 	 * @return the referenceType
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ReferenceType getReferenceType() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
-			referenceType = findReferenceTypePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			referenceType = findReferenceTypePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_TYPE);
 		}
 		return referenceType;
@@ -373,16 +373,16 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 
 	/**
 	 * @param referenceType the referenceType to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setReferenceType(ReferenceType referenceType) throws InvalidSPDXAnalysisException {
 		this.referenceType = referenceType;
 		if (referenceType == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_TYPE);
 		} else {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_REFERENCE_TYPE, 
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_REFERENCE_TYPE,
 					referenceType);
 		}
 	}
@@ -392,7 +392,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	 */
 	public String getReferenceLocator() {
 		if (this.resource != null && this.refreshOnGet) {
-			referenceLocator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			referenceLocator = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_LOCATOR);
 		}
 		return referenceLocator;
@@ -404,15 +404,15 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 	public void setReferenceLocator(String referenceLocator) {
 		this.referenceLocator = referenceLocator;
 		if (referenceLocator == null) {
-			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
+			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_REFERENCE_LOCATOR);
 		} else {
-			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, 
-					SpdxRdfConstants.PROP_REFERENCE_LOCATOR, 
+			setPropertyValue(SpdxRdfConstants.SPDX_NAMESPACE,
+					SpdxRdfConstants.PROP_REFERENCE_LOCATOR,
 					referenceLocator);
 		}
 	}
-	
+
 	@Override
 	public Resource findDuplicateResource(IModelContainer modelContainer, String uri) throws InvalidSPDXAnalysisException {
 		if (referenceCategory == null || referenceType == null || referenceLocator == null) {
@@ -420,7 +420,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		}
 		Node referenceLocatorProperty = modelContainer.getModel().getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_REFERENCE_LOCATOR).asNode();
 		Triple referenceLocatorMatch = Triple.createMatch(null, referenceLocatorProperty, NodeFactory.createLiteral(this.referenceLocator));
-		ExtendedIterator<Triple> referenceMatchIter = modelContainer.getModel().getGraph().find(referenceLocatorMatch);	
+		ExtendedIterator<Triple> referenceMatchIter = modelContainer.getModel().getGraph().find(referenceLocatorMatch);
 		while (referenceMatchIter.hasNext()) {
 			Triple referenceMatchTriple = referenceMatchIter.next();
 			Node referenceNode = referenceMatchTriple.getSubject();
@@ -454,7 +454,7 @@ public class ExternalRef extends RdfModelObject implements Comparable<ExternalRe
 		// if we get to here, we did not find a match
 		return null;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

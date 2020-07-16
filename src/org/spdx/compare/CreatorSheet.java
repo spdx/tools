@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -76,8 +76,8 @@ public class CreatorSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {

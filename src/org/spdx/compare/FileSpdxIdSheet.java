@@ -26,14 +26,14 @@ import org.spdx.rdfparser.model.SpdxFile;
 public class FileSpdxIdSheet extends AbstractFileCompareSheet {
 
 	private static final int FILE_TYPE_COL_WIDTH = 20;
-	
+
 	public FileSpdxIdSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
 	static void create(Workbook wb, String sheetName) {
 		AbstractFileCompareSheet.create(wb, sheetName, FILE_TYPE_COL_WIDTH);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.compare.AbstractFileCompareSheet#valuesMatch(org.spdx.compare.SpdxComparer, org.spdx.rdfparser.model.SpdxFile, int, org.spdx.rdfparser.model.SpdxFile, int)
 	 */

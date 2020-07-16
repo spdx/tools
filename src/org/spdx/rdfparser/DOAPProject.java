@@ -30,7 +30,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 /**
  * Contains a DOAP project
  * Currently, only the home page and name properties are supported
- * 
+ *
  * This class is provided for compatibility with the 1.2 version of the library
  * and is no longer used in version 2.0 and above (replaced by model.DoapProject)
  * @author Gary O'Neall
@@ -38,7 +38,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 @Deprecated
 public class DOAPProject implements Cloneable {
-	
+
 	public static final String UNKNOWN_URI = "UNKNOWN";
 	private String name = null;
 	private String homePage = null;
@@ -46,7 +46,7 @@ public class DOAPProject implements Cloneable {
 	private Resource projectResource = null;
 	private Model model = null;
 	private String uri = null;
-	
+
 	/**
 	 * This method will create a DOAP Project object from a DOAP document
 	 * which already exists.  The DOAP project is read from the uri and
@@ -54,14 +54,14 @@ public class DOAPProject implements Cloneable {
 	 * @param model Jena model to populate
 	 * @param projectUrl The URL of the DOAP project
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	static DOAPProject getExistingProject(Model model, String projectUrl) throws InvalidSPDXAnalysisException {
 		Resource projectResource = model.createResource(projectUrl);
 		model.read(projectUrl);
 		return new DOAPProject(model, projectResource.asNode());
 	}
-	
+
 	public DOAPProject(Model model, Node node) throws InvalidSPDXAnalysisException {
 		this.model = model;
 		this.projectNode = node;
@@ -73,11 +73,11 @@ public class DOAPProject implements Cloneable {
 		} else {
 			throw(new InvalidSPDXAnalysisException("Can not create a DOAP project from a literal node"));
 		}
-		
+
 		// name
 		Node p = model.getProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_NAME).asNode();
 		Triple m = Triple.createMatch(projectNode, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.name = t.getObject().toString(false);
@@ -85,7 +85,7 @@ public class DOAPProject implements Cloneable {
 		// home page
 		p = model.getProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_HOMEPAGE).asNode();
 		m = Triple.createMatch(projectNode, p, null);
-		tripleIter = model.getGraph().find(m);	
+		tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.homePage = t.getObject().toString(false);
@@ -143,7 +143,7 @@ public class DOAPProject implements Cloneable {
 			}
 		}
 	}
-	
+
 	public String getProjectUri() {
 		if (projectNode == null) {
 			if (uri == null || uri.isEmpty()) {
@@ -159,7 +159,7 @@ public class DOAPProject implements Cloneable {
 			}
 		}
 	}
-	
+
 	public Resource createResource(Model model) {
 		Resource type = model.createResource(SpdxRdfConstants.DOAP_NAMESPACE + SpdxRdfConstants.CLASS_DOAP_PROJECT);
 		Resource retval;
@@ -180,8 +180,8 @@ public class DOAPProject implements Cloneable {
 		this.model = model;
 		this.projectNode = projectResource.asNode();
 		this.projectResource = projectResource;
-		
-		// Name		
+
+		// Name
 		if (name != null) {
 			Property p = model.createProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_NAME);
 			projectResource.addProperty(p, name);
@@ -191,7 +191,7 @@ public class DOAPProject implements Cloneable {
 		if (homePage != null) {
 			Property p = model.createProperty(SpdxRdfConstants.DOAP_NAMESPACE, SpdxRdfConstants.PROP_PROJECT_HOMEPAGE);
 			projectResource.addProperty(p, homePage);
-		}		
+		}
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class DOAPProject implements Cloneable {
 
 	/**
 	 * @param uri
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setUri(String uri) throws InvalidSPDXAnalysisException {
 		if (this.projectResource != null) {
@@ -216,8 +216,8 @@ public class DOAPProject implements Cloneable {
 		}
 		this.uri = uri;
 	}
-	
-	@Override 
+
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof DOAPProject)) {
 			return false;
@@ -228,7 +228,7 @@ public class DOAPProject implements Cloneable {
 				!compare.getProjectUri().equals(UNKNOWN_URI) && !this.getProjectUri().equals(UNKNOWN_URI)) {
 			return this.getProjectUri().equals(compare.getProjectUri());
 		}
-		if ((compare.getProjectUri() != null && !compare.getProjectUri().equals(UNKNOWN_URI)) || 
+		if ((compare.getProjectUri() != null && !compare.getProjectUri().equals(UNKNOWN_URI)) ||
 				(this.getProjectUri() != null && !this.getProjectUri().equals(UNKNOWN_URI))) {
 			return false;
 		}
@@ -239,7 +239,7 @@ public class DOAPProject implements Cloneable {
 		// just use the object compares if the above shortcuts did not work out
 		return super.equals(o);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		// need this method to match the equals for proper behavior
@@ -249,7 +249,7 @@ public class DOAPProject implements Cloneable {
 			return this.getHomePage().hashCode();
 		} else {
 			return super.hashCode();
-		}		
+		}
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class DOAPProject implements Cloneable {
 	public Resource getResource() {
 		return this.projectResource;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 * Provides a deep copy of the DOAPProject

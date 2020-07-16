@@ -24,11 +24,11 @@ import org.spdx.rdfparser.model.ExternalRef;
  *
  */
 public class ExternalRefContext {
-	
+
 	private String category = "[UNKNOWN]";
 	private String type = "[UNKNOWN]";
 	private String locator = "[UNKNOWN]";
-	
+
 	public ExternalRefContext(ExternalRef externalRef) {
 		if (externalRef != null) {
 			if (externalRef.getReferenceCategory() != null) {

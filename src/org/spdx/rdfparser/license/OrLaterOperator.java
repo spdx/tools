@@ -44,18 +44,18 @@ public class OrLaterOperator extends AnyLicenseInfo {
 	 * Create an OrLaterOperator from a node in an existing RDF model
 	 * @param enclosingSpdxDocument document which includes the license
 	 * @param licenseInfoNode Node that defines the OrLaterOperator
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public OrLaterOperator(IModelContainer modelContainer, Node licenseInfoNode) throws InvalidSPDXAnalysisException {
 		super(modelContainer, licenseInfoNode);
 		getPropertiesFromModel();
 	}
-	
+
 	public OrLaterOperator(SimpleLicensingInfo license) {
 		super();
 		this.license = license;
 	}
-	
+
 	/**
 	 * @return the license
 	 */
@@ -72,7 +72,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 
 	/**
 	 * @param license the license to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setLicense(SimpleLicensingInfo license) throws InvalidSPDXAnalysisException {
 		this.license = license;
@@ -86,7 +86,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 			resource.addProperty(licProperty, licResource);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.license.AnyLicenseInfo#toString()
 	 */
@@ -176,7 +176,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 		model.removeAll(resource, licProperty, null);
 		licProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER);
 		Resource licResource = license.createResource(this.modelContainer);
-		resource.addProperty(licProperty, licResource);		
+		resource.addProperty(licProperty, licResource);
 	}
 
 	/* (non-Javadoc)
@@ -186,7 +186,7 @@ public class OrLaterOperator extends AnyLicenseInfo {
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		Node p = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_SET_MEMEBER).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (this.license != null) {

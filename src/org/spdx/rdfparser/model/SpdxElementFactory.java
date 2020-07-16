@@ -34,7 +34,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  *
  */
 public class SpdxElementFactory {
-	
+
 	/**
 	 * Add to a cache of created elements
 	 * @param modelContainer
@@ -107,13 +107,13 @@ public class SpdxElementFactory {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static SpdxElement guessElementByProperties(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		// Look for required SPDX Item properties
 		if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
-				SpdxRdfConstants.PROP_LICENSE_CONCLUDED) && 
+				SpdxRdfConstants.PROP_LICENSE_CONCLUDED) &&
 				propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_COPYRIGHT_TEXT)) {
 			return guessSpdxItemByProperties(modelContainer, node);
@@ -127,26 +127,26 @@ public class SpdxElementFactory {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static SpdxElement guessSpdxItemByProperties(
 			IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		// Look for required file properties
-		if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_CHECKSUM) && 
-				propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
+		if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
+				SpdxRdfConstants.PROP_FILE_CHECKSUM) &&
+				propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
 						SpdxRdfConstants.PROP_FILE_TYPE))  {
 			return new SpdxFile(modelContainer, node);
-		} else if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
-				SpdxRdfConstants.PROP_FILE_CHECKSUM) && 
-				propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
-						SpdxRdfConstants.PROP_PACKAGE_DOWNLOAD_URL) && 
-						propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
-								SpdxRdfConstants.PROP_PACKAGE_LICENSE_INFO_FROM_FILES) && 
-								propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
+		} else if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
+				SpdxRdfConstants.PROP_FILE_CHECKSUM) &&
+				propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
+						SpdxRdfConstants.PROP_PACKAGE_DOWNLOAD_URL) &&
+						propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
+								SpdxRdfConstants.PROP_PACKAGE_LICENSE_INFO_FROM_FILES) &&
+								propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
 										SpdxRdfConstants.PROP_PACKAGE_VERIFICATION_CODE))  {
 			return new SpdxPackage(modelContainer, node);
-		} else if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE, 
+		} else if (propertyExists(modelContainer, node, SpdxRdfConstants.SPDX_NAMESPACE,
 				SpdxRdfConstants.PROP_SNIPPET_FROM_FILE)) {
 			return new SpdxSnippet(modelContainer, node);
 		} else {
@@ -166,7 +166,7 @@ public class SpdxElementFactory {
 			Node node, String namespace, String propertyName) {
 		Node p = modelContainer.getModel().getProperty(namespace, propertyName).asNode();
 		Triple m = Triple.createMatch(node, p, null);
-		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);
 		return tripleIter.hasNext();
 	}
 
@@ -174,11 +174,11 @@ public class SpdxElementFactory {
 	 * @param modelContainer
 	 * @param node
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static SpdxElement getElementByType(IModelContainer modelContainer,
 			Node node) throws InvalidSPDXAnalysisException {
-		Node rdfTypePredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE, 
+		Node rdfTypePredicate = modelContainer.getModel().getProperty(SpdxRdfConstants.RDF_NAMESPACE,
 				SpdxRdfConstants.RDF_PROP_TYPE).asNode();
 		Triple m = Triple.createMatch(node, rdfTypePredicate, null);
 		ExtendedIterator<Triple> tripleIter = modelContainer.getModel().getGraph().find(m);	// find the type(s)

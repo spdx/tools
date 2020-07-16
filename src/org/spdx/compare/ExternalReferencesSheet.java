@@ -37,11 +37,11 @@ import com.google.common.base.Objects;
  *
  */
 public class ExternalReferencesSheet extends AbstractSheet {
-	
+
 	private static class ExternalDocRefComparator implements Comparator<ExternalDocumentRef>, Serializable {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = -4558641025187339674L;
 
@@ -63,34 +63,34 @@ public class ExternalReferencesSheet extends AbstractSheet {
 						}
 					} else {
 						return retval;
-					}					
+					}
 				} else {
 					return 1;
 				}
 			} else {
 				return -1;
 			}
-		}	
+		}
 	}
-	
+
 	ExternalDocRefComparator externalDocRefComparator = new ExternalDocRefComparator();
 
-	
+
 	static final int NAMESPACE_COL = 0;
 	static final String NAMESPACE_TEXT_TITLE = "External Document Namespace";
 	static final int NAMESPACE_COL_WIDTH = 80;
-	
+
 	static final int CHECKSUM_COL = 1;
 	static final String CHECKSUM_TEXT_TITLE = "External Doc Checksum";
 	static final int CHECKSUM_COL_WIDTH = 55;
-	
+
 	static final int FIRST_DOC_ID_COL = 2;
 	static final int DOC_ID_COL_WIDTH = 30;
-	
+
 	public ExternalReferencesSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.spdxspreadsheet.AbstractSheet#verify()
 	 */
@@ -98,7 +98,7 @@ public class ExternalReferencesSheet extends AbstractSheet {
 	public String verify() {
 		return null;	// nothing to verify
 	}
-	
+
 	/**
 	 * @param wb
 	 * @param sheetName
@@ -117,13 +117,13 @@ public class ExternalReferencesSheet extends AbstractSheet {
 		Cell extractedHeaderCell = row.createCell(NAMESPACE_COL);
 		extractedHeaderCell.setCellStyle(headerStyle);
 		extractedHeaderCell.setCellValue(NAMESPACE_TEXT_TITLE);
-		
+
 		sheet.setColumnWidth(CHECKSUM_COL, CHECKSUM_COL_WIDTH*256);
 		sheet.setDefaultColumnStyle(CHECKSUM_COL, defaultStyle);
 		Cell checksumHeaderCell = row.createCell(CHECKSUM_COL);
 		checksumHeaderCell.setCellStyle(headerStyle);
 		checksumHeaderCell.setCellValue(CHECKSUM_TEXT_TITLE);
-		
+
 		for (int i = FIRST_DOC_ID_COL; i < MultiDocumentSpreadsheet.MAX_DOCUMENTS; i++) {
 			sheet.setColumnWidth(i, DOC_ID_COL_WIDTH*256);
 			sheet.setDefaultColumnStyle(i, defaultStyle);
@@ -131,11 +131,11 @@ public class ExternalReferencesSheet extends AbstractSheet {
 			cell.setCellStyle(headerStyle);
 		}
 	}
-	
+
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {
@@ -165,7 +165,7 @@ public class ExternalReferencesSheet extends AbstractSheet {
 					ExternalDocumentRef compareRef = externalRefs[i][refIndexes[i]];
                     if (Objects.equal(nextRef.getSpdxDocumentNamespace(),
 							compareRef.getSpdxDocumentNamespace()) &&
-							nextRef.equivalentConsideringNull(nextRef.getChecksum(), 
+							nextRef.equivalentConsideringNull(nextRef.getChecksum(),
 									compareRef.getChecksum())) {
 						Cell docIdCell = currentRow.createCell(FIRST_DOC_ID_COL+i);
 						docIdCell.setCellValue(externalRefs[i][refIndexes[i]].getExternalDocumentId());

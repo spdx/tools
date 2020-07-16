@@ -35,11 +35,11 @@ import org.spdx.spdxspreadsheet.AbstractSheet;
  *
  */
 public class DocumentAnnotationSheet extends AbstractSheet {
-	
+
 	private static class AnnotationComparator implements Comparator<Annotation>, Serializable {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -67,30 +67,30 @@ public class DocumentAnnotationSheet extends AbstractSheet {
 			} else {
 				return -1;
 			}
-		}	
+		}
 	}
-	
+
 	AnnotationComparator annotationComparator = new AnnotationComparator();
 
 	static final int ANNOTATOR_COL = 0;
 	static final int ANNOTATOR_COL_WIDTH = 40;
 	static final String ANNOTATOR_COL_TEXT_TITLE = "Annotator";
-	
+
 	static final int TYPE_COL = 1;
 	static final int TYPE_COL_WIDTH = 15;
 	static final String TYPE_COL_TEXT_TITLE = "Type";
-	
+
 	static final int COMMENT_COL = 2;
 	static final int COMMENT_COL_WIDTH = 70;
 	static final String COMMENT_COL_TEXT_TITLE = "Comment";
-	
+
 	static final int FIRST_DATE_COL = 3;
 	static final int DATE_COL_WIDTH = 25;
-	
+
 	public DocumentAnnotationSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
-	
+
 	/**
 	 * @param wb
 	 * @param sheetName
@@ -109,19 +109,19 @@ public class DocumentAnnotationSheet extends AbstractSheet {
 		Cell annotatorHeaderCell = row.createCell(ANNOTATOR_COL);
 		annotatorHeaderCell.setCellStyle(headerStyle);
 		annotatorHeaderCell.setCellValue(ANNOTATOR_COL_TEXT_TITLE);
-		
+
 		sheet.setColumnWidth(TYPE_COL, TYPE_COL_WIDTH*256);
 		sheet.setDefaultColumnStyle(TYPE_COL, defaultStyle);
 		Cell typeHeaderCell = row.createCell(TYPE_COL);
 		typeHeaderCell.setCellStyle(headerStyle);
 		typeHeaderCell.setCellValue(TYPE_COL_TEXT_TITLE);
-		
+
 		sheet.setColumnWidth(COMMENT_COL, COMMENT_COL_WIDTH*256);
 		sheet.setDefaultColumnStyle(COMMENT_COL, defaultStyle);
 		Cell commentHeaderCell = row.createCell(COMMENT_COL);
 		commentHeaderCell.setCellStyle(headerStyle);
 		commentHeaderCell.setCellValue(COMMENT_COL_TEXT_TITLE);
-		
+
 		for (int i = FIRST_DATE_COL; i < MultiDocumentSpreadsheet.MAX_DOCUMENTS; i++) {
 			sheet.setColumnWidth(i, DATE_COL_WIDTH*256);
 			sheet.setDefaultColumnStyle(i, defaultStyle);
@@ -129,11 +129,11 @@ public class DocumentAnnotationSheet extends AbstractSheet {
 			cell.setCellStyle(headerStyle);
 		}
 	}
-	
+
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {

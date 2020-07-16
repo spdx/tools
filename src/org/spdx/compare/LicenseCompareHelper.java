@@ -52,60 +52,60 @@ import com.google.common.collect.Maps;
  *
  */
 public class LicenseCompareHelper {
-	
+
 	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'();:\"/]+)((\\s|\\.|,|\\?|'|\"|\\(|\\)|;|:|/|$)+)";
 	protected static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
-	
+
 	protected static final ImmutableSet<String> PUNCTUATION = ImmutableSet.<String>builder()
 			.add(".").add(",").add("?").add("\"").add("'").add("(").add(")").add(";").add(":").add("/").build();
-	
+
 	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
 	protected static final ImmutableSet<String> SKIPPABLE_TOKENS = ImmutableSet.<String>builder()
 		.add("//").add("/*").add("*/").add("/**").add("#").add("##")
 		.add("*").add("**").add("\"\"\"").add("/").add("=begin").add("=end").build();
-	
+
 	protected static final Map<String, String> NORMALIZE_TOKENS = Maps.newHashMap();
-	
+
 	static {
 		//TODO: These should be moved to a property file
-		NORMALIZE_TOKENS.put("acknowledgment","acknowledgement");   
-		NORMALIZE_TOKENS.put("analogue","analog");   
-		NORMALIZE_TOKENS.put("analyse","analyze");   
-		NORMALIZE_TOKENS.put("artefact","artifact");   
-		NORMALIZE_TOKENS.put("authorisation","authorization");   
-		NORMALIZE_TOKENS.put("authorised","authorized");   
-		NORMALIZE_TOKENS.put("calibre","caliber");   
-		NORMALIZE_TOKENS.put("cancelled","canceled");   
-		NORMALIZE_TOKENS.put("apitalisations","apitalizations");   
-		NORMALIZE_TOKENS.put("catalogue","catalog");   
-		NORMALIZE_TOKENS.put("categorise","categorize");   
-		NORMALIZE_TOKENS.put("centre","center");   
-		NORMALIZE_TOKENS.put("emphasised","emphasized");   
-		NORMALIZE_TOKENS.put("favour","favor");   
-		NORMALIZE_TOKENS.put("favourite","favorite");   
-		NORMALIZE_TOKENS.put("fulfil","fulfill");   
-		NORMALIZE_TOKENS.put("fulfilment","fulfillment");   
-		NORMALIZE_TOKENS.put("initialise","initialize");   
-		NORMALIZE_TOKENS.put("judgment","judgement");   
-		NORMALIZE_TOKENS.put("labelling","labeling");   
-		NORMALIZE_TOKENS.put("labour","labor");   
-		NORMALIZE_TOKENS.put("licence","license");   
-		NORMALIZE_TOKENS.put("maximise","maximize");   
-		NORMALIZE_TOKENS.put("modelled","modeled");   
-		NORMALIZE_TOKENS.put("modelling","modeling");   
-		NORMALIZE_TOKENS.put("offence","offense");   
-		NORMALIZE_TOKENS.put("optimise","optimize");   
-		NORMALIZE_TOKENS.put("organisation","organization");   
-		NORMALIZE_TOKENS.put("organise","organize");   
-		NORMALIZE_TOKENS.put("practise","practice");   
-		NORMALIZE_TOKENS.put("programme","program");   
-		NORMALIZE_TOKENS.put("realise","realize");   
-		NORMALIZE_TOKENS.put("recognise","recognize");   
-		NORMALIZE_TOKENS.put("signalling","signaling");   
-		NORMALIZE_TOKENS.put("utilisation","utilization");   
-		NORMALIZE_TOKENS.put("whilst","while");   
-		NORMALIZE_TOKENS.put("wilful","wilfull");   
-		NORMALIZE_TOKENS.put("non-commercial","noncommercial");    
+		NORMALIZE_TOKENS.put("acknowledgment","acknowledgement");
+		NORMALIZE_TOKENS.put("analogue","analog");
+		NORMALIZE_TOKENS.put("analyse","analyze");
+		NORMALIZE_TOKENS.put("artefact","artifact");
+		NORMALIZE_TOKENS.put("authorisation","authorization");
+		NORMALIZE_TOKENS.put("authorised","authorized");
+		NORMALIZE_TOKENS.put("calibre","caliber");
+		NORMALIZE_TOKENS.put("cancelled","canceled");
+		NORMALIZE_TOKENS.put("apitalisations","apitalizations");
+		NORMALIZE_TOKENS.put("catalogue","catalog");
+		NORMALIZE_TOKENS.put("categorise","categorize");
+		NORMALIZE_TOKENS.put("centre","center");
+		NORMALIZE_TOKENS.put("emphasised","emphasized");
+		NORMALIZE_TOKENS.put("favour","favor");
+		NORMALIZE_TOKENS.put("favourite","favorite");
+		NORMALIZE_TOKENS.put("fulfil","fulfill");
+		NORMALIZE_TOKENS.put("fulfilment","fulfillment");
+		NORMALIZE_TOKENS.put("initialise","initialize");
+		NORMALIZE_TOKENS.put("judgment","judgement");
+		NORMALIZE_TOKENS.put("labelling","labeling");
+		NORMALIZE_TOKENS.put("labour","labor");
+		NORMALIZE_TOKENS.put("licence","license");
+		NORMALIZE_TOKENS.put("maximise","maximize");
+		NORMALIZE_TOKENS.put("modelled","modeled");
+		NORMALIZE_TOKENS.put("modelling","modeling");
+		NORMALIZE_TOKENS.put("offence","offense");
+		NORMALIZE_TOKENS.put("optimise","optimize");
+		NORMALIZE_TOKENS.put("organisation","organization");
+		NORMALIZE_TOKENS.put("organise","organize");
+		NORMALIZE_TOKENS.put("practise","practice");
+		NORMALIZE_TOKENS.put("programme","program");
+		NORMALIZE_TOKENS.put("realise","realize");
+		NORMALIZE_TOKENS.put("recognise","recognize");
+		NORMALIZE_TOKENS.put("signalling","signaling");
+		NORMALIZE_TOKENS.put("utilisation","utilization");
+		NORMALIZE_TOKENS.put("whilst","while");
+		NORMALIZE_TOKENS.put("wilful","wilfull");
+		NORMALIZE_TOKENS.put("non-commercial","noncommercial");
 		NORMALIZE_TOKENS.put("copyright-owner", "copyright-holder");
 		NORMALIZE_TOKENS.put("sublicense", "sub-license");
 		NORMALIZE_TOKENS.put("non-infringement", "noninfringement");
@@ -113,8 +113,8 @@ public class LicenseCompareHelper {
 		NORMALIZE_TOKENS.put("copyright", "(c)");
 		NORMALIZE_TOKENS.put("\"", "'");
 	}
-	
-	
+
+
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
 	static final Pattern SPACE_PATTERN = Pattern.compile("[\\u202F\\u2007\\u2060]");
 	static final Pattern PER_CENT_PATTERN = Pattern.compile("per cent", Pattern.CASE_INSENSITIVE);
@@ -127,7 +127,7 @@ public class LicenseCompareHelper {
 	static final Pattern COPYRIGHT_HOLDER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*holder", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNERS_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owners", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owner", Pattern.CASE_INSENSITIVE);
-	
+
 	//TODO: Add equiv for quotes
 	/**
 	 * Returns true if two sets of license text is considered a match per
@@ -141,7 +141,7 @@ public class LicenseCompareHelper {
 		//TODO: Handle comment characters without white space before text
 		//TODO: Handle bullets and numbering
 		// Need to take care of multi-word equivalent words - convert to single words with hypens
-		
+
 		// tokenize each of the strings
 		if (licenseTextA == null) {
 			return (licenseTextB == null || licenseTextB.isEmpty());
@@ -169,7 +169,7 @@ public class LicenseCompareHelper {
 				if (nextAToken != null) {
 					return false;	// there is more stuff in the license text B, so not equal
 				}
-			} else if (tokensEquivalent(nextAToken, nextBToken)) { 
+			} else if (tokensEquivalent(nextAToken, nextBToken)) {
 				// just move onto the next set of tokens
 				nextAToken = getTokenAt(licenseATokens, aTokenCounter++);
 				nextBToken = getTokenAt(licenseBTokens, bTokenCounter++);
@@ -196,14 +196,14 @@ public class LicenseCompareHelper {
 		}
 		return (nextBToken == null);
 	}
-	
+
 	/**
 	 * Normalize quotes and no-break spaces
 	 * @param s
 	 * @return
 	 */
 	static String normalizeText(String s) {
-		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes 
+		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes
 		// then normalize non-breaking spaces to spaces
 		return s.replaceAll("‘|’|‛|‚|`", "'")	// Take care of single quotes first
 				.replaceAll("http://", "https://") // Normalize the http protocol scheme
@@ -213,7 +213,7 @@ public class LicenseCompareHelper {
 				.replaceAll("—|–","-")			// replace em dash, en dash with simple dash
 				.replaceAll("\\u2028", "\n");	// replace line separator with newline since Java does not handle the former well
 	}
-	
+
 	/**
 	 * Locate the original text starting with the start token and ending with the end token
 	 * @param fullLicenseText
@@ -222,7 +222,7 @@ public class LicenseCompareHelper {
 	 * @param tokenToLocation
 	 * @return
 	 */
-	public static String locateOriginalText(String fullLicenseText, int startToken, int endToken,  
+	public static String locateOriginalText(String fullLicenseText, int startToken, int endToken,
 			Map<Integer, LineColumn> tokenToLocation, String[] tokens) {
 		if (startToken > endToken) {
 			return "";
@@ -273,7 +273,7 @@ public class LicenseCompareHelper {
 					sb.append(line.substring(0, end.getColumn()+end.getLen()));
 				}
 				return sb.toString();
-			}			
+			}
 		} catch (IOException e) {
 			// just build with spaces - not ideal, but close enough most of the time
 			StringBuilder sb = new StringBuilder(tokens[startToken]);
@@ -292,13 +292,13 @@ public class LicenseCompareHelper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Tokenizes the license text, normalizes quotes, lowercases and converts multi-words for better equiv. comparisons
 	 * @param tokenLocations location for all of the tokens
 	 * @param licenseText
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static String[] tokenizeLicenseText(String licenseText, Map<Integer, LineColumn> tokenToLocation) {
 		String textToTokenize = normalizeText(replaceMultWord(replaceSpace(licenseText))).toLowerCase();
@@ -353,7 +353,7 @@ public class LicenseCompareHelper {
 		}
 		return tokens.toArray(new String[tokens.size()]);
 	}
-	
+
 	/**
 	 * @param text
 	 * @return the first token in the license text
@@ -368,7 +368,7 @@ public class LicenseCompareHelper {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param text
 	 * @return true if the text contains a single token
@@ -390,7 +390,7 @@ public class LicenseCompareHelper {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Replace different forms of space with a normalized space
 	 * @param s
@@ -430,7 +430,7 @@ public class LicenseCompareHelper {
 		retval = m.replaceAll("percent\n");
 		return retval;
 	}
-	
+
 	/**
 	 * Just fetches the string at the index checking for range.  Returns null if index is out of range.
 	 * @param tokens
@@ -500,7 +500,7 @@ public class LicenseCompareHelper {
 	 * @param license2
 	 * @param xlationMap Mapping the license ID's from license 1 to license 2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	public static boolean isLicenseEqual(AnyLicenseInfo license1,
 			AnyLicenseInfo license2, Map<String, String> xlationMap) throws SpdxCompareException {
@@ -540,7 +540,7 @@ public class LicenseCompareHelper {
 	 * @param license1
 	 * @param license2
 	 * @return
-	 * @throws SpdxCompareException 
+	 * @throws SpdxCompareException
 	 */
 	private static boolean isLicenseSetsEqual(LicenseSet license1, LicenseSet license2, Map<String, String> xlationMap) throws SpdxCompareException {
 		// note - order does not matter
@@ -569,7 +569,7 @@ public class LicenseCompareHelper {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Compares license text to the license text of an SPDX Standard License
 	 * @param license SPDX Standard License to compare
@@ -597,7 +597,7 @@ public class LicenseCompareHelper {
 		}
 		return compareTemplateOutputHandler.getDifferences();
 	}
-	
+
 	/**
 	 * Compares exception text to the exception text of an SPDX Standard exception
 	 * @param exception SPDX Standard exception to compare
@@ -625,7 +625,7 @@ public class LicenseCompareHelper {
 		}
 		return compareTemplateOutputHandler.getDifferences();
 	}
-	
+
 	/**
 	 * Returns a list of SPDX Standard License ID's that match the text provided using
 	 * the SPDX matching guidelines.

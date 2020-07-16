@@ -37,9 +37,9 @@ import org.spdx.tag.CommonCode;
  * Converts a spreadsheet to a tag-value format Usage: SpreadsheetToTag
  * spreadsheetfile.xls spdxfile.spdx where spreadsheetfile.xls is a valid SPDX
  * Spreadsheet and spdxfile.spdx is the output SPDX tag-value file.
- * 
+ *
  * @author Rana Rahal, Protecode Inc.
- * 
+ *
  */
 public class SpreadsheetToTag {
 
@@ -68,9 +68,9 @@ public class SpreadsheetToTag {
 			return;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the Spreadsheet file to be converted, args[1] is the result Tag Value file name
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * @return Warnings of the conversion, displayed to the user

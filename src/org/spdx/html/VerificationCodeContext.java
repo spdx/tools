@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
  *
  */
 public class VerificationCodeContext {
-	
+
 	SpdxPackageVerificationCode code = null;
 	Exception error = null;
 
@@ -58,7 +58,7 @@ public class VerificationCodeContext {
 			return code.getValue();
 		}
 	}
-	
+
 	public List<String> packageVerificationCodeExcludedFile() {
 		List<String> retval = Lists.newArrayList();
 		if (code != null) {

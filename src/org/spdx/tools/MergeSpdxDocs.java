@@ -46,7 +46,7 @@ import org.apache.jena.rdf.model.Model;
  * Usage: MergeSpdxDocs doc1 doc2 doc3 ... [output]
  * where doc1 doc2 doc3 are SPDX documents either RDF/XML or tag/value format
  * And doc1 will be used as master document. The output SPDX document is built based on the master document.
- * 
+ *
  * @author Gang Ling
  *
  */
@@ -54,9 +54,9 @@ public class MergeSpdxDocs {
 
 	static final int MIN_ARGS = 2;
 	static final int ERROR_STATUS =1;
-	
+
 	/**
-	 * 
+	 *
 	 * @param args (input SPDX documents; the last item in the args will be the output file name)
 	 */
 	public static void main(String[] args){
@@ -71,14 +71,14 @@ public class MergeSpdxDocs {
 				System.out.println("Output file "+args[args.length-1]+" already exist");
 				System.exit(ERROR_STATUS);
 			}
-			
-			//store inputed SPDX documents in the array "mergeDocs" for later parsing 
+
+			//store inputed SPDX documents in the array "mergeDocs" for later parsing
 			SpdxDocument[] mergeDocs = new SpdxDocument[args.length-1];
 
 			String[] docNames = new String[args.length-1];
 			@SuppressWarnings("unchecked")
 			List<String>[] verficationError = new List[args.length-1];
-			
+
 			for(int i = 0; i < args.length-1; i++){
 				try{
 					List<String> warnings = new ArrayList<String>();
@@ -96,20 +96,20 @@ public class MergeSpdxDocs {
 					verficationError[i] = mergeDocs[i].verify();
 					if(verficationError[i] != null && verficationError[i].size() > 0){
 						System.out.println("Warning: "+docNames[i]+" contains verfication errors.");
-					}			
+					}
 				}catch(SpdxCompareException e){
 					System.out.println("Error opening SPDX document "+args[i]+" : "+e.getMessage());
 					System.exit(ERROR_STATUS);
 				}
 			}
-			
+
 			//separate master document and sub-documents
 			SpdxDocument master = mergeDocs[0];
 			SpdxDocument[] subDocs = new SpdxDocument[mergeDocs.length-1];
 			for(int k = 0; k < subDocs.length; k++){
 				subDocs[k] = mergeDocs[k+1];
 			}
-			
+
 			FileOutputStream out;
 			try{
 				out = new FileOutputStream(spdxRdfFile);
@@ -119,7 +119,7 @@ public class MergeSpdxDocs {
 				usage();
 				return;
 			}
-			
+
 			//create outputDoc, then clone master into outputDoc
 			SpdxDocument outputDoc = null;
 			String masterDocUri = master.getDocumentContainer().getDocumentNamespace();
@@ -141,9 +141,9 @@ public class MergeSpdxDocs {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				return;	
+				return;
 			}
-			
+
 			//obtain package list from master document
 			List <SpdxPackage> packageInfoResult = null;
 			try {
@@ -151,29 +151,29 @@ public class MergeSpdxDocs {
 			} catch (InvalidSPDXAnalysisException e1) {
 				System.out.println("Error obtaining master's packages: "+e1.getMessage());
 			}
-						
+
 			ExtractedLicenseInfo[] licInfoResult = null;
 			SpdxLicenseMapper licenseMapper = new SpdxLicenseMapper();
-			
+
 			try{
 				SpdxLicenseInfoMerger nonStandardLicMerger = new SpdxLicenseInfoMerger(outputDoc, licenseMapper);
 				//merge non-standard license information
 				licInfoResult = nonStandardLicMerger.mergeNonStdLic(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
-				System.out.println("Error merging documents' SPDX Non-standard License Information: "+e.getMessage());				
+				System.out.println("Error merging documents' SPDX Non-standard License Information: "+e.getMessage());
 				System.exit(ERROR_STATUS);
 			}
-				
+
 			SpdxFile[] fileInfoResult = null;
 			try{
 				SpdxFileInfoMerger fileInfoMerger = new SpdxFileInfoMerger(master, licenseMapper);
-				//merge file information 
+				//merge file information
 				fileInfoResult = fileInfoMerger.mergeFileInfo(subDocs);
 			}catch(InvalidSPDXAnalysisException e){
 				System.out.println("Error merging SPDX files' Information: "+e.getMessage());
 				System.exit(ERROR_STATUS);
 			}
-	
+
 			try{
 				SpdxPackageInfoMerger packInfoMerger = new SpdxPackageInfoMerger(packageInfoResult, subDocs, licenseMapper);
 				try {
@@ -187,8 +187,8 @@ public class MergeSpdxDocs {
 				System.out.println("Error merging SPDX Non-standard License Information: "+e.getMessage());
 				System.exit(ERROR_STATUS);
 			}
-			
-			try{			
+
+			try{
 				//set document review information as empty array
 				SPDXReview[] reviewInfoResult = new SPDXReview[0];
 				outputDoc.setReviewers(reviewInfoResult);
@@ -196,7 +196,7 @@ public class MergeSpdxDocs {
 				outputDoc.setSpecVersion(master.getSpecVersion());
 				//set document creator information
 				outputDoc.setCreationInfo(master.getCreationInfo());
-				//set document comment information 
+				//set document comment information
 				outputDoc.setComment(master.getComment());
 				//set document data license information
 				outputDoc.setDataLicense(master.getDataLicense());
@@ -206,7 +206,7 @@ public class MergeSpdxDocs {
 //				outputDoc.getSpdxPackage().setLicenseDeclared(packageInfoResult.getLicenseDeclared());
 				//set package's file information
 //				outputDoc.getSpdxPackage().setFiles(fileInfoResult);
-				//set package's license comments information 
+				//set package's license comments information
 //				outputDoc.getSpdxPackage().setLicenseComments(packageInfoResult.getLicenseComments());
 				//set package's verification code
 //				outputDoc.getSpdxPackage().setPackageVerificationCode(packageInfoResult.getPackageVerificationCode());
@@ -222,7 +222,7 @@ public class MergeSpdxDocs {
 				return;
 			}
 
-			try{	
+			try{
 				model.write(out, "RDF/XML-ABBREV");
 			}catch(Exception e){
 				System.out.println("Error writing to the output file "+e.getMessage());
@@ -235,12 +235,12 @@ public class MergeSpdxDocs {
 				}
 			 }
 			}
-			
+
 	}
-	
+
     /**
-     * 
-     */	
+     *
+     */
     private static void usage(){
     		System.out.println("Usage: doc1 doc2 doc3...[output]");
     		System.out.println("where doc1, doc2, doc3... is a serial of vaild SPDX documents in RDF/XML format");

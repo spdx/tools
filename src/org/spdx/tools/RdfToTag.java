@@ -49,7 +49,7 @@ import org.spdx.tag.CommonCode;
  * Translates an RDF XML file to a tag-value format Usage: RdfToTag
  * rdfxmlfile.rdf spdxfile.spdx where rdfxmlfile.rdf is a valid SPDX RDF XML
  * file and spdxfile.spdx is the output SPDX tag-value file.
- * 
+ *
  * @author Rana Rahal, Protecode Inc.
  */
 public class RdfToTag {
@@ -80,7 +80,7 @@ public class RdfToTag {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param args args[0] is the RDF file to be converted, args[1] is the result Tag file name
 	 * @throws OnlineToolException Exception caught by JPype and displayed to the user
 	 * @return Warnings of the conversion, displayed to the user
@@ -112,7 +112,7 @@ public class RdfToTag {
 			} catch (IOException e1) {
 				throw new OnlineToolException("Could not write to the new SPDX Tag file "
 						+ args[1] +  "due to error " + e1.getMessage());
-				
+
 			}
 			SpdxDocument doc = null;
 			try {
@@ -154,7 +154,7 @@ public class RdfToTag {
 		}
 		return verify;
 	}
-	
+
 	private static void usage() {
 		System.out
 				.println("Usage: RdfToTag rdfxmlfile.rdf spdxfile.spdx\n"

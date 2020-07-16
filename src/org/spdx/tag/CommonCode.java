@@ -70,12 +70,12 @@ import com.google.common.collect.Lists;
 /**
  * Define Common methods used by Tag-Value and SPDXViewer to print the SPDX
  * document.
- * 
+ *
  * @author Rana Rahal, Protecode Inc.
  */
 @SuppressWarnings("deprecation")
 public class CommonCode {
-	
+
 
 	/**
 	 * @param doc
@@ -149,14 +149,14 @@ public class CommonCode {
 		if (doc.getCreationInfo().getComment() != null
 				&& !doc.getCreationInfo().getComment().isEmpty()) {
 			println(out, constants.getProperty("PROP_CREATION_COMMENT")
-					+ constants.getProperty("PROP_BEGIN_TEXT") 
-					+ doc.getCreationInfo().getComment() 
+					+ constants.getProperty("PROP_BEGIN_TEXT")
+					+ doc.getCreationInfo().getComment()
 					+ constants.getProperty("PROP_END_TEXT"));
 		}
 		// License list version
 		if (doc.getCreationInfo().getLicenseListVersion() != null &&
 				!doc.getCreationInfo().getLicenseListVersion().isEmpty()) {
-			println(out, constants.getProperty("PROP_LICENSE_LIST_VERSION") + 
+			println(out, constants.getProperty("PROP_LICENSE_LIST_VERSION") +
 					doc.getCreationInfo().getLicenseListVersion());
 		}
 		printElementAnnotationsRelationships(doc, out, constants, "PROP_DOCUMENT_NAME", "PROP_SPDX_COMMENT");
@@ -213,7 +213,7 @@ public class CommonCode {
 		}
 		// Reviewers
 		SPDXReview[] reviewedBy = doc.getReviewers();
-		
+
 		if (reviewedBy != null && reviewedBy.length > 0) {
 			println(out, constants.getProperty("REVIEW_INFO_HEADER"));
 			for (int i = 0; i < reviewedBy.length; i++) {
@@ -224,8 +224,8 @@ public class CommonCode {
 				if (reviewedBy[i].getComment() != null
 						&& !reviewedBy[i].getComment().isEmpty()) {
 					println(out, constants.getProperty("PROP_REVIEW_COMMENT")
-							+ constants.getProperty("PROP_BEGIN_TEXT") 
-							+ reviewedBy[i].getComment() 
+							+ constants.getProperty("PROP_BEGIN_TEXT")
+							+ reviewedBy[i].getComment()
 							+ constants.getProperty("PROP_END_TEXT"));
 				}
 				println(out, "");
@@ -237,7 +237,7 @@ public class CommonCode {
 	 * @param spdxSnippet
 	 * @param out
 	 * @param constants
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printSnippet(SpdxSnippet spdxSnippet, PrintWriter out,
 			Properties constants) throws InvalidSPDXAnalysisException {
@@ -245,11 +245,11 @@ public class CommonCode {
 		// NOTE: We can't call the print element properties since the order for tag/value is different for snippets
 		println(out, constants.getProperty("PROP_SNIPPET_SPDX_ID") + spdxSnippet.getId());
 		if (spdxSnippet.getSnippetFromFile() != null) {
-			println(out, constants.getProperty("PROP_SNIPPET_FROM_FILE_ID") + 
+			println(out, constants.getProperty("PROP_SNIPPET_FROM_FILE_ID") +
 					spdxSnippet.getSnippetFromFile().getId());
 		}
 		if (spdxSnippet.getByteRange() != null) {
-			println(out, constants.getProperty("PROP_SNIPPET_BYTE_RANGE") + 
+			println(out, constants.getProperty("PROP_SNIPPET_BYTE_RANGE") +
 					formatPointerRange(spdxSnippet.getByteRange()));
 		}
 		if (spdxSnippet.getLineRange() != null) {
@@ -280,7 +280,7 @@ public class CommonCode {
 		}
 		if (spdxSnippet.getName() != null && !spdxSnippet.getName().trim().isEmpty()) {
 			println(out, constants.getProperty("PROP_SNIPPET_NAME") +
-					spdxSnippet.getName());	
+					spdxSnippet.getName());
 		}
 		println(out, "");
 	}
@@ -289,7 +289,7 @@ public class CommonCode {
 	 * Format a start end pointer into a numeric range
 	 * @param pointer
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static String formatPointerRange(StartEndPointer pointer) throws InvalidSPDXAnalysisException {
 		String start = "[MISSING]";
@@ -315,7 +315,7 @@ public class CommonCode {
 	 * @param externalDocumentRef
 	 * @param out
 	 * @param constants
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printExternalDocumentRef(
 			ExternalDocumentRef externalDocumentRef, PrintWriter out,
@@ -334,7 +334,7 @@ public class CommonCode {
 			id = "[UNSPECIFIED]";
 		}
 		println(out, constants.getProperty("PROP_EXTERNAL_DOC_URI") +
-					id + " " + uri + " SHA1: " + sha1);	
+					id + " " + uri + " SHA1: " + sha1);
 	}
 
 	/**
@@ -420,7 +420,7 @@ public class CommonCode {
 					constants.getProperty("PROP_LICENSE_ID") + license.getLicenseId());
 		}
 		if (license.getExtractedText() != null && !license.getExtractedText().isEmpty()) {
-			println(out, constants.getProperty("PROP_EXTRACTED_TEXT") 
+			println(out, constants.getProperty("PROP_EXTRACTED_TEXT")
 					+ constants.getProperty("PROP_BEGIN_TEXT")
 					+ license.getExtractedText() + constants.getProperty("PROP_END_TEXT"));
 		}
@@ -495,18 +495,18 @@ public class CommonCode {
           String[] excludedFiles = pkg.getPackageVerificationCode().getExcludedFileNames();
           if (excludedFiles.length != 0) {
               StringBuilder excludedFilesBuilder = new StringBuilder("(");
-                
+
               for (String excludedFile : excludedFiles) {
                 if(excludedFilesBuilder.length() > 0){
                     excludedFilesBuilder.append(", ");
                 }
-                
+
                 excludedFilesBuilder.append(excludedFile);
               }
-              
+
               excludedFilesBuilder.append(')');
               code += excludedFilesBuilder.toString();
-          }                    
+          }
           println(out, code);
         }
 		// Checksums
@@ -518,14 +518,14 @@ public class CommonCode {
 		}
 		// Home page
 		if (pkg.getHomepage() != null && !pkg.getHomepage().isEmpty()) {
-			println(out, constants.getProperty("PROP_PACKAGE_HOMEPAGE_URL") + 
+			println(out, constants.getProperty("PROP_PACKAGE_HOMEPAGE_URL") +
 					pkg.getHomepage());
 		}
 		// Source info
 		if (pkg.getSourceInfo() != null && !pkg.getSourceInfo().isEmpty()) {
-			println(out, 
+			println(out,
 					constants.getProperty("PROP_PACKAGE_SOURCE_INFO")
-							+ constants.getProperty("PROP_BEGIN_TEXT") 
+							+ constants.getProperty("PROP_BEGIN_TEXT")
 							+ pkg.getSourceInfo()
 							+ constants.getProperty("PROP_END_TEXT"));
 		}
@@ -554,28 +554,28 @@ public class CommonCode {
 		if (pkg.getLicenseComments() != null
 				&& !pkg.getLicenseComments().isEmpty()) {
 			println(out, constants.getProperty("PROP_PACKAGE_LICENSE_COMMENT")
-					+ constants.getProperty("PROP_BEGIN_TEXT") 
-					+ pkg.getLicenseComments() + 
+					+ constants.getProperty("PROP_BEGIN_TEXT")
+					+ pkg.getLicenseComments() +
 					constants.getProperty("PROP_END_TEXT"));
 		}
 		// Declared copyright
 		if (pkg.getCopyrightText() != null
 				&& !pkg.getCopyrightText().isEmpty()) {
 			println(out, constants.getProperty("PROP_PACKAGE_DECLARED_COPYRIGHT")
-					+ constants.getProperty("PROP_BEGIN_TEXT") 
+					+ constants.getProperty("PROP_BEGIN_TEXT")
 					+ pkg.getCopyrightText() + constants.getProperty("PROP_END_TEXT"));
 		}
 		// Short description
 		if (pkg.getSummary() != null
 				&& !pkg.getSummary().isEmpty()) {
 			println(out, constants.getProperty("PROP_PACKAGE_SHORT_DESC")
-					+ constants.getProperty("PROP_BEGIN_TEXT") 
+					+ constants.getProperty("PROP_BEGIN_TEXT")
 					+ pkg.getSummary() + constants.getProperty("PROP_END_TEXT"));
 		}
 		// Description
 		if (pkg.getDescription() != null && !pkg.getDescription().isEmpty()) {
 			println(out, constants.getProperty("PROP_PACKAGE_DESCRIPTION")
-					+ constants.getProperty("PROP_BEGIN_TEXT") 
+					+ constants.getProperty("PROP_BEGIN_TEXT")
 					+ pkg.getDescription() + constants.getProperty("PROP_END_TEXT"));
 		}
 		// Attribution text
@@ -583,7 +583,7 @@ public class CommonCode {
 		if (attributionText != null) {
 			for (String att:attributionText) {
 				println(out, constants.getProperty("PROP_PACKAGE_ATTRIBUTION_TEXT")
-						+ constants.getProperty("PROP_BEGIN_TEXT") 
+						+ constants.getProperty("PROP_BEGIN_TEXT")
 						+ att + constants.getProperty("PROP_END_TEXT"));
 			}
 		}
@@ -606,7 +606,7 @@ public class CommonCode {
                     List<SpdxFile> sortedFileList = Lists.newArrayList();
                     /* Sort the SPDX files before printout */
                     sortedFileList = Arrays.asList(pkg.getFiles());
-                    Collections.sort(sortedFileList);                    
+                    Collections.sort(sortedFileList);
                     println(out, "");
 			println(out, constants.getProperty("FILE_INFO_HEADER"));
                         /* Print out sorted files */
@@ -626,7 +626,7 @@ public class CommonCode {
 	 * @param constants
 	 * @param externalRef
 	 * @param docNamespace
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	private static void printExternalRef(PrintWriter out, Properties constants,
 			ExternalRef externalRef, String docNamespace) throws InvalidSPDXAnalysisException {
@@ -637,7 +637,7 @@ public class CommonCode {
 			category = externalRef.getReferenceCategory().getTag();
 		}
 		String referenceType = null;
-		if (externalRef.getReferenceType() == null || 
+		if (externalRef.getReferenceType() == null ||
 				externalRef.getReferenceType().getReferenceTypeUri() == null) {
 			referenceType = "[MISSING]";
 		} else {
@@ -657,7 +657,7 @@ public class CommonCode {
 		if (referenceLocator == null) {
 			referenceLocator = "[MISSING]";
 		}
-		println(out, constants.getProperty("PROP_EXTERNAL_REFERENCE") + 
+		println(out, constants.getProperty("PROP_EXTERNAL_REFERENCE") +
 				category + " " + referenceType + " " + referenceLocator);
 		if (externalRef.getComment() != null) {
 			println(out, constants.getProperty("PROP_EXTERNAL_REFERENCE_COMMENT") + externalRef.getComment());
@@ -673,7 +673,7 @@ public class CommonCode {
 	private static void printChecksum(Checksum checksum, PrintWriter out,
 			Properties constants, String checksumProperty) {
 		out.println(constants.getProperty(checksumProperty)
-				+ Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(checksum.getAlgorithm()) 
+				+ Checksum.CHECKSUM_ALGORITHM_TO_TAG.get(checksum.getAlgorithm())
 				+ " " + checksum.getValue());
 	}
 
@@ -682,7 +682,7 @@ public class CommonCode {
 	 */
 	private static void printFile(SpdxFile file, PrintWriter out,
 			Properties constants) {
-		printElementProperties(file, out, constants, "PROP_FILE_NAME", 
+		printElementProperties(file, out, constants, "PROP_FILE_NAME",
 				"PROP_FILE_COMMENT");
 		// type
 		FileType[] fileTypes = file.getFileTypes();
@@ -720,7 +720,7 @@ public class CommonCode {
 		}
 		// file copyright
 		if (file.getCopyrightText() != null && !file.getCopyrightText().isEmpty()) {
-			println(out, constants.getProperty("PROP_FILE_COPYRIGHT") 
+			println(out, constants.getProperty("PROP_FILE_COPYRIGHT")
 					+ constants.getProperty("PROP_BEGIN_TEXT")
 					+ file.getCopyrightText() + constants.getProperty("PROP_END_TEXT"));
 		}
@@ -732,16 +732,16 @@ public class CommonCode {
 		}
 		// File notice
 		if (file.getNoticeText() != null && !file.getNoticeText().isEmpty()) {
-			println(out, constants.getProperty("PROP_FILE_NOTICE_TEXT") + 
+			println(out, constants.getProperty("PROP_FILE_NOTICE_TEXT") +
 					constants.getProperty("PROP_BEGIN_TEXT") +
-					file.getNoticeText() + 
+					file.getNoticeText() +
 					constants.getProperty("PROP_END_TEXT"));
 		}
 		// file attribution text
 		String[] attributionText = file.getAttributionText();
 		if (attributionText != null) {
 			for (String att:attributionText) {
-				println(out, constants.getProperty("PROP_FILE_ATTRIBUTION_TEXT") 
+				println(out, constants.getProperty("PROP_FILE_ATTRIBUTION_TEXT")
 						+ constants.getProperty("PROP_BEGIN_TEXT")
 						+ att + constants.getProperty("PROP_END_TEXT"));
 			}
@@ -760,7 +760,7 @@ public class CommonCode {
 				println(out, constants.getProperty("PROP_FILE_DEPENDENCY") + fileDepdency.getName());
 			}
 		}
-		printElementAnnotationsRelationships(file, out, constants, "PROP_FILE_NAME", 
+		printElementAnnotationsRelationships(file, out, constants, "PROP_FILE_NAME",
 				"PROP_FILE_COMMENT");
 	}
 

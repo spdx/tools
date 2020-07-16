@@ -31,13 +31,13 @@ import org.apache.jena.iri.IRIFactory;
  *
  */
 public class SpdxVerificationHelper {
-	
+
 	static IRIFactory iriFactory = IRIFactory.iriImplementation();
 
 	static final String[] VALID_CREATOR_PREFIXES = new String[] {SpdxRdfConstants.CREATOR_PREFIX_PERSON,
 		SpdxRdfConstants.CREATOR_PREFIX_ORGANIZATION, SpdxRdfConstants.CREATOR_PREFIX_TOOL};
 	static final String[] VALID_ORIGINATOR_SUPPLIER_PREFIXES = new String[] {SpdxRdfConstants.NOASSERTION_VALUE, "Person:", "Organization:"};
-	
+
 	public static String verifyNonStdLicenseid(String licenseId) {
 		if (SpdxRdfConstants.LICENSE_ID_PATTERN.matcher(licenseId).matches()) {
 			return null;
@@ -46,23 +46,23 @@ public class SpdxVerificationHelper {
 					"and made up of the characters from the set 'a'-'z', 'A'-'Z', '0'-'9', '+', '_', '.', and '-'.";
 		}
 	}
-	
+
 	public static String verifyChecksumString(String checksum) {
 		return verifyChecksumString(checksum, ChecksumAlgorithm.checksumAlgorithm_sha1);
 	}
 	public static String verifyChecksumString(String checksum, ChecksumAlgorithm algorithm) {
-		
+
 		for (int i = 0; i < checksum.length(); i++) {
 			char c = checksum.charAt(i);
 			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
 				return "Invalid checksum string character at position "+String.valueOf(i);
 			}
 		}
-		
+
 		if (ChecksumAlgorithm.checksumAlgorithm_sha1.equals(algorithm) && checksum.length() != 40) {
 			return "Invalid number of characters for checksum";
 		}
-	
+
 		if (ChecksumAlgorithm.checksumAlgorithm_sha256.equals(algorithm) && checksum.length() != 64) {
 			return "Invalid number of characters for checksum";
 		}
@@ -109,7 +109,7 @@ public class SpdxVerificationHelper {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Verifies the originator string
 	 * @param originator
@@ -118,7 +118,7 @@ public class SpdxVerificationHelper {
 	public static String verifyOriginator(String originator) {
 		return verifyOriginatorOrSupplier(originator);
 	}
-	
+
 	/**
 	 * Verifies the supplier String
 	 * @param supplier
@@ -153,7 +153,7 @@ public class SpdxVerificationHelper {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @param creationDate
 	 * @return
@@ -189,7 +189,7 @@ public class SpdxVerificationHelper {
 	public static boolean isValidUri(String uri) {
 		return !iriFactory.create(uri).hasViolation(false);
 	}
-	
+
 	/**
 	 * Returns true if s1 equals s2 taking into account the possibility of null values
 	 * @param s1
@@ -205,7 +205,7 @@ public class SpdxVerificationHelper {
 		}
 		return s1.equals(s2);
 	}
-	
+
 	/**
 	 * Returns true if the array s1 contains the same objects as s2 independent of order
 	 * and allowing for null values

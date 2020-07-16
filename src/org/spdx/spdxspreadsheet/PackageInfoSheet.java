@@ -28,16 +28,16 @@ import org.spdx.rdfparser.model.SpdxPackage;
  *
  */
 public abstract class PackageInfoSheet extends AbstractSheet {
-	
+
 	protected String version;
 
 	public PackageInfoSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
 		this.version = version;
 	}
-	
+
 	public abstract void add(SpdxPackage pkgInfo) throws InvalidSPDXAnalysisException;
-		
+
 	public static String licensesToString(AnyLicenseInfo[] licenses) {
 		if (licenses == null || licenses.length == 0) {
 			return "";
@@ -52,7 +52,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 			return sb.toString();
 		}
 	}
-	
+
 	public static void create(Workbook wb, String sheetName) {
 		PackageInfoSheetV2d2.create(wb, sheetName);
 	}
@@ -66,7 +66,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	 */
 	public static PackageInfoSheet openVersion(Workbook workbook,
 			String packageInfoSheetName, String version) {
-		
+
 		if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_1) <= 0) {
 			return new PackageInfoSheetV9d1(workbook, packageInfoSheetName, version);
 		} else if (version.compareTo(SPDXSpreadsheet.VERSION_0_9_2) <= 0) {
@@ -87,7 +87,7 @@ public abstract class PackageInfoSheet extends AbstractSheet {
 	/**
 	 * @param rowNum row number of the package
 	 * @return
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public abstract SpdxPackage[] getPackages(SpdxDocumentContainer container) throws SpreadsheetException;
 }

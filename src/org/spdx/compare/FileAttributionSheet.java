@@ -25,9 +25,9 @@ import org.spdx.rdfparser.model.SpdxFile;
  *
  */
 public class FileAttributionSheet extends AbstractFileCompareSheet {
-	
+
 	private static final int FILE_ATTRIBUTION_COL_WIDTH = 50;
-	
+
 	public FileAttributionSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}

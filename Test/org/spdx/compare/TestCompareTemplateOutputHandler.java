@@ -38,7 +38,7 @@ import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
  *
  */
 public class TestCompareTemplateOutputHandler {
-	
+
 	static final String ADOBE_GLYPH_TEXT = "TestFiles" + File.separator + "Adobe-Glyph.txt";
 	static final String ADOBE_GLYPH_TEMPLATE = "TestFiles" + File.separator + "Adobe-Glyph.template.txt";
 	static final String AAL_TEXT = "TestFiles" + File.separator + "AAL.txt";
@@ -68,7 +68,7 @@ public class TestCompareTemplateOutputHandler {
 	static final String RPSL_1_TEXT = "TestFiles" + File.separator + "RPSL-1.0.txt";
 	static final String RPSL_1_TEMPLATE = "TestFiles" + File.separator + "RPSL-1.0.template.txt";
 	static final String RSCPL_TEXT = "TestFiles" + File.separator + "RSCPL.txt";
-	static final String RSCPL_TEMPLATE = "TestFiles" + File.separator + "RSCPL.template.txt";	
+	static final String RSCPL_TEMPLATE = "TestFiles" + File.separator + "RSCPL.template.txt";
 	static final String HPND_TEXT = "TestFiles" + File.separator + "HPND.txt";
 	static final String HPND_TEMPLATE = "TestFiles" + File.separator + "HPND.template.txt";
 	static final String CECILL2_TEXT = "TestFiles" + File.separator + "CECILL-2.0.txt";
@@ -87,7 +87,7 @@ public class TestCompareTemplateOutputHandler {
 	static final String SSPL_1_0_TEMPLATE = "TestFiles" + File.separator + "SSPL-1.0.template.txt";
 	static final String AGPL_3_0_ONLY_TEXT = "TestFiles" + File.separator + "AGPL-3.0-only.txt";
 	static final String AGPL_3_0_ONLY_TEMPLATE = "TestFiles" + File.separator + "AGPL-3.0-only.template.txt";
-	
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -118,7 +118,7 @@ public class TestCompareTemplateOutputHandler {
 
 	/**
 	 * Test method for {@link org.spdx.compare.CompareTemplateOutputHandler#CompareTemplateOutputHandler(java.lang.String)}.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Test
 	public void testCompareTemplateOutputHandler() throws Exception {
@@ -312,7 +312,7 @@ public class TestCompareTemplateOutputHandler {
 		ctoh.completeParsing();
 		assertTrue(!ctoh.matches());
 	}
-	
+
 	@Test
 	public void testRegressionAdobeGlyph() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(ADOBE_GLYPH_TEXT);
@@ -321,7 +321,7 @@ public class TestCompareTemplateOutputHandler {
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		assertTrue(templateOutputHandler.matches());
 	}
-	
+
 	@Test
 	public void testRegressionAFL3() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(AFL_3_TEXT);
@@ -330,7 +330,7 @@ public class TestCompareTemplateOutputHandler {
 		SpdxLicenseTemplateHelper.parseTemplate(templateText, templateOutputHandler);
 		assertTrue(templateOutputHandler.matches());
 	}
-	
+
 	@Test
 	public void testRegressionBsdNetBsd() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(BSDNETBSD_TEXT);
@@ -341,7 +341,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionApache1() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(APACHE_1_0_TEXT);
@@ -352,7 +352,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionBsd2Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(BSD_2_CLAUSE_TEXT);
@@ -374,7 +374,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionBsd4Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(BSD_4_CLAUSE_TEXT);
@@ -385,7 +385,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionCrossword() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(CROSSWORD_TEXT);
@@ -396,7 +396,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionDFSL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(DFSL_TEXT);
@@ -407,7 +407,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionCondor11() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(CONDOR_1_1_TEXT);
@@ -418,7 +418,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionIsc() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(ISC_TEXT);
@@ -429,7 +429,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionMPL11() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(MPL_1_TEXT);
@@ -440,7 +440,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionRPSL1() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(RPSL_1_TEXT);
@@ -451,7 +451,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionRSCPL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(RSCPL_TEXT);
@@ -462,7 +462,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionAAL() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(AAL_TEXT);
@@ -473,7 +473,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionHPND() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(HPND_TEXT);
@@ -484,7 +484,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionCECILL2() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(CECILL2_TEXT);
@@ -495,7 +495,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionBSD1Clause() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(BSD_1_CLAUSE_TEXT);
@@ -506,7 +506,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionLppl13a() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(LPPL_1_3_A_TEXT);
@@ -517,7 +517,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionLppl13c() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(LPPL_1_3_C_TEXT);
@@ -528,7 +528,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionOdbl() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(ODBL_1_TEXT);
@@ -539,7 +539,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionSleepycat() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(SLEEPYCAT_TEXT);
@@ -550,7 +550,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testRegressionSSPL10() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(SSPL_1_0_TEXT);
@@ -561,7 +561,7 @@ public class TestCompareTemplateOutputHandler {
 			fail(templateOutputHandler.getDifferences().getDifferenceMessage());
 		}
 	}
-	
+
 	@Test
 	public void testCompareHttps() throws IOException, LicenseTemplateRuleException, LicenseParserException {
 		String compareText = UnitTestHelper.fileToText(AGPL_3_0_ONLY_TEXT);

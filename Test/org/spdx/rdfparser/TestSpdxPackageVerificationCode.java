@@ -37,16 +37,16 @@ public class TestSpdxPackageVerificationCode {
 
 	static final String[] VALUES = new String[] {"0123456789abcdef0123456789abcdef01234567",
 			"c1ef456789abcdab0123456789abcdef01234567", "invalidvalue"};
-	
+
 	static final String[] VALUES2 = new String[] {"ab23456789abcdef0123456789abcdef01234567",
 		"00ef456789abcdab0123456789abcdef01234567", "2invalidvalue2"};
 
 	static final String[] [] SKIPPED_FILES = new String[][] {new String[] {"skipped1", "skipped2"},
 			new String[0], new String[] {"oneSkippedFile"}};
-	
+
 	static final String[] [] SKIPPED_FILES2 = new String[][] {new String[] {},
 		new String[] {"single/file"}, new String[] {"a/b/c", "d/e/f", "g/hi"}};
-	
+
 	SpdxPackageVerificationCode[] VERIFICATION_CODES;
 	Model model;
 	/**
@@ -71,7 +71,7 @@ public class TestSpdxPackageVerificationCode {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxPackageVerificationCode#setExcludedFileNames(java.lang.String[])}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetExcludedFileNames() throws InvalidSPDXAnalysisException {
@@ -108,7 +108,7 @@ public class TestSpdxPackageVerificationCode {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxPackageVerificationCode#addExcludedFileName(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testAddExcludedFileName() throws InvalidSPDXAnalysisException {
@@ -132,7 +132,7 @@ public class TestSpdxPackageVerificationCode {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxPackageVerificationCode#setValue(java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetValue() throws InvalidSPDXAnalysisException {
@@ -147,7 +147,7 @@ public class TestSpdxPackageVerificationCode {
 			assertEquals(VALUES2[i], comp.getValue());
 		}
 	}
-	
+
 	@Test
 	public void testVerify() {
 		List<String> verify = VERIFICATION_CODES[0].verify();

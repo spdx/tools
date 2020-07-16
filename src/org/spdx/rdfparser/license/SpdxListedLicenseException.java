@@ -23,12 +23,12 @@ package org.spdx.rdfparser.license;
 public class SpdxListedLicenseException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6475983225526150116L;
 
 	/**
-	 * 
+	 *
 	 */
 	public SpdxListedLicenseException() {
 	}

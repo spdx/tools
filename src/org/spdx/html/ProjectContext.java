@@ -27,7 +27,7 @@ public class ProjectContext {
 
 	Exception error = null;
 	DoapProject project = null;
-	
+
 	/**
 	 * @param error
 	 */
@@ -41,7 +41,7 @@ public class ProjectContext {
 	public ProjectContext(DoapProject doapProject) {
 		this.project = doapProject;
 	}
-	
+
 	public String name() {
 		if (this.project == null && this.error != null) {
 			return "Error getting project information: "+error.getMessage();
@@ -52,7 +52,7 @@ public class ProjectContext {
 			return null;
 		}
 	}
-	
+
 	public String homepage() {
 		if (this.project == null && this.error != null) {
 			return "Error getting project information: "+error.getMessage();
@@ -63,7 +63,7 @@ public class ProjectContext {
 			return null;
 		}
 	}
-	
+
 	public String ArtifactOfProjectURI() {
 		if (this.project == null && this.error != null) {
 			return "Error getting project information: "+error.getMessage();

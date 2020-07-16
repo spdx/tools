@@ -61,30 +61,30 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 	static final int COMMENT_COL = CONTRIBUTORS_COL + 1;
 	static final int FILE_DEPENDENCIES_COL = COMMENT_COL + 1;
 	static final int USER_DEFINED_COL = FILE_DEPENDENCIES_COL + 1;
-	
-	static final boolean[] REQUIRED = new boolean[] {true, true, false, true, false, false, 
+
+	static final boolean[] REQUIRED = new boolean[] {true, true, false, true, false, false,
 		false, false, false, false, false, false, false, false, false, false, false};
 	static final String[] HEADER_TITLES = new String[] {"File Name", "SPDX Identifier",
 		"Package Identifier", "File Type(s)",
 		"File Checksum(s)", "License Concluded", "License Info in File", "License Comments",
-		"File Copyright Text", "Notice Text", "Artifact of Project", "Artifact of Homepage", 
+		"File Copyright Text", "Notice Text", "Artifact of Project", "Artifact of Homepage",
 		"Artifact of URL", "Contributors", "File Comment", "File Dependencies", "User Defined Columns..."};
 	static final int[] COLUMN_WIDTHS = new int[] {60, 25, 25, 30, 85, 50, 50, 60,
 		70, 70, 35, 60, 60, 60, 60, 60, 60};
-	static final boolean[] LEFT_WRAP = new boolean[] {true, false, false, true, true, 
+	static final boolean[] LEFT_WRAP = new boolean[] {true, false, false, true, true,
 		true, true, true, true, true, true, true, true, true, true, true, true};
-	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, true, false, false, 
+	static final boolean[] CENTER_NOWRAP = new boolean[] {false, true, true, false, false,
 		false, false, false, false, false, false, false, false, false, false, false, false};
-	
+
 	/**
 	 * Hashmap of the file name to SPDX file
 	 */
 	Map<String, SpdxFile> fileCache = Maps.newHashMap();
-	
+
 	PerFileSheetV2d0(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName, version);
 	}
-	
+
 	@Override
     @SuppressWarnings("deprecation")
 	public void add(SpdxFile fileInfo, String pkgId) {
@@ -116,7 +116,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 					projectUrl = "";
 				}
 				projectUrls[i] = projectUrl;
-			}			
+			}
 			row.createCell(ARTIFACT_OF_PROJECT_COL).setCellValue(stringsToCsv(projectNames));
 			row.createCell(ARTIFACT_OF_HOMEPAGE_COL).setCellValue(stringsToCsv(projectHomePages));
 			row.createCell(ARTIFACT_OF_PROJECT_URL_COL).setCellValue(stringsToCsv(projectUrls));
@@ -143,7 +143,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 			row.createCell(COMMENT_COL).setCellValue(fileInfo.getComment());
 		}
 		if (fileInfo.getFileContributors() != null && fileInfo.getFileContributors().length > 0) {
-			row.createCell(CONTRIBUTORS_COL).setCellValue(stringsToCsv(fileInfo.getFileContributors()));	
+			row.createCell(CONTRIBUTORS_COL).setCellValue(stringsToCsv(fileInfo.getFileContributors()));
 		}
 		if (fileInfo.getFileDependencies() != null && fileInfo.getFileDependencies().length > 0) {
 			SpdxFile[] fileDependencies = fileInfo.getFileDependencies();
@@ -170,7 +170,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 			throw(new SpreadsheetException(ver));
 		}
 		String name = row.getCell(FILE_NAME_COL).getStringCellValue();
-		
+
 		if (this.fileCache.containsKey(name)) {
 			return this.fileCache.get(name);
 		}
@@ -222,7 +222,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 		} else {
 			copyright = "";
 		}
-		
+
 		//artifactOf
 		String[] projectNames = new String[0];
 		String[] projectHomePages = new String[0];
@@ -254,9 +254,9 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 				} catch (InvalidSPDXAnalysisException e) {
 					throw new SpreadsheetException("Error setting the URI for the artifact of");
 				}
-			}			
+			}
 		}
-		
+
 		SpdxFile[] fileDependencies = new SpdxFile[0];
 		Cell fileDependencyCells = row.getCell(FILE_DEPENDENCIES_COL);
 		if (fileDependencyCells != null && !fileDependencyCells.getStringCellValue().isEmpty()) {
@@ -271,13 +271,13 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 		if (contributorCell != null && !contributorCell.getStringCellValue().trim().isEmpty()) {
 			contributors = csvToStrings(contributorCell.getStringCellValue().trim());
 		}
-		
+
 		String noticeText = null;
 		Cell noticeCell = row.getCell(NOTICE_TEXT_COL);
 		if (noticeCell != null) {
 			noticeText = noticeCell.getStringCellValue().trim();
 		}
-		
+
 		String comment = null;
 		Cell commentCell = row.getCell(COMMENT_COL);
 		if (commentCell != null) {
@@ -286,8 +286,8 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 
 		SpdxFile retval;
 		try {
-			retval = new SpdxFile(name, comment, new Annotation[0], new Relationship[0], 
-					concludedLicense, seenLicenses, copyright, licenseComments, types, 
+			retval = new SpdxFile(name, comment, new Annotation[0], new Relationship[0],
+					concludedLicense, seenLicenses, copyright, licenseComments, types,
 					checksums, contributors, noticeText, projects);
 			Cell idCell = row.getCell(ID_COL);
 			if (idCell != null && idCell.getStringCellValue() != null && !idCell.getStringCellValue().isEmpty()) {
@@ -305,7 +305,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 	 * Finds an SPDX file by name by searching through the rows for a matching file name
 	 * @param fileName
 	 * @return
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public SpdxFile findFileByName(String fileName, SpdxDocumentContainer container) throws SpreadsheetException {
 		if (this.fileCache.containsKey(fileName)) {
@@ -332,7 +332,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS- 1; i++) { 	// Don't check the last (user defined) column
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for SPDX File worksheet";
@@ -385,7 +385,7 @@ public class PerFileSheetV2d0 extends PerFileSheet {
 			wb.removeSheetAt(sheetNum);
 		}
 		Sheet sheet = wb.createSheet(sheetName);
-		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);	
+		CellStyle headerStyle = AbstractSheet.createHeaderStyle(wb);
 		CellStyle centerStyle = AbstractSheet.createCenterStyle(wb);
 		CellStyle wrapStyle = AbstractSheet.createLeftWrapStyle(wb);
 		Row row = sheet.createRow(0);

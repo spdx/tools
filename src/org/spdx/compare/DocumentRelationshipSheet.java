@@ -59,7 +59,7 @@ public class DocumentRelationshipSheet extends AbstractSheet {
 					if (r1.getRelatedSpdxElement().equivalent(r2.getRelatedSpdxElement())) {
 						return 0;
 					}
-					if (r1.getRelatedSpdxElement().getName() != null && 
+					if (r1.getRelatedSpdxElement().getName() != null &&
 							r2.getRelatedSpdxElement().getName() != null) {
 						return r1.getRelatedSpdxElement().getName().compareTo(r2.getRelatedSpdxElement().getName());
 					} else {
@@ -71,21 +71,21 @@ public class DocumentRelationshipSheet extends AbstractSheet {
 			} else {
 				return -1;
 			}
-		}	
+		}
 	}
-	
+
 	RelationshipComparator relationshipComparator = new RelationshipComparator();
-	
+
 	static final int TYPE_COL = 0;
 	static final int TYPE_COL_WIDTH = 25;
 	static final String TYPE_COL_TEXT_TITLE = "Type";
 	static final int FIRST_RELATIONSHIP_COL = 1;
 	static final int FIRST_RELATIONSHIP_COL_WIDTH = 60;
-	
+
 	public DocumentRelationshipSheet(Workbook workbook, String sheetName) {
 		super(workbook, sheetName);
 	}
-	
+
 	/**
 	 * @param wb
 	 * @param sheetName
@@ -113,11 +113,11 @@ public class DocumentRelationshipSheet extends AbstractSheet {
 			cell.setCellStyle(headerStyle);
 		}
 	}
-	
+
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {

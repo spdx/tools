@@ -37,7 +37,7 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestWithExceptionOperator {
-	
+
 	static final String LICENSE_ID1 = "LicenseRef-1";
 	static final String LICENSE_TEXT1 = "licenseText";
 	static final String EXCEPTION_ID1 = "Exception-1";
@@ -53,7 +53,7 @@ public class TestWithExceptionOperator {
 	private SimpleLicensingInfo license2;
 	private LicenseException exception1;
 	private LicenseException exception2;
-	
+
 	Model model;
 	IModelContainer modelContainer = new IModelContainer() {
 		@Override
@@ -75,7 +75,7 @@ public class TestWithExceptionOperator {
 		}
 		@Override
 		public void addSpdxElementRef(String elementRef) {
-			
+
 		}
 		@Override
 		public String documentNamespaceToId(String externalNamespace) {
@@ -90,7 +90,7 @@ public class TestWithExceptionOperator {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -101,7 +101,7 @@ public class TestWithExceptionOperator {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 	};
 	/**
 	 * @throws java.lang.Exception
@@ -144,7 +144,7 @@ public class TestWithExceptionOperator {
 	public void testHashCode() {
 		SimpleLicensingInfo sameLicId = new ExtractedLicenseInfo(LICENSE_ID1, "different text");
 		LicenseException sameExceptionId = new LicenseException(EXCEPTION_ID1, "different Name",
-				"different exception text"); 
+				"different exception text");
 		WithExceptionOperator weo1 = new WithExceptionOperator(license1, exception1);
 		WithExceptionOperator weo2 = new WithExceptionOperator(license2, exception2);
 		WithExceptionOperator weoSameIdAs1 = new WithExceptionOperator(sameLicId, sameExceptionId);
@@ -159,7 +159,7 @@ public class TestWithExceptionOperator {
 	public void testEqualsObject() {
 		SimpleLicensingInfo sameLicId = new ExtractedLicenseInfo(LICENSE_ID1, "different text");
 		LicenseException sameExceptionId = new LicenseException(EXCEPTION_ID1, "different Name",
-				"different exception text"); 
+				"different exception text");
 		WithExceptionOperator weo1 = new WithExceptionOperator(license1, exception1);
 		WithExceptionOperator weo2 = new WithExceptionOperator(license2, exception2);
 		WithExceptionOperator weoSameIdAs1 = new WithExceptionOperator(sameLicId, sameExceptionId);
@@ -169,7 +169,7 @@ public class TestWithExceptionOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.WithExceptionOperator#verify()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testVerify() throws InvalidSPDXAnalysisException {
@@ -183,7 +183,7 @@ public class TestWithExceptionOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.WithExceptionOperator#clone()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
@@ -204,7 +204,7 @@ public class TestWithExceptionOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.WithExceptionOperator#setLicense(org.spdx.rdfparser.license.SimpleLicensingInfo)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetLicense() throws InvalidSPDXAnalysisException {
@@ -231,7 +231,7 @@ public class TestWithExceptionOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.WithExceptionOperator#setException(org.spdx.rdfparser.license.LicenseException)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSetException() throws InvalidSPDXAnalysisException {
@@ -257,7 +257,7 @@ public class TestWithExceptionOperator {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.license.AnyLicenseInfo#createResource(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testCreateResource() throws InvalidSPDXAnalysisException {
@@ -275,7 +275,7 @@ public class TestWithExceptionOperator {
 		assertEquals(le1.getLicenseExceptionText(), le1FromResource.getLicenseExceptionText());
 		assertEquals(le1.getName(), le1FromResource.getName());
 	}
-	
+
 	@Test
 	public void testClassPathException() throws InvalidSPDXAnalysisException, InvalidLicenseStringException {
 		assertTrue(LicenseInfoFactory.parseSPDXLicenseString("GPL-2.0-only WITH Classpath-exception-2.0").verify().isEmpty());

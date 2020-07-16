@@ -18,19 +18,19 @@ package org.spdx.tag;
 
 /**
  * Exceptions for errors in a SPDX tag format file
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public class InvalidSpdxTagFileException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 *
 	 */
 	public InvalidSpdxTagFileException() {
 

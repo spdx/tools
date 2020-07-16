@@ -30,17 +30,17 @@ import au.com.bytecode.opencsv.CSVWriter;
 /**
  * Abstract class for PerFileSheet.  Specific version implementations are implemented
  * as subclasses.
- * 
+ *
  * @author Gary O'Neall
  *
  */
 public abstract class PerFileSheet extends AbstractSheet {
-	
+
 	static final char CSV_SEPARATOR_CHAR = ',';
 	static final char CSV_QUOTING_CHAR = '"';
-	
+
 	protected String version;
-	
+
 	public PerFileSheet(Workbook workbook, String sheetName, String version) {
 		super(workbook, sheetName);
 		this.version = version;
@@ -68,7 +68,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 			return new PerFileSheetV2d2(workbook, perFileSheetName, version);
 		}
 	}
-	
+
 	/**
 	 * converts an array of strings to a comma separated list
 	 * @param strings
@@ -92,7 +92,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 			}
 		}
 	}
-	
+
 	/**
 	 * Converts a comma separated CSV string to an array of strings
 	 * @param csv
@@ -113,14 +113,14 @@ public abstract class PerFileSheet extends AbstractSheet {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add the file to the spreadsheet
 	 * @param file
 	 * @param pkgIds string containing the package ID's which contain this file
 	 */
 	public abstract void add(SpdxFile file, String pkgIds);
-	
+
 	/**
 	 * Get the file information for a row in the PerFileSheet
 	 * @param rowNum
@@ -128,7 +128,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 	 */
 	public abstract SpdxFile getFileInfo(int rowNum, SpdxDocumentContainer container) throws SpreadsheetException;
 
-	/**	
+	/**
 	 * Create a blank worksheet NOTE: Replaces / deletes existing sheet by the same name
 	 * @param wb
 	 * @param perFileSheetName

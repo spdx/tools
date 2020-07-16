@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -34,13 +34,13 @@ import org.spdx.rdfparser.model.SpdxPackage;
 import org.spdx.spdxspreadsheet.AbstractSheet;
 /**
  * Document level fields for comparison spreadsheet
- * Column1 is the document field name, column2 indicates if all docs are equal, 
+ * Column1 is the document field name, column2 indicates if all docs are equal,
  * columns3 through columnN are document specific field values
  * @author Gary O'Neall
  *
  */
 public class PackageSheet extends AbstractSheet {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(PackageSheet.class);
 	private static final int COL_WIDTH = 60;
 	protected static final int FIELD_COL = 0;
@@ -79,7 +79,7 @@ public class PackageSheet extends AbstractSheet {
 	private static final String FILES_ANALYZED_FIELD_TEXT = "Files Analyzed";
 	private static final String EXTERNAL_REFS_FIELD_TEXT = "External Refs";
 	private static final String NO_VALUE = "[No Value]";
-	
+
 	/**
 	 * @param workbook
 	 * @param sheetName
@@ -115,13 +115,13 @@ public class PackageSheet extends AbstractSheet {
 		Cell fieldCell = headerRow.createCell(FIELD_COL);
 		fieldCell.setCellStyle(headerStyle);
 		fieldCell.setCellValue(FIELD_HEADER_TEXT);
-		
+
 		sheet.setColumnWidth(EQUALS_COL, EQUALS_COL_WIDTH * 256);
 		sheet.setDefaultColumnStyle(EQUALS_COL, defaultStyle);
 		Cell equalsCell = headerRow.createCell(EQUALS_COL);
 		equalsCell.setCellStyle(headerStyle);
 		equalsCell.setCellValue(EQUALS_HEADER_TEXT);
-		
+
 		for (int i = FIRST_DOC_COL; i < MultiDocumentSpreadsheet.MAX_DOCUMENTS+FIRST_DOC_COL; i++) {
 			sheet.setColumnWidth(i, COL_WIDTH*256);
 			sheet.setDefaultColumnStyle(i, defaultStyle);
@@ -132,8 +132,8 @@ public class PackageSheet extends AbstractSheet {
 
 	/**
 	 * @param comparer
-	 * @param docNames 
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param docNames
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (comparer.getNumSpdxDocs() != docNames.length) {
@@ -146,7 +146,7 @@ public class PackageSheet extends AbstractSheet {
 			Cell headerCell = header.getCell(FIRST_DOC_COL+i);
 			headerCell.setCellValue(docNames[i]);
 		}
-		
+
 		SpdxPackageComparer[] packagComparers = comparer.getPackageComparers();
 		Arrays.sort(packagComparers, new Comparator<SpdxPackageComparer>() {
 
@@ -159,19 +159,19 @@ public class PackageSheet extends AbstractSheet {
 					return 0;	// can't throw an exception
 				}
 			}
-			
+
 		});
 		for (int i = 0; i < packagComparers.length; i++) {
 			addPackageToSheet(packagComparers[i], comparer.getSpdxDocuments());
 		}
 	}
-	
+
 	/**
 	 * @param comparer
-	 * @throws InvalidSPDXAnalysisException 
-	 * @throws SpdxCompareException 
+	 * @throws InvalidSPDXAnalysisException
+	 * @throws SpdxCompareException
 	 */
-	private void addPackageToSheet(SpdxPackageComparer comparer, 
+	private void addPackageToSheet(SpdxPackageComparer comparer,
 			SpdxDocument[] docs) throws InvalidSPDXAnalysisException, SpdxCompareException {
 		Row packageNameRow = this.addRow();
 		boolean allDocsPresent = comparer.getNumPackages() == docs.length;
@@ -334,7 +334,7 @@ public class PackageSheet extends AbstractSheet {
 		} else {
 			setCellDifferentValue(externalRefsRow.createCell(EQUALS_COL));
 		}
-		
+
 		for (int i = 0; i < docs.length; i++) {
 			SpdxPackage pkg = comparer.getDocPackage(docs[i]);
 			if (pkg != null) {
@@ -429,7 +429,7 @@ public class PackageSheet extends AbstractSheet {
 			cell.setCellValue(EQUAL_STRING);
 		} else {
 			cell.setCellValue(MISSING_STRING);
-		}		
+		}
 		cell.setCellStyle(greenWrapped);
 	}
 }

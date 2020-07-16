@@ -39,7 +39,7 @@ public class StartEndPointer extends CompoundPointer implements Comparable<Start
 	 * Reference to the pointer that defines the end point for a range.
 	 */
 	private SinglePointer endPointer;
-	
+
 	/**
 	 * Create a StartEndPointer from an existing RDF node
 	 * @param modelContainer
@@ -50,12 +50,12 @@ public class StartEndPointer extends CompoundPointer implements Comparable<Start
 		super(modelContainer, node);
 		getPropertiesFromModel();
 	}
-	
+
 	public StartEndPointer(SinglePointer startPointer, SinglePointer endPointer) {
 		super(startPointer);
 		this.endPointer = endPointer;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.spdx.rdfparser.model.IRdfModel#verify()
 	 */
@@ -148,10 +148,10 @@ public class StartEndPointer extends CompoundPointer implements Comparable<Start
 		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, SpdxRdfConstants.PROP_POINTER_END_POINTER,
 				this.endPointer);
 	}
-	
+
 	/**
 	 * @return the endPointer
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SinglePointer getEndPointer() throws InvalidSPDXAnalysisException {
 		if (model != null && this.refreshOnGet) {
@@ -162,14 +162,14 @@ public class StartEndPointer extends CompoundPointer implements Comparable<Start
 
 	/**
 	 * @param endPointer the endPointer to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setEndPointer(SinglePointer endPointer) throws InvalidSPDXAnalysisException {
 		this.endPointer = endPointer;
 		setPropertyValue(SpdxRdfConstants.RDF_POINTER_NAMESPACE, SpdxRdfConstants.PROP_POINTER_END_POINTER,
 				this.endPointer);
 	}
-	
+
 	@Override
 	public StartEndPointer clone() {
 		SinglePointer newStartPointer = null;
@@ -209,7 +209,7 @@ public class StartEndPointer extends CompoundPointer implements Comparable<Start
 			return -1;
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("From: ");

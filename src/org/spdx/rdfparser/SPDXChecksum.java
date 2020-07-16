@@ -32,7 +32,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * SPDX Checksum class for packages and files
- * 
+ *
  * This class is provided for compatibility with version 1.2 of the library and
  * is no longer used by version 2.0 or above.  It has been replaced by model.Checksum
  * @author Gary O'Neall
@@ -45,23 +45,23 @@ public class SPDXChecksum implements Cloneable {
 	public static final Map<String, String> ALGORITHM_TO_URI = Maps.newHashMap();
 	public static final Map<String, String> URI_TO_ALGORITHM = Maps.newHashMap();
 	static {
-		ALGORITHM_TO_URI.put(SpdxRdfConstants.ALGORITHM_SHA1, 
+		ALGORITHM_TO_URI.put(SpdxRdfConstants.ALGORITHM_SHA1,
 				SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM_SHA1);
 		URI_TO_ALGORITHM.put(SpdxRdfConstants.SPDX_NAMESPACE+SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM_SHA1,
 				SpdxRdfConstants.ALGORITHM_SHA1);
 	}
-	
+
 	private String algorithm;
 	private String value;
 	private Model model;
 	private Node checksumNode;
 	private Resource checksumResource;
-	
+
 	protected static Resource findSpdxChecksum(Model model, SPDXChecksum checksum) throws InvalidSPDXAnalysisException {
 		// find any matching checksum values
 		Node checksumValueProperty = model.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
 		Triple checksumValueMatch = Triple.createMatch(null, checksumValueProperty, NodeFactory.createLiteral(checksum.getValue()));
-		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);	
+		ExtendedIterator<Triple> checksumMatchIter = model.getGraph().find(checksumValueMatch);
 		while (checksumMatchIter.hasNext()) {
 			Triple checksumMatchTriple = checksumMatchIter.next();
 			Node checksumNode = checksumMatchTriple.getSubject();
@@ -90,12 +90,12 @@ public class SPDXChecksum implements Cloneable {
 		// if we get to here, we did not find a match
 		return null;
 	}
-	
+
 	public SPDXChecksum(String algorithm, String value) {
 		this.algorithm = algorithm;
 		this.value = value;
 	}
-	
+
 	public SPDXChecksum(Model spdxModel, Node checksumNode) throws InvalidSPDXAnalysisException {
 		this.model = spdxModel;
 		this.checksumNode = checksumNode;
@@ -109,7 +109,7 @@ public class SPDXChecksum implements Cloneable {
 		// Algorithm
 		Node p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM).asNode();
 		Triple m = Triple.createMatch(checksumNode, p, null);
-		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);	
+		ExtendedIterator<Triple> tripleIter = spdxModel.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			if (t.getObject().isLiteral()) {
@@ -125,11 +125,11 @@ public class SPDXChecksum implements Cloneable {
 				throw(new InvalidSPDXAnalysisException("Invalid checksum algorithm - must be one of the defined algorithms supported by SPDX."));
 			}
 		}
-		
+
 		// value
 		p = spdxModel.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_CHECKSUM_VALUE).asNode();
 		m = Triple.createMatch(checksumNode, p, null);
-		tripleIter = spdxModel.getGraph().find(m);	
+		tripleIter = spdxModel.getGraph().find(m);
 		while (tripleIter.hasNext()) {
 			Triple t = tripleIter.next();
 			this.value = t.getObject().toString(false);
@@ -145,7 +145,7 @@ public class SPDXChecksum implements Cloneable {
 
 	/**
 	 * @param algorithm the algorithm to set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void setAlgorithm(String algorithm) throws InvalidSPDXAnalysisException {
 		this.algorithm = algorithm;
@@ -164,7 +164,7 @@ public class SPDXChecksum implements Cloneable {
 	 * Converts a string algorithm to an RDF resource
 	 * @param algorithm
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Resource  algorithmStringToResource(String algorithm, Model model) throws InvalidSPDXAnalysisException {
 		String resourceUri = ALGORITHM_TO_URI.get(algorithm);
@@ -174,7 +174,7 @@ public class SPDXChecksum implements Cloneable {
 		Resource retval = model.createResource(resourceUri);
 		return retval;
 	}
-	
+
 	public static String algorithmResourceToString(Resource algorithmResource) throws InvalidSPDXAnalysisException {
 		String uri = algorithmResource.getURI();
 		if (!algorithmResource.isURIResource()) {
@@ -186,7 +186,7 @@ public class SPDXChecksum implements Cloneable {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * @return the value
 	 */
@@ -208,7 +208,7 @@ public class SPDXChecksum implements Cloneable {
 			checksumResource.addProperty(p, value);
 		}
 	}
-	
+
 	/**
 	 * Creates a resource from this SPDX Checksum
 	 * @param model
@@ -218,7 +218,7 @@ public class SPDXChecksum implements Cloneable {
 		this.model = model;
 		Resource type = model.createResource(SpdxRdfConstants.SPDX_NAMESPACE +
 				SpdxRdfConstants.CLASS_SPDX_CHECKSUM);
-		
+
 		Resource r;
 		try {
 			r = findSpdxChecksum(model, this);
@@ -230,7 +230,7 @@ public class SPDXChecksum implements Cloneable {
 			r = model.createResource(type);
 		}
 		if (algorithm != null) {
-			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE, 
+			Property algProperty = model.createProperty(SpdxRdfConstants.SPDX_NAMESPACE,
 					SpdxRdfConstants.PROP_CHECKSUM_ALGORITHM);
 			Resource algResource = model.createResource(ALGORITHM_TO_URI.get(algorithm));
 			r.addProperty(algProperty, algResource);
@@ -243,7 +243,7 @@ public class SPDXChecksum implements Cloneable {
 		this.checksumResource = r;
 		return r;
 	}
-	
+
 	public List<String> verify() {
 		List<String> retval = Lists.newArrayList();
 		String algorithm = this.getAlgorithm();
@@ -265,8 +265,8 @@ public class SPDXChecksum implements Cloneable {
 		}
 		return retval;
 	}
-	
-	@Override 
+
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SPDXChecksum)) {
 			return false;
@@ -277,7 +277,7 @@ public class SPDXChecksum implements Cloneable {
 		}
 		return compare.getValue().compareToIgnoreCase(this.getValue()) == 0;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		int retval = 13;
@@ -296,7 +296,7 @@ public class SPDXChecksum implements Cloneable {
 	public Resource getResource() {
 		return this.checksumResource;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#clone()
 	 */

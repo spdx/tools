@@ -25,7 +25,7 @@ import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 public class NoListedLicenseRdfModel extends InvalidSPDXAnalysisException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4045777176566797553L;
 

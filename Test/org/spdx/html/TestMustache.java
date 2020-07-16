@@ -52,7 +52,7 @@ public class TestMustache {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	static final String TEST_FIELD1 = "testField1";
 	static final String TEST_RESULT1 = "testResult1";
 	@Test

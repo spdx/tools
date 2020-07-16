@@ -41,9 +41,9 @@ public class RelationshipsSheet extends AbstractSheet {
 	static final int COMMENT_COL = RELATED_ID_COL + 1;
 	static final int USER_DEFINED_COL = COMMENT_COL + 1;
 	static final int NUM_COLS = USER_DEFINED_COL;
-	
+
 	static final String[] HEADER_TITLES = new String[] {"SPDX Identifier A",
-		"Relationship", "SPDX Identifier B", "Relationship Comment", 
+		"Relationship", "SPDX Identifier B", "Relationship Comment",
 		"Optional User Defined Columns..."};
 	static final int[] COLUMN_WIDTHS = new int[] {20, 25, 20, 70, 50};
 	static final boolean[] LEFT_WRAP = new boolean[] {false, false, false, true, true};
@@ -67,7 +67,7 @@ public class RelationshipsSheet extends AbstractSheet {
 			Row firstRow = sheet.getRow(firstRowNum);
 			for (int i = 0; i < NUM_COLS; i++) {
 				Cell cell = firstRow.getCell(i+firstCellNum);
-				if (cell == null || 
+				if (cell == null ||
 						cell.getStringCellValue() == null ||
 						!cell.getStringCellValue().equals(HEADER_TITLES[i])) {
 					return "Column "+HEADER_TITLES[i]+" missing for Relationship worksheet";
@@ -99,7 +99,7 @@ public class RelationshipsSheet extends AbstractSheet {
 			Cell cell = row.getCell(i);
 			if (REQUIRED[i] && cell == null) {
 				return "Required cell "+HEADER_TITLES[i]+" missing for row "+String.valueOf(row.getRowNum())+" in relationships sheet";
-			} 
+			}
 			if (i == RELATIONSHIP_COL && cell.getStringCellValue() != null) {
 				try {
 					RelationshipType.fromTag(cell.getStringCellValue());
@@ -138,11 +138,11 @@ public class RelationshipsSheet extends AbstractSheet {
 	 * @param relationship
 	 */
 	public void add(Relationship relationship, String elementId) {
-		Row row = addRow();		
+		Row row = addRow();
 		if (elementId != null) {
 			Cell idCell = row.createCell(ID_COL, CellType.STRING);
 			idCell.setCellValue(elementId);
-		}	
+		}
 		if (relationship.getRelationshipType() != null) {
 			Cell relationshipCell = row.createCell(RELATIONSHIP_COL, CellType.STRING);
 			relationshipCell.setCellValue(relationship.getRelationshipType().toTag());
@@ -150,13 +150,13 @@ public class RelationshipsSheet extends AbstractSheet {
 		if (relationship.getRelatedSpdxElement() != null) {
 			Cell relatedIdCell = row.createCell(RELATED_ID_COL, CellType.STRING);
 			relatedIdCell.setCellValue(relationship.getRelatedSpdxElement().getId());
-		}		
+		}
 		if (relationship.getComment() != null) {
 			Cell commentCell = row.createCell(COMMENT_COL, CellType.STRING);
 			commentCell.setCellValue(relationship.getComment());
 		}
 	}
-	
+
 	public String getElmementId(int rowNum) {
 		Row row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -192,7 +192,7 @@ public class RelationshipsSheet extends AbstractSheet {
 			element = container.findElementById(relatedId);
 		} catch (InvalidSPDXAnalysisException e) {
 			throw new SpreadsheetException("No element found for relationship with related ID "+relatedId);
-		}	
+		}
 		return new Relationship(element, type, comment);
 	}
 }

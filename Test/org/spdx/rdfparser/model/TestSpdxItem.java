@@ -362,7 +362,7 @@ public class TestSpdxItem {
 		SpdxItem item2= new SpdxItem(modelContainer, r.asNode());
 		assertEquals(LICENSE_COMMENT2, item2.getLicenseComments());
 	}
-	
+
 	@Test
 	public void testSetAttributionText() throws InvalidSPDXAnalysisException {
 		Annotation[] annotations = new Annotation[] {ANNOTATION1, ANNOTATION2};
@@ -390,7 +390,7 @@ public class TestSpdxItem {
 		} else {
 			assertEquals(attributionText1, result[1]);
 			assertEquals(attributionText2, result[0]);
-		} 
+		}
 		SpdxItem item2= new SpdxItem(modelContainer, r.asNode());
 		result = item2.getAttributionText();
 		assertEquals(2, result.length);
@@ -399,7 +399,7 @@ public class TestSpdxItem {
 		} else {
 			assertEquals(attributionText1, result[1]);
 			assertEquals(attributionText2, result[0]);
-		} 
+		}
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class LicenseExceptionJSONFile extends AbstractJsonFile {
 	 */
 	public LicenseExceptionJSONFile() {
 	}
-	
+
 	public LicenseExceptionJSONFile(LicenseException exception, boolean deprecated) {
 		this.setException(exception, deprecated);
 	}

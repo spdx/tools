@@ -45,7 +45,7 @@ import com.google.common.io.Files;
  *
  */
 public class MergeToolTest {
-	
+
 	static final String TEST_DIR = "TestFiles";
 	static File TEMP_DIR;
 
@@ -100,15 +100,15 @@ public class MergeToolTest {
 //		// check for licenses and build a license map
 //
 //		AnyLicenseInfo[] masterExtractedLicenses = masterDoc.getExtractedLicenseInfos();
-//		AnyLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();		
+//		AnyLicenseInfo[] outputDocExtratedLicenses = outputDoc.getExtractedLicenseInfos();
 //
 //		HashMap<String, String> masterDocLicMap = mapLicenseIds(masterExtractedLicenses, outputDocExtratedLicenses);
 //		HashMap<String, String> firstMergeDoccLicMap = mapLicenseIds(firstMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
 //		HashMap<String, String> secondMergeDocLicMap = mapLicenseIds(secondMergeDoc.getExtractedLicenseInfos(), outputDocExtratedLicenses);
-//		
+//
 //		SpdxFile[] expectedFiles = createExpectedFiles(masterDoc,firstMergeDoc,secondMergeDoc);
 //		SpdxFile[] outputDocFiles = outputDoc.getSpdxPackage().getFiles();
-//		
+//
 //		int num = 0;
 //		for(SpdxFile outputFile:outputDocFiles){
 //			for(SpdxFile expectedFile: expectedFiles){
@@ -137,8 +137,8 @@ public class MergeToolTest {
 			if (fromLicense instanceof ExtractedLicenseInfo) {
 				ExtractedLicenseInfo fromNonStdLicense = (ExtractedLicenseInfo)fromLicense;
 				for (AnyLicenseInfo toLicense : toLicenses) {
-					if (toLicense instanceof ExtractedLicenseInfo && 
-							LicenseCompareHelper.isLicenseTextEquivalent(fromNonStdLicense.getExtractedText(), 
+					if (toLicense instanceof ExtractedLicenseInfo &&
+							LicenseCompareHelper.isLicenseTextEquivalent(fromNonStdLicense.getExtractedText(),
 							((ExtractedLicenseInfo)toLicense).getExtractedText())) {
 						if (retval.containsKey(fromNonStdLicense.getLicenseId())) {
 							fail("Duplicate license text values for "+fromNonStdLicense.getExtractedText());
@@ -154,7 +154,7 @@ public class MergeToolTest {
 		}
 		return retval;
 	}
-	
+
 	private SpdxFile[] createExpectedFiles(
 			SpdxDocument masterDoc, SpdxDocument firstMergeDoc, SpdxDocument secondMergeDoc) throws InvalidSPDXAnalysisException{
 		List<SpdxFile> retval = Lists.newArrayList();
@@ -182,12 +182,12 @@ public class MergeToolTest {
 		secondDocFiles[0].setLicenseInfosFromFiles(secondMergeDocLics);
 		secondDocFiles[0].setLicenseConcluded(clonedLic);
 		retval.add(secondDocFiles[0]);
-		
+
 		SpdxFile[] result = new SpdxFile[retval.size()];
 		retval.toArray(result);
-		
+
 		return result;
-		
+
 	}
 
 }

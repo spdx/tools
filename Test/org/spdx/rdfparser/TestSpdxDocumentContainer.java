@@ -75,7 +75,7 @@ public class TestSpdxDocumentContainer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#SpdxDocumentContainer(org.apache.jena.rdf.model.Model)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSpdxDocumentContainerModel() throws InvalidSPDXAnalysisException {
@@ -84,7 +84,7 @@ public class TestSpdxDocumentContainer {
 		SpdxDocumentContainer container = new SpdxDocumentContainer(docUri, version);
 		assertEquals(docUri + "#", container.getDocumentNamespace());
 		assertEquals(version, container.getSpdxDocument().getSpecVersion());
-		
+
 		Model model = container.getModel();
 		SpdxDocumentContainer container2 = new SpdxDocumentContainer(model);
 		assertEquals(version, container2.getSpdxDocument().getSpecVersion());
@@ -92,7 +92,7 @@ public class TestSpdxDocumentContainer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#SpdxDocumentContainer(java.lang.String, java.lang.String)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testSpdxDocumentContainerStringString() throws InvalidSPDXAnalysisException {
@@ -113,7 +113,7 @@ public class TestSpdxDocumentContainer {
 		assertEquals(docUri + "#", result);
 		doc = new SpdxDocumentContainer(docUri + "#SPDXDocument");
 		result = doc.getDocumentNamespace();
-		assertEquals(docUri + "#", result);	
+		assertEquals(docUri + "#", result);
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class TestSpdxDocumentContainer {
 		result = SpdxDocumentContainer.getElementRefNumber(ref2);
 		assertEquals(refNum2, result);
 		result = SpdxDocumentContainer.getElementRefNumber(invalidRef);
-		assertEquals(-1, result);		
+		assertEquals(-1, result);
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class TestSpdxDocumentContainer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#formNonStandardLicenseID(int)}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testFormNonStandardLicenseID() throws InvalidSPDXAnalysisException {
@@ -169,7 +169,7 @@ public class TestSpdxDocumentContainer {
 
 	/**
 	 * Test method for {@link org.spdx.rdfparser.SpdxDocumentContainer#getNextLicenseRef()}.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	@Test
 	public void testGetNextLicenseRef() throws InvalidSPDXAnalysisException {
@@ -183,7 +183,7 @@ public class TestSpdxDocumentContainer {
 		ExtractedLicenseInfo lic = new ExtractedLicenseInfo(SpdxDocumentContainer.formNonStandardLicenseID(licenseRefNum), "License Text");
 		doc.setExtractedLicenseInfos(new ExtractedLicenseInfo[] {lic});
 		expected = SpdxRdfConstants.NON_STD_LICENSE_ID_PRENUM + String.valueOf(licenseRefNum + 1);
-		assertEquals(expected, doc.getNextLicenseRef());		
+		assertEquals(expected, doc.getNextLicenseRef());
 	}
 
 
@@ -237,23 +237,23 @@ public class TestSpdxDocumentContainer {
 		String NON_STD_LIC_NAME1 = "licenseName1";
 		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
 		String NON_STD_LIC_COMMENT1 = "License 1 comment";
-		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1,
 				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
-		
+
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 
 		ExtractedLicenseInfo[] emptyLic = doc.getSpdxDocument().getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
 		assertTrue(!doc.extractedLicenseExists(NON_STD_LIC_ID1));
-		
+
 		doc.addNewExtractedLicenseInfo(lic1);
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
-		
+
 		ExtractedLicenseInfo lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
 		assertTrue(doc.extractedLicenseExists(NON_STD_LIC_ID1));
 		assertTrue(doc.extractedLicenseExists(lic2.getLicenseId()));
 	}
-	
+
 	@Test
 	public void testGetExtractedLicenseInfo() throws InvalidSPDXAnalysisException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
@@ -264,18 +264,18 @@ public class TestSpdxDocumentContainer {
 		String NON_STD_LIC_NAME1 = "licenseName1";
 		String[] NON_STD_LIC_REFERENCES1 = new String[] {"ref1"};
 		String NON_STD_LIC_COMMENT1 = "License 1 comment";
-		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1, 
+		ExtractedLicenseInfo lic1 = new ExtractedLicenseInfo(NON_STD_LIC_ID1, NON_STD_LIC_TEXT1,
 				NON_STD_LIC_NAME1, NON_STD_LIC_REFERENCES1, NON_STD_LIC_COMMENT1);
-		
+
 		String NON_STD_LIC_TEXT2 = "LicenseText2";
 
 		ExtractedLicenseInfo[] emptyLic = doc.getSpdxDocument().getExtractedLicenseInfos();
 		assertEquals(0,emptyLic.length);
 		assertTrue(doc.getExtractedLicense(NON_STD_LIC_ID1) == null);
-		
+
 		doc.addNewExtractedLicenseInfo(lic1);
 		assertEquals(lic1, doc.getExtractedLicense(NON_STD_LIC_ID1));
-		
+
 		ExtractedLicenseInfo lic2 = doc.addNewExtractedLicenseInfo(NON_STD_LIC_TEXT2);
 		assertEquals(lic2, doc.getExtractedLicense(lic2.getLicenseId()));
 	}
@@ -292,13 +292,13 @@ public class TestSpdxDocumentContainer {
 		doc = new SpdxDocumentContainer(testDocUri, SpdxDocumentContainer.ONE_DOT_ZERO_SPDX_VERSION);
 		assertEquals(SpdxDocumentContainer.ONE_DOT_ZERO_SPDX_VERSION, doc.getSpdxDocument().getSpecVersion());
 		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID_VERSION_1_0, ((SpdxListedLicense)(doc.getSpdxDocument().getDataLicense())).getLicenseId());
-		
+
 		// current version
 		doc = new SpdxDocumentContainer(testDocUri);
 		assertEquals(SpdxDocumentContainer.CURRENT_SPDX_VERSION, doc.getSpdxDocument().getSpecVersion());
 		assertEquals(SpdxRdfConstants.SPDX_DATA_LICENSE_ID, ((SpdxListedLicense)(doc.getSpdxDocument().getDataLicense())).getLicenseId());
 	}
-	
+
 	@Test
 	public void testFindElementById() throws InvalidSPDXAnalysisException {
 		String PACKAGE_ID = "SpdxRef-PackageID";
@@ -326,9 +326,9 @@ public class TestSpdxDocumentContainer {
 		result = doc.findElementById(FILE_ID2);
 		assertTrue(file2.equivalent(result));
 		result = doc.findElementById(FILE_ID3);
-		assertTrue(file3.equivalent(result));		
+		assertTrue(file3.equivalent(result));
 	}
-	
+
 	@Test
 	public void testGetFileReferences() throws InvalidSPDXAnalysisException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
@@ -344,7 +344,7 @@ public class TestSpdxDocumentContainer {
 		SpdxFile[] expected = new SpdxFile[] {file1, file2, file3};
 		assertTrue(UnitTestHelper.isArraysEquivalent(expected, doc.getFileReferences()));
 	}
-	
+
 	@Test
 	public void testDocumentNamespaceToId() throws InvalidSPDXAnalysisException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
@@ -368,7 +368,7 @@ public class TestSpdxDocumentContainer {
 		assertEquals(id1, doc.documentNamespaceToId(uri1));
 		assertEquals(uri2, doc.externalDocumentIdToNamespace(id2));
 		assertEquals(id2, doc.documentNamespaceToId(uri2));
-		
+
 		ExternalDocumentRef[] newRefs = new ExternalDocumentRef[] {
 				new ExternalDocumentRef(uri3, null, id3),
 				new ExternalDocumentRef(uri4, null, id4)
@@ -381,7 +381,7 @@ public class TestSpdxDocumentContainer {
 		assertEquals(uri4, doc.externalDocumentIdToNamespace(id4));
 		assertEquals(id4, doc.documentNamespaceToId(uri4));
 	}
-	
+
 	@Test
 	public void testFindAllElements() throws InvalidSPDXAnalysisException {
 		String FILE_ID1 = "SpdxRef-File1";
@@ -416,7 +416,7 @@ public class TestSpdxDocumentContainer {
 		SpdxElement[] expected = new SpdxElement[] {doc.getSpdxDocument(), file1, file2, file3, pkg1, pkg2, pkg3};
 		UnitTestHelper.isArraysEquivalent(expected, doc.findAllElements().toArray(new SpdxElement[doc.findAllElements().size()]));
 	}
-	
+
 	@Test
 	public void testFindAllPackage() throws InvalidSPDXAnalysisException {
 		String PACKAGE_ID1 = "SpdxRef-PackageID";
@@ -443,7 +443,7 @@ public class TestSpdxDocumentContainer {
 		SpdxPackage[] resultArray = result.toArray(new SpdxPackage[result.size()]);
 		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxPackage[] {pkg1,  pkg2, pkg3}, resultArray));
 	}
-	
+
 	@Test
 	public void testFindAllFiles() throws InvalidSPDXAnalysisException {
 		String FILE_ID1 = "SpdxRef-File1";
@@ -455,7 +455,7 @@ public class TestSpdxDocumentContainer {
 		file2.setId(FILE_ID2);
 		SpdxFile file3 = new SpdxFile("File3", null, null, null, null, null, null, null, null);
 		file3.setId(FILE_ID3);
-		
+
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.0");
 		assertTrue(doc.findAllFiles().isEmpty());
@@ -471,7 +471,7 @@ public class TestSpdxDocumentContainer {
 		SpdxFile[] resultArray = result.toArray(new SpdxFile[result.size()]);
 		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxFile[] {file1,  file2, file3}, resultArray));
 	}
-	
+
 	@Test
 	public void testFindAllSnippets() throws InvalidSPDXAnalysisException {
 		String SNIPPET_ID1 = "SpdxRef-Snippet1";
@@ -483,7 +483,7 @@ public class TestSpdxDocumentContainer {
 		snippet1.setId(SNIPPET_ID2);
 		SpdxSnippet snippet3 = new SpdxSnippet("Snippet3", null, null, null, null, null, null, null, null, null, null);
 		snippet1.setId(SNIPPET_ID3);
-		
+
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";
 		SpdxDocumentContainer doc = new SpdxDocumentContainer(testUri,"SPDX-2.1");
 		assertTrue(doc.findAllSnippets().isEmpty());
@@ -499,7 +499,7 @@ public class TestSpdxDocumentContainer {
 		SpdxSnippet[] resultArray = result.toArray(new SpdxSnippet[result.size()]);
 		assertTrue(UnitTestHelper.isArraysEquivalent(new SpdxSnippet[] {snippet1,  snippet2, snippet3}, resultArray));
 	}
-	
+
 	@Test
 	public void testMultipleObjectsForTheSameNode() throws InvalidSPDXAnalysisException {
 		String testUri = "https://olex.openlogic.com/package_versions/download/4832?path=openlogic/zlib/1.2.3/zlib-1.2.3-all-src.zip&amp;package_version_id=1082";

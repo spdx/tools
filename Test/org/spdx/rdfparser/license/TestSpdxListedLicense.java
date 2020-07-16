@@ -65,7 +65,7 @@ public class TestSpdxListedLicense {
 		@Override
 		public void addSpdxElementRef(String elementRef)
 				throws InvalidSPDXAnalysisException {
-			
+
 		}
 		@Override
 		public String documentNamespaceToId(String externalNamespace) {
@@ -80,7 +80,7 @@ public class TestSpdxListedLicense {
 				Resource type, IRdfModel modelObject) {
 			if (duplicate != null) {
 				return duplicate;
-			} else if (uri == null) {			
+			} else if (uri == null) {
 				return model.createResource(type);
 			} else {
 				return model.createResource(uri, type);
@@ -90,7 +90,7 @@ public class TestSpdxListedLicense {
 		public boolean addCheckNodeObject(Node node, IRdfModel rdfModelObject) {
 			return false;
 		}
-		
+
 	};
 	/**
 	 * @throws java.lang.Exception
@@ -105,7 +105,7 @@ public class TestSpdxListedLicense {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void testCreate() throws InvalidSPDXAnalysisException, InvalidLicenseTemplateException {
 		model = ModelFactory.createDefaultModel();
@@ -136,7 +136,7 @@ public class TestSpdxListedLicense {
 		assertTrue(compLic.isOsiApproved());
 		assertFalse(compLic.isDeprecated());
 	}
-	
+
 	@Test
 	public void testSetComment() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -153,7 +153,7 @@ public class TestSpdxListedLicense {
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(comments, compLic.getComment());
-		
+
 		compLic.setComment(comments2);
 		assertEquals(comments2, compLic.getComment());
 		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
@@ -168,7 +168,7 @@ public class TestSpdxListedLicense {
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testSetFsfLibre() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -197,7 +197,7 @@ public class TestSpdxListedLicense {
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
-		
+
 		// Test for null value
 		SpdxListedLicense stdl2 = new SpdxListedLicense(name, id, text,
 				sourceUrls, notes, standardLicenseHeader, template, false, null, licenseHtml, true, deprecatedVersion);
@@ -215,10 +215,10 @@ public class TestSpdxListedLicense {
 		assertTrue(compLic3.isNotFsfLibre());
 		SpdxListedLicense compLic4 = new SpdxListedLicense(modelContainer, licResource2.asNode());
 		assertFalse(compLic4.getFsfLibre() == null);
-		assertFalse(compLic4.isFsfLibre());		
+		assertFalse(compLic4.isFsfLibre());
 		assertTrue(compLic4.isNotFsfLibre());
 	}
-	
+
 	@Test
 	public void testSetDeprecated() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -235,7 +235,7 @@ public class TestSpdxListedLicense {
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(true, compLic.isDeprecated());
-		
+
 		compLic.setDeprecated(false);
 		assertEquals(false, compLic.isDeprecated());
 		SpdxListedLicense compLic2 = new SpdxListedLicense(modelContainer, licResource.asNode());
@@ -262,7 +262,7 @@ public class TestSpdxListedLicense {
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(id, compLic.getLicenseId());
 		assertEquals(text, compLic.getLicenseText());
-		
+
 		String newID = "newID";
 		String newText = "new Text";
 		compLic.setLicenseId(newID);
@@ -277,7 +277,7 @@ public class TestSpdxListedLicense {
 		verify = compLic.verify();
 		assertEquals(1, verify.size());	// verify will fail since this is not a valid listed license ID
 	}
-	
+
 	@Test
 	public void testCreateMultile() {
 		// test to make sure if we create a node with the same id, we
@@ -293,28 +293,28 @@ public class TestSpdxListedLicense {
 		String template = "template";
 		String id2 = "Apache-1.0";
 		String name2 = "name2";
-		
+
 		try {
     		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
     				sourceUrls1, notes, standardLicenseHeader, template, true);
     		Resource licResource = stdl.createResource(modelContainer);
-    		
+
     		SpdxListedLicense stdl3 = new SpdxListedLicense(name2, id2, text,
     				sourceUrls2, notes, standardLicenseHeader, template, true);
     		@SuppressWarnings("unused")
     		Resource compResource3 = stdl3.createResource(modelContainer);
-    		
+
     		SpdxListedLicense stdl2 = new SpdxListedLicense(name2, id, text,
     				sourceUrls2, notes, standardLicenseHeader, template, true);
-            
+
     		Resource compResource = stdl2.createResource(modelContainer);
             assertTrue(licResource.equals(compResource));
-            assertEquals(licResource.getURI(), compResource.getURI());		
+            assertEquals(licResource.getURI(), compResource.getURI());
 		} catch (InvalidSPDXAnalysisException e) {
 		    throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Test
 	public void testClone() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -331,7 +331,7 @@ public class TestSpdxListedLicense {
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 
-		
+
 		SpdxListedLicense lic2 = (SpdxListedLicense)compLic.clone();
 
 		assertEquals(id, lic2.getLicenseId());
@@ -369,7 +369,7 @@ public class TestSpdxListedLicense {
 		}
 		return true;
 	}
-	
+
 	@Test
 	public void testEquivalent() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -395,7 +395,7 @@ public class TestSpdxListedLicense {
 		stdl2.setLicenseId("Apache-2.0");
 		assertFalse(stdl.equivalent(stdl2));
 	}
-	
+
 	@Test
 	public void testSetHeaderTemplate() throws InvalidSPDXAnalysisException {
 		model = ModelFactory.createDefaultModel();
@@ -413,7 +413,7 @@ public class TestSpdxListedLicense {
 		Resource licResource = stdl.createResource(modelContainer);
 		SpdxListedLicense compLic = new SpdxListedLicense(modelContainer, licResource.asNode());
 		assertEquals(standardLicenseHeaderTemplate, compLic.getStandardLicenseHeaderTemplate());
-		
+
 		String newHeaderTemplate = "New standard license template";
 		compLic.setStandardLicenseHeaderTemplate(newHeaderTemplate);
 		assertEquals(newHeaderTemplate, compLic.getStandardLicenseHeaderTemplate());
@@ -424,7 +424,7 @@ public class TestSpdxListedLicense {
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
 	}
-	
+
 	@Test
 	public void testSetHeaderTemplateHtml() throws InvalidSPDXAnalysisException, InvalidLicenseTemplateException {
 		model = ModelFactory.createDefaultModel();
@@ -439,7 +439,7 @@ public class TestSpdxListedLicense {
 		String standardLicenseHeaderHtml = "<h1>licenseHeader</h1>";
 		String textHtml = "<h1>text</h1>";
 		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text,
-				sourceUrls, notes, standardLicenseHeader, template, standardLicenseHeaderTemplate, 
+				sourceUrls, notes, standardLicenseHeader, template, standardLicenseHeaderTemplate,
 				true, true, textHtml, standardLicenseHeaderHtml);
 		assertEquals(textHtml, stdl.getLicenseTextHtml());
 		assertEquals(standardLicenseHeaderHtml, stdl.getLicenseHeaderHtml());

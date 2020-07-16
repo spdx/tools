@@ -26,15 +26,15 @@ import java.util.regex.Pattern;
  *
  */
 public class LicenseTemplateRule {
-	
+
 	public enum RuleType {VARIABLE, BEGIN_OPTIONAL, END_OPTIONAL};
-	
+
 	RuleType type;
 	String original = null;
 	String name;
 	String example = null;
 	String match = null;
-	
+
 	static final Pattern SPLIT_REGEX = Pattern.compile("[^\\\\];");
 	private static final String EXAMPLE_KEYWORD = "example";
 	private static final String NAME_KEYWORD = "name";
@@ -44,14 +44,14 @@ public class LicenseTemplateRule {
 	private static final String BEGIN_OPTIONAL_TYPE_STR = "beginOptional";
 	private static final String END_OPTIONAL_TYPE_STR = "endOptional";
 	private static final String VALUE_SEPARATOR = "=";
-	
+
 	/**
 	 * Create a new LicenseTemplateRule
 	 * @param name Name of the rule - must not be null
 	 * @param type - type of rule
 	 * @param original - Original text - must not be null
 	 * @param example - Example text - may be null
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	public LicenseTemplateRule(String name, RuleType type, String original, String match, String example) throws LicenseTemplateRuleException {
 		this.type = type;
@@ -61,7 +61,7 @@ public class LicenseTemplateRule {
 		this.match = match;
 		validate();
 	}
-	
+
 	@Override
 	public String toString() {
 		if (RuleType.VARIABLE.equals(this.type)) {
@@ -78,10 +78,10 @@ public class LicenseTemplateRule {
 			return "Unknown";
 		}
 	}
-	
+
 	/**
 	 * Validates that the LicenseTemplateRule is properly initialized
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	public void validate() throws LicenseTemplateRuleException {
 		if (this.type == null) {
@@ -102,7 +102,7 @@ public class LicenseTemplateRule {
 	 * Create a new License Template Rule by parsing a rule string compliant with the SPDX
 	 * License Template text
 	 * @param parseableLicenseTemplateRule
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	public LicenseTemplateRule(String parseableLicenseTemplateRule) throws LicenseTemplateRuleException {
 		parseLicenseTemplateRule(parseableLicenseTemplateRule);
@@ -112,7 +112,7 @@ public class LicenseTemplateRule {
 	/**
 	 * @param ruleName
 	 * @param ruleType
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	public LicenseTemplateRule(String ruleName, RuleType ruleType) throws LicenseTemplateRuleException {
 		this.name = ruleName;
@@ -124,7 +124,7 @@ public class LicenseTemplateRule {
 	 * Parse a license template rule string compliant with the SPDX license template text and
 	 * replace all properties with the parsed values
 	 * @param parseableLicenseTemplateRule
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	public void parseLicenseTemplateRule(String parseableLicenseTemplateRule) throws LicenseTemplateRuleException {
 		//TODO: Check for repeated keywords
@@ -145,7 +145,7 @@ public class LicenseTemplateRule {
 			start = parseableLicenseTemplateRule.length();
 		}
 		this.type = typeStringToType(typeStr);
-		
+
 		// parse out remaining fields
 		while (rulePartMatcher.find()) {
 			String rulePart = parseableLicenseTemplateRule.substring(start, rulePartMatcher.start()+1);
@@ -162,7 +162,7 @@ public class LicenseTemplateRule {
 	/**
 	 * @param typeStr
 	 * @return
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	private RuleType typeStringToType(String typeStr) throws LicenseTemplateRuleException {
 		if (typeStr.equals(VARIABLE_RULE_TYPE_STR)) {
@@ -175,7 +175,7 @@ public class LicenseTemplateRule {
 			throw(new LicenseTemplateRuleException("Unknown rule type: "+typeStr));
 		}
 	}
-	
+
 	public RuleType getType() {
 		return type;
 	}
@@ -246,7 +246,7 @@ public class LicenseTemplateRule {
 	/**
 	 * Parse the part of a rule and stores the result as a property
 	 * @param rulePart
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	private void parseRulePart(String rulePart) throws LicenseTemplateRuleException {
 		if (rulePart.startsWith(EXAMPLE_KEYWORD)) {
@@ -280,7 +280,7 @@ public class LicenseTemplateRule {
 	 * @param rulePart
 	 * @param keyword
 	 * @return
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException
 	 */
 	private String getValue(String rulePart, String keyword) throws LicenseTemplateRuleException {
 		String retval = rulePart.substring(keyword.length());

@@ -38,7 +38,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 	/**
 	 * @param modelContainer container which includes the license
 	 * @param node Node that defines the conjunctive license set
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public ConjunctiveLicenseSet(IModelContainer modelContainer, Node node) throws InvalidSPDXAnalysisException {
 		super(modelContainer, node);
@@ -69,7 +69,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 		sb.append(')');
 		return sb.toString();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		// Calculate a hashcode by XOR'ing all of the hashcodes of the license set
@@ -106,7 +106,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 				if (li.equals(compInfos[i])) {
 					found = true;
 					break;
-				} 
+				}
 			}
 			if (!found) {
 				return false;
@@ -186,7 +186,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 				if (li.equivalent(compInfos[i])) {
 					found = true;
 					break;
-				} 
+				}
 			}
 			if (!found) {
 				return false;

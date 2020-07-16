@@ -38,11 +38,11 @@ import org.spdx.tag.InvalidSpdxTagFileException;
  *
  */
 public class CompareHelper {
-	
+
 	static final int MAX_CHARACTERS_PER_CELL = 32000;
 
 	/**
-	 * 
+	 *
 	 */
 	private CompareHelper() {
 		// Static helper, should not be instantiated
@@ -159,7 +159,7 @@ public class CompareHelper {
 		}
 		return sb.toString();
 	}
-	
+
 	public static String relationshipToString(Relationship relationship) {
 		if (relationship == null) {
 			return "";
@@ -216,7 +216,7 @@ public class CompareHelper {
 			return "";
 		}
 		StringBuilder sb;
-		if (elements[0] == null || elements[0].getId() == null || 
+		if (elements[0] == null || elements[0].getId() == null ||
 				elements[0].getId().isEmpty()) {
 			sb = new StringBuilder("[UNKNOWNID]");
 		} else {
@@ -229,7 +229,7 @@ public class CompareHelper {
 		}
 		for (int i = 1; i < elements.length; i++) {
 			sb.append(", ");
-			if (elements[i] == null || elements[i].getId() == null || 
+			if (elements[i] == null || elements[i].getId() == null ||
 					elements[i].getId().isEmpty()) {
 				sb.append("[UNKNOWNID]");
 			} else {
@@ -271,7 +271,7 @@ public class CompareHelper {
 	/**
 	 * @param typeStr
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static FileType[] parseFileTypeString(String typeStr) throws InvalidSPDXAnalysisException {
 		if (typeStr == null || typeStr.trim().isEmpty()) {
@@ -296,7 +296,7 @@ public class CompareHelper {
 	/**
 	 * @param checksumsString
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Checksum[] strToChecksums(String checksumsString) throws InvalidSPDXAnalysisException {
 		if (checksumsString == null || checksumsString.trim().isEmpty()) {
@@ -313,7 +313,7 @@ public class CompareHelper {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Creates a Checksum from the parameters specified in the tag value
 	 * @param value
@@ -336,7 +336,7 @@ public class CompareHelper {
 	 * Convert external refs to a friendly string
 	 * @param externalRefs
 	 * @return
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static String externalRefsToString(ExternalRef[] externalRefs, String docNamespace) throws InvalidSPDXAnalysisException {
 		if (externalRefs == null || externalRefs.length == 0) {
@@ -349,7 +349,7 @@ public class CompareHelper {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Convert a single external ref to a friendly string
 	 * @param externalRef
@@ -365,7 +365,7 @@ public class CompareHelper {
 			category = externalRef.getReferenceCategory().getTag();
 		}
 		String referenceType = null;
-		if (externalRef.getReferenceType() == null || 
+		if (externalRef.getReferenceType() == null ||
 				externalRef.getReferenceType().getReferenceTypeUri() == null) {
 			referenceType = "[MISSING]";
 		} else {

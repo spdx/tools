@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
  * Copyright (c) 2013 Black Duck Software Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -37,7 +37,7 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  * Spreadsheet holding the results of a comparison from multiple SPDX documents
  * Each sheet contains the comparison result results with the columns representing the SPDX documents
  * and the rows representing the SPDX fields.
- * 
+ *
  * The sheets include:
  *   - document: Document level fields Created, Data License, Document Comment, created date, creator comment
  *   - creator: Creators
@@ -51,14 +51,14 @@ import org.spdx.spdxspreadsheet.SpreadsheetException;
  *   - file type: file type of all files
  *   - reviewers: review information
  *   - verification: List of any verification errors
- *   
+ *
  * @author Gary O'Neall
  *
  */
 public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
-	
+
 	private static final class SpdxFileComparator implements Comparator<SpdxFile> {
-		
+
 		private NormalizedFileNameComparator normalizedFileNameComparator = new NormalizedFileNameComparator();
 
 		/* (non-Javadoc)
@@ -67,9 +67,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		@Override
 		public int compare(SpdxFile arg0, SpdxFile arg1) {
 			return normalizedFileNameComparator.compare(arg0.getName(), arg1.getName());
-		}	
+		}
 	}
-	
+
 	private SpdxFileComparator fileComparator = new SpdxFileComparator();
 
 	static Logger logger = LoggerFactory.getLogger(MultiDocumentSpreadsheet.class);
@@ -94,7 +94,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private static final String FILE_ARTIFACT_OF_SHEET_NAME = "File ArtifactOf";
 	private FileArtifactOfSheet fileArtifactOfSheet;
 	private static final String FILE_TYPE_SHEET_NAME = "File Type";
-	private FileTypeSheet fileTypeSheet;	
+	private FileTypeSheet fileTypeSheet;
 	private static final String REVIEWER_SHEET_NAME = "Reviewers";
 	private ReviewerSheet reviewerSheet;
 	private static final String FILE_CONTRIBUTOR_SHEET_NAME = "File Contributors";
@@ -115,7 +115,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private static final String FILE_ANNOTATION_SHEET_NAME = "File Annot.";
 	private static final String FILE_RELATIONSHIP_SHEET = "File Relationships";
 	private static final String SNIPPET_SHEET_NAME = "Snippets";
-	
+
 	private VerificationSheet verificationSheet;
 
 	private ExternalReferencesSheet externalReferencesSheet;
@@ -131,9 +131,9 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	private FileAnnotationSheet fileAnnotationSheet;
 
 	private FileRelationshipSheet fileRelationshipSheet;
-	
+
 	private SnippetSheet snippetSheet;
-	
+
 	/**
 	 * @param spreadsheetFile
 	 * @param create
@@ -157,7 +157,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileLicenseInfoSheet = new FileLicenseInfoSheet(this.workbook, FILE_FOUND_SHEET_NAME);
 		fileLicenseCommentsSheet = new FileLicenseCommentsSheet(this.workbook, FILE_LICENSE_COMMENT_SHEET_NAME);
 		fileCopyrightSheet = new FileCopyrightSheet(this.workbook, FILE_COPYRIGHT_SHEET_NAME);
-		fileArtifactOfSheet = new FileArtifactOfSheet(this.workbook, FILE_ARTIFACT_OF_SHEET_NAME);		
+		fileArtifactOfSheet = new FileArtifactOfSheet(this.workbook, FILE_ARTIFACT_OF_SHEET_NAME);
 		fileCommentSheet = new FileCommentSheet(this.workbook, FILE_COMMENT_SHEET_NAME);
 		fileNoticeSheet = new FileNoticeSheet(this.workbook, FILE_NOTICE_SHEET_NAME);
 		fileContributorsSheet = new FileContributorsSheet(this.workbook, FILE_CONTRIBUTOR_SHEET_NAME);
@@ -166,8 +166,8 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileAnnotationSheet = new FileAnnotationSheet(this.workbook, FILE_ANNOTATION_SHEET_NAME);
 		fileRelationshipSheet = new FileRelationshipSheet(this.workbook, FILE_RELATIONSHIP_SHEET);
 		snippetSheet = new SnippetSheet(this.workbook, SNIPPET_SHEET_NAME);
-		reviewerSheet = new ReviewerSheet(this.workbook, REVIEWER_SHEET_NAME);	
-		verificationSheet = new VerificationSheet(this.workbook, VERIFICATION_SHEET_NAME);	
+		reviewerSheet = new ReviewerSheet(this.workbook, REVIEWER_SHEET_NAME);
+		verificationSheet = new VerificationSheet(this.workbook, VERIFICATION_SHEET_NAME);
 		String verify = this.verifyWorkbook();
 		if (verify != null && !verify.isEmpty()) {
 			logger.error("Invalid workbook: "+verify);
@@ -211,7 +211,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			FileAnnotationSheet.create(wb, FILE_ANNOTATION_SHEET_NAME);
 			FileRelationshipSheet.create(wb, FILE_RELATIONSHIP_SHEET);
 			SnippetSheet.create(wb, SNIPPET_SHEET_NAME);
-			ReviewerSheet.create(wb, REVIEWER_SHEET_NAME);	
+			ReviewerSheet.create(wb, REVIEWER_SHEET_NAME);
 			VerificationSheet.create(wb, VERIFICATION_SHEET_NAME);
 			wb.write(excelOut);
 		} finally {
@@ -220,7 +220,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		    }
 		}
 	}
-	
+
 	public void importCompareResults(SpdxComparer comparer, String[] docNames) throws SpdxCompareException, InvalidSPDXAnalysisException {
 		if (docNames == null) {
 			throw(new SpdxCompareException("Doc names can not be null"));
@@ -247,7 +247,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		documentAnnotationSheet.resizeRows();
 		documentRelationshipSheet.importCompareResults(comparer, docNames);
 		documentRelationshipSheet.resizeRows();
-		packageSheet.importCompareResults(comparer, docNames);	
+		packageSheet.importCompareResults(comparer, docNames);
 		packageSheet.resizeRows();
 		fileSpdxIdSheet.importCompareResults(comparer, files, docNames);
 		fileSpdxIdSheet.resizeRows();
@@ -301,7 +301,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 		fileLicenseInfoSheet.clear();
 		fileLicenseCommentsSheet.clear();
 		fileArtifactOfSheet.clear();
-		reviewerSheet.clear();	
+		reviewerSheet.clear();
 		verificationSheet.clear();
 		fileCommentSheet.clear();
 		fileContributorsSheet.clear();
@@ -366,32 +366,32 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		sheetVerify = reviewerSheet.verify();	
+		sheetVerify = reviewerSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		sheetVerify = fileContributorsSheet.verify();	
+		sheetVerify = fileContributorsSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		sheetVerify = fileAttributionSheet.verify();	
+		sheetVerify = fileAttributionSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		sheetVerify = fileDependenciesSheet.verify();	
+		sheetVerify = fileDependenciesSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		sheetVerify = fileNoticeSheet.verify();	
+		sheetVerify = fileNoticeSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
 		}
-		sheetVerify = verificationSheet.verify();	
+		sheetVerify = verificationSheet.verify();
 		if (sheetVerify != null && !sheetVerify.isEmpty()) {
 			sb.append("; ");
 			sb.append(sheetVerify);
@@ -411,7 +411,7 @@ public class MultiDocumentSpreadsheet extends AbstractSpreadsheet {
 	/**
 	 * @param verificationErrors
 	 * @param docNames
-	 * @throws SpreadsheetException 
+	 * @throws SpreadsheetException
 	 */
 	public void importVerificationErrors(
 			List<String>[] verificationErrors, String[] docNames) throws SpreadsheetException {

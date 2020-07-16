@@ -34,18 +34,18 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class SpdxNoneLicense extends AnyLicenseInfo {
-	
+
 	static final int NONE_LICENSE_HASHCODE = 147; // prime number - all none licenses should have the same hashcde
 
 	/**
 	 * @param container
 	 * @param node
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException
 	 */
 	public SpdxNoneLicense(IModelContainer container, Node node) throws InvalidSPDXAnalysisException {
 		super(container, node);
 	}
-	
+
 	public SpdxNoneLicense() {
 		super();
 	}
@@ -57,7 +57,7 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	public String toString() {
 		return LicenseInfoFactory.NONE_LICENSE_NAME;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return NONE_LICENSE_HASHCODE;
@@ -104,7 +104,7 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	@Override
 	public void populateModel() throws InvalidSPDXAnalysisException {
 		// Nothing to populate
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -113,7 +113,7 @@ public class SpdxNoneLicense extends AnyLicenseInfo {
 	@Override
 	public void getPropertiesFromModel() throws InvalidSPDXAnalysisException {
 		// No properties to get
-		
+
 	}
 
 	/* (non-Javadoc)
