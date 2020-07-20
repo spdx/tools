@@ -631,7 +631,7 @@ public abstract class License extends SimpleLicensingInfo {
 	public AnyLicenseInfo clone() {
 		try {
 			SpdxListedLicense retval = new SpdxListedLicense(this.getName(), this.getLicenseId(),
-					this.getLicenseText(), this.getSeeAlso(), this.getSeeAlsoDetails(), this.getComment(),
+					this.getLicenseText(), this.getSeeAlso(), this.getCrossRef(), this.getComment(),
 					this.getStandardLicenseHeader(), this.getStandardLicenseTemplate(),
 					this.getStandardLicenseHeaderTemplate(), this.isOsiApproved(), this.getFsfLibre());
 			retval.setDeprecated(this.isDeprecated());
@@ -652,7 +652,7 @@ public abstract class License extends SimpleLicensingInfo {
 		this.setName(license.getName());
 		this.setOsiApproved(license.isOsiApproved());
 		this.setSeeAlso(license.getSeeAlso());
-		this.setSeeAlsoDetails(license.getSeeAlsoDetails());
+		this.setCrossRef(license.getCrossRef());
 		this.setStandardLicenseHeader(license.getStandardLicenseHeader());
 		this.setStandardLicenseTemplate(this.getStandardLicenseTemplate());
 		this.setStandardLicenseHeaderTemplate(license.getStandardLicenseHeaderTemplate());

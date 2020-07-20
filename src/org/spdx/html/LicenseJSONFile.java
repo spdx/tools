@@ -71,7 +71,7 @@ public class LicenseJSONFile extends AbstractJsonFile {
 		}
 		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getName());
 		String[] seeAlsos = license.getSeeAlso();
-		String[] seeAlsoDetails = license.getSeeAlsoDetails();
+		String[] crossRefs = license.getCrossRef();
 		if (seeAlsos != null && seeAlsos.length > 0) {
 			JSONArray seeAlsoArray = new JSONArray();
 			for (String seeAlso:seeAlsos) {
@@ -80,11 +80,11 @@ public class LicenseJSONFile extends AbstractJsonFile {
 			jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 		}
 		if (seeAlsos != null && seeAlsos.length > 0) {
-			JSONArray seeAlsoDetailsArray = new JSONArray();
-			for (String seeAlsoDetail:seeAlsoDetails) {
-				seeAlsoDetailsArray.add(seeAlsoDetail);
+			JSONArray crossRefArray = new JSONArray();
+			for (String crossRef:crossRefs) {
+				crossRefArray.add(crossRef);
 			}
-			jsonObject.put(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, seeAlsoDetailsArray);
+			jsonObject.put(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, crossRefArray);
 		}
 		if (license.getComment() != null && !license.getComment().isEmpty()) {
 			jsonObject.put(SpdxRdfConstants.PROP_LIC_COMMENTS, license.getComment());
