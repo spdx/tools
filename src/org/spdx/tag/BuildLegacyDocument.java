@@ -169,7 +169,6 @@ public class BuildLegacyDocument implements TagValueBehavior {
 				values[i] = values[i].trim();
 			}
 			lastExtractedLicense.setSeeAlso(values);
-			// lastExtractedLicense.setSeeAlsoDetails(values);
 		} else if (tag.equals(constants.getProperty("PROP_LICENSE_COMMENT"))) {
 			if (lastExtractedLicense == null) {
 				throw(new InvalidSpdxTagFileException("Missing Extracted License - An  extracted license ID must be provided before the license comment"));

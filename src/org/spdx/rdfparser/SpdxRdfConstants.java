@@ -46,15 +46,14 @@ public interface SpdxRdfConstants {
 	public static final String RDFS_PROP_COMMENT = "comment";
 	public static final String RDFS_PROP_LABEL = "label";
 	public static final String RDFS_PROP_SEE_ALSO = "seeAlso";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS = "seeAlsoDetails";
 
-	// crossrefs details (seeAlsoDetails) properties
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_IS_VALID = "isValid";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_WAYBACK_LINK = "isWayBackLink";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_MATCH = "match";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_URL = "url";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_IS_DEAD = "isDead";
-	public static final String RDFS_PROP_SEE_ALSO_DETAILS_TIMESTAMP = "timestamp";
+	// crossrefs details (crossRef) properties
+	public static final String PROP_CROSS_REF_IS_VALID = "isValid";
+	public static final String PROP_CROSS_REF_WAYBACK_LINK = "isWayBackLink";
+	public static final String PROP_CROSS_REF_MATCH = "match";
+	public static final String PROP_CROSS_REF_URL = "url";
+	public static final String PROP_CROSS_REF_IS_LIVE = "isLive";
+	public static final String PROP_CROSS_REF_TIMESTAMP = "timestamp";
 
 	// DOAP Class Names
 	public static final String CLASS_DOAP_PROJECT = "Project";
