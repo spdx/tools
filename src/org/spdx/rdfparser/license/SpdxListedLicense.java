@@ -168,6 +168,26 @@ public class SpdxListedLicense extends License {
 		super(name, id, text, sourceUrl, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
 	}
 
+	/**
+	 * @param name License name
+	 * @param id License ID
+	 * @param text License text
+	 * @param sourceUrl Optional URLs that reference this license
+	 * @param sourceUrlDetails Optional URLs that reference this license
+	 * @param comments Optional comments
+	 * @param standardLicenseHeader Optional license header
+	 * @param template Optional template
+	 * @param licenseHeaderTemplate optional template for the standard license header
+	 * @param osiApproved True if this is an OSI Approved license
+	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String[] sourceUrlDetails, String comments,
+			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
+
+		super(name, id, text, sourceUrl, sourceUrlDetails, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);
+	}
+
 	@Override
 	public List<String> verify() {
 		List<String> retval = super.verify();
