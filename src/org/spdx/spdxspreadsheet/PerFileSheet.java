@@ -135,7 +135,7 @@ public abstract class PerFileSheet extends AbstractSheet {
 	 */
 	public static void create(Workbook wb, String perFileSheetName) {
 		//NOTE: This needs to be updated the the most current version
-		PerFileSheetV2d0.create(wb, perFileSheetName);
+		PerFileSheetV2d2.create(wb, perFileSheetName);
 	}
 
 	/**
