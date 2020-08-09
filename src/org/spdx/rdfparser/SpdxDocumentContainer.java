@@ -74,7 +74,7 @@ public class SpdxDocumentContainer implements IModelContainer, SpdxRdfConstants 
 	public static final String TWO_POINT_TWO_VERSION = "SPDX-2.2";
 	public static final String CURRENT_SPDX_VERSION = TWO_POINT_TWO_VERSION;
 
-	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.2.0";
+	public static final String CURRENT_IMPLEMENTATION_VERSION = "2.2.3";
 
 	static Set<String> SUPPORTED_SPDX_VERSIONS = Sets.newHashSet();
 
