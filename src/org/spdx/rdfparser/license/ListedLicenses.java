@@ -17,6 +17,9 @@
 package org.spdx.rdfparser.license;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -76,6 +80,7 @@ public class ListedLicenses implements IModelContainer {
 
 	Properties licenseProperties;
     boolean onlyUseLocalLicenses;
+    File localLicensesDir = null;
 
     String licenseListVersion = DEFAULT_LICENSE_LIST_VERSION;
 
@@ -94,8 +99,36 @@ public class ListedLicenses implements IModelContainer {
 	 */
 	private ListedLicenses() {
 		licenseProperties = loadLicenseProperties();
-		onlyUseLocalLicenses = Boolean.parseBoolean(
-	            System.getProperty("SPDXParser.OnlyUseLocalLicenses", licenseProperties.getProperty("OnlyUseLocalLicenses", "false")));
+		// System properties have precedence over environment variables which have precedence over the license properties file
+		String stOnlyLicenses = System.getenv("SPDXParser.OnlyUseLocalLicenses");
+		if (Objects.isNull(stOnlyLicenses) || stOnlyLicenses.isEmpty()) {
+			onlyUseLocalLicenses = Boolean.parseBoolean(
+		            System.getProperty("SPDXParser.OnlyUseLocalLicenses", licenseProperties.getProperty("OnlyUseLocalLicenses", "false")));
+		} else {
+			onlyUseLocalLicenses = Boolean.parseBoolean(stOnlyLicenses);
+		}
+		
+		if (onlyUseLocalLicenses) {
+			try {
+				String localLicensesDirStr = System.getenv("SPDXParser.LocalLicensesDir");
+				if (Objects.isNull(localLicensesDirStr) || localLicensesDirStr.isEmpty()) {
+					localLicensesDirStr = System.getProperty("SPDXParser.LocalLicensesDir", 
+							licenseProperties.getProperty("SPDXParser.LocalLicensesDir"));
+				}
+				if (Objects.isNull(localLicensesDirStr)) {
+					localLicensesDir = null;
+				} else {
+					localLicensesDir = new File(localLicensesDirStr);
+					if (!localLicensesDir.isDirectory()) {
+						logger.error("Local license directory "+localLicensesDirStr+" is not a directory");
+						localLicensesDir = null;
+					}
+				}
+			} catch (Exception ex) {
+				logger.error("Error getting local licenses directory",ex);
+				localLicensesDir = null;
+			}
+		}
 		loadListedLicenseIDs();
 	}
 
@@ -275,8 +308,23 @@ public class ListedLicenses implements IModelContainer {
 		Model retval = ModelFactory.createDefaultModel();
 		InputStream in = null;
 		try {
+			if (onlyUseLocalLicenses && Objects.nonNull(this.localLicensesDir)) {
+				// Fetch from the local file system
+				String fileName = this.localLicensesDir.getAbsolutePath() + File.separator + uri.substring(LISTED_LICENSE_URI_PREFIX.length());
+				try {
+					in = new FileInputStream(new File(fileName));
+				} catch (FileNotFoundException e) {
+					throw(new NoListedLicenseRdfModel("SPDX listed license file "+fileName+" does not exist."));
+				}
+				try (InputStreamReader reader = new InputStreamReader(in, Charset.forName("UTF-8"))){
+					retval.read(in, base, "JSON-LD");
+					return retval;
+				} catch(Exception ex) {
+					throw(new NoListedLicenseRdfModel("Error reading the spdx listed licenses: "+ex.getMessage(),ex));
+				}
+			}
 			try {
-				if (!(onlyUseLocalLicenses && uri.startsWith(LISTED_LICENSE_URI_PREFIX))) {
+				if (in == null && !onlyUseLocalLicenses) {
 					//Accessing the old HTTP urls produces 301.
 					String actualUrl = StringUtils.replaceOnce(uri, "http://", "https://");
 					actualUrl = getNestedURL(actualUrl);
@@ -368,7 +416,16 @@ public class ListedLicenses implements IModelContainer {
             InputStream tocStream = null;
             BufferedReader reader = null;
             try {
-                if (!this.onlyUseLocalLicenses) {
+            	if (this.onlyUseLocalLicenses) {
+            		if (Objects.nonNull(localLicensesDir)) {
+            			try {
+                			// Fetch from the file system
+            				tocStream = new FileInputStream(new File(localLicensesDir.getAbsolutePath() + File.separator + LICENSE_TOC_FILENAME));
+            			} catch (IOException e) {
+            				logger.error("Json TOC local file missing or invalid - using installed licenses");
+            			}
+            		}
+        		} else {
                 	try {
 						URL tocUrl = new URL(LISTED_LICENSE_URI_PREFIX + LICENSE_TOC_FILENAME);
 						tocStream = tocUrl.openStream();
@@ -379,7 +436,7 @@ public class ListedLicenses implements IModelContainer {
 						logger.error("I/O error opening Json TOC URL, using local TOC file");
 						tocStream = null;
 					}
-                }
+        		}
                 if (tocStream == null) {
                 	// fetch from class loader
                 	String fileName = LISTED_LICENSE_RDF_LOCAL_DIR + "/" + LICENSE_TOC_FILENAME;

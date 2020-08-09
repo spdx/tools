@@ -17,6 +17,9 @@
 package org.spdx.rdfparser.license;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -65,7 +69,8 @@ public class ListedExceptions implements IModelContainer {
 	Map<IModelContainer, Map<Node, ListedLicenseException>> listedExceptionNodeCache = Maps.newHashMap();
 
     boolean onlyUseLocalLicenses;
-
+    File localLicensesDir = null;
+    
     String licenseListVersion = ListedLicenses.DEFAULT_LICENSE_LIST_VERSION;
 
 	private static volatile ListedExceptions listedExceptions = null;
@@ -83,6 +88,7 @@ public class ListedExceptions implements IModelContainer {
 	 */
 	private ListedExceptions() {
 		onlyUseLocalLicenses = ListedLicenses.getListedLicenses().onlyUseLocalLicenses;
+		localLicensesDir = ListedLicenses.getListedLicenses().localLicensesDir;
 		loadListedExceptionIDs();
 	}
 
@@ -262,8 +268,23 @@ public class ListedExceptions implements IModelContainer {
 		Model retval = ModelFactory.createDefaultModel();
 		InputStream in = null;
 		try {
+			if (onlyUseLocalLicenses && Objects.nonNull(this.localLicensesDir)) {
+				// Fetch from the local file system
+				String fileName = this.localLicensesDir.getAbsolutePath() + File.separator + uri.substring(ListedLicenses.LISTED_LICENSE_URI_PREFIX.length());
+				try {
+					in = new FileInputStream(new File(fileName));
+				} catch (FileNotFoundException e) {
+					throw(new NoListedLicenseRdfModel("SPDX listed exception file "+fileName+" does not exist."));
+				}
+				try (InputStreamReader reader = new InputStreamReader(in, Charset.forName("UTF-8"))){
+					retval.read(in, base, "JSON-LD");
+					return retval;
+				} catch(Exception ex) {
+					throw(new NoListedLicenseRdfModel("Error reading the spdx listed exceptions: "+ex.getMessage(),ex));
+				}
+			}
 			try {
-				if (!(onlyUseLocalLicenses && uri.startsWith(ListedLicenses.LISTED_LICENSE_URI_PREFIX))) {
+				if (in == null && !onlyUseLocalLicenses) {
 					//Accessing the old HTTP urls produces 301.
 					String actualUrl = StringUtils.replaceOnce(uri, "http://", "https://");
 					in = FileManager.get().open(actualUrl);
@@ -326,7 +347,16 @@ public class ListedExceptions implements IModelContainer {
             InputStream tocStream = null;
             BufferedReader reader = null;
             try {
-                if (!this.onlyUseLocalLicenses) {
+            	if (this.onlyUseLocalLicenses) {
+            		if (Objects.nonNull(localLicensesDir)) {
+            			try {
+                			// Fetch from the file system
+            				tocStream = new FileInputStream(new File(localLicensesDir.getAbsolutePath() + File.separator + EXCEPTION_TOC_FILENAME));
+            			} catch (IOException e) {
+            				logger.error("Json TOC local file missing or invalid - using installed licenses");
+            			}
+            		}
+        		} else {
                 	try {
 						URL tocUrl = new URL(ListedLicenses.LISTED_LICENSE_URI_PREFIX + EXCEPTION_TOC_FILENAME);
 						tocStream = tocUrl.openStream();
