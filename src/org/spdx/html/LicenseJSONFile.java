@@ -79,7 +79,7 @@ public class LicenseJSONFile extends AbstractJsonFile {
 			}
 			jsonObject.put(SpdxRdfConstants.RDFS_PROP_SEE_ALSO, seeAlsoArray);
 		}
-		if (seeAlsos != null && seeAlsos.length > 0) {
+		if (crossRefs != null && crossRefs.length > 0) {
 			JSONArray crossRefArray = new JSONArray();
 			for (String crossRef:crossRefs) {
 				crossRefArray.add(crossRef);
