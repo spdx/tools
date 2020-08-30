@@ -129,7 +129,7 @@ public class DisjunctiveLicenseSet extends LicenseSet {
 	}
 
 	/**
-	 * Disjunctive license sets can contain other conjunctive license sets as members.  Logically,
+	 * Disjunctive license sets can contain other disjunctive license sets as members.  Logically,
 	 * the members of these "sub-disjunctive license sets" could be direct members and have the same
 	 * meaning.
 	 * @return all members "flattening out" disjunctive license sets which are members of this set

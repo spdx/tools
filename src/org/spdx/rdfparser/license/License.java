@@ -28,7 +28,6 @@ import org.spdx.rdfparser.model.IRdfModel;
 
 import com.google.common.collect.Lists;
 import org.apache.jena.graph.Node;
-import org.json.simple.JSONArray;
 
 /**
  * Describes a license
