@@ -569,6 +569,51 @@ public class LicenseCompareHelper {
 		}
 		return true;
 	}
+	
+	/**
+	 * Get the text of a license minus any optional text - note: this include the default variable text
+	 * @param licenseTemplate license template containing optional and var tags
+	 * @param includeVarText if true, include the default variable text; if false remove the variable text
+	 * @return list of strings for all non-optional license text.  
+	 * @throws SpdxCompareException
+	 */
+	public static List<String> getNonOptionalLicenseText(String licenseTemplate, boolean includeVarText) throws SpdxCompareException {
+		FilterTemplateOutputHandler filteredOutput = new FilterTemplateOutputHandler(includeVarText);
+		try {
+			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, filteredOutput);
+		} catch (LicenseTemplateRuleException e) {
+			throw(new SpdxCompareException("Invalid template rule found during filter: "+e.getMessage(),e));
+		} catch (LicenseParserException e) {
+			throw(new SpdxCompareException("Invalid template found during filter: "+e.getMessage(),e));
+		}
+		return filteredOutput.getFilteredText();
+	}
+	
+	/**
+	 * Creates a regular expression pattern to match the start of a license text
+	 * @param nonOptionalText List of strings of non-optional text from the license template (see <code>List<String> getNonOptionalLicenseText</code>)
+	 * @param numberOfWords Number of words to use in the match
+	 * @return Pattern which will match the start of the license text
+	 */
+	public static Pattern nonOptionalTextToStartPattern(List<String> nonOptionalText, int numberOfWords) {
+		int wordCount = 0;
+		int textIndex = 0;
+		StringBuilder patternBuilder = new StringBuilder();
+		while (wordCount <= numberOfWords && textIndex < nonOptionalText.size()) {
+			String[] tokens = normalizeText(nonOptionalText.get(textIndex++).trim()).split("\\s");
+			int tokenIndex = 0;
+			while (tokenIndex < tokens.length && wordCount < numberOfWords) {
+				String token = tokens[tokenIndex++].trim();
+				if (token.length() > 0) {
+					patternBuilder.append(Pattern.quote(token));
+					patternBuilder.append("\\s*");
+					wordCount++;
+				}
+			}
+			patternBuilder.append(".*");
+		}
+		return Pattern.compile(patternBuilder.toString(), Pattern.DOTALL);
+	}
 
 	/**
 	 * Compares license text to the license text of an SPDX Standard License

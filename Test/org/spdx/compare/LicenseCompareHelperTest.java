@@ -22,7 +22,10 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +52,8 @@ public class LicenseCompareHelperTest {
 
 	static final String GPL_2_TEXT = "TestFiles" + File.separator + "GPL-2.0.txt";
 	static final String ZPL_2_1_TEXT = "TestFiles" + File.separator + "ZPL-2.1.txt";
-
+	static final String AGPL_3_ONLY_TEMPLATE = "TestFiles" + File.separator + "AGPL-3.0-only.template.txt";
+	static final String AGPL_3_ONLY = "TestFiles" + File.separator + "AGPL-3.0-only.txt";
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -634,5 +638,35 @@ public class LicenseCompareHelperTest {
 		String t1 = "This is a test of space";
 		String t2 = "This is\u2060a\u2007test\u202Fof space";
 		assertTrue(LicenseCompareHelper.isLicenseTextEquivalent(t1, t2));
+	}
+	
+	@Test
+	public void testGetNonOptionalLicenseText() throws SpdxCompareException, IOException {
+		String agplTemplate = UnitTestHelper.fileToText(AGPL_3_ONLY_TEMPLATE);
+		List<String> result = LicenseCompareHelper.getNonOptionalLicenseText(agplTemplate, true);
+		assertEquals(1, result.size());
+		assertTrue(result.get(0).trim().startsWith("Copyright (C) 2007 Free Software Foundation"));
+		assertTrue(result.get(0).trim().endsWith("a copy of the Program in return for a fee."));
+		result = LicenseCompareHelper.getNonOptionalLicenseText(agplTemplate, false);
+		assertEquals(34,result.size());
+		assertTrue(result.get(0).trim().startsWith("Copyright (C) 2007 Free Software Foundation"));
+		assertTrue(result.get(1).trim().startsWith("Definitions."));	
+	}
+	
+	@Test
+	public void testNonOptionalTextToStartPattern() throws SpdxCompareException, IOException {
+		String agplTemplate = UnitTestHelper.fileToText(AGPL_3_ONLY_TEMPLATE);
+		List<String> nonOptionalText = LicenseCompareHelper.getNonOptionalLicenseText(agplTemplate, true);
+		Pattern result = LicenseCompareHelper.nonOptionalTextToStartPattern(nonOptionalText, 25);
+		String beforeLicense = "BEFORE THE LICENSE ";
+		String afterTheLicense = " AFTER THE LICENSE";
+		String licenseText = UnitTestHelper.fileToText(AGPL_3_ONLY);
+		String testText = beforeLicense + licenseText + afterTheLicense;
+		testText = LicenseCompareHelper.normalizeText(testText);
+		Matcher matcher = result.matcher(testText);
+		assertTrue(matcher.find());
+		assertEquals(beforeLicense.length() + " GNU AFFERO GENERAL PUBLIC LICENSE".length() + // include optional text ignored
+						+ "Version 3, 19 November 2007".length() + 2		// 2 for the number of space type characters
+						, matcher.start());
 	}
 }
