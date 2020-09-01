@@ -316,6 +316,13 @@ public abstract class License extends SimpleLicensingInfo {
 		this.textInHtml = false;	// stored in the clear
 	}
 
+	/**
+	 * @return the optional text of the license
+	 */
+	public String getOptionalText() {
+		return "Microsoft Public License (Ms-PL)";
+	}
+
 	@Deprecated
 	/**
 	 * Replaced by <code>getComment()</code>
