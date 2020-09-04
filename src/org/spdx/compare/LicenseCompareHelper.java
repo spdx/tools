@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -596,23 +597,64 @@ public class LicenseCompareHelper {
 	 * @return Pattern which will match the start of the license text
 	 */
 	public static Pattern nonOptionalTextToStartPattern(List<String> nonOptionalText, int numberOfWords) {
-		int wordCount = 0;
-		int textIndex = 0;
+		if (Objects.isNull(nonOptionalText) || nonOptionalText.size() == 0 || numberOfWords < 1) {
+			return Pattern.compile("");
+		}
+		int startWordCount = 0;
+		int startTextIndex = 0;
+		int wordsInLastLine = 0;	// keep track of the number of words processed in the last start line to make sure we don't overlap words in the end lines
 		StringBuilder patternBuilder = new StringBuilder();
-		while (wordCount <= numberOfWords && textIndex < nonOptionalText.size()) {
-			String[] tokens = normalizeText(nonOptionalText.get(textIndex++).trim()).split("\\s");
+		while (startWordCount < numberOfWords && startTextIndex < nonOptionalText.size()) {
+			String[] tokens = normalizeText(nonOptionalText.get(startTextIndex++).trim()).split("\\s");
 			int tokenIndex = 0;
-			while (tokenIndex < tokens.length && wordCount < numberOfWords) {
+			wordsInLastLine = 0;
+			while (tokenIndex < tokens.length && startWordCount < numberOfWords) {
 				String token = tokens[tokenIndex++].trim();
 				if (token.length() > 0) {
 					patternBuilder.append(Pattern.quote(token));
 					patternBuilder.append("\\s*");
-					wordCount++;
+					startWordCount++;
+					wordsInLastLine++;
 				}
 			}
 			patternBuilder.append(".*");
 		}
-		return Pattern.compile(patternBuilder.toString(), Pattern.DOTALL);
+		
+		// End words
+		List<String> endTextReversePattern = new ArrayList<>();
+		int endTextIndex = nonOptionalText.size()-1;
+		int endWordCount = 0;
+		int lastProcessedStartLine = startTextIndex - 1;
+		while (endWordCount < numberOfWords && 
+				(endTextIndex > lastProcessedStartLine || 
+						(endTextIndex == lastProcessedStartLine && (numberOfWords - endWordCount) < (nonOptionalText.get(endTextIndex).length() - wordsInLastLine)))) {	// Check to make sure we're not overlapping the start words
+			String[] tokens = normalizeText(nonOptionalText.get(endTextIndex).trim()).split("\\s");
+			List<String> nonEmptyTokens = new ArrayList<>();
+			for (String token:tokens) {
+				String trimmedToken = token.trim();
+				if (!trimmedToken.isEmpty()) {
+					nonEmptyTokens.add(trimmedToken);
+				}
+			}
+			int remainingTokens = (endTextIndex == lastProcessedStartLine && nonEmptyTokens.size() - wordsInLastLine > numberOfWords - endWordCount) ? 
+										numberOfWords - endWordCount : nonEmptyTokens.size() - wordsInLastLine;
+			endTextIndex--;
+			int tokenIndex = nonEmptyTokens.size() - 1;
+			while (tokenIndex >= 0 && remainingTokens > 0) {
+				String token = nonEmptyTokens.get(tokenIndex--);
+				endTextReversePattern.add("\\s*");
+				endTextReversePattern.add(Pattern.quote(token));
+				remainingTokens--;
+				endWordCount++;
+			}
+			endTextReversePattern.add(".*");
+		}
+		
+		int revPatternIndex = endTextReversePattern.size()-1;
+		while (revPatternIndex >= 0) {
+			patternBuilder.append(endTextReversePattern.get(revPatternIndex--));
+		}
+		return Pattern.compile(patternBuilder.toString(), Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
 	}
 
 	/**

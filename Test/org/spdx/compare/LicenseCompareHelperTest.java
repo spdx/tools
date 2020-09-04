@@ -54,6 +54,8 @@ public class LicenseCompareHelperTest {
 	static final String ZPL_2_1_TEXT = "TestFiles" + File.separator + "ZPL-2.1.txt";
 	static final String AGPL_3_ONLY_TEMPLATE = "TestFiles" + File.separator + "AGPL-3.0-only.template.txt";
 	static final String AGPL_3_ONLY = "TestFiles" + File.separator + "AGPL-3.0-only.txt";
+	static final String ISC_TEMPLATE = "TestFiles" + File.separator + "ISC.template.txt";
+	static final String ISC = "TestFiles" + File.separator + "ISC.txt";
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -654,7 +656,7 @@ public class LicenseCompareHelperTest {
 	}
 	
 	@Test
-	public void testNonOptionalTextToStartPattern() throws SpdxCompareException, IOException {
+	public void testNonOptionalTextToStartPattern() throws SpdxCompareException, IOException, InvalidSPDXAnalysisException {
 		String agplTemplate = UnitTestHelper.fileToText(AGPL_3_ONLY_TEMPLATE);
 		List<String> nonOptionalText = LicenseCompareHelper.getNonOptionalLicenseText(agplTemplate, true);
 		Pattern result = LicenseCompareHelper.nonOptionalTextToStartPattern(nonOptionalText, 25);
@@ -668,5 +670,20 @@ public class LicenseCompareHelperTest {
 		assertEquals(beforeLicense.length() + " GNU AFFERO GENERAL PUBLIC LICENSE".length() + // include optional text ignored
 						+ "Version 3, 19 November 2007".length() + 2		// 2 for the number of space type characters
 						, matcher.start());
+		SpdxListedLicense license = new SpdxListedLicense("AGPL-3.0", "AGPL-3.0", "", new String[] {},
+				"", "", agplTemplate, false, false);
+		assertFalse(LicenseCompareHelper.isTextStandardLicense(license, testText.substring(matcher.start(), matcher.end())).isDifferenceFound());
+		// Test overlapping start and end text
+		String iscTempalte = UnitTestHelper.fileToText(ISC_TEMPLATE);
+		nonOptionalText = LicenseCompareHelper.getNonOptionalLicenseText(iscTempalte, true);
+		result = LicenseCompareHelper.nonOptionalTextToStartPattern(nonOptionalText, 100);
+		licenseText = UnitTestHelper.fileToText(ISC);
+		testText = beforeLicense + licenseText + afterTheLicense;
+		testText = LicenseCompareHelper.normalizeText(testText);
+		matcher = result.matcher(testText);
+		assertTrue(matcher.find());
+		license = new SpdxListedLicense("ISC", "ISC", "", new String[] {},
+				"", "", iscTempalte, false, false);
+		assertFalse(LicenseCompareHelper.isTextStandardLicense(license, testText.substring(matcher.start(), matcher.end())).isDifferenceFound());
 	}
 }
