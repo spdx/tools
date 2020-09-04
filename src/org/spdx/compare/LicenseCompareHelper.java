@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -202,7 +203,7 @@ public class LicenseCompareHelper {
 	 * @param s
 	 * @return
 	 */
-	static String normalizeText(String s) {
+	public static String normalizeText(String s) {
 		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes
 		// then normalize non-breaking spaces to spaces
 		return s.replaceAll("‘|’|‛|‚|`", "'")	// Take care of single quotes first
@@ -568,6 +569,92 @@ public class LicenseCompareHelper {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Get the text of a license minus any optional text - note: this include the default variable text
+	 * @param licenseTemplate license template containing optional and var tags
+	 * @param includeVarText if true, include the default variable text; if false remove the variable text
+	 * @return list of strings for all non-optional license text.  
+	 * @throws SpdxCompareException
+	 */
+	public static List<String> getNonOptionalLicenseText(String licenseTemplate, boolean includeVarText) throws SpdxCompareException {
+		FilterTemplateOutputHandler filteredOutput = new FilterTemplateOutputHandler(includeVarText);
+		try {
+			SpdxLicenseTemplateHelper.parseTemplate(licenseTemplate, filteredOutput);
+		} catch (LicenseTemplateRuleException e) {
+			throw(new SpdxCompareException("Invalid template rule found during filter: "+e.getMessage(),e));
+		} catch (LicenseParserException e) {
+			throw(new SpdxCompareException("Invalid template found during filter: "+e.getMessage(),e));
+		}
+		return filteredOutput.getFilteredText();
+	}
+	
+	/**
+	 * Creates a regular expression pattern to match the start of a license text
+	 * @param nonOptionalText List of strings of non-optional text from the license template (see <code>List<String> getNonOptionalLicenseText</code>)
+	 * @param numberOfWords Number of words to use in the match
+	 * @return Pattern which will match the start of the license text
+	 */
+	public static Pattern nonOptionalTextToStartPattern(List<String> nonOptionalText, int numberOfWords) {
+		if (Objects.isNull(nonOptionalText) || nonOptionalText.size() == 0 || numberOfWords < 1) {
+			return Pattern.compile("");
+		}
+		int startWordCount = 0;
+		int startTextIndex = 0;
+		int wordsInLastLine = 0;	// keep track of the number of words processed in the last start line to make sure we don't overlap words in the end lines
+		StringBuilder patternBuilder = new StringBuilder();
+		while (startWordCount < numberOfWords && startTextIndex < nonOptionalText.size()) {
+			String[] tokens = normalizeText(nonOptionalText.get(startTextIndex++).trim()).split("\\s");
+			int tokenIndex = 0;
+			wordsInLastLine = 0;
+			while (tokenIndex < tokens.length && startWordCount < numberOfWords) {
+				String token = tokens[tokenIndex++].trim();
+				if (token.length() > 0) {
+					patternBuilder.append(Pattern.quote(token));
+					patternBuilder.append("\\s*");
+					startWordCount++;
+					wordsInLastLine++;
+				}
+			}
+			patternBuilder.append(".*");
+		}
+		
+		// End words
+		List<String> endTextReversePattern = new ArrayList<>();
+		int endTextIndex = nonOptionalText.size()-1;
+		int endWordCount = 0;
+		int lastProcessedStartLine = startTextIndex - 1;
+		while (endWordCount < numberOfWords && 
+				(endTextIndex > lastProcessedStartLine || 
+						(endTextIndex == lastProcessedStartLine && (numberOfWords - endWordCount) < (nonOptionalText.get(endTextIndex).length() - wordsInLastLine)))) {	// Check to make sure we're not overlapping the start words
+			String[] tokens = normalizeText(nonOptionalText.get(endTextIndex).trim()).split("\\s");
+			List<String> nonEmptyTokens = new ArrayList<>();
+			for (String token:tokens) {
+				String trimmedToken = token.trim();
+				if (!trimmedToken.isEmpty()) {
+					nonEmptyTokens.add(trimmedToken);
+				}
+			}
+			int remainingTokens = (endTextIndex == lastProcessedStartLine && nonEmptyTokens.size() - wordsInLastLine > numberOfWords - endWordCount) ? 
+										numberOfWords - endWordCount : nonEmptyTokens.size() - wordsInLastLine;
+			endTextIndex--;
+			int tokenIndex = nonEmptyTokens.size() - 1;
+			while (tokenIndex >= 0 && remainingTokens > 0) {
+				String token = nonEmptyTokens.get(tokenIndex--);
+				endTextReversePattern.add("\\s*");
+				endTextReversePattern.add(Pattern.quote(token));
+				remainingTokens--;
+				endWordCount++;
+			}
+			endTextReversePattern.add(".*");
+		}
+		
+		int revPatternIndex = endTextReversePattern.size()-1;
+		while (revPatternIndex >= 0) {
+			patternBuilder.append(endTextReversePattern.get(revPatternIndex--));
+		}
+		return Pattern.compile(patternBuilder.toString(), Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
 	}
 
 	/**
