@@ -203,7 +203,7 @@ public class LicenseCompareHelper {
 	 * @param s
 	 * @return
 	 */
-	static String normalizeText(String s) {
+	public static String normalizeText(String s) {
 		// First normalize single quotes, then normalize two single quotes to a double quote, normalize double quotes
 		// then normalize non-breaking spaces to spaces
 		return s.replaceAll("‘|’|‛|‚|`", "'")	// Take care of single quotes first
