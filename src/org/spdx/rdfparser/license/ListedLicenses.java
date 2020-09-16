@@ -379,25 +379,28 @@ public class ListedLicenses implements IModelContainer {
 
 	public static String getNestedURL(String stringUrl) throws MalformedURLException {
 		URL url = new URL(stringUrl);
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setInstanceFollowRedirects(false);
-			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
-			con.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
-			con.addRequestProperty("Referer", "https://www.google.com/");
-			con.connect();
-			int resultCode = con.getResponseCode();
-			if (resultCode == HttpURLConnection.HTTP_SEE_OTHER
-					|| resultCode == HttpURLConnection.HTTP_MOVED_PERM
-					|| resultCode == HttpURLConnection.HTTP_MOVED_TEMP) {
-				String Location = con.getHeaderField("Location");
-				if (Location.startsWith("/")) {
-					Location = url.getProtocol() + "://" + url.getHost() + Location;
+		String protocol = url.getProtocol();
+		if (protocol.startsWith("http")) {
+			try {
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setInstanceFollowRedirects(false);
+				con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+				con.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+				con.addRequestProperty("Referer", "https://www.google.com/");
+				con.connect();
+				int resultCode = con.getResponseCode();
+				if (resultCode == HttpURLConnection.HTTP_SEE_OTHER
+						|| resultCode == HttpURLConnection.HTTP_MOVED_PERM
+						|| resultCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+					String Location = con.getHeaderField("Location");
+					if (Location.startsWith("/")) {
+						Location = url.getProtocol() + "://" + url.getHost() + Location;
+					}
+					return getNestedURL(Location);
 				}
-				return getNestedURL(Location);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
 		}
 		return url.toString();
 	}
