@@ -37,6 +37,7 @@ import org.spdx.rdfparser.license.ConjunctiveLicenseSet;
 import org.spdx.rdfparser.license.DisjunctiveLicenseSet;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
+import org.spdx.rdfparser.license.ListedLicenses;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
@@ -56,6 +57,7 @@ public class LicenseCompareHelperTest {
 	static final String AGPL_3_ONLY = "TestFiles" + File.separator + "AGPL-3.0-only.txt";
 	static final String ISC_TEMPLATE = "TestFiles" + File.separator + "ISC.template.txt";
 	static final String ISC = "TestFiles" + File.separator + "ISC.txt";
+	static final String GPL_3_TEXT = "TestFiles" + File.separator + "GPL-3.0-test.txt";
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -617,6 +619,14 @@ public class LicenseCompareHelperTest {
 //		assertTrue(result[0].startsWith("GPL-2"));
 //		assertTrue(result[1].startsWith("GPL-2"));
 	}
+	
+	@Test
+	public void testIsTextStandardLicenseGpl3() throws InvalidSPDXAnalysisException, SpdxCompareException, IOException {
+		SpdxListedLicense gpl3 = ListedLicenses.getListedLicenses().getListedLicenseById("GPL-3.0");
+		String compareText = UnitTestHelper.fileToText(GPL_3_TEXT);
+		DifferenceDescription result = LicenseCompareHelper.isTextStandardLicense(gpl3, compareText);
+		assertFalse(result.isDifferenceFound());
+	}
 
 	@Test
 	public void testFirstLicenseToken() {
@@ -684,6 +694,7 @@ public class LicenseCompareHelperTest {
 		assertTrue(matcher.find());
 		license = new SpdxListedLicense("ISC", "ISC", "", new String[] {},
 				"", "", iscTempalte, false, false);
-		assertFalse(LicenseCompareHelper.isTextStandardLicense(license, testText.substring(matcher.start(), matcher.end())).isDifferenceFound());
+		DifferenceDescription diff = LicenseCompareHelper.isTextStandardLicense(license, testText.substring(matcher.start(), matcher.end()));
+		assertFalse(diff.isDifferenceFound());
 	}
 }
