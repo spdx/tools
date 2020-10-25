@@ -110,8 +110,9 @@ public class LicenseCompareHelper {
 		NORMALIZE_TOKENS.put("copyright-owner", "copyright-holder");
 		NORMALIZE_TOKENS.put("sublicense", "sub-license");
 		NORMALIZE_TOKENS.put("non-infringement", "noninfringement");
-		NORMALIZE_TOKENS.put("©", "(c)");
-		NORMALIZE_TOKENS.put("copyright", "(c)");
+		NORMALIZE_TOKENS.put("(c)", "-c-");
+		NORMALIZE_TOKENS.put("copyright", "-c-");
+		NORMALIZE_TOKENS.put("©", "-c-");
 		NORMALIZE_TOKENS.put("\"", "'");
 	}
 
@@ -128,6 +129,7 @@ public class LicenseCompareHelper {
 	static final Pattern COPYRIGHT_HOLDER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*holder", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNERS_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owners", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNER_PATTERN_LF = Pattern.compile("copyright\\s*\\n+\\s*owner", Pattern.CASE_INSENSITIVE);
+	static final Pattern COPYRIGHT_SYMBOL_PATTERN = Pattern.compile("\\(c\\)", Pattern.CASE_INSENSITIVE);
 
 	//TODO: Add equiv for quotes
 	/**
@@ -429,6 +431,8 @@ public class LicenseCompareHelper {
 		retval = m.replaceAll("percent");
 		m = PER_CENT_PATTERN.matcher(retval);
 		retval = m.replaceAll("percent\n");
+		m = COPYRIGHT_SYMBOL_PATTERN.matcher(retval);
+		retval = m.replaceAll("-c-");	// replace the parenthesis with a dash so that it results in a single token rather than 3
 		return retval;
 	}
 
