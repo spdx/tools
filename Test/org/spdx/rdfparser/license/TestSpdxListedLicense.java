@@ -42,6 +42,21 @@ import org.apache.jena.rdf.model.Resource;
  *
  */
 public class TestSpdxListedLicense {
+	
+	private static final String TEST_URL1 = "http://test1/index.html";
+	private static final String TEST_URL2 = "http://test2/index.html";
+	private static final Boolean TEST_ISLIVE1 = true;
+	private static final Boolean TEST_ISLIVE2 = false;
+	private static final Boolean TEST_ISWAYBACK1 = true;
+	private static final Boolean TEST_ISWAYBACK2 = false;
+	private static final Boolean TEST_ISVALID1 = true;
+	private static final Boolean TEST_ISVALID2 = false;
+	private static final String TEST_MATCH1 = "true";
+	private static final String TEST_MATCH2 = "false";
+	private static final Integer TEST_ORDER1 = 1;
+	private static final Integer TEST_ORDER2 = 2;
+	private static final String TEST_TIMESTAMP1 = "timestamp1";
+	private static final String TEST_TIMESTAMP2 = "timestamp2";
 
 	Model model;
 	IModelContainer modelContainer = new IModelContainer() {
@@ -167,6 +182,58 @@ public class TestSpdxListedLicense {
 		assertEquals(0, verify.size());
 		verify = compLic.verify();
 		assertEquals(0, verify.size());
+	}
+	
+	@Test
+	public void testSetCrossRef() throws InvalidSPDXAnalysisException {
+		model = ModelFactory.createDefaultModel();
+		CrossRef crossref1 = new CrossRef(TEST_URL1, TEST_ISVALID1, TEST_ISLIVE1, TEST_ISWAYBACK1, 
+				TEST_MATCH1, TEST_TIMESTAMP1, TEST_ORDER1);
+		CrossRef crossref2 = new CrossRef(TEST_URL2, TEST_ISVALID2, TEST_ISLIVE2, TEST_ISWAYBACK2, 
+				TEST_MATCH2, TEST_TIMESTAMP2, TEST_ORDER2);
+		String name = "name";
+		String id = "AFL-3.0";
+		String text = "text";
+		String[] sourceUrls = new String[] {"source url1", "source url2"};
+		String notes = "notes";
+		String standardLicenseHeader = "Standard license header";
+		String template = "template";
+		String licenseHtml = "<html>html</html>";
+		SpdxListedLicense stdl = new SpdxListedLicense(name, id, text, sourceUrls, new CrossRef[]{}, 
+				notes, standardLicenseHeader, template, licenseHtml, false, null);
+		assertEquals(0, stdl.getCrossRef().length);
+		stdl.setCrossRef(new CrossRef[]{crossref1, crossref2});
+		CrossRef[] result = stdl.getCrossRef();
+		assertEquals(2, stdl.getCrossRef().length);
+		if (result[0].getUrl().equals(TEST_URL1)) {
+			assertEquals(TEST_ISVALID1, result[0].isValid());
+			assertEquals(TEST_ISLIVE1, result[0].isLive());
+			assertEquals(TEST_ISWAYBACK1, result[0].isWayBackLink());
+			assertEquals(TEST_MATCH1, result[0].getMatch());
+			assertEquals(TEST_TIMESTAMP1, result[0].getTimestamp());
+			assertEquals(TEST_ORDER1, result[0].getOrder());
+			assertEquals(TEST_URL2, result[1].getUrl());
+			assertEquals(TEST_ISVALID2, result[1].isValid());
+			assertEquals(TEST_ISLIVE2, result[1].isLive());
+			assertEquals(TEST_ISWAYBACK2, result[1].isWayBackLink());
+			assertEquals(TEST_MATCH2, result[1].getMatch());
+			assertEquals(TEST_TIMESTAMP2, result[1].getTimestamp());
+			assertEquals(TEST_ORDER2, result[1].getOrder());
+		} else {
+			assertEquals(TEST_ISVALID1, result[1].isValid());
+			assertEquals(TEST_ISLIVE1, result[1].isLive());
+			assertEquals(TEST_ISWAYBACK1, result[1].isWayBackLink());
+			assertEquals(TEST_MATCH1, result[1].getMatch());
+			assertEquals(TEST_TIMESTAMP1, result[1].getTimestamp());
+			assertEquals(TEST_ORDER1, result[1].getOrder());
+			assertEquals(TEST_URL2, result[0].getUrl());
+			assertEquals(TEST_ISVALID2, result[0].isValid());
+			assertEquals(TEST_ISLIVE2, result[0].isLive());
+			assertEquals(TEST_ISWAYBACK2, result[0].isWayBackLink());
+			assertEquals(TEST_MATCH2, result[0].getMatch());
+			assertEquals(TEST_TIMESTAMP2, result[0].getTimestamp());
+			assertEquals(TEST_ORDER2, result[0].getOrder());
+		}
 	}
 
 	@Test

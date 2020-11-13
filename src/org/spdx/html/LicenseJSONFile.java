@@ -18,7 +18,9 @@ package org.spdx.html;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.rdfparser.license.CrossRef;
 import org.spdx.rdfparser.license.SpdxListedLicense;
 
 /**
@@ -71,7 +73,12 @@ public class LicenseJSONFile extends AbstractJsonFile {
 		}
 		jsonObject.put(SpdxRdfConstants.PROP_STD_LICENSE_NAME, license.getName());
 		String[] seeAlsos = license.getSeeAlso();
-		String[] crossRefs = license.getCrossRef();
+		CrossRef[] crossRefs;
+		try {
+			crossRefs = license.getCrossRef();
+		} catch (InvalidSPDXAnalysisException e) {
+			crossRefs = new CrossRef[0];
+		}
 		if (seeAlsos != null && seeAlsos.length > 0) {
 			JSONArray seeAlsoArray = new JSONArray();
 			for (String seeAlso:seeAlsos) {
@@ -81,8 +88,32 @@ public class LicenseJSONFile extends AbstractJsonFile {
 		}
 		if (crossRefs != null && crossRefs.length > 0) {
 			JSONArray crossRefArray = new JSONArray();
-			for (String crossRef:crossRefs) {
-				crossRefArray.add(crossRef);
+			for (CrossRef crossRef:crossRefs) {
+				JSONObject crossRefJson = new JSONObject();
+				crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_MATCH, crossRef.getMatch());
+				try {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_ORDER, crossRef.getOrder());
+				} catch (InvalidSPDXAnalysisException e) {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_ORDER, null);
+				}
+				crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_TIMESTAMP, crossRef.getTimestamp());
+				crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_URL, crossRef.getUrl());
+				try {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_IS_LIVE, crossRef.isLive());
+				} catch (InvalidSPDXAnalysisException e) {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_IS_LIVE, null);
+				}
+				try {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_IS_VALID, crossRef.isValid());
+				} catch (InvalidSPDXAnalysisException e) {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_IS_VALID, null);
+				}
+				try {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_WAYBACK_LINK, crossRef.isWayBackLink());
+				} catch (InvalidSPDXAnalysisException e) {
+					crossRefJson.put(SpdxRdfConstants.PROP_CROSS_REF_WAYBACK_LINK, null);
+				}
+				crossRefArray.add(crossRefJson);
 			}
 			jsonObject.put(SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, crossRefArray);
 		}

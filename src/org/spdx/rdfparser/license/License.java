@@ -117,7 +117,7 @@ public abstract class License extends SimpleLicensingInfo {
 	 * @param fsfLibre true if FSF describes the license as free / libre, false if FSF describes the license as not free / libre, null if FSF does not reference the license
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public License(String name, String id, String text, String[] sourceUrl, String[] sourceUrlDetails, String comments,
+	public License(String name, String id, String text, String[] sourceUrl, CrossRef[] sourceUrlDetails, String comments,
 			String standardLicenseHeader, String template, String standardLicenseHeaderTemplate,
 			boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
 		super(name, id, comments, sourceUrl, sourceUrlDetails);
@@ -643,8 +643,9 @@ public abstract class License extends SimpleLicensingInfo {
 	/**
 	 * Copy all of the parameters from another license
 	 * @param license
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void copyFrom(License license) {
+	public void copyFrom(License license) throws InvalidSPDXAnalysisException {
 		this.setComment(license.getComment());
 		this.setLicenseId(license.getLicenseId());
 		this.setLicenseText(license.getLicenseText());

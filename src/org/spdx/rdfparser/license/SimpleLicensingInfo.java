@@ -44,7 +44,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	protected String comment;
 	protected String name;
 	protected String[] seeAlso;
-	protected String[] crossRef;
+	protected CrossRef[] crossRef;
 
 
 	/**
@@ -79,16 +79,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 			}
 		}
 		// SourceUrlDetails/crossRef
-		this.crossRef = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
-		// The following is added for compatibility with earlier versions
-		String[] moreCrossRef = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
-		if (moreCrossRef != null && moreCrossRef.length > 0) {
-			int startExtraIndex = this.crossRef.length;
-			this.crossRef = Arrays.copyOf(this.crossRef, startExtraIndex + moreCrossRef.length);
-			for (int i = 0; i < moreCrossRef.length; i++) {
-				this.crossRef[startExtraIndex + i] = moreCrossRef[i];
-			}
-		}
+		this.crossRef = this.findMultipleCrossRefPropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
 		// comments
 		this.comment = findSinglePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.RDFS_PROP_COMMENT);
 		if (this.comment == null) {
@@ -118,7 +109,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 	 * @param sourceUrl Optional reference URL's
 	 * @param sourceUrlDetails Optional reference URL details
 	 */
-	SimpleLicensingInfo(String name, String id, String comments, String[] sourceUrl, String[] sourceUrlDetails) {
+	SimpleLicensingInfo(String name, String id, String comments, String[] sourceUrl, CrossRef[] sourceUrlDetails) {
 		super();
 		this.licenseId = id;
 		this.name = name;
@@ -240,19 +231,11 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 
 	/**
 	 * @return the urls which reference the same license information
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public String[] getCrossRef() {
+	public CrossRef[] getCrossRef() throws InvalidSPDXAnalysisException {
 		if (this.resource != null && this.refreshOnGet) {
-			this.crossRef = this.findMultiplePropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
-			// The following is added for compatibility with earlier versions
-			String[] moreCrossRef = findMultiplePropertyValues(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
-			if (moreCrossRef != null && moreCrossRef.length > 0) {
-				int startExtraIndex = this.crossRef.length;
-				this.crossRef = Arrays.copyOf(this.crossRef, startExtraIndex + moreCrossRef.length);
-				for (int i = 0; i < moreCrossRef.length; i++) {
-					this.crossRef[startExtraIndex + i] = moreCrossRef[i];
-				}
-			}
+			this.crossRef = this.findMultipleCrossRefPropertyValues(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
 		}
 		return crossRef;
 	}
@@ -260,15 +243,16 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 
 	/**
 	 * @param seeAlsoUrl the urls which are references to the same license to set
+	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void setCrossRef(String[] seeAlsoUrl) {
+	public void setCrossRef(CrossRef[] seeAlsoUrl) throws InvalidSPDXAnalysisException {
 		this.crossRef = seeAlsoUrl;
 		if (this.node != null) {
 			removePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_URL_VERSION_1);
 			if (crossRef == null) {
 				removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
 			} else {
-				setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, crossRef);
+				SetPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, crossRef);
 			}
 		}
 	}
@@ -336,7 +320,7 @@ public abstract class SimpleLicensingInfo extends AnyLicenseInfo {
 		if (crossRef == null) {
 			removePropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF);
 		} else {
-			setPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, crossRef);
+			SetPropertyValue(SpdxRdfConstants.RDFS_NAMESPACE, SpdxRdfConstants.LICENSEXML_ELEMENT_CROSS_REF, crossRef);
 		}
 	}
 

@@ -27,6 +27,7 @@ import org.spdx.rdfparser.SPDXReview;
 import org.spdx.rdfparser.SpdxPackageVerificationCode;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.CrossRef;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.rdfparser.model.pointer.PointerFactory;
 import org.spdx.rdfparser.model.pointer.SinglePointer;
@@ -834,6 +835,28 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 		}
 		return retval.toArray(new Checksum[retval.size()]);
 	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @return
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected CrossRef[] findMultipleCrossRefPropertyValues(String nameSpace,
+			String propertyName) throws InvalidSPDXAnalysisException {
+		if (this.model == null || this.node == null) {
+			return new CrossRef[0];
+		}
+		List<CrossRef> retval = Lists.newArrayList();
+		Node p = model.getProperty(nameSpace, propertyName).asNode();
+		Triple m = Triple.createMatch(node, p, null);
+		ExtendedIterator<Triple> tripleIter = model.getGraph().find(m);
+		while (tripleIter.hasNext()) {
+			Triple t = tripleIter.next();
+			retval.add(new CrossRef(modelContainer, t.getObject()));
+		}
+		return retval.toArray(new CrossRef[retval.size()]);
+	}
 
 	/**
 	 * @param nameSpace
@@ -981,6 +1004,25 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 			if (doapProjectValues != null) {
 				for (int i = 0; i < doapProjectValues.length; i++) {
 					this.resource.addProperty(p, doapProjectValues[i].createResource(this.modelContainer));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @param nameSpace
+	 * @param propertyName
+	 * @param crossRefValues
+	 * @throws InvalidSPDXAnalysisException
+	 */
+	protected void SetPropertyValue(String nameSpace,
+			String propertyName, CrossRef[] crossRefValues) throws InvalidSPDXAnalysisException {
+		if (model != null && resource != null) {
+			Property p = model.createProperty(nameSpace, propertyName);
+			model.removeAll(this.resource, p, null);
+			if (crossRefValues != null) {
+				for (int i = 0; i < crossRefValues.length; i++) {
+					this.resource.addProperty(p, crossRefValues[i].createResource(this.modelContainer));
 				}
 			}
 		}

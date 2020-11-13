@@ -182,7 +182,7 @@ public class SpdxListedLicense extends License {
 	 * @param fsfLibre True if the license is listed by the Free Software Foundation as free / libre
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, String[] sourceUrlDetails, String comments,
+	public SpdxListedLicense(String name, String id, String text, String[] sourceUrl, CrossRef[] sourceUrlDetails, String comments,
 			String standardLicenseHeader, String template, String licenseHeaderTemplate, boolean osiApproved, Boolean fsfLibre) throws InvalidSPDXAnalysisException {
 
 		super(name, id, text, sourceUrl, sourceUrlDetails, comments, standardLicenseHeader, template, licenseHeaderTemplate, osiApproved, fsfLibre);

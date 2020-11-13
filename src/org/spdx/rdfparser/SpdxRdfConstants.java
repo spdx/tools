@@ -54,6 +54,7 @@ public interface SpdxRdfConstants {
 	public static final String PROP_CROSS_REF_URL = "url";
 	public static final String PROP_CROSS_REF_IS_LIVE = "isLive";
 	public static final String PROP_CROSS_REF_TIMESTAMP = "timestamp";
+	public static final String PROP_CROSS_REF_ORDER = "order";
 
 	// DOAP Class Names
 	public static final String CLASS_DOAP_PROJECT = "Project";
@@ -101,6 +102,7 @@ public interface SpdxRdfConstants {
 	public static final String CLASS_SPDX_EXTERNAL_REFERENCE = "ExternalRef";
 	public static final String CLASS_SPDX_REFERENCE_TYPE = "ReferenceType";
 	public static final String CLASS_SPDX_SNIPPET = "Snippet";
+	public static final String CLASS_CROSS_REF = "CrossRef";
 
 	// General SPDX Properties
 	public static final String PROP_VALUE_NONE = "none";
