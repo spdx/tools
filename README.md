@@ -13,6 +13,12 @@ see [http://spdx.org/](http://spdx.org/)
 
 See the [SPDX Tools Documentation](https://spdx.dev/wp-content/uploads/sites/41/2017/12/spdx_tools-20170327.pdf) for details on how to use the command line tools.
 
+## Getting Starting
+
+The SPDX Tool binaries can be downloaded from the [BinTray SPDX Tools Java](https://bintray.com/spdx/spdx-tools/spdx-tools-java) repo under the respective release.  The package is also available in [Maven Central](https://search.maven.org/artifact/org.spdx/spdx-tools) (organization org.spdx, artifact spdx-tools).
+
+See the Syntax section below for the commands available.
+
 ## Contributing
 See the file CONTRIBUTING.md for information on making contributions to the SPDX tools.
 
