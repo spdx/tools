@@ -388,6 +388,7 @@ This license is based on the Apache Software License, version 1.1.</extractedTex
 			<plugin>
        			<groupId>org.apache.maven.plugins</groupId>
        			<artifactId>maven-shade-plugin</artifactId>
+       			<version>3.2.4</version>
        			<configuration>
          				<shadedArtifactAttached>true</shadedArtifactAttached>
          				<shadedClassifierName>jar-with-dependencies</shadedClassifierName>
