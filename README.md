@@ -2,6 +2,9 @@
 
  [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/734/badge)](https://bestpractices.coreinfrastructure.org/projects/734)
 
+# Important Update
+This version of the SPDX Java tools is planned to be replaced on the next major release of the SPDX Spec.  The new Java tools can be found in the [tools-java](https://github.com/spdx/tools-java) repo.  You are encouraged to switch over to the new version of the SPDX Java tools which should be stable.  If you would like to use a lighter weight library in you Java application, check out the [SPDX Java Library](https://github.com/spdx/Spdx-Java-Library).
+
 # Overview
 The Software Package Data Exchange (SPDX) specification is a standard format for communicating the components, licenses and copyrights associated with a software package.
 
