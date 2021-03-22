@@ -41,6 +41,7 @@ import org.apache.jena.graph.Node;
 public abstract class License extends SimpleLicensingInfo {
 
 	static final String XML_LITERAL = "^^http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral";
+	static final String XML_BOOLEAN = "^^http://www.w3.org/2001/XMLSchema#boolean";
 
 	/**
 	 * True if the text in the RDF model uses HTML tags.  If this flag is true, the text will
@@ -206,6 +207,9 @@ public abstract class License extends SimpleLicensingInfo {
 		}
 		if (osiTextValue != null) {
 			osiTextValue = osiTextValue.trim();
+    	    if (osiTextValue.endsWith(XML_BOOLEAN)) {
+	            osiTextValue = osiTextValue.substring(0, osiTextValue.length()-XML_BOOLEAN.length());
+    	    }
 			if (osiTextValue.equals("true") || osiTextValue.equals("1")) {
 				this.osiApproved = true;
 			} else if (osiTextValue.equals("false") || osiTextValue.equals("0")){
@@ -219,6 +223,9 @@ public abstract class License extends SimpleLicensingInfo {
 		String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 		if (fsfTextValue != null) {
 			fsfTextValue = fsfTextValue.trim();
+			if (fsfTextValue.endsWith(XML_BOOLEAN)) {
+                fsfTextValue = fsfTextValue.substring(0, fsfTextValue.length()-XML_BOOLEAN.length());
+            }
 			if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
 				this.fsfLibre = true;
 			} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
@@ -233,6 +240,9 @@ public abstract class License extends SimpleLicensingInfo {
 		String deprecatedValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
 		if (deprecatedValue != null) {
 			deprecatedValue = deprecatedValue.trim();
+			if (deprecatedValue.endsWith(XML_BOOLEAN)) {
+			    deprecatedValue = deprecatedValue.substring(0, deprecatedValue.length()-XML_BOOLEAN.length());
+            }
 			if (deprecatedValue.equals("true") || deprecatedValue.equals("1")) {
 				this.deprecated = true;
 			} else if (deprecatedValue.equals("false") || deprecatedValue.equals("0")) {
@@ -484,6 +494,9 @@ public abstract class License extends SimpleLicensingInfo {
 			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 			if (fsfTextValue != null) {
 				fsfTextValue = fsfTextValue.trim();
+				if (fsfTextValue.endsWith(XML_BOOLEAN)) {
+	                fsfTextValue = fsfTextValue.substring(0, fsfTextValue.length()-XML_BOOLEAN.length());
+	            }
 				if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
 					this.fsfLibre = true;
 				} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
@@ -504,6 +517,9 @@ public abstract class License extends SimpleLicensingInfo {
 			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 			if (fsfTextValue != null) {
 				fsfTextValue = fsfTextValue.trim();
+				if (fsfTextValue.endsWith(XML_BOOLEAN)) {
+	                fsfTextValue = fsfTextValue.substring(0, fsfTextValue.length()-XML_BOOLEAN.length());
+	            }
 				if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
 					this.fsfLibre = true;
 				} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
@@ -524,6 +540,9 @@ public abstract class License extends SimpleLicensingInfo {
 			String fsfTextValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_STD_LICENSE_FSF_LIBRE);
 			if (fsfTextValue != null) {
 				fsfTextValue = fsfTextValue.trim();
+				if (fsfTextValue.endsWith(XML_BOOLEAN)) {
+	                fsfTextValue = fsfTextValue.substring(0, fsfTextValue.length()-XML_BOOLEAN.length());
+	            }
 				if (fsfTextValue.equals("true") || fsfTextValue.equals("1")) {
 					this.fsfLibre = true;
 				} else if (fsfTextValue.equals("false") || fsfTextValue.equals("0")) {
@@ -549,6 +568,9 @@ public abstract class License extends SimpleLicensingInfo {
 			}
 			if (osiTextValue != null) {
 				osiTextValue = osiTextValue.trim();
+				if (osiTextValue.endsWith(XML_BOOLEAN)) {
+	                osiTextValue = osiTextValue.substring(0, osiTextValue.length()-XML_BOOLEAN.length());
+	            }
 				if (osiTextValue.equals("true") || osiTextValue.equals("1")) {
 					this.osiApproved = true;
 				} else if (osiTextValue.equals("false") || osiTextValue.equals("0")){
@@ -571,6 +593,9 @@ public abstract class License extends SimpleLicensingInfo {
 			String deprecatedValue = findSinglePropertyValue(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LIC_ID_DEPRECATED);
 			if (deprecatedValue != null) {
 				deprecatedValue = deprecatedValue.trim();
+				if (deprecatedValue.endsWith(XML_BOOLEAN)) {
+	                deprecatedValue = deprecatedValue.substring(0, deprecatedValue.length()-XML_BOOLEAN.length());
+	            }
 				if (deprecatedValue.equals("true") || deprecatedValue.equals("1")) {
 					this.deprecated = true;
 				} else if (deprecatedValue.equals("false") || deprecatedValue.equals("0")){

@@ -44,6 +44,8 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  *
  */
 public class LicenseException implements IRdfModel, Cloneable  {
+    
+    static final String XML_BOOLEAN = "^^http://www.w3.org/2001/XMLSchema#boolean";
 
 	Model model = null;
 	Node exceptionNode = null;
@@ -143,6 +145,9 @@ public class LicenseException implements IRdfModel, Cloneable  {
 			Triple t = tripleIter.next();
 			String deprecatedValue = t.getObject().toString(false).trim();
 			if (deprecatedValue != null && !deprecatedValue.isEmpty()) {
+			    if (deprecatedValue.endsWith(XML_BOOLEAN)) {
+	                deprecatedValue = deprecatedValue.substring(0, deprecatedValue.length()-XML_BOOLEAN.length());
+	            }
 				if (deprecatedValue.equals("true") || deprecatedValue.equals("1")) {
 					this.deprecated = true;
 				} else if (deprecatedValue.equals("false") || deprecatedValue.equals("0")) {
