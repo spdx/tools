@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.spdx.rdfparser.InvalidSPDXAnalysisException;
 import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
+import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
 /**
  * @author Gary
@@ -206,5 +207,11 @@ public class TestLicenseExpressionParser {
 				NONSTD_IDS[1] + " AND " + NONSTD_IDS[2], container);
 		assertTrue(container.extractedLicenseExists(NONSTD_IDS[1]));
 		assertTrue(container.extractedLicenseExists(NONSTD_IDS[2]));
+	}
+	
+	@Test
+	public void regressionMitWith() throws InvalidSPDXAnalysisException, InvalidLicenseStringException {
+	    AnyLicenseInfo result = LicenseInfoFactory.parseSPDXLicenseString("MIT WITH Autoconf-exception-2.0");
+	    assertEquals("MIT WITH Autoconf-exception-2.0",result.toString());
 	}
 }
