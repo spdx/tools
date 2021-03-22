@@ -35,11 +35,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.FileManager;
+import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spdx.rdfparser.IModelContainer;
@@ -332,6 +334,17 @@ public class ListedLicenses implements IModelContainer {
 					try {
 						retval.read(in, base, "JSON-LD");
 						Property p = retval.getProperty(SpdxRdfConstants.SPDX_NAMESPACE, SpdxRdfConstants.PROP_LICENSE_ID);
+						if (!retval.contains(null, p)) {
+						    Property typeProperty = retval.getProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+	                        Resource licenseType = retval.getResource(SpdxRdfConstants.SPDX_NAMESPACE + "ListedLicense");
+	                        Triple m = Triple.createMatch(null, typeProperty.asNode(), licenseType.asNode());
+	                        ExtendedIterator<Triple> tripleIter = retval.getGraph().find(m);
+	                        if (tripleIter.hasNext()) {
+	                            Resource licenseIdResource = retval.createResource(tripleIter.next().getSubject().getURI());
+	                            String id = licenseIdResource.getURI().substring("http://spdx.org/licenses/".length());
+	                            ((Resource)licenseIdResource).addProperty(p, id);
+	                        }
+						}
 				    	if (retval.isEmpty() || !retval.contains(null, p)) {
 					    	try {
 								in.close();
