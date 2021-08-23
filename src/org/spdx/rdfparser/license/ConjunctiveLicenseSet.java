@@ -201,7 +201,7 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 	@Override
 	public String getUri(IModelContainer modelContainer)
 			throws InvalidSPDXAnalysisException {
-		// Use anonomous nodes
+		// Use anonymous nodes
 		return null;
 	}
 

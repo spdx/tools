@@ -243,7 +243,7 @@ public class Checksum extends RdfModelObject implements Comparable<Checksum> {
 	 */
 	@Override
 	public String getUri(IModelContainer modelContainer) {
-		// Use anonomous nodes
+		// Use anonymous nodes
 		return null;
 	}
 

@@ -79,7 +79,7 @@ public interface IModelContainer {
 	/**
 	 * Create a resource in the model
 	 * @param duplicate A duplicate resource who's node and resource should be returned
-	 * @param uri If not null, the URI for the resource - if null, an anonomous resource will be used
+	 * @param uri If not null, the URI for the resource - if null, an anonymous resource will be used
 	 * @param type Type of the resource
 	 * @param modelObject the object representing this node
 	 * @return

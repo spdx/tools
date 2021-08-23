@@ -690,12 +690,12 @@ public class LicenseException implements IRdfModel, Cloneable  {
 		this.setLicenseExceptionText(exception.getLicenseExceptionText());
 	}
 	/*
-	 * Get the URI for this RDF object. Null if this is for an anonomous node.
+	 * Get the URI for this RDF object. Null if this is for an anonymous node.
 	 * @param modelContainer
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected String getUri(IModelContainer modelContainer) throws InvalidSPDXAnalysisException {
-		return null;	// default to anonomous node
+		return null;	// default to anonymous node
 	}
 }
