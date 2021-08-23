@@ -203,7 +203,7 @@ public abstract class RdfModelObject implements IRdfModel, Cloneable {
 	}
 
 	/**
-	 * Get the URI for this RDF object. Null if this is for an anonomous node.
+	 * Get the URI for this RDF object. Null if this is for an anonymous node.
 	 * @param modelContainer
 	 * @return
 	 * @throws InvalidSPDXAnalysisException
