@@ -81,11 +81,16 @@ public class FileContext {
 		return spdxFile.getId();
 	}
 
+	public List<String> fileInfoErrorWithRetrievalList(String errorMessage) {
+		List<String> retval = Lists.newArrayList();
+		retval.add(errorMessage);
+		return retval;
+	}
+
 	public List<String> checksums() {
+
 		if (spdxFile == null) {
-			List<String> retval = Lists.newArrayList();
-			retval.add("Error getting SPDX file information: "+ (error != null ? error.getMessage() : "null"));
-			return retval;
+			return fileInfoErrorWithRetrievalList("Error getting SPDX file information: "+ (error != null ? error.getMessage() : "null"));
 		}
 		Checksum[] fileChecksums = this.spdxFile.getChecksums();
 		if (fileChecksums == null || fileChecksums.length ==0) {
@@ -102,9 +107,7 @@ public class FileContext {
 
 	public List<String> fileType() {
 		if (spdxFile == null && error != null) {
-			List<String> retval = Lists.newArrayList();
-			retval.add("Error getting SPDX file information: "+error.getMessage());
-			return retval;
+			return fileInfoErrorWithRetrievalList("Error getting SPDX file information: "+error.getMessage());
 		} else {
 			if (spdxFile != null && spdxFile.getFileTypes() != null &&
 					spdxFile.getFileTypes().length > 0) {
