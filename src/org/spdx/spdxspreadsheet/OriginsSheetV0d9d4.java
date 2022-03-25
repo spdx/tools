@@ -43,7 +43,6 @@ public class OriginsSheetV0d9d4 extends DocumentInfoSheet {
 
 	static final int NUM_COLS = 6;
 	static final int SPREADSHEET_VERSION_COL = 0;
-	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
 	static final int CREATED_BY_COL = SPDX_VERSION_COL + 1;
 	static final int CREATED_COL = CREATED_BY_COL + 1;
 	static final int DATA_LICENSE_COL = CREATED_COL + 1;
