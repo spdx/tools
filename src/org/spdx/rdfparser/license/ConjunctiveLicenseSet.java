@@ -56,18 +56,18 @@ public class ConjunctiveLicenseSet extends LicenseSet {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder("(");
+		StringBuilder stringBuilder = new StringBuilder("(");
 		boolean moreThanOne = false;
-		Iterator<AnyLicenseInfo> iter = this.licenseInfos.iterator();
-		while (iter.hasNext()) {
+		Iterator<AnyLicenseInfo> iterator = this.licenseInfos.iterator();
+		while (iterator.hasNext()) {
 			if (moreThanOne) {
-				sb.append(" AND ");
+				stringBuilder.append(" AND ");
 			}
 			moreThanOne = true;
-			sb.append(iter.next().toString());
+			stringBuilder.append(iterator.next().toString());
 		}
-		sb.append(')');
-		return sb.toString();
+		stringBuilder.append(')');
+		return stringBuilder.toString();
 	}
 
 	@Override
