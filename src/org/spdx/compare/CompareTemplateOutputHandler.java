@@ -16,7 +16,9 @@
 */
 package org.spdx.compare;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,6 +45,85 @@ public class CompareTemplateOutputHandler implements
 		ILicenseTemplateOutputHandler {
 	private static final int MAX_NEXT_NORMAL_TEXT_SEARCH_LENGTH = 15;	// Maximum number of tokens to compare when searching for a normal text match
 	private static final int MIN_TOKENS_NORMAL_TEXT_SEARCH = 3;	// Minimum number of tokens to match of normal text to match after a variable block to bound greedy regex var text
+
+	/**
+	 * Locate the original text starting with the start token and ending with the end token
+	 * @param fullLicenseText
+	 * @param startToken
+	 * @param endToken
+	 * @param tokenToLocation
+	 * @return
+	 */
+	public static String locateOriginalText(String fullLicenseText, int startToken, int endToken,
+			Map<Integer, LineColumn> tokenToLocation, String[] tokens) {
+		if (startToken > endToken) {
+			return "";
+		}
+		LineColumn start = tokenToLocation.get(startToken);
+		if (start == null) {
+			return "";
+		}
+		LineColumn end = tokenToLocation.get(endToken);
+		// If end == null, then we read to the end
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new StringReader(fullLicenseText));
+			int currentLine = 1;
+			String line = reader.readLine();
+			while (line != null && currentLine < start.getLine()) {
+				currentLine++;
+				line = reader.readLine();
+			}
+			if (line == null) {
+				return "";
+			}
+			if (end == null) {
+				// read until the end of the stream
+				StringBuilder sb = new StringBuilder(line.substring(start.getColumn(), line.length()));
+				currentLine++;
+				line = reader.readLine();
+				while (line != null) {
+					sb.append(line);
+					currentLine++;
+					line = reader.readLine();
+				}
+				return sb.toString();
+			} else if (end.getLine() == currentLine) {
+				return line.substring(start.getColumn(), end.getColumn()+end.getLen());
+			} else {
+				StringBuilder sb = new StringBuilder(line.substring(start.getColumn(), line.length()));
+				currentLine++;
+				line = reader.readLine();
+				while (line != null && currentLine < end.getLine()) {
+					sb.append("\n");
+					sb.append(line);
+					currentLine++;
+					line = reader.readLine();
+				}
+				if (line != null && end.getColumn()+end.getLen() > 0) {
+					sb.append("\n");
+					sb.append(line.substring(0, end.getColumn()+end.getLen()));
+				}
+				return sb.toString();
+			}
+		} catch (IOException e) {
+			// just build with spaces - not ideal, but close enough most of the time
+			StringBuilder sb = new StringBuilder(tokens[startToken]);
+			for (int i = startToken+1; i <= endToken; i++) {
+				sb.append(' ');
+				sb.append(tokens[i]);
+			}
+			return sb.toString();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
+		}
+	}
 
 	class ParseInstruction {
 		LicenseTemplateRule rule;
@@ -465,7 +546,7 @@ public class CompareTemplateOutputHandler implements
 				return -1;
 			}
 			for (int matchingStartToken:matchingStartTokens) {
-				String compareText = LicenseCompareHelper.locateOriginalText(originalText, startToken, matchingStartToken-1, tokenToLocation, matchTokens);
+				String compareText = locateOriginalText(originalText, startToken, matchingStartToken-1, tokenToLocation, matchTokens);
 				Pattern matchPattern = Pattern.compile(rule.getMatch(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 				Matcher matcher = matchPattern.matcher(compareText);
 				if (!matcher.find() || matcher.start() > 0) {
