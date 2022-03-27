@@ -59,20 +59,7 @@ public class SpdxLicenseTemplateHelper {
 			end = ruleMatcher.end();
 			String ruleString = ruleMatcher.group(1);
 			LicenseTemplateRule rule = new LicenseTemplateRule(ruleString);
-			if (rule.getType() == LicenseTemplateRule.RuleType.VARIABLE) {
-				templateOutputHandler.variableRule(rule);
-			} else if (rule.getType() == LicenseTemplateRule.RuleType.BEGIN_OPTIONAL) {
-				templateOutputHandler.beginOptional(rule);
-				optionalNestLevel++;
-			} else if (rule.getType() == LicenseTemplateRule.RuleType.END_OPTIONAL) {
-				optionalNestLevel--;
-				if (optionalNestLevel < 0) {
-					throw(new LicenseTemplateRuleException("End optional rule found without a matching begin optional rule after text '"+upToTheFind+"'"));
-				}
-				templateOutputHandler.endOptional(rule);
-			} else {
-				throw(new LicenseTemplateRuleException("Unrecognized rule: "+rule.getType().toString()+" after text '"+upToTheFind+"'"));
-			}
+			optionalNestLevel = getOptionalNestLevel(templateOutputHandler, optionalNestLevel, upToTheFind, rule);
 		}
 		if (optionalNestLevel > 0) {
 			throw(new LicenseTemplateRuleException("Missing EndOptional rule and end of text"));
@@ -83,6 +70,24 @@ public class SpdxLicenseTemplateHelper {
 			templateOutputHandler.text(restOfTemplate);
 		}
 		templateOutputHandler.completeParsing();
+	}
+
+	private static int getOptionalNestLevel(ILicenseTemplateOutputHandler templateOutputHandler, int optionalNestLevel, String upToTheFind, LicenseTemplateRule rule) throws LicenseTemplateRuleException {
+		if (rule.getType() == LicenseTemplateRule.RuleType.VARIABLE) {
+			templateOutputHandler.variableRule(rule);
+		} else if (rule.getType() == LicenseTemplateRule.RuleType.BEGIN_OPTIONAL) {
+			templateOutputHandler.beginOptional(rule);
+			optionalNestLevel++;
+		} else if (rule.getType() == LicenseTemplateRule.RuleType.END_OPTIONAL) {
+			optionalNestLevel--;
+			if (optionalNestLevel < 0) {
+				throw(new LicenseTemplateRuleException("End optional rule found without a matching begin optional rule after text '"+ upToTheFind +"'"));
+			}
+			templateOutputHandler.endOptional(rule);
+		} else {
+			throw(new LicenseTemplateRuleException("Unrecognized rule: "+ rule.getType().toString()+" after text '"+ upToTheFind +"'"));
+		}
+		return optionalNestLevel;
 	}
 
 	/**
