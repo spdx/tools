@@ -33,6 +33,7 @@ import org.spdx.rdfparser.model.SpdxDocument;
 public abstract class DocumentInfoSheet extends AbstractSheet {
 	static final int SPREADSHEET_VERSION_COL = 0;
 	static final int DATA_ROW_NUM = 1;
+	static final int SPDX_VERSION_COL = SPREADSHEET_VERSION_COL + 1;
 
 	protected String version;
 
