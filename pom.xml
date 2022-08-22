@@ -46,12 +46,6 @@
 	<dependencies>
 		<!-- JENA -->
 		<dependency>
-		<!-- Force the dependency version to 2.10.0.pr1 so the JSON-LD will work. This can be removed once https://github.com/jsonld-java/jsonld-java/commit/0f251f203649a04faf053c52beddab1d8865be5b is released -->
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.10.0.pr1</version>
-		</dependency>
-		<dependency>
 		<!-- Force the dependency version to 1.18 for Jena - resolves vulnerability -->
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
@@ -243,7 +237,7 @@
 			<plugin>
 				<groupId>org.spdx</groupId>
 					<artifactId>spdx-maven-plugin</artifactId>
-					<version>0.5.3</version>
+					<version>0.5.5</version>
 					<executions>
 						<execution>
 							<id>build-spdx</id>
