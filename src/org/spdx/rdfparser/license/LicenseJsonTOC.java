@@ -16,7 +16,6 @@
 package org.spdx.rdfparser.license;
 
 import java.util.Map;
-import java.util.Set;
 
 import com.google.common.collect.Maps;
 
@@ -29,7 +28,7 @@ import com.google.common.collect.Maps;
  */
 public class LicenseJsonTOC {
 
-	class LicenseJson {
+	public class LicenseJson {
 		private String reference;
 		private boolean isDeprecatedLicenseId;
 		private String detailsUrl;
