@@ -44,7 +44,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  */
 public abstract class LicenseSet extends AnyLicenseInfo {
 
-	protected Set<AnyLicenseInfo> licenseInfos = Sets.newHashSet();
+	protected Set<AnyLicenseInfo> licenseInfos = Sets.newLinkedHashSet();
 
 	/**
 	 * @param modelContainer container which includes the license
