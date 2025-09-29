@@ -1,9 +1,13 @@
-[![Build Status](https://travis-ci.org/spdx/tools.svg?branch=master)](https://travis-ci.org/spdx/tools)
-
- [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/734/badge)](https://bestpractices.coreinfrastructure.org/projects/734)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/734/badge)](https://bestpractices.coreinfrastructure.org/projects/734)
 
 # Important Update
-This version of the SPDX Java tools is planned to be replaced on the next major release of the SPDX Spec.  The new Java tools can be found in the [tools-java](https://github.com/spdx/tools-java) repo.  You are encouraged to switch over to the new version of the SPDX Java tools which should be stable.  If you would like to use a lighter weight library in you Java application, check out the [SPDX Java Library](https://github.com/spdx/Spdx-Java-Library).
+
+**Following the [SPDX 3.0 release][press] in April 2024, this version of the SPDX Java tools is replaced by the new Java tools in the [tools-java](https://github.com/spdx/tools-java) repo. The older version in this repo will no longer be maintained.**
+
+- You are encouraged to switch to the new version of the SPDX Java tools, which is stable and supports both SPDX 2 and SPDX 3 specifications.
+- If you would like to use a lighter-weight library in your Java application, check out the [SPDX Java Library](https://github.com/spdx/Spdx-Java-Library).
+
+[press]: https://www.linuxfoundation.org/press/spdx-3-revolutionizes-software-management-in-systems-with-enhanced-functionality-and-streamlined-use-cases
 
 # Overview
 The Software Package Data Exchange (SPDX) specification is a standard format for communicating the components, licenses and copyrights associated with a software package.
