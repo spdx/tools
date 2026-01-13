@@ -27,6 +27,8 @@ import org.spdx.rdfparser.SpdxDocumentContainer;
 import org.spdx.rdfparser.SpdxRdfConstants;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
+import java.util.HashMap;
+
 /**
  * Factory for creating SPDXLicenseInfo objects from a Jena model
  * @author Gary O'Neall
@@ -165,25 +167,26 @@ public class LicenseInfoFactory {
 				throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo - not an SPDX type"));
 			}
 			String type = typeUri.substring(SpdxRdfConstants.SPDX_NAMESPACE.length());
-			if (type.equals(SpdxRdfConstants.CLASS_SPDX_CONJUNCTIVE_LICENSE_SET)) {
-				return new ConjunctiveLicenseSet(modelContainer, node);
-			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET)) {
-				return new DisjunctiveLicenseSet(modelContainer, node);
-			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO)) {
-				return new ExtractedLicenseInfo(modelContainer, node);
-			} else if (type.equals(SpdxRdfConstants.CLASS_SPDX_LICENSE)) {
-				return new SpdxListedLicense(modelContainer, node);
-			} else if (type.equals(SpdxRdfConstants.CLASS_OR_LATER_OPERATOR)) {
-				return new OrLaterOperator(modelContainer, node);
-			} else if (type.equals(SpdxRdfConstants.CLASS_WITH_EXCEPTION_OPERATOR)) {
-				return new WithExceptionOperator(modelContainer, node);
-			} else {
-				throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo '"+type+"'"));
-			}
+			return getAnyLicenseInfoSetByType(modelContainer, node, type);
 		} else {
 			return null;
 		}
 	}
+
+	private static AnyLicenseInfo getAnyLicenseInfoSetByType(IModelContainer modelContainer, Node node, String type) throws InvalidSPDXAnalysisException {
+		HashMap<String, ILicenseInfoSetStrategy> map = new HashMap();
+		map.put(SpdxRdfConstants.CLASS_SPDX_CONJUNCTIVE_LICENSE_SET, new ConjunctiveLicenseSetStrategy());
+		map.put(SpdxRdfConstants.CLASS_SPDX_DISJUNCTIVE_LICENSE_SET, new DisjunctiveLicenseSetStrategy());
+		map.put(SpdxRdfConstants.CLASS_SPDX_EXTRACTED_LICENSING_INFO, new ExtractedLicenseInfoStrategy());
+		map.put(SpdxRdfConstants.CLASS_SPDX_LICENSE, new SpdxListedLicenseStrategy());
+		map.put(SpdxRdfConstants.CLASS_OR_LATER_OPERATOR, new OrLaterOperatorStrategy());
+		map.put(SpdxRdfConstants.CLASS_WITH_EXCEPTION_OPERATOR, new WithExceptionOperatorStrategy());
+		if (!map.containsKey(type)) {
+			throw(new InvalidSPDXAnalysisException("Invalid type for licenseInfo '"+ type +"'"));
+		}
+		return map.get(type).getLicenseInfoSet(modelContainer, node);
+	}
+
 
 	/**
 	 * Parses a license string and converts it into a SPDXLicenseInfo object
